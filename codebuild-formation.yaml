@@ -54,7 +54,7 @@ Resources:
                         - "/"
                         - - Ref: "ArtifactsBucketName"
                           - "*"
-            
+
           - Action:
               - ssm:GetParameters
             Effect: Allow
