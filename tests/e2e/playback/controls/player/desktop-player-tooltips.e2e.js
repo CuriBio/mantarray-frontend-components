@@ -5,7 +5,7 @@ const path = require("path");
 import {
   testcafe_page_visual_regression,
   testcafe_element_visual_regression,
-} from "@curibio/frontend_test_utils";
+} from "@curi-bio/frontend-test-utils";
 
 const base_screenshot_path = path.join(
   "playback",

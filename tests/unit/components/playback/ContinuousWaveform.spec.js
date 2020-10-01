@@ -23,7 +23,7 @@ import {
   get_y_axis_ticks_with_text,
   get_waveform_line_pixel_coordinates_from_svg,
   convert_waveform_line_pixel_coordinates_to_expected_data,
-} from "@curibio/frontend_test_utils";
+} from "@curi-bio/frontend-test-utils";
 
 import { convert_from_json_of_sample_idx_and_value } from "@/js_utils/waveform_data_formatter.js";
 const parse_svg_d_path = require("d-path-parser");

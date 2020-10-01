@@ -2,7 +2,7 @@ import { Selector } from "testcafe";
 import { RequestMock } from "testcafe";
 const path = require("path");
 
-import { testcafe_page_visual_regression } from "@curibio/frontend_test_utils";
+import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 import {
   system_status_when_recording_regexp,

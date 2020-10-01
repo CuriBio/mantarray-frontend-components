@@ -4,7 +4,7 @@ const fs = require("fs");
 import { getPerformanceMetrics } from "@platform-os/testcafe-helpers";
 const path = require("path");
 
-import { testcafe_page_visual_regression } from "@curibio/frontend_test_utils";
+import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 import VueSelector from "testcafe-vue-selectors";
 

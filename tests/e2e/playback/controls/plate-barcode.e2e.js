@@ -2,7 +2,7 @@ import { Selector, ClientFunction } from "testcafe";
 
 const path = require("path");
 
-import { testcafe_page_visual_regression } from "@curibio/frontend_test_utils";
+import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 const unfocus = ClientFunction(() => {
   document.activeElement.blur(); // https://stackoverflow.com/questions/6976486/is-there-any-way-in-javascript-to-focus-the-document-content-area

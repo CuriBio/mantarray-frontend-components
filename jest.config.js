@@ -1,7 +1,7 @@
 module.exports = {
   globalSetup: "<rootDir>/jest.setup-nuxt-store.js", //  (Eli 2/24/20) adapted from https://medium.com/@brandonaaskov/how-to-test-nuxt-stores-with-jest-9a5d55d54b28
   setupFilesAfterEnv: [
-    "<rootDir>/node_modules/@curibio/frontend_test_utils/src/jest.setup-failure-on-warnings.js",
+    "<rootDir>/node_modules/@curi-bio/frontend-test-utils/src/jest.setup-failure-on-warnings.js",
   ], // (Eli 3/2/20) adapted from https://medium.com/@chris.washington_60485/vue-jest-properly-catch-unhandledpromiserejectionwarning-and-vue-warn-errors-in-jest-unit-tests-fcc45269146b
   moduleNameMapper: {
     // we can use "@/components/item.vue" to access components in a simpler way
