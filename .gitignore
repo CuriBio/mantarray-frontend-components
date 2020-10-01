@@ -1,0 +1,22 @@
+*.log
+.cache
+.DS_Store
+src/.temp
+node_modules
+dist/
+
+venv/
+.env
+.env.*
+.nuxt
+tests/__coverage__
+test-report.html
+
+
+# Testcafe screenshots
+**/e2e/screenshots/**/*-actual.png
+**/e2e/screenshots/*-actual.png
+**/e2e/screenshots/**/*-actual-diff.png
+**/e2e/screenshots/*-actual-diff.png
+**/e2e/screenshots/**/thumbnails
+**/e2e/screenshots/thumbnails

@@ -1,0 +1,9 @@
+{
+  "plugins": ["node_modules/jsdoc-vuejs"],
+  "source": {
+    "includePattern": "\\.(vue|js)$"
+  },
+  "jsdoc-vuejs": {
+    "followImports": true
+  }
+}
