@@ -109,5 +109,5 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: visual-regression-screenshots
+          name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node }}
           path: "tests/e2e/screenshots/**/*"
