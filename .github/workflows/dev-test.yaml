@@ -4,7 +4,7 @@ name: Dev
 on:
   workflow_dispatch:
   schedule:
-    - cron: "* 5 * * *"
+    - cron: "0 5 * * *"
   push:
     branches:
       - main
@@ -110,4 +110,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: visual-regression-screenshots
-          path: "e2e/screenshots/**/*"
+          path: "tests/e2e/screenshots/**/*"
