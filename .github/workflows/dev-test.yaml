@@ -47,7 +47,7 @@ jobs:
           python-version: 3.8
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2.1.1
+        uses: actions/setup-node@v2.1.2
         with:
           node-version: ${{ matrix.node }}
       - name: Display Language Dependency Versions
@@ -104,3 +104,10 @@ jobs:
           env_vars: OS,NODE
           name: codecov-umbrella
           fail_ci_if_error: true
+
+      - name: Archive visual regression
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: visual-regression-screenshots
+          path: "e2e/screenshots/**/*"
