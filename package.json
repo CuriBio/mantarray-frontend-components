@@ -25,7 +25,7 @@
     "docs": "jsdoc -c jsdoc.json"
   },
   "engines": {
-    "node": ">=15.13.0"
+    "node": ">=12.13.0"
   },
   "files": [
     "dist/*",
