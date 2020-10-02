@@ -85,7 +85,7 @@ jobs:
         run: npm run test:unit-no-prebuild -- --ci --verbose
 
       - name: Run E2E Tests
-      - uses: DevExpress/testcafe-action@latest
+        uses: DevExpress/testcafe-action@latest
         with:
           version: "1.9.3"
           args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ./tests/e2e --screenshots path=./tests/e2e/screenshots --app ''npm run dev'' --app-init-delay 35000'
