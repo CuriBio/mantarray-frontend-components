@@ -54,7 +54,7 @@ phases:
       - echo "Building package"
       - npm run build
       - npm run test:unit-no-prebuild -- --ci
-      - npm run test:e2e-no-prebuild
+      - npm run test:e2e-no-prebuild-codebuild
       # Only run the following command if the PUBLISH_TO_NPM environmental variable is set to 1 https://stackoverflow.com/questions/39619956/short-way-to-run-command-if-variable-is-set  (extra outer parentheses needed to make YAML parser happy)
       # Grab the version from the setup.py file using a grep "look-behind" https://stackoverflow.com/questions/30776265/how-to-grep-for-value-in-a-key-value-store-from-plain-text
       # If this is attempted on any branch other than main, it should fail because the role only has permission to push to the main branch
