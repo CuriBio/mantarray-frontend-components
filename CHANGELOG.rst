@@ -1,6 +1,12 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.1 (2020-10-05)
+------------------
+
+- Transitioned to Github / NPM
+
+
 0.0.61 (2020-09-03)
 ------------------
 
