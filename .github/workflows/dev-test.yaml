@@ -22,10 +22,15 @@ jobs:
         node:
           - 12
           # - 14
+        e2e-tests:
+          - "tests/e2e/playback"
+          - "tests/e2e/status"
+          - "tests/e2e/waveform"
         include:
           # only enable coverage on the fastest job
           - os: "ubuntu-18.04"
             node: "12"
+            e2e-tests: "tests/e2e/status"
             ENABLE_CODE_COVERAGE: true
             IS_FASTEST_JOB: true
           - os: "ubuntu-18.04"
@@ -97,7 +102,7 @@ jobs:
         uses: DevExpress/testcafe-action@v0.0.3
         with:
           version: "1.9.3"
-          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ./tests/e2e --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 35000'
+          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 35000'
 
       - name: Confirm Sphinx Docs build correctly
         # only check Sphinx docs build on the fastest job
