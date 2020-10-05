@@ -25,7 +25,7 @@ jobs:
         e2e-tests:
           - "tests/e2e/playback"
           - "tests/e2e/status"
-          - "tests/e2e/waveform"
+          - "tests/e2e/waveforms"
         include:
           # only enable coverage on the fastest job
           - os: "ubuntu-18.04"
