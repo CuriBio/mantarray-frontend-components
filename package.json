@@ -97,7 +97,7 @@
     "jest-transform-css": "~2.0.0",
     "jest-transform-stub": "~2.0.0",
     "jscpd": "^3.3.19",
-    "jsdoc": "^3.6.5",
+    "jsdoc": "^3.6.6",
     "jsdoc-vuejs": "^3.0.8",
     "npm-merge-driver": "~2.3.6",
     "nuxt": "~2.14.4",
