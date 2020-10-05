@@ -32,14 +32,14 @@ os.environ["PATH"] += (
 )  # add the local JSDOC installation to the system PATH so that sphinx can find it even when it's not installed globally
 
 
-js_source_path = os.path.join(abs_repo_root_path, "src")
+js_source_path = os.path.join(abs_repo_root_path, "js_utils")
 
 
 # -- Project information -----------------------------------------------------
 
-project = "frontend_test_utils"
-copyright = "2019, NanoSurface Biomedical"  # pylint: disable=redefined-builtin
-author = "NanoSurface Biomedical"
+project = "mantarray-frontend-components"
+copyright = "2020, Curi Bio"  # pylint: disable=redefined-builtin
+author = "Curi Bio"
 
 # The full version, including alpha/beta/rc tags
 release = "0.1"
