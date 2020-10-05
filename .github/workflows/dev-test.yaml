@@ -22,7 +22,7 @@ jobs:
         node:
           - 12
           - 14
-        e2e-tests:
+        e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
           - "tests/e2e/playback"
           - "tests/e2e/status"
           - "tests/e2e/waveforms"
@@ -42,7 +42,7 @@ jobs:
     env:
       ENABLE_CODE_COVERAGE: ${{ matrix.ENABLE_CODE_COVERAGE }}
       TESTCAFE_VERSION: "1.9.3" # TODO (Eli 10/5/20): get this working as a variable in the Testcafe actions
-    name: Node.js ${{ matrix.node }} on ${{ matrix.os }}
+    name: Node.js ${{ matrix.node }} on ${{ matrix.os }} for E2E test suite ${{ matrix.e2e-tests }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
