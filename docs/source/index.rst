@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to mantarray-frontend-components' documentation!
-=================================================
+========================================================
 
 .. toctree::
    :maxdepth: 2
