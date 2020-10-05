@@ -30,8 +30,8 @@ jobs:
             IS_FASTEST_JOB: true
           - os: "ubuntu-18.04"
             IS_LINUX: true
-          - os: "windows-2019"
-            IS_WINDOWS: true
+          # - os: "windows-2019"
+          #   IS_WINDOWS: true
     env:
       ENABLE_CODE_COVERAGE: ${{ matrix.ENABLE_CODE_COVERAGE }}
       TESTCAFE_VERSION: "1.9.3" # TODO (Eli 10/5/20): get this working as a variable in the Testcafe actions
