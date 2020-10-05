@@ -10,8 +10,6 @@ Welcome to mantarray-frontend-components' documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   visual_regression_utils
-
 
 Indices and tables
 ==================
