@@ -21,6 +21,8 @@ import { get_available_data_regex } from "../../../../../store/modules/waveform/
 
 import { STATUS } from "../../../../../store/modules/flask/enums";
 
+const msec_to_wait_for_calibration_to_complete = 3500;
+
 const base_screenshot_path = path.join(
   "playback",
   "controls",
@@ -167,7 +169,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await t.hover(title_text);
 
   // wait for 'calibrating' state to complete
-  await t.wait(3000);
+  await t.wait(msec_to_wait_for_calibration_to_complete);
   screenshot_path = path.join(this_base_screenshot_path, "calibrated");
   await testcafe_page_visual_regression(t, screenshot_path);
 
@@ -260,7 +262,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await t.hover(title_text);
 
   // wait for 'calibrating' state to complete
-  await t.wait(3000);
+  await t.wait(msec_to_wait_for_calibration_to_complete);
 
   screenshot_path = path.join(
     this_base_screenshot_path,
@@ -350,7 +352,7 @@ test("Given x/y offset of div containing DesktopPlayerControls, Then the compone
   await t.click(calibrate_button);
   await t.hover(title_text);
   // wait for 'calibrating' state to complete
-  await t.wait(3000);
+  await t.wait(msec_to_wait_for_calibration_to_complete);
 
   await t.hover(calibrate_button);
   screenshot_path = path.join(
