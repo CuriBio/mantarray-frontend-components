@@ -1,6 +1,11 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.1.1 (2020-10-06)
+------------------
+
+- Updated a variety of dependencies major versions, including core-js
+
 0.1 (2020-10-05)
 ------------------
 
