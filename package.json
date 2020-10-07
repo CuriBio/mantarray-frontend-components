@@ -34,7 +34,7 @@
     "*.json"
   ],
   "dependencies": {
-    "@fortawesome/vue-fontawesome": "^0.1.9",
+    "@fortawesome/vue-fontawesome": "^2.0.0",
     "@tofandel/uuid-base62": "^1.0.3",
     "axios": "^0.20.0",
     "base-x": "^3.0.8",
