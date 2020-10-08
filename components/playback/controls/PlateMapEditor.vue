@@ -357,7 +357,7 @@ export default {
       const row_index = value.charCodeAt(0) - 65;
       for (
         let column_index = 0;
-        column_index < twenty_four_well_labware_definition.column_count;
+        column_index < twenty_four_well_labware_definition.num_columns;
         column_index++
       ) {
         const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
@@ -553,7 +553,7 @@ export default {
 
       for (
         let column_index = 0;
-        column_index < twenty_four_well_labware_definition.column_count;
+        column_index < twenty_four_well_labware_definition.num_columns;
         column_index++
       ) {
         const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
@@ -569,7 +569,7 @@ export default {
 
       for (
         let column_index = 0;
-        column_index < twenty_four_well_labware_definition.column_count;
+        column_index < twenty_four_well_labware_definition.num_columns;
         column_index++
       ) {
         const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
@@ -620,7 +620,7 @@ export default {
       const column_index = parseInt(value) - 1; // as incoming values start from 01
       for (
         let row_index = 0;
-        row_index < twenty_four_well_labware_definition.row_count;
+        row_index < twenty_four_well_labware_definition.num_rows;
         row_index++
       ) {
         const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
@@ -828,7 +828,7 @@ export default {
 
       for (
         let row_index = 0;
-        row_index < twenty_four_well_labware_definition.row_count;
+        row_index < twenty_four_well_labware_definition.num_rows;
         row_index++
       ) {
         const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
@@ -844,7 +844,7 @@ export default {
 
       for (
         let row_index = 0;
-        row_index < twenty_four_well_labware_definition.row_count;
+        row_index < twenty_four_well_labware_definition.num_rows;
         row_index++
       ) {
         const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
