@@ -42,3 +42,5 @@ export { default as PlateBarcode } from "./components/playback/controls/PlateBar
 export { default as StatusBar } from "./components/status/StatusBar.vue";
 export { default as RecordingTime } from "./components/playback/controls/RecordingTime.vue";
 export { default as SimulationMode } from "./components/status/SimulationMode.vue";
+export { default as PopButton } from "./components/playback/controls/player/PopButton.vue";
+export { default as PopInput } from "./components/playback/controls/player/PopInput.vue";
