@@ -2,7 +2,7 @@ import { Selector } from "testcafe";
 
 const path = require("path");
 
-import { testcafe_page_visual_regression } from "@curibio/frontend_test_utils";
+import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 const base_screenshot_path = path.join("playback", "controls", "plate-well");
 
 // the fixture declares what we are testing
