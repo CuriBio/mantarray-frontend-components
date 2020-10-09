@@ -60,7 +60,7 @@
     "@fortawesome/free-solid-svg-icons": "~5.12.1",
     "@platform-os/testcafe-helpers": "~2.3.2",
     "@vue/cli-service": "~4.4.4",
-    "@vue/test-utils": "~1.0.3",
+    "@vue/test-utils": "~1.1.0",
     "autoprefixer": "~9.7.3",
     "axios-mock-adapter": "^1.18.1",
     "babel-core": "~7.0.0-bridge.0",
