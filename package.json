@@ -57,7 +57,7 @@
     "@fortawesome/fontawesome-svg-core": "~1.2.27",
     "@fortawesome/free-brands-svg-icons": "~5.12.1",
     "@fortawesome/free-regular-svg-icons": "~5.12.1",
-    "@fortawesome/free-solid-svg-icons": "~5.12.1",
+    "@fortawesome/free-solid-svg-icons": "~5.15.1",
     "@platform-os/testcafe-helpers": "~2.3.2",
     "@vue/cli-service": "~4.4.4",
     "@vue/test-utils": "~1.1.0",
