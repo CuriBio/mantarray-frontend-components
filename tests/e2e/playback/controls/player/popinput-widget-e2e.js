@@ -5,6 +5,7 @@ const path = require("path");
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 const input_field = Selector("#input-widget");
+const background_screen = Selector(".div__popinput-background");
 
 fixture`playback/controls/player/popup-input/basic-input`
   .page // declare the fixture
@@ -33,6 +34,7 @@ test("testing the popinput for the VALID Value Entered", async (t) => {
     "pop-input-valid-value"
   );
   await t.typeText(input_field, "2VSckkBYH2An3dqHEyfRRE");
+  await t.hover(background_screen);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
