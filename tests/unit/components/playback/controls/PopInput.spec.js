@@ -59,4 +59,30 @@ describe("popinput.vue", () => {
     const target_input = wrapper.find("#input-alphanumeric");
     expect(target_input.attributes().placeholder).toStrictEqual("place holder");
   });
+  test("When mounting popinput, Then the user enters few charters in the input validate if this emits an event", async () => {
+    const propsData = {
+      title_label: "Enter  Alphanumeric  ID",
+      key_placeholder: "place holder",
+      user_key: "",
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const uuidBase62 = "2VSckkBYH2An3dqHEyfRRE"; // proper uuidcode sent
+    const input_alphanumeric = wrapper.find("#input-alphanumeric");
+    input_alphanumeric.element.value = uuidBase62;
+    await input_alphanumeric.trigger("input");
+    // const invalid_field = wrapper.find(
+    //   ".div__popdialog-form-controls-content-numericid-input-invalid-info"
+    // );
+    // expect(invalid_field.text()).toEqual(
+    //   "The entered ID has an invalid character 0,"
+    // );
+    const parent_id_events = wrapper.emitted("update:user_key");
+    expect(parent_id_events).toHaveLength(2);
+    expect(parent_id_events).toStrictEqual([[""], ["2VSckkBYH2An3dqHEyfRRE"]]);
+    expect(wrapper.vm.alphanumerickeyState).toStrictEqual(true);
+  });
 });
