@@ -35,3 +35,18 @@ test("testing the popinput for the VALID Value Entered", async (t) => {
   await t.typeText(input_field, "2VSckkBYH2An3dqHEyfRRE");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+
+fixture`playback/controls/player/popup-input/x-y-offset`
+  .page // declare the fixture
+`http://localhost:8080/playback/controls/player/popup-input/x-y-offset`; // specify the start page
+
+test("testing the popinput for the X-Y Offset", async (t) => {
+  const screenshot_path_base = path.join(
+    "playback",
+    "controls",
+    "player",
+    "settings-form"
+  );
+  const screenshot_path = path.join(screenshot_path_base, "x-y-offset");
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
