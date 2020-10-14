@@ -2,14 +2,34 @@
   <div>
     <div class="div__popbutton-background" :style="background_cssprops"></div>
     <span
-      ref="btn_0"
-      class="span__popdialog-btn"
+      v-for="btn_index in num_of_btn"
+      :key="btn_index"
+      :ref="'btn_' + btn_index"
+      :class="'span__popdialog-btn-' + btn_index"
       :style="btn_stateprop"
-      @click="selected(0)"
-      @mouseenter="hover_active(0)"
-      @mouseleave="hover_inactive(0)"
-      >{{ popup_btn_names[0] }}</span
+      @click="selected(btn_index)"
+      @mouseenter="hover_active(btn_index)"
+      @mouseleave="hover_inactive(btn_index)"
+      >{{ popup_btn_names[btn_index - 1] }}</span
     >
+    <!--    <span
+      ref="btn_1"
+      class="span__popdialog-btn-1"
+      :style="btn_stateprop"
+      @click="selected(1)"
+      @mouseenter="hover_active(1)"
+      @mouseleave="hover_inactive(1)"
+      >{{ popup_btn_names[1] }}</span
+    >
+    <span
+      ref="btn_2"
+      class="span__popdialog-btn-2"
+      :style="btn_stateprop"
+      @click="selected(2)"
+      @mouseenter="hover_active(2)"
+      @mouseleave="hover_inactive(2)"
+      >{{ popup_btn_names[2] }}</span
+    >  -->
     <!--
     <canvas
       class="canvas__popdialog-form-controls-common-vertical-line"
@@ -69,11 +89,14 @@ export default {
   },
   data() {
     return {
-      num_of_btn: this.popup_btn_names.length - 1,
+      // num_of_btn: this.popup_btn_names.length,
       count: 0,
     };
   },
   computed: {
+    num_of_btn: function () {
+      return this.popup_btn_names.length;
+    },
     background_cssprops: function () {
       return (
         "width: " +
@@ -96,12 +119,12 @@ export default {
   methods: {
     selected() {},
     hover_active(value) {
-      if (this.is_enabled[value] == true) {
-        this.$refs["btn_" + value].style.color = this.hover_color[value];
+      if (this.is_enabled[value - 1] == true) {
+        this.$refs["btn_" + value].style.color = this.hover_color[value - 1];
       }
     },
     hover_inactive(value) {
-      if (this.is_enabled[value] == true) {
+      if (this.is_enabled[value - 1] == true) {
         this.$refs["btn_" + value].style.color = this.focus_color;
       }
     },
@@ -124,13 +147,13 @@ export default {
   pointer-events: all;
 }
 
-.span__popdialog-btn {
+.span__popdialog-btn-1 {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 250px;
+  width: 166.66px;
   height: 30px;
   top: 7px;
   left: 0px;
@@ -145,6 +168,52 @@ export default {
   color: #3f3f3f;
   text-align: center;
   z-index: 19;
+}
+
+.span__popdialog-btn-2 {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 166.66px;
+  height: 30px;
+  top: 7px;
+  left: 166.66px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: #3f3f3f;
+  text-align: center;
+  z-index: 3;
+}
+
+.span__popdialog-btn-3 {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 166.66px;
+  height: 30px;
+  top: 7px;
+  left: 333.34px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: #3f3f3f;
+  text-align: center;
+  z-index: 3;
 }
 
 /*.span__popdialog-btn-enable {*/
