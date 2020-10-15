@@ -88,3 +88,39 @@ test("testing the popinput for the NO Value Entered", async (t) => {
   );
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+
+fixture`playback/controls/player/popup-input/input-width-200`
+  .page // declare the fixture
+`http://localhost:8080/playback/controls/player/popup-input/input-width-200`; // specify the start page
+
+test("testing the popinput for width of 200px", async (t) => {
+  const screenshot_path_base = path.join(
+    "playback",
+    "controls",
+    "player",
+    "settings-form"
+  );
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "pop-input-width-200px"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
+fixture`playback/controls/player/popup-input/input-width-300`
+  .page // declare the fixture
+`http://localhost:8080/playback/controls/player/popup-input/input-width-300`; // specify the start page
+
+test("testing the popinput for width of 300px", async (t) => {
+  const screenshot_path_base = path.join(
+    "playback",
+    "controls",
+    "player",
+    "settings-form"
+  );
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "pop-input-width-300px"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
