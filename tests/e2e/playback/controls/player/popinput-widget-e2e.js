@@ -124,3 +124,20 @@ test("testing the popinput for width of 300px", async (t) => {
   );
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+
+fixture`playback/controls/player/popup-input/input-disallow`
+  .page // declare the fixture
+`http://localhost:8080/playback/controls/player/popup-input/input-disallow`; // specify the start page
+
+test("testing the popinput when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
+  const screenshot_path_base = path.join(
+    "playback",
+    "controls",
+    "player",
+    "settings-form"
+  );
+  const screenshot_path = path.join(screenshot_path_base, "pop-input-disallow");
+  await t.typeText(input_field, "sample text");
+  await t.click(input_label);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
