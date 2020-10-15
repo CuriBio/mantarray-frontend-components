@@ -152,7 +152,9 @@ describe("popinput.vue", () => {
       localVue,
     });
     const background = wrapper.find(".div__popinput-background");
-    expect(background.attributes("style")).toStrictEqual("width: 394px;");
+    expect(background.attributes("style")).toStrictEqual(
+      "width: 394px; height: 100px;"
+    );
     const input_title_label = wrapper.find(".span__popinput-content-label");
     expect(input_title_label.attributes("style")).toStrictEqual(
       "width: 390px;"
@@ -161,7 +163,7 @@ describe("popinput.vue", () => {
       ".div__popinput-controls-content-input-widget"
     );
     expect(input_bounded_div.attributes("style")).toStrictEqual(
-      "width: 390px;"
+      "width: 390px; top: 40px;"
     );
     const input_text_entry_span = wrapper.find(
       ".span__popinput-controls-content-input-txt-widget"
@@ -173,7 +175,7 @@ describe("popinput.vue", () => {
       ".div__popinput-controls-content-input-feedback"
     );
     expect(input_text_entry_feedback.attributes("style")).toStrictEqual(
-      "width: 390px;"
+      "width: 390px; top: 88px;"
     );
   });
 });

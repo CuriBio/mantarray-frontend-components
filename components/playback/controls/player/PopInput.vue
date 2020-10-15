@@ -2,9 +2,17 @@
   <div>
     <div
       class="div__popinput-background"
-      :style="'width: ' + input_width_background + 'px;'"
+      :style="
+        'width: ' +
+        input_width_background +
+        'px;' +
+        'height: ' +
+        input_height_background +
+        'px;'
+      "
     >
       <span
+        v-if="title_label !== ''"
         class="span__popinput-content-label"
         :style="'width: ' + input_width + 'px;'"
       >
@@ -19,7 +27,9 @@
             ? 'div__popinput-controls-content-input--invalid-widget'
             : 'div__popinput-controls-content-input--valid-widget',
         ]"
-        :style="'width: ' + input_width + 'px;'"
+        :style="
+          'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'
+        "
       >
         <span
           class="span__popinput-controls-content-input-txt-widget"
@@ -46,7 +56,9 @@
       <div
         v-show="!inputenterykeyState"
         class="div__popinput-controls-content-input-feedback"
-        :style="'width: ' + input_width + 'px;'"
+        :style="
+          'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'
+        "
       >
         {{ invalid_text }}
       </div>
@@ -89,6 +101,15 @@ export default {
       this.$emit("update:user_key", this.input_value_key);
       return this.invalid_text === "";
     },
+    input_height_background: function () {
+      return this.title_label !== "" ? 100 : 60;
+    },
+    input_widget_top: function () {
+      return this.title_label !== "" ? 40 : 0;
+    },
+    input_feedback_top: function () {
+      return this.title_label !== "" ? 88 : 48;
+    },
   },
   methods: {},
 };
@@ -101,7 +122,7 @@ export default {
   margin: 0px;
   background: rgb(17, 17, 17);
   position: absolute;
-  height: 100px;
+  /* height: 100px; */
   top: 0px;
   left: 0px;
   visibility: visible;
@@ -163,7 +184,7 @@ export default {
   overflow: hidden;
   position: absolute;
   height: 45px;
-  top: 40px;
+  /* top: 40px; */
   left: 0px;
   visibility: visible;
   z-index: 7;
@@ -191,7 +212,7 @@ export default {
   color: rgb(229, 74, 74);
   font-family: Muli;
   position: absolute;
-  top: 88px;
+  /* top: 88px; */
   left: 0px;
   height: 13px;
   overflow: hidden;
