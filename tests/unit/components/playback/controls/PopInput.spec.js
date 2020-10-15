@@ -136,7 +136,7 @@ describe("popinput.vue", () => {
     expect(parent_id_events).toHaveLength(1);
     expect(parent_id_events).toStrictEqual([[""]]); // confirming that the values are not passed
   });
-  test("When the PopInput is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width'", () => {
+  test("When the PopInput is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width'", async () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",
       key_placeholder: "place holder",
@@ -144,44 +144,36 @@ describe("popinput.vue", () => {
       invalid_text: "This field is required",
       input_check: false,
       block: false,
-      entry_width: 490,
+      input_width: 390,
     };
-    wrapper = shallowMount(ComponentToTest, {
+    wrapper = mount(ComponentToTest, {
       propsData,
       store,
       localVue,
     });
     const background = wrapper.find(".div__popinput-background");
-    expect(background.attributes()).toStrictEqual({
-      class: "div__popinput-background",
-      style: "--p-width: 10px;",
-    });
+    expect(background.attributes("style")).toStrictEqual("width: 394px;");
     const input_title_label = wrapper.find(".span__popinput-content-label");
-    expect(input_title_label.attributes()).toStrictEqual({
-      class: "span__popinput-content-label",
-      style: "--p-width: 0px;",
-    });
+    expect(input_title_label.attributes("style")).toStrictEqual(
+      "width: 390px;"
+    );
     const input_bounded_div = wrapper.find(
       ".div__popinput-controls-content-input-widget"
     );
-    expect(input_bounded_div.attributes()).toStrictEqual({
-      class:
-        "div__popinput-controls-content-input-widget div__popinput-controls-content-input--invalid-widget",
-      style: "--p-width: 0px;",
-    });
+    expect(input_bounded_div.attributes("style")).toStrictEqual(
+      "width: 390px;"
+    );
     const input_text_entry_span = wrapper.find(
       ".span__popinput-controls-content-input-txt-widget"
     );
-    expect(input_text_entry_span.attributes()).toStrictEqual({
-      class: "span__popinput-controls-content-input-txt-widget",
-      style: "--p-width: 0px;",
-    });
+    expect(input_text_entry_span.attributes("style")).toStrictEqual(
+      "width: 390px;"
+    );
     const input_text_entry_feedback = wrapper.find(
       ".div__popinput-controls-content-input-feedback"
     );
-    expect(input_text_entry_feedback.attributes()).toStrictEqual({
-      class: "div__popinput-controls-content-input-feedback",
-      style: "--p-width: 0px;",
-    });
+    expect(input_text_entry_feedback.attributes("style")).toStrictEqual(
+      "width: 390px;"
+    );
   });
 });

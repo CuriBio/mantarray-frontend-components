@@ -65,13 +65,13 @@ export default {
     },
   },
   created: function () {
-    this.label = "AlphanumericID";
-    this.entrykey = "2VSckkBYr2An3dqHEyfRRE";
+    this.label = "Enter Alphanumeric ID";
+    this.entrykey = "";
     this.keyplaceholder = "2VSckkBYr2An3dqHEyfRRE";
     this.spellchecking = false;
     this.error_text = "This field is required";
     this.key_validation = false;
-    this.entry_width = 500;
+    this.entry_width = 400;
     this.disallow_entry = false;
   },
   methods: {

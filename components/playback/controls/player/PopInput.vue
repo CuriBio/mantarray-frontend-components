@@ -2,54 +2,54 @@
   <div>
     <div
       class="div__popinput-background"
-      :style="'--p-width: ' + input_width_background + 'px'"
-    ></div>
-
-    <span
-      class="span__popinput-content-label"
-      :style="'--p-width: ' + input_label_width + 'px'"
-    >
-      {{ title_label }}
-      <!--  original mockflow ID: cmpDb072c1da7a823374cbee04cb1666edb1   -->
-    </span>
-
-    <div
-      class="div__popinput-controls-content-input-widget"
-      :class="[
-        !inputenterykeyState
-          ? 'div__popinput-controls-content-input--invalid-widget'
-          : 'div__popinput-controls-content-input--valid-widget',
-      ]"
-      :style="'--p-width: ' + input_width + 'px'"
+      :style="'width: ' + input_width_background + 'px;'"
     >
       <span
-        class="span__popinput-controls-content-input-txt-widget"
-        :style="'--p-width: ' + input_width + 'px'"
+        class="span__popinput-content-label"
+        :style="'width: ' + input_width + 'px;'"
       >
-        <b-form-input
-          id="input-widget"
-          v-model="input_value_key"
-          :spellcheck="input_check"
-          :state="inputenterykeyState"
-          aria-describedby="input-feedback"
-          :placeholder="key_placeholder"
-          :disabled="block"
-          class="w-100 h-100 edit-id"
-          style="
-            border-radius: 0;
-            color: rgb(255, 255, 255);
-            background-color: #3f3f3f;
-            border: 0px;
-          "
-        ></b-form-input>
+        {{ title_label }}
+        <!--  original mockflow ID: cmpDb072c1da7a823374cbee04cb1666edb1   -->
       </span>
-    </div>
-    <div
-      v-show="!inputenterykeyState"
-      class="div__popinput-controls-content-input-feedback"
-      :style="'--p-width: ' + input_width + 'px'"
-    >
-      {{ invalid_text }}
+
+      <div
+        class="div__popinput-controls-content-input-widget"
+        :class="[
+          !inputenterykeyState
+            ? 'div__popinput-controls-content-input--invalid-widget'
+            : 'div__popinput-controls-content-input--valid-widget',
+        ]"
+        :style="'width: ' + input_width + 'px;'"
+      >
+        <span
+          class="span__popinput-controls-content-input-txt-widget"
+          :style="'width: ' + input_width + 'px;'"
+        >
+          <b-form-input
+            id="input-widget"
+            v-model="input_value_key"
+            :spellcheck="input_check"
+            :state="inputenterykeyState"
+            aria-describedby="input-feedback"
+            :placeholder="key_placeholder"
+            :disabled="block"
+            class="w-100 h-100 edit-id"
+            style="
+              border-radius: 0;
+              color: rgb(255, 255, 255);
+              background-color: #3f3f3f;
+              border: 0px;
+            "
+          ></b-form-input>
+        </span>
+      </div>
+      <div
+        v-show="!inputenterykeyState"
+        class="div__popinput-controls-content-input-feedback"
+        :style="'width: ' + input_width + 'px;'"
+      >
+        {{ invalid_text }}
+      </div>
     </div>
   </div>
 </template>
@@ -79,8 +79,9 @@ export default {
   data() {
     return {
       input_value_key: this.user_key,
-      input_width_background: this.input_width + 10,
-      input_label_width: this.input_width * 0.68,
+      input_width_background: this.input_width + 4, // This is required as the red/green boxes around the input widget requirement based on feedback introduced the need its not in Mockflow
+      // very essential else the input box would appear poping out on the right side outside the background, request to consult Eli or Raghu
+      // if any modification are to be done on the increament
     };
   },
   computed: {
@@ -90,9 +91,6 @@ export default {
     },
   },
   methods: {},
-  // created: function() {
-  //     this.$refs["input"].width = this.input_width;
-  // },
 };
 </script>
 <style type="text/css">
@@ -103,7 +101,6 @@ export default {
   margin: 0px;
   background: rgb(17, 17, 17);
   position: absolute;
-  width: var(--p-width);
   height: 100px;
   top: 0px;
   left: 0px;
@@ -117,14 +114,14 @@ export default {
 
 .span__popinput-content-label {
   pointer-events: all;
+  align: center;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: var(--p-width);
   height: 30px;
   top: 0px;
-  left: 75px;
+  left: 5px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -147,7 +144,6 @@ export default {
   font-weight: normal;
   transform: translateZ(0px);
   position: absolute;
-  width: var(--p-width);
   height: 45px;
   line-height: 45px;
   top: 0px;
@@ -166,10 +162,9 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: var(--p-width);
   height: 45px;
   top: 40px;
-  left: 5px;
+  left: 0px;
   visibility: visible;
   z-index: 7;
   background-color: #1c1c1c;
@@ -197,8 +192,7 @@ export default {
   font-family: Muli;
   position: absolute;
   top: 88px;
-  left: 5px;
-  width: var(--p-width);
+  left: 0px;
   height: 13px;
   overflow: hidden;
   visibility: visible;
