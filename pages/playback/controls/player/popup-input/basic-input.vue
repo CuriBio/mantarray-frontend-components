@@ -6,6 +6,8 @@
       :input_check="spellchecking"
       :invalid_text="error_text"
       :user_key.sync="entrykey"
+      :input_width="entry_width"
+      :block="disallow_entry"
     ></PopInput>
   </div>
 </template>
@@ -63,11 +65,14 @@ export default {
     },
   },
   created: function () {
-    this.label = "Enter  Alphanumeric  ID";
+    this.label = "AlphanumericID";
+    this.entrykey = "2VSckkBYr2An3dqHEyfRRE";
     this.keyplaceholder = "2VSckkBYr2An3dqHEyfRRE";
     this.spellchecking = false;
     this.error_text = "This field is required";
     this.key_validation = false;
+    this.entry_width = 500;
+    this.disallow_entry = false;
   },
   methods: {
     entrykeys() {

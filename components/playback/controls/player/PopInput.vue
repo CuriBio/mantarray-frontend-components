@@ -1,8 +1,14 @@
 <template>
   <div>
-    <div class="div__popinput-background"></div>
+    <div
+      class="div__popinput-background"
+      :style="'--p-width: ' + input_width_background + 'px'"
+    ></div>
 
-    <span class="span__popinput-content-label">
+    <span
+      class="span__popinput-content-label"
+      :style="'--p-width: ' + input_label_width + 'px'"
+    >
       {{ title_label }}
       <!--  original mockflow ID: cmpDb072c1da7a823374cbee04cb1666edb1   -->
     </span>
@@ -14,17 +20,20 @@
           ? 'div__popinput-controls-content-input--invalid-widget'
           : 'div__popinput-controls-content-input--valid-widget',
       ]"
-      width="382"
-      height="57"
+      :style="'--p-width: ' + input_width + 'px'"
     >
-      <span class="span__popinput-controls-content-input-txt-widget">
+      <span
+        class="span__popinput-controls-content-input-txt-widget"
+        :style="'--p-width: ' + input_width + 'px'"
+      >
         <b-form-input
           id="input-widget"
-          v-model="inputvaluekey"
+          v-model="input_value_key"
           :spellcheck="input_check"
           :state="inputenterykeyState"
           aria-describedby="input-feedback"
           :placeholder="key_placeholder"
+          :disabled="block"
           class="w-100 h-100 edit-id"
           style="
             border-radius: 0;
@@ -38,6 +47,7 @@
     <div
       v-show="!inputenterykeyState"
       class="div__popinput-controls-content-input-feedback"
+      :style="'--p-width: ' + input_width + 'px'"
     >
       {{ invalid_text }}
     </div>
@@ -56,27 +66,33 @@ import "bootstrap/dist/css/bootstrap.min.css";
 Vue.use(uuid);
 
 export default {
-  name: "Popinput",
+  name: "PopInput", // this just case in-senstive this even if you name as Popinput what we put in index.js matters.. not the
   props: {
     title_label: { type: String, default: "" },
-    key_placeholder: { type: String, default: "" },
+    key_placeholder: { type: String, default: "" }, // The end user uses keyboard to enter either in desktop or laptop so its named as key
     invalid_text: { type: String, default: "" },
     input_check: { type: Boolean, default: false },
     user_key: { type: String, default: "" },
-    // field_value: {type:String,default:""}
+    input_width: { type: Number, default: 0 },
+    block: { type: Boolean, default: false },
   },
   data() {
     return {
-      inputvaluekey: this.user_key,
+      input_value_key: this.user_key,
+      input_width_background: this.input_width + 10,
+      input_label_width: this.input_width * 0.68,
     };
   },
   computed: {
     inputenterykeyState: function () {
-      this.$emit("update:user_key", this.inputvaluekey);
+      this.$emit("update:user_key", this.input_value_key);
       return this.invalid_text === "";
     },
   },
   methods: {},
+  // created: function() {
+  //     this.$refs["input"].width = this.input_width;
+  // },
 };
 </script>
 <style type="text/css">
@@ -87,7 +103,7 @@ export default {
   margin: 0px;
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 400px;
+  width: var(--p-width);
   height: 100px;
   top: 0px;
   left: 0px;
@@ -105,7 +121,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 275px;
+  width: var(--p-width);
   height: 30px;
   top: 0px;
   left: 75px;
@@ -122,10 +138,6 @@ export default {
   z-index: 25;
 }
 
-.div__popdialog-form-controls-customer-account-id-widget {
-  height: 50px;
-}
-
 .span__popinput-controls-content-input-txt-widget {
   padding-left: 0px;
   padding-right: 0px;
@@ -135,7 +147,7 @@ export default {
   font-weight: normal;
   transform: translateZ(0px);
   position: absolute;
-  width: 390px;
+  width: var(--p-width);
   height: 45px;
   line-height: 45px;
   top: 0px;
@@ -154,7 +166,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 390px;
+  width: var(--p-width);
   height: 45px;
   top: 40px;
   left: 5px;
@@ -186,7 +198,7 @@ export default {
   position: absolute;
   top: 88px;
   left: 5px;
-  width: 370px;
+  width: var(--p-width);
   height: 13px;
   overflow: hidden;
   visibility: visible;

@@ -44,7 +44,7 @@ describe("popinput.vue", () => {
 
     expect(target_span.text()).toStrictEqual("Enter  Alphanumeric  ID"); // the value of &nbsp<wbr> is '\u00a0'
   });
-  test("When mounting popinput from the build dist file, Then it loads successfully and the props defined placeholder is rendered on input field", () => {
+  test("When the PopInput is mounted, Then it loads successfully and the props defined placeholder is rendered on input field", () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",
       key_placeholder: "place holder",
@@ -57,7 +57,7 @@ describe("popinput.vue", () => {
     const target_input = wrapper.find("#input-widget");
     expect(target_input.attributes().placeholder).toStrictEqual("place holder");
   });
-  test("When mounting popinput, Then the user enters few charters in the input validate if this emits an event", async () => {
+  test("When the PopInput is mounted, Then the user enters few charters in the input, confirm that an event 'update' is emitted with entered text", async () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",
       key_placeholder: "place holder",
@@ -76,5 +76,112 @@ describe("popinput.vue", () => {
     expect(parent_id_events).toHaveLength(2);
     expect(parent_id_events).toStrictEqual([[""], ["2VSckkBYH2An3dqHEyfRRE"]]);
     expect(wrapper.vm.inputenterykeyState).toStrictEqual(true);
+  });
+  test("When the popinput is mouted, Then when by default an error text is rendered provided in the prop", async () => {
+    const propsData = {
+      title_label: "Enter  Alphanumeric  ID",
+      key_placeholder: "place holder",
+      user_key: "",
+      invalid_text: "This field is required",
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_div = wrapper.find(
+      ".div__popinput-controls-content-input-feedback"
+    );
+    expect(target_div.text()).toStrictEqual("This field is required");
+  });
+  test("When the PopInput is mounted, Then the user enters few charters in the input, verify that the spellcheck is set to false", async () => {
+    const propsData = {
+      title_label: "Enter  Alphanumeric  ID",
+      key_placeholder: "place holder",
+      user_key: "",
+      invalid_text: "This field is required",
+      input_check: false,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const userdata = "bdukeusaued"; // proper uuidcode sent
+    const input_widget = wrapper.find("#input-widget");
+    input_widget.element.value = userdata;
+    await input_widget.trigger("input");
+    expect(input_widget.html()).toContain('spellcheck="false"');
+  });
+  test("When the PopInput is mounted, Then the user enters few charters in the input, verify that its prevented as props have made this option disabled", async () => {
+    const propsData = {
+      title_label: "Enter  Alphanumeric  ID",
+      key_placeholder: "place holder",
+      user_key: "",
+      invalid_text: "This field is required",
+      input_check: false,
+      block: true,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const userdata = "bdukeusaued"; // proper uuidcode sent
+    const input_widget = wrapper.find("#input-widget");
+    input_widget.element.value = userdata;
+    await input_widget.trigger("input");
+    expect(input_widget.html()).toContain("disabled");
+    const parent_id_events = wrapper.emitted("update:user_key");
+    expect(parent_id_events).toHaveLength(1);
+    expect(parent_id_events).toStrictEqual([[""]]); // confirming that the values are not passed
+  });
+  test("When the PopInput is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width'", () => {
+    const propsData = {
+      title_label: "Enter  Alphanumeric  ID",
+      key_placeholder: "place holder",
+      user_key: "",
+      invalid_text: "This field is required",
+      input_check: false,
+      block: false,
+      entry_width: 490,
+    };
+    wrapper = shallowMount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const background = wrapper.find(".div__popinput-background");
+    expect(background.attributes()).toStrictEqual({
+      class: "div__popinput-background",
+      style: "--p-width: 10px;",
+    });
+    const input_title_label = wrapper.find(".span__popinput-content-label");
+    expect(input_title_label.attributes()).toStrictEqual({
+      class: "span__popinput-content-label",
+      style: "--p-width: 0px;",
+    });
+    const input_bounded_div = wrapper.find(
+      ".div__popinput-controls-content-input-widget"
+    );
+    expect(input_bounded_div.attributes()).toStrictEqual({
+      class:
+        "div__popinput-controls-content-input-widget div__popinput-controls-content-input--invalid-widget",
+      style: "--p-width: 0px;",
+    });
+    const input_text_entry_span = wrapper.find(
+      ".span__popinput-controls-content-input-txt-widget"
+    );
+    expect(input_text_entry_span.attributes()).toStrictEqual({
+      class: "span__popinput-controls-content-input-txt-widget",
+      style: "--p-width: 0px;",
+    });
+    const input_text_entry_feedback = wrapper.find(
+      ".div__popinput-controls-content-input-feedback"
+    );
+    expect(input_text_entry_feedback.attributes()).toStrictEqual({
+      class: "div__popinput-controls-content-input-feedback",
+      style: "--p-width: 0px;",
+    });
   });
 });
