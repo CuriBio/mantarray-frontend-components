@@ -142,11 +142,11 @@ test("testing the popinput when the input is disabled or not allowed then enteri
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/popup-input/input-no-title-label`
+fixture`playback/controls/player/popup-input/input-validation-rules`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/popup-input/input-no-title-label`; // specify the start page
+`http://localhost:8080/playback/controls/player/popup-input/input-validation-rules`; // specify the start page
 
-test("testing the popinput when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
+test("testing the popinput when the input validation rules 1, 2, 3 charters", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -155,7 +155,25 @@ test("testing the popinput when the input is disabled or not allowed then enteri
   );
   const screenshot_path = path.join(
     screenshot_path_base,
-    "pop-input-no-title-label"
+    "pop-input-validation-rules"
   );
   await testcafe_page_visual_regression(t, screenshot_path);
+  await t.typeText(input_field, "a");
+  const screenshot_path_one = path.join(
+    screenshot_path_base,
+    "pop-input-validation-rules-one-charter"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path_one);
+  await t.typeText(input_field, "b");
+  const screenshot_path_two = path.join(
+    screenshot_path_base,
+    "pop-input-validation-rules-two-charter"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path_two);
+  await t.typeText(input_field, "c");
+  const screenshot_path_three = path.join(
+    screenshot_path_base,
+    "pop-input-validation-rules-three-charter"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path_three);
 });
