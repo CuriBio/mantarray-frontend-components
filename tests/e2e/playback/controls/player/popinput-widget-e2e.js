@@ -141,3 +141,21 @@ test("testing the popinput when the input is disabled or not allowed then enteri
   await t.click(input_label);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+
+fixture`playback/controls/player/popup-input/input-no-title-label`
+  .page // declare the fixture
+`http://localhost:8080/playback/controls/player/popup-input/input-no-title-label`; // specify the start page
+
+test("testing the popinput when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
+  const screenshot_path_base = path.join(
+    "playback",
+    "controls",
+    "player",
+    "settings-form"
+  );
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "pop-input-no-title-label"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
