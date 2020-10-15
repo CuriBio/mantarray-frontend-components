@@ -80,13 +80,13 @@ Vue.use(uuid);
 export default {
   name: "PopInput", // this just case in-senstive this even if you name as Popinput what we put in index.js matters.. not the
   props: {
-    title_label: { type: String, default: "" },
-    key_placeholder: { type: String, default: "" }, // The end user uses keyboard to enter either in desktop or laptop so its named as key
-    invalid_text: { type: String, default: "" },
-    input_check: { type: Boolean, default: false },
-    user_key: { type: String, default: "" },
-    input_width: { type: Number, default: 0 },
-    block: { type: Boolean, default: false },
+    title_label: { type: String, default: "", required: false }, // title_text (str) (optional, defaults to empty string "")
+    key_placeholder: { type: String, default: "" }, // placeholder (str)
+    invalid_text: { type: String, default: "" }, // invalid_text (str)
+    input_check: { type: Boolean, default: true, required: false }, // spellcheck (optional bool=True)
+    user_key: { type: String, default: "", required: false }, // field_value (str) (optional, defaults to empty string "")
+    input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
+    block: { type: Boolean, default: false, required: false }, // disabled (optional bool=False) (not able to type into input)
   },
   data() {
     return {
