@@ -106,7 +106,7 @@ jobs:
         uses: DevExpress/testcafe-action@v0.0.3
         with:
           version: "1.9.3"
-          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 35000'
+          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 40000'
 
       - name: Confirm Sphinx Docs build correctly
         # only check Sphinx docs build on the fastest job
