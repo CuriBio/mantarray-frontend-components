@@ -159,18 +159,21 @@ test("testing the popinput when the input validation rules 1, 2, 3 charters", as
   );
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.typeText(input_field, "a");
+  await t.click(input_label);
   const screenshot_path_one = path.join(
     screenshot_path_base,
     "pop-input-validation-rules-one-charter"
   );
   await testcafe_page_visual_regression(t, screenshot_path_one);
   await t.typeText(input_field, "b");
+  await t.click(input_label);
   const screenshot_path_two = path.join(
     screenshot_path_base,
     "pop-input-validation-rules-two-charter"
   );
   await testcafe_page_visual_regression(t, screenshot_path_two);
   await t.typeText(input_field, "c");
+  await t.click(input_label);
   const screenshot_path_three = path.join(
     screenshot_path_base,
     "pop-input-validation-rules-three-charter"

@@ -23,7 +23,7 @@
       <div
         class="div__popinput-controls-content-input-widget"
         :class="[
-          !inputenterykeyState
+          !input_key_action
             ? 'div__popinput-controls-content-input--invalid-widget'
             : 'div__popinput-controls-content-input--valid-widget',
         ]"
@@ -39,7 +39,7 @@
             id="input-widget"
             v-model="input_value_key"
             :spellcheck="input_check"
-            :state="inputenterykeyState"
+            :state="input_key_action"
             aria-describedby="input-feedback"
             :placeholder="key_placeholder"
             :disabled="block"
@@ -54,7 +54,6 @@
         </span>
       </div>
       <div
-        v-show="!inputenterykeyState"
         class="div__popinput-controls-content-input-feedback"
         :style="
           'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'
@@ -78,7 +77,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 Vue.use(uuid);
 
 export default {
-  name: "PopInput", // this just case in-senstive this even if you name as Popinput what we put in index.js matters.. not the
+  name: "PopInput",
   props: {
     title_label: { type: String, default: "", required: false }, // title_text (str) (optional, defaults to empty string "")
     key_placeholder: { type: String, default: "" }, // placeholder (str)
@@ -93,11 +92,13 @@ export default {
       input_value_key: this.user_key,
       input_width_background: this.input_width + 4, // This is required as the red/green boxes around the input widget requirement based on feedback introduced the need its not in Mockflow
       // very essential else the input box would appear poping out on the right side outside the background, request to consult Eli or Raghu
-      // if any modification are to be done on the increament
     };
   },
   computed: {
-    inputenterykeyState: function () {
+    input_key_action: function () {
+      // This is a very sensitive computed function as its invoked on every key entry by user action
+      // the function would never have any processing its only responsible to pass the value of string to the parent component
+      // any modification to add logic might impact depedent functionalities, request to consult Eli or Raghu
       this.$emit("update:user_key", this.input_value_key);
       return this.invalid_text === "";
     },

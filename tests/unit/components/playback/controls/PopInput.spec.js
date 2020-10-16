@@ -75,7 +75,7 @@ describe("popinput.vue", () => {
     const parent_id_events = wrapper.emitted("update:user_key");
     expect(parent_id_events).toHaveLength(2);
     expect(parent_id_events).toStrictEqual([[""], ["2VSckkBYH2An3dqHEyfRRE"]]);
-    expect(wrapper.vm.inputenterykeyState).toStrictEqual(true);
+    expect(wrapper.vm.input_key_action).toStrictEqual(true); // This is a computed value its a response its important to verify the value
   });
   test("When the popinput is mouted, Then when by default an error text is rendered provided in the prop", async () => {
     const propsData = {
