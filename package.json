@@ -39,7 +39,7 @@
     "axios": "^0.20.0",
     "base-x": "^3.0.8",
     "bootstrap-vue": "^2.17.3",
-    "d3": "^5.16.0",
+    "d3": "^6.2.0",
     "jquery": "^3.5.1",
     "typeface-anonymous-pro": "^0.0.72",
     "typeface-muli": "^1.1.3",
