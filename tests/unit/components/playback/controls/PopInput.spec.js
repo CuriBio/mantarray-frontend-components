@@ -178,4 +178,45 @@ describe("popinput.vue", () => {
       "width: 390px; top: 88px;"
     );
   });
+  test("When the PopInput is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width' in the event of title being empty the height is modified without a hole", async () => {
+    const propsData = {
+      title_label: "",
+      key_placeholder: "place holder",
+      user_key: "",
+      invalid_text: "This field is required",
+      input_check: false,
+      block: false,
+      input_width: 390,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const background = wrapper.find(".div__popinput-background");
+    expect(background.attributes("style")).toStrictEqual(
+      "width: 394px; height: 60px;"
+    );
+    const input_title_label = wrapper.find(".span__popinput-content-label");
+    expect(input_title_label.exists()).toBe(false);
+
+    const input_bounded_div = wrapper.find(
+      ".div__popinput-controls-content-input-widget"
+    );
+    expect(input_bounded_div.attributes("style")).toStrictEqual(
+      "width: 390px; top: 0px;"
+    );
+    const input_text_entry_span = wrapper.find(
+      ".span__popinput-controls-content-input-txt-widget"
+    );
+    expect(input_text_entry_span.attributes("style")).toStrictEqual(
+      "width: 390px;"
+    );
+    const input_text_entry_feedback = wrapper.find(
+      ".div__popinput-controls-content-input-feedback"
+    );
+    expect(input_text_entry_feedback.attributes("style")).toStrictEqual(
+      "width: 390px; top: 48px;"
+    );
+  });
 });
