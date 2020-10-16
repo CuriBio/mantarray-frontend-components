@@ -5,7 +5,7 @@ const path = require("path");
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 const input_field = Selector("#input-widget");
-const input_label = Selector(".span__popinput-content-label");
+const input_label = Selector(".span__input-content-label");
 
 fixture`playback/controls/player/popup-input/basic-input`
   .page // declare the fixture
@@ -179,4 +179,22 @@ test("testing the popinput when the input validation rules 1, 2, 3 charters", as
     "pop-input-validation-rules-three-charter"
   );
   await testcafe_page_visual_regression(t, screenshot_path_three);
+});
+
+fixture`playback/controls/player/popup-input/input-no-title-label`
+  .page // declare the fixture
+`http://localhost:8080/playback/controls/player/popup-input/input-no-title-label`; // specify the start page
+
+test("testing the popinput when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
+  const screenshot_path_base = path.join(
+    "playback",
+    "controls",
+    "player",
+    "settings-form"
+  );
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "pop-input-no-title-label"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path);
 });

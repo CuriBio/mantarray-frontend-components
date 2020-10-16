@@ -2,18 +2,18 @@
   <div>
     <PopInput
       :title_label="label"
-      :key_placeholder="keyplaceholder"
-      :input_check="spellchecking"
+      :placeholder="keyplaceholder"
+      :spellcheck="spellchecking"
       :invalid_text="error_text"
-      :user_key.sync="entrykey"
+      :value.sync="entrykey"
       :input_width="entry_width"
-      :block="disallow_entry"
+      :disabled="disallow_entry"
     ></PopInput>
   </div>
 </template>
 
 <script>
-import { PopInput } from "../../../../../dist/mantarray.common";
+import { PopInput } from "@/dist/mantarray.common";
 // import PopInput from "@/components/playback/controls/player/PopInput.vue";
 import Vue from "vue";
 
@@ -75,38 +75,6 @@ export default {
     this.disallow_entry = false;
   },
   methods: {
-    entrykeys() {
-      let current_validation = false;
-      this.key_validation = current_validation;
-      const len_alpahanumerickey = this.entrykey.length;
-      if (this.entrykey.length == 22) {
-        /* eslint-disable new-cap */
-        uuid.customBase = new uuid.baseX(
-          "23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-        );
-        /* eslint-enable new-cap */
-        // decode the the value provided
-        try {
-          // decode the the value provided
-          const decode_uuid = uuid.decode(this.entrykey);
-          const encode_uuid = uuid.encode(decode_uuid);
-          if (encode_uuid === this.entrykey) {
-            this.uuid_errorfinder(len_alpahanumerickey, "valid");
-            current_validation = true;
-            this.key_validation = current_validation;
-          } else {
-            this.uuid_errorfinder(len_alpahanumerickey, "encoderror");
-          }
-        } catch (err) {
-          this.uuid_errorfinder(len_alpahanumerickey, "error");
-          current_validation = false;
-          this.key_validation = current_validation;
-        }
-      } else {
-        this.uuid_errorfinder(len_alpahanumerickey, "size");
-      }
-      return this.key_validation;
-    },
     uuid_errorfinder(len, source) {
       let invalid_builder = "";
       let error = false;

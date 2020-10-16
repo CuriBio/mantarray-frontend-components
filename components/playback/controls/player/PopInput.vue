@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="div__popinput-background"
+      class="div__input-background"
       :style="
         'width: ' +
         input_width_background +
@@ -13,7 +13,7 @@
     >
       <span
         v-if="title_label !== ''"
-        class="span__popinput-content-label"
+        class="span__input-content-label"
         :style="'width: ' + input_width + 'px;'"
       >
         {{ title_label }}
@@ -21,28 +21,28 @@
       </span>
 
       <div
-        class="div__popinput-controls-content-input-widget"
+        class="div__input-controls-content-widget"
         :class="[
           !input_key_action
-            ? 'div__popinput-controls-content-input--invalid-widget'
-            : 'div__popinput-controls-content-input--valid-widget',
+            ? 'div__input-controls-content-widget--invalid'
+            : 'div__input-controls-content-widget--valid',
         ]"
         :style="
           'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'
         "
       >
         <span
-          class="span__popinput-controls-content-input-txt-widget"
+          class="span__input-controls-content-input-txt-widget"
           :style="'width: ' + input_width + 'px;'"
         >
           <b-form-input
             id="input-widget"
             v-model="input_value_key"
-            :spellcheck="input_check"
+            :spellcheck="spellcheck"
             :state="input_key_action"
             aria-describedby="input-feedback"
-            :placeholder="key_placeholder"
-            :disabled="block"
+            :placeholder="placeholder"
+            :disabled="disabled"
             class="w-100 h-100 edit-id"
             style="
               border-radius: 0;
@@ -54,7 +54,7 @@
         </span>
       </div>
       <div
-        class="div__popinput-controls-content-input-feedback"
+        class="div__input-controls-content-feedback"
         :style="
           'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'
         "
@@ -82,17 +82,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export default {
   name: "PopInput",
   props: {
-    title_label: { type: String, default: "", required: false }, // title_text (str) (optional, defaults to empty string "")
-    key_placeholder: { type: String, default: "" }, // placeholder (str)
+    title_label: { type: String, default: "" }, // title_text (str) (optional, defaults to empty string "")
+    placeholder: { type: String, default: "" }, // placeholder (str)
     invalid_text: { type: String, default: "" }, // invalid_text (str)
-    input_check: { type: Boolean, default: true, required: false }, // spellcheck (optional bool=True)
-    user_key: { type: String, default: "", required: false }, // field_value (str) (optional, defaults to empty string "")
+    spellcheck: { type: Boolean, default: true }, // spellcheck (optional bool=True)
+    value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
-    block: { type: Boolean, default: false, required: false }, // disabled (optional bool=False) (not able to type into input)
+    disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
   },
   data() {
     return {
-      input_value_key: this.user_key,
+      input_value_key: this.value,
       input_width_background: this.input_width + 4, // This is required as the red/green boxes around the input widget requirement based on feedback introduced the need its not in Mockflow
       // very essential else the input box would appear poping out on the right side outside the background, request to consult Eli or Raghu
     };
@@ -102,7 +102,7 @@ export default {
       // This is a very sensitive computed function as its invoked on every key entry by user action
       // the function would never have any processing its only responsible to pass the value of string to the parent component
       // any modification to add logic might impact depedent functionalities, request to consult Eli or Raghu
-      this.$emit("update:user_key", this.input_value_key);
+      this.$emit("update:value", this.input_value_key);
       return this.invalid_text === "";
     },
     input_height_background: function () {
@@ -119,14 +119,13 @@ export default {
 };
 </script>
 <style type="text/css">
-.div__popinput-background {
+.div__input-background {
   transform: rotate(0deg);
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
   background: rgb(17, 17, 17);
   position: absolute;
-  /* height: 100px; */
   top: 0px;
   left: 0px;
   visibility: visible;
@@ -137,7 +136,7 @@ export default {
   pointer-events: all;
 }
 
-.span__popinput-content-label {
+.span__input-content-label {
   pointer-events: all;
   align: center;
   line-height: 100%;
@@ -160,7 +159,7 @@ export default {
   z-index: 25;
 }
 
-.span__popinput-controls-content-input-txt-widget {
+.span__input-controls-content-input-txt-widget {
   padding-left: 0px;
   padding-right: 0px;
   overflow: hidden;
@@ -182,32 +181,31 @@ export default {
   background-color: #2f2f2f;
 }
 
-.div__popinput-controls-content-input-widget {
+.div__input-controls-content-widget {
   pointer-events: all;
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
   height: 45px;
-  /* top: 40px; */
   left: 0px;
   visibility: visible;
   z-index: 7;
   background-color: #1c1c1c;
 }
 
-.div__popinput-controls-content-input--invalid-widget {
+.div__input-controls-content-widget--invalid {
   border-width: thin;
   border-style: solid;
   border-color: #bd3532;
 }
 
-.div__popinput-controls-content-input--valid-widget {
+.div__input-controls-content-widget--valid {
   border-width: thin;
   border-style: solid;
   border-color: #19ac8a;
 }
 
-.div__popinput-controls-content-input-feedback {
+.div__input-controls-content-feedback {
   line-height: 1;
   transform: rotate(0deg);
   padding: 0px;
@@ -216,7 +214,6 @@ export default {
   color: rgb(229, 74, 74);
   font-family: Muli;
   position: absolute;
-  /* top: 88px; */
   left: 0px;
   height: 13px;
   overflow: hidden;

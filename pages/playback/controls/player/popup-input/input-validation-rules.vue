@@ -2,18 +2,18 @@
   <div>
     <PopInput
       :title_label="label"
-      :key_placeholder="keyplaceholder"
-      :input_check="spellchecking"
+      :placeholder="keyplaceholder"
+      :spellcheck="spellchecking"
       :invalid_text="error_text"
-      :user_key.sync="entrykey"
+      :value.sync="entrykey"
       :input_width="entry_width"
-      :block="disallow_entry"
+      :disabled="disallow_entry"
     ></PopInput>
   </div>
 </template>
 
 <script>
-import { PopInput } from "../../../../../dist/mantarray.common";
+import { PopInput } from "@/dist/mantarray.common";
 // import PopInput from "@/components/playback/controls/player/PopInput.vue";
 import Vue from "vue";
 
