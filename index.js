@@ -44,5 +44,5 @@ export { default as RecordingTime } from "./components/playback/controls/Recordi
 export { default as SimulationMode } from "./components/status/SimulationMode.vue";
 export { default as PlateMapEditor } from "./components/playback/controls/PlateMapEditor.vue";
 export { default as PlateWell } from "./components/playback/controls/PlateWell.vue";
-export { default as PopInput } from "./components/playback/controls/player/PopInput.vue";
+export { default as InputWidget } from "./components/playback/controls/player/InputWidget.vue";
 export { default as PopButton } from "./components/playback/controls/player/PopButton.vue";

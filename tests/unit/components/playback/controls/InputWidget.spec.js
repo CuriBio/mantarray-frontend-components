@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/playback/controls/player/PopInput.vue";
-import { PopInput as DistComponentToTest } from "@/dist/mantarray.common";
+import ComponentToTest from "@/components/playback/controls/player/InputWidget.vue";
+import { InputWidget as DistComponentToTest } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 
 import Vuex from "vuex";
@@ -19,7 +19,7 @@ localVue.use(uuid);
 let NuxtStore;
 let store;
 
-describe("popinput.vue", () => {
+describe("InputWidget.vue", () => {
   beforeAll(async () => {
     // note the store will mutate across tests, so make sure to re-create it in beforeEach
     const storePath = `${process.env.buildDir}/store.js`;
