@@ -89,10 +89,10 @@ describe("popbutton.vue", () => {
       store,
       localVue,
     });
-    const target_popdialog_btn = wrapper.find(".span__popdialog-btn-1");
+    const target_popdialog_btn = wrapper.find(".span__popdialog-btn");
     expect(target_popdialog_btn.text()).toStrictEqual("Save ID");
     expect(target_popdialog_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255);"
+      "color: rgb(255, 255, 255); width: 500px; left: 0px;"
     ); // DOM converts the #FFFFFF to rgb(255, 255, 255)
   });
   test("When that popbutton is mounted, Then it loads the button background, button label, visible, focus color and greyed color the values provided from the props as visible is false a greyed color text is rendred", () => {
@@ -111,10 +111,10 @@ describe("popbutton.vue", () => {
       store,
       localVue,
     });
-    const target_popdialog_btn = wrapper.find(".span__popdialog-btn-1");
+    const target_popdialog_btn = wrapper.find(".span__popdialog-btn");
     expect(target_popdialog_btn.text()).toStrictEqual("Save ID");
     expect(target_popdialog_btn.attributes().style).toBe(
-      "color: rgb(63, 63, 63);"
+      "color: rgb(63, 63, 63); width: 500px; left: 0px;"
     ); // DOM converts the #3F3F3F to rgb(63, 63, 63)
   });
   test("When that popbutton is mounted, Then it loads the button background, button label, visible, focus color, greyed color, hover color the values provided from the props as visible is true so focus color text is rendred, user hover the hover color is rendered", async () => {
@@ -134,14 +134,45 @@ describe("popbutton.vue", () => {
       store,
       localVue,
     });
-    const target_popdialog_btn = wrapper.find(".span__popdialog-btn-1");
+    const target_popdialog_btn = wrapper.find(".span__popdialog-btn");
     await target_popdialog_btn.trigger("mouseenter");
     expect(target_popdialog_btn.attributes().style).toBe(
-      "color: rgb(189, 73, 50);"
+      "color: rgb(189, 73, 50); width: 500px; left: 0px;"
     );
     await target_popdialog_btn.trigger("mouseleave");
     expect(target_popdialog_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255);"
+      "color: rgb(255, 255, 255); width: 500px; left: 0px;"
+    );
+  });
+  test("When that popbutton is mounted, Then it loads the button background, with buttons label Cancel/Delete ID/Save ID is placed with equal width of 1/3 that of widget and shifted from left at rate of 0, 1/3 and 2/3", async () => {
+    const propsData = {
+      popup_btn_names: ["Cancel", "Delete ID", "Save ID"],
+      focus_color: "#FFFFFF",
+      hide_color: "#3F3F3F",
+      is_enabled: [true, true, false],
+      hover_color: ["#BD4932", "#BD4932", "#19ac8a"],
+      btn_width: 500,
+      btn_height: 50,
+      btn_top: 0,
+      btn_left: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_popdialog_btn = wrapper.findAll(".span__popdialog-btn");
+    const cancel_btn = target_popdialog_btn.at(0);
+    expect(cancel_btn.attributes().style).toBe(
+      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 0px;"
+    );
+    const delete_btn = target_popdialog_btn.at(1);
+    expect(delete_btn.attributes().style).toBe(
+      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 166.66666666666666px;"
+    );
+    const save_btn = target_popdialog_btn.at(2);
+    expect(save_btn.attributes().style).toBe(
+      "color: rgb(63, 63, 63); width: 166.66666666666666px; left: 333.3333333333333px;"
     );
   });
 });

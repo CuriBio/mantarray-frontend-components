@@ -4,32 +4,14 @@
     <span
       v-for="btn_index in num_of_btn"
       :key="btn_index"
-      :ref="btn_index"
-      :class="'span__popdialog-btn-' + btn_index"
-      :style="btn_stateprop"
+      :ref="btn_index.toString()"
+      class="span__popdialog-btn"
+      :style="btn_stateprop(btn_index)"
       @click="selected(btn_index)"
       @mouseenter="hover_active(btn_index)"
       @mouseleave="hover_inactive(btn_index)"
       >{{ popup_btn_names[btn_index - 1] }}</span
     >
-    <!--    <span
-      ref="btn_1"
-      class="span__popdialog-btn-1"
-      :style="btn_stateprop"
-      @click="selected(1)"
-      @mouseenter="hover_active(1)"
-      @mouseleave="hover_inactive(1)"
-      >{{ popup_btn_names[1] }}</span
-    >
-    <span
-      ref="btn_2"
-      class="span__popdialog-btn-2"
-      :style="btn_stateprop"
-      @click="selected(2)"
-      @mouseenter="hover_active(2)"
-      @mouseleave="hover_inactive(2)"
-      >{{ popup_btn_names[2] }}</span
-    >  -->
     <!--
     <canvas
       class="canvas__popdialog-form-controls-common-vertical-line"
@@ -89,7 +71,6 @@ export default {
   },
   data() {
     return {
-      // num_of_btn: this.popup_btn_names.length,
       count: 0,
     };
   },
@@ -110,24 +91,43 @@ export default {
         "px;"
       );
     },
-    btn_stateprop: function () {
-      return this.is_enabled[this.count]
-        ? "color: " + this.focus_color + ";"
-        : "color: " + this.hide_color + ";";
-    },
   },
   methods: {
+    btn_stateprop(value) {
+      this.count = value - 1;
+      const computed_width = this.btn_width / this.num_of_btn;
+      const computed_left = computed_width * this.count;
+      return this.is_enabled[this.count]
+        ? "color: " +
+            this.focus_color +
+            ";" +
+            "width: " +
+            computed_width +
+            "px;" +
+            "left: " +
+            computed_left +
+            "px;"
+        : "color: " +
+            this.hide_color +
+            ";" +
+            "width: " +
+            computed_width +
+            "px;" +
+            "left: " +
+            computed_left +
+            "px;";
+    },
     selected() {},
     hover_active(value) {
       if (this.is_enabled[value - 1] == true) {
-        // this.$refs["btn_" + value].style.color = this.hover_color[value - 1];
-        // const $ref = this.$refs + "value.toString()";
-        // console.log($ref.style.color);
+        const local_ref = this.$refs[value.toString()];
+        local_ref[0].style.color = this.hover_color[value - 1];
       }
     },
     hover_inactive(value) {
       if (this.is_enabled[value - 1] == true) {
-        // this.$refs["btn_" + value].style.color = this.focus_color;
+        const local_ref = this.$refs[value.toString()];
+        local_ref[0].style.color = this.focus_color;
       }
     },
   },
@@ -149,16 +149,16 @@ export default {
   pointer-events: all;
 }
 
-.span__popdialog-btn-1 {
+.span__popdialog-btn {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 166.66px;
+  /* width: 166.66px; */
   height: 30px;
   top: 7px;
-  left: 0px;
+  /* left: 0px; */
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -170,52 +170,6 @@ export default {
   color: #3f3f3f;
   text-align: center;
   z-index: 19;
-}
-
-.span__popdialog-btn-2 {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 166.66px;
-  height: 30px;
-  top: 7px;
-  left: 166.66px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: #3f3f3f;
-  text-align: center;
-  z-index: 3;
-}
-
-.span__popdialog-btn-3 {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 166.66px;
-  height: 30px;
-  top: 7px;
-  left: 333.34px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: #3f3f3f;
-  text-align: center;
-  z-index: 3;
 }
 
 /*.span__popdialog-btn-enable {*/
