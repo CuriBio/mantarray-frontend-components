@@ -12,19 +12,12 @@
       @mouseleave="hover_inactive(btn_index)"
       >{{ popup_btn_names[btn_index - 1] }}</span
     >
-    <!--
+    <canvas class="canvas__vertical-line" width="14" height="67"></canvas>
     <canvas
-      class="canvas__popdialog-form-controls-common-vertical-line"
-      width="14"
-      height="67"
-    ></canvas>
-    <canvas
-      class="canvas__popdialog-form-controls-common-horizontal-line"
-      :class="canvas__popdialog_form_controls_common_horizontal_line_dynamic"
-      width="482"
-      height="14"
+      class="canvas__common-horizontal-line"
+      :style="'width: ' + (btn_width - 10) + 'px;'"
     >
-    </canvas>  -->
+    </canvas>
   </div>
 </template>
 <script>
@@ -155,10 +148,8 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  /* width: 166.66px; */
   height: 30px;
   top: 7px;
-  /* left: 0px; */
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -171,46 +162,6 @@ export default {
   text-align: center;
   z-index: 19;
 }
-
-/*.span__popdialog-btn-enable {*/
-/*  color: #FFFFFF;*/
-/*}*/
-
-/*.span__popdialog-btn-disable {*/
-/*  color: #3F3F3F;*/
-/*}*/
-
-/*.span__popdialog-form-controls-save-btn {*/
-/*  pointer-events: all;*/
-/*  line-height: 100%;*/
-/*  transform: rotate(0deg);*/
-/*  overflow: hidden;*/
-/*  position: absolute;*/
-/*  width: 250px;*/
-/*  height: 30px;*/
-/*  top: 7px;*/
-/*  left: 250px;*/
-/*  padding: 5px;*/
-/*  visibility: visible;*/
-/*  user-select: none;*/
-/*  font-family: Muli;*/
-/*  font-weight: normal;*/
-/*  font-style: normal;*/
-/*  text-decoration: none;*/
-/*  font-size: 17px;*/
-/*  text-align: center;*/
-/*  z-index: 3;*/
-/*}*/
-
-/*.span__popdialog-form-controls-save-btn-enable {*/
-/*  color: rgb(255, 255, 255);*/
-/*}*/
-/*.span__popdialog-form-controls-save-btn-enable:hover {*/
-/*  color: #19ac8a;*/
-/*}*/
-/*.span__popdialog-form-controls-save-btn-disable {*/
-/*  color: rgb(63, 63, 63);*/
-/*}*/
 
 /*.canvas__popdialog-form-controls-common-vertical-line {*/
 /*  transform: rotate(0deg);*/
@@ -225,18 +176,19 @@ export default {
 /*  background-color: #3f3f3f;*/
 /*}*/
 
-/*.canvas__popdialog-form-controls-common-horizontal-line {*/
-/*  transform: rotate(0deg);*/
-/*  pointer-events: all;*/
-/*  position: absolute;*/
-/*  width: 490px;*/
-/*  height: 2px;*/
-/*  top: 0px;*/
-/*  left: 5px;*/
-/*  visibility: visible;*/
-/*  z-index: 13;*/
-/*  background-color: #3f3f3f;*/
-/*}*/
+.canvas__common-horizontal-line {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  height: 2px;
+  top: 0px;
+  left: 5px;
+  visibility: visible;
+  z-index: 22;
+  color: #3f3f3f;
+  border: 1px solid;
+  opacity: 0.5;
+}
 /*.canvas__popdialog-form-controls-common-horizontal-line-customer-account-id {*/
 /*  top: 1px;*/
 /*}*/

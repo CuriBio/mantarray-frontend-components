@@ -175,4 +175,26 @@ describe("popbutton.vue", () => {
       "color: rgb(63, 63, 63); width: 166.66666666666666px; left: 333.3333333333333px;"
     );
   });
+  test("When the PopButton is mounted, Then it loads the horizontal top-line divider proportion, to the defined width of 490px with padding from edges of the widget length", async () => {
+    const propsData = {
+      popup_btn_names: ["Save ID"],
+      focus_color: "#FFFFFF",
+      hide_color: "#3F3F3F",
+      is_enabled: [true],
+      hover_color: ["#BD4932"],
+      btn_width: 500,
+      btn_height: 50,
+      btn_top: 0,
+      btn_left: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_canvas_common_line = wrapper.find(
+      ".canvas__common-horizontal-line"
+    );
+    expect(target_canvas_common_line.attributes().style).toBe("width: 490px;"); // validated if dynamically the value is modified to n-10 px in width as 5px padding is as per mockflow
+  });
 });
