@@ -1,27 +1,27 @@
 <template>
   <div>
-    <PopButton
+    <ButtonWidget
       :btn_width="500"
       :btn_height="50"
       :btn_top="0"
       :btn_left="0"
-      :popup_btn_names="btnnames"
+      :btn_names="btnnames"
       :focus_color="visiblecolor"
       :hide_color="hidecolor"
       :hover_color="hovercolors"
       :is_enabled="enablelist"
     >
-    </PopButton>
+    </ButtonWidget>
   </div>
 </template>
 
 <script>
-import { PopButton } from "@/dist/mantarray.common";
-// import PopButton from "@/components/playback/controls/player/PopButton.vue";
+import { ButtonWidget } from "@/dist/mantarray.common";
+// import ButtonWidget from "@/components/playback/controls/player/ButtonWidget.vue";
 
 export default {
   components: {
-    PopButton,
+    ButtonWidget,
   },
   created: function () {
     this.btnnames = ["Cancel", "Delete ID", "Save ID"];

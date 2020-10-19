@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="div__popbutton-background" :style="background_cssprops"></div>
+    <div class="div__button-background" :style="background_cssprops"></div>
     <span
       v-for="btn_index in num_of_btn"
       :key="btn_index"
       :ref="btn_index.toString()"
-      class="span__popdialog-btn"
+      class="span__button_label"
       :style="btn_stateprop(btn_index)"
       @click="selected(btn_index)"
       @mouseenter="hover_active(btn_index)"
       @mouseleave="hover_inactive(btn_index)"
-      >{{ popup_btn_names[btn_index - 1] }}
+      >{{ btn_names[btn_index - 1] }}
     </span>
     <div v-if="num_of_verticalline >= 1">
       <canvas
@@ -37,9 +37,9 @@ Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default {
-  name: "Popbutton",
+  name: "ButtonWidget",
   props: {
-    popup_btn_names: {
+    btn_names: {
       type: Array,
       default: function () {
         return [];
@@ -77,10 +77,10 @@ export default {
   },
   computed: {
     num_of_btn: function () {
-      return this.popup_btn_names.length;
+      return this.btn_names.length;
     },
     num_of_verticalline: function () {
-      return this.popup_btn_names.length - 1;
+      return this.btn_names.length - 1;
     },
     background_cssprops: function () {
       return (
@@ -151,7 +151,7 @@ export default {
 };
 </script>
 <style>
-.div__popbutton-background {
+.div__button-background {
   transform: rotate(0deg);
   box-sizing: border-box;
   padding: 0px;
@@ -166,7 +166,7 @@ export default {
   pointer-events: all;
 }
 
-.span__popdialog-btn {
+.span__button_label {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);

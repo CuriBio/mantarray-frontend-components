@@ -45,4 +45,4 @@ export { default as SimulationMode } from "./components/status/SimulationMode.vu
 export { default as PlateMapEditor } from "./components/playback/controls/PlateMapEditor.vue";
 export { default as PlateWell } from "./components/playback/controls/PlateWell.vue";
 export { default as InputWidget } from "./components/playback/controls/player/InputWidget.vue";
-export { default as PopButton } from "./components/playback/controls/player/PopButton.vue";
+export { default as ButtonWidget } from "./components/playback/controls/player/ButtonWidget.vue";
