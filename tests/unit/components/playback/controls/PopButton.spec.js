@@ -33,7 +33,16 @@ describe("popbutton.vue", () => {
   afterEach(() => wrapper.destroy());
 
   test("When mounting popbutton from the build dist file, Then it loads successfully and the black box is displayed", () => {
-    const propsData = {};
+    const propsData = {
+      popup_btn_names: ["Save ID"],
+      focus_color: "#FFFFFF",
+      hide_color: "#3F3F3F",
+      is_enabled: [true],
+      btn_width: 500,
+      btn_height: 50,
+      btn_top: 0,
+      btn_left: 0,
+    };
     wrapper = shallowMount(DistComponentToTest, {
       propsData,
       store,
@@ -44,6 +53,10 @@ describe("popbutton.vue", () => {
   });
   test("When that popbutton is mounted, Then the button CSS values gets applied based on the values from the props", () => {
     const propsData = {
+      popup_btn_names: ["Save ID"],
+      focus_color: "#FFFFFF",
+      hide_color: "#3F3F3F",
+      is_enabled: [true],
       btn_width: 500,
       btn_height: 50,
       btn_top: 0,
@@ -196,5 +209,82 @@ describe("popbutton.vue", () => {
       ".canvas__common-horizontal-line"
     );
     expect(target_canvas_common_line.attributes().style).toBe("width: 490px;"); // validated if dynamically the value is modified to n-10 px in width as 5px padding is as per mockflow
+  });
+  test("When the PopButton is mounted, Then it loads the widget as there is only one single btn label Save ID, verify that vertical line is not present", async () => {
+    const propsData = {
+      popup_btn_names: ["Save ID"],
+      focus_color: "#FFFFFF",
+      hide_color: "#3F3F3F",
+      is_enabled: [true],
+      hover_color: ["#BD4932"],
+      btn_width: 500,
+      btn_height: 50,
+      btn_top: 0,
+      btn_left: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_canvas_vertical_line = wrapper.find(".canvas__vertical-line");
+    expect(target_canvas_vertical_line.exists()).toBe(false);
+  });
+  test("When that popbutton is mounted, Then it loads the button background, with buttons label Cancel/Delete ID/Save ID in between them a vertical line between button labels is rendered", async () => {
+    const propsData = {
+      popup_btn_names: ["Cancel", "Delete ID", "Save ID"],
+      focus_color: "#FFFFFF",
+      hide_color: "#3F3F3F",
+      is_enabled: [true, true, false],
+      hover_color: ["#BD4932", "#BD4932", "#19ac8a"],
+      btn_width: 500,
+      btn_height: 50,
+      btn_top: 0,
+      btn_left: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_vertical_line = wrapper.findAll(".canvas__vertical-line");
+
+    const first_vertical_line = target_vertical_line.at(0);
+    expect(first_vertical_line.attributes().style).toBe(
+      "left: 166.66666666666666px;"
+    );
+    const second_vertical_line = target_vertical_line.at(1);
+    expect(second_vertical_line.attributes().style).toBe(
+      "left: 333.3333333333333px;"
+    );
+  });
+  test("When that popbutton is mounted, Then it loads the button background, with buttons label Cancel/Save ID when user click on Cancel an event is sent, as Save ID is disabled no-event is sent", async () => {
+    const propsData = {
+      popup_btn_names: ["Cancel", "Save ID"],
+      focus_color: "#FFFFFF",
+      hide_color: "#3F3F3F",
+      is_enabled: [true, false],
+      hover_color: ["#BD4932", "#19ac8a"],
+      btn_width: 500,
+      btn_height: 50,
+      btn_top: 0,
+      btn_left: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_popdialog_btn = wrapper.findAll(".span__popdialog-btn");
+    const cancel_btn = target_popdialog_btn.at(0);
+    await cancel_btn.trigger("click");
+    const parent_id_events = wrapper.emitted("btn-click");
+    expect(parent_id_events).toHaveLength(1);
+    expect(parent_id_events).toStrictEqual([[0]]);
+
+    const save_btn = target_popdialog_btn.at(1);
+    await save_btn.trigger("click");
+    expect(parent_id_events).toHaveLength(1);
+    expect(parent_id_events).toStrictEqual([[0]]);
   });
 });

@@ -10,9 +10,17 @@
       @click="selected(btn_index)"
       @mouseenter="hover_active(btn_index)"
       @mouseleave="hover_inactive(btn_index)"
-      >{{ popup_btn_names[btn_index - 1] }}</span
-    >
-    <canvas class="canvas__vertical-line" width="14" height="67"></canvas>
+      >{{ popup_btn_names[btn_index - 1] }}
+    </span>
+    <div v-if="num_of_verticalline >= 1">
+      <canvas
+        v-for="line_index in num_of_verticalline"
+        :key="line_index"
+        class="canvas__vertical-line"
+        :style="btn_divider_display(line_index)"
+      >
+      </canvas>
+    </div>
     <canvas
       class="canvas__common-horizontal-line"
       :style="'width: ' + (btn_width - 10) + 'px;'"
@@ -71,6 +79,9 @@ export default {
     num_of_btn: function () {
       return this.popup_btn_names.length;
     },
+    num_of_verticalline: function () {
+      return this.popup_btn_names.length - 1;
+    },
     background_cssprops: function () {
       return (
         "width: " +
@@ -110,7 +121,20 @@ export default {
             computed_left +
             "px;";
     },
-    selected() {},
+    btn_divider_display(value) {
+      const computed_width = this.btn_width / this.num_of_btn;
+      if (value == 0) {
+        return "left: " + computed_width + "px;";
+      } else {
+        const left_shift = computed_width * value;
+        return "left: " + left_shift + "px;";
+      }
+    },
+    selected(value) {
+      if (this.is_enabled[value - 1] == true) {
+        this.$emit("btn-click", value - 1);
+      }
+    },
     hover_active(value) {
       if (this.is_enabled[value - 1] == true) {
         const local_ref = this.$refs[value.toString()];
@@ -149,7 +173,7 @@ export default {
   overflow: hidden;
   position: absolute;
   height: 30px;
-  top: 7px;
+  top: 7.5px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -163,18 +187,19 @@ export default {
   z-index: 19;
 }
 
-/*.canvas__popdialog-form-controls-common-vertical-line {*/
-/*  transform: rotate(0deg);*/
-/*  pointer-events: all;*/
-/*  position: absolute;*/
-/*  width: 2px;*/
-/*  height: 50px;*/
-/*  top: 0px;*/
-/*  left: 250px;*/
-/*  visibility: visible;*/
-/*  z-index: 15;*/
-/*  background-color: #3f3f3f;*/
-/*}*/
+.canvas__vertical-line {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 2px;
+  height: 50px;
+  top: 0px;
+  left: 0px;
+  visibility: visible;
+  z-index: 15;
+  background-color: #3f3f3f;
+  opacity: 1;
+}
 
 .canvas__common-horizontal-line {
   transform: rotate(0deg);
@@ -185,11 +210,7 @@ export default {
   left: 5px;
   visibility: visible;
   z-index: 22;
-  color: #3f3f3f;
-  border: 1px solid;
-  opacity: 0.5;
+  background-color: #3f3f3f;
+  opacity: 1;
 }
-/*.canvas__popdialog-form-controls-common-horizontal-line-customer-account-id {*/
-/*  top: 1px;*/
-/*}*/
 </style>
