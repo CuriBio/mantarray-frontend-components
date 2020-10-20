@@ -29,13 +29,6 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import BootstrapVue from "bootstrap-vue";
-import { BButton } from "bootstrap-vue";
-Vue.use(BootstrapVue);
-Vue.component("BButton", BButton);
-import "bootstrap/dist/css/bootstrap.min.css";
-
 export default {
   name: "ButtonWidget",
   props: {

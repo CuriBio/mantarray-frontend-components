@@ -5,16 +5,11 @@ import { shallowMount } from "@vue/test-utils";
 
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
-import BootstrapVue from "bootstrap-vue";
-import "bootstrap/dist/css/bootstrap.min.css";
-import uuid from "@tofandel/uuid-base62";
 
 let wrapper = null;
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
-localVue.use(BootstrapVue);
-localVue.use(uuid);
 
 let NuxtStore;
 let store;
@@ -72,20 +67,6 @@ describe("ButtonWidget.vue", () => {
       "width: 500px; height: 50px; top: 0px; left: 0px;"
     );
   });
-
-  /*
-
-  Given ButtonWidget is mounted with empty invalid_text, When the invalid_text prop gets updated to non-empty, Then the red text appears in the DOM
-
-  Given ButtonWidget is mounted with empty invalid_text, When the invalid_text prop gets updated to non-empty, Then the red "invalid" icon appears inside the textbox
-
-  When ButtonWidget is mounted with a message in invalid_text, Then the red "invalid" icon appears inside the textbox and red outline and invalid_text is displayed below
-
-
-
-
-  */
-
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color and greyed color the values provided from the props as visible is true so focus color text is rendred", () => {
     const propsData = {
       btn_names: ["Save ID"],
