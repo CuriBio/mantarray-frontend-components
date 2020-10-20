@@ -29,14 +29,15 @@ describe("ButtonWidget.vue", () => {
 
   test("When mounting ButtonWidget from the build dist file, Then it loads successfully and the black box is displayed", () => {
     const propsData = {
-      btn_names: ["Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      hover_color: ["#BD4932"],
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = shallowMount(DistComponentToTest, {
       propsData,
@@ -46,16 +47,17 @@ describe("ButtonWidget.vue", () => {
     const target_background_div = wrapper.find(".div__button-background");
     expect(target_background_div.isVisible()).toBe(true);
   });
-  test("When that ButtonWidget is mounted, Then the button CSS values gets applied based on the values from the props", () => {
+  test("When that ButtonWidget is mounted, Then the button width/height/top and left gets applied based on the values from the props", () => {
     const propsData = {
-      btn_names: ["Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      hover_color: ["#BD4932"],
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -69,14 +71,15 @@ describe("ButtonWidget.vue", () => {
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color and greyed color the values provided from the props as visible is true so focus color text is rendred", () => {
     const propsData = {
-      btn_names: ["Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      hover_color: ["#BD4932"],
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -91,14 +94,15 @@ describe("ButtonWidget.vue", () => {
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color and greyed color the values provided from the props as visible is false a greyed color text is rendred", () => {
     const propsData = {
-      btn_names: ["Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [false],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      hover_color: ["#BD4932"],
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -111,17 +115,49 @@ describe("ButtonWidget.vue", () => {
       "color: rgb(63, 63, 63); width: 500px; left: 0px;"
     ); // DOM converts the #3F3F3F to rgb(63, 63, 63)
   });
+  test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color and greyed color the values provided from the props as visible is false a greyed color text, on a prop update of visible to true the enabled color text is rendered", async () => {
+    const propsData = {
+      button_names: ["Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
+      is_enabled: [false],
+      hover_color: ["#BD4932"],
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_button_label_btn = wrapper.find(".span__button_label");
+    expect(target_button_label_btn.text()).toStrictEqual("Save ID");
+    expect(target_button_label_btn.attributes().style).toBe(
+      "color: rgb(63, 63, 63); width: 500px; left: 0px;"
+    ); // DOM converts the #3F3F3F to rgb(63, 63, 63)
+
+    const updated_propsData = {
+      is_enabled: [true],
+    };
+
+    await wrapper.setProps(updated_propsData);
+    expect(target_button_label_btn.attributes().style).toBe(
+      "color: rgb(255, 255, 255); width: 500px; left: 0px;"
+    ); // DOM converts the #FFFFFF to rgb(255, 255, 255)
+  });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color, greyed color, hover color the values provided from the props as visible is true so focus color text is rendred, user hover the hover color is rendered", async () => {
     const propsData = {
-      btn_names: ["Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true],
       hover_color: ["#BD4932"],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -140,15 +176,15 @@ describe("ButtonWidget.vue", () => {
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, with buttons label Cancel/Delete ID/Save ID is placed with equal width of 1/3 that of widget and shifted from left at rate of 0, 1/3 and 2/3", async () => {
     const propsData = {
-      btn_names: ["Cancel", "Delete ID", "Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Cancel", "Delete ID", "Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true, true, false],
       hover_color: ["#BD4932", "#BD4932", "#19ac8a"],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -171,15 +207,15 @@ describe("ButtonWidget.vue", () => {
   });
   test("When the ButtonWidget is mounted, Then it loads the horizontal top-line divider proportion, to the defined width of 490px with padding from edges of the widget length", async () => {
     const propsData = {
-      btn_names: ["Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true],
       hover_color: ["#BD4932"],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -193,15 +229,15 @@ describe("ButtonWidget.vue", () => {
   });
   test("When the ButtonWidget is mounted, Then it loads the widget as there is only one single btn label Save ID, verify that vertical line is not present", async () => {
     const propsData = {
-      btn_names: ["Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true],
       hover_color: ["#BD4932"],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -213,15 +249,15 @@ describe("ButtonWidget.vue", () => {
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, with buttons label Cancel/Delete ID/Save ID in between them a vertical line between button labels is rendered", async () => {
     const propsData = {
-      btn_names: ["Cancel", "Delete ID", "Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Cancel", "Delete ID", "Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true, true, false],
       hover_color: ["#BD4932", "#BD4932", "#19ac8a"],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -239,17 +275,17 @@ describe("ButtonWidget.vue", () => {
       "left: 333.3333333333333px;"
     );
   });
-  test("When that ButtonWidget is mounted, Then it loads the button background, with buttons label Cancel/Save ID when user click on Cancel an event is sent, as Save ID is disabled no-event is sent", async () => {
+  test("When the ButtonWidget is mounted with Cancel / Save ID buttons and Save is disabled, When User clicks on Cancel, Then an event is emmitted with the Button Index as the contents of the event", async () => {
     const propsData = {
-      btn_names: ["Cancel", "Save ID"],
-      focus_color: "#FFFFFF",
-      hide_color: "#3F3F3F",
+      button_names: ["Cancel", "Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
       is_enabled: [true, false],
       hover_color: ["#BD4932", "#19ac8a"],
-      btn_width: 500,
-      btn_height: 50,
-      btn_top: 0,
-      btn_left: 0,
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -262,10 +298,29 @@ describe("ButtonWidget.vue", () => {
     const parent_id_events = wrapper.emitted("btn-click");
     expect(parent_id_events).toHaveLength(1);
     expect(parent_id_events).toStrictEqual([[0]]);
-
+  });
+  test("When the ButtonWidget is mounted with Cancel / Save ID buttons and Save is disabled, When User clicks on Cancel, Then no event is emmitted when disabled button of Save is clicked", async () => {
+    const propsData = {
+      button_names: ["Cancel", "Save ID"],
+      enabled_color: "#FFFFFF",
+      disabled_color: "#3F3F3F",
+      is_enabled: [true, false],
+      hover_color: ["#BD4932", "#19ac8a"],
+      button_widget_width: 500,
+      button_widget_height: 50,
+      button_widget_top: 0,
+      button_widget_left: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_button_label_btn = wrapper.findAll(".span__button_label");
     const save_btn = target_button_label_btn.at(1);
     await save_btn.trigger("click");
-    expect(parent_id_events).toHaveLength(1);
-    expect(parent_id_events).toStrictEqual([[0]]);
+    const parent_id_events = wrapper.emitted("btn-click");
+    expect(parent_id_events).toBeUndefined();
+    expect(parent_id_events).toBeUndefined();
   });
 });

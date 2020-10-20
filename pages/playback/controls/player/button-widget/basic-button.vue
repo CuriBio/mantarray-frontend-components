@@ -1,13 +1,13 @@
 <template>
   <div>
     <ButtonWidget
-      :btn_width="500"
-      :btn_height="50"
-      :btn_top="0"
-      :btn_left="0"
-      :btn_names="btnnames"
-      :focus_color="visiblecolor"
-      :hide_color="hidecolor"
+      :button_widget_width="500"
+      :button_widget_height="50"
+      :button_widget_top="0"
+      :button_widget_left="0"
+      :button_names="btnnames"
+      :enabled_color="visiblecolor"
+      :disabled_color="hidecolor"
       :hover_color="hovercolors"
       :is_enabled="enablelist"
     >

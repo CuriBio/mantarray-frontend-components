@@ -2,13 +2,13 @@
   <div>
     <div style="top: 50px; left: 88px; position: absolute">
       <ButtonWidget
-        :btn_width="500"
-        :btn_height="50"
-        :btn_top="0"
-        :btn_left="0"
-        :btn_names="btnnames"
-        :focus_color="visiblecolor"
-        :hide_color="hidecolor"
+        :button_widget_width="500"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="btnnames"
+        :enabled_color="visiblecolor"
+        :disabled_color="hidecolor"
         :hover_color="hovercolors_add_customer"
         :is_enabled="enablelist"
       >
@@ -16,13 +16,13 @@
     </div>
     <div style="top: 110px; left: 88px; position: absolute">
       <ButtonWidget
-        :btn_width="500"
-        :btn_height="50"
-        :btn_top="0"
-        :btn_left="0"
-        :btn_names="btnnames_add_customer"
-        :focus_color="visiblecolor_add_customer"
-        :hide_color="hidecolor_add_customer"
+        :button_widget_width="500"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="btnnames_add_customer"
+        :enabled_color="visiblecolor_add_customer"
+        :disabled_color="hidecolor_add_customer"
         :hover_color="hovercolors_add_customer"
         :is_enabled="enablelist_add_customer"
       >
@@ -30,13 +30,13 @@
     </div>
     <div style="top: 170px; left: 88px; position: absolute">
       <ButtonWidget
-        :btn_width="400"
-        :btn_height="50"
-        :btn_top="0"
-        :btn_left="0"
-        :btn_names="btnnames_trash_treatment"
-        :focus_color="visiblecolor_trash_treatment"
-        :hide_color="hidecolor_trash_treatment"
+        :button_widget_width="400"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="btnnames_trash_treatment"
+        :enabled_color="visiblecolor_trash_treatment"
+        :disabled_color="hidecolor_trash_treatment"
         :hover_color="hovercolors_trash_treatment"
         :is_enabled="enablelist_trash_treatment"
       >
@@ -44,13 +44,13 @@
     </div>
     <div style="top: 230px; left: 88px; position: absolute">
       <ButtonWidget
-        :btn_width="1000"
-        :btn_height="50"
-        :btn_top="0"
-        :btn_left="0"
-        :btn_names="btnnames_plate_map_treatment"
-        :focus_color="visiblecolor_plate_map_treatment"
-        :hide_color="hidecolor_plate_map_treatment"
+        :button_widget_width="1000"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="btnnames_plate_map_treatment"
+        :enabled_color="visiblecolor_plate_map_treatment"
+        :disabled_color="hidecolor_plate_map_treatment"
         :hover_color="hovercolors_plate_map_treatment"
         :is_enabled="enablelist_plate_map_treatment"
       >
@@ -58,13 +58,13 @@
     </div>
     <div style="top: 290px; left: 88px; position: absolute">
       <ButtonWidget
-        :btn_width="500"
-        :btn_height="50"
-        :btn_top="0"
-        :btn_left="0"
-        :btn_names="btnnames_create_plate_map_treatment"
-        :focus_color="visiblecolor_create_plate_map_treatment"
-        :hide_color="hidecolor_create_plate_map_treatment"
+        :button_widget_width="500"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="btnnames_create_plate_map_treatment"
+        :enabled_color="visiblecolor_create_plate_map_treatment"
+        :disabled_color="hidecolor_create_plate_map_treatment"
         :hover_color="hovercolors_create_plate_map_treatment"
         :is_enabled="enablelist_create_plate_map_treatment"
       >
@@ -72,13 +72,13 @@
     </div>
     <div style="top: 350px; left: 88px; position: absolute">
       <ButtonWidget
-        :btn_width="420"
-        :btn_height="50"
-        :btn_top="0"
-        :btn_left="0"
-        :btn_names="btnnames_create_plate_map_okay"
-        :focus_color="visiblecolor_create_plate_map_okay"
-        :hide_color="hidecolor_create_plate_map_okay"
+        :button_widget_width="420"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="btnnames_create_plate_map_okay"
+        :enabled_color="visiblecolor_create_plate_map_okay"
+        :disabled_color="hidecolor_create_plate_map_okay"
         :hover_color="hovercolors_create_plate_map_okay"
         :is_enabled="enablelist_create_plate_map_okay"
       >
@@ -86,13 +86,13 @@
     </div>
     <div style="top: 410px; left: 88px; position: absolute">
       <ButtonWidget
-        :btn_width="265"
-        :btn_height="50"
-        :btn_top="0"
-        :btn_left="0"
-        :btn_names="btnnames_y_axis_widget"
-        :focus_color="visiblecolor_y_axis_widget"
-        :hide_color="hidecolor_y_axis_widget"
+        :button_widget_width="265"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="btnnames_y_axis_widget"
+        :enabled_color="visiblecolor_y_axis_widget"
+        :disabled_color="hidecolor_y_axis_widget"
         :hover_color="hovercolors_y_axis_widget"
         :is_enabled="enablelist_y_axis_widget"
       >

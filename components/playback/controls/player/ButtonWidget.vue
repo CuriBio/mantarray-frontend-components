@@ -10,7 +10,7 @@
       @click="selected(btn_index)"
       @mouseenter="hover_active(btn_index)"
       @mouseleave="hover_inactive(btn_index)"
-      >{{ btn_names[btn_index - 1] }}
+      >{{ button_names[btn_index - 1] }}
     </span>
     <div v-if="num_of_verticalline >= 1">
       <canvas
@@ -23,7 +23,7 @@
     </div>
     <canvas
       class="canvas__common-horizontal-line"
-      :style="'width: ' + (btn_width - 10) + 'px;'"
+      :style="'width: ' + (button_widget_width - 10) + 'px;'"
     >
     </canvas>
   </div>
@@ -32,36 +32,26 @@
 export default {
   name: "ButtonWidget",
   props: {
-    btn_names: {
+    button_names: {
       type: Array,
-      default: function () {
-        return [];
-      },
+      required: true,
     },
-    focus_color: { type: String, default: "" },
-    hide_color: { type: String, default: "" },
+    enabled_color: { type: String, default: "" },
+    disabled_color: { type: String, default: "" },
     hover_color: {
       type: Array,
-      default: function () {
-        return [];
-      },
+      required: true,
     },
     is_enabled: {
       type: Array,
       default: function () {
-        return [];
+        return new Array(this.num_of_btn).fill(true);
       },
     },
-    btn_width: { type: Number, default: 0 },
-    btn_height: { type: Number, default: 0 },
-    btn_top: { type: Number, default: 0 },
-    btn_left: { type: Number, default: 0 },
-    event_names: {
-      type: Array,
-      default: function () {
-        return [];
-      },
-    },
+    button_widget_width: { type: Number, default: 0 },
+    button_widget_height: { type: Number, default: 0 },
+    button_widget_top: { type: Number, default: 0 },
+    button_widget_left: { type: Number, default: 0 },
   },
   data() {
     return {
@@ -70,21 +60,21 @@ export default {
   },
   computed: {
     num_of_btn: function () {
-      return this.btn_names.length;
+      return this.button_names.length;
     },
     num_of_verticalline: function () {
-      return this.btn_names.length - 1;
+      return this.button_names.length - 1;
     },
     background_cssprops: function () {
       return (
         "width: " +
-        this.btn_width +
+        this.button_widget_width +
         "px; height: " +
-        this.btn_height +
+        this.button_widget_height +
         "px; top: " +
-        this.btn_top +
+        this.button_widget_top +
         "px; left: " +
-        this.btn_left +
+        this.button_widget_left +
         "px;"
       );
     },
@@ -92,11 +82,11 @@ export default {
   methods: {
     btn_stateprop(value) {
       this.count = value - 1;
-      const computed_width = this.btn_width / this.num_of_btn;
+      const computed_width = this.button_widget_width / this.num_of_btn;
       const computed_left = computed_width * this.count;
       return this.is_enabled[this.count]
         ? "color: " +
-            this.focus_color +
+            this.enabled_color +
             ";" +
             "width: " +
             computed_width +
@@ -105,7 +95,7 @@ export default {
             computed_left +
             "px;"
         : "color: " +
-            this.hide_color +
+            this.disabled_color +
             ";" +
             "width: " +
             computed_width +
@@ -115,7 +105,7 @@ export default {
             "px;";
     },
     btn_divider_display(value) {
-      const computed_width = this.btn_width / this.num_of_btn;
+      const computed_width = this.button_widget_width / this.num_of_btn;
       if (value == 0) {
         return "left: " + computed_width + "px;";
       } else {
@@ -137,7 +127,7 @@ export default {
     hover_inactive(value) {
       if (this.is_enabled[value - 1] == true) {
         const local_ref = this.$refs[value.toString()];
-        local_ref[0].style.color = this.focus_color;
+        local_ref[0].style.color = this.enabled_color;
       }
     },
   },

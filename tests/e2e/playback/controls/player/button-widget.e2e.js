@@ -77,3 +77,27 @@ test("testing the multiple options capability using Button Widget with an X-Y Of
   const screenshot_path = path.join(screenshot_path_base, "multiple-button");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+
+fixture`playback/controls/player/button-widget/button-event`
+  .page // declare the fixture
+`http://localhost:8080/playback/controls/player/button-widget/button-event`; // specify the start page
+test("testing the ButtonWidget and hover on the buttons", async (t) => {
+  const screenshot_path_base = path.join(
+    "playback",
+    "controls",
+    "player",
+    "button-widget"
+  );
+
+  const buttons = ["cancel", "delete", "save"];
+  var count = await span__button_label.count;
+
+  for (var i = 0; i < count; i++) {
+    let screenshot_path = path.join(
+      screenshot_path_base,
+      "button-widget-Clicked-" + buttons[i]
+    );
+    await t.click(span__button_label.nth(i));
+    await testcafe_page_visual_regression(t, screenshot_path);
+  }
+});
