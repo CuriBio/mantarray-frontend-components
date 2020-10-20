@@ -11,7 +11,7 @@ fixture`playback/controls/player/input-widget/basic-input`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-widget/basic-input`; // specify the start page
 
-test("testing the popinput for the NO Value Entered", async (t) => {
+test("testing the Input Widget for the NO Value Entered", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -25,7 +25,7 @@ test("testing the popinput for the NO Value Entered", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-test("testing the popinput for the VALID Value Entered", async (t) => {
+test("testing the Input Widget for the VALID Value Entered", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -41,7 +41,7 @@ test("testing the popinput for the VALID Value Entered", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-test("testing the popinput for the spellcheck is set to false so red squiggle line not visible", async (t) => {
+test("testing the Input Widget for the spellcheck is set to false so red squiggle line not visible", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -61,7 +61,7 @@ fixture`playback/controls/player/input-widget/x-y-offset`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-widget/x-y-offset`; // specify the start page
 
-test("testing the popinput for the X-Y Offset", async (t) => {
+test("testing the Input Widget for the X-Y Offset", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -76,7 +76,7 @@ fixture`playback/controls/player/input-widget/input-spellcheck`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-widget/input-spellcheck`; // specify the start page
 
-test("testing the popinput for the NO Value Entered", async (t) => {
+test("testing the Input Widget for the NO Value Entered", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -96,7 +96,7 @@ fixture`playback/controls/player/input-widget/input-width-200`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-widget/input-width-200`; // specify the start page
 
-test("testing the popinput for width of 200px", async (t) => {
+test("testing the Input Widget for width of 200px", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -114,7 +114,7 @@ fixture`playback/controls/player/input-widget/input-width-300`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-widget/input-width-300`; // specify the start page
 
-test("testing the popinput for width of 300px", async (t) => {
+test("testing the Input Widget for width of 300px", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -132,7 +132,7 @@ fixture`playback/controls/player/input-widget/input-disallow`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-widget/input-disallow`; // specify the start page
 
-test("testing the popinput when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
+test("testing the Input Widget when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -152,7 +152,7 @@ fixture`playback/controls/player/input-widget/input-validation-rules`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-widget/input-validation-rules`; // specify the start page
 
-test("testing the popinput when the input validation rules 1, 2, 3 charters", async (t) => {
+test("testing the Input Widget when the input validation rules 1, 2, 3 charters", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
@@ -191,7 +191,7 @@ fixture`playback/controls/player/input-widget/input-no-title-label`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-widget/input-no-title-label`; // specify the start page
 
-test("testing the popinput when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
+test("testing the Input Widget when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",
