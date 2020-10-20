@@ -14,7 +14,7 @@
       >
       </ButtonWidget>
     </div>
-    <div style="top: 100px; left: 88px; position: absolute">
+    <div style="top: 110px; left: 88px; position: absolute">
       <ButtonWidget
         :btn_width="500"
         :btn_height="50"
@@ -28,7 +28,7 @@
       >
       </ButtonWidget>
     </div>
-    <div style="top: 150px; left: 88px; position: absolute">
+    <div style="top: 170px; left: 88px; position: absolute">
       <ButtonWidget
         :btn_width="400"
         :btn_height="50"
@@ -42,7 +42,7 @@
       >
       </ButtonWidget>
     </div>
-    <div style="top: 200px; left: 88px; position: absolute">
+    <div style="top: 230px; left: 88px; position: absolute">
       <ButtonWidget
         :btn_width="1000"
         :btn_height="50"
@@ -56,7 +56,7 @@
       >
       </ButtonWidget>
     </div>
-    <div style="top: 250px; left: 88px; position: absolute">
+    <div style="top: 290px; left: 88px; position: absolute">
       <ButtonWidget
         :btn_width="500"
         :btn_height="50"
@@ -70,7 +70,7 @@
       >
       </ButtonWidget>
     </div>
-    <div style="top: 300px; left: 88px; position: absolute">
+    <div style="top: 350px; left: 88px; position: absolute">
       <ButtonWidget
         :btn_width="420"
         :btn_height="50"
@@ -84,7 +84,7 @@
       >
       </ButtonWidget>
     </div>
-    <div style="top: 350px; left: 88px; position: absolute">
+    <div style="top: 410px; left: 88px; position: absolute">
       <ButtonWidget
         :btn_width="265"
         :btn_height="50"
