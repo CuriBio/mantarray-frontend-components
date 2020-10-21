@@ -80,7 +80,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
    input_width = MockflowUI_width - 4
    ==========================================================================================================================================*/
 export default {
-  name: "PopInput",
+  name: "InputWidget",
   props: {
     title_label: { type: String, default: "" }, // title_text (str) (optional, defaults to empty string "")
     placeholder: { type: String, default: "" }, // placeholder (str)
