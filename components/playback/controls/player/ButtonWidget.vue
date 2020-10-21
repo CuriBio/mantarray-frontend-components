@@ -36,8 +36,8 @@ export default {
       type: Array,
       required: true,
     },
-    enabled_color: { type: String, default: "" },
-    disabled_color: { type: String, default: "" },
+    enabled_color: { type: String, default: "#FFFFFF" },
+    disabled_color: { type: String, default: "#3F3F3F" },
     hover_color: {
       type: Array,
       required: true,
@@ -45,7 +45,7 @@ export default {
     is_enabled: {
       type: Array,
       default: function () {
-        return new Array(this.num_of_btn).fill(true);
+        return new Array(this.button_names.length).fill(true);
       },
     },
     button_widget_width: { type: Number, default: 0 },
@@ -106,12 +106,8 @@ export default {
     },
     btn_divider_display(value) {
       const computed_width = this.button_widget_width / this.num_of_btn;
-      if (value == 0) {
-        return "left: " + computed_width + "px;";
-      } else {
-        const left_shift = computed_width * value;
-        return "left: " + left_shift + "px;";
-      }
+      const left_shift = computed_width * value;
+      return "left: " + left_shift + "px;";
     },
     selected(value) {
       if (this.is_enabled[value - 1] == true) {

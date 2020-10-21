@@ -5,6 +5,7 @@ const path = require("path");
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 const span__button_label = Selector(".span__button_label");
+const button_event_handler = Selector(".button-event-handler");
 
 fixture`playback/controls/player/button-widget/basic-button`
   .page // declare the fixture
@@ -82,22 +83,13 @@ fixture`playback/controls/player/button-widget/button-event`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/button-widget/button-event`; // specify the start page
 test("testing the ButtonWidget and hover on the buttons", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "button-widget"
-  );
-
-  const buttons = ["cancel", "delete", "save"];
+  const buttons_label = ["Cancel", "Delete ID", "Save ID"];
   var count = await span__button_label.count;
 
   for (var i = 0; i < count; i++) {
-    let screenshot_path = path.join(
-      screenshot_path_base,
-      "button-widget-Clicked-" + buttons[i]
-    );
     await t.click(span__button_label.nth(i));
-    await testcafe_page_visual_regression(t, screenshot_path);
+    await t
+      .expect(button_event_handler.textContent)
+      .contains("The Button that was clicked :" + buttons_label[i]);
   }
 });

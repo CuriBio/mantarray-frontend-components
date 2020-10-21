@@ -15,8 +15,8 @@
       >
       </ButtonWidget>
     </div>
-    <div>
-      The Button that was clicked : <b> {{ clicked }} </b>
+    <div class="button-event-handler">
+      The Button that was clicked :<b>{{ clicked }}</b>
     </div>
   </div>
 </template>
