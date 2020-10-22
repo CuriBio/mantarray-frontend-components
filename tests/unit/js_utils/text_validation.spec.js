@@ -64,12 +64,62 @@ describe("TextValidation.validate", () => {
     ["MB190440991", "11", "YEAR is SET AS 19"],
     ["MB210440991", "11", "YEAR is SET AS 21"],
     ["MB100440991", "11", "YEAR is SET AS 10"],
+    ["MA*#300001", "10", "Invalid symbols"],
   ])(
     "Given a text %s as the platebarcode, When the  [input.length = %s] values in the index range of [2-3] is %s fails the defined criteria of YEAR EQUAL 20, Then validation fails and feedback text is <space>",
     (plate_bar_code, len, error) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
       expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
+    }
+  );
+  test.each([
+    ["MA20222111*", "Invalid symbols"],
+    ["MA20010*#12", "Invalid symbols"],
+    ["MA20001 021", "<space>"],
+    ["MA20001º21", "scientific symbols"],
+  ])(
+    "Given a text %s as the platebarcode with invalid special charcters on the [input.length = 11], When the middle of the charcters [7-till end]  contained %s fails the defined criteria, Then validation fails and feedback text is <space>",
+    (plate_bar_code, error) => {
+      const text = plate_bar_code;
+      const TestPlateBarCode = TextValidation_PlateBarcode;
+      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
+    }
+  );
+  test.each([
+    ["MA20210न21", "unicode present"],
+    ["MA20011浩211", "unicode present length 11"],
+    ["MA二千万一千〇九", "All unicode"],
+  ])(
+    "Given a text %s as the platebarcode with invalid charcters with the [input.length = 11 or 10], When the text has %s fails the the defined criteria, Then validation fails and feedback text is <space>",
+    (plate_bar_code, error) => {
+      const text = plate_bar_code;
+      const TestPlateBarCode = TextValidation_PlateBarcode;
+      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
+    }
+  );
+  test.each([
+    ["MA", "2"],
+    ["MA20", "4"],
+    ["MA20044", "7"],
+    ["MA20**#*", 8],
+  ])(
+    "When an improper platecode text  %s with the [input.length = %] and special characters as its not matching criteria, Then validation fails and feedback text is <space>",
+    (plate_bar_code, error) => {
+      const text = plate_bar_code;
+      const TestPlateBarCode = TextValidation_PlateBarcode;
+      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
+    }
+  );
+  test.each([
+    ["MA20044001", "10"],
+    ["M120044099", "11"],
+  ])(
+    "When a proper platecode text of %s with the [input.length = %] and special characters as its matching criteria, Then validation PASSES and feedback text is <empty>",
+    (plate_bar_code, error) => {
+      const text = plate_bar_code;
+      const TestPlateBarCode = TextValidation_PlateBarcode;
+      expect(TestPlateBarCode.validate(text)).toStrictEqual("");
     }
   );
 });
