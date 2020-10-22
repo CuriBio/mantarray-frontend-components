@@ -33,7 +33,7 @@ describe("TextValidation", () => {
   });
 });
 
-describe("TextValidation.validate", () => {
+describe("TextValidation.validate_plate_barcode", () => {
   test.each([
     ["AB200440012", "alphabets"],
     ["12200440012", "numbers"],
@@ -120,6 +120,55 @@ describe("TextValidation.validate", () => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
       expect(TestPlateBarCode.validate(text)).toStrictEqual("");
+    }
+  );
+});
+
+describe("TextValidation.validate_uuidBase_fiftyseven_encode", () => {
+  test.each([
+    [
+      "0VSckkBYH2An3dqHEyfRRE",
+      "0",
+      "The entered ID has an invalid character 0,",
+    ],
+    [
+      "2VSckkBY2An3dqHEyfRRE",
+      "one less",
+      "The entered ID is 21 characters. All valid IDs are exactly 22 characters.",
+    ],
+    [
+      "2VSckkBY12An3dqHEyfRRE",
+      "1",
+      "The entered ID has an invalid character 1,",
+    ],
+    [
+      "2VSIkkBYH2An3dqHEyfRRE",
+      "I",
+      "The entered ID has an invalid character I,",
+    ],
+    [
+      "2VSskkBYH2An3dqHElfRRE",
+      "l",
+      "The entered ID has an invalid character l,",
+    ],
+    [
+      "2VSskkBYH2An3dqHEyfRRO",
+      "O",
+      "The entered ID has an invalid character O,",
+    ],
+    ["5FY8KwTsQaUJ2KzHJGetfE", "", ""],
+    [
+      "2VSckkBY2An3dqHEyfRREab",
+      "more than 21",
+      "The entered ID is 23 characters. All valid IDs are exactly 22 characters.",
+    ],
+    ["4vqyd623ARXqj9nRUNhtLQ", "", ""],
+  ])(
+    "Given the encoded-uuid %s is the invalid and fails the matching criteria, When the text contains (%s) charcter, Then validation fails and appropriate invalid text is returned",
+    (uuid_text, error, message) => {
+      const text = message;
+      const TestBase57Code = TextValidation_UUIDBase57;
+      expect(TestBase57Code.validate(uuid_text)).toStrictEqual(text);
     }
   );
 });

@@ -1,3 +1,9 @@
+// dependencies
+const baseX = require("base-x"); // External library depenency of @tofandel/uuid-base62
+const customBase = baseX(
+  "23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+); // Custom Base 57 defined as per requirement.
+
 /** Allows text validation for the pre-defined criteria rules applied on the text by definitions */
 export class TextValidation {
   /**
@@ -29,7 +35,7 @@ export class TextValidation {
         feedback = this.validate_plate_barcode(text);
         break;
       case "uuidBase57encode":
-        /* yet to implement a function todo */
+        feedback = this.validate_uuidBase_fiftyseven_encode(text);
         break;
       case "alphanumeric":
         /* yet to implement a function todo */
@@ -97,5 +103,124 @@ export class TextValidation {
       error = true;
     }
     return error ? " " : "";
+  }
+  /**
+   * Returns the feedback text for the uuidBase57 encoding validation
+   *
+   * @param  {uuidtext}   uuidtext The uuidtext on which the validation rules are verified
+   * @return {string}  The string is either empty on valid or invalid text
+   *
+   */
+  validate_uuidBase_fiftyseven_encode(uuidtext) {
+    let invalid_text = "";
+    const len_uuidBase57encode = uuidtext.length;
+    if (len_uuidBase57encode == 22) {
+      // decode the the value provided
+      try {
+        // decode the the value provided
+        const decode_uuid = customBase.decode(uuidtext);
+        const encode_uuid = customBase.encode(decode_uuid);
+        if (encode_uuid === uuidtext) {
+          invalid_text = this.uuid_errorfinder(
+            len_uuidBase57encode,
+            "valid",
+            uuidtext
+          );
+        } else {
+          invalid_text = this.uuid_errorfinder(
+            len_uuidBase57encode,
+            "encoderror",
+            uuidtext
+          );
+        }
+      } catch (err) {
+        invalid_text = this.uuid_errorfinder(
+          len_uuidBase57encode,
+          "error",
+          uuidtext
+        );
+      }
+    } else {
+      invalid_text = this.uuid_errorfinder(
+        len_uuidBase57encode,
+        "size",
+        uuidtext
+      );
+    }
+    return invalid_text;
+  }
+  /**
+   * Returns the feedback text for the uuidBase57 encoding validation
+   *
+   * @param  {len}    len The len contains the length of uuidbase57 encoded data
+   * @param  {source} source The source identifies first level identified validation and errors.
+   * @param  {uuidtext} uuidtext The uuidtext on which the validation rules are verified
+   * @return {string}  The string is either empty on valid or invalid text with specific information.
+   *
+   */
+  uuid_errorfinder(len, source, uuidtext) {
+    let feedback_text = "";
+    let invalid_builder = "";
+    let error = false;
+    for (let i = 0; i < uuidtext.length; i++) {
+      const scan_ascii = uuidtext.charCodeAt(i);
+      if (scan_ascii === 48) {
+        invalid_builder = invalid_builder + "0";
+        error = true;
+      }
+      if (scan_ascii === 49) {
+        invalid_builder = invalid_builder + "1";
+        error = true;
+      }
+      if (scan_ascii === 73) {
+        invalid_builder = invalid_builder + "I";
+        error = true;
+      }
+      if (scan_ascii === 108) {
+        invalid_builder = invalid_builder + "l";
+        error = true;
+      }
+      if (scan_ascii === 79) {
+        invalid_builder = invalid_builder + "O";
+        error = true;
+      }
+      if (error === true) {
+        invalid_builder = invalid_builder + ",";
+        error = false;
+      }
+    }
+    if (len < 22) {
+      if (len == 0) {
+        feedback_text = "This field is required";
+      } else {
+        feedback_text =
+          "The entered ID is " +
+          len +
+          " characters. All valid IDs are exactly 22 characters.";
+      }
+    } else {
+      if (invalid_builder != "") {
+        feedback_text =
+          "The entered ID has an invalid character " + invalid_builder;
+      } else {
+        if (source == "error") {
+          feedback_text = "Entry permitted for Alphanumeric only";
+        } else {
+          if (source == "encoderror") {
+            feedback_text =
+              "This combination of 22 characters is invalid encoded id";
+          } else {
+            feedback_text = "";
+          }
+        }
+      }
+    }
+    if (len > 22) {
+      feedback_text =
+        "The entered ID is " +
+        len +
+        " characters. All valid IDs are exactly 22 characters.";
+    }
+    return feedback_text;
   }
 }
