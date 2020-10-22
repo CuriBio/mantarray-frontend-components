@@ -32,3 +32,44 @@ describe("TextValidation", () => {
     expect(validation.toString()).toStrictEqual("TextValidation.nickname");
   });
 });
+
+describe("TextValidation.validate", () => {
+  test.each([
+    ["AB200440012", "alphabets"],
+    ["12200440012", "numbers"],
+    ["*#200440012", "symbols"],
+  ])(
+    "Given a text %s as the platebarcode, When the alphabets of MA, MB or M1 the [input.length = 11] barcode fails the defined criteria with wrong %s, Then validation fails and feedback text is <space>",
+    (plate_bar_code, type) => {
+      const text = plate_bar_code;
+      const TestPlateBarCode = TextValidation_PlateBarcode;
+      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
+    }
+  );
+  test.each([
+    ["MA200000012", "000"],
+    ["MA203670012", "367"],
+    ["MA209990121", "999"],
+  ])(
+    "Given a text %s as the platebarcode, When the  [input.length = 11] values in the index range of [4-6] is  %s fails the defined criteria of DAY range(001 -- 367), Then validation fails and feedback text is <space>",
+    (plate_bar_code, error) => {
+      const text = plate_bar_code;
+      const TestPlateBarCode = TextValidation_PlateBarcode;
+      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
+    }
+  );
+  test.each([
+    ["MA 13000012", "11", "<space>"],
+    ["MA  300000", "10", "2<space>"],
+    ["MB190440991", "11", "YEAR is SET AS 19"],
+    ["MB210440991", "11", "YEAR is SET AS 21"],
+    ["MB100440991", "11", "YEAR is SET AS 10"],
+  ])(
+    "Given a text %s as the platebarcode, When the  [input.length = %s] values in the index range of [2-3] is %s fails the defined criteria of YEAR EQUAL 20, Then validation fails and feedback text is <space>",
+    (plate_bar_code, len, error) => {
+      const text = plate_bar_code;
+      const TestPlateBarCode = TextValidation_PlateBarcode;
+      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
+    }
+  );
+});
