@@ -5,6 +5,7 @@ const TextValidation_PlateBarcode = new TextValidation("platebarcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
 const TextValidation_Nickname = new TextValidation("nickname");
+const TextValidation_MyRule = new TextValidation("myrule");
 
 describe("DistTextValidation", () => {
   test("Given a text validation with no rule specified, When called toString(), Then return would be undefined, thus preventing using without rules", () => {
@@ -30,6 +31,17 @@ describe("TextValidation", () => {
   test("Given a text validation is for nickname, When called toString(), Then return would match the text rule of 'nickname' applied", () => {
     const validation = TextValidation_Nickname;
     expect(validation.toString()).toStrictEqual("TextValidation.nickname");
+  });
+  test("Given a text validation is for Myrule, When called for validate, Then return would thow an error", () => {
+    const validation = TextValidation_MyRule;
+    const obj_error = { err: "Not Supported rule error" };
+    try {
+      validation.validate("my criteria");
+    } catch (err) {
+      /* eslint-disable jest/no-conditional-expect */
+      expect(err).toStrictEqual(obj_error);
+      /* eslint-enable */
+    }
   });
 });
 
@@ -184,6 +196,36 @@ describe("TextValidation.validate_alphanumeric", () => {
       const text = message;
       const TestAlphanumericCode = TextValidation_Alphanumeric;
       expect(TestAlphanumericCode.validate(alphanumeric)).toStrictEqual(text);
+    }
+  );
+});
+describe("TextValidation.validate_nickname", () => {
+  test.each([
+    ["C", ""],
+    ["Experiment anemia -1", ""],
+    [null, "This field is required"],
+    [
+      "Experiment anemia alpha cells -1",
+      "Invalid as its more than 20 charcters",
+    ],
+    [
+      "Cat * lab",
+      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
+    ],
+    [
+      "Cat lab` ",
+      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
+    ],
+    [
+      "Cat lab;",
+      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
+    ],
+  ])(
+    "Given the Nickname %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
+    (nickname_id, message) => {
+      const text = message;
+      const TesttValidationNickname = TextValidation_Nickname;
+      expect(TesttValidationNickname.validate(nickname_id)).toStrictEqual(text);
     }
   );
 });
