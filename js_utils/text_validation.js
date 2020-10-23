@@ -1,6 +1,6 @@
 // dependencies
-const baseX = require("base-x"); // External library depenency of @tofandel/uuid-base62
-const customBase = baseX(
+export const uuid = require("@tofandel/uuid-base62"); // External library depenency of @tofandel/uuid-base62
+export const customBase = uuid.baseX(
   "23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
 ); // Custom Base 57 defined as per requirement.
 
@@ -38,7 +38,7 @@ export class TextValidation {
         feedback = this.validate_uuidBase_fiftyseven_encode(text);
         break;
       case "alphanumeric":
-        /* yet to implement a function todo */
+        feedback = this.validate_alphanumeric(text);
         break;
       case "nickname":
         /* yet to implement a function todo */
@@ -222,5 +222,58 @@ export class TextValidation {
         " characters. All valid IDs are exactly 22 characters.";
     }
     return feedback_text;
+  }
+  /**
+   * Returns the feedback text with either value of "" or text with reason for failure
+   *
+   * @param  {apikey}  apikey The apikey on which the validation rules are verified
+   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
+   */
+  validate_alphanumeric(apikey) {
+    let feedback_text = "";
+    const apikey_len = apikey.length;
+
+    if (apikey_len == 36) {
+      // encode the the value provided
+      try {
+        const encode_uuid = customBase.encode(apikey);
+        const decode_uuid = customBase.decode(encode_uuid);
+        if (decode_uuid === apikey) {
+          feedback_text = this.apikey_errorfinder("valid");
+        }
+      } catch (err) {
+        feedback_text = this.apikey_errorfinder("error");
+      }
+    } else {
+      if (apikey_len == 0) {
+        feedback_text = "";
+      } else {
+        if (apikey_len > 36) {
+          feedback_text = this.apikey_errorfinder("error");
+        }
+        if (apikey_len <= 35) {
+          feedback_text = this.apikey_errorfinder("error");
+        }
+      }
+    }
+    return feedback_text;
+  }
+  /**
+   * Returns the feedback text with either value of "" or text with reason for failure
+   *
+   * @param  {stats}  stats The stats on which the validation status
+   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
+   */
+  apikey_errorfinder(stats) {
+    let invalid_text = "";
+    switch (stats) {
+      case "valid":
+        invalid_text = "";
+        break;
+      case "error":
+        invalid_text = "Wrong Format of API Key";
+        break;
+    }
+    return invalid_text;
   }
 }
