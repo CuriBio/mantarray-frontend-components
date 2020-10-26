@@ -1,9 +1,12 @@
+"use strict";
+
 // dependencies
-export const uuid = require("@tofandel/uuid-base62"); // External library depenency of @tofandel/uuid-base62
-export const customBase = uuid.baseX(
+const uuidBase62 = require("@tofandel/uuid-base62"); // External library depenency of @tofandel/uuid-base62
+/* eslint-disable new-cap */
+uuidBase62.customBase = new uuidBase62.baseX(
   "23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
 ); // Custom Base 57 defined as per requirement.
-
+/* eslint-enable */
 /** Allows text validation for the pre-defined criteria rules applied on the text by definitions */
 export class TextValidation {
   /**
@@ -120,12 +123,14 @@ export class TextValidation {
   validate_uuidBase_fiftyseven_encode(uuidtext) {
     let invalid_text = "";
     const len_uuidBase57encode = uuidtext.length;
+    let encode_uuid = "";
+    let decode_uuid = "";
     if (len_uuidBase57encode == 22) {
       // decode the the value provided
       try {
         // decode the the value provided
-        const decode_uuid = customBase.decode(uuidtext);
-        const encode_uuid = customBase.encode(decode_uuid);
+        decode_uuid = uuidBase62.decode(uuidtext);
+        encode_uuid = uuidBase62.encode(decode_uuid);
         if (encode_uuid === uuidtext) {
           invalid_text = this.uuid_errorfinder(
             len_uuidBase57encode,
@@ -238,12 +243,14 @@ export class TextValidation {
   validate_alphanumeric(apikey) {
     let feedback_text = "";
     const apikey_len = apikey.length;
-
+    let encode_uuid = "";
+    let decode_uuid = "";
     if (apikey_len == 36) {
       // encode the the value provided
       try {
-        const encode_uuid = customBase.encode(apikey);
-        const decode_uuid = customBase.decode(encode_uuid);
+        encode_uuid = uuidBase62.encode(apikey);
+        decode_uuid = uuidBase62.decode(encode_uuid);
+
         if (decode_uuid === apikey) {
           feedback_text = this.apikey_errorfinder("valid");
         }

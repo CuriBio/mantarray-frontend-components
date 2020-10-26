@@ -174,7 +174,11 @@ describe("TextValidation.validate_uuidBase_fiftyseven_encode", () => {
       "more than 21",
       "The entered ID is 23 characters. All valid IDs are exactly 22 characters.",
     ],
-    ["4vqyd623ARXqj9nRUNhtLQ", "", ""], // need to investigate
+    [
+      "4vqyd62oARXqj9nRUNhtLQ",
+      "",
+      "This combination of 22 characters is invalid encoded id",
+    ],
   ])(
     "Given the encoded-uuid %s is the invalid and fails the matching criteria, When the text contains (%s) charcter, Then validation fails and appropriate invalid text is returned",
     (uuid_text, error, message) => {
@@ -189,7 +193,7 @@ describe("TextValidation.validate_alphanumeric", () => {
     ["06ad547f fe02-477b-9473-f7977e4d5e17", "Wrong Format of API Key"],
     ["06ad547f-fe02-477b-9473-f7977e4d5e1", "Wrong Format of API Key"],
     ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "Wrong Format of API Key"],
-    ["ba86b8f0-6fdf-4944-87a0-8a491a19490e", "Wrong Format of API Key"], // need to investigate
+    ["06ad547f-fe02-477b-9473-f7977e4d5e17", ""], // need to investigate
   ])(
     "Given the UUID %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
     (alphanumeric, message) => {
