@@ -129,7 +129,7 @@ export default {
   top: 0px;
   left: 0px;
   visibility: visible;
-  border: 2px solid rgb(0, 0, 0);
+  border: 2px solid rgb(17, 17, 17); /* This was essential to make the appearance match the mockflow UI as boreder with rgb(0,0,0) is getting rendered which is incorrect */
   border-radius: 0px;
   box-shadow: none;
   z-index: 3;
