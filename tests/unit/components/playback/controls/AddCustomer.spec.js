@@ -10,7 +10,7 @@ import BootstrapVue from "bootstrap-vue";
 // import { BFormInput } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import uuid from "@tofandel/uuid-base62";
-
+import { TextValidation } from "@/js_utils/text_validation.js";
 let wrapper = null;
 
 const localVue = createLocalVue();
@@ -73,7 +73,6 @@ describe("AddCustomer.enter_uuidbase57", () => {
   });
 
   afterEach(() => wrapper.destroy());
-
   test("Given a  encoded base57-UUID for 'Add Customer->Alphanumeric ID' is input, When the base57-UUID is matching all validation criteria, Then this results in valid condition and feedback text is <empty>", async () => {
     /* eslint-disable new-cap */
     uuid.customBase = new uuid.baseX(
@@ -85,7 +84,10 @@ describe("AddCustomer.enter_uuidbase57", () => {
     /* a) User has an encoded value in uuid_base57 */
     /* b) User enter the the uuid_base57 value into input with
            id #input-widget @(0) location in DOM */
-
+    const spied_text_validator = jest.spyOn(
+      TextValidation.prototype,
+      "validate_uuidBase_fiftyseven_encode"
+    );
     const pre_encode_value = "ba86b8f0-6fdf-4944-87a0-8a491a19490e";
     const uuid_base57 = uuid.encode(pre_encode_value);
     const input_all = wrapper.findAll("#input-widget");
@@ -113,7 +115,7 @@ describe("AddCustomer.enter_uuidbase57", () => {
     /* https://github.com/vuejs/vue-test-utils/issues/331#issuecomment-382037200 <Imiller1990> */
 
     wrapper.vm.$options.watch.enter_uuidbase57.call(wrapper.vm); // we initiate the watch function to verify if the expected value in the prop happens and it updates
-
+    expect(spied_text_validator).toHaveBeenCalledWith(uuid_base57);
     /* f) The Javascript function of validation TextValidation.validate is executed */
 
     await wrapper.vm.$nextTick(); // wait for update
@@ -541,6 +543,120 @@ describe("AddCustomer.enable_save_button", () => {
 
       expect(wrapper.vm.error_text_nickname).toStrictEqual(invalid_nickname);
       expect(wrapper.vm.enablelist_add_customer).toStrictEqual(enabelist);
+    }
+  );
+});
+
+describe("AddCustomer.clicked_button", () => {
+  beforeEach(async () => {
+    const propsData = {
+      dialogdata: null,
+      dataindex: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    store = await NuxtStore.createStore();
+  });
+
+  beforeAll(async () => {
+    // note the store will mutate across tests, so make sure to re-create it in beforeEach
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+
+  afterEach(() => wrapper.destroy());
+
+  test.each([
+    [
+      "5FY8KwTsQaUJ2KzHJGetfE",
+      "",
+      "06ad547f-fe02-477b-9473-f7977e4d5e17",
+      "",
+      "Experiment anemia -1",
+      "",
+      [true, true],
+      1,
+    ],
+  ])(
+    "Given an UUID, API Key, Nickname for 'Add Customer' as input, When the input contains based on valid the critera, Then buttons labels of Cancel and Save ID are clicked",
+    async (
+      uuid,
+      invalid_uuid,
+      apikey,
+      invalid_apikey,
+      nickname,
+      invalid_nickname,
+      enabelist,
+      label
+    ) => {
+      const uuidBase57_error = uuid; // this contains the error.
+      const input_all = wrapper.findAll("#input-widget");
+      const input_alphanumeric = input_all.at(0);
+      input_alphanumeric.element.value = uuidBase57_error;
+      await input_alphanumeric.trigger("input");
+
+      await wrapper.vm.$nextTick(); // wait for update
+      wrapper.vm.$emit("update", "");
+      wrapper.vm.$emit("update", uuidBase57_error);
+
+      await wrapper.vm.$nextTick(); // wait for update
+
+      expect(wrapper.emitted().update).toBeTruthy();
+      wrapper.vm.enter_uuidbase57 = uuidBase57_error;
+      wrapper.vm.$options.watch.enter_uuidbase57.call(wrapper.vm); // we initiate the watch function to verify if the expected value in the prop happens and it updates
+      await wrapper.vm.$nextTick(); // wait for update
+      expect(wrapper.vm.error_text_uuid).toStrictEqual(invalid_uuid);
+
+      const apikey_id = apikey;
+      const input_apikey = input_all.at(1);
+      input_apikey.element.value = apikey_id;
+      await input_apikey.trigger("input");
+
+      await wrapper.vm.$nextTick(); // wait for update
+      wrapper.vm.$emit("update", "");
+      wrapper.vm.$emit("update", apikey_id);
+
+      await wrapper.vm.$nextTick(); // wait for update
+
+      expect(wrapper.emitted().update).toBeTruthy();
+      wrapper.vm.enter_apikey = apikey_id;
+
+      wrapper.vm.$options.watch.enter_apikey.call(wrapper.vm); // we initiate the watch function to verify if the expected value in the prop happens and it updates
+
+      await wrapper.vm.$nextTick(); // wait for update
+      expect(wrapper.vm.error_text_api).toStrictEqual(invalid_apikey);
+
+      const nickname_id = nickname;
+      const input_nickname = input_all.at(2);
+      input_nickname.element.value = nickname_id;
+      await input_nickname.trigger("input");
+      await wrapper.vm.$nextTick(); // wait for update
+
+      wrapper.vm.$emit("update", "");
+      wrapper.vm.$emit("update", nickname_id);
+      await wrapper.vm.$nextTick(); // wait for update
+
+      expect(wrapper.emitted().update).toBeTruthy();
+      wrapper.vm.enter_nickname = nickname_id;
+      wrapper.vm.$options.watch.enter_nickname.call(wrapper.vm); // we initiate the watch function to verify if the expected value in the prop happens and it updates
+
+      await wrapper.vm.$nextTick(); // wait for update
+
+      expect(wrapper.vm.error_text_nickname).toStrictEqual(invalid_nickname);
+      expect(wrapper.vm.enablelist_add_customer).toStrictEqual(enabelist);
+
+      const customer_btn_label = wrapper.findAll(".span__button_label");
+      const save_btn = customer_btn_label.at(label);
+      await save_btn.trigger("click");
+
+      wrapper.vm.$emit("btn-click", label);
+      const child_id_events = wrapper.emitted("btn-click");
+      expect(child_id_events).toHaveLength(1);
+      expect(child_id_events).toStrictEqual([[1]]);
+      //  expect(wrapper.vm.clicked_button).toHaveBeenCalledWith(label);
     }
   );
 });
