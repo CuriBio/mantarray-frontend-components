@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="div__popdialog-form-controls"></div>
-    <span class="span__popdialog-form-controls-content-title">
+    <div class="div__addcustomer-form-controls"></div>
+    <span class="span__addcustomer-form-controls-content-title">
       Add&nbsp;<wbr />New&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
     </span>
     <div style="top: 40px; left: 50px; position: absolute">
@@ -97,18 +97,21 @@ export default {
         this.enter_uuidbase57
       );
       this.error_text_uuid = invalid_text;
+      this.enable_save_button();
     },
     enter_apikey() {
       const invalid_text = TextValidation_Alphanumeric.validate(
         this.enter_apikey
       );
       this.error_text_api = invalid_text;
+      this.enable_save_button();
     },
     enter_nickname() {
       const invalid_text = TextValidation_Nickname.validate(
         this.enter_nickname
       );
       this.error_text_nickname = invalid_text;
+      this.enable_save_button();
     },
   },
   created: function () {
@@ -148,11 +151,26 @@ export default {
       this.$emit("save-id", add_customer);
       this.$bvModal.hide("add-customer");
     },
+    enable_save_button() {
+      if (this.error_text_uuid === "") {
+        if (this.error_text_api === "") {
+          if (this.error_text_nickname === "") {
+            this.enablelist_add_customer = [true, true];
+          } else {
+            this.enablelist_add_customer = [true, false];
+          }
+        } else {
+          this.enablelist_add_customer = [true, false];
+        }
+      } else {
+        this.enablelist_add_customer = [true, false];
+      }
+    },
   },
 };
 </script>
 <style type="text/css">
-.div__popdialog-form-controls {
+.div__addcustomer-form-controls {
   transform: rotate(0deg);
   box-sizing: border-box;
   padding: 0px;
@@ -171,7 +189,7 @@ export default {
   pointer-events: all;
 }
 
-.span__popdialog-form-controls-content-title {
+.span__addcustomer-form-controls-content-title {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
