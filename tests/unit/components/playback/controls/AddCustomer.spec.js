@@ -3,7 +3,7 @@ import ComponentToTest from "@/components/playback/controls/player/AddCustomer.v
 import { AddCustomer as DistComponentToTest } from "@/dist/mantarray.common";
 // import { shallowMount } from "@vue/test-utils";
 
-// import Vue from "vue";
+import Vue from "vue";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
@@ -17,6 +17,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(BootstrapVue);
 localVue.use(uuid);
+localVue.use(Vue);
 
 let NuxtStore;
 let store;

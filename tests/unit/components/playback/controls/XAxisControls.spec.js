@@ -16,6 +16,7 @@ beforeAll(async () => {
   // note the store will mutate across tests, so make sure to re-create it in beforeEach
   const storePath = `${process.env.buildDir}/store.js`;
   NuxtStore = await import(storePath);
+  jest.spyOn(console, "warn").mockImplementation(() => {});
 });
 
 beforeEach(async () => {
@@ -23,6 +24,10 @@ beforeEach(async () => {
 });
 
 afterEach(() => wrapper.destroy());
+
+afterAll(() => {
+  console.warn.mockClear();
+});
 
 describe("XAxisControls.vue", () => {
   it("should be able to mount the XAxisControls when loaded from the built dist file", async () => {

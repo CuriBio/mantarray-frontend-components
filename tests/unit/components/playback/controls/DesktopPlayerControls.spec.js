@@ -38,11 +38,13 @@ beforeAll(async () => {
 beforeEach(async () => {
   store = await NuxtStore.createStore();
   jest.restoreAllMocks();
+  jest.spyOn(console, "warn").mockImplementation(() => {});
 });
 
 afterEach(async () => {
   wrapper.destroy();
   store.commit("playback/stop_playback_progression");
+  console.warn.mockClear();
 });
 
 describe("DesktopPlayerControls.vue", () => {
