@@ -5,8 +5,13 @@ import { DesktopPlayerControls as dist_component_to_test } from "@/dist/mantarra
 import playback_module from "@/store/modules/playback";
 const wait_for_expect = require("wait-for-expect");
 import { shallowMount } from "@vue/test-utils";
-import Vuex from "vuex";
 import Vue from "vue";
+import BootstrapVue from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+import Vuex from "vuex";
+
 import axios from "axios";
 import VueAxios from "vue-axios";
 import { createLocalVue } from "@vue/test-utils";
@@ -25,6 +30,8 @@ let wrapper = null;
 const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(VueAxios, axios);
+localVue.use(BootstrapVue);
+
 let NuxtStore;
 let store;
 let mocked_axios;
@@ -38,13 +45,11 @@ beforeAll(async () => {
 beforeEach(async () => {
   store = await NuxtStore.createStore();
   jest.restoreAllMocks();
-  jest.spyOn(console, "warn").mockImplementation(() => {});
 });
 
 afterEach(async () => {
   wrapper.destroy();
   store.commit("playback/stop_playback_progression");
-  console.warn.mockClear();
 });
 
 describe("DesktopPlayerControls.vue", () => {

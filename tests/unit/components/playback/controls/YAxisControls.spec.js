@@ -6,18 +6,24 @@ import { YAxisControls as dist_YAxisControls } from "@/dist/mantarray.common";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import { mapGetters } from "vuex";
+import Vue from "vue";
+import BootstrapVue from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
 let wrapper = null;
 
 const localVue = createLocalVue();
 let NuxtStore;
 let store;
+localVue.use(Vuex);
+localVue.use(BootstrapVue);
 
 beforeAll(async () => {
   // note the store will mutate across tests, so make sure to re-create it in beforeEach
   const storePath = `${process.env.buildDir}/store.js`;
   NuxtStore = await import(storePath);
-  jest.spyOn(console, "warn").mockImplementation(() => {});
 });
 
 beforeEach(async () => {
@@ -25,10 +31,6 @@ beforeEach(async () => {
 });
 
 afterEach(() => wrapper.destroy());
-
-afterAll(() => {
-  console.warn.mockClear();
-});
 
 describe("YAxisControls.vue", () => {
   it("should be able to mount the YAxisControls when loaded from the built dist file", async () => {
