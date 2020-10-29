@@ -56,7 +56,7 @@
       </span>
     </div>
     <div
-      v-show="!message_if_blank"
+      v-show="message_if_blank"
       class="div__input-dropdown-controls-content-feedback"
       :style="
         'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'
