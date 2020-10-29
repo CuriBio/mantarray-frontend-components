@@ -22,7 +22,7 @@
     <div
       class="div__input-dropdown-controls-content-widget"
       :class="[
-        !input_key_action
+        message_if_blank
           ? 'div__input-dropdown-controls-content-widget--invalid'
           : 'div__input-dropdown-controls-content-widget--valid',
       ]"
