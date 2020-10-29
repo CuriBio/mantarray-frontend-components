@@ -1,13 +1,14 @@
 import { mount } from "@vue/test-utils";
 import ComponentToTest from "@/components/playback/controls/player/AddCustomer.vue";
+import InputWidget from "@/components/playback/controls/player/InputWidget.vue";
 import { AddCustomer as DistComponentToTest } from "@/dist/mantarray.common";
 // import { shallowMount } from "@vue/test-utils";
 
-import Vue from "vue";
+// import Vue from "vue";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
-// import { BFormInput } from "bootstrap-vue";
+import { BFormInput } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import uuid from "@tofandel/uuid-base62";
 import { TextValidation } from "@/js_utils/text_validation.js";
@@ -17,7 +18,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(BootstrapVue);
 localVue.use(uuid);
-localVue.use(Vue);
+// localVue.use(Vue);
 
 let NuxtStore;
 let store;
@@ -91,14 +92,48 @@ describe("AddCustomer.enter_uuidbase57", () => {
     );
     const pre_encode_value = "ba86b8f0-6fdf-4944-87a0-8a491a19490e";
     const uuid_base57 = uuid.encode(pre_encode_value);
-    const input_all = wrapper.findAll("#input-widget");
+
+    const input_all_ids = wrapper.findAll("#input-widget");
+    const input_alphanumeric_ids = input_all_ids.at(0);
+
+    const input_all = wrapper.findAllComponents(InputWidget);
     const input_alphanumeric = input_all.at(0);
-    input_alphanumeric.element.value = uuid_base57;
-    await input_alphanumeric.trigger("input");
+    // ===============> console.log(input_alphanumeric);
+    /* This will show the Input Widget structure */
+    /* eslint-disable no-unused-vars */
+    const input_uuid = input_alphanumeric.find("#input-widget");
+
+    // ===============> console.log(input_uuid);
+    // ===============> console.log(input_alphanumeric_ids);
+
+    /* Accessing via the Componenent or Accessing via findAll (id) both leads to same object */
+
+    const bootstrap_object = input_alphanumeric.findComponent(BFormInput);
+    /* eslint-enable */
+
+    // ===============> console.log(bootstrap_object); // console.log
+
+    /* Accessing the above just leads to the larger child component of BFormInput */
+
+    /* So let's just trigger the input event now on input_alphanumeric_ids */
+
+    input_alphanumeric_ids.element.value = uuid_base57;
+    await input_alphanumeric_ids.trigger("input");
 
     await wrapper.vm.$nextTick(); // wait for update
+    await wrapper.vm.$nextTick(); // wait for update
+
+    const parent_id_events = input_alphanumeric.emitted()["update:value"];
+    expect(parent_id_events).toHaveLength(1);
+    expect(parent_id_events).toStrictEqual([[""]]);
+
+    /* Still didn't recevie the value passed as uuid_base57 */
+
+    // ===============> console.log(wrapper.vm.enter_uuidbase57); // console.log
 
     /* c) InputWidget now emmits and event update with uuid_base57 */
+
+    await wrapper.vm.$nextTick(); // wait for update
 
     wrapper.vm.$emit("update", "");
     wrapper.vm.$emit("update", uuid_base57);
@@ -107,7 +142,6 @@ describe("AddCustomer.enter_uuidbase57", () => {
 
     expect(wrapper.emitted().update).toBeTruthy();
     expect(wrapper.emitted().update[1]).toStrictEqual([uuid_base57]);
-
     /* d) This results in assigning the prop enter_uuidbase57 with uuid_base57 */
 
     wrapper.vm.enter_uuidbase57 = uuid_base57;

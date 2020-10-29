@@ -4,7 +4,7 @@
     <span class="span__addcustomer-form-controls-content-title">
       Add&nbsp;<wbr />New&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
     </span>
-    <div style="top: 40px; left: 50px; position: absolute">
+    <div id="uuid" style="top: 40px; left: 50px; position: absolute">
       <InputWidget
         :title_label="label_uuid"
         :placeholder="keyplaceholder_encode"
@@ -15,7 +15,7 @@
         :disabled="disallow_entry"
       ></InputWidget>
     </div>
-    <div style="top: 140px; left: 50px; position: absolute">
+    <div id="apikey" style="top: 140px; left: 50px; position: absolute">
       <InputWidget
         :title_label="label_api"
         :placeholder="keyplaceholder_uuid"
@@ -26,7 +26,7 @@
         :disabled="disallow_entry"
       ></InputWidget>
     </div>
-    <div style="top: 240px; left: 50px; position: absolute">
+    <div id="nickname" style="top: 240px; left: 50px; position: absolute">
       <InputWidget
         :title_label="label_nickname"
         :placeholder="keyplaceholder_nickname"
