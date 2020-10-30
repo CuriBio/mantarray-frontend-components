@@ -41,12 +41,13 @@ export default {
       if (this.entrykey == "") {
         this.on_empty_flag = true;
       } else {
-        this.on_empty_flag = false;
         const nickname_focus = this.nicknames_list.indexOf(this.entrykey);
         if (nickname_focus == -1) {
-          // logic of enabling making "Edit ID"  Customer or "Add New Customer ID" in Settings
+          // logic of "Add New Customer ID" in Settings
+          this.on_empty_flag = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
         } else {
-          // logic of enabling making just "Add New Customer ID" in Settings
+          // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
+          this.on_empty_flag = false;
         }
       }
     },

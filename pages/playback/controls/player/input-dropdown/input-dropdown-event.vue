@@ -1,15 +1,20 @@
 <template>
   <div>
-    <InputDropDown
-      :title_label="label"
-      :placeholder="keyplaceholder"
-      :invalid_text="error_text"
-      :value.sync="entrykey"
-      :input_width="entry_width"
-      :disabled="disallow_entry"
-      :options_text="nicknames_list"
-      :message_if_blank="on_empty_flag"
-    ></InputDropDown>
+    <div style="top: 50px; left: 88px; position: absolute">
+      <InputDropDown
+        :title_label="label"
+        :placeholder="keyplaceholder"
+        :invalid_text="error_text"
+        :value.sync="entrykey"
+        :input_width="entry_width"
+        :disabled="disallow_entry"
+        :options_text="nicknames_list"
+        :message_if_blank="on_empty_flag"
+      ></InputDropDown>
+    </div>
+    <div class="input-selected-handler">
+      The Input Option that was selected :<b>{{ option_choosen }}</b>
+    </div>
   </div>
 </template>
 
@@ -26,7 +31,7 @@ export default {
       entrykey: "",
       keyplaceholder: "Select the Customer",
       error_text: "An ID is required",
-      entry_width: 300,
+      entry_width: 400,
       disallow_entry: false,
       nicknames_list: [
         "Customer Account 1",
@@ -48,6 +53,7 @@ export default {
         } else {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag = false;
+          this.option_choosen = this.nicknames_list[nickname_focus];
         }
       }
     },
