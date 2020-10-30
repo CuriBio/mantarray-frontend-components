@@ -119,6 +119,8 @@ describe("AddCustomer.enter_uuidbase57", () => {
 
     input_alphanumeric_ids.element.value = uuid_base57;
     await input_alphanumeric_ids.trigger("input");
+    // await input_alphanumeric_ids.dispatchEvent(new Event('input'));   is not a function error received
+    // await input_alphanumeric_ids.element.dispatchEvent(new Event(input));  is not a function error received.
 
     await wrapper.vm.$nextTick(); // wait for update
     await wrapper.vm.$nextTick(); // wait for update
