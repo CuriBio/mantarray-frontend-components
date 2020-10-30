@@ -92,24 +92,19 @@ export default {
     };
   },
   computed: {
-    input_key_action: function () {
-      return this.message_if_blank;
-    },
     dropdown_options: function () {
-      if (this.options_text.length == 0) {
-        return [];
-      } else {
-        const list = [];
+      const list = []; // list is empty to start
 
-        for (let i = 0; i < this.options_text.length; i++) {
-          const name = {
-            id: "opt-" + i,
-            name: this.options_text[i],
-          };
-          list.push(name);
-        }
-        return list;
+      for (let i = 0; i < this.options_text.length; i++) {
+        // the options_text is required true so a minimal of one element is needed
+        // if suppose options_text.length is zero(0) then return doesn't change its []
+        const name = {
+          id: "opt-" + i,
+          name: this.options_text[i],
+        };
+        list.push(name);
       }
+      return list;
     },
     input_height_background: function () {
       return this.title_label !== "" ? 100 : 60;
@@ -160,7 +155,7 @@ export default {
   position: absolute;
   height: 30px;
   top: 0px;
-  left: 5px;
+  left: 0px;
   padding: 5px;
   visibility: visible;
   user-select: none;

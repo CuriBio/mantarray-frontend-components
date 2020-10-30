@@ -116,7 +116,7 @@ fixture`playback/controls/player/input-dropdown/input-no-title-dropdown`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/player/input-dropdown/input-no-title-dropdown`; // specify the start page
 
-test("testing the Input Widget when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
+test("testing the Input Widget when the title of widget is <empty> the widget height correction happens and the rest of input dropdown features are rendered", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",

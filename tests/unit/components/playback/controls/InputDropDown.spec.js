@@ -120,13 +120,13 @@ describe("InputDropDown.vue", () => {
     });
     const userdata = "Demo Account"; // some data
     const input_widget = wrapper.find("#input-dropdown-widget");
+    expect(input_widget.html()).toContain("disabled");
     input_widget.element.value = userdata;
     await input_widget.trigger("input");
-    expect(input_widget.html()).toContain("disabled");
     const parent_id_events = wrapper.emitted("update:value");
     expect(parent_id_events).toBeUndefined();
   });
-  test("When the InputDropDown is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width'", async () => {
+  test("When the InputDropDown is mounted, Then the widget width is modified in props to that of the value set from the props value 'entry_width'", async () => {
     const propsData = {
       title_label: "Customer ID",
       options_text: nicknames,

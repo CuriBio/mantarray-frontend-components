@@ -36,21 +36,5 @@ export default {
       on_empty_flag: false,
     };
   },
-  watch: {
-    entrykey() {
-      if (this.entrykey == "") {
-        this.on_empty_flag = true;
-      } else {
-        this.on_empty_flag = false;
-        const nickname_focus = this.nicknames_list.indexOf(this.entrykey);
-        if (nickname_focus == -1) {
-          // logic of enabling making "Edit ID"  Customer or "Add New Customer ID" in Settings
-        } else {
-          // logic of enabling making just "Add New Customer ID" in Settings
-        }
-      }
-    },
-    methods: {},
-  },
 };
 </script>
