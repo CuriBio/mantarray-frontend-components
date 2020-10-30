@@ -171,7 +171,7 @@ describe("InputDropDown.vue", () => {
       "width: 390px; top: 88px;"
     );
   });
-  test("When the InputDropDown is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width' in the event of title being empty the height is modified without a hole", async () => {
+  test("When the InputDropDown is mounted with the title prop empty/blank, Then height of the widget is modified  in the event of title being empty without a hole", async () => {
     const propsData = {
       title_label: "",
       options_text: nicknames,
