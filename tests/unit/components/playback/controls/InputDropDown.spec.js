@@ -101,6 +101,10 @@ describe("InputDropDown.vue", () => {
     const target_div = wrapper.find(
       ".div__input-dropdown-controls-content-feedback"
     );
+    const target_dropdown_surronded_box = wrapper.find(
+      ".div__input-dropdown-controls-content-widget--invalid"
+    );
+    expect(target_dropdown_surronded_box.isVisible()).toBe(true);
     expect(target_div.text()).toStrictEqual("This field is required");
   });
   test("When the InputDropDown is mounted, Then the user enters few charters in the input, verify that its prevented as props have made this option disabled", async () => {
