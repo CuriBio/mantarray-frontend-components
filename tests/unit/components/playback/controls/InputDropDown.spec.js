@@ -64,7 +64,7 @@ describe("InputDropDown.vue", () => {
       "Select Customer ID"
     );
   });
-  test("When the InputDropDown is mounted, Then the user enters few charters in the input, confirm that an event 'update' is emitted with entered text", async () => {
+  test("Given that the user types, When a valid option from the list is entered, Then confirm that an event 'update' is emitted with entered text", async () => {
     const propsData = {
       title_label: "Customer ID",
       options_text: nicknames,
@@ -76,7 +76,7 @@ describe("InputDropDown.vue", () => {
       store,
       localVue,
     });
-    const customer = "New Customer"; // new Customer
+    const customer = "Customer Account 1"; // new Customer
     const input_widget = wrapper.find("#input-dropdown-widget");
     input_widget.element.value = customer;
     await input_widget.trigger("input");
@@ -107,7 +107,7 @@ describe("InputDropDown.vue", () => {
     expect(target_dropdown_surronded_box.isVisible()).toBe(true);
     expect(target_div.text()).toStrictEqual("This field is required");
   });
-  test("When the InputDropDown is mounted, Then the user enters few charters in the input, verify that its prevented as props have made this option disabled", async () => {
+  test("Given that the user enters few characters, When the props disabled is set to true, Then confirm that no event is emitted with entered text", async () => {
     const propsData = {
       title_label: "Customer ID",
       options_text: nicknames,
