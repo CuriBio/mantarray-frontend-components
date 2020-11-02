@@ -46,3 +46,4 @@ export { default as PlateMapEditor } from "./components/playback/controls/PlateM
 export { default as PlateWell } from "./components/playback/controls/PlateWell.vue";
 export { default as InputWidget } from "./components/playback/controls/player/InputWidget.vue";
 export { default as ButtonWidget } from "./components/playback/controls/player/ButtonWidget.vue";
+export { default as InputDropDown } from "./components/playback/controls/player/InputDropDown.vue";
