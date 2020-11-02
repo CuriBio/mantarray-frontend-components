@@ -4,7 +4,7 @@ import InputWidget from "@/components/playback/controls/player/InputWidget.vue";
 import { AddCustomer as DistComponentToTest } from "@/dist/mantarray.common";
 // import { shallowMount } from "@vue/test-utils";
 
-// import Vue from "vue";
+import Vue from "vue";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
@@ -18,7 +18,6 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(BootstrapVue);
 localVue.use(uuid);
-// localVue.use(Vue);
 
 let NuxtStore;
 let store;
@@ -55,6 +54,13 @@ describe("AddCustomer.vue", () => {
 });
 
 describe("AddCustomer.enter_uuidbase57", () => {
+  /* eslint-disable new-cap */
+  uuid.customBase = new uuid.baseX(
+    "23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+  );
+  /* eslint-enable */
+  const pre_encode_value = "ba86b8f0-6fdf-4944-87a0-8a491a19490e";
+  const uuid_base57 = uuid.encode(pre_encode_value);
   beforeEach(async () => {
     const propsData = {
       dialogdata: null,
@@ -64,6 +70,9 @@ describe("AddCustomer.enter_uuidbase57", () => {
       propsData,
       store,
       localVue,
+      data: function () {
+        return { enter_uuidbase57: uuid_base57 };
+      },
     });
     store = await NuxtStore.createStore();
   });
@@ -76,12 +85,6 @@ describe("AddCustomer.enter_uuidbase57", () => {
 
   afterEach(() => wrapper.destroy());
   test("Given a  encoded base57-UUID for 'Add Customer->Alphanumeric ID' is input, When the base57-UUID is matching all validation criteria, Then this results in valid condition and feedback text is <empty>", async () => {
-    /* eslint-disable new-cap */
-    uuid.customBase = new uuid.baseX(
-      "23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-    );
-    /* eslint-enable */
-
     /* Following happens in the below section :-      */
     /* a) User has an encoded value in uuid_base57 */
     /* b) User enter the the uuid_base57 value into input with
@@ -90,17 +93,19 @@ describe("AddCustomer.enter_uuidbase57", () => {
       TextValidation.prototype,
       "validate_uuidBase_fiftyseven_encode"
     );
-    const pre_encode_value = "ba86b8f0-6fdf-4944-87a0-8a491a19490e";
-    const uuid_base57 = uuid.encode(pre_encode_value);
 
     const input_all_ids = wrapper.findAll("#input-widget");
     const input_alphanumeric_ids = input_all_ids.at(0);
 
     const input_all = wrapper.findAllComponents(InputWidget);
     const input_alphanumeric = input_all.at(0);
+
+    //  await wrapper.setData({ enter_uuidbase57: uuid_base57 });   this is not working.
+
     // ===============> console.log(input_alphanumeric);
     /* This will show the Input Widget structure */
     /* eslint-disable no-unused-vars */
+
     const input_uuid = input_alphanumeric.find("#input-widget");
 
     // ===============> console.log(input_uuid);
@@ -117,49 +122,50 @@ describe("AddCustomer.enter_uuidbase57", () => {
 
     /* So let's just trigger the input event now on input_alphanumeric_ids */
 
-    input_alphanumeric_ids.element.value = uuid_base57;
-    await input_alphanumeric_ids.trigger("input");
+    // input_alphanumeric_ids.element.value = uuid_base57;
+    input_alphanumeric_ids.trigger("input");
+
     // await input_alphanumeric_ids.dispatchEvent(new Event('input'));   is not a function error received
     // await input_alphanumeric_ids.element.dispatchEvent(new Event(input));  is not a function error received.
 
-    await wrapper.vm.$nextTick(); // wait for update
-    await wrapper.vm.$nextTick(); // wait for update
+    await Vue.nextTick();
 
+    expect(wrapper.vm.$options.watch.enter_uuidbase57).toBeTruthy();
     const parent_id_events = input_alphanumeric.emitted()["update:value"];
     expect(parent_id_events).toHaveLength(1);
-    expect(parent_id_events).toStrictEqual([[""]]);
-
-    /* Still didn't recevie the value passed as uuid_base57 */
-
+    expect(parent_id_events).toStrictEqual([[uuid_base57]]);
+    wrapper.vm.$options.watch.enter_uuidbase57.call(wrapper.vm); // we initiate the watch function to verify if the expected value in the prop happens and it updates
+    expect(spied_text_validator).toHaveBeenCalledWith(uuid_base57);
+    expect(wrapper.vm.error_text_uuid).toStrictEqual("");
     // ===============> console.log(wrapper.vm.enter_uuidbase57); // console.log
 
     /* c) InputWidget now emmits and event update with uuid_base57 */
 
-    await wrapper.vm.$nextTick(); // wait for update
+    // await wrapper.vm.$nextTick(); // wait for update
 
-    wrapper.vm.$emit("update", "");
-    wrapper.vm.$emit("update", uuid_base57);
+    // wrapper.vm.$emit("update", "");
+    // wrapper.vm.$emit("update", uuid_base57);
 
-    await wrapper.vm.$nextTick(); // wait for update
+    // await wrapper.vm.$nextTick(); // wait for update
 
-    expect(wrapper.emitted().update).toBeTruthy();
-    expect(wrapper.emitted().update[1]).toStrictEqual([uuid_base57]);
-    /* d) This results in assigning the prop enter_uuidbase57 with uuid_base57 */
+    // expect(wrapper.emitted().update).toBeTruthy();
+    // expect(wrapper.emitted().update[1]).toStrictEqual([uuid_base57]);
+    // /* d) This results in assigning the prop enter_uuidbase57 with uuid_base57 */
 
-    wrapper.vm.enter_uuidbase57 = uuid_base57;
+    // wrapper.vm.enter_uuidbase57 = uuid_base57;
 
-    /* e) The AddCustomer now invokes the watch function of enter_uuidbase57 from the solution shared from vue-test-utils in the link below */
-    /* https://github.com/vuejs/vue-test-utils/issues/331#issuecomment-382037200 <Imiller1990> */
+    // /* e) The AddCustomer now invokes the watch function of enter_uuidbase57 from the solution shared from vue-test-utils in the link below */
+    // /* https://github.com/vuejs/vue-test-utils/issues/331#issuecomment-382037200 <Imiller1990> */
 
-    wrapper.vm.$options.watch.enter_uuidbase57.call(wrapper.vm); // we initiate the watch function to verify if the expected value in the prop happens and it updates
-    expect(spied_text_validator).toHaveBeenCalledWith(uuid_base57);
-    /* f) The Javascript function of validation TextValidation.validate is executed */
+    // wrapper.vm.$options.watch.enter_uuidbase57.call(wrapper.vm); // we initiate the watch function to verify if the expected value in the prop happens and it updates
+    // expect(spied_text_validator).toHaveBeenCalledWith(uuid_base57);
+    // /* f) The Javascript function of validation TextValidation.validate is executed */
 
-    await wrapper.vm.$nextTick(); // wait for update
+    // await wrapper.vm.$nextTick(); // wait for update
 
-    /* g) The response feedback text or invalid_text is set to "" */
+    // /* g) The response feedback text or invalid_text is set to "" */
 
-    expect(wrapper.vm.error_text_uuid).toStrictEqual("");
+    // expect(wrapper.vm.error_text_uuid).toStrictEqual("");
   });
   test.each([
     [
