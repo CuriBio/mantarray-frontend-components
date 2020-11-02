@@ -64,7 +64,7 @@ describe("InputDropDown.vue", () => {
       "Select Customer ID"
     );
   });
-  test("Given that the user types, When a valid option from the list is entered, Then confirm that an event 'update' is emitted with entered text", async () => {
+  test("When the user types a valid option from the list, Then an event 'update' is emitted with the entered text", async () => {
     const propsData = {
       title_label: "Customer ID",
       options_text: nicknames,
@@ -107,7 +107,7 @@ describe("InputDropDown.vue", () => {
     expect(target_dropdown_surronded_box.isVisible()).toBe(true);
     expect(target_div.text()).toStrictEqual("This field is required");
   });
-  test("Given that the user enters few characters, When the props disabled is set to true, Then confirm that no event is emitted with entered text", async () => {
+  test("Given the disabled prop is set to true, When the user types a few characters, Then no update event is emitted by the component.", async () => {
     const propsData = {
       title_label: "Customer ID",
       options_text: nicknames,
