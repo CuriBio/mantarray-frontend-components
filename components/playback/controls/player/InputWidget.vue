@@ -23,7 +23,7 @@
       <div
         class="div__input-controls-content-widget"
         :class="[
-          !input_key_action
+          !input_is_valid
             ? 'div__input-controls-content-widget--invalid'
             : 'div__input-controls-content-widget--valid',
         ]"
@@ -37,9 +37,9 @@
         >
           <b-form-input
             id="input-widget"
-            v-model="input_value_key"
+            v-model="input_value"
             :spellcheck="spellcheck"
-            :state="input_key_action"
+            :state="input_is_valid"
             aria-describedby="input-feedback"
             :placeholder="placeholder"
             :disabled="disabled"
@@ -50,6 +50,7 @@
               background-color: #3f3f3f;
               border: 0px;
             "
+            @input="on_b_form_input"
           ></b-form-input>
         </span>
       </div>
@@ -86,23 +87,20 @@ export default {
     placeholder: { type: String, default: "" }, // placeholder (str)
     invalid_text: { type: String, default: "" }, // invalid_text (str)
     spellcheck: { type: Boolean, default: true }, // spellcheck (optional bool=True)
-    value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")
+    initial_value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
   },
   data() {
     return {
-      input_value_key: this.value,
+      input_value: this.value,
       input_width_background: this.input_width + 4, // This is required as the red/green boxes around the input widget requirement based on feedback introduced the need its not in Mockflow
       // very essential else the input box would appear poping out on the right side outside the background, request to consult Eli or Raghu
     };
   },
+
   computed: {
-    input_key_action: function () {
-      // This is a very sensitive computed function as its invoked on every key entry by user action
-      // the function would never have any processing its only responsible to pass the value of string to the parent component
-      // any modification to add logic might impact depedent functionalities, request to consult Eli or Raghu
-      this.$emit("update:value", this.input_value_key);
+    input_is_valid: function () {
       return this.invalid_text === "";
     },
     input_height_background: function () {
@@ -115,7 +113,11 @@ export default {
       return this.title_label !== "" ? 88 : 48;
     },
   },
-  methods: {},
+  methods: {
+    on_b_form_input: function () {
+      this.$emit("update:value", this.input_value);
+    },
+  },
 };
 </script>
 <style type="text/css">

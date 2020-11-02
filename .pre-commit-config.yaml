@@ -4,18 +4,18 @@ minimum_pre_commit_version: "2.5.1"
 repos:
   # Git-related
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0 # Use the ref you want to point at
+    rev: v3.3.0 # Use the ref you want to point at
     hooks:
       - id: forbid-new-submodules
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: ab800ce3ba94e6601e7ec2d7931b3ed60b0ac89f #2.0.0 # Use the ref you want to point at
+    rev: 2.1.4 #2.0.0 # Use the ref you want to point at
     hooks:
       - id: git-dirty
 
   # Reformatting (should generally come before any file format or other checks, because reformatting can change things)
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0 # Use the ref you want to point at
+    rev: v3.3.0 # Use the ref you want to point at
     hooks:
       - id: trailing-whitespace
         exclude: dist/ # apparently sometimes the build adds in whitespace, so this can cause the git repo to be dirty unnecessarily
@@ -24,7 +24,7 @@ repos:
         exclude: sample_waveform_data/|jsdoc.json|.babelrc
 
   - repo: https://github.com/prettier/prettier
-    rev: 2.1.1
+    rev: 2.1.2
     hooks:
       - id: prettier
         # args: [--vue-indent-script-and-style true]
@@ -32,13 +32,13 @@ repos:
 
   # Safety/Security Issues
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0 # Use the ref you want to point at
+    rev: v3.3.0 # Use the ref you want to point at
     hooks:
       - id: detect-private-key
 
   # Invalid File Checks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0 # Use the ref you want to point at
+    rev: v3.3.0 # Use the ref you want to point at
     hooks:
       - id: check-added-large-files
         name: general-large-file-check
@@ -61,7 +61,7 @@ repos:
         exclude: dist
       - id: vuejs-check-no-import-from-vue-file
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v7.8.1
+    rev: v7.12.1
     hooks:
       - id: eslint
         exclude: (dist/)|(tests/unit/components/status/StatusBar.spec.js)|(tests/unit/components/status/SimulationMode.spec.js)|(tests/unit/components/playback/ContinuousWaveform.spec.js)|(tests/unit/components/playback/controls/WebPlayerControls.spec.js)|(tests/unit/components/playback/controls/SettingsForm.spec.js)|(tests/unit/components/playback/controls/YAxisControls.spec.js)|(tests/unit/components/playback/controls/PlateBarcode.spec.js)|(tests/unit/components/playback/controls/PlateNavigator.spec.js)|(tests/unit/components/playback/controls/DesktopPlayerControls.spec.js)|(tests/unit/components/playback/controls/PopDialogForm.spec.js)|(tests/unit/components/playback/controls/RecordingTime.spec.js)|(tests/unit/components/playback/controls/XAxisControls.spec.js)|(tests/unit/store/twentyfour.spec.js)|(tests/unit/store/playback.spec.js)|(tests/unit/store/flask.spec.js)|(tests/unit/store/waveform.spec.js)|(tests/unit/store/api_service.spec.js)|(tests/unit/store/settings.spec.js)|(tests/e2e/)|(server.js)

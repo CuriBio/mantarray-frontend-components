@@ -5,7 +5,6 @@
       :placeholder="keyplaceholder"
       :spellcheck="spellchecking"
       :invalid_text="error_text"
-      :value.sync="entrykey"
       :input_width="entry_width"
       :disabled="disallow_entry"
     ></InputWidget>

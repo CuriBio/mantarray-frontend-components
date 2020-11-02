@@ -1,7 +1,6 @@
 import { mount } from "@vue/test-utils";
 import ComponentToTest from "@/components/playback/controls/player/InputWidget.vue";
 import { InputWidget as DistComponentToTest } from "@/dist/mantarray.common";
-import { shallowMount } from "@vue/test-utils";
 
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
@@ -31,11 +30,11 @@ describe("InputWidget.vue", () => {
   });
 
   afterEach(() => wrapper.destroy());
-  test("When mounting popinput from the build dist file, Then it loads successfully and the props defined title is rendered", () => {
+  test("When mounting from the built dist file, Then it loads successfully and the props defined title is rendered", () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",
     };
-    wrapper = shallowMount(DistComponentToTest, {
+    wrapper = mount(DistComponentToTest, {
       propsData,
       store,
       localVue,
@@ -44,7 +43,7 @@ describe("InputWidget.vue", () => {
 
     expect(target_span.text()).toStrictEqual("Enter  Alphanumeric  ID"); // the value of &nbsp<wbr> is '\u00a0'
   });
-  test("When the PopInput is mounted, Then it loads successfully and the props defined placeholder is rendered on input field", () => {
+  test("When the Component is mounted, Then it loads successfully and the props defined placeholder is rendered on input field", () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",
       placeholder: "place holder",
@@ -57,11 +56,11 @@ describe("InputWidget.vue", () => {
     const target_input = wrapper.find("#input-widget");
     expect(target_input.attributes().placeholder).toStrictEqual("place holder");
   });
-  test("When the PopInput is mounted, Then the user enters few charters in the input, confirm that an event 'update' is emitted with entered text", async () => {
+  test("When the the user enters few charters in the input, Then an event 'update' is emitted with entered text", async () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",
       placeholder: "place holder",
-      value: "",
+      initial_value: "",
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -72,17 +71,14 @@ describe("InputWidget.vue", () => {
     const input_widget = wrapper.find("#input-widget");
     input_widget.element.value = uuidBase62;
     await input_widget.trigger("input");
-    const parent_id_events = wrapper.emitted("update:value");
-    expect(parent_id_events).toHaveLength(2);
-    expect(parent_id_events).toStrictEqual([[""], ["2VSckkBYH2An3dqHEyfRRE"]]);
-    expect(wrapper.vm.input_key_action).toStrictEqual(true); // This is a computed value its a response its important to verify the value
+    const emitted_events = wrapper.emitted("update:value");
+    expect(emitted_events).toHaveLength(1);
+    expect(emitted_events).toStrictEqual([["2VSckkBYH2An3dqHEyfRRE"]]);
   });
-  test("When the popinput is mouted, Then when by default an error text is rendered provided in the prop", async () => {
+  test("When the component is mounted with some invalid text present as a prop, Then the error text is rendered in the DOM", async () => {
+    const expected_text = "This field is required";
     const propsData = {
-      title_label: "Enter  Alphanumeric  ID",
-      placeholder: "place holder",
-      value: "",
-      invalid_text: "This field is required",
+      invalid_text: expected_text,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -90,14 +86,10 @@ describe("InputWidget.vue", () => {
       localVue,
     });
     const target_div = wrapper.find(".div__input-controls-content-feedback");
-    expect(target_div.text()).toStrictEqual("This field is required");
+    expect(target_div.text()).toStrictEqual(expected_text);
   });
-  test("When the PopInput is mounted, Then the user enters few charters in the input, verify that the spellcheck is set to false", async () => {
+  test("When the Component is mounted with the spellcheck prop set to false, Then the input field in the DOM has the spellcheck attribute set to false", async () => {
     const propsData = {
-      title_label: "Enter  Alphanumeric  ID",
-      placeholder: "place holder",
-      value: "",
-      invalid_text: "This field is required",
       spellcheck: false,
     };
     wrapper = mount(ComponentToTest, {
@@ -105,19 +97,11 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
-    const userdata = "bdukeusaued"; // proper uuidcode sent
     const input_widget = wrapper.find("#input-widget");
-    input_widget.element.value = userdata;
-    await input_widget.trigger("input");
     expect(input_widget.html()).toContain('spellcheck="false"');
   });
-  test("When the PopInput is mounted, Then the user enters few charters in the input, verify that its prevented as props have made this option disabled", async () => {
+  test("Given the component is mounted with the disabled prop set to True, When the user enters few charters in the input, Then no update:value event should be emitted because the field is disabled", async () => {
     const propsData = {
-      title_label: "Enter  Alphanumeric  ID",
-      placeholder: "place holder",
-      value: "",
-      invalid_text: "This field is required",
-      spellcheck: false,
       disabled: true,
     };
     wrapper = mount(ComponentToTest, {
@@ -125,23 +109,18 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
-    const userdata = "bdukeusaued"; // proper uuidcode sent
     const input_widget = wrapper.find("#input-widget");
+    expect(input_widget.html()).toContain("disabled");
+
+    const userdata = "bdukeusaued"; // proper uuidcode sent
     input_widget.element.value = userdata;
     await input_widget.trigger("input");
-    expect(input_widget.html()).toContain("disabled");
     const parent_id_events = wrapper.emitted("update:value");
-    expect(parent_id_events).toHaveLength(1);
-    expect(parent_id_events).toStrictEqual([[""]]); // confirming that the values are not passed
+    expect(parent_id_events).toBeUndefined();
   });
-  test("When the PopInput is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width'", async () => {
+  test("When the component is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width'", async () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",
-      placeholder: "place holder",
-      value: "",
-      invalid_text: "This field is required",
-      spellcheck: false,
-      disabled: false,
       input_width: 390,
     };
     wrapper = mount(ComponentToTest, {
@@ -176,11 +155,11 @@ describe("InputWidget.vue", () => {
       "width: 390px; top: 88px;"
     );
   });
-  test("When the PopInput is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width' in the event of title being empty the height is modified without a hole", async () => {
+  test("When the component is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width' in the event of title being empty the height is modified without a hole", async () => {
     const propsData = {
       title_label: "",
       placeholder: "place holder",
-      value: "",
+      initial_value: "",
       invalid_text: "This field is required",
       spellcheck: false,
       disabled: false,
