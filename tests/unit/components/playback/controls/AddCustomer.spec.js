@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 import ComponentToTest from "@/components/playback/controls/player/AddCustomer.vue";
-import InputWidget from "@/components/playback/controls/player/InputWidget.vue";
+// import InputWidget from "@/components/playback/controls/player/InputWidget.vue";
 import { AddCustomer as DistComponentToTest } from "@/dist/mantarray.common";
 // import { shallowMount } from "@vue/test-utils";
 
@@ -8,7 +8,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
-import { BFormInput } from "bootstrap-vue";
+// import { BFormInput } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import uuid from "@tofandel/uuid-base62";
 import { TextValidation } from "@/js_utils/text_validation.js";
@@ -70,9 +70,6 @@ describe("AddCustomer.enter_uuidbase57", () => {
       propsData,
       store,
       localVue,
-      data: function () {
-        return { enter_uuidbase57: uuid_base57 };
-      },
     });
     store = await NuxtStore.createStore();
   });
@@ -97,8 +94,8 @@ describe("AddCustomer.enter_uuidbase57", () => {
     const input_all_ids = wrapper.findAll("#input-widget");
     const input_alphanumeric_ids = input_all_ids.at(0);
 
-    const input_all = wrapper.findAllComponents(InputWidget);
-    const input_alphanumeric = input_all.at(0);
+    // const input_all = wrapper.findAllComponents(InputWidget);
+    // const input_alphanumeric = input_all.at(0);
 
     //  await wrapper.setData({ enter_uuidbase57: uuid_base57 });   this is not working.
 
@@ -106,14 +103,14 @@ describe("AddCustomer.enter_uuidbase57", () => {
     /* This will show the Input Widget structure */
     /* eslint-disable no-unused-vars */
 
-    const input_uuid = input_alphanumeric.find("#input-widget");
+    // const input_uuid = input_alphanumeric.find("#input-widget");
 
     // ===============> console.log(input_uuid);
     // ===============> console.log(input_alphanumeric_ids);
 
     /* Accessing via the Componenent or Accessing via findAll (id) both leads to same object */
 
-    const bootstrap_object = input_alphanumeric.findComponent(BFormInput);
+    // const bootstrap_object = input_alphanumeric.findComponent(BFormInput);
     /* eslint-enable */
 
     // ===============> console.log(bootstrap_object); // console.log
@@ -122,16 +119,15 @@ describe("AddCustomer.enter_uuidbase57", () => {
 
     /* So let's just trigger the input event now on input_alphanumeric_ids */
 
-    // input_alphanumeric_ids.element.value = uuid_base57;
-    input_alphanumeric_ids.trigger("input");
+    input_alphanumeric_ids.element.setData(String, uuid_base57);
+    // input_alphanumeric_ids.trigger("input");
 
-    // await input_alphanumeric_ids.dispatchEvent(new Event('input'));   is not a function error received
-    // await input_alphanumeric_ids.element.dispatchEvent(new Event(input));  is not a function error received.
+    // input_alphanumeric_ids.dispatchEvent(new Event('input'));   // is not a function error received
+    input_alphanumeric_ids.element.dispatchEvent(new Event("input")); //  is not a function error received.
 
     await Vue.nextTick();
 
-    expect(wrapper.vm.$options.watch.enter_uuidbase57).toBeTruthy();
-    const parent_id_events = input_alphanumeric.emitted()["update:value"];
+    const parent_id_events = input_alphanumeric_ids.emitted("update:value");
     expect(parent_id_events).toHaveLength(1);
     expect(parent_id_events).toStrictEqual([[uuid_base57]]);
     wrapper.vm.$options.watch.enter_uuidbase57.call(wrapper.vm); // we initiate the watch function to verify if the expected value in the prop happens and it updates
