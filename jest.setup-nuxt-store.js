@@ -36,7 +36,7 @@ const resetConfig = {
 // we take our nuxt config, lay the resets on top of it,
 // and lastly we apply the non-boolean overrides
 const config = Object.assign({}, nuxtConfig, resetConfig, {
-  mode: "spa",
+  ssr: false,
   srcDir: nuxtConfig.srcDir,
   ignore: ["**/components/**/*", "**/layouts/**/*", "**/pages/**/*"],
 });

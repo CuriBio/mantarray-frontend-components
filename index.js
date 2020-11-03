@@ -11,6 +11,7 @@ export { get_array_slice_to_display } from "./js_utils/waveform_data_formatter";
 export { convert_from_json_of_well_indices_and_x_y_arrays } from "./js_utils/waveform_data_formatter";
 export { append_get_available_well_data } from "./js_utils/waveform_data_formatter";
 export { WellTitle } from "./js_utils/labware_calculations";
+export { TextValidation } from "./js_utils/text_validation";
 
 // Store
 export { default as playback_store_module } from "./store/modules/playback";
@@ -47,3 +48,5 @@ export { default as PlateWell } from "./components/playback/controls/PlateWell.v
 export { default as InputWidget } from "./components/playback/controls/player/InputWidget.vue";
 export { default as ButtonWidget } from "./components/playback/controls/player/ButtonWidget.vue";
 export { default as InputDropDown } from "./components/playback/controls/player/InputDropDown.vue";
+
+export { default as AddCustomer } from "./components/playback/controls/player/AddCustomer.vue";

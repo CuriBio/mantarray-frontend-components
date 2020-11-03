@@ -4,7 +4,7 @@ const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-const input_field = Selector("#input-widget");
+const input_field = Selector("#input-widget-field-");
 const input_label = Selector(".span__input-content-label");
 
 fixture`playback/controls/player/input-widget/basic-input`
