@@ -80,7 +80,7 @@
         >
       </p>
     </div>
-    <texarea
+    <textarea
       id="error_file_path"
       name="error_file"
       rows="4"
@@ -113,7 +113,7 @@
     >
       C:\Users\Eli\
       CuriBio\AppData\Roaming\MantarrayController\logs_flask\mantarray_log__2020_10_21_185640.txt
-    </texarea>
+    </textarea>
     <div style="top: 220px; left: -5px; position: absolute">
       <ButtonWidget
         :button_widget_width="440"
