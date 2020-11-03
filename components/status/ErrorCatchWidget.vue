@@ -85,19 +85,24 @@
       name="error_file"
       rows="4"
       cols="50"
+      spellcheck="false"
       style="
         line-height: 1.2;
         transform: rotate(0deg);
         padding: 0px;
         margin: 0px;
-        overflow-wrap: break-word;
+        word-wrap: break-word;
         color: rgb(183, 183, 183);
         font-family: Courier New;
         position: absolute;
         top: 137.6407px;
         left: 41px;
         width: 338px;
-        height: 68px;
+        height: 75px;
+        background: rgb(17, 17, 17);
+        border: 2px solid rgb(17, 17, 17);
+        border-radius: 0px;
+        box-shadow: none;
         overflow: hidden;
         visibility: visible;
         user-select: text;
@@ -111,8 +116,7 @@
         pointer-events: all;
       "
     >
-      C:\Users\Eli\
-      CuriBio\AppData\Roaming\MantarrayController\logs_flask\mantarray_log__2020_10_21_185640.txt
+C:\Users\Eli\CuriBio\AppData\Roaming\MantarrayController\logs_flask\mantarray_log__2020_10_21_185640.txt
     </textarea>
     <div style="top: 220px; left: -5px; position: absolute">
       <ButtonWidget
