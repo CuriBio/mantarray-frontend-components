@@ -111,8 +111,8 @@
         pointer-events: all;
       "
     >
-      C:\Users\Eli
-      Nanosurface\AppData\Roaming\MantarrayController\logs_flask\mantarray_log__2020_10_21_185640.txt
+      C:\Users\Eli\
+      CuriBio\AppData\Roaming\MantarrayController\logs_flask\mantarray_log__2020_10_21_185640.txt
     </texarea>
     <div style="top: 220px; left: -5px; position: absolute">
       <ButtonWidget
