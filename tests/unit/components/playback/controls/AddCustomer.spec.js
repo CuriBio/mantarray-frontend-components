@@ -76,14 +76,35 @@ describe("AddCustomer.enter_uuidbase57", () => {
     jest.restoreAllMocks();
   });
   test.each([
-    [uuid_base57, "valid input", "alphanumeric-id"],
-    ["abcdFEG", "too short of input", "alphanumeric-id"],
+    [
+      uuid_base57,
+      "valid input",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+    ],
+    [
+      "abcdFEG",
+      "too short of input",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+    ],
+    [
+      "abc!",
+      "input contains invalid character",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+    ],
   ])(
-    "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function is called and the error message from the validation function is rendered below the input in the DOM",
-    async (entry, test_description, selector_id_suffix) => {
+    "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
+    async (
+      entry,
+      test_description,
+      selector_id_suffix,
+      text_validation_type
+    ) => {
       const spied_text_validator = jest.spyOn(
         TextValidation.prototype,
-        "validate_uuidBase_fiftyseven_encode"
+        text_validation_type
       );
 
       const target_input_field = wrapper.find(
