@@ -56,6 +56,19 @@ describe("InputWidget.vue", () => {
     const target_input = wrapper.find("#input-widget");
     expect(target_input.attributes().placeholder).toStrictEqual("place holder");
   });
+  test("When the Component is mounted with an initial value supplied as a prop, Then the input field is populated with that value", () => {
+    const expected = "quick brown fox";
+    const propsData = {
+      initial_value: expected,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_input = wrapper.find("#input-widget");
+    expect(target_input.element.value).toStrictEqual(expected);
+  });
   test("When the the user enters few charters in the input, Then an event 'update' is emitted with entered text", async () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",

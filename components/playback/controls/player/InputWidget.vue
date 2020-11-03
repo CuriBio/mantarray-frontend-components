@@ -93,7 +93,7 @@ export default {
   },
   data() {
     return {
-      input_value: this.value,
+      input_value: this.initial_value,
       input_width_background: this.input_width + 4, // This is required as the red/green boxes around the input widget requirement based on feedback introduced the need its not in Mockflow
       // very essential else the input box would appear poping out on the right side outside the background, request to consult Eli or Raghu
     };
