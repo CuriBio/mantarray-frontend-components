@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import ComponentToTest from "@/components/playback/controls/player/AddCustomer.vue";
-import InputWidget from "@/components/playback/controls/player/InputWidget.vue";
 import { AddCustomer as DistComponentToTest } from "@/dist/mantarray.common";
 
 import Vue from "vue";
@@ -72,36 +71,37 @@ describe("AddCustomer.enter_uuidbase57", () => {
     NuxtStore = await import(storePath);
   });
 
-  afterEach(() => wrapper.destroy());
-  test("Given a  encoded base57-UUID for 'Add Customer->Alphanumeric ID' is input, When the base57-UUID is matching all validation criteria, Then this results in valid condition and feedback text is <empty>", async () => {
-    const spied_text_validator = jest.spyOn(
-      TextValidation.prototype,
-      "validate_uuidBase_fiftyseven_encode"
-    );
-
-    const all_input_fields = wrapper.findAll("#input-widget");
-    const input_alphanumeric_id = all_input_fields.at(0);
-
-    const all_input_error_messages = wrapper.findAll(
-      ".div__input-controls-content-feedback"
-    );
-    const alphanumeric_id_error_message = all_input_error_messages.at(0);
-
-    input_alphanumeric_id.element.value = uuid_base57;
-    await input_alphanumeric_id.trigger("input");
-
-    const alphanumeric_id_input_component = wrapper.findComponent(InputWidget);
-
-    await Vue.nextTick();
-    await Vue.nextTick();
-    await Vue.nextTick();
-    await wrapper.vm.$nextTick(); // wait for update
-    expect(spied_text_validator).toHaveBeenCalledWith(uuid_base57);
-    console.log(alphanumeric_id_error_message.html()); // allow-log
-    console.log("wraper vm errortext: " + wrapper.vm.error_text_uuid); // allow-log
-    console.log(alphanumeric_id_input_component.props()); // allow-log
-
-    // Eli - for some reason this isn't updating. The props in the InputWidget itself don't appear to be getting updated
-    // expect(alphanumeric_id_error_message.text()).toStrictEqual("");
+  afterEach(() => {
+    wrapper.destroy();
+    jest.restoreAllMocks();
   });
+  test.each([
+    [uuid_base57, "valid input", "alphanumeric-id"],
+    ["abcdFEG", "too short of input", "alphanumeric-id"],
+  ])(
+    "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function is called and the error message from the validation function is rendered below the input in the DOM",
+    async (entry, test_description, selector_id_suffix) => {
+      const spied_text_validator = jest.spyOn(
+        TextValidation.prototype,
+        "validate_uuidBase_fiftyseven_encode"
+      );
+
+      const target_input_field = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix
+      );
+
+      const target_error_message = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix
+      );
+
+      target_input_field.setValue(entry);
+
+      await Vue.nextTick();
+      expect(spied_text_validator).toHaveBeenCalledWith(entry);
+
+      expect(target_error_message.text()).toStrictEqual(
+        spied_text_validator.mock.results[0].value
+      );
+    }
+  );
 });

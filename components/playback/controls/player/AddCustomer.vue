@@ -12,6 +12,7 @@
         :invalid_text="error_text_uuid"
         :input_width="entry_width"
         :disabled="disallow_entry"
+        :dom_id_suffix="'alphanumeric-id'"
         @update:value="on_update_uuid($event)"
       ></InputWidget>
     </div>
@@ -72,7 +73,6 @@ export default {
   methods: {
     on_update_uuid: function (new_value) {
       this.error_text_uuid = TextValidation_UUIDBase57.validate(new_value);
-      // console.log("in updateuuid, errortext: " + this.error_text_uuid);
     },
   },
 };

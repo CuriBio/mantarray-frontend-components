@@ -53,7 +53,7 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
-    const target_input = wrapper.find("#input-widget");
+    const target_input = wrapper.find("#input-widget-field-");
     expect(target_input.attributes().placeholder).toStrictEqual("place holder");
   });
   test("When the Component is mounted with an initial value supplied as a prop, Then the input field is populated with that value", () => {
@@ -66,9 +66,25 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
-    const target_input = wrapper.find("#input-widget");
+    const target_input = wrapper.find("#input-widget-field-");
     expect(target_input.element.value).toStrictEqual(expected);
   });
+  test("When the Component is mounted with a DOM ID suffix supplied as a prop, Then the input field and feedback text have that included in their DOM IDs", () => {
+    const expected = "my-suffix";
+    const propsData = {
+      dom_id_suffix: expected,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_input = wrapper.find("#input-widget-field-" + expected);
+    expect(target_input.exists()).toBe(true);
+    const target_feedback = wrapper.find("#input-widget-feedback-" + expected);
+    expect(target_feedback.exists()).toBe(true);
+  });
+
   test("When the the user enters few charters in the input, Then an event 'update' is emitted with entered text", async () => {
     const propsData = {
       title_label: "Enter  Alphanumeric  ID",
@@ -81,7 +97,7 @@ describe("InputWidget.vue", () => {
       localVue,
     });
     const uuidBase62 = "2VSckkBYH2An3dqHEyfRRE"; // proper uuidcode sent
-    const input_widget = wrapper.find("#input-widget");
+    const input_widget = wrapper.find("#input-widget-field-");
     input_widget.element.value = uuidBase62;
     await input_widget.trigger("input");
     const emitted_events = wrapper.emitted("update:value");
@@ -110,7 +126,7 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
-    const input_widget = wrapper.find("#input-widget");
+    const input_widget = wrapper.find("#input-widget-field-");
     expect(input_widget.html()).toContain('spellcheck="false"');
   });
   test("Given the component is mounted with the disabled prop set to True, When the user enters few charters in the input, Then no update:value event should be emitted because the field is disabled", async () => {
@@ -122,7 +138,7 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
-    const input_widget = wrapper.find("#input-widget");
+    const input_widget = wrapper.find("#input-widget-field-");
     expect(input_widget.html()).toContain("disabled");
 
     const userdata = "bdukeusaued"; // proper uuidcode sent

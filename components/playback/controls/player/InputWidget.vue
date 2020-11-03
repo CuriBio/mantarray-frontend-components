@@ -36,7 +36,7 @@
           :style="'width: ' + input_width + 'px;'"
         >
           <b-form-input
-            id="input-widget"
+            :id="'input-widget-field-' + dom_id_suffix"
             v-model="input_value"
             :spellcheck="spellcheck"
             :state="input_is_valid"
@@ -55,6 +55,7 @@
         </span>
       </div>
       <div
+        :id="'input-widget-feedback-' + dom_id_suffix"
         class="div__input-controls-content-feedback"
         :style="
           'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'
@@ -90,6 +91,7 @@ export default {
     initial_value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
+    dom_id_suffix: { type: String, default: "" }, // TODO (Eli 11/3/20): consider defaulting this to a random UUID if no value supplied
   },
   data() {
     return {
