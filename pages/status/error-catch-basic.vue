@@ -1,7 +1,7 @@
 <template>
   <div>
     <ComponentToTest
-      error_file_full_path="C:\Users\Eli\CuriBio\AppData\Roaming\MantarrayController\logs_flask\mantarray_log__2020_10_21_185640.txt"
+      error_file_full_path="C:\mantarrally_log__2020_10_21_40.txt"
     ></ComponentToTest>
   </div>
 </template>

@@ -20,12 +20,13 @@
     <textarea
       class="textarea__error-file-path"
       name="error_file"
-      rows="4"
+      :rows="compute_number_of_rows"
       cols="50"
       spellcheck="false"
       :value.prop="internal_file_full_path"
     ></textarea>
-    <div style="top: 220px; left: -5px; position: absolute">
+    <div style="top: 160px; left: -5px; position: absolute">
+      <!-- top modification needed -->
       <ButtonWidget
         :button_widget_width="440"
         :button_widget_height="50"
@@ -57,7 +58,13 @@ export default {
       internal_file_full_path: this.error_file_full_path,
     };
   },
-  computed: {},
+  computed: {
+    compute_number_of_rows: function () {
+      return Math.ceil(
+        ((this.error_file_full_path.length * 1.0) / 50).toFixed(1)
+      );
+    },
+  },
   watch: {},
   created() {
     this.btnnames_create_plate_map_okay = ["Okay"];
@@ -87,7 +94,7 @@ a:hover {
   position: absolute;
   background: rgb(17, 17, 17);
   width: 450px;
-  height: 270px;
+  height: 180px; /* modification needed */
   top: -15px;
   left: -15px;
   visibility: visible;
@@ -154,7 +161,7 @@ a:hover {
   top: 137.6407px;
   left: 41px;
   width: 338px;
-  height: 75px;
+  height: 25px; /* modification needed */
   background: rgb(17, 17, 17);
   border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;

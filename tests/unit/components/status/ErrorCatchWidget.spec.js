@@ -69,4 +69,22 @@ describe("ErrorCatchWidget.vue", () => {
       "C:\\test_file_log.txt"
     );
   });
+  test("Given that ErrorCatchWidget has a props having error file name is small, When the lifecyle hook mount is excuted, Then the text area rows attribute is modified to suite file path length intially, at run time based on error file length the rows attribute is updated", async () => {
+    const propsData = {
+      error_file_full_path: "C:\\test_file_log.txt",
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    await wrapper.vm.$nextTick(); // wait for update
+    const target_text_area = wrapper.find(".textarea__error-file-path");
+    expect(target_text_area.attributes("rows")).toBe("1");
+    await wrapper.setProps({
+      error_file_full_path:
+        "C:\\Users\\Eli\\CuriBio\\AppData\\Roaming\\MantarrayController\\logs_flask\\mantarrally_log__2020_10_21_185640.txt",
+    });
+    expect(target_text_area.attributes("rows")).toBe("3");
+  });
 });
