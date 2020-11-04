@@ -112,7 +112,6 @@ a:hover {
   position: absolute;
   background: rgb(17, 17, 17);
   width: 450px;
-  /* height: 180px;  modification needed */
   top: -15px;
   left: -15px;
   visibility: visible;
@@ -180,7 +179,6 @@ a:hover {
   top: 137.6407px;
   left: 41px;
   width: 338px;
-  /*height: 25px;  modification needed */
   background: rgb(17, 17, 17);
   border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;
