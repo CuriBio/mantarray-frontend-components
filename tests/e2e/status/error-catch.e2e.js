@@ -12,13 +12,13 @@ fixture`status/error-catch-basic`
 `http://localhost:8080/status/error-catch-basic`; // specify the start page
 
 test("testing the ErrorCatchWidget with a error log file path", async (t) => {
-  const screenshot_path_base = path.join("status");
+  const screenshot_path_base = path.join("status", "errorcatch");
   const screenshot_path = path.join(screenshot_path_base, "error-catch-basic");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("testing the ErrorCatchWidget with a error log file path and hover on the okay button", async (t) => {
-  const screenshot_path_base = path.join("status");
+  const screenshot_path_base = path.join("status", "errorcatch");
   const screenshot_path = path.join(
     screenshot_path_base,
     "error-catch-hover-okay-button"
@@ -28,7 +28,7 @@ test("testing the ErrorCatchWidget with a error log file path and hover on the o
 });
 
 test("testing the ErrorCatchWidget with a error log file path and hover on the contact e-mail", async (t) => {
-  const screenshot_path_base = path.join("status");
+  const screenshot_path_base = path.join("status", "errorcatch");
   const screenshot_path = path.join(
     screenshot_path_base,
     "error-catch-hover-contact-email"
@@ -42,7 +42,7 @@ fixture`status/error-catch-x-y-offset`
 `http://localhost:8080/status/error-catch-x-y-offset`; // specify the start page
 
 test("testing the ErrorCatchWidget with an offset of X and Y position", async (t) => {
-  const screenshot_path_base = path.join("status");
+  const screenshot_path_base = path.join("status", "errorcatch");
   const screenshot_path = path.join(
     screenshot_path_base,
     "error-catch-x-y-offset"
@@ -55,7 +55,7 @@ fixture`status/error-catch-small-path`
 `http://localhost:8080/status/error-catch-small-path`; // specify the start page
 
 test("testing the ErrorCatchWidget with a error log file with just small size file path and height adjusted based on length error log file", async (t) => {
-  const screenshot_path_base = path.join("status");
+  const screenshot_path_base = path.join("status", "errorcatch");
   const screenshot_path = path.join(
     screenshot_path_base,
     "error-catch-small-path"

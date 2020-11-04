@@ -55,18 +55,16 @@ export default {
     ButtonWidget,
   },
   props: {
-    error_file_full_path: { type: String, default: "" },
+    log_filepath: { type: String, default: "" },
   },
   data() {
     return {
-      internal_file_full_path: this.error_file_full_path,
+      internal_file_full_path: this.log_filepath,
     };
   },
   computed: {
     compute_number_of_rows: function () {
-      return Math.ceil(
-        ((this.error_file_full_path.length * 1.0) / 50).toFixed(1)
-      );
+      return Math.ceil(((this.log_filepath.length * 1.0) / 50).toFixed(1));
     },
     error_background_cssprops: function () {
       return "height: " + (180 + this.compute_number_of_rows * 12) + "px;";
@@ -78,7 +76,7 @@ export default {
       return (
         "top: " +
         (160 + this.compute_number_of_rows * 12) +
-        "px; left: -15px; position: absolute"
+        "px; left: 0px; position: absolute"
       );
     },
   },
@@ -111,8 +109,8 @@ a:hover {
   position: absolute;
   background: rgb(17, 17, 17);
   width: 450px;
-  top: -15px;
-  left: -15px;
+  top: 0px;
+  left: 0px;
   visibility: visible;
   z-index: 1;
 }
@@ -123,7 +121,7 @@ a:hover {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 420px;
+  width: 450px;
   height: 30px;
   top: 17.3852px;
   left: 0px;
@@ -149,8 +147,8 @@ a:hover {
   font-family: Muli;
   position: absolute;
   top: 57.6407px;
-  left: 41px;
-  width: 338px;
+  left: 0px;
+  width: 450px;
   height: 66px;
   overflow: hidden;
   visibility: visible;
@@ -176,7 +174,7 @@ a:hover {
   font-family: Courier New;
   position: absolute;
   top: 137.6407px;
-  left: 41px;
+  left: 56px;
   width: 338px;
   background: rgb(17, 17, 17);
   border: 2px solid rgb(17, 17, 17);

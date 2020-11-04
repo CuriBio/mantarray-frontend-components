@@ -1,7 +1,7 @@
 <template>
   <div>
     <ComponentToTest
-      error_file_full_path="C:\log__2020_10_21_185640.txt"
+      log_filepath="C:\log__2020_10_21_185640.txt"
     ></ComponentToTest>
   </div>
 </template>
