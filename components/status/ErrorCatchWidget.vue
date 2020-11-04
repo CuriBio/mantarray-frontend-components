@@ -15,7 +15,9 @@
       <!-- the prettier-ignore -->
       <p>
         Please send this log file to
-        <a href="mailto:contact@curibio.com ? subject = Mantarray Error log"
+        <a
+          id="error_contact"
+          href="mailto:contact@curibio.com ? subject = Mantarray Error log"
           >contact@curibio.com</a
         >
       </p>
@@ -31,7 +33,7 @@
     ></textarea>
     <div class="div__error-button" :style="error_catch_button_cssprops">
       <ButtonWidget
-        :button_widget_width="440"
+        :button_widget_width="450"
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
@@ -77,7 +79,7 @@ export default {
       return (
         "top: " +
         (160 + this.compute_number_of_rows * 12) +
-        "px; left: -5px; position: absolute"
+        "px; left: -15px; position: absolute"
       );
     },
   },
