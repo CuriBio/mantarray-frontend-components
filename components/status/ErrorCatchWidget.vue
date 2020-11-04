@@ -1,7 +1,10 @@
 <template>
   <div>
     <!-- original mockflow ID: id="cmpDd7c4156bb0839a33f5be9502418562bf" -->
-    <div class="div__status-error-catch-background"></div>
+    <div
+      class="div__status-error-catch-background"
+      :style="error_background_cssprops"
+    ></div>
     <!-- original mockflow ID: id="cmpD94339a6591e3ead19b4308b3a8b0cb68" -->
     <span class="div_status-error-catch-title-label"
       >An&nbsp;<wbr />error&nbsp;<wbr />occurred.
@@ -24,9 +27,9 @@
       cols="50"
       spellcheck="false"
       :value.prop="internal_file_full_path"
+      :style="textarea__error_cssprops"
     ></textarea>
-    <div style="top: 160px; left: -5px; position: absolute">
-      <!-- top modification needed -->
+    <div class="div__error-button" :style="error_catch_button_cssprops">
       <ButtonWidget
         :button_widget_width="440"
         :button_widget_height="50"
@@ -64,6 +67,19 @@ export default {
         ((this.error_file_full_path.length * 1.0) / 50).toFixed(1)
       );
     },
+    error_background_cssprops: function () {
+      return "height: " + (180 + this.compute_number_of_rows * 12) + "px;";
+    },
+    textarea__error_cssprops: function () {
+      return "height: " + (25 + this.compute_number_of_rows * 10) + "px;";
+    },
+    error_catch_button_cssprops: function () {
+      return (
+        "top: " +
+        (160 + this.compute_number_of_rows * 12) +
+        "px; left: -5px; position: absolute"
+      );
+    },
   },
   watch: {},
   created() {
@@ -94,7 +110,7 @@ a:hover {
   position: absolute;
   background: rgb(17, 17, 17);
   width: 450px;
-  height: 180px; /* modification needed */
+  /* height: 180px;  modification needed */
   top: -15px;
   left: -15px;
   visibility: visible;
@@ -148,6 +164,7 @@ a:hover {
   z-index: 5;
   pointer-events: all;
 }
+
 .textarea__error-file-path {
   line-height: 1.2;
   transform: rotate(0deg);
@@ -161,7 +178,7 @@ a:hover {
   top: 137.6407px;
   left: 41px;
   width: 338px;
-  height: 25px; /* modification needed */
+  /*height: 25px;  modification needed */
   background: rgb(17, 17, 17);
   border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;
