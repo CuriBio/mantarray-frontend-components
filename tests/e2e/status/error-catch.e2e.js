@@ -49,3 +49,16 @@ test("testing the ErrorCatchWidget with an offset of X and Y position", async (t
   );
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+
+fixture`status/error-catch-small-path`
+  .page // declare the fixture
+`http://localhost:8080/status/error-catch-small-path`; // specify the start page
+
+test("testing the ErrorCatchWidget with a error log file with just small size file path and height adjusted based on length error log file", async (t) => {
+  const screenshot_path_base = path.join("status");
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "error-catch-small-path"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path);
+});

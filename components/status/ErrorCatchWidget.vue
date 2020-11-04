@@ -12,7 +12,6 @@
     <!-- original mockflow ID: id="cmpD7504e31fab5b6799a0bbf3fe2514622e" -->
     <div class="div_status-error-catch-alert-txt">
       <p>Mantarray software is about to shut down.</p>
-      <!-- the prettier-ignore -->
       <p>
         Please send this log file to
         <a
