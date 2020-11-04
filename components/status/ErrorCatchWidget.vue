@@ -9,30 +9,22 @@
     <!-- original mockflow ID: id="cmpD7504e31fab5b6799a0bbf3fe2514622e" -->
     <div class="div_status-error-catch-alert-txt">
       <p>Mantarray software is about to shut down.</p>
-      <!-- the prettier breaks down the tag of p below which as per TDD is verifying as single line tag -->
+      <!-- the prettier-ignore -->
       <p>
         Please send this log file to
-        <a
-          href="mailto:contact@curibio.com ? subject = Error log & body = Logfile"
+        <a href="mailto:contact@curibio.com ? subject = Mantarray Error log"
           >contact@curibio.com</a
         >
       </p>
     </div>
-    <!-- eslint-disable -->
-    <!-- It might be observed if we follow the rule as per the lint rules it expects v-model="error_file_full_path" -->
-    <!-- But in the sequence of adhering to the rule of eslint if this modification is done then the following testcase -->
-    <!-- Given that ErrorCatchWidget has a props having error file name, When the lifecyle hook mount is excuted, -->
-    <!-- Then title, alert text, contact e-mail and error file name is rendered properly -->
-    <!-- The assertion of the value passed as prop into the error_file_full_path fails in line 66 of file ErrorCatchWidget.spec.js -->
     <textarea
       class="textarea__error-file-path"
       name="error_file"
       rows="4"
       cols="50"
       spellcheck="false"
-      >{{ error_file_full_path }}</textarea
-    >
-    <!-- eslint-enable -->
+      :value.prop="internal_file_full_path"
+    ></textarea>
     <div style="top: 220px; left: -5px; position: absolute">
       <ButtonWidget
         :button_widget_width="440"
@@ -59,6 +51,11 @@ export default {
   },
   props: {
     error_file_full_path: { type: String, default: "" },
+  },
+  data() {
+    return {
+      internal_file_full_path: this.error_file_full_path,
+    };
   },
   computed: {},
   watch: {},
