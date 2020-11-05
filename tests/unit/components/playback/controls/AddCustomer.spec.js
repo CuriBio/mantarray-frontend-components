@@ -81,26 +81,150 @@ describe("AddCustomer.enter_uuidbase57", () => {
       "valid input",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
+      "",
     ],
     [
-      "abcdFEG",
-      "too short of input",
+      "0VSckkBYH2An3dqHEyfRRE",
+      "contains zero (0)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
+      "The entered ID has an invalid character 0,",
     ],
     [
-      "abc!",
-      "input contains invalid character",
+      "2VSckkBY2An3dqHEyfRRE",
+      "is less than 22 characters",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
+      "The entered ID is 21 characters. All valid IDs are exactly 22 characters.",
     ],
+    [
+      "2VSckkBY2An3dqHEyfRREab",
+      "23 characters",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+      "The entered ID is 23 characters. All valid IDs are exactly 22 characters.",
+    ],
+    [
+      "2VSckkBY12An3dqHEyfRRE",
+      "contains  (1)",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+      "The entered ID has an invalid character 1,",
+    ],
+    [
+      "2VSIkkBYH2An3dqHEyfRRE",
+      "contains capital (I)",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+      "The entered ID has an invalid character I,",
+    ],
+    [
+      "2VSskkBYH2An3dqHElfRRE",
+      "contains  (l)",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+      "The entered ID has an invalid character l,",
+    ],
+    [
+      "2VSskkBYH2An3dqHEyfRRO",
+      "contains  (O)",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+      "The entered ID has an invalid character O,",
+    ],
+    [
+      "4vqyd62oARXqj9nRUNhtLQ",
+      "error in encoding",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+      "This combination of 22 characters is invalid encoded id",
+    ],
+    [
+      "2VSckkBY-2An3dqHEyfRRE",
+      "contains hypen (-)",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+      "Entry permitted for Alphanumeric only",
+    ],
+    [
+      "2VSckkBYº2An3dqHEyfRRE",
+      "contains symbols (º)",
+      "alphanumeric-id",
+      "validate_uuidBase_fiftyseven_encode",
+      "Entry permitted for Alphanumeric only",
+    ],
+    [
+      "06ad547f-fe02-477b-9473-f7977e4d5e17",
+      "valid input",
+      "apikey-id",
+      "validate_alphanumeric",
+      "",
+    ],
+    [
+      "06ad547f fe02-477b-9473-f7977e4d5e17",
+      "missing hypen",
+      "apikey-id",
+      "validate_alphanumeric",
+      "Wrong Format of API Key",
+    ],
+    [
+      "06ad547f-fe02-477b-9473-f7977e4d5e1",
+      "less than 36",
+      "apikey-id",
+      "validate_alphanumeric",
+      "Wrong Format of API Key",
+    ],
+    [
+      "06ad547f-fe02-477b-9473-f7977e4d5e14k",
+      "more than 36",
+      "apikey-id",
+      "validate_alphanumeric",
+      "Wrong Format of API Key",
+    ],
+    [
+      "Experiment anemia -1",
+      "valid input",
+      "nickname-id",
+      "validate_nickname",
+      "",
+    ],
+    [
+      "Cat * lab",
+      "contains asterisk *",
+      "nickname-id",
+      "validate_nickname",
+      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
+    ],
+    [
+      "Cat lab`",
+      "contains left quote `",
+      "nickname-id",
+      "validate_nickname",
+      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
+    ],
+    [
+      "Cat lab;",
+      "contains semi-colon ;",
+      "nickname-id",
+      "validate_nickname",
+      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
+    ],
+    [
+      "Experiment anemia alpha cells -1",
+      "more than 20 characters",
+      "nickname-id",
+      "validate_nickname",
+      "Invalid as its more than 20 charcters",
+    ],
+    ["C", "minimum one character C", "nickname-id", "validate_nickname", ""],
   ])(
     "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
     async (
       entry,
       test_description,
       selector_id_suffix,
-      text_validation_type
+      text_validation_type,
+      response_text
     ) => {
       const spied_text_validator = jest.spyOn(
         TextValidation.prototype,
@@ -120,9 +244,7 @@ describe("AddCustomer.enter_uuidbase57", () => {
       await Vue.nextTick();
       expect(spied_text_validator).toHaveBeenCalledWith(entry);
 
-      expect(target_error_message.text()).toStrictEqual(
-        spied_text_validator.mock.results[0].value
-      );
+      expect(target_error_message.text()).toStrictEqual(response_text);
     }
   );
 });
