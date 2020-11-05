@@ -248,3 +248,258 @@ describe("AddCustomer.enter_uuidbase57", () => {
     }
   );
 });
+
+describe("AddCustomer.enable_save_button", () => {
+  beforeEach(async () => {
+    const propsData = {
+      dialogdata: null,
+      dataindex: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    store = await NuxtStore.createStore();
+  });
+
+  beforeAll(async () => {
+    // note the store will mutate across tests, so make sure to re-create it in beforeEach
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+
+  afterEach(() => wrapper.destroy());
+
+  test.each([
+    [
+      "0VSckkBYH2An3dqHEyfRRE",
+      "The entered ID has an invalid character 0,",
+      "06ad547f-fe02-477b-9473-f7977e4d5e17",
+      "",
+      "Experiment anemia -1",
+      "",
+      "color: rgb(63, 63, 63); width: 250px; left: 250px;",
+    ],
+    [
+      "5FY8KwTsQaUJ2KzHJGetfE",
+      "",
+      "06ad547f fe02-477b-9473-f7977e4d5e17",
+      "Wrong Format of API Key",
+      "Experiment anemia -1",
+      "",
+      "color: rgb(63, 63, 63); width: 250px; left: 250px;",
+    ],
+    [
+      "5FY8KwTsQaUJ2KzHJGetfE",
+      "",
+      "06ad547f-fe02-477b-9473-f7977e4d5e17",
+      "",
+      "Cat * lab",
+      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
+      "color: rgb(63, 63, 63); width: 250px; left: 250px;",
+    ],
+    [
+      "5FY8KwTsQaUJ2KzHJGetfE",
+      "",
+      "06ad547f-fe02-477b-9473-f7977e4d5e17",
+      "",
+      "Experiment anemia -1",
+      "",
+      "color: rgb(255, 255, 255); width: 250px; left: 250px;",
+    ],
+  ])(
+    "Given an UUID, API Key, Nickname for 'Add Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed",
+    async (
+      uuid,
+      invalid_uuid,
+      apikey,
+      invalid_apikey,
+      nickname,
+      invalid_nickname,
+      save_btn_css
+    ) => {
+      const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
+      const selector_id_suffix_apikey_id = "apikey-id";
+      const selector_id_suffix_nickname_id = "nickname-id";
+
+      const spied_text_validator_uuid = jest.spyOn(
+        TextValidation.prototype,
+        "validate_uuidBase_fiftyseven_encode"
+      );
+
+      const spied_text_validator_api = jest.spyOn(
+        TextValidation.prototype,
+        "validate_alphanumeric"
+      );
+
+      const spied_text_validator_nickname = jest.spyOn(
+        TextValidation.prototype,
+        "validate_nickname"
+      );
+
+      const target_input_field_uuid = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix_alphanumeric_id
+      );
+      const target_error_message_uuid = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix_alphanumeric_id
+      );
+      target_input_field_uuid.setValue(uuid);
+      await Vue.nextTick();
+      expect(spied_text_validator_uuid).toHaveBeenCalledWith(uuid);
+      expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
+
+      const target_input_field_apikey = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix_apikey_id
+      );
+      const target_error_message_apikey = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix_apikey_id
+      );
+      target_input_field_apikey.setValue(apikey);
+      await Vue.nextTick();
+      expect(spied_text_validator_api).toHaveBeenCalledWith(apikey);
+      expect(target_error_message_apikey.text()).toStrictEqual(invalid_apikey);
+
+      const target_input_field_nickname = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix_nickname_id
+      );
+      const target_error_message_nickname = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix_nickname_id
+      );
+      target_input_field_nickname.setValue(nickname);
+      await Vue.nextTick();
+      expect(spied_text_validator_nickname).toHaveBeenCalledWith(nickname);
+      expect(target_error_message_nickname.text()).toStrictEqual(
+        invalid_nickname
+      );
+
+      const target_button_label_btn = wrapper.findAll(".span__button_label");
+      const cancel_btn = target_button_label_btn.at(0);
+      expect(cancel_btn.attributes().style).toBe(
+        "color: rgb(255, 255, 255); width: 250px; left: 0px;"
+      );
+      const save_btn = target_button_label_btn.at(1);
+      expect(save_btn.attributes().style).toBe(save_btn_css);
+    }
+  );
+});
+
+describe("AddCustomer.clicked_button", () => {
+  beforeEach(async () => {
+    const propsData = {
+      dialogdata: null,
+      dataindex: 0,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    store = await NuxtStore.createStore();
+  });
+
+  beforeAll(async () => {
+    // note the store will mutate across tests, so make sure to re-create it in beforeEach
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+
+  afterEach(() => wrapper.destroy());
+
+  test.each([
+    [
+      "5FY8KwTsQaUJ2KzHJGetfE",
+      "",
+      "06ad547f-fe02-477b-9473-f7977e4d5e17",
+      "",
+      "Experiment anemia -1",
+      "",
+      "color: rgb(255, 255, 255); width: 250px; left: 250px;",
+      1,
+    ],
+  ])(
+    "Given an UUID, API Key, Nickname for 'Add Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible, click on Cancel, emitted event (value 0) and click on Save emitted event (value 1)",
+    async (
+      uuid,
+      invalid_uuid,
+      apikey,
+      invalid_apikey,
+      nickname,
+      invalid_nickname,
+      save_btn_css,
+      label
+    ) => {
+      const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
+      const selector_id_suffix_apikey_id = "apikey-id";
+      const selector_id_suffix_nickname_id = "nickname-id";
+
+      const spied_text_validator_uuid = jest.spyOn(
+        TextValidation.prototype,
+        "validate_uuidBase_fiftyseven_encode"
+      );
+
+      const spied_text_validator_api = jest.spyOn(
+        TextValidation.prototype,
+        "validate_alphanumeric"
+      );
+
+      const spied_text_validator_nickname = jest.spyOn(
+        TextValidation.prototype,
+        "validate_nickname"
+      );
+
+      const spied_button_function = jest.spyOn(wrapper.vm, "clicked_button");
+
+      const target_input_field_uuid = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix_alphanumeric_id
+      );
+      const target_error_message_uuid = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix_alphanumeric_id
+      );
+      target_input_field_uuid.setValue(uuid);
+      await Vue.nextTick();
+      expect(spied_text_validator_uuid).toHaveBeenCalledWith(uuid);
+      expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
+
+      const target_input_field_apikey = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix_apikey_id
+      );
+      const target_error_message_apikey = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix_apikey_id
+      );
+      target_input_field_apikey.setValue(apikey);
+      await Vue.nextTick();
+      expect(spied_text_validator_api).toHaveBeenCalledWith(apikey);
+      expect(target_error_message_apikey.text()).toStrictEqual(invalid_apikey);
+
+      const target_input_field_nickname = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix_nickname_id
+      );
+      const target_error_message_nickname = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix_nickname_id
+      );
+      target_input_field_nickname.setValue(nickname);
+      await Vue.nextTick();
+      expect(spied_text_validator_nickname).toHaveBeenCalledWith(nickname);
+      expect(target_error_message_nickname.text()).toStrictEqual(
+        invalid_nickname
+      );
+
+      const target_button_label_btn = wrapper.findAll(".span__button_label");
+      const cancel_btn = target_button_label_btn.at(0);
+      expect(cancel_btn.attributes().style).toBe(
+        "color: rgb(255, 255, 255); width: 250px; left: 0px;"
+      );
+      const save_btn = target_button_label_btn.at(1);
+      expect(save_btn.attributes().style).toBe(save_btn_css);
+
+      await cancel_btn.trigger("click");
+      await Vue.nextTick();
+      expect(spied_button_function).toHaveBeenCalledWith(0);
+
+      await save_btn.trigger("click");
+      await Vue.nextTick();
+      expect(spied_button_function).toHaveBeenCalledWith(label);
+    }
+  );
+});
