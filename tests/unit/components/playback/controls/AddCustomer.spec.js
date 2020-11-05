@@ -500,6 +500,18 @@ describe("AddCustomer.clicked_button", () => {
       await save_btn.trigger("click");
       await Vue.nextTick();
       expect(spied_button_function).toHaveBeenCalledWith(label);
+
+      const save_id_events = wrapper.emitted("save-id");
+      expect(save_id_events).toHaveLength(1);
+      expect(save_id_events[0]).toStrictEqual([
+        {
+          api_key: "06ad547f-fe02-477b-9473-f7977e4d5e17",
+          cust_id: 0,
+          nickname: "Experiment anemia -1",
+          user_ids: [],
+          uuid: "5FY8KwTsQaUJ2KzHJGetfE",
+        },
+      ]);
     }
   );
 });
