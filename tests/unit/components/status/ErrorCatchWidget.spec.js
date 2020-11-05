@@ -71,7 +71,7 @@ describe("ErrorCatchWidget.vue", () => {
       "C:\\test_file_log.txt"
     );
   });
-  test("Given that ErrorCatchWidget has a props having log_filepath is small, When the lifecyle hook mounted is created, Then the text area rows attribute is modified to suite the length of props log_filepath intially, at run time based on new log_filepath then the rows attribute of textarea is updated", async () => {
+  test("Given that ErrorCatchWidget has a props having log_filepath is small, When mounting the component with short log_filepath, Then the text area rows attribute is modified to suite the length of props log_filepath intially, at run time based on new log_filepath then the rows attribute of textarea is updated", async () => {
     const propsData = {
       log_filepath: "C:\\test_file_log.txt",
     };
@@ -89,7 +89,7 @@ describe("ErrorCatchWidget.vue", () => {
     });
     expect(target_text_area.attributes("rows")).toBe("3");
   });
-  test("Given that ErrorCatchWidget has a props having log_filepath is small, When the lifecyle hook mounted is created, Then the height attribute of the status-error-catch-background, textarea__error-file-path and the top attribute of error_catch_button is updated based on the length prop log_filepath", async () => {
+  test("Given that ErrorCatchWidget has a props having log_filepath is small, When mounting the component with short log_filepath, Then the height attribute of the status-error-catch-background, textarea__error-file-path and the top attribute of error_catch_button is updated based on the length prop log_filepath", async () => {
     const propsData = {
       log_filepath: "C:\\test_file_log.txt",
     };

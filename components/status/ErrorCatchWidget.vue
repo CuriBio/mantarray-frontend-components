@@ -27,7 +27,7 @@
       :rows="compute_number_of_rows"
       cols="50"
       spellcheck="false"
-      :value.prop="internal_file_full_path"
+      :value.prop="log_filepath"
       :style="textarea__error_cssprops"
     ></textarea>
     <div class="div__error-button" :style="error_catch_button_cssprops">
@@ -36,11 +36,9 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
-        :button_names="btnnames_create_plate_map_okay"
-        :enabled_color="visiblecolor_create_plate_map_okay"
-        :disabled_color="hidecolor_create_plate_map_okay"
-        :hover_color="hovercolors_create_plate_map_okay"
-        :is_enabled="enablelist_create_plate_map_okay"
+        :button_names="['Okay']"
+        :enabled_color="'#B7B7B7'"
+        :hover_color="['#FFFFFF']"
       >
       </ButtonWidget>
     </div>
@@ -56,11 +54,6 @@ export default {
   },
   props: {
     log_filepath: { type: String, default: "" },
-  },
-  data() {
-    return {
-      internal_file_full_path: this.log_filepath,
-    };
   },
   computed: {
     compute_number_of_rows: function () {
@@ -81,13 +74,7 @@ export default {
     },
   },
   watch: {},
-  created() {
-    this.btnnames_create_plate_map_okay = ["Okay"];
-    this.enablelist_create_plate_map_okay = [true];
-    this.visiblecolor_create_plate_map_okay = "#B7B7B7";
-    this.hidecolor_create_plate_map_okay = "#3F3F3F";
-    this.hovercolors_create_plate_map_okay = ["#FFFFFF"];
-  },
+  created() {},
   methods: {},
 };
 </script>
