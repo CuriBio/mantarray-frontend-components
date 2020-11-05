@@ -43,6 +43,7 @@ export { default as PlateBarcode } from "./components/playback/controls/PlateBar
 export { default as StatusBar } from "./components/status/StatusBar.vue";
 export { default as RecordingTime } from "./components/playback/controls/RecordingTime.vue";
 export { default as SimulationMode } from "./components/status/SimulationMode.vue";
+export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as PlateMapEditor } from "./components/playback/controls/PlateMapEditor.vue";
 export { default as PlateWell } from "./components/playback/controls/PlateWell.vue";
 export { default as InputWidget } from "./components/playback/controls/player/InputWidget.vue";
