@@ -225,4 +225,27 @@ describe("InputWidget.vue", () => {
       "width: 390px; top: 48px;"
     );
   });
+  test("When the component is mounted, Then then the props value 'display_text_message' is set to 'false' the invalid_text is not rendered, on resetting 'display_text_message' to 'true' then invalid_text is rendered", async () => {
+    const propsData = {
+      title_label: "",
+      placeholder: "place holder",
+      initial_value: "",
+      invalid_text: "This field is required",
+      spellcheck: false,
+      disabled: false,
+      input_width: 390,
+      display_text_message: false,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const input_text_entry_feedback = wrapper.find(
+      ".div__input-controls-content-feedback"
+    );
+    expect(input_text_entry_feedback.isVisible()).toBe(false);
+    await wrapper.setProps({ display_text_message: true });
+    expect(input_text_entry_feedback.isVisible()).toBe(true);
+  });
 });

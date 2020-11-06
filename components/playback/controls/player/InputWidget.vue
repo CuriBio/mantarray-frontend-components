@@ -55,6 +55,7 @@
         </span>
       </div>
       <div
+        v-show="display_text_message"
         :id="'input-widget-feedback-' + dom_id_suffix"
         class="div__input-controls-content-feedback"
         :style="
@@ -92,6 +93,7 @@ export default {
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     dom_id_suffix: { type: String, default: "" }, // TODO (Eli 11/3/20): consider defaulting this to a random UUID if no value supplied
+    display_text_message: { type: Boolean, default: true }, // display_text_message (boolean) if set to false would not render invalid_text
   },
   data() {
     return {
