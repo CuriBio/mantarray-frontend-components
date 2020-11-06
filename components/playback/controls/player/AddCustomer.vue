@@ -11,7 +11,6 @@
         :spellcheck="false"
         :invalid_text="error_text_uuid"
         :input_width="400"
-        :disabled="false"
         :dom_id_suffix="'alphanumeric-id'"
         @update:value="on_update_uuid($event)"
       ></InputWidget>
@@ -24,7 +23,6 @@
         :spellcheck="false"
         :invalid_text="error_text_api"
         :input_width="400"
-        :disabled="false"
         :dom_id_suffix="'apikey-id'"
         @update:value="on_update_api($event)"
       ></InputWidget>
@@ -36,7 +34,6 @@
         :spellcheck="false"
         :invalid_text="error_text_nickname"
         :input_width="400"
-        :disabled="false"
         :dom_id_suffix="'nickname-id'"
         @update:value="on_update_nickname($event)"
       ></InputWidget>
@@ -139,14 +136,18 @@ export default {
         if (this.error_text_api === "") {
           if (this.error_text_nickname === "") {
             this.enablelist_add_customer = [true, true];
+            return;
           } else {
             this.enablelist_add_customer = [true, false];
+            return;
           }
         } else {
           this.enablelist_add_customer = [true, false];
+          return;
         }
       } else {
         this.enablelist_add_customer = [true, false];
+        return;
       }
     },
   },

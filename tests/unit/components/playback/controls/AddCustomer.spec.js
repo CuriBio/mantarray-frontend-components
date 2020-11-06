@@ -81,140 +81,100 @@ describe("AddCustomer.enter_uuidbase57", () => {
       "valid input",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "",
     ],
     [
       "0VSckkBYH2An3dqHEyfRRE",
       "contains zero (0)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "The entered ID has an invalid character 0,",
     ],
     [
       "2VSckkBY2An3dqHEyfRRE",
       "is less than 22 characters",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "The entered ID is 21 characters. All valid IDs are exactly 22 characters.",
     ],
     [
       "2VSckkBY2An3dqHEyfRREab",
       "23 characters",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "The entered ID is 23 characters. All valid IDs are exactly 22 characters.",
     ],
     [
       "2VSckkBY12An3dqHEyfRRE",
       "contains  (1)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "The entered ID has an invalid character 1,",
     ],
     [
       "2VSIkkBYH2An3dqHEyfRRE",
       "contains capital (I)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "The entered ID has an invalid character I,",
     ],
     [
       "2VSskkBYH2An3dqHElfRRE",
       "contains  (l)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "The entered ID has an invalid character l,",
     ],
     [
       "2VSskkBYH2An3dqHEyfRRO",
       "contains  (O)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "The entered ID has an invalid character O,",
     ],
     [
       "4vqyd62oARXqj9nRUNhtLQ",
       "error in encoding",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "This combination of 22 characters is invalid encoded id",
     ],
     [
       "2VSckkBY-2An3dqHEyfRRE",
       "contains hypen (-)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "Entry permitted for Alphanumeric only",
     ],
     [
       "2VSckkBYº2An3dqHEyfRRE",
       "contains symbols (º)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
-      "Entry permitted for Alphanumeric only",
     ],
     [
       "06ad547f-fe02-477b-9473-f7977e4d5e17",
       "valid input",
       "apikey-id",
       "validate_alphanumeric",
-      "",
     ],
     [
       "06ad547f fe02-477b-9473-f7977e4d5e17",
       "missing hypen",
       "apikey-id",
       "validate_alphanumeric",
-      "Wrong Format of API Key",
     ],
     [
       "06ad547f-fe02-477b-9473-f7977e4d5e1",
       "less than 36",
       "apikey-id",
       "validate_alphanumeric",
-      "Wrong Format of API Key",
     ],
     [
       "06ad547f-fe02-477b-9473-f7977e4d5e14k",
       "more than 36",
       "apikey-id",
       "validate_alphanumeric",
-      "Wrong Format of API Key",
     ],
-    [
-      "Experiment anemia -1",
-      "valid input",
-      "nickname-id",
-      "validate_nickname",
-      "",
-    ],
-    [
-      "Cat * lab",
-      "contains asterisk *",
-      "nickname-id",
-      "validate_nickname",
-      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
-    ],
-    [
-      "Cat lab`",
-      "contains left quote `",
-      "nickname-id",
-      "validate_nickname",
-      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
-    ],
-    [
-      "Cat lab;",
-      "contains semi-colon ;",
-      "nickname-id",
-      "validate_nickname",
-      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
-    ],
+    ["Experiment anemia -1", "valid input", "nickname-id", "validate_nickname"],
+    ["Cat * lab", "contains asterisk *", "nickname-id", "validate_nickname"],
+    ["Cat lab`", "contains left quote `", "nickname-id", "validate_nickname"],
+    ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_nickname"],
     [
       "Experiment anemia alpha cells -1",
       "more than 20 characters",
       "nickname-id",
       "validate_nickname",
-      "Invalid as its more than 20 charcters",
     ],
     ["C", "minimum one character C", "nickname-id", "validate_nickname", ""],
   ])(
@@ -223,8 +183,7 @@ describe("AddCustomer.enter_uuidbase57", () => {
       entry,
       test_description,
       selector_id_suffix,
-      text_validation_type,
-      response_text
+      text_validation_type
     ) => {
       const spied_text_validator = jest.spyOn(
         TextValidation.prototype,
@@ -244,7 +203,10 @@ describe("AddCustomer.enter_uuidbase57", () => {
       await Vue.nextTick();
       expect(spied_text_validator).toHaveBeenCalledWith(entry);
 
-      expect(target_error_message.text()).toStrictEqual(response_text);
+      expect(target_error_message.text()).toStrictEqual(
+        spied_text_validator.mock.results[0].value
+      );
+      // expect(target_error_message.text()).toStrictEqual(response_text);
     }
   );
 });
@@ -274,69 +236,54 @@ describe("AddCustomer.enable_save_button", () => {
   test.each([
     [
       "0VSckkBYH2An3dqHEyfRRE",
+      "06ad547f-fe02-477b-9473-f7977e4d5e17",
+      "Experiment anemia -1",
       "The entered ID has an invalid character 0,",
-      "06ad547f-fe02-477b-9473-f7977e4d5e17",
       "",
-      "Experiment anemia -1",
       "",
       "color: rgb(63, 63, 63); width: 250px; left: 250px;",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
-      "",
       "06ad547f fe02-477b-9473-f7977e4d5e17",
-      "Wrong Format of API Key",
       "Experiment anemia -1",
+      "",
+      "Wrong Format of API Key",
       "",
       "color: rgb(63, 63, 63); width: 250px; left: 250px;",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
-      "",
       "06ad547f-fe02-477b-9473-f7977e4d5e17",
-      "",
       "Cat * lab",
+      "",
+      "",
       "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
       "color: rgb(63, 63, 63); width: 250px; left: 250px;",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
-      "",
       "06ad547f-fe02-477b-9473-f7977e4d5e17",
-      "",
       "Experiment anemia -1",
+      "",
+      "",
       "",
       "color: rgb(255, 255, 255); width: 250px; left: 250px;",
     ],
   ])(
-    "Given an UUID, API Key, Nickname for 'Add Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed",
+    "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Add Customer' as input, When the input contains based on validthe critera or failure (%s)(%s)(%s), Then display of Label 'Save ID' is visible or greyed (%s)",
     async (
       uuid,
-      invalid_uuid,
       apikey,
-      invalid_apikey,
       nickname,
+      invalid_uuid,
+      invalid_apikey,
       invalid_nickname,
       save_btn_css
     ) => {
       const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
       const selector_id_suffix_apikey_id = "apikey-id";
       const selector_id_suffix_nickname_id = "nickname-id";
-
-      const spied_text_validator_uuid = jest.spyOn(
-        TextValidation.prototype,
-        "validate_uuidBase_fiftyseven_encode"
-      );
-
-      const spied_text_validator_api = jest.spyOn(
-        TextValidation.prototype,
-        "validate_alphanumeric"
-      );
-
-      const spied_text_validator_nickname = jest.spyOn(
-        TextValidation.prototype,
-        "validate_nickname"
-      );
 
       const target_input_field_uuid = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_alphanumeric_id
@@ -346,7 +293,7 @@ describe("AddCustomer.enable_save_button", () => {
       );
       target_input_field_uuid.setValue(uuid);
       await Vue.nextTick();
-      expect(spied_text_validator_uuid).toHaveBeenCalledWith(uuid);
+
       expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
 
       const target_input_field_apikey = wrapper.find(
@@ -357,7 +304,7 @@ describe("AddCustomer.enable_save_button", () => {
       );
       target_input_field_apikey.setValue(apikey);
       await Vue.nextTick();
-      expect(spied_text_validator_api).toHaveBeenCalledWith(apikey);
+
       expect(target_error_message_apikey.text()).toStrictEqual(invalid_apikey);
 
       const target_input_field_nickname = wrapper.find(
@@ -368,7 +315,7 @@ describe("AddCustomer.enable_save_button", () => {
       );
       target_input_field_nickname.setValue(nickname);
       await Vue.nextTick();
-      expect(spied_text_validator_nickname).toHaveBeenCalledWith(nickname);
+
       expect(target_error_message_nickname.text()).toStrictEqual(
         invalid_nickname
       );
@@ -409,22 +356,22 @@ describe("AddCustomer.clicked_button", () => {
   test.each([
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
-      "",
       "06ad547f-fe02-477b-9473-f7977e4d5e17",
-      "",
       "Experiment anemia -1",
+      "",
+      "",
       "",
       "color: rgb(255, 255, 255); width: 250px; left: 250px;",
       1,
     ],
   ])(
-    "Given an UUID, API Key, Nickname for 'Add Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible, click on Cancel, emitted event (value 0) and click on Save emitted event (value 1)",
+    "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, emitted event (value 0) and click on Save emitted event (value %s)",
     async (
-      uuid,
-      invalid_uuid,
-      apikey,
+      uuid_test,
+      apikey_test,
+      nickname_test,
       invalid_apikey,
-      nickname,
+      invalid_uuid,
       invalid_nickname,
       save_btn_css,
       label
@@ -432,21 +379,6 @@ describe("AddCustomer.clicked_button", () => {
       const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
       const selector_id_suffix_apikey_id = "apikey-id";
       const selector_id_suffix_nickname_id = "nickname-id";
-
-      const spied_text_validator_uuid = jest.spyOn(
-        TextValidation.prototype,
-        "validate_uuidBase_fiftyseven_encode"
-      );
-
-      const spied_text_validator_api = jest.spyOn(
-        TextValidation.prototype,
-        "validate_alphanumeric"
-      );
-
-      const spied_text_validator_nickname = jest.spyOn(
-        TextValidation.prototype,
-        "validate_nickname"
-      );
 
       const spied_button_function = jest.spyOn(wrapper.vm, "clicked_button");
 
@@ -456,9 +388,9 @@ describe("AddCustomer.clicked_button", () => {
       const target_error_message_uuid = wrapper.find(
         "#input-widget-feedback-" + selector_id_suffix_alphanumeric_id
       );
-      target_input_field_uuid.setValue(uuid);
+      target_input_field_uuid.setValue(uuid_test);
       await Vue.nextTick();
-      expect(spied_text_validator_uuid).toHaveBeenCalledWith(uuid);
+
       expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
 
       const target_input_field_apikey = wrapper.find(
@@ -467,9 +399,9 @@ describe("AddCustomer.clicked_button", () => {
       const target_error_message_apikey = wrapper.find(
         "#input-widget-feedback-" + selector_id_suffix_apikey_id
       );
-      target_input_field_apikey.setValue(apikey);
+      target_input_field_apikey.setValue(apikey_test);
       await Vue.nextTick();
-      expect(spied_text_validator_api).toHaveBeenCalledWith(apikey);
+
       expect(target_error_message_apikey.text()).toStrictEqual(invalid_apikey);
 
       const target_input_field_nickname = wrapper.find(
@@ -478,9 +410,9 @@ describe("AddCustomer.clicked_button", () => {
       const target_error_message_nickname = wrapper.find(
         "#input-widget-feedback-" + selector_id_suffix_nickname_id
       );
-      target_input_field_nickname.setValue(nickname);
+      target_input_field_nickname.setValue(nickname_test);
       await Vue.nextTick();
-      expect(spied_text_validator_nickname).toHaveBeenCalledWith(nickname);
+
       expect(target_error_message_nickname.text()).toStrictEqual(
         invalid_nickname
       );
@@ -505,11 +437,11 @@ describe("AddCustomer.clicked_button", () => {
       expect(save_id_events).toHaveLength(1);
       expect(save_id_events[0]).toStrictEqual([
         {
-          api_key: "06ad547f-fe02-477b-9473-f7977e4d5e17",
+          api_key: apikey_test,
           cust_id: 0,
-          nickname: "Experiment anemia -1",
+          nickname: nickname_test,
           user_ids: [],
-          uuid: "5FY8KwTsQaUJ2KzHJGetfE",
+          uuid: uuid_test,
         },
       ]);
     }

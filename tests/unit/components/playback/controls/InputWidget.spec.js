@@ -225,7 +225,28 @@ describe("InputWidget.vue", () => {
       "width: 390px; top: 48px;"
     );
   });
-  test("When the component is mounted, Then then the props value 'display_text_message' is set to 'false' the invalid_text is not rendered, on resetting 'display_text_message' to 'true' then invalid_text is rendered", async () => {
+  test("When the component is mounted with the display_text_message prop set to false, Then the invalid_text is not rendered", async () => {
+    const propsData = {
+      title_label: "",
+      placeholder: "place holder",
+      initial_value: "",
+      invalid_text: "This field is required",
+      spellcheck: false,
+      disabled: false,
+      input_width: 390,
+      display_text_message: false,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const input_text_entry_feedback = wrapper.find(
+      ".div__input-controls-content-feedback"
+    );
+    expect(input_text_entry_feedback.isVisible()).toBe(false);
+  });
+  test("Given the component was mounted with the display_text_message prop set to false, When the display_text_message prop is updated to True, Then the invalid_text is rendered", async () => {
     const propsData = {
       title_label: "",
       placeholder: "place holder",
@@ -247,5 +268,32 @@ describe("InputWidget.vue", () => {
     expect(input_text_entry_feedback.isVisible()).toBe(false);
     await wrapper.setProps({ display_text_message: true });
     expect(input_text_entry_feedback.isVisible()).toBe(true);
+  });
+  test("When an the props cut_paste_disable is set to true, Then validate its not updated on input and onpaste attribute has script with 'return false;'", async () => {
+    const propsData = {
+      title_label: "",
+      placeholder: "place holder",
+      initial_value: "",
+      invalid_text: "This field is required",
+      spellcheck: false,
+      disabled: false,
+      input_width: 390,
+      display_text_message: false,
+      cut_paste_disable: true,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const mEvent = {
+      clipboardData: { getData: jest.fn().mockReturnValueOnce("12") },
+    };
+    wrapper.find("#input-widget-field-").trigger("paste", mEvent);
+    await wrapper.vm.$nextTick(); // wait for update
+    expect(wrapper.find("#input-widget-field-").value).toBeUndefined();
+    expect(wrapper.find("#input-widget-field-").html()).toContain(
+      'onpaste="return false;"'
+    );
   });
 });
