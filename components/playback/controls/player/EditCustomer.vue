@@ -87,6 +87,7 @@ export default {
       uuid: this.dialogdata.uuid,
       apikey: this.dialogdata.api_key,
       nickname: this.dialogdata.nickname,
+      userids: this.dialogdata.userids,
       error_text_uuid: "",
       error_text_api: "",
       error_text_nickname: "",
@@ -118,7 +119,7 @@ export default {
           this.delete_customer();
           break;
         case 2:
-          this.save_newcustomer();
+          this.save_customer();
           break;
       }
     },
@@ -128,10 +129,10 @@ export default {
     delete_customer() {
       const edit_customer = {
         cust_id: this.dataindex,
-        uuid: this.alphanumerickey,
+        uuid: this.uuid,
         api_key: this.apikey,
-        nickname: this.curiaccount,
-        user_ids: this.edit_userids,
+        nickname: this.nickname,
+        user_ids: this.userids,
       };
       this.$bvModal.hide("edit-customer");
       this.$emit("delete-id", edit_customer);
@@ -139,10 +140,10 @@ export default {
     save_customer() {
       const edit_customer = {
         cust_id: this.dataindex,
-        uuid: this.alphanumerickey,
+        uuid: this.uuid,
         api_key: this.apikey,
-        nickname: this.curiaccount,
-        user_ids: this.edit_userids,
+        nickname: this.nickname,
+        user_ids: this.userids,
       };
       this.$emit("save-id", edit_customer);
       this.$bvModal.hide("edit-customer");

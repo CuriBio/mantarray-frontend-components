@@ -59,15 +59,6 @@ describe("EditCustomer.enter_uuidbase57", () => {
   const uuid_base57 = "2VSckkBYr2An3dqHEyfRRE";
 
   beforeEach(async () => {
-    const propsData = {
-      dialogdata: null,
-      dataindex: 0,
-    };
-    wrapper = mount(ComponentToTest, {
-      propsData,
-      store,
-      localVue,
-    });
     store = await NuxtStore.createStore();
   });
 
@@ -191,6 +182,32 @@ describe("EditCustomer.enter_uuidbase57", () => {
       selector_id_suffix,
       text_validation_type
     ) => {
+      const editcustomer = {
+        uuid: "",
+        apikey: "",
+        nickname: "",
+      };
+
+      if (text_validation_type === "validate_uuidBase_fiftyseven_encode") {
+        editcustomer.uuid = entry;
+      }
+      if (text_validation_type === "validate_alphanumeric") {
+        editcustomer.apikey = entry;
+      }
+      if (text_validation_type === "validate_nickname") {
+        editcustomer.nickname = entry;
+      }
+
+      const propsData = {
+        dialogdata: editcustomer,
+        dataindex: 0,
+      };
+      wrapper = mount(ComponentToTest, {
+        propsData,
+        store,
+        localVue,
+      });
+
       const spied_text_validator = jest.spyOn(
         TextValidation.prototype,
         text_validation_type
@@ -218,15 +235,6 @@ describe("EditCustomer.enter_uuidbase57", () => {
 
 describe("EditCustomer.enable_save_button", () => {
   beforeEach(async () => {
-    const propsData = {
-      dialogdata: null,
-      dataindex: 0,
-    };
-    wrapper = mount(ComponentToTest, {
-      propsData,
-      store,
-      localVue,
-    });
     store = await NuxtStore.createStore();
   });
 
@@ -290,6 +298,26 @@ describe("EditCustomer.enable_save_button", () => {
       const selector_id_suffix_apikey_id = "apikey-id";
       const selector_id_suffix_nickname_id = "nickname-id";
 
+      const editcustomer = {
+        uuid: "",
+        apikey: "",
+        nickname: "",
+      };
+
+      editcustomer.uuid = uuid;
+      editcustomer.apikey = apikey;
+      editcustomer.nickname = nickname;
+
+      const propsData = {
+        dialogdata: editcustomer,
+        dataindex: 0,
+      };
+      wrapper = mount(ComponentToTest, {
+        propsData,
+        store,
+        localVue,
+      });
+
       const target_input_field_uuid = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_alphanumeric_id
       );
@@ -330,7 +358,11 @@ describe("EditCustomer.enable_save_button", () => {
       expect(cancel_btn.attributes().style).toContain(
         "color: rgb(255, 255, 255);"
       );
-      const save_btn = target_button_label_btn.at(1);
+      const delete_btn = target_button_label_btn.at(1);
+      expect(delete_btn.attributes().style).toContain(
+        "color: rgb(255, 255, 255);"
+      );
+      const save_btn = target_button_label_btn.at(2);
       expect(save_btn.attributes().style).toContain(save_btn_css);
     }
   );
@@ -338,15 +370,6 @@ describe("EditCustomer.enable_save_button", () => {
 
 describe("EditCustomer.clicked_button", () => {
   beforeEach(async () => {
-    const propsData = {
-      dialogdata: null,
-      dataindex: 0,
-    };
-    wrapper = mount(ComponentToTest, {
-      propsData,
-      store,
-      localVue,
-    });
     store = await NuxtStore.createStore();
   });
 
@@ -366,8 +389,8 @@ describe("EditCustomer.clicked_button", () => {
       "",
       "",
       "",
-      "color: rgb(255, 255, 255); width: 250px; left: 250px;",
-      1,
+      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 333.3333333333333px;",
+      2,
     ],
   ])(
     "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, emitted event (value 0) and click on Save emitted event (value %s)",
@@ -384,6 +407,27 @@ describe("EditCustomer.clicked_button", () => {
       const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
       const selector_id_suffix_apikey_id = "apikey-id";
       const selector_id_suffix_nickname_id = "nickname-id";
+
+      const editcustomer = {
+        uuid: "",
+        apikey: "",
+        nickname: "",
+        userids: [],
+      };
+
+      editcustomer.uuid = uuid_test;
+      editcustomer.apikey = apikey_test;
+      editcustomer.nickname = nickname_test;
+
+      const propsData = {
+        dialogdata: editcustomer,
+        dataindex: 0,
+      };
+      wrapper = mount(ComponentToTest, {
+        propsData,
+        store,
+        localVue,
+      });
 
       const spied_button_function = jest.spyOn(wrapper.vm, "clicked_button");
 
@@ -425,14 +469,33 @@ describe("EditCustomer.clicked_button", () => {
       const target_button_label_btn = wrapper.findAll(".span__button_label");
       const cancel_btn = target_button_label_btn.at(0);
       expect(cancel_btn.attributes().style).toBe(
-        "color: rgb(255, 255, 255); width: 250px; left: 0px;"
+        "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 0px;"
       );
-      const save_btn = target_button_label_btn.at(1);
+      const delete_btn = target_button_label_btn.at(1);
+      expect(delete_btn.attributes().style).toBe(
+        "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 166.66666666666666px;"
+      );
+      const save_btn = target_button_label_btn.at(2);
       expect(save_btn.attributes().style).toBe(save_btn_css);
 
       await cancel_btn.trigger("click");
       await Vue.nextTick();
       expect(spied_button_function).toHaveBeenCalledWith(0);
+
+      await delete_btn.trigger("click");
+      await Vue.nextTick();
+      expect(spied_button_function).toHaveBeenCalledWith(1);
+      const delete_id_events = wrapper.emitted("delete-id");
+      expect(delete_id_events).toHaveLength(1);
+      expect(delete_id_events[0]).toStrictEqual([
+        {
+          cust_id: 0,
+          uuid: uuid_test,
+          api_key: apikey_test,
+          nickname: nickname_test,
+          user_ids: [],
+        },
+      ]);
 
       await save_btn.trigger("click");
       await Vue.nextTick();
@@ -442,11 +505,11 @@ describe("EditCustomer.clicked_button", () => {
       expect(save_id_events).toHaveLength(1);
       expect(save_id_events[0]).toStrictEqual([
         {
-          api_key: apikey_test,
           cust_id: 0,
+          uuid: uuid_test,
+          api_key: apikey_test,
           nickname: nickname_test,
           user_ids: [],
-          uuid: uuid_test,
         },
       ]);
     }
