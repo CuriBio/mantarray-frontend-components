@@ -95,7 +95,7 @@ export default {
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     dom_id_suffix: { type: String, default: "" }, // TODO (Eli 11/3/20): consider defaulting this to a random UUID if no value supplied
     display_text_message: { type: Boolean, default: true }, // display_text_message (boolean) if set to false would not render invalid_text
-    cut_paste_disable: { type: Boolean, default: false }, // cut_paste_disable (boolean) if set to true would prevent cut and paste of text into input
+    disable_paste: { type: Boolean, default: false }, // disable_paste (boolean) if set to true would prevent cut and paste of text into input
   },
   data() {
     return {
@@ -119,7 +119,7 @@ export default {
       return this.title_label !== "" ? 88 : 48;
     },
     input_cut_paste: function () {
-      return this.cut_paste_disable == true ? "return false;" : "";
+      return this.disable_paste == true ? "return false;" : "";
     },
   },
   methods: {

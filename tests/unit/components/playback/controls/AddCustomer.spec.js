@@ -206,7 +206,6 @@ describe("AddCustomer.enter_uuidbase57", () => {
       expect(target_error_message.text()).toStrictEqual(
         spied_text_validator.mock.results[0].value
       );
-      // expect(target_error_message.text()).toStrictEqual(response_text);
     }
   );
 });
@@ -241,7 +240,7 @@ describe("AddCustomer.enable_save_button", () => {
       "The entered ID has an invalid character 0,",
       "",
       "",
-      "color: rgb(63, 63, 63); width: 250px; left: 250px;",
+      "color: rgb(63, 63, 63);",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
@@ -250,7 +249,7 @@ describe("AddCustomer.enable_save_button", () => {
       "",
       "Wrong Format of API Key",
       "",
-      "color: rgb(63, 63, 63); width: 250px; left: 250px;",
+      "color: rgb(63, 63, 63);",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
@@ -259,7 +258,7 @@ describe("AddCustomer.enable_save_button", () => {
       "",
       "",
       "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
-      "color: rgb(63, 63, 63); width: 250px; left: 250px;",
+      "color: rgb(63, 63, 63);",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
@@ -268,7 +267,7 @@ describe("AddCustomer.enable_save_button", () => {
       "",
       "",
       "",
-      "color: rgb(255, 255, 255); width: 250px; left: 250px;",
+      "color: rgb(255, 255, 255);",
     ],
   ])(
     "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Add Customer' as input, When the input contains based on validthe critera or failure (%s)(%s)(%s), Then display of Label 'Save ID' is visible or greyed (%s)",
@@ -322,11 +321,11 @@ describe("AddCustomer.enable_save_button", () => {
 
       const target_button_label_btn = wrapper.findAll(".span__button_label");
       const cancel_btn = target_button_label_btn.at(0);
-      expect(cancel_btn.attributes().style).toBe(
-        "color: rgb(255, 255, 255); width: 250px; left: 0px;"
+      expect(cancel_btn.attributes().style).toContain(
+        "color: rgb(255, 255, 255);"
       );
       const save_btn = target_button_label_btn.at(1);
-      expect(save_btn.attributes().style).toBe(save_btn_css);
+      expect(save_btn.attributes().style).toContain(save_btn_css);
     }
   );
 });

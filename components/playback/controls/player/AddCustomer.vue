@@ -8,7 +8,6 @@
       <InputWidget
         :title_label="'Enter Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
-        :spellcheck="false"
         :invalid_text="error_text_uuid"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
@@ -20,7 +19,6 @@
       <InputWidget
         :title_label="'Enter API Key(Optional)'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
-        :spellcheck="false"
         :invalid_text="error_text_api"
         :input_width="400"
         :dom_id_suffix="'apikey-id'"
@@ -31,7 +29,6 @@
       <InputWidget
         :title_label="'Enter ID Nickname'"
         :placeholder="'Curi Bio Main Account'"
-        :spellcheck="false"
         :invalid_text="error_text_nickname"
         :input_width="400"
         :dom_id_suffix="'nickname-id'"
@@ -137,18 +134,10 @@ export default {
           if (this.error_text_nickname === "") {
             this.enablelist_add_customer = [true, true];
             return;
-          } else {
-            this.enablelist_add_customer = [true, false];
-            return;
           }
-        } else {
-          this.enablelist_add_customer = [true, false];
-          return;
         }
-      } else {
-        this.enablelist_add_customer = [true, false];
-        return;
       }
+      this.enablelist_add_customer = [true, false];
     },
   },
 };

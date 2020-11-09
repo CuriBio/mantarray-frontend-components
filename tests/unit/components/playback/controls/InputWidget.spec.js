@@ -279,7 +279,7 @@ describe("InputWidget.vue", () => {
       disabled: false,
       input_width: 390,
       display_text_message: false,
-      cut_paste_disable: true,
+      disable_paste: true,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
