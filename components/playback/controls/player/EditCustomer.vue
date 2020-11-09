@@ -2,13 +2,14 @@
   <div>
     <div class="div__addcustomer-form-controls"></div>
     <span class="span__addcustomer-form-controls-content-title">
-      Add&nbsp;<wbr />New&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
+      Edit&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
     </span>
     <div id="uuid" style="top: 40px; left: 50px; position: absolute">
       <InputWidget
-        :title_label="'Enter Alphanumeric ID'"
+        :title_label="'Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
         :invalid_text="error_text_uuid"
+        :initial_value="uuid"
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
@@ -18,9 +19,10 @@
 
     <div id="apikey" style="top: 140px; left: 50px; position: absolute">
       <InputWidget
-        :title_label="'Enter API Key(Optional)'"
+        :title_label="'API Key (Optional)'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
         :invalid_text="error_text_api"
+        :initial_value="apikey"
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'apikey-id'"
@@ -29,9 +31,10 @@
     </div>
     <div id="nickname" style="top: 240px; left: 50px; position: absolute">
       <InputWidget
-        :title_label="'Enter ID Nickname'"
+        :title_label="'ID Nickname'"
         :placeholder="'Curi Bio Main Account'"
         :invalid_text="error_text_nickname"
+        :initial_value="nickname"
         :input_width="400"
         :dom_id_suffix="'nickname-id'"
         @update:value="on_update_nickname($event)"
@@ -43,9 +46,9 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
-        :button_names="['Cancel', 'Save ID']"
-        :hover_color="['#BD4932', '#19ac8a']"
-        :is_enabled="enablelist_add_customer"
+        :button_names="['Cancel', 'Delete ID', 'Save ID']"
+        :hover_color="['#BD4932', '#BD4932', '#19ac8a']"
+        :is_enabled="enablelist_edit_customer"
         @btn-click="clicked_button"
       >
       </ButtonWidget>
@@ -70,23 +73,24 @@ const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
 const TextValidation_Nickname = new TextValidation("nickname");
 export default {
-  name: "AddCustomer",
+  name: "EditCustomer",
   components: {
     InputWidget,
     ButtonWidget,
   },
   props: {
+    dialogdata: { type: Object, default: null },
     dataindex: { type: Number, default: 0 },
   },
   data() {
     return {
-      uuid: "",
-      apikey: "",
-      nickname: "",
-      error_text_uuid: "This field is required",
+      uuid: this.dialogdata.uuid,
+      apikey: this.dialogdata.api_key,
+      nickname: this.dialogdata.nickname,
+      error_text_uuid: "",
       error_text_api: "",
-      error_text_nickname: "This field is required",
-      enablelist_add_customer: [true, false],
+      error_text_nickname: "",
+      enablelist_edit_customer: [true, true, true],
     };
   },
   methods: {
@@ -108,37 +112,51 @@ export default {
     clicked_button: function (choice) {
       switch (choice) {
         case 0:
-          this.cancel_addcustomer();
+          this.cancel_editcustomer();
           break;
         case 1:
+          this.delete_customer();
+          break;
+        case 2:
           this.save_newcustomer();
           break;
       }
     },
-    cancel_addcustomer() {
-      this.$bvModal.hide("add-customer");
+    cancel_editcustomer() {
+      this.$bvModal.hide("edit-customer");
     },
-    save_newcustomer() {
-      const add_customer = {
+    delete_customer() {
+      const edit_customer = {
         cust_id: this.dataindex,
-        uuid: this.uuid,
+        uuid: this.alphanumerickey,
         api_key: this.apikey,
-        nickname: this.nickname,
-        user_ids: [],
+        nickname: this.curiaccount,
+        user_ids: this.edit_userids,
       };
-      this.$emit("save-id", add_customer);
-      this.$bvModal.hide("add-customer");
+      this.$bvModal.hide("edit-customer");
+      this.$emit("delete-id", edit_customer);
+    },
+    save_customer() {
+      const edit_customer = {
+        cust_id: this.dataindex,
+        uuid: this.alphanumerickey,
+        api_key: this.apikey,
+        nickname: this.curiaccount,
+        user_ids: this.edit_userids,
+      };
+      this.$emit("save-id", edit_customer);
+      this.$bvModal.hide("edit-customer");
     },
     enable_save_button() {
       if (this.error_text_uuid === "") {
         if (this.error_text_api === "") {
           if (this.error_text_nickname === "") {
-            this.enablelist_add_customer = [true, true];
+            this.enablelist_edit_customer = [true, true, true];
             return;
           }
         }
       }
-      this.enablelist_add_customer = [true, false];
+      this.enablelist_edit_customer = [true, true, false];
     },
   },
 };
