@@ -6,15 +6,47 @@
     </span>
     <div id="uuid" style="top: 40px; left: 50px; position: absolute">
       <InputWidget
-        :title_label="label_uuid"
-        :placeholder="keyplaceholder_encode"
-        :spellcheck="spellchecking"
+        :title_label="'Enter Alphanumeric ID'"
+        :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
         :invalid_text="error_text_uuid"
-        :input_width="entry_width"
-        :disabled="disallow_entry"
+        :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
         @update:value="on_update_uuid($event)"
       ></InputWidget>
+    </div>
+
+    <div id="apikey" style="top: 140px; left: 50px; position: absolute">
+      <InputWidget
+        :title_label="'Enter API Key(Optional)'"
+        :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
+        :invalid_text="error_text_api"
+        :input_width="400"
+        :dom_id_suffix="'apikey-id'"
+        @update:value="on_update_api($event)"
+      ></InputWidget>
+    </div>
+    <div id="nickname" style="top: 240px; left: 50px; position: absolute">
+      <InputWidget
+        :title_label="'Enter ID Nickname'"
+        :placeholder="'Curi Bio Main Account'"
+        :invalid_text="error_text_nickname"
+        :input_width="400"
+        :dom_id_suffix="'nickname-id'"
+        @update:value="on_update_nickname($event)"
+      ></InputWidget>
+    </div>
+    <div style="top: 350px; left: 0px; position: absolute">
+      <ButtonWidget
+        :button_widget_width="500"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="['Cancel', 'Save ID']"
+        :hover_color="['#BD4932', '#19ac8a']"
+        :is_enabled="enablelist_add_customer"
+        @btn-click="clicked_button"
+      >
+      </ButtonWidget>
     </div>
   </div>
 </template>
@@ -25,7 +57,7 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
 import InputWidget from "@/components/playback/controls/player/InputWidget.vue";
-// import ButtonWidget from "@/components/playback/controls/player/ButtonWidget.vue";
+import ButtonWidget from "@/components/playback/controls/player/ButtonWidget.vue";
 import { TextValidation } from "@/js_utils/text_validation.js";
 Vue.use(BootstrapVue);
 Vue.component("BFormInput", BFormInput);
@@ -33,13 +65,13 @@ Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
 Vue.use(uuid);
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
-// const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
-// const TextValidation_Nickname = new TextValidation("nickname");
+const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
+const TextValidation_Nickname = new TextValidation("nickname");
 export default {
   name: "AddCustomer",
   components: {
     InputWidget,
-    // ButtonWidget,
+    ButtonWidget,
   },
   props: {
     dialogdata: { type: Object, default: null },
@@ -47,32 +79,65 @@ export default {
   },
   data() {
     return {
+      uuid: "",
+      apikey: "",
+      nickname: "",
       error_text_uuid: "This field is required",
+      error_text_api: "",
+      error_text_nickname: "This field is required",
+      enablelist_add_customer: [true, false],
     };
-  },
-  created: function () {
-    this.label_uuid = "Enter Alphanumeric ID";
-    this.label_api = "Enter API Key(Optional)";
-    this.label_nickname = "Enter ID Nickname";
-    this.keyplaceholder_encode = "2VSckkBYr2An3dqHEyfRRE";
-    this.keyplaceholder_uuid = "ba86b8f0-6fdf-4944-87a0-8a491a19490e";
-    this.keyplaceholder_nickname = "Curi Bio Main Account";
-    this.spellchecking = false;
-
-    this.error_text_api = "";
-    this.error_text_nickname = "This field is required";
-    this.key_validation = false;
-    this.entry_width = 400;
-    this.disallow_entry = false;
-    this.btnnames_add_customer = ["Cancel", "Save ID"];
-    this.enablelist_add_customer = [true, false];
-    this.visiblecolor_add_customer = "#FFFFFF";
-    this.hidecolor_add_customer = "#3F3F3F";
-    this.hovercolors_add_customer = ["#BD4932", "#19ac8a"];
   },
   methods: {
     on_update_uuid: function (new_value) {
       this.error_text_uuid = TextValidation_UUIDBase57.validate(new_value);
+      this.uuid = new_value;
+      this.enable_save_button();
+    },
+    on_update_api: function (new_value) {
+      this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
+      this.apikey = new_value;
+      this.enable_save_button();
+    },
+    on_update_nickname: function (new_value) {
+      this.error_text_nickname = TextValidation_Nickname.validate(new_value);
+      this.nickname = new_value;
+      this.enable_save_button();
+    },
+    clicked_button: function (choice) {
+      switch (choice) {
+        case 0:
+          this.cancel_addcustomer();
+          break;
+        case 1:
+          this.save_newcustomer();
+          break;
+      }
+    },
+    cancel_addcustomer() {
+      this.$bvModal.hide("add-customer");
+    },
+    save_newcustomer() {
+      const add_customer = {
+        cust_id: this.dataindex,
+        uuid: this.uuid,
+        api_key: this.apikey,
+        nickname: this.nickname,
+        user_ids: [],
+      };
+      this.$emit("save-id", add_customer);
+      this.$bvModal.hide("add-customer");
+    },
+    enable_save_button() {
+      if (this.error_text_uuid === "") {
+        if (this.error_text_api === "") {
+          if (this.error_text_nickname === "") {
+            this.enablelist_add_customer = [true, true];
+            return;
+          }
+        }
+      }
+      this.enablelist_add_customer = [true, false];
     },
   },
 };

@@ -43,6 +43,7 @@
             aria-describedby="input-feedback"
             :placeholder="placeholder"
             :disabled="disabled"
+            :onpaste="input_cut_paste"
             class="w-100 h-100 edit-id"
             style="
               border-radius: 0;
@@ -55,6 +56,7 @@
         </span>
       </div>
       <div
+        v-show="display_text_message"
         :id="'input-widget-feedback-' + dom_id_suffix"
         class="div__input-controls-content-feedback"
         :style="
@@ -92,6 +94,8 @@ export default {
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     dom_id_suffix: { type: String, default: "" }, // TODO (Eli 11/3/20): consider defaulting this to a random UUID if no value supplied
+    display_text_message: { type: Boolean, default: true }, // display_text_message (boolean) if set to false would not render invalid_text
+    disable_paste: { type: Boolean, default: false }, // disable_paste (boolean) if set to true would prevent cut and paste of text into input
   },
   data() {
     return {
@@ -113,6 +117,9 @@ export default {
     },
     input_feedback_top: function () {
       return this.title_label !== "" ? 88 : 48;
+    },
+    input_cut_paste: function () {
+      return this.disable_paste == true ? "return false;" : "";
     },
   },
   methods: {

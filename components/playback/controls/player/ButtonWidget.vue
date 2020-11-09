@@ -53,11 +53,6 @@ export default {
     button_widget_top: { type: Number, default: 0 },
     button_widget_left: { type: Number, default: 0 },
   },
-  data() {
-    return {
-      count: 0,
-    };
-  },
   computed: {
     num_of_btn: function () {
       return this.button_names.length;
@@ -81,10 +76,10 @@ export default {
   },
   methods: {
     btn_stateprop(value) {
-      this.count = value - 1;
+      const count = value - 1;
       const computed_width = this.button_widget_width / this.num_of_btn;
-      const computed_left = computed_width * this.count;
-      return this.is_enabled[this.count]
+      const computed_left = computed_width * count;
+      return this.is_enabled[count]
         ? "color: " +
             this.enabled_color +
             ";" +
