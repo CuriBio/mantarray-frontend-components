@@ -1,13 +1,14 @@
 <template>
   <div>
-    <div class="div__adduser-form-controls"></div>
-    <span class="span__adduser-form-controls-content-title">
-      Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />ID
+    <div class="div__edituser-form-controls"></div>
+    <span class="span__edituser-form-controls-content-title">
+      Edit&nbsp;<wbr />User&nbsp;<wbr />ID
     </span>
     <div id="uuid" style="top: 40px; left: 50px; position: absolute">
       <InputWidget
-        :title_label="'Enter Alphanumeric ID'"
+        :title_label="'Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
+        :initial_value="uuid"
         :invalid_text="error_text_uuid"
         :spellcheck="false"
         :input_width="400"
@@ -18,8 +19,9 @@
 
     <div id="nickname" style="top: 140px; left: 50px; position: absolute">
       <InputWidget
-        :title_label="'Enter ID Nickname'"
+        :title_label="'ID Nickname'"
         :placeholder="'Curi Bio Main Account'"
+        :initial_value="nickname"
         :invalid_text="error_text_nickname"
         :input_width="400"
         :dom_id_suffix="'nickname-id'"
@@ -32,9 +34,9 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
-        :button_names="['Cancel', 'Save ID']"
-        :hover_color="['#BD4932', '#19ac8a']"
-        :is_enabled="enablelist_add_user"
+        :button_names="['Cancel', 'Delete ID', 'Save ID']"
+        :hover_color="['#BD4932', '#BD4932', '#19ac8a']"
+        :is_enabled="enablelist_edit_user"
         @btn-click="clicked_button"
       >
       </ButtonWidget>
@@ -59,21 +61,22 @@ const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 
 const TextValidation_Nickname = new TextValidation("nickname");
 export default {
-  name: "AddUser",
+  name: "EditUser",
   components: {
     InputWidget,
     ButtonWidget,
   },
   props: {
+    dialogdata: { type: Object, default: null },
     dataindex: { type: Number, default: 0 },
   },
   data() {
     return {
-      uuid: "",
-      nickname: "",
-      error_text_uuid: "This field is required",
-      error_text_nickname: "This field is required",
-      enablelist_add_user: [true, false],
+      uuid: this.dialogdata.uuid,
+      nickname: this.dialogdata.nickname,
+      error_text_uuid: "",
+      error_text_nickname: "",
+      enablelist_edit_user: [true, true, true],
     };
   },
   methods: {
@@ -91,39 +94,51 @@ export default {
     clicked_button: function (choice) {
       switch (choice) {
         case 0:
-          this.cancel_adduser();
+          this.cancel_edituser();
           break;
         case 1:
-          this.save_adduser();
+          this.delete_user();
+          break;
+        case 2:
+          this.save_edituser();
           break;
       }
     },
-    cancel_adduser() {
-      this.$bvModal.hide("add-user");
+    cancel_edituser() {
+      this.$bvModal.hide("edit-user");
     },
-    save_adduser() {
-      const add_user = {
+    delete_user() {
+      const delete_user = {
         user_id: this.dataindex,
         uuid: this.uuid,
         nickname: this.nickname,
       };
-      this.$emit("save-id", add_user);
-      this.$bvModal.hide("add-user");
+      this.$emit("delete-id", delete_user);
+      this.$bvModal.hide("edit-user");
+    },
+    save_edituser() {
+      const edit_user = {
+        user_id: this.dataindex,
+        uuid: this.uuid,
+        nickname: this.nickname,
+      };
+      this.$emit("save-id", edit_user);
+      this.$bvModal.hide("edit-user");
     },
     enable_save_button() {
       if (this.error_text_uuid === "") {
         if (this.error_text_nickname === "") {
-          this.enablelist_add_user = [true, true];
+          this.enablelist_edit_user = [true, true, true];
           return;
         }
       }
-      this.enablelist_add_user = [true, false];
+      this.enablelist_edit_user = [true, true, false];
     },
   },
 };
 </script>
 <style type="text/css">
-.div__adduser-form-controls {
+.div__edituser-form-controls {
   transform: rotate(0deg);
   box-sizing: border-box;
   padding: 0px;
@@ -141,7 +156,7 @@ export default {
   z-index: 3;
   pointer-events: all;
 }
-.span__adduser-form-controls-content-title {
+.span__edituser-form-controls-content-title {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
