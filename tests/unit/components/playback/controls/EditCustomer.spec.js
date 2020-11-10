@@ -48,7 +48,7 @@ describe("EditCustomer.vue", () => {
     });
 
     const target_span = wrapper.find(
-      ".span__addcustomer-form-controls-content-title"
+      ".span__editcustomer-form-controls-content-title"
     );
 
     expect(target_span.text()).toStrictEqual("Edit Customer Account ID");
@@ -284,7 +284,7 @@ describe("EditCustomer.enable_save_button", () => {
       "color: rgb(255, 255, 255);",
     ],
   ])(
-    "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Add Customer' as input, When the input contains based on validthe critera or failure (%s)(%s)(%s), Then display of Label 'Save ID' is visible or greyed (%s)",
+    "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Edit Customer' as input, When the input contains based on validthe critera or failure (%s)(%s)(%s), Then display of Label 'Save ID' is visible or greyed (%s)",
     async (
       uuid,
       apikey,
@@ -393,7 +393,7 @@ describe("EditCustomer.clicked_button", () => {
       2,
     ],
   ])(
-    "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, emitted event (value 0) and click on Save emitted event (value %s)",
+    "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, emitted event (value 0) and click on Save emitted event (value %s)",
     async (
       uuid_test,
       apikey_test,

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="div__addcustomer-form-controls"></div>
-    <span class="span__addcustomer-form-controls-content-title">
+    <div class="div__editcustomer-form-controls"></div>
+    <span class="span__editcustomer-form-controls-content-title">
       Edit&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
     </span>
     <div id="uuid" style="top: 40px; left: 50px; position: absolute">
