@@ -140,7 +140,7 @@ export default {
   top: 0px;
   left: 0px;
   visibility: visible;
-  border: 2px solid rgb(0, 0, 0);
+  border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;
   box-shadow: none;
   z-index: 3;

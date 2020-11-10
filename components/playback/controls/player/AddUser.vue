@@ -1,15 +1,14 @@
 <template>
   <div>
-    <div class="div__editcustomer-form-controls"></div>
-    <span class="span__editcustomer-form-controls-content-title">
-      Edit&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
+    <div class="div__adduser-form-controls"></div>
+    <span class="span__adduser-form-controls-content-title">
+      Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />ID
     </span>
     <div id="uuid" style="top: 40px; left: 50px; position: absolute">
       <InputWidget
-        :title_label="'Alphanumeric ID'"
+        :title_label="'Enter Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
         :invalid_text="error_text_uuid"
-        :initial_value="uuid"
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
@@ -17,38 +16,25 @@
       ></InputWidget>
     </div>
 
-    <div id="apikey" style="top: 140px; left: 50px; position: absolute">
+    <div id="nickname" style="top: 140px; left: 50px; position: absolute">
       <InputWidget
-        :title_label="'API Key (Optional)'"
-        :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
-        :invalid_text="error_text_api"
-        :initial_value="apikey"
-        :spellcheck="false"
-        :input_width="400"
-        :dom_id_suffix="'apikey-id'"
-        @update:value="on_update_api($event)"
-      ></InputWidget>
-    </div>
-    <div id="nickname" style="top: 240px; left: 50px; position: absolute">
-      <InputWidget
-        :title_label="'ID Nickname'"
+        :title_label="'Enter ID Nickname'"
         :placeholder="'Curi Bio Main Account'"
         :invalid_text="error_text_nickname"
-        :initial_value="nickname"
         :input_width="400"
         :dom_id_suffix="'nickname-id'"
         @update:value="on_update_nickname($event)"
       ></InputWidget>
     </div>
-    <div style="top: 350px; left: 0px; position: absolute">
+    <div style="top: 254px; left: 0px; position: absolute">
       <ButtonWidget
         :button_widget_width="500"
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
-        :button_names="['Cancel', 'Delete ID', 'Save ID']"
-        :hover_color="['#BD4932', '#BD4932', '#19ac8a']"
-        :is_enabled="enablelist_edit_customer"
+        :button_names="['Cancel', 'Save ID']"
+        :hover_color="['#BD4932', '#19ac8a']"
+        :is_enabled="enablelist_add_customer"
         @btn-click="clicked_button"
       >
       </ButtonWidget>
@@ -70,28 +56,24 @@ Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
 Vue.use(uuid);
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
-const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
+
 const TextValidation_Nickname = new TextValidation("nickname");
 export default {
-  name: "EditCustomer",
+  name: "AddUser",
   components: {
     InputWidget,
     ButtonWidget,
   },
   props: {
-    dialogdata: { type: Object, default: null },
     dataindex: { type: Number, default: 0 },
   },
   data() {
     return {
-      uuid: this.dialogdata.uuid,
-      apikey: this.dialogdata.api_key,
-      nickname: this.dialogdata.nickname,
-      userids: this.dialogdata.userids,
-      error_text_uuid: "",
-      error_text_api: "",
-      error_text_nickname: "",
-      enablelist_edit_customer: [true, true, true],
+      uuid: "",
+      nickname: "",
+      error_text_uuid: "This field is required",
+      error_text_nickname: "This field is required",
+      enablelist_add_customer: [true, false],
     };
   },
   methods: {
@@ -100,11 +82,7 @@ export default {
       this.uuid = new_value;
       this.enable_save_button();
     },
-    on_update_api: function (new_value) {
-      this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
-      this.apikey = new_value;
-      this.enable_save_button();
-    },
+
     on_update_nickname: function (new_value) {
       this.error_text_nickname = TextValidation_Nickname.validate(new_value);
       this.nickname = new_value;
@@ -113,57 +91,39 @@ export default {
     clicked_button: function (choice) {
       switch (choice) {
         case 0:
-          this.cancel_editcustomer();
+          this.cancel_adduser();
           break;
         case 1:
-          this.delete_customer();
-          break;
-        case 2:
-          this.save_customer();
+          this.save_adduser();
           break;
       }
     },
-    cancel_editcustomer() {
-      this.$bvModal.hide("edit-customer");
+    cancel_adduser() {
+      this.$bvModal.hide("add-user");
     },
-    delete_customer() {
-      const edit_customer = {
-        cust_id: this.dataindex,
+    save_adduser() {
+      const add_user = {
+        user_id: this.dataindex,
         uuid: this.uuid,
-        api_key: this.apikey,
         nickname: this.nickname,
-        user_ids: this.userids,
       };
-      this.$bvModal.hide("edit-customer");
-      this.$emit("delete-id", edit_customer);
-    },
-    save_customer() {
-      const edit_customer = {
-        cust_id: this.dataindex,
-        uuid: this.uuid,
-        api_key: this.apikey,
-        nickname: this.nickname,
-        user_ids: this.userids,
-      };
-      this.$emit("save-id", edit_customer);
-      this.$bvModal.hide("edit-customer");
+      this.$emit("save-id", add_user);
+      this.$bvModal.hide("add-user");
     },
     enable_save_button() {
       if (this.error_text_uuid === "") {
-        if (this.error_text_api === "") {
-          if (this.error_text_nickname === "") {
-            this.enablelist_edit_customer = [true, true, true];
-            return;
-          }
+        if (this.error_text_nickname === "") {
+          this.enablelist_add_customer = [true, true];
+          return;
         }
       }
-      this.enablelist_edit_customer = [true, true, false];
+      this.enablelist_add_customer = [true, false];
     },
   },
 };
 </script>
 <style type="text/css">
-.div__editcustomer-form-controls {
+.div__adduser-form-controls {
   transform: rotate(0deg);
   box-sizing: border-box;
   padding: 0px;
@@ -171,7 +131,7 @@ export default {
   background: rgb(17, 17, 17);
   position: absolute;
   width: 500px;
-  height: 401px;
+  height: 307px;
   top: 0px;
   left: 0px;
   visibility: visible;
@@ -181,7 +141,7 @@ export default {
   z-index: 3;
   pointer-events: all;
 }
-.span__editcustomer-form-controls-content-title {
+.span__adduser-form-controls-content-title {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
