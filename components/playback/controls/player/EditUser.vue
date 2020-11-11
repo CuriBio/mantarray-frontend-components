@@ -4,7 +4,10 @@
     <span class="span__edituser-form-controls-content-title">
       Edit&nbsp;<wbr />User&nbsp;<wbr />ID
     </span>
-    <div id="uuid" style="top: 40px; left: 50px; position: absolute">
+    <div
+      id="uuid"
+      style="top: 50px; left: 45px; position: absolute; z-index: 24"
+    >
       <InputWidget
         :title_label="'Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
@@ -17,7 +20,10 @@
       ></InputWidget>
     </div>
 
-    <div id="nickname" style="top: 140px; left: 50px; position: absolute">
+    <div
+      id="nickname"
+      style="top: 145px; left: 45px; position: absolute; z-index: 23"
+    >
       <InputWidget
         :title_label="'ID Nickname'"
         :placeholder="'Curi Bio Main Account'"

@@ -4,7 +4,10 @@
     <span class="span__adduser-form-controls-content-title">
       Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />ID
     </span>
-    <div id="uuid" style="top: 40px; left: 50px; position: absolute">
+    <div
+      id="uuid"
+      style="top: 50px; left: 45px; position: absolute; z-index: 24"
+    >
       <InputWidget
         :title_label="'Enter Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
@@ -16,7 +19,10 @@
       ></InputWidget>
     </div>
 
-    <div id="nickname" style="top: 140px; left: 50px; position: absolute">
+    <div
+      id="nickname"
+      style="top: 145px; left: 45px; position: absolute; z-index: 23"
+    >
       <InputWidget
         :title_label="'Enter ID Nickname'"
         :placeholder="'Curi Bio Main Account'"
