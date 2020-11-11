@@ -177,10 +177,10 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 370px;
+  width: 500px;
   height: 30px;
   top: 17px;
-  left: 50.5px;
+  left: 0px;
   padding: 5px;
   visibility: visible;
   user-select: none;

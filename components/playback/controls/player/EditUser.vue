@@ -6,7 +6,7 @@
     </span>
     <div
       id="uuid"
-      style="top: 50px; left: 45px; position: absolute; z-index: 24"
+      style="top: 50px; left: 50px; position: absolute; z-index: 24"
     >
       <InputWidget
         :title_label="'Alphanumeric ID'"
@@ -22,7 +22,7 @@
 
     <div
       id="nickname"
-      style="top: 145px; left: 45px; position: absolute; z-index: 23"
+      style="top: 145px; left: 50px; position: absolute; z-index: 23"
     >
       <InputWidget
         :title_label="'ID Nickname'"
@@ -168,10 +168,10 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 370px;
+  width: 500px;
   height: 30px;
   top: 17px;
-  left: 50.5px;
+  left: 0px;
   padding: 5px;
   visibility: visible;
   user-select: none;

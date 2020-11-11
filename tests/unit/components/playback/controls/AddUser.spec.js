@@ -142,6 +142,7 @@ describe("AddUser.enter_uuidbase57", () => {
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
     ],
+    ["", "<empty>", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
     ["Experiment anemia -1", "valid input", "nickname-id", "validate_nickname"],
     ["Cat * lab", "contains asterisk *", "nickname-id", "validate_nickname"],
     ["Cat lab`", "contains left quote `", "nickname-id", "validate_nickname"],
@@ -152,7 +153,8 @@ describe("AddUser.enter_uuidbase57", () => {
       "nickname-id",
       "validate_nickname",
     ],
-    ["C", "minimum one character C", "nickname-id", "validate_nickname", ""],
+    ["C", "minimum one character C", "nickname-id", "validate_nickname"],
+    ["", "<empty>", "nickname-id", "validate_nickname"],
   ])(
     "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
     async (
