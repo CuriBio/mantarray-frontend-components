@@ -72,20 +72,13 @@
             hide-header
             hide-header-close
           >
-            <!--    <PopDialogForm
+            <PopDialogForm
               category="Edit Customer"
               :dialogdata="customer_account_ids[customer_focus_id]"
               :dataindex="customer_focus_id"
               @save-id="onUpdateCustomerId"
               @delete-id="onDeleteCustomerId"
-            ></PopDialogForm>  -->
-            <EditCustomer
-              :dialogdata="customer_account_ids[customer_focus_id]"
-              :dataindex="customer_focus_id"
-              @save-id="onUpdateCustomerId"
-              @delete-id="onDeleteCustomerId"
-            >
-            </EditCustomer>
+            ></PopDialogForm>
           </b-modal>
         </span>
         <span
@@ -113,17 +106,11 @@
           hide-header
           hide-header-close
         >
-          <!-- <PopDialogForm
+          <PopDialogForm
             category="Add Customer"
             :dataindex="addcustomerid"
             @save-id="onSaveCustomerId"
-          ></PopDialogForm> -->
-          <AddCustomer
-            :dataindex="addcustomerid"
-            @save-id="onSaveCustomerId"
-            @cancel-id="onCancelCustomerId"
-          >
-          </AddCustomer>
+          ></PopDialogForm>
         </b-modal>
       </span>
     </div>
@@ -192,19 +179,13 @@
           hide-header
           hide-header-close
         >
-          <!-- <PopDialogForm
+          <PopDialogForm
             category="Edit User"
             :dialogdata="transiant_user_ids"
             :dataindex="user_focus_id"
             @save-id="onUpdateUserId"
             @delete-id="onDeleteUserId"
-          ></PopDialogForm>  -->
-          <EditUser
-            :dialogdata="transiant_user_ids"
-            :dataindex="user_focus_id"
-            @save-id="onUpdateUserId"
-            @delete-id="onDeleteUserId"
-          ></EditUser>
+          ></PopDialogForm>
         </b-modal>
       </span>
       <span
@@ -233,12 +214,11 @@
           hide-header
           hide-header-close
         >
-          <!-- <PopDialogForm
+          <PopDialogForm
             category="Add User"
             :dataindex="adduserid"
             @save-id="onSaveUserId"
-          ></PopDialogForm> -->
-          <AddUser :dataindex="adduserid" @save-id="onSaveUserId"></AddUser>
+          ></PopDialogForm>
         </b-modal>
       </span>
       <span
@@ -394,11 +374,8 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
-
-import AddCustomer from "@/components/playback/controls/player/AddCustomer.vue";
-import EditCustomer from "@/components/playback/controls/player/EditCustomer.vue";
-import AddUser from "@/components/playback/controls/player/AddUser.vue";
-import EditUser from "@/components/playback/controls/player/EditUser.vue";
+// import "bootstrap/dist/css/bootstrap.min.css";
+import PopDialogForm from "@/components/playback/controls/player/PopDialogForm.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -407,13 +384,7 @@ Vue.component("BFormInput", BFormInput);
 
 export default {
   name: "SettingsForm",
-  components: {
-    FontAwesomeIcon,
-    AddCustomer,
-    EditCustomer,
-    AddUser,
-    EditUser,
-  },
+  components: { PopDialogForm, FontAwesomeIcon },
   data() {
     return {
       customerid: "",
@@ -615,10 +586,6 @@ export default {
     onSaveCustomerId(add_customer) {
       this.customerid = add_customer.nickname;
       this.customer_account_ids.push(add_customer);
-      this.$bvModal.hide("add-customer");
-    },
-    onCancelCustomerId() {
-      this.$bvModal.hide("add-customer");
     },
     onUpdateCustomerId(edit_customer) {
       this.customerid = edit_customer.nickname;
