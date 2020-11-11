@@ -390,7 +390,6 @@ describe("EditCustomer.clicked_button", () => {
       "",
       "",
       "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 333.3333333333333px;",
-      2,
     ],
   ])(
     "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, emitted event (value 0) and click on Save emitted event (value %s)",
@@ -401,8 +400,7 @@ describe("EditCustomer.clicked_button", () => {
       invalid_apikey,
       invalid_uuid,
       invalid_nickname,
-      save_btn_css,
-      label
+      save_btn_css
     ) => {
       const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
       const selector_id_suffix_apikey_id = "apikey-id";
@@ -428,8 +426,6 @@ describe("EditCustomer.clicked_button", () => {
         store,
         localVue,
       });
-
-      const spied_button_function = jest.spyOn(wrapper.vm, "clicked_button");
 
       const target_input_field_uuid = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_alphanumeric_id
@@ -480,11 +476,13 @@ describe("EditCustomer.clicked_button", () => {
 
       await cancel_btn.trigger("click");
       await Vue.nextTick();
-      expect(spied_button_function).toHaveBeenCalledWith(0);
+      const cancel_id_events = wrapper.emitted("cancel-id");
+      expect(cancel_id_events).toHaveLength(1);
+      expect(cancel_id_events[0]).toStrictEqual([]);
 
       await delete_btn.trigger("click");
       await Vue.nextTick();
-      expect(spied_button_function).toHaveBeenCalledWith(1);
+
       const delete_id_events = wrapper.emitted("delete-id");
       expect(delete_id_events).toHaveLength(1);
       expect(delete_id_events[0]).toStrictEqual([
@@ -499,7 +497,6 @@ describe("EditCustomer.clicked_button", () => {
 
       await save_btn.trigger("click");
       await Vue.nextTick();
-      expect(spied_button_function).toHaveBeenCalledWith(label);
 
       const save_id_events = wrapper.emitted("save-id");
       expect(save_id_events).toHaveLength(1);

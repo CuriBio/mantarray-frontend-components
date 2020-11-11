@@ -133,7 +133,7 @@ export default {
       }
     },
     cancel_editcustomer() {
-      this.$bvModal.hide("edit-customer");
+      this.$emit("cancel-id");
     },
     delete_customer() {
       const edit_customer = {
@@ -143,7 +143,6 @@ export default {
         nickname: this.nickname,
         user_ids: this.userids,
       };
-      this.$bvModal.hide("edit-customer");
       this.$emit("delete-id", edit_customer);
     },
     save_customer() {
@@ -155,7 +154,6 @@ export default {
         user_ids: this.userids,
       };
       this.$emit("save-id", edit_customer);
-      this.$bvModal.hide("edit-customer");
     },
     enable_save_button() {
       if (this.error_text_uuid === "") {

@@ -355,8 +355,6 @@ describe("EditUser.clicked_button", () => {
         localVue,
       });
 
-      const spied_button_function = jest.spyOn(wrapper.vm, "clicked_button");
-
       const target_input_field_uuid = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_alphanumeric_id
       );
@@ -395,11 +393,10 @@ describe("EditUser.clicked_button", () => {
 
       await cancel_btn.trigger("click");
       await Vue.nextTick();
-      expect(spied_button_function).toHaveBeenCalledWith(0);
 
       await delete_btn.trigger("click");
       await Vue.nextTick();
-      expect(spied_button_function).toHaveBeenCalledWith(1);
+
       const delete_id_events = wrapper.emitted("delete-id");
       expect(delete_id_events).toHaveLength(1);
       expect(delete_id_events[0]).toStrictEqual([
@@ -412,7 +409,9 @@ describe("EditUser.clicked_button", () => {
 
       await save_btn.trigger("click");
       await Vue.nextTick();
-      expect(spied_button_function).toHaveBeenCalledWith(label);
+      const cancel_id_events = wrapper.emitted("cancel-id");
+      expect(cancel_id_events).toHaveLength(1);
+      expect(cancel_id_events[0]).toStrictEqual([]);
 
       const save_id_events = wrapper.emitted("save-id");
       expect(save_id_events).toHaveLength(1);

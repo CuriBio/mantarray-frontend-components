@@ -364,7 +364,6 @@ describe("AddCustomer.clicked_button", () => {
       "",
       "",
       "color: rgb(255, 255, 255); width: 250px; left: 250px;",
-      1,
     ],
   ])(
     "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, emitted event (value 0) and click on Save emitted event (value %s)",
@@ -375,14 +374,11 @@ describe("AddCustomer.clicked_button", () => {
       invalid_apikey,
       invalid_uuid,
       invalid_nickname,
-      save_btn_css,
-      label
+      save_btn_css
     ) => {
       const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
       const selector_id_suffix_apikey_id = "apikey-id";
       const selector_id_suffix_nickname_id = "nickname-id";
-
-      const spied_button_function = jest.spyOn(wrapper.vm, "clicked_button");
 
       const target_input_field_uuid = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_alphanumeric_id
@@ -429,11 +425,13 @@ describe("AddCustomer.clicked_button", () => {
 
       await cancel_btn.trigger("click");
       await Vue.nextTick();
-      expect(spied_button_function).toHaveBeenCalledWith(0);
+
+      const cancel_id_events = wrapper.emitted("cancel-id");
+      expect(cancel_id_events).toHaveLength(1);
+      expect(cancel_id_events[0]).toStrictEqual([]);
 
       await save_btn.trigger("click");
       await Vue.nextTick();
-      expect(spied_button_function).toHaveBeenCalledWith(label);
 
       const save_id_events = wrapper.emitted("save-id");
       expect(save_id_events).toHaveLength(1);

@@ -105,7 +105,7 @@ export default {
       }
     },
     cancel_adduser() {
-      this.$bvModal.hide("add-user");
+      this.$emit("cancel-id");
     },
     save_adduser() {
       const add_user = {
@@ -114,7 +114,6 @@ export default {
         nickname: this.nickname,
       };
       this.$emit("save-id", add_user);
-      this.$bvModal.hide("add-user");
     },
     enable_save_button() {
       if (this.error_text_uuid === "") {

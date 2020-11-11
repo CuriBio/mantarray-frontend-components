@@ -118,7 +118,11 @@
             :dataindex="addcustomerid"
             @save-id="onSaveCustomerId"
           ></PopDialogForm> -->
-          <AddCustomer :dataindex="addcustomerid" @save-id="onSaveCustomerId">
+          <AddCustomer
+            :dataindex="addcustomerid"
+            @save-id="onSaveCustomerId"
+            @cancel-id="onCancelCustomerId"
+          >
           </AddCustomer>
         </b-modal>
       </span>
@@ -611,6 +615,10 @@ export default {
     onSaveCustomerId(add_customer) {
       this.customerid = add_customer.nickname;
       this.customer_account_ids.push(add_customer);
+      this.$bvModal.hide("add-customer");
+    },
+    onCancelCustomerId() {
+      this.$bvModal.hide("add-customer");
     },
     onUpdateCustomerId(edit_customer) {
       this.customerid = edit_customer.nickname;

@@ -111,7 +111,7 @@ export default {
       }
     },
     cancel_edituser() {
-      this.$bvModal.hide("edit-user");
+      this.$emit("cancel-id");
     },
     delete_user() {
       const delete_user = {
@@ -120,7 +120,6 @@ export default {
         nickname: this.nickname,
       };
       this.$emit("delete-id", delete_user);
-      this.$bvModal.hide("edit-user");
     },
     save_edituser() {
       const edit_user = {
@@ -129,7 +128,6 @@ export default {
         nickname: this.nickname,
       };
       this.$emit("save-id", edit_user);
-      this.$bvModal.hide("edit-user");
     },
     enable_save_button() {
       if (this.error_text_uuid === "") {

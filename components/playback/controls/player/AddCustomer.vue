@@ -125,7 +125,7 @@ export default {
       }
     },
     cancel_addcustomer() {
-      this.$bvModal.hide("add-customer");
+      this.$emit("cancel-id");
     },
     save_newcustomer() {
       const add_customer = {
@@ -136,7 +136,6 @@ export default {
         user_ids: [],
       };
       this.$emit("save-id", add_customer);
-      this.$bvModal.hide("add-customer");
     },
     enable_save_button() {
       if (this.error_text_uuid === "") {
