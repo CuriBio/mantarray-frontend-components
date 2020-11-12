@@ -3,7 +3,6 @@ import ComponentToTest from "@/components/playback/controls/player/AddCustomer.v
 import { AddCustomer as DistComponentToTest } from "@/dist/mantarray.common";
 
 import Vue from "vue";
-import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,12 +11,8 @@ import { TextValidation } from "@/js_utils/text_validation.js";
 let wrapper = null;
 
 const localVue = createLocalVue();
-localVue.use(Vuex);
 localVue.use(BootstrapVue);
 localVue.use(uuid);
-
-let NuxtStore;
-let store;
 
 describe("AddCustomer.vue", () => {
   beforeEach(async () => {
@@ -27,10 +22,10 @@ describe("AddCustomer.vue", () => {
     };
     wrapper = mount(ComponentToTest, {
       propsData,
-      store,
       localVue,
     });
   });
+  afterEach(() => wrapper.destroy());
   test("When mounting AddCustomer from the build dist file, Then it loads successfully and the `Add Customer` defined title text is rendered", () => {
     const propsData = {
       dialogdata: null,
@@ -38,14 +33,11 @@ describe("AddCustomer.vue", () => {
     };
     wrapper = mount(DistComponentToTest, {
       propsData,
-      store,
       localVue,
     });
-
     const target_span = wrapper.find(
       ".span__addcustomer-form-controls-content-title"
     );
-
     expect(target_span.text()).toStrictEqual("Add New Customer Account ID");
   });
 });
@@ -59,18 +51,9 @@ describe("AddCustomer.enter_uuidbase57", () => {
     };
     wrapper = mount(ComponentToTest, {
       propsData,
-      store,
       localVue,
     });
-    store = await NuxtStore.createStore();
   });
-
-  beforeAll(async () => {
-    // note the store will mutate across tests, so make sure to re-create it in beforeEach
-    const storePath = `${process.env.buildDir}/store.js`;
-    NuxtStore = await import(storePath);
-  });
-
   afterEach(() => {
     wrapper.destroy();
     jest.restoreAllMocks();
@@ -170,7 +153,7 @@ describe("AddCustomer.enter_uuidbase57", () => {
     ["", "<empty>", "apikey-id", "validate_alphanumeric"],
     ["Experiment anemia -1", "valid input", "nickname-id", "validate_nickname"],
     ["Cat * lab", "contains asterisk *", "nickname-id", "validate_nickname"],
-    ["Cat lab`", "contains left quote `", "nickname-id", "validate_nickname"],
+    ["Cat lab`", "contains backtick `", "nickname-id", "validate_nickname"],
     ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_nickname"],
     [
       "Experiment anemia alpha cells -1",
@@ -192,20 +175,15 @@ describe("AddCustomer.enter_uuidbase57", () => {
         TextValidation.prototype,
         text_validation_type
       );
-
       const target_input_field = wrapper.find(
         "#input-widget-field-" + selector_id_suffix
       );
-
       const target_error_message = wrapper.find(
         "#input-widget-feedback-" + selector_id_suffix
       );
-
       target_input_field.setValue(entry);
-
       await Vue.nextTick();
       expect(spied_text_validator).toHaveBeenCalledWith(entry);
-
       expect(target_error_message.text()).toStrictEqual(
         spied_text_validator.mock.results[0].value
       );
@@ -221,68 +199,44 @@ describe("AddCustomer.enable_save_button", () => {
     };
     wrapper = mount(ComponentToTest, {
       propsData,
-      store,
       localVue,
     });
-    store = await NuxtStore.createStore();
   });
-
-  beforeAll(async () => {
-    // note the store will mutate across tests, so make sure to re-create it in beforeEach
-    const storePath = `${process.env.buildDir}/store.js`;
-    NuxtStore = await import(storePath);
-  });
-
   afterEach(() => wrapper.destroy());
-
   test.each([
     [
       "0VSckkBYH2An3dqHEyfRRE",
       "06ad547f-fe02-477b-9473-f7977e4d5e17",
       "Experiment anemia -1",
-      "The entered ID has an invalid character 0,",
-      "",
-      "",
       "color: rgb(63, 63, 63);",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
       "06ad547f fe02-477b-9473-f7977e4d5e17",
       "Experiment anemia -1",
-      "",
-      "Wrong Format of API Key",
-      "",
       "color: rgb(63, 63, 63);",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
       "06ad547f-fe02-477b-9473-f7977e4d5e17",
       "Cat * lab",
-      "",
-      "",
-      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
       "color: rgb(63, 63, 63);",
     ],
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
       "06ad547f-fe02-477b-9473-f7977e4d5e17",
       "Experiment anemia -1",
+      "color: rgb(255, 255, 255);",
+    ],
+    [
+      "5FY8KwTsQaUJ2KzHJGetfE",
       "",
-      "",
-      "",
+      "Experiment anemia -1",
       "color: rgb(255, 255, 255);",
     ],
   ])(
-    "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Add Customer' as input, When the input contains based on validthe critera or failure (%s)(%s)(%s), Then display of Label 'Save ID' is visible or greyed (%s)",
-    async (
-      uuid,
-      apikey,
-      nickname,
-      invalid_uuid,
-      invalid_apikey,
-      invalid_nickname,
-      save_btn_css
-    ) => {
+    "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
+    async (uuid, apikey, nickname, save_btn_css) => {
       const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
       const selector_id_suffix_apikey_id = "apikey-id";
       const selector_id_suffix_nickname_id = "nickname-id";
@@ -290,37 +244,20 @@ describe("AddCustomer.enable_save_button", () => {
       const target_input_field_uuid = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_alphanumeric_id
       );
-      const target_error_message_uuid = wrapper.find(
-        "#input-widget-feedback-" + selector_id_suffix_alphanumeric_id
-      );
       target_input_field_uuid.setValue(uuid);
       await Vue.nextTick();
-
-      expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
 
       const target_input_field_apikey = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_apikey_id
       );
-      const target_error_message_apikey = wrapper.find(
-        "#input-widget-feedback-" + selector_id_suffix_apikey_id
-      );
       target_input_field_apikey.setValue(apikey);
       await Vue.nextTick();
-
-      expect(target_error_message_apikey.text()).toStrictEqual(invalid_apikey);
 
       const target_input_field_nickname = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_nickname_id
       );
-      const target_error_message_nickname = wrapper.find(
-        "#input-widget-feedback-" + selector_id_suffix_nickname_id
-      );
       target_input_field_nickname.setValue(nickname);
       await Vue.nextTick();
-
-      expect(target_error_message_nickname.text()).toStrictEqual(
-        invalid_nickname
-      );
 
       const target_button_label_btn = wrapper.findAll(".span__button_label");
       const cancel_btn = target_button_label_btn.at(0);
@@ -341,20 +278,10 @@ describe("AddCustomer.clicked_button", () => {
     };
     wrapper = mount(ComponentToTest, {
       propsData,
-      store,
       localVue,
     });
-    store = await NuxtStore.createStore();
   });
-
-  beforeAll(async () => {
-    // note the store will mutate across tests, so make sure to re-create it in beforeEach
-    const storePath = `${process.env.buildDir}/store.js`;
-    NuxtStore = await import(storePath);
-  });
-
   afterEach(() => wrapper.destroy());
-
   test.each([
     [
       "5FY8KwTsQaUJ2KzHJGetfE",
@@ -363,10 +290,10 @@ describe("AddCustomer.clicked_button", () => {
       "",
       "",
       "",
-      "color: rgb(255, 255, 255); width: 250px; left: 250px;",
+      "color: rgb(255, 255, 255);",
     ],
   ])(
-    "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, emitted event (value 0) and click on Save emitted event (value %s)",
+    "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, an event 'cancel-id' is emmited to the parent and click on Save an event 'save-id' is emmited to parent with object containing uuid,apikey and nickname",
     async (
       uuid_test,
       apikey_test,
@@ -388,9 +315,7 @@ describe("AddCustomer.clicked_button", () => {
       );
       target_input_field_uuid.setValue(uuid_test);
       await Vue.nextTick();
-
       expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
-
       const target_input_field_apikey = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_apikey_id
       );
@@ -399,9 +324,7 @@ describe("AddCustomer.clicked_button", () => {
       );
       target_input_field_apikey.setValue(apikey_test);
       await Vue.nextTick();
-
       expect(target_error_message_apikey.text()).toStrictEqual(invalid_apikey);
-
       const target_input_field_nickname = wrapper.find(
         "#input-widget-field-" + selector_id_suffix_nickname_id
       );
@@ -410,29 +333,23 @@ describe("AddCustomer.clicked_button", () => {
       );
       target_input_field_nickname.setValue(nickname_test);
       await Vue.nextTick();
-
       expect(target_error_message_nickname.text()).toStrictEqual(
         invalid_nickname
       );
-
       const target_button_label_btn = wrapper.findAll(".span__button_label");
       const cancel_btn = target_button_label_btn.at(0);
-      expect(cancel_btn.attributes().style).toBe(
-        "color: rgb(255, 255, 255); width: 250px; left: 0px;"
+      expect(cancel_btn.attributes().style).toContain(
+        "color: rgb(255, 255, 255);"
       );
       const save_btn = target_button_label_btn.at(1);
-      expect(save_btn.attributes().style).toBe(save_btn_css);
-
+      expect(save_btn.attributes().style).toContain(save_btn_css);
       await cancel_btn.trigger("click");
       await Vue.nextTick();
-
       const cancel_id_events = wrapper.emitted("cancel-id");
       expect(cancel_id_events).toHaveLength(1);
       expect(cancel_id_events[0]).toStrictEqual([]);
-
       await save_btn.trigger("click");
       await Vue.nextTick();
-
       const save_id_events = wrapper.emitted("save-id");
       expect(save_id_events).toHaveLength(1);
       expect(save_id_events[0]).toStrictEqual([

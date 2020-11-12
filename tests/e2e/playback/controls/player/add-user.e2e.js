@@ -8,7 +8,9 @@ const user_alphanumeric_input_field = Selector(
   "#input-widget-field-alphanumeric-id"
 );
 
-const user_idnickname_input_field = Selector("#input-widget-field-nickname-id");
+const user_id_nickname_input_field = Selector(
+  "#input-widget-field-nickname-id"
+);
 const span__button_label = Selector(".span__button_label");
 
 const add_user_cancel_btn = span__button_label.nth(0);
@@ -37,7 +39,7 @@ test("testing the add user Valid State", async (t) => {
     "add-user"
   );
   await t.typeText(user_alphanumeric_input_field, "2VSckkBYH2An3dqHEyfRRE");
-  await t.typeText(user_idnickname_input_field, "User Account-1");
+  await t.typeText(user_id_nickname_input_field, "User Account-1");
   const screenshot_path = path.join(screenshot_path_base, "add-user-valid");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
@@ -50,7 +52,7 @@ test("testing the add user Valid State Cancel Hover", async (t) => {
     "add-user"
   );
   await t.typeText(user_alphanumeric_input_field, "2VSckkBYH2An3dqHEyfRRE");
-  await t.typeText(user_idnickname_input_field, "User Account-1");
+  await t.typeText(user_id_nickname_input_field, "User Account-1");
   await t.hover(add_user_cancel_btn);
   const screenshot_path = path.join(
     screenshot_path_base,
@@ -67,7 +69,7 @@ test("testing the add user Valid State Save Hover", async (t) => {
     "add-user"
   );
   await t.typeText(user_alphanumeric_input_field, "2VSckkBYH2An3dqHEyfRRE");
-  await t.typeText(user_idnickname_input_field, "User Account-1");
+  await t.typeText(user_id_nickname_input_field, "User Account-1");
   await t.hover(add_user_save_btn);
   const screenshot_path = path.join(
     screenshot_path_base,

@@ -58,7 +58,7 @@ test("testing for the edit customer Valid State Delete Hover", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-test("testing for the edit customer Valid State Delete Hover", async (t) => {
+test("testing for the edit customer Valid State Save Hover", async (t) => {
   const screenshot_path_base = path.join(
     "playback",
     "controls",

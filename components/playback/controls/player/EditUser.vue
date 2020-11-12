@@ -26,7 +26,7 @@
     >
       <InputWidget
         :title_label="'ID Nickname'"
-        :placeholder="'Curi Bio Main Account'"
+        :placeholder="'Marie Curi'"
         :initial_value="nickname"
         :invalid_text="error_text_nickname"
         :input_width="400"
@@ -41,7 +41,7 @@
         :button_widget_top="0"
         :button_widget_left="0"
         :button_names="['Cancel', 'Delete ID', 'Save ID']"
-        :hover_color="['#BD4932', '#BD4932', '#19ac8a']"
+        :hover_color="['#bd4932', '#bd4932', '#19ac8a']"
         :is_enabled="enablelist_edit_user"
         @btn-click="clicked_button"
       >
@@ -181,13 +181,5 @@ export default {
   color: rgb(255, 255, 255);
   text-align: center;
   z-index: 21;
-}
-/* Over ride the bootstrap default color for  valid (tick) alert from #28a745 to the one matching the mockflow value #19ac8a */
-.form-control.is-valid {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2319ac8a' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
-}
-/* Over ride the bootstrap default color for  valid (stop exclamatory) alert from #dc3545 to the one matching the mockflow value #bd3532 */
-.form-control.is-invalid {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23bd3532' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23bd3532' stroke='none'/%3e%3c/svg%3e");
 }
 </style>
