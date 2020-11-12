@@ -1,17 +1,18 @@
 <template>
   <div>
-    <div class="div__button-background" :style="background_cssprops"></div>
-    <span
-      v-for="btn_index in num_of_btn"
-      :key="btn_index"
-      :ref="btn_index.toString()"
-      class="span__button_label"
-      :style="btn_stateprop(btn_index)"
-      @click="selected(btn_index)"
-      @mouseenter="hover_active(btn_index)"
-      @mouseleave="hover_inactive(btn_index)"
-      >{{ button_names[btn_index - 1] }}
-    </span>
+    <div class="div__button-background" :style="background_cssprops">
+      <span
+        v-for="btn_index in num_of_btn"
+        :key="btn_index"
+        :ref="btn_index.toString()"
+        class="span__button_label"
+        :style="btn_stateprop(btn_index)"
+        @click="selected(btn_index)"
+        @mouseenter="hover_active(btn_index)"
+        @mouseleave="hover_inactive(btn_index)"
+        >{{ button_names[btn_index - 1] }}
+      </span>
+    </div>
     <div v-if="num_of_verticalline >= 1">
       <canvas
         v-for="line_index in num_of_verticalline"
@@ -130,6 +131,9 @@ export default {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: rgb(17, 17, 17);
   position: absolute;
   visibility: visible;
@@ -147,7 +151,6 @@ export default {
   overflow: hidden;
   position: absolute;
   height: 30px;
-  top: 7.5px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -172,7 +175,7 @@ export default {
   visibility: visible;
   z-index: 15;
   background-color: #3f3f3f;
-  opacity: 1;
+  opacity: 0.5;
 }
 
 .canvas__common-horizontal-line {
@@ -185,6 +188,6 @@ export default {
   visibility: visible;
   z-index: 22;
   background-color: #3f3f3f;
-  opacity: 1;
+  opacity: 0.5;
 }
 </style>

@@ -4,28 +4,39 @@
     <span class="span__addcustomer-form-controls-content-title">
       Add&nbsp;<wbr />New&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
     </span>
-    <div id="uuid" style="top: 40px; left: 50px; position: absolute">
+    <div
+      id="uuid"
+      style="top: 50px; left: 50px; position: absolute; z-index: 24"
+    >
       <InputWidget
         :title_label="'Enter Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
         :invalid_text="error_text_uuid"
+        :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
         @update:value="on_update_uuid($event)"
       ></InputWidget>
     </div>
 
-    <div id="apikey" style="top: 140px; left: 50px; position: absolute">
+    <div
+      id="apikey"
+      style="top: 145px; left: 50px; position: absolute; z-index: 23"
+    >
       <InputWidget
-        :title_label="'Enter API Key(Optional)'"
+        :title_label="'Enter API Key (Optional)'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
         :invalid_text="error_text_api"
+        :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'apikey-id'"
         @update:value="on_update_api($event)"
       ></InputWidget>
     </div>
-    <div id="nickname" style="top: 240px; left: 50px; position: absolute">
+    <div
+      id="nickname"
+      style="top: 241px; left: 50px; position: absolute; z-index: 22"
+    >
       <InputWidget
         :title_label="'Enter ID Nickname'"
         :placeholder="'Curi Bio Main Account'"
@@ -42,7 +53,7 @@
         :button_widget_top="0"
         :button_widget_left="0"
         :button_names="['Cancel', 'Save ID']"
-        :hover_color="['#BD4932', '#19ac8a']"
+        :hover_color="['#bd4932', '#19ac8a']"
         :is_enabled="enablelist_add_customer"
         @btn-click="clicked_button"
       >
@@ -74,7 +85,6 @@ export default {
     ButtonWidget,
   },
   props: {
-    dialogdata: { type: Object, default: null },
     dataindex: { type: Number, default: 0 },
   },
   data() {
@@ -115,7 +125,7 @@ export default {
       }
     },
     cancel_addcustomer() {
-      this.$bvModal.hide("add-customer");
+      this.$emit("cancel-id");
     },
     save_newcustomer() {
       const add_customer = {
@@ -126,7 +136,6 @@ export default {
         user_ids: [],
       };
       this.$emit("save-id", add_customer);
-      this.$bvModal.hide("add-customer");
     },
     enable_save_button() {
       if (this.error_text_uuid === "") {
@@ -167,10 +176,10 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 370px;
+  width: 500px;
   height: 30px;
   top: 17px;
-  left: 50.5px;
+  left: 0px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -183,12 +192,8 @@ export default {
   text-align: center;
   z-index: 21;
 }
-/* Over ride the bootstrap default color for  valid (tick) alert from #28a745 to the one matching the mockflow value #19ac8a */
-.form-control.is-valid {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2319ac8a' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
-}
-/* Over ride the bootstrap default color for  valid (stop exclamatory) alert from #dc3545 to the one matching the mockflow value #bd3532 */
-.form-control.is-invalid {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23bd3532' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23bd3532' stroke='none'/%3e%3c/svg%3e");
+.span__input-controls-content-input-txt-widget
+  > #input-widget-field-nickname-id {
+  font-family: Muli;
 }
 </style>

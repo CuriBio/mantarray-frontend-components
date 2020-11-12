@@ -51,3 +51,6 @@ export { default as ButtonWidget } from "./components/playback/controls/player/B
 export { default as InputDropDown } from "./components/playback/controls/player/InputDropDown.vue";
 
 export { default as AddCustomer } from "./components/playback/controls/player/AddCustomer.vue";
+export { default as EditCustomer } from "./components/playback/controls/player/EditCustomer.vue";
+export { default as AddUser } from "./components/playback/controls/player/AddUser.vue";
+export { default as EditUser } from "./components/playback/controls/player/EditUser.vue";

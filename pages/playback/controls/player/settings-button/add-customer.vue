@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AddCustomer :dialogdata="null" :dataindex="0"> </AddCustomer>
+    <AddCustomer :dataindex="0"> </AddCustomer>
   </div>
 </template>
 
