@@ -172,6 +172,28 @@ describe("AddUser.enter_uuidbase57", () => {
       );
     }
   );
+  test.each([
+    ["alphanumeric-id", "This field is required"],
+    ["nickname-id", "This field is required"],
+  ])(
+    "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
+    async (selector_id_suffix, expected_message) => {
+      const target_input_field = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix
+      );
+      const target_error_message = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix
+      );
+      target_input_field.setValue("blah");
+      await Vue.nextTick();
+      // confirm that the pre-condition is different
+      expect(target_error_message.text()).not.toStrictEqual(expected_message);
+
+      target_input_field.setValue("");
+      await Vue.nextTick();
+      expect(target_error_message.text()).toStrictEqual(expected_message);
+    }
+  );
 });
 
 describe("AddUser.enable_save_button", () => {

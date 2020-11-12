@@ -125,7 +125,6 @@ describe("AddCustomer.enter_uuidbase57", () => {
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
     ],
-    ["", "<empty>", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
     [
       "06ad547f-fe02-477b-9473-f7977e4d5e17",
       "valid input",
@@ -187,6 +186,29 @@ describe("AddCustomer.enter_uuidbase57", () => {
       expect(target_error_message.text()).toStrictEqual(
         spied_text_validator.mock.results[0].value
       );
+    }
+  );
+  test.each([
+    ["alphanumeric-id", "This field is required"],
+    ["apikey-id", ""],
+    ["nickname-id", "This field is required"],
+  ])(
+    "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
+    async (selector_id_suffix, expected_message) => {
+      const target_input_field = wrapper.find(
+        "#input-widget-field-" + selector_id_suffix
+      );
+      const target_error_message = wrapper.find(
+        "#input-widget-feedback-" + selector_id_suffix
+      );
+      target_input_field.setValue("blah");
+      await Vue.nextTick();
+      // confirm that the pre-condition is different
+      expect(target_error_message.text()).not.toStrictEqual(expected_message);
+
+      target_input_field.setValue("");
+      await Vue.nextTick();
+      expect(target_error_message.text()).toStrictEqual(expected_message);
     }
   );
 });
