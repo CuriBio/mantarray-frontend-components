@@ -25,7 +25,7 @@
     >
       <InputWidget
         :title_label="'Enter ID Nickname'"
-        :placeholder="'Marie Curi'"
+        :placeholder="'Marie Curie'"
         :invalid_text="error_text_nickname"
         :input_width="400"
         :dom_id_suffix="'nickname-id'"

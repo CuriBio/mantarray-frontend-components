@@ -26,7 +26,7 @@
     >
       <InputWidget
         :title_label="'ID Nickname'"
-        :placeholder="'Marie Curi'"
+        :placeholder="'Marie Curie'"
         :initial_value="nickname"
         :invalid_text="error_text_nickname"
         :input_width="400"
