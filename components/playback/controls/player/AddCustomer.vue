@@ -24,7 +24,7 @@
       style="top: 145px; left: 50px; position: absolute; z-index: 23"
     >
       <InputWidget
-        :title_label="'Enter API Key(Optional)'"
+        :title_label="'Enter API Key (Optional)'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
         :invalid_text="error_text_api"
         :spellcheck="false"
