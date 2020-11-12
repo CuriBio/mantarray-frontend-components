@@ -192,4 +192,8 @@ export default {
   text-align: center;
   z-index: 21;
 }
+.span__input-controls-content-input-txt-widget
+  > #input-widget-field-nickname-id {
+  font-family: Muli;
+}
 </style>
