@@ -24,13 +24,14 @@
 <script>
 import { mapState } from "vuex";
 import playback_module from "@/store/modules/playback";
-
+import { TextValidation } from "@/js_utils/text_validation.js";
 /**
  * @vue-data {String} platebarcode - Current plate bar code
  * @vue-data {String} playback_state_enums - Current state of playback
  * @vue-computed {String} playback_state - Current value in Vuex store
  * @vue-event {String} validatePlateBarcode - User entered String parser
  */
+const TextValidation_platebarcode = new TextValidation("platebarcode");
 export default {
   name: "PlateBarcode",
   data() {
@@ -49,48 +50,18 @@ export default {
   },
   methods: {
     validatePlateBarcode(event) {
-      let error = true;
       const val = event.target.value;
-      const barcode_len = val.length;
       const inp = document.getElementById("plateinfo");
 
       inp.addEventListener("blur", this.set_red_color(inp));
       this.$store.commit("playback/set_barcode_number", null);
-
-      // process for validation only when length is either 10 or 11 for Barcode.
-      if (barcode_len >= 10 && barcode_len < 12) {
-        const initial_code = val.slice(0, 2); // this has to be MA, MB or M1 [2 characters]
-        const year_code = val.slice(2, 4); // this is of range 00 to 99   [2 characters]
-        const day_code = val.slice(4, 7); // this is of range 000 to 367 [3 characters]
-        if (
-          initial_code === "MA" ||
-          initial_code === "MB" ||
-          initial_code === "M1"
-        ) {
-          // validate if the remaining values are only numbers and no special characters.
-          error = false; // first validation passed so error is false
-          for (let i = 2; i < barcode_len && error == false; i++) {
-            const scan_ascii = val.charCodeAt(i);
-            if (scan_ascii > 47 && scan_ascii < 58) {
-              error = false; // filter out all the charcters not contain any special characters or alphabetces
-              // this has to be numbers only then keyed Barcode matches further processing.
-            } else {
-              error = true; // validation any were fails results in breaking the loop.
-            }
-          }
-          if (error == false) {
-            const year = parseInt(year_code);
-            const day = parseInt(day_code);
-            if (year == 20) {
-              // Year is always 20
-              if (day > 0 && day < 367) {
-                // Day is between 1 to 366
-                inp.addEventListener("blur", this.set_green_color(inp));
-                this.$store.commit("playback/set_barcode_number", val);
-              }
-            }
-          }
-        }
+      const result = TextValidation_platebarcode.validate(val);
+      if (result == "") {
+        this.set_green_color(inp);
+        this.$store.commit("playback/set_barcode_number", val);
+      }
+      if (result == " ") {
+        this.set_red_color(inp);
       }
     },
     set_green_color(inp) {
