@@ -77,7 +77,7 @@ export class TextValidation {
       if (
         initial_code === "MA" ||
         initial_code === "MB" ||
-        initial_code === "M1"
+        initial_code === "MD"
       ) {
         // validate if the remaining values are only numbers and no special characters.
         error = false; // first validation passed so error is false
@@ -93,8 +93,8 @@ export class TextValidation {
         if (error == false) {
           const year = parseInt(year_code);
           const day = parseInt(day_code);
-          if (year == 20) {
-            // Year is always 20
+          if (year > -1 && year < 100) {
+            // Year is 00 to 99
             if (day > 0 && day < 367) {
               // Day is between 1 to 366
               error = false;
