@@ -126,6 +126,7 @@ describe("TextValidation.validate_plate_barcode", () => {
   test.each([
     ["MA20044001", "10", ""],
     ["M120044099", "11", " "], // M1 is invalid so returns space
+    ["MD20044099", "11", ""], // MD is valid so return empty
   ])(
     "When a proper platecode text of %s with the [input.length = %s] and special characters as its matching criteria, Then validation PASSES and feedback text is <empty>",
     (plate_bar_code, error, result) => {

@@ -70,9 +70,9 @@ describe("PlateBarcode.vue", () => {
     ["MA209990121", "validate_plate_barcode", null],
     ["MA 13000012", "validate_plate_barcode", null],
     ["MA  300000", "validate_plate_barcode", null],
-    ["MB190440991", "validate_plate_barcode", null],
-    ["MB210440991", "validate_plate_barcode", null],
-    ["MB100440991", "validate_plate_barcode", null],
+    ["MB190440991", "validate_plate_barcode", "MB190440991"], // year 19 now allowed.
+    ["MB210440991", "validate_plate_barcode", "MB210440991"], // year 21 now allowed
+    ["MB100440991", "validate_plate_barcode", "MB100440991"], // year 10 now allowed.
     ["MA*#300001", "validate_plate_barcode", null],
     ["MA20222111*", "validate_plate_barcode", null],
     ["MA20010*#12", "validate_plate_barcode", null],
@@ -86,10 +86,8 @@ describe("PlateBarcode.vue", () => {
     ["MA20044", "validate_plate_barcode", null],
     ["MA20**#*", "validate_plate_barcode", null],
     ["MA20044001", "validate_plate_barcode", "MA20044001"],
-    ["M120044099", "validate_plate_barcode", "M120044099"],
-    ["MB190440991", "validate_plate_barcode", null],
-    ["MB210440991", "validate_plate_barcode", null],
-    ["MB100440991", "validate_plate_barcode", null],
+    ["M120044099", "validate_plate_barcode", null], // M1 is disallow
+    ["MD20044099", "validate_plate_barcode", "MD20044099"], // new rule allow MD
   ])(
     "Given a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode and PASSES for valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode",
     async (platecode, validation_rule, store_data) => {
