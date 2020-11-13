@@ -72,13 +72,13 @@
             hide-header
             hide-header-close
           >
-            <PopDialogForm
-              category="Edit Customer"
+            <EditCustomer
               :dialogdata="customer_account_ids[customer_focus_id]"
               :dataindex="customer_focus_id"
+              @cancel-id="onCancelCustomerId"
               @save-id="onUpdateCustomerId"
               @delete-id="onDeleteCustomerId"
-            ></PopDialogForm>
+            ></EditCustomer>
           </b-modal>
         </span>
         <span
@@ -106,11 +106,11 @@
           hide-header
           hide-header-close
         >
-          <PopDialogForm
-            category="Add Customer"
+          <AddCustomer
             :dataindex="addcustomerid"
+            @cancel-id="onCancelAddCustomerId"
             @save-id="onSaveCustomerId"
-          ></PopDialogForm>
+          ></AddCustomer>
         </b-modal>
       </span>
     </div>
@@ -179,13 +179,13 @@
           hide-header
           hide-header-close
         >
-          <PopDialogForm
-            category="Edit User"
+          <EditUser
             :dialogdata="transiant_user_ids"
             :dataindex="user_focus_id"
+            @cancel-id="onCancelUserId"
             @save-id="onUpdateUserId"
             @delete-id="onDeleteUserId"
-          ></PopDialogForm>
+          ></EditUser>
         </b-modal>
       </span>
       <span
@@ -214,11 +214,11 @@
           hide-header
           hide-header-close
         >
-          <PopDialogForm
-            category="Add User"
+          <AddUser
             :dataindex="adduserid"
+            @cancel-id="onCancelAddUserId"
             @save-id="onSaveUserId"
-          ></PopDialogForm>
+          ></AddUser>
         </b-modal>
       </span>
       <span
@@ -374,8 +374,10 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
-// import "bootstrap/dist/css/bootstrap.min.css";
-import PopDialogForm from "@/components/playback/controls/player/PopDialogForm.vue";
+import AddCustomer from "@/components/playback/controls/player/AddCustomer.vue";
+import EditCustomer from "@/components/playback/controls/player/EditCustomer.vue";
+import AddUser from "@/components/playback/controls/player/AddUser.vue";
+import EditUser from "@/components/playback/controls/player/EditUser.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -384,7 +386,13 @@ Vue.component("BFormInput", BFormInput);
 
 export default {
   name: "SettingsForm",
-  components: { PopDialogForm, FontAwesomeIcon },
+  components: {
+    FontAwesomeIcon,
+    AddCustomer,
+    EditCustomer,
+    AddUser,
+    EditUser,
+  },
   data() {
     return {
       customerid: "",
@@ -583,11 +591,19 @@ export default {
       this.$store.commit("settings/set_customer_index", this.customer_focus_id);
       this.$store.commit("settings/set_user_index", this.user_focus_id);
     },
+    onCancelAddCustomerId() {
+      this.$bvModal.hide("add-customer");
+    },
     onSaveCustomerId(add_customer) {
+      this.$bvModal.hide("add-customer");
       this.customerid = add_customer.nickname;
       this.customer_account_ids.push(add_customer);
     },
+    onCancelCustomerId() {
+      this.$bvModal.hide("edit-customer");
+    },
     onUpdateCustomerId(edit_customer) {
+      this.$bvModal.hide("edit-customer");
       this.customerid = edit_customer.nickname;
       this.customer_account_ids[edit_customer.cust_id].cust_id =
         edit_customer.cust_id;
@@ -601,6 +617,7 @@ export default {
         edit_customer.user_ids;
     },
     onDeleteCustomerId(delete_customer) {
+      this.$bvModal.hide("edit-customer");
       /* Received delete_customer remove from the array */
       this.customer_account_ids.splice(delete_customer.cust_id, 1);
       /* Inside the SettingsVue page the index value has to be reset to startup value of 0 */
@@ -619,7 +636,11 @@ export default {
       this.customerid = "";
       this.userid = "";
     },
+    onCancelAddUserId() {
+      this.$bvModal.hide("add-user");
+    },
     onSaveUserId(add_user) {
+      this.$bvModal.hide("add-user");
       this.userid = add_user.nickname;
       this.customer_account_ids[this.customer_focus_id].user_ids.push(add_user);
       const user = {
@@ -630,7 +651,11 @@ export default {
       };
       this.users_options.push(user);
     },
+    onCancelUserId() {
+      this.$bvModal.hide("edit-user");
+    },
     onUpdateUserId(edit_user) {
+      this.$bvModal.hide("edit-user");
       this.userid = edit_user.nickname;
       this.customer_account_ids[this.customer_focus_id].user_ids[
         edit_user.user_id
@@ -643,6 +668,7 @@ export default {
       ].nickname = edit_user.nickname;
     },
     onDeleteUserId(delete_user) {
+      this.$bvModal.hide("edit-user");
       this.customer_account_ids[this.customer_focus_id].user_ids.splice(
         delete_user.user_id,
         1
