@@ -67,51 +67,54 @@ export class TextValidation {
    *
    */
   validate_plate_barcode(text) {
-    let error = false; // We first assume that the text has no error default its false
-    const barcode_len = text.length;
-    // process for validation only when length is either 10 or 11 for Barcode.
-    if (barcode_len >= 10 && barcode_len < 12) {
-      const initial_code = text.slice(0, 2); // this has to be MA, MB or M1 [2 characters]
-      const year_code = text.slice(2, 4); // this is of range 00 to 99   [2 characters]
-      const day_code = text.slice(4, 7); // this is of range 000 to 367 [3 characters]
-      if (
-        initial_code === "MA" ||
-        initial_code === "MB" ||
-        initial_code === "MD"
-      ) {
-        // validate if the remaining values are only numbers and no special characters.
-        error = false; // first validation passed so error is false
-        for (let i = 2; i < barcode_len && error == false; i++) {
-          const scan_ascii = text.charCodeAt(i);
-          if (scan_ascii > 47 && scan_ascii < 58) {
-            error = false; // filter out all the charcters not contain any special characters or alphabetces
-            // this has to be numbers only then keyed Barcode matches further processing.
-          } else {
-            error = true; // validation any were fails results in breaking the loop.
-          }
-        }
-        if (error == false) {
-          const year = parseInt(year_code);
-          const day = parseInt(day_code);
-          if (year > -1 && year < 100) {
-            // Year is 00 to 99
-            if (day > 0 && day < 367) {
-              // Day is between 1 to 366
-              error = false;
-            } else {
-              error = true;
-            }
-          } else {
-            error = true;
-          }
-        }
-      } else {
-        error = true;
-      }
-    } else {
-      error = true;
+    // refactored for 100% code coverage on JEST Unit testcases.
+    let response = " "; // let us first assume that incoming text is invalid unless it passes the criteria.
+    const platebarcode_len = text.length;
+    if (platebarcode_len < 10) {
+      // clearly there is no need to process as its not matching basic rule length (< 10)
+      return response;
     }
-    return error ? " " : "";
+    if (platebarcode_len >= 12) {
+      // clearly there is no need to process as its not matching basic rule length (> 11)
+      return response;
+    }
+    const start_code = text.slice(0, 2); // this has to be MA, MB or MD [2 characters]
+    if (start_code.charAt(0) != "M") {
+      // clearly the first criteria of two characters is not matching
+      return response;
+    }
+    if (start_code.charAt(1) != "A") {
+      if (start_code.charAt(1) != "B") {
+        if (start_code.charAt(1) != "D") {
+          return response;
+        }
+      }
+    }
+    for (let i = 2; i < platebarcode_len; i++) {
+      const scan_ascii = text.charCodeAt(i);
+      if (scan_ascii < 47) {
+        // clearly the valid input from second character in not numeral [0 to 9] ascii 0 -> 47
+        return response;
+      }
+      if (scan_ascii > 58) {
+        // clearly the valid input from second charcter is not numeral [0 to 9] ascii 9 -> 57
+        return response;
+      }
+    }
+    const year_code = text.slice(2, 4); // this is of range 00 to 99   [2 characters]
+    const year = parseInt(year_code);
+    if (year >= 0 && year <= 99) {
+      response = "";
+    }
+    const day_code = text.slice(4, 7); // this is of range 001 to 366 [3 characters]
+    const day = parseInt(day_code);
+
+    if (day > 0 && day < 367) {
+      response = "";
+    } else {
+      response = " ";
+    }
+    return response;
   }
   /**
    * Returns the feedback text for the uuidBase57 encoding validation

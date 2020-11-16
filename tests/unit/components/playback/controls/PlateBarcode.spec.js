@@ -61,36 +61,97 @@ describe("PlateBarcode.vue", () => {
     [
       "AB200440012",
       "validate_plate_barcode",
+      "error not matching MA MB MD",
       null, //  vuex value
     ],
-    ["12200440012", "validate_plate_barcode", null],
-    ["*#200440012", "validate_plate_barcode", null],
-    ["MA200000012", "validate_plate_barcode", null],
-    ["MA203670012", "validate_plate_barcode", null],
-    ["MA209990121", "validate_plate_barcode", null],
-    ["MA 13000012", "validate_plate_barcode", null],
-    ["MA  300000", "validate_plate_barcode", null],
-    ["MB190440991", "validate_plate_barcode", "MB190440991"], // year 19 now allowed.
-    ["MB210440991", "validate_plate_barcode", "MB210440991"], // year 21 now allowed
-    ["MB100440991", "validate_plate_barcode", "MB100440991"], // year 10 now allowed.
-    ["MA*#300001", "validate_plate_barcode", null],
-    ["MA20222111*", "validate_plate_barcode", null],
-    ["MA20010*#12", "validate_plate_barcode", null],
-    ["MA20001 021", "validate_plate_barcode", null],
-    ["MA20001º21", "validate_plate_barcode", null],
-    ["MA20210न21", "validate_plate_barcode", null],
-    ["MA20011浩211", "validate_plate_barcode", null],
-    ["MA二千万一千〇九", "validate_plate_barcode", null],
-    ["MA", "validate_plate_barcode", null],
-    ["MA20", "validate_plate_barcode", null],
-    ["MA20044", "validate_plate_barcode", null],
-    ["MA20**#*", "validate_plate_barcode", null],
-    ["MA20044001", "validate_plate_barcode", "MA20044001"],
-    ["M120044099", "validate_plate_barcode", null], // M1 is disallow
-    ["MD20044099", "validate_plate_barcode", "MD20044099"], // new rule allow MD
+    [
+      "12200440012",
+      "validate_plate_barcode",
+      "error not matching MA MB MD",
+      null,
+    ],
+    [
+      "*#200440012",
+      "validate_plate_barcode",
+      "error not matching MA MB MD",
+      null,
+    ],
+    ["MA200000012", "validate_plate_barcode", "error as day is 0", null],
+    ["MA203670012", "validate_plate_barcode", "error as day is 367", null],
+    ["MA209990121", "validate_plate_barcode", "error as day is 999", null],
+    ["MA 13000012", "validate_plate_barcode", "error due to <space>", null],
+    ["MA  300000", "validate_plate_barcode", "error due to 2<space>", null],
+    [
+      "MB190440991",
+      "validate_plate_barcode",
+      "year 19 now allowed",
+      "MB190440991",
+    ],
+    [
+      "MB210440991",
+      "validate_plate_barcode",
+      "year 21 now allowed",
+      "MB210440991",
+    ],
+    [
+      "MB100440991",
+      "validate_plate_barcode",
+      "year 10 now allowed",
+      "MB100440991",
+    ],
+    ["MA*#300001", "validate_plate_barcode", "error as *# asterisk", null],
+    ["MA20222111*", "validate_plate_barcode", "error as * asterisk", null],
+    ["MA20010*#12", "validate_plate_barcode", "error as *# asterisk", null],
+    ["MA20001 021", "validate_plate_barcode", "error due <space> in day", null],
+    ["MA20001º21", "validate_plate_barcode", "error due to symbol º", null],
+    ["MA20210न21", "validate_plate_barcode", "error due to unicode", null],
+    ["MA20011浩211", "validate_plate_barcode", "error due to unicode", null],
+    [
+      "MA二千万一千〇九",
+      "validate_plate_barcode",
+      "error due to all unicode",
+      null,
+    ],
+    [
+      "MA",
+      "validate_plate_barcode",
+      "error due to not matching length (10,11)",
+      null,
+    ],
+    [
+      "MA20",
+      "validate_plate_barcode",
+      "error due to not matching length (10,11)",
+      null,
+    ],
+    [
+      "MA20044",
+      "validate_plate_barcode",
+      "error due to not matching length (10,11)",
+      null,
+    ],
+    [
+      "MA20**#*",
+      "validate_plate_barcode",
+      "error due to not matching length (10,11)",
+      null,
+    ],
+    [
+      "MA20044001",
+      "validate_plate_barcode",
+      "All criteria matches",
+      "MA20044001",
+    ],
+    ["M120044099", "validate_plate_barcode", "error as M1 is disallowed", null],
+    [
+      "MD20044099",
+      "validate_plate_barcode",
+      "All criteria matches",
+      "MD20044099",
+    ], // new rule allow MD
   ])(
-    "Given a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode and PASSES for valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode",
-    async (platecode, validation_rule, store_data) => {
+    "Given a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode or PASSES due %s for a valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode",
+    async (platecode, validation_rule, reason, store_data) => {
       const spied_text_validator = jest.spyOn(
         TextValidation.prototype,
         validation_rule
@@ -98,6 +159,7 @@ describe("PlateBarcode.vue", () => {
 
       const input_id = wrapper.find("#plateinfo");
       wrapper.find("input").setValue(platecode);
+      expect(spied_text_validator).toHaveBeenCalledWith(platecode);
       expect(store.state.playback.barcode).toEqual(store_data);
     }
   );

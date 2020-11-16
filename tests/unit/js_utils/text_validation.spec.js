@@ -116,7 +116,7 @@ describe("TextValidation.validate_plate_barcode", () => {
     ["MA20044", "7"],
     ["MA20**#*", 8],
   ])(
-    "When an improper platecode text  %s with the [input.length = %s] and special characters as its not matching criteria, Then validation fails and feedback text is <space>",
+    "When an improper platecode text  %s with the [input.length = %s] < 10 or 11 and special characters are not matching criteria, Then validation fails and feedback text is <space>",
     (plate_bar_code, error) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
@@ -124,12 +124,12 @@ describe("TextValidation.validate_plate_barcode", () => {
     }
   );
   test.each([
-    ["MA20044001", "10", ""],
-    ["M120044099", "11", " "], // M1 is invalid so returns space
-    ["MD20044099", "11", ""], // MD is valid so return empty
+    ["MA20044001", "10", "", "MA is still valid"],
+    ["M120044099", "11", " ", "M1 disallowed"], // M1 is invalid so returns space
+    ["MD20044099", "11", "", "MD is new valid value"], // MD is valid so return empty
   ])(
-    "When a proper platecode text of %s with the [input.length = %s] and special characters as its matching criteria, Then validation PASSES and feedback text is <empty>",
-    (plate_bar_code, error, result) => {
+    "When a proper platecode text of %s with the [input.length = %s] and as %s its matching criteria, Then validation PASSES and feedback text is <empty>",
+    (plate_bar_code, error, result, reason) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
       expect(TestPlateBarCode.validate(text)).toStrictEqual(result);

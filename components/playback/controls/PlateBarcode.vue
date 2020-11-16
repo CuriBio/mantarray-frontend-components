@@ -31,7 +31,7 @@ import { TextValidation } from "@/js_utils/text_validation.js";
  * @vue-computed {String} playback_state - Current value in Vuex store
  * @vue-event {String} validatePlateBarcode - User entered String parser
  */
-const TextValidation_platebarcode = new TextValidation("platebarcode");
+const TextValidation_plate_barcode = new TextValidation("platebarcode");
 export default {
   name: "PlateBarcode",
   data() {
@@ -55,7 +55,7 @@ export default {
 
       inp.addEventListener("blur", this.set_red_color(inp));
       this.$store.commit("playback/set_barcode_number", null);
-      const result = TextValidation_platebarcode.validate(val);
+      const result = TextValidation_plate_barcode.validate(val);
       if (result == "") {
         this.set_green_color(inp);
         this.$store.commit("playback/set_barcode_number", val);
