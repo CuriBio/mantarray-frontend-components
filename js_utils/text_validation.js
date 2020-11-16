@@ -36,7 +36,7 @@ export class TextValidation {
     const obj = {};
     try {
       switch (this.rule) {
-        case "platebarcode":
+        case "plate_barcode":
           feedback = this.validate_plate_barcode(text);
           break;
         case "uuidBase57encode":

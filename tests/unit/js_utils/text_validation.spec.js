@@ -1,7 +1,7 @@
 import { TextValidation } from "@/js_utils/text_validation.js";
 import { TextValidation as DistTextValidation } from "@/dist/mantarray.common";
 
-const TextValidation_PlateBarcode = new TextValidation("platebarcode");
+const TextValidation_PlateBarcode = new TextValidation("plate_barcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
 const TextValidation_Nickname = new TextValidation("nickname");
@@ -16,7 +16,7 @@ describe("DistTextValidation", () => {
 describe("TextValidation", () => {
   test("Given a text validation is for platebarcode, When called toString(), Then return would match the text rule of 'platebarcode' applied", () => {
     const validation = TextValidation_PlateBarcode;
-    expect(validation.toString()).toStrictEqual("TextValidation.platebarcode");
+    expect(validation.toString()).toStrictEqual("TextValidation.plate_barcode");
   });
   test("Given a text validation is for uuidBase57encode, When called toString(), Then return would match the text rule of 'uuidBase57encode' applied", () => {
     const validation = TextValidation_UUIDBase57;

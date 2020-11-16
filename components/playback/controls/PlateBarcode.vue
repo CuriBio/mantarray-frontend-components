@@ -31,7 +31,7 @@ import { TextValidation } from "@/js_utils/text_validation.js";
  * @vue-computed {String} playback_state - Current value in Vuex store
  * @vue-event {String} validatePlateBarcode - User entered String parser
  */
-const TextValidation_plate_barcode = new TextValidation("platebarcode");
+const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 export default {
   name: "PlateBarcode",
   data() {
