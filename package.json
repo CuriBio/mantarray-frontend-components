@@ -74,7 +74,7 @@
     "babel-preset-stage-2": "~6.24.1",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.18.1",
-    "core-js": "~3.6.5",
+    "core-js": "~3.7.0",
     "eslint": "^7.5.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^6.12.0",
