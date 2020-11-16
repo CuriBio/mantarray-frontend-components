@@ -6,7 +6,7 @@
 
 <script>
 import { SettingsForm } from "../../../../../dist/mantarray.common";
-//  import SettingsForm from "@/components/playback/controls/player/SettingsForm.vue";
+// import SettingsForm from "@/components/playback/controls/player/SettingsForm.vue";
 
 export default {
   components: {

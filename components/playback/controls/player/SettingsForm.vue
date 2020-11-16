@@ -5,54 +5,25 @@
       <!--  original mockflow ID : cmpD6f871b37d5c9f6c0c0715f4f6ab99523 -->
       <span class="span__settingsform-title">Settings</span>
       <!-- original mockflow ID : cmpD698ee7f9b579fcf64ee501697ea75af9 -->
-      <span class="span__settingsform-customer-account-id"
-        >Customer&nbsp;<wbr />Account&nbsp;<wbr />ID</span
-      >
+
       <!-- original mockflow ID : cmpDd8b22bfae4d2a9945a94972384dacecd -->
       <span class="span__settingsform-customer-sub-title"
         >Select&nbsp;<wbr />Customer&nbsp;<wbr />ID</span
       >
+
       <!-- original mockflow ID : cmpD5a52d34b430ce573300ed527a7b6a37d -->
-      <div class="div__settingsform-editor-icon">
-        <!-- original mockflow ID : cmpD5a52d34b430ce573300ed527a7b6a37d_txt -->
-        <span class="span__settingsform-editor-icon-txt">
-          <!-- <FontAwesomeIcon :icon="['fa', 'key']" /> -->
-          &#x1F5DD;
-        </span>
-      </div>
+
       <div class="div__settingsform-editor-input">
-        <div
-          class="div__settingsform-editor-input-editor"
-          :class="[
-            !valid_customer_focus
-              ? 'div__settingsform-editor-customer-input-editor--invalid'
-              : 'div__settingsform-editor-customer-input-editor--valid',
-          ]"
-        >
-          <b-form-input
-            id="input-customer"
-            v-model="customerid"
-            list="customer_list"
-            placeholder="Select Customer Account"
-            class="w-100 h-100 edit-id"
-            style="
-              border-radius: 0;
-              color: rgb(255, 255, 255);
-              background-color: #1c1c1c;
-              border: 0px;
-              color: #ffffff;
-            "
-          ></b-form-input>
-          <datalist v-if="customers_options.length" id="customer_list">
-            <option
-              v-for="customer in customers_options"
-              :id="customer.id"
-              :key="customer.name"
-            >
-              {{ decoder(customer.name) }}
-            </option>
-          </datalist>
-        </div>
+        <InputDropDown
+          :title_label="label"
+          :placeholder="keyplaceholder"
+          :invalid_text="error_text"
+          :value.sync="entrykey"
+          :input_width="entry_width"
+          :disabled="disallow_entry"
+          :options_text="nicknames_list"
+          :message_if_blank="on_empty_flag"
+        ></InputDropDown>
       </div>
       <div class="div__settingsform-customer-edit-btn" width="88" height="45">
         <span
@@ -121,43 +92,23 @@
     <canvas class="canvas__settings-user-seperator" width="510" height="20">
     </canvas>
     <!-- original Mockflow ID : cmpD36f04653a57e9f5f716e9c5a7405b38e -->
-    <span class="span__settingsform-user-account-title"
-      >User&nbsp;<wbr />Account&nbsp;<wbr />ID</span
-    >
     <!--  original Mockflow ID : cmpDa220fe036f45bb8db289301ce0d9f6cc -->
     <span class="span__settingsform-user-account-sub-title"
       >Select&nbsp;<wbr />User&nbsp;<wbr />ID</span
     >
+
     <!-- original MockFlow ID : cmpD289dc218dd29cfe1f9a4330b16e40c6f -->
     <div class="div__settingsform-user-input">
-      <!-- original Mockflow ID : cmpD289dc218dd29cfe1f9a4330b16e40c6f_txt -->
-      <div
-        class="div__settingsform-user-input-editor"
-        :class="[
-          !valid_user_focus
-            ? 'div__settingsform-editor-user-input-editor--invalid'
-            : 'div__settingsform-editor-user-input-editor--valid',
-        ]"
-      >
-        <b-form-input
-          id="input-user"
-          v-model="userid"
-          list="user_list"
-          placeholder="Select User"
-          class="w-100 h-100 edit-id"
-          style="
-            border-radius: 0;
-            background-color: #1c1c1c;
-            border: 0px;
-            color: #ffffff;
-          "
-        ></b-form-input>
-        <datalist v-if="users_options.length" id="user_list">
-          <option v-for="user in users_options" :id="user.id" :key="user.id">
-            {{ user.name }}
-          </option>
-        </datalist>
-      </div>
+      <InputDropDown
+        :title_label="label"
+        :placeholder="keyplaceholder"
+        :invalid_text="error_text"
+        :value.sync="entrykey"
+        :input_width="entry_width"
+        :disabled="disallow_entry"
+        :options_text="nicknames_list"
+        :message_if_blank="on_empty_flag"
+      ></InputDropDown>
     </div>
     <!-- original Mockflow ID : cmpD4c6b34524a3a014988f42e90a7cc071c -->
     <div class="div__settingsform-user-input-edit-btn" width="98" height="45">
@@ -378,6 +329,7 @@ import AddCustomer from "@/components/playback/controls/player/AddCustomer.vue";
 import EditCustomer from "@/components/playback/controls/player/EditCustomer.vue";
 import AddUser from "@/components/playback/controls/player/AddUser.vue";
 import EditUser from "@/components/playback/controls/player/EditUser.vue";
+import InputDropDown from "@/components/playback/controls/player/InputDropDown.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -392,6 +344,7 @@ export default {
     EditCustomer,
     AddUser,
     EditUser,
+    InputDropDown,
   },
   data() {
     return {
@@ -405,6 +358,19 @@ export default {
       disable_edit_customer: true,
       disable_add_user: true,
       disable_edit_user: true,
+
+      label: "Customer Account ID",
+      entrykey: "",
+      keyplaceholder: "Select the Customer",
+      error_text: "An ID is required",
+      entry_width: 283,
+      disallow_entry: false,
+      nicknames_list: [
+        "Customer Account 1",
+        "Customer Account-2",
+        "Customer Account-3",
+      ],
+      on_empty_flag: true,
     };
   },
   computed: {
@@ -558,6 +524,7 @@ export default {
       }
       this.modify_btn_states();
     },
+    entrykey: function () {},
   },
   created: function () {
     if (this.customer_index != null) {
@@ -827,7 +794,7 @@ export default {
   position: absolute;
   width: 285px;
   height: 45px;
-  top: 112.422px;
+  top: 70.422px;
   left: calc(962.145px - 734.511px);
   padding: 0px;
   visibility: visible;
@@ -1102,9 +1069,9 @@ export default {
   line-height: 100%;
   transform: rotate(0deg);
   position: absolute;
-  width: 285px;
+  width: 253px;
   height: 45px;
-  top: 291.422px;
+  top: 245.422px;
   left: calc(962.145px - 734.511px);
   padding: 5px;
   visibility: visible;

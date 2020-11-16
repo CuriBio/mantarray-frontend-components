@@ -134,7 +134,7 @@ export default {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: rgb(17, 17, 17);
+  background: rgb(0, 0, 0);
   position: absolute;
   top: 0px;
   left: 0px;
@@ -163,8 +163,8 @@ export default {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
+  font-size: 19px;
+  color: rgb(255, 255, 255);
   text-align: center;
   z-index: 25;
 }
