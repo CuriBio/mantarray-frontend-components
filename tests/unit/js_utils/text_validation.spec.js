@@ -1,7 +1,7 @@
 import { TextValidation } from "@/js_utils/text_validation.js";
 import { TextValidation as DistTextValidation } from "@/dist/mantarray.common";
 
-const TextValidation_PlateBarcode = new TextValidation("platebarcode");
+const TextValidation_PlateBarcode = new TextValidation("plate_barcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
 const TextValidation_Nickname = new TextValidation("nickname");
@@ -16,7 +16,7 @@ describe("DistTextValidation", () => {
 describe("TextValidation", () => {
   test("Given a text validation is for platebarcode, When called toString(), Then return would match the text rule of 'platebarcode' applied", () => {
     const validation = TextValidation_PlateBarcode;
-    expect(validation.toString()).toStrictEqual("TextValidation.platebarcode");
+    expect(validation.toString()).toStrictEqual("TextValidation.plate_barcode");
   });
   test("Given a text validation is for uuidBase57encode, When called toString(), Then return would match the text rule of 'uuidBase57encode' applied", () => {
     const validation = TextValidation_UUIDBase57;
@@ -71,18 +71,18 @@ describe("TextValidation.validate_plate_barcode", () => {
     }
   );
   test.each([
-    ["MA 13000012", "11", "<space>"],
-    ["MA  300000", "10", "2<space>"],
-    ["MB190440991", "11", "YEAR is SET AS 19"],
-    ["MB210440991", "11", "YEAR is SET AS 21"],
-    ["MB100440991", "11", "YEAR is SET AS 10"],
-    ["MA*#300001", "10", "Invalid symbols"],
+    ["MA 13000012", "11", "<space>", " "],
+    ["MA  300000", "10", "2<space>", " "],
+    ["MB190440991", "11", "YEAR is SET AS 19", ""],
+    ["MB210440991", "11", "YEAR is SET AS 21", ""],
+    ["MB100440991", "11", "YEAR is SET AS 10", ""],
+    ["MA*#300001", "10", "Invalid symbols", " "],
   ])(
     "Given a text %s as the platebarcode, When the  [input.length = %s] values in the index range of [2-3] is %s fails the defined criteria of YEAR EQUAL 20, Then validation fails and feedback text is <space>",
-    (plate_bar_code, len, error) => {
+    (plate_bar_code, len, error, result) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
+      expect(TestPlateBarCode.validate(text)).toStrictEqual(result);
     }
   );
   test.each([
@@ -116,7 +116,7 @@ describe("TextValidation.validate_plate_barcode", () => {
     ["MA20044", "7"],
     ["MA20**#*", 8],
   ])(
-    "When an improper platecode text  %s with the [input.length = %] and special characters as its not matching criteria, Then validation fails and feedback text is <space>",
+    "When an improper platecode text  %s with the [input.length = %s] < 10 or 11 and special characters are not matching criteria, Then validation fails and feedback text is <space>",
     (plate_bar_code, error) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
@@ -124,14 +124,15 @@ describe("TextValidation.validate_plate_barcode", () => {
     }
   );
   test.each([
-    ["MA20044001", "10"],
-    ["M120044099", "11"],
+    ["MA20044001", "10", "", "MA is still valid"],
+    ["M120044099", "11", " ", "M1 disallowed"], // M1 is invalid so returns space
+    ["MD20044099", "11", "", "MD is new valid value"], // MD is valid so return empty
   ])(
-    "When a proper platecode text of %s with the [input.length = %] and special characters as its matching criteria, Then validation PASSES and feedback text is <empty>",
-    (plate_bar_code, error) => {
+    "When a proper platecode text of %s with the [input.length = %s] and as %s its matching criteria, Then validation PASSES and feedback text is <empty>",
+    (plate_bar_code, error, result, reason) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual("");
+      expect(TestPlateBarCode.validate(text)).toStrictEqual(result);
     }
   );
 });
