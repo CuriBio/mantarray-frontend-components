@@ -15,14 +15,14 @@
 
       <div class="div__settingsform-editor-input">
         <InputDropDown
-          :title_label="label"
-          :placeholder="keyplaceholder"
-          :invalid_text="error_text"
-          :value.sync="entrykey"
-          :input_width="entry_width"
-          :disabled="disallow_entry"
-          :options_text="nicknames_list"
-          :message_if_blank="on_empty_flag"
+          :title_label="label_customer"
+          :placeholder="keyplaceholder_customer"
+          :invalid_text="error_text_customer"
+          :value.sync="entrykey_customer"
+          :input_width="entry_width_customer"
+          :disabled="disallow_entry_customer"
+          :options_text="nicknames_list_customer"
+          :message_if_blank="on_empty_flag_customer"
         ></InputDropDown>
       </div>
       <div class="div__settingsform-customer-edit-btn" width="88" height="45">
@@ -100,14 +100,14 @@
     <!-- original MockFlow ID : cmpD289dc218dd29cfe1f9a4330b16e40c6f -->
     <div class="div__settingsform-user-input">
       <InputDropDown
-        :title_label="label"
-        :placeholder="keyplaceholder"
-        :invalid_text="error_text"
-        :value.sync="entrykey"
-        :input_width="entry_width"
-        :disabled="disallow_entry"
-        :options_text="nicknames_list"
-        :message_if_blank="on_empty_flag"
+        :title_label="label_user"
+        :placeholder="keyplaceholder_user"
+        :invalid_text="error_text_user"
+        :value.sync="entrykey_user"
+        :input_width="entry_width_user"
+        :disabled="disallow_entry_user"
+        :options_text="nicknames_list_user"
+        :message_if_blank="on_empty_flag_user"
       ></InputDropDown>
     </div>
     <!-- original Mockflow ID : cmpD4c6b34524a3a014988f42e90a7cc071c -->
@@ -359,18 +359,27 @@ export default {
       disable_add_user: true,
       disable_edit_user: true,
 
-      label: "Customer Account ID",
-      entrykey: "",
-      keyplaceholder: "Select the Customer",
-      error_text: "An ID is required",
-      entry_width: 283,
-      disallow_entry: false,
-      nicknames_list: [
+      label_customer: "Customer Account ID",
+      entrykey_customer: "",
+      keyplaceholder_customer: "Select the Customer",
+      error_text_customer: "An ID is required",
+      entry_width_customer: 283,
+      disallow_entry_customer: false,
+      nicknames_list_customer: [
         "Customer Account 1",
         "Customer Account-2",
         "Customer Account-3",
       ],
-      on_empty_flag: true,
+      on_empty_flag_customer: true,
+
+      label_user: "User Account ID",
+      entrykey_user: "",
+      keyplaceholder_user: "Select User",
+      error_text_user: "An ID is required",
+      entry_width_user: 283,
+      disallow_entry_user: false,
+      nicknames_list_user: ["Lab Experiment 1", "Intern"],
+      on_empty_flag_user: true,
     };
   },
   computed: {
