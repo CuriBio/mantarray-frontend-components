@@ -23,6 +23,7 @@
           :disabled="disallow_entry_customer"
           :options_text="nicknames_list_customer"
           :message_if_blank="on_empty_flag_customer"
+          :options_id="'cust-'"
         ></InputDropDown>
       </div>
       <div class="div__settingsform-customer-edit-btn" width="88" height="45">
@@ -108,6 +109,7 @@
         :disabled="disallow_entry_user"
         :options_text="nicknames_list_user"
         :message_if_blank="on_empty_flag_user"
+        :options_id="'user-'"
       ></InputDropDown>
     </div>
     <!-- original Mockflow ID : cmpD4c6b34524a3a014988f42e90a7cc071c -->
@@ -365,11 +367,6 @@ export default {
       error_text_customer: "An ID is required",
       entry_width_customer: 283,
       disallow_entry_customer: false,
-      nicknames_list_customer: [
-        "Customer Account 1",
-        "Customer Account-2",
-        "Customer Account-3",
-      ],
       on_empty_flag_customer: true,
 
       label_user: "User Account ID",
@@ -378,7 +375,6 @@ export default {
       error_text_user: "An ID is required",
       entry_width_user: 283,
       disallow_entry_user: false,
-      nicknames_list_user: ["Lab Experiment 1", "Intern"],
       on_empty_flag_user: true,
     };
   },
@@ -399,11 +395,7 @@ export default {
         const list = [];
 
         for (let i = 0; i < this.customer_account_ids.length; i++) {
-          const customer = {
-            id: "cust-" + i,
-            name: this.customer_account_ids[i].nickname,
-          };
-          list.push(customer);
+          list.push(this.customer_account_ids[i].nickname);
         }
         return list;
       }
@@ -429,12 +421,10 @@ export default {
                   .length;
                 i++
               ) {
-                const user = {
-                  id: "user-" + i,
-                  name: this.customer_account_ids[this.customer_focus_id]
-                    .user_ids[i].nickname,
-                };
-                userlist.push(user);
+                userlist.push(
+                  this.customer_account_ids[this.customer_focus_id].user_ids[i]
+                    .nickname
+                );
               }
               return userlist;
             }
@@ -469,83 +459,168 @@ export default {
   },
   watch: {
     customerid: function () {
-      const customer_focus = this.customer_account_ids.find(
-        (customer) => customer.nickname === this.customerid
-      );
-      this.valid_customer_focus = false;
-      this.valid_user_focus = false;
-      if (customer_focus != null) {
-        this.customer_focus_id = customer_focus.cust_id;
-        const new_user_ids = customer_focus.user_ids;
-        this.valid_customer_focus = true;
-        if (this.user_options !== undefined) {
-          this.users_options.splice(0, this.users_options.length);
-          for (let i = 0; i < new_user_ids.length; i++) {
-            const user = {
-              id: "user-" + i,
-              name: new_user_ids[i].nickname,
-            };
-            this.users_options.push(user);
-          }
-        }
-        this.userid = "";
-      }
-      this.userid = "";
-      if (this.created_flag == true) {
-        this.created_flag = false;
-        this.userid = this.customer_account_ids[this.customer_index].user_ids[
-          this.user_index
-        ].nickname;
-      }
-      this.modify_btn_states();
+      // const customer_focus = this.customer_account_ids.find(
+      //   (customer) => customer.nickname === this.customerid
+      // );
+      // this.valid_customer_focus = false;
+      // this.valid_user_focus = false;
+      // if (customer_focus != null) {
+      //   this.customer_focus_id = customer_focus.cust_id;
+      //   const new_user_ids = customer_focus.user_ids;
+      //   this.valid_customer_focus = true;
+      //   if (this.user_options !== undefined) {
+      //     this.users_options.splice(0, this.users_options.length);
+      //     for (let i = 0; i < new_user_ids.length; i++) {
+      //       this.users_options.push(new_user_ids[i].nickname);
+      //     }
+      //   }
+      //   this.userid = "";
+      // }
+      // this.userid = "";
+      // if (this.created_flag == true) {
+      //   this.created_flag = false;
+      //   this.userid = this.customer_account_ids[this.customer_index].user_ids[
+      //     this.user_index
+      //   ].nickname;
+      // }
+      // this.modify_btn_states();
     },
     userid: function () {
-      const customer_focus = this.customer_account_ids.find(
-        (customer) => customer.nickname === this.customerid
-      );
-      if (customer_focus != null) {
-        const user_focus = customer_focus.user_ids.find(
-          (user) => user.nickname === this.userid
+      // const customer_focus = this.customer_account_ids.find(
+      //   (customer) => customer.nickname === this.customerid
+      // );
+      // if (customer_focus != null) {
+      //   const user_focus = customer_focus.user_ids.find(
+      //     (user) => user.nickname === this.userid
+      //   );
+      //   this.valid_user_focus = false;
+      //   if (user_focus != null) {
+      //     if (this.userid != "") {
+      //       this.valid_user_focus = true;
+      //       this.user_focus_id = user_focus.user_id;
+      //       this.transiant_user_ids = user_focus;
+      //     } else {
+      //       this.user_focus_id = null;
+      //       this.transiant_user_ids = null;
+      //     }
+      //   } else {
+      //     this.user_focus_id = null;
+      //     this.transiant_user_ids = null;
+      //   }
+      //   this.users_options.splice(0, this.users_options.length);
+      //   for (let i = 0; i < customer_focus.user_ids.length; i++) {
+      //     this.users_options.push(customer_focus.user_ids[i].nickname);
+      //   }
+      // }
+      // this.modify_btn_states();
+    },
+    entrykey_customer: function () {
+      // console.log("===>in entrykey_customer_watch "+this.entrykey_customer);
+      if (this.entrykey_customer == "") {
+        this.on_empty_flag_customer = true;
+      } else {
+        const nickname_focus = this.nicknames_list_customer.indexOf(
+          this.entrykey_customer
         );
-        this.valid_user_focus = false;
-        if (user_focus != null) {
-          if (this.userid != "") {
-            this.valid_user_focus = true;
-            this.user_focus_id = user_focus.user_id;
-            this.transiant_user_ids = user_focus;
-          } else {
-            this.user_focus_id = null;
-            this.transiant_user_ids = null;
-          }
+        if (nickname_focus == -1) {
+          // logic of "Add New Customer ID" in Settings
+          this.on_empty_flag_customer = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
         } else {
-          this.user_focus_id = null;
-          this.transiant_user_ids = null;
-        }
-
-        this.users_options.splice(0, this.users_options.length);
-        for (let i = 0; i < customer_focus.user_ids.length; i++) {
-          const user = {
-            id: "user-" + i,
-            name: customer_focus.user_ids[i].nickname,
-          };
-          this.users_options.push(user);
+          // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
+          this.on_empty_flag_customer = false;
+          const customer_focus = this.customer_account_ids.find(
+            (customer) => customer.nickname === this.entrykey_customer
+          );
+          // console.log("Value set by the user action are "+customer_focus.cust_id+" and "+ customer_focus.nickname);
+          this.valid_customer_focus = false;
+          this.valid_user_focus = false;
+          if (customer_focus != null) {
+            this.customer_focus_id = customer_focus.cust_id;
+            const new_user_ids = customer_focus.user_ids;
+            // console.log("List of users present with customer_focus is "+new_user_ids[0].user_ids + " and "+new_user_ids[0].nickname );
+            // console.log("List of users present with customer_focus is "+new_user_ids[1].user_ids + " and "+new_user_ids[1].nickname );
+            this.valid_customer_focus = true;
+            if (this.user_options == undefined) {
+              // this.users_options.splice(0, this.users_options.length);
+              for (let i = 0; i < new_user_ids.length; i++) {
+                this.users_options.push(new_user_ids[i].nickname);
+                // console.log("We push all users nickname ===> "+new_user_ids[i].nickname);
+              }
+            }
+          }
+          this.entrykey_user = "";
+          if (this.created_flag == true) {
+            this.created_flag = false;
+            this.entrykey_user = this.customer_account_ids[
+              this.customer_index
+            ].user_ids[this.user_index].nickname;
+          }
+          this.modify_btn_states();
         }
       }
-      this.modify_btn_states();
     },
-    entrykey: function () {},
+    entrykey_user: function () {
+      // console.log("===>in entrykey_user_watch"+this.entrykey_user);
+      if (this.entrykey_customer == "") {
+        this.on_empty_flag_user = true;
+      } else {
+        const nickname_focus = this.nicknames_list_customer.indexOf(
+          this.entrykey_customer
+        );
+        if (nickname_focus == -1) {
+          // logic of "Add New Customer ID" in Settings
+          this.on_empty_flag_user = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
+        } else {
+          // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
+          this.on_empty_flag_user = false;
+          //       const customer_focus = this.customer_account_ids.find(
+          //       (customer) => customer.nickname === this.entrykey_customer
+          //     );
+
+          //       const user_focus = customer_focus.user_ids.find(
+          //     (user) => user.nickname === this.userid
+          //   );
+          //   this.valid_user_focus = false;
+          //   if (user_focus != null) {
+          //     if (this.userid != "") {
+          //       this.valid_user_focus = true;
+          //       this.user_focus_id = user_focus.user_id;
+          //       this.transiant_user_ids = user_focus;
+          //     } else {
+          //       this.user_focus_id = null;
+          //       this.transiant_user_ids = null;
+          //     }
+          //   } else {
+          //     this.user_focus_id = null;
+          //     this.transiant_user_ids = null;
+          //   }
+
+          //   this.users_options.splice(0, this.users_options.length);
+          //   for (let i = 0; i < customer_focus.user_ids.length; i++) {
+          //     this.users_options.push(customer_focus.user_ids[i].nickname);
+          //   }
+          // this.modify_btn_states();
+        }
+      }
+    },
   },
   created: function () {
+    this.nicknames_list_customer = this.customers_options;
+    this.nicknames_list_user = this.users_options;
+    //  console.log(this.nicknames_list_customer);
+    //  console.log(this.nicknames_list_user);
     if (this.customer_index != null) {
-      this.customerid = this.customer_account_ids[this.customer_index].nickname;
+      this.entrykey_customer = this.customer_account_ids[
+        this.customer_index
+      ].nickname;
       this.valid_customer_focus = true;
       this.customer_focus_id = this.customer_index;
       this.disable_edit_customer = false;
       this.disable_add_user = false;
       if (this.user_index != null) {
-        this.userid = this.customer_account_ids[this.customer_index].user_ids[
-          this.user_index
-        ].nickname;
+        this.entrykey_user = this.customer_account_ids[
+          this.customer_index
+        ].user_ids[this.user_index].nickname;
         this.valid_user_focus = true;
         this.user_focus_id = this.user_index;
         this.disable_edit_user = false;

@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import ComponentToTest from "@/components/playback/controls/player/SettingsForm.vue";
+import InputDropDown from "@/components/playback/controls/player/InputDropDown.vue";
 import { SettingsForm as DistComponentToTest } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 
@@ -145,9 +146,7 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    const input_customer = wrapper.find("#input-customer");
-    input_customer.element.value = "Customer account -2";
-    await input_customer.trigger("input");
+    wrapper.find("#input-dropdown-widgetcust-").setValue("Customer account -2");
     Vue.nextTick(() => {
       expect(wrapper.find("#user-0").text()).toEqual("Lab User  -1");
       expect(wrapper.find("#user-1").text()).toEqual("Intern -1");

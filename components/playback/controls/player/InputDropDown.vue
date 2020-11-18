@@ -35,9 +35,9 @@
         :style="'width: ' + input_width + 'px;'"
       >
         <b-form-input
-          id="input-dropdown-widget"
+          :id="'input-dropdown-widget' + options_id"
           v-model="input_dropdown_value_key"
-          list="option_list"
+          :list="'option_list' + options_id"
           :placeholder="placeholder"
           :disabled="disabled"
           class="w-100 h-100 edit-id"
@@ -48,7 +48,10 @@
             color: #ffffff;
           "
         ></b-form-input>
-        <datalist v-if="dropdown_options.length" id="option_list">
+        <datalist
+          v-if="dropdown_options.length"
+          :id="'option_list' + options_id"
+        >
           <option v-for="item in dropdown_options" :id="item.id" :key="item.id">
             {{ item.name }}
           </option>
@@ -83,6 +86,7 @@ export default {
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     options_text: { type: Array, required: true },
+    options_id: { type: String, default: "opt-" },
     message_if_blank: { type: Boolean, default: false }, // when set to true, will display a simple feedback
   },
   data() {
@@ -99,7 +103,7 @@ export default {
         // the options_text is required true so a minimal of one element is needed
         // if suppose options_text.length is zero(0) then return doesn't change its []
         const name = {
-          id: "opt-" + i,
+          id: this.options_id + i,
           name: this.options_text[i],
         };
         list.push(name);
