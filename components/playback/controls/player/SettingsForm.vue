@@ -540,13 +540,15 @@ export default {
             // console.log("List of users present with customer_focus is "+new_user_ids[0].user_ids + " and "+new_user_ids[0].nickname );
             // console.log("List of users present with customer_focus is "+new_user_ids[1].user_ids + " and "+new_user_ids[1].nickname );
             this.valid_customer_focus = true;
-            if (this.user_options == undefined) {
-              // this.users_options.splice(0, this.users_options.length);
+            if (this.user_options !== undefined) {
+              this.users_options.splice(0, this.users_options.length);
               for (let i = 0; i < new_user_ids.length; i++) {
                 this.users_options.push(new_user_ids[i].nickname);
                 // console.log("We push all users nickname ===> "+new_user_ids[i].nickname);
               }
             }
+            this.entrykey_user = "";
+            this.nicknames_list_user = this.users_options;
           }
           this.entrykey_user = "";
           if (this.created_flag == true) {
@@ -558,6 +560,7 @@ export default {
           this.modify_btn_states();
         }
       }
+      this.modify_btn_states();
     },
     entrykey_user: function () {
       // console.log("===>in entrykey_user_watch"+this.entrykey_user);
@@ -573,33 +576,35 @@ export default {
         } else {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_user = false;
-          //       const customer_focus = this.customer_account_ids.find(
-          //       (customer) => customer.nickname === this.entrykey_customer
-          //     );
+          const customer_focus = this.customer_account_ids.find(
+            (customer) => customer.nickname === this.entrykey_customer
+          );
 
-          //       const user_focus = customer_focus.user_ids.find(
-          //     (user) => user.nickname === this.userid
-          //   );
-          //   this.valid_user_focus = false;
-          //   if (user_focus != null) {
-          //     if (this.userid != "") {
-          //       this.valid_user_focus = true;
-          //       this.user_focus_id = user_focus.user_id;
-          //       this.transiant_user_ids = user_focus;
-          //     } else {
-          //       this.user_focus_id = null;
-          //       this.transiant_user_ids = null;
-          //     }
-          //   } else {
-          //     this.user_focus_id = null;
-          //     this.transiant_user_ids = null;
-          //   }
+          const user_focus = customer_focus.user_ids.find(
+            (user) => user.nickname === this.entrykey_user
+          );
+          this.valid_user_focus = false;
+          if (user_focus != null) {
+            if (this.entrykey_user != "") {
+              this.valid_user_focus = true;
+              this.user_focus_id = user_focus.user_id;
+              this.transiant_user_ids = user_focus;
+            } else {
+              this.user_focus_id = null;
+              this.transiant_user_ids = null;
+            }
+          } else {
+            this.on_empty_flag_user = true;
+            this.user_focus_id = null;
+            this.transiant_user_ids = null;
+          }
 
-          //   this.users_options.splice(0, this.users_options.length);
-          //   for (let i = 0; i < customer_focus.user_ids.length; i++) {
-          //     this.users_options.push(customer_focus.user_ids[i].nickname);
-          //   }
-          // this.modify_btn_states();
+          this.users_options.splice(0, this.users_options.length);
+          for (let i = 0; i < customer_focus.user_ids.length; i++) {
+            this.users_options.push(customer_focus.user_ids[i].nickname);
+          }
+          this.nicknames_list_user = this.users_options;
+          this.modify_btn_states();
         }
       }
     },
@@ -625,7 +630,9 @@ export default {
         this.user_focus_id = this.user_index;
         this.disable_edit_user = false;
         this.created_flag = true;
+        this.on_empty_flag_user = false;
       }
+      this.on_empty_flag_customer = false;
     }
   },
   methods: {
@@ -647,7 +654,7 @@ export default {
     },
     onSaveCustomerId(add_customer) {
       this.$bvModal.hide("add-customer");
-      this.customerid = add_customer.nickname;
+      this.entrykey_customer = add_customer.nickname;
       this.customer_account_ids.push(add_customer);
     },
     onCancelCustomerId() {
@@ -655,7 +662,7 @@ export default {
     },
     onUpdateCustomerId(edit_customer) {
       this.$bvModal.hide("edit-customer");
-      this.customerid = edit_customer.nickname;
+      this.entrykey_customer = edit_customer.nickname;
       this.customer_account_ids[edit_customer.cust_id].cust_id =
         edit_customer.cust_id;
       this.customer_account_ids[edit_customer.cust_id].uuid =
@@ -684,30 +691,24 @@ export default {
             this.customer_account_ids[i].cust_id - 1;
         }
       }
-      this.customerid = "";
-      this.userid = "";
+      this.entrykey_customer = "";
+      this.entrykey_user = "";
     },
     onCancelAddUserId() {
       this.$bvModal.hide("add-user");
     },
     onSaveUserId(add_user) {
       this.$bvModal.hide("add-user");
-      this.userid = add_user.nickname;
+      this.entrykey_user = add_user.nickname;
       this.customer_account_ids[this.customer_focus_id].user_ids.push(add_user);
-      const user = {
-        id:
-          "user-" +
-          this.customer_account_ids[this.customer_focus_id].user_ids.length,
-        name: add_user.nickname,
-      };
-      this.users_options.push(user);
+      this.users_options.push(add_user.nickname);
     },
     onCancelUserId() {
       this.$bvModal.hide("edit-user");
     },
     onUpdateUserId(edit_user) {
       this.$bvModal.hide("edit-user");
-      this.userid = edit_user.nickname;
+      this.entrykey_user = edit_user.nickname;
       this.customer_account_ids[this.customer_focus_id].user_ids[
         edit_user.user_id
       ].user_id = edit_user.user_id;
@@ -720,10 +721,14 @@ export default {
     },
     onDeleteUserId(delete_user) {
       this.$bvModal.hide("edit-user");
+      // console.log("The Customer Focus ID is"+this.customer_focus_id);
+      // console.log("The Customer Nickname now is"+this.customer_account_ids[this.customer_focus_id].nickname);
       this.customer_account_ids[this.customer_focus_id].user_ids.splice(
         delete_user.user_id,
         1
       );
+      // console.log(this.customer_account_ids[this.customer_focus_id].user_ids[0].nickname);
+      // console.log(this.customer_account_ids[this.customer_focus_id].user_ids[1].nickname);
       /* Now that cust_id element is deleted we need to update all the right side customer cust_id value reduced by 1 */
       for (
         let i = delete_user.user_id;
@@ -736,7 +741,7 @@ export default {
       }
       this.transiant_user_ids = null;
       this.user_focus_id = null;
-      this.userid = "";
+      this.entrykey_user = "";
     },
     modify_btn_states() {
       const num_of_customers = this.customer_account_ids.length;
@@ -746,7 +751,7 @@ export default {
           .user_ids.length;
         if (num_of_userids > 0) {
           const customer_focus = this.customer_account_ids.find(
-            (customer) => customer.nickname === this.customerid
+            (customer) => customer.nickname === this.entrykey_customer
           );
           if (customer_focus != null) {
             const new_user_ids = customer_focus.user_ids;
@@ -755,7 +760,7 @@ export default {
             this.disable_edit_user = true;
             if (new_user_ids != undefined) {
               const user_focus = customer_focus.user_ids.find(
-                (user) => user.nickname === this.userid
+                (user) => user.nickname === this.entrykey_user
               );
               if (user_focus != null) {
                 this.disable_edit_customer = false;

@@ -86,7 +86,7 @@ export default {
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     options_text: { type: Array, required: true },
-    options_id: { type: String, default: "opt-" },
+    options_id: { type: String, default: "" }, // This prop is utilized by the parent component
     message_if_blank: { type: Boolean, default: false }, // when set to true, will display a simple feedback
   },
   data() {

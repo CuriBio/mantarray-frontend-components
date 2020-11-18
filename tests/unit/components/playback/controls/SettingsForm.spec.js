@@ -146,7 +146,9 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    wrapper.find("#input-dropdown-widgetcust-").setValue("Customer account -2");
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -2");
     Vue.nextTick(() => {
       expect(wrapper.find("#user-0").text()).toEqual("Lab User  -1");
       expect(wrapper.find("#user-1").text()).toEqual("Intern -1");
@@ -249,17 +251,13 @@ describe("SettingsForm.vue", () => {
     expect(wrapper.find("#cust-0").text()).toEqual("Customer account -1");
     expect(wrapper.find("#cust-1").text()).toEqual("Customer account -2");
 
-    const input_customer = wrapper.find("#input-customer");
-    input_customer.element.value = "Customer account -2";
-
-    await input_customer.trigger("input");
+    wrapper.find("#input-dropdown-widgetcust-").setValue("Customer account -2");
     Vue.nextTick(() => {
       expect(wrapper.find("#user-0").text()).toEqual("Lab User  -1");
       expect(wrapper.find("#user-1").text()).toEqual("Intern -1");
     });
 
-    input_customer.element.value = "Customer account -1";
-    await input_customer.trigger("input");
+    wrapper.find("#input-dropdown-widgetcust-").setValue("Customer account -1");
 
     Vue.nextTick(() => {
       expect(wrapper.find("#user-0").text()).toEqual("User account -1");
@@ -325,8 +323,8 @@ describe("SettingsForm.vue", () => {
     /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
     wrapper.vm.onSaveCustomerId(add_customer);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
   });
   test("When mounting SettingsForm on init, the Settings now recevies an event 'save-id' with and object of the added customer 'Customer Account -3', add a user New User-1 an event 'save-id' under Customer Account -3 and validate the addtion of 'New User-1'", async () => {
     const array_of_userid_1 = [
@@ -392,13 +390,13 @@ describe("SettingsForm.vue", () => {
     /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
     wrapper.vm.onSaveCustomerId(add_customer);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
 
     wrapper.vm.onSaveUserId(add_user);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("New User -1");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("New User -1");
   });
   test("When mounting SettingsForm on init, the Settings now recevies an event 'delete-id' with and object of the customer 'Customer Account -1', add  validate the deletion  of 'Customer Account -1'", async () => {
     const array_of_userid_1 = [
@@ -471,13 +469,13 @@ describe("SettingsForm.vue", () => {
     /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
     wrapper.vm.onSaveCustomerId(add_customer);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
 
     wrapper.vm.onSaveUserId(add_user);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("New User -1");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("New User -1");
 
     wrapper.vm.onDeleteCustomerId(delete_customer);
 
@@ -560,13 +558,13 @@ describe("SettingsForm.vue", () => {
     /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
     wrapper.vm.onSaveCustomerId(add_customer);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
 
     wrapper.vm.onSaveUserId(add_user);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("New User -1");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("New User -1");
 
     wrapper.vm.onUpdateCustomerId(edit_customer);
 
@@ -650,27 +648,23 @@ describe("SettingsForm.vue", () => {
     /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
     wrapper.vm.onSaveCustomerId(add_customer);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
 
     wrapper.vm.onSaveUserId(add_user);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("New User -1");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("New User -1");
 
-    const input_customer = wrapper.find("#input-customer");
-    input_customer.element.value = "Customer account -2";
-
-    await input_customer.trigger("input");
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -2");
     Vue.nextTick(() => {
       expect(wrapper.find("#user-0").text()).toEqual("Lab User  -1");
       expect(wrapper.find("#user-1").text()).toEqual("Intern -1");
     });
 
-    const input_user = wrapper.find("#input-user");
-    input_user.element.value = "Lab User -1";
-    await input_user.trigger("input");
-
+    wrapper.find("#input-dropdown-widgetuser-").setValue("Lab User -1");
     wrapper.vm.onDeleteUserId(delete_user);
 
     expect(wrapper.vm.customer_account_ids[1].user_ids[0].nickname).toEqual(
@@ -747,27 +741,23 @@ describe("SettingsForm.vue", () => {
     /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
     wrapper.vm.onSaveCustomerId(add_customer);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
 
     wrapper.vm.onSaveUserId(add_user);
 
-    expect(wrapper.vm.customerid).toEqual("Customer account -3");
-    expect(wrapper.vm.userid).toEqual("New User -1");
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("New User -1");
 
-    const input_customer = wrapper.find("#input-customer");
-    input_customer.element.value = "Customer account -2";
-
-    await input_customer.trigger("input");
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -2");
     Vue.nextTick(() => {
       expect(wrapper.find("#user-0").text()).toEqual("Lab User  -1");
       expect(wrapper.find("#user-1").text()).toEqual("Intern -1");
     });
 
-    const input_user = wrapper.find("#input-user");
-    input_user.element.value = "Lab User -1";
-    await input_user.trigger("input");
-
+    await wrapper.find("#input-dropdown-widgetuser-").setValue("Lab User -1");
     wrapper.vm.onUpdateUserId(update_user);
 
     expect(wrapper.vm.customer_account_ids[1].user_ids[0].nickname).toEqual(
@@ -802,9 +792,7 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    const input_customer = wrapper.find("#input-customer");
-    input_customer.element.value = "Customer account -1";
-    input_customer.trigger("input");
+    wrapper.find("#input-dropdown-widgetcust-").setValue("Customer account -1");
 
     const add_customer_btn = wrapper.find(
       ".span__settingsform-customer-add-btn_txt"
@@ -848,16 +836,14 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    const input_customer = wrapper.find("#input-customer");
-    input_customer.element.value = "Customer account -1";
-    input_customer.trigger("input");
-
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -1");
     await wrapper.vm.$nextTick(); // wait for update
 
-    const input_user = wrapper.find("#input-user");
-    input_user.element.value = "User account -1";
-    input_user.trigger("input");
-
+    await wrapper
+      .find("#input-dropdown-widgetuser-")
+      .setValue("User account -1");
     await wrapper.vm.$nextTick(); // wait for update
 
     const add_customer_btn = wrapper.find(
@@ -1000,16 +986,14 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    const input_customer = wrapper.find("#input-customer");
-    input_customer.element.value = "Customer account -1";
-    input_customer.trigger("input");
-
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -1");
     await wrapper.vm.$nextTick(); // wait for update
 
-    const input_user = wrapper.find("#input-user");
-    input_user.element.value = "User account -1";
-    input_user.trigger("input");
-
+    await wrapper
+      .find("#input-dropdown-widgetuser-")
+      .setValue("User account -1");
     await wrapper.vm.$nextTick(); // wait for update
 
     const add_customer_btn = wrapper.find(
@@ -1067,16 +1051,14 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    const input_customer = wrapper.find("#input-customer");
-    input_customer.element.value = "Customer account -1";
-    input_customer.trigger("input");
-
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -1");
     await wrapper.vm.$nextTick(); // wait for update
 
-    const input_user = wrapper.find("#input-user");
-    input_user.element.value = "User account -1";
-    input_user.trigger("input");
-
+    await wrapper
+      .find("#input-dropdown-widgetuser-")
+      .setValue("User account -1");
     await wrapper.vm.$nextTick(); // wait for update
 
     const add_customer_btn = wrapper.find(
@@ -1210,12 +1192,11 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    const Customer_ID_Input_Editor_Red_Box = wrapper.find(
-      ".div__settingsform-editor-customer-input-editor--invalid"
+    const Boxes = wrapper.findAll(
+      ".div__input-dropdown-controls-content-widget--invalid"
     );
-    const User_ID_Input_Editor_Red_Box = wrapper.find(
-      ".div__settingsform-editor-user-input-editor--invalid"
-    );
+    const Customer_ID_Input_Editor_Red_Box = Boxes.at(0);
+    const User_ID_Input_Editor_Red_Box = Boxes.at(1);
 
     expect(Customer_ID_Input_Editor_Red_Box.isVisible()).toBe(true);
     expect(User_ID_Input_Editor_Red_Box.isVisible()).toBe(true);
@@ -1246,12 +1227,11 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    const Customer_ID_Input_Editor_Green_Box = wrapper.find(
-      ".div__settingsform-editor-customer-input-editor--valid"
+    const Boxes = wrapper.findAll(
+      ".div__input-dropdown-controls-content-widget--valid"
     );
-    const User_ID_Input_Editor_Green_Box = wrapper.find(
-      ".div__settingsform-editor-user-input-editor--valid"
-    );
+    const Customer_ID_Input_Editor_Green_Box = Boxes.at(0);
+    const User_ID_Input_Editor_Green_Box = Boxes.at(1);
 
     expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
     expect(User_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
@@ -1296,17 +1276,20 @@ describe("SettingsForm.vue", () => {
 
     await wrapper.vm.$nextTick(); // wait for update
 
-    const customer_input = wrapper.find("#input-customer");
-    expect(customer_input.element.value).toEqual("Customer account -1");
-    const user_input = wrapper.find("#input-user");
-    expect(user_input.element.value).toEqual("User account -1");
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -1");
+    await wrapper.vm.$nextTick(); // wait for update
+    await wrapper
+      .find("#input-dropdown-widgetuser-")
+      .setValue("User account -1");
+    await wrapper.vm.$nextTick(); // wait for update
 
-    const Customer_ID_Input_Editor_Green_Box = wrapper.find(
-      ".div__settingsform-editor-customer-input-editor--valid"
+    const Boxes = wrapper.findAll(
+      ".div__input-dropdown-controls-content-widget--valid"
     );
-    const User_ID_Input_Editor_Green_Box = wrapper.find(
-      ".div__settingsform-editor-user-input-editor--valid"
-    );
+    const Customer_ID_Input_Editor_Green_Box = Boxes.at(0);
+    const User_ID_Input_Editor_Green_Box = Boxes.at(1);
 
     expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
     expect(User_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
@@ -1377,17 +1360,14 @@ describe("SettingsForm.vue", () => {
       store,
       localVue,
     });
-
-    const input_customer = wrapper.find("#input-customer");
-    const input_user = wrapper.find("#input-user");
-
-    input_customer.element.value = "Customer account -2";
-    input_customer.trigger("input");
-
     await wrapper.vm.$nextTick(); // wait for update
 
-    input_user.element.value = "Lab User -1";
-    input_user.trigger("input");
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -2");
+    await wrapper.vm.$nextTick(); // wait for update
+    await wrapper.find("#input-dropdown-widgetuser-").setValue("Lab User -1");
+    await wrapper.vm.$nextTick(); // wait for update
 
     await wrapper.vm.$nextTick(); // wait for update
 
@@ -1451,8 +1431,8 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    const predecoding_str = "&#x1F5DD; " + wrapper.vm.customers_options[0].name;
-    const customerid = "&#x1F5DD; " + wrapper.vm.customerid;
+    const predecoding_str = "&#x1F5DD; " + wrapper.vm.customers_options[0];
+    const customerid = "&#x1F5DD; " + wrapper.vm.entrykey_customer;
 
     const postdecoding_str = wrapper.vm.decoder(predecoding_str);
     expect(wrapper.vm.decoder(customerid)).toEqual(postdecoding_str);
