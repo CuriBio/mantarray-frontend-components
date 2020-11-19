@@ -155,11 +155,72 @@ describe("SettingsForm.vue", () => {
       expect(wrapper.vm.users_options.length).toEqual(2);
     });
   });
+
+  test("When mounting SettingsForm on init, the Settings Vuex store is accessed and a Customer Account is selected, the user initiates an 'Edit Customer' and chooses Cancel Button so an event 'cancel-id is invoked verify that nicknames are retained", async () => {
+    const array_of_userid_1 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkBYr2An3dqHEyfRRE",
+        nickname: "User account -1",
+      },
+      {
+        user_id: 1,
+        uuid: "5FY8KwTsQaUJ2KzHJGetfE",
+        nickname: "User account -2",
+      },
+    ];
+    const array_of_userid_2 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkkkk2An3dqHEyfRRE",
+        nickname: "Lab User  -1",
+      },
+      {
+        user_id: 1,
+        uuid: "5FY8ghtsQaUJ2KzHJGetfE",
+        nickname: "Intern -1",
+      },
+    ];
+    const array_of_customerids = [
+      {
+        cust_id: 0,
+        uuid: "4vqyd62oARXqj9nRUNhtLQ",
+        api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+        nickname: "Customer account -1",
+        user_ids: array_of_userid_1,
+      },
+      {
+        cust_id: 1,
+        uuid: "6cBaidlJ84Ggc5JA7IYCgv",
+        api_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
+        nickname: "Customer account -2",
+        user_ids: array_of_userid_2,
+      },
+    ];
+    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_index", 1);
+
+    wrapper = mount(ComponentToTest, {
+      store,
+      localVue,
+    });
+
+    wrapper.vm.onCancelCustomerId();
+    expect(wrapper.vm.customers_options.length).toEqual(2);
+  });
   test("When mounting SettingsForm on init, the Settings Vuex store is accessed and a list of customer_account_ids is null so the drop dropDown is empty", () => {
     wrapper = mount(ComponentToTest, {
       store,
       localVue,
     });
+    expect(wrapper.vm.customers_options.length).toEqual(0);
+  });
+  test("When mounting SettingsForm on init, the user access the dialog of 'Add Customer' and decides to cancel by an event 'cancel-id' verify if no customer ids are added", () => {
+    wrapper = mount(ComponentToTest, {
+      store,
+      localVue,
+    });
+    wrapper.vm.onCancelAddCustomerId();
     expect(wrapper.vm.customers_options.length).toEqual(0);
   });
   test("When mounting SettingsForm on init, the Settings Vuex store is accessed and a Customer Account is selected, then user_ids is empty", () => {
@@ -326,6 +387,60 @@ describe("SettingsForm.vue", () => {
     expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
     expect(wrapper.vm.entrykey_user).toEqual("");
   });
+  test("When mounting SettingsForm on init, the Settings now recevies an event 'cancel-id' with no data of the added customer, validate its handled and dialog is closed'", async () => {
+    const array_of_userid_1 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkBYr2An3dqHEyfRRE",
+        nickname: "User account -1",
+      },
+      {
+        user_id: 1,
+        uuid: "5FY8KwTsQaUJ2KzHJGetfE",
+        nickname: "User account -2",
+      },
+    ];
+    const array_of_userid_2 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkkkk2An3dqHEyfRRE",
+        nickname: "Lab User  -1",
+      },
+      {
+        user_id: 1,
+        uuid: "5FY8ghtsQaUJ2KzHJGetfE",
+        nickname: "Intern -1",
+      },
+    ];
+    const array_of_customerids = [
+      {
+        cust_id: 0,
+        uuid: "4vqyd62oARXqj9nRUNhtLQ",
+        api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+        nickname: "Customer account -1",
+        user_ids: array_of_userid_1,
+      },
+      {
+        cust_id: 1,
+        uuid: "6cBaidlJ84Ggc5JA7IYCgv",
+        api_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
+        nickname: "Customer account -2",
+        user_ids: array_of_userid_2,
+      },
+    ];
+    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_index", 0);
+    wrapper = mount(ComponentToTest, {
+      store,
+      localVue,
+    });
+    /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
+    /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
+    wrapper.vm.onCancelCustomerId();
+
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -1");
+    expect(wrapper.vm.entrykey_user).toEqual("");
+  });
   test("When mounting SettingsForm on init, the Settings now recevies an event 'save-id' with and object of the added customer 'Customer Account -3', add a user New User-1 an event 'save-id' under Customer Account -3 and validate the addtion of 'New User-1'", async () => {
     const array_of_userid_1 = [
       {
@@ -397,6 +512,75 @@ describe("SettingsForm.vue", () => {
 
     expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
     expect(wrapper.vm.entrykey_user).toEqual("New User -1");
+  });
+  test("When mounting SettingsForm on init, the Settings now recevies an event 'save-id' with and object of the added customer 'Customer Account -3', add a user tries to add an new user but, due to duplicate selects Cancel Button and an event 'cancel-id' is emmited validate that no user got added", async () => {
+    const array_of_userid_1 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkBYr2An3dqHEyfRRE",
+        nickname: "User account -1",
+      },
+      {
+        user_id: 1,
+        uuid: "5FY8KwTsQaUJ2KzHJGetfE",
+        nickname: "User account -2",
+      },
+    ];
+    const array_of_userid_2 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkkkk2An3dqHEyfRRE",
+        nickname: "Lab User  -1",
+      },
+      {
+        user_id: 1,
+        uuid: "5FY8ghtsQaUJ2KzHJGetfE",
+        nickname: "Intern -1",
+      },
+    ];
+    const array_of_customerids = [
+      {
+        cust_id: 0,
+        uuid: "4vqyd62oARXqj9nRUNhtLQ",
+        api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+        nickname: "Customer account -1",
+        user_ids: array_of_userid_1,
+      },
+      {
+        cust_id: 1,
+        uuid: "6cBaidlJ84Ggc5JA7IYCgv",
+        api_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
+        nickname: "Customer account -2",
+        user_ids: array_of_userid_2,
+      },
+    ];
+    store.commit("settings/set_customer_account_ids", array_of_customerids);
+
+    wrapper = mount(ComponentToTest, {
+      store,
+      localVue,
+    });
+
+    const add_customer = {
+      cust_id: 2,
+      uuid: "5FY8KwTsQaUJ2KzHJGetfE",
+      api_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
+      nickname: "Customer account -3",
+      user_ids: [],
+    };
+
+    /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
+    /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
+    wrapper.vm.onSaveCustomerId(add_customer);
+
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
+
+    wrapper.vm.onCancelAddUserId();
+
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
+    expect(wrapper.vm.customer_account_ids[2].user_ids.length).toBe(0);
   });
   test("When mounting SettingsForm on init, the Settings now recevies an event 'delete-id' with and object of the customer 'Customer Account -1', add  validate the deletion  of 'Customer Account -1'", async () => {
     const array_of_userid_1 = [

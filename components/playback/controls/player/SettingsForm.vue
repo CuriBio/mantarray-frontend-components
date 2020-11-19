@@ -350,8 +350,8 @@ export default {
   },
   data() {
     return {
-      customerid: "",
-      userid: "",
+      // customerid: "",
+      // userid: "",
       valid_customer_focus: false,
       valid_user_focus: false,
       customer_focus_id: 0,
@@ -401,7 +401,7 @@ export default {
       }
     },
     users_options: function () {
-      if (this.customerid != "") {
+      if (this.entrykey_customer != "") {
         if (this.customer_account_ids.length != 0) {
           if (
             this.customer_account_ids[this.customer_focus_id].user_ids !==
@@ -458,62 +458,6 @@ export default {
     },
   },
   watch: {
-    customerid: function () {
-      // const customer_focus = this.customer_account_ids.find(
-      //   (customer) => customer.nickname === this.customerid
-      // );
-      // this.valid_customer_focus = false;
-      // this.valid_user_focus = false;
-      // if (customer_focus != null) {
-      //   this.customer_focus_id = customer_focus.cust_id;
-      //   const new_user_ids = customer_focus.user_ids;
-      //   this.valid_customer_focus = true;
-      //   if (this.user_options !== undefined) {
-      //     this.users_options.splice(0, this.users_options.length);
-      //     for (let i = 0; i < new_user_ids.length; i++) {
-      //       this.users_options.push(new_user_ids[i].nickname);
-      //     }
-      //   }
-      //   this.userid = "";
-      // }
-      // this.userid = "";
-      // if (this.created_flag == true) {
-      //   this.created_flag = false;
-      //   this.userid = this.customer_account_ids[this.customer_index].user_ids[
-      //     this.user_index
-      //   ].nickname;
-      // }
-      // this.modify_btn_states();
-    },
-    userid: function () {
-      // const customer_focus = this.customer_account_ids.find(
-      //   (customer) => customer.nickname === this.customerid
-      // );
-      // if (customer_focus != null) {
-      //   const user_focus = customer_focus.user_ids.find(
-      //     (user) => user.nickname === this.userid
-      //   );
-      //   this.valid_user_focus = false;
-      //   if (user_focus != null) {
-      //     if (this.userid != "") {
-      //       this.valid_user_focus = true;
-      //       this.user_focus_id = user_focus.user_id;
-      //       this.transiant_user_ids = user_focus;
-      //     } else {
-      //       this.user_focus_id = null;
-      //       this.transiant_user_ids = null;
-      //     }
-      //   } else {
-      //     this.user_focus_id = null;
-      //     this.transiant_user_ids = null;
-      //   }
-      //   this.users_options.splice(0, this.users_options.length);
-      //   for (let i = 0; i < customer_focus.user_ids.length; i++) {
-      //     this.users_options.push(customer_focus.user_ids[i].nickname);
-      //   }
-      // }
-      // this.modify_btn_states();
-    },
     entrykey_customer: function () {
       // console.log("===>in entrykey_customer_watch "+this.entrykey_customer);
       if (this.entrykey_customer == "") {
@@ -654,8 +598,13 @@ export default {
     },
     onSaveCustomerId(add_customer) {
       this.$bvModal.hide("add-customer");
-      this.entrykey_customer = add_customer.nickname;
       this.customer_account_ids.push(add_customer);
+      this.nicknames_list_customer.splice(
+        0,
+        this.nicknames_list_customer.length
+      );
+      this.nicknames_list_customer = this.customers_options;
+      this.entrykey_customer = add_customer.nickname;
     },
     onCancelCustomerId() {
       this.$bvModal.hide("edit-customer");
