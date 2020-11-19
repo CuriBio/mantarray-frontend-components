@@ -1511,7 +1511,142 @@ describe("SettingsForm.vue", () => {
     expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
     expect(User_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
   });
+  test("When mounting SettingsForm on init, the Settings has the value of  'Customer ID' is assigned to 'Customer account -1' and 'User ID' is assigned to 'User account -1', user now modifies to non-existant customer say 'Customer -', validate that Red Boxes are visible around Customer ID and User ID and only 'Add New Customer Button' is enabled", async () => {
+    const array_of_userid_1 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkBYr2An3dqHEyfRRE",
+        nickname: "User account -1",
+      },
+    ];
+    const array_of_customerids = [
+      {
+        cust_id: 0,
+        uuid: "4vqyd62oARXqj9nRUNhtLQ",
+        api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+        nickname: "Customer account -1",
+        user_ids: array_of_userid_1,
+      },
+    ];
+    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_index", 0);
+    store.commit("settings/set_user_index", 0);
 
+    wrapper = mount(ComponentToTest, {
+      store,
+      localVue,
+    });
+
+    const Boxes = wrapper.findAll(
+      ".div__input-dropdown-controls-content-widget--valid"
+    );
+    const Customer_ID_Input_Editor_Green_Box = Boxes.at(0);
+    const User_ID_Input_Editor_Green_Box = Boxes.at(1);
+
+    expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
+    expect(User_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
+
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -"); // customer with this doesn't exist.
+
+    await wrapper.vm.$nextTick(); // wait for update
+
+    const Boxes_2 = wrapper.findAll(
+      ".div__input-dropdown-controls-content-widget--invalid"
+    );
+    const Customer_ID_Input_Editor_Red_Box = Boxes_2.at(0);
+    const User_ID_Input_Editor_Red_Box = Boxes_2.at(1);
+
+    expect(Customer_ID_Input_Editor_Red_Box.isVisible()).toBe(true);
+    expect(User_ID_Input_Editor_Red_Box.isVisible()).toBe(true);
+
+    expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
+    expect(User_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
+
+    await wrapper.vm.$nextTick(); // wait for update
+    const add_customer_btn = wrapper.find(
+      ".span__settingsform-customer-add-btn_txt"
+    );
+    const edit_customer_btn = wrapper.find(
+      ".span__settingsform-customer-edit-btn-txt"
+    );
+    const add_user_btn = wrapper.find(".span__settingsform_user-input-editor");
+    const edit_user_btn = wrapper.find(
+      ".span__settingsform-user-input-edit-btn-txt"
+    );
+
+    expect(add_customer_btn.isVisible()).toBe(true);
+    expect(edit_customer_btn.isVisible()).toBe(false);
+    expect(add_user_btn.isVisible()).toBe(false);
+    expect(edit_user_btn.isVisible()).toBe(false);
+  });
+  test("When mounting SettingsForm on init, the Settings has the value of  'Customer ID' is assigned to 'Customer account -1' and 'User ID' is assigned to 'User account -1', user now modifies to non-existant User ID say 'User account -', validate that Red Boxes are visible around User ID and only 'Add New User Button' is enabled", async () => {
+    const array_of_userid_1 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkBYr2An3dqHEyfRRE",
+        nickname: "User account -1",
+      },
+    ];
+    const array_of_customerids = [
+      {
+        cust_id: 0,
+        uuid: "4vqyd62oARXqj9nRUNhtLQ",
+        api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+        nickname: "Customer account -1",
+        user_ids: array_of_userid_1,
+      },
+    ];
+    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_index", 0);
+    store.commit("settings/set_user_index", 0);
+
+    wrapper = mount(ComponentToTest, {
+      store,
+      localVue,
+    });
+
+    const Boxes = wrapper.findAll(
+      ".div__input-dropdown-controls-content-widget--valid"
+    );
+    const Customer_ID_Input_Editor_Green_Box = Boxes.at(0);
+    const User_ID_Input_Editor_Green_Box = Boxes.at(1);
+
+    expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
+    expect(User_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
+
+    await wrapper
+      .find("#input-dropdown-widgetuser-")
+      .setValue("User account -"); // user  doesn't exist.
+
+    await wrapper.vm.$nextTick(); // wait for update
+
+    const Boxes_2 = wrapper.findAll(
+      ".div__input-dropdown-controls-content-widget--invalid"
+    );
+    const User_ID_Input_Editor_Red_Box = Boxes_2.at(0);
+
+    expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true);
+    expect(User_ID_Input_Editor_Red_Box.isVisible()).toBe(true);
+
+    await wrapper.vm.$nextTick(); // wait for update
+    const add_customer_btn = wrapper.find(
+      ".span__settingsform-customer-add-btn_txt"
+    );
+    const edit_customer_btn = wrapper.find(
+      ".span__settingsform-customer-edit-btn-txt"
+    );
+    const add_user_btn = wrapper.find(".span__settingsform_user-input-editor");
+    const edit_user_btn = wrapper.find(
+      ".span__settingsform-user-input-edit-btn-txt"
+    );
+
+    expect(add_customer_btn.isVisible()).toBe(true);
+    expect(edit_customer_btn.isVisible()).toBe(true);
+    expect(add_user_btn.isVisible()).toBe(true);
+    expect(edit_user_btn.isVisible()).toBe(false);
+  });
   test("When mounting SettingsForm on init, the Settings has the value of  'Customer ID' is not assigned to and 'User ID' is assigned is not assigned,  Vuex sets Customer ID=>'Customer account-1' and 'User ID'=>'User account-1' validate if created() is invoked ", async () => {
     const array_of_userid_1 = [
       {

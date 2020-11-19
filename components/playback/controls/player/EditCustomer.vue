@@ -96,7 +96,7 @@ export default {
       uuid: this.dialogdata.uuid,
       apikey: this.dialogdata.api_key,
       nickname: this.dialogdata.nickname,
-      userids: this.dialogdata.userids,
+      userids: this.dialogdata.user_ids,
       error_text_uuid: "",
       error_text_api: "",
       error_text_nickname: "",

@@ -430,7 +430,6 @@ export default {
             }
           }
         }
-        return [];
       }
       return [];
     },
@@ -452,14 +451,14 @@ export default {
           return this.customer_account_ids[this.customer_focus_id].user_ids
             .length;
         } else {
-          return 0;
+          return 0; // this was introduced as vue/return-in-computed-property eslint specifies this is needed
+          // on JEST this appears as missing in code-coverage can't reach the above line via JEST testcase
         }
       }
     },
   },
   watch: {
     entrykey_customer: function () {
-      // console.log("===>in entrykey_customer_watch "+this.entrykey_customer);
       if (this.entrykey_customer == "") {
         this.on_empty_flag_customer = true;
       } else {
@@ -469,27 +468,24 @@ export default {
         if (nickname_focus == -1) {
           // logic of "Add New Customer ID" in Settings
           this.on_empty_flag_customer = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
+          this.entrykey_user = "";
         } else {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_customer = false;
           const customer_focus = this.customer_account_ids.find(
             (customer) => customer.nickname === this.entrykey_customer
           );
-          // console.log("Value set by the user action are "+customer_focus.cust_id+" and "+ customer_focus.nickname);
           this.valid_customer_focus = false;
           this.valid_user_focus = false;
           if (customer_focus != null) {
             this.customer_focus_id = customer_focus.cust_id;
-            const new_user_ids = customer_focus.user_ids;
-            // console.log("List of users present with customer_focus is "+new_user_ids[0].user_ids + " and "+new_user_ids[0].nickname );
-            // console.log("List of users present with customer_focus is "+new_user_ids[1].user_ids + " and "+new_user_ids[1].nickname );
             this.valid_customer_focus = true;
-            if (this.user_options !== undefined) {
-              this.users_options.splice(0, this.users_options.length);
-              for (let i = 0; i < new_user_ids.length; i++) {
-                this.users_options.push(new_user_ids[i].nickname);
-                // console.log("We push all users nickname ===> "+new_user_ids[i].nickname);
-              }
+            if (this.nicknames_list_user !== undefined) {
+              this.nicknames_list_user.splice(
+                0,
+                this.nicknames_list_user.length
+              );
+              this.nicknames_list_user = this.users_options;
             }
             this.entrykey_user = "";
             this.nicknames_list_user = this.users_options;
@@ -507,7 +503,6 @@ export default {
       this.modify_btn_states();
     },
     entrykey_user: function () {
-      // console.log("===>in entrykey_user_watch"+this.entrykey_user);
       if (this.entrykey_customer == "") {
         this.on_empty_flag_user = true;
       } else {
@@ -517,13 +512,15 @@ export default {
         if (nickname_focus == -1) {
           // logic of "Add New Customer ID" in Settings
           this.on_empty_flag_user = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
+          this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
+          this.nicknames_list_user = [];
+          this.modify_btn_states();
         } else {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_user = false;
           const customer_focus = this.customer_account_ids.find(
             (customer) => customer.nickname === this.entrykey_customer
           );
-
           const user_focus = customer_focus.user_ids.find(
             (user) => user.nickname === this.entrykey_user
           );
@@ -533,19 +530,11 @@ export default {
               this.valid_user_focus = true;
               this.user_focus_id = user_focus.user_id;
               this.transiant_user_ids = user_focus;
-            } else {
-              this.user_focus_id = null;
-              this.transiant_user_ids = null;
             }
           } else {
             this.on_empty_flag_user = true;
             this.user_focus_id = null;
             this.transiant_user_ids = null;
-          }
-
-          this.users_options.splice(0, this.users_options.length);
-          for (let i = 0; i < customer_focus.user_ids.length; i++) {
-            this.users_options.push(customer_focus.user_ids[i].nickname);
           }
           this.nicknames_list_user = this.users_options;
           this.modify_btn_states();
@@ -556,8 +545,6 @@ export default {
   created: function () {
     this.nicknames_list_customer = this.customers_options;
     this.nicknames_list_user = this.users_options;
-    //  console.log(this.nicknames_list_customer);
-    //  console.log(this.nicknames_list_user);
     if (this.customer_index != null) {
       this.entrykey_customer = this.customer_account_ids[
         this.customer_index
@@ -611,7 +598,6 @@ export default {
     },
     onUpdateCustomerId(edit_customer) {
       this.$bvModal.hide("edit-customer");
-      this.entrykey_customer = edit_customer.nickname;
       this.customer_account_ids[edit_customer.cust_id].cust_id =
         edit_customer.cust_id;
       this.customer_account_ids[edit_customer.cust_id].uuid =
@@ -622,6 +608,12 @@ export default {
         edit_customer.nickname;
       this.customer_account_ids[edit_customer.cust_id].user_ids =
         edit_customer.user_ids;
+      this.nicknames_list_customer.splice(
+        0,
+        this.nicknames_list_customer.length
+      );
+      this.nicknames_list_customer = this.customers_options;
+      this.entrykey_customer = edit_customer.nickname;
     },
     onDeleteCustomerId(delete_customer) {
       this.$bvModal.hide("edit-customer");
@@ -629,17 +621,18 @@ export default {
       this.customer_account_ids.splice(delete_customer.cust_id, 1);
       /* Inside the SettingsVue page the index value has to be reset to startup value of 0 */
       this.customer_focus_id = 0;
-      /* Now that cust_id element is deleted we need to update all the right side customer cust_id value reduced by 1 */
-      if (this.customer_account_ids.length > 1) {
-        for (
-          let i = delete_customer.cust_id;
-          i < this.customer_account_ids.length;
-          i++
-        ) {
-          this.customer_account_ids[i].cust_id =
-            this.customer_account_ids[i].cust_id - 1;
-        }
+      this.user_focus_id = 0;
+      /* Now that customer id element is deleted we need to update all the right side customer cust_id index starting from 0 */
+      for (let i = 0; i < this.customer_account_ids.length; i++) {
+        this.customer_account_ids[i].cust_id = i;
       }
+      this.nicknames_list_customer.splice(
+        0,
+        this.nicknames_list_customer.length
+      );
+      this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
+      this.nicknames_list_customer = this.customers_options;
+      this.nicknames_list_user = this.users_options;
       this.entrykey_customer = "";
       this.entrykey_user = "";
     },
@@ -667,27 +660,27 @@ export default {
       this.customer_account_ids[this.customer_focus_id].user_ids[
         edit_user.user_id
       ].nickname = edit_user.nickname;
+      this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
+      this.nicknames_list_user = this.users_options;
     },
     onDeleteUserId(delete_user) {
       this.$bvModal.hide("edit-user");
-      // console.log("The Customer Focus ID is"+this.customer_focus_id);
-      // console.log("The Customer Nickname now is"+this.customer_account_ids[this.customer_focus_id].nickname);
       this.customer_account_ids[this.customer_focus_id].user_ids.splice(
         delete_user.user_id,
         1
       );
-      // console.log(this.customer_account_ids[this.customer_focus_id].user_ids[0].nickname);
-      // console.log(this.customer_account_ids[this.customer_focus_id].user_ids[1].nickname);
-      /* Now that cust_id element is deleted we need to update all the right side customer cust_id value reduced by 1 */
+      /* Now that user_id element is deleted we need to update all the user ids without holes or starting index 0 */
       for (
-        let i = delete_user.user_id;
+        let i = 0;
         i < this.customer_account_ids[this.customer_focus_id].user_ids.length;
         i++
       ) {
-        this.customer_account_ids[this.customer_focus_id].user_ids[i].user_id =
-          this.customer_account_ids[this.customer_focus_id].user_ids[i]
-            .user_id - 1;
+        this.customer_account_ids[this.customer_focus_id].user_ids[
+          i
+        ].user_id = i;
       }
+      this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
+      this.nicknames_list_user = this.users_options;
       this.transiant_user_ids = null;
       this.user_focus_id = null;
       this.entrykey_user = "";

@@ -128,6 +128,9 @@ export default {
       // any modification to add logic might impact depedent functionalities, request to consult Eli or Raghu
       this.$emit("update:value", this.input_dropdown_value_key);
     },
+    value: function () {
+      this.input_dropdown_value_key = this.value;
+    },
   },
   methods: {},
 };
