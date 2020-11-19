@@ -36,7 +36,7 @@
   "dependencies": {
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@tofandel/uuid-base62": "^1.0.3",
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "base-x": "^3.0.8",
     "d3": "^6.2.0",
     "jquery": "^3.5.1",
