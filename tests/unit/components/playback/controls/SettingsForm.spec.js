@@ -952,6 +952,97 @@ describe("SettingsForm.vue", () => {
     );
     expect(wrapper.vm.customer_account_ids[1].user_ids.length).toEqual(2);
   });
+  test("When mounting SettingsForm on init, the Settings now recevies an event 'cancel-id' when the user was intenting to rename 'Lab User -1'  as 'Renamed User -1', add  validate that no change of nickname happend'", async () => {
+    const array_of_userid_1 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkBYr2An3dqHEyfRRE",
+        nickname: "User account -1",
+      },
+      {
+        user_id: 1,
+        uuid: "5FY8KwTsQaUJ2KzHJGetfE",
+        nickname: "User account -2",
+      },
+    ];
+    const array_of_userid_2 = [
+      {
+        user_id: 0,
+        uuid: "2VSckkkkk2An3dqHEyfRRE",
+        nickname: "Lab User -1",
+      },
+      {
+        user_id: 1,
+        uuid: "5FY8ghtsQaUJ2KzHJGetfE",
+        nickname: "Intern -1",
+      },
+    ];
+    const array_of_customerids = [
+      {
+        cust_id: 0,
+        uuid: "4vqyd62oARXqj9nRUNhtLQ",
+        api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+        nickname: "Customer account -1",
+        user_ids: array_of_userid_1,
+      },
+      {
+        cust_id: 1,
+        uuid: "6cBaidlJ84Ggc5JA7IYCgv",
+        api_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
+        nickname: "Customer account -2",
+        user_ids: array_of_userid_2,
+      },
+    ];
+    store.commit("settings/set_customer_account_ids", array_of_customerids);
+
+    wrapper = mount(ComponentToTest, {
+      store,
+      localVue,
+    });
+
+    const add_customer = {
+      cust_id: 2,
+      uuid: "5FY8KwTsQaUJ2KzHJGetfE",
+      api_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
+      nickname: "Customer account -3",
+      user_ids: [],
+    };
+    const add_user = {
+      user_id: 0,
+      uuid: "5FY8ghtsQaUJ2KzHJGetfE",
+      nickname: "New User -1",
+    };
+    /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
+    /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
+    wrapper.vm.onSaveCustomerId(add_customer);
+
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("");
+
+    wrapper.vm.onSaveUserId(add_user);
+
+    expect(wrapper.vm.entrykey_customer).toEqual("Customer account -3");
+    expect(wrapper.vm.entrykey_user).toEqual("New User -1");
+
+    await wrapper
+      .find("#input-dropdown-widgetcust-")
+      .setValue("Customer account -2");
+    Vue.nextTick(() => {
+      expect(wrapper.find("#user-0").text()).toEqual("Lab User  -1");
+      expect(wrapper.find("#user-1").text()).toEqual("Intern -1");
+    });
+
+    await wrapper.find("#input-dropdown-widgetuser-").setValue("Lab User -1");
+    wrapper.vm.onCancelUserId();
+
+    expect(wrapper.vm.customer_account_ids[1].user_ids[0].nickname).toEqual(
+      "Lab User -1"
+    );
+    expect(wrapper.vm.customer_account_ids[1].user_ids[1].nickname).toEqual(
+      "Intern -1"
+    );
+    expect(wrapper.vm.customer_account_ids[1].user_ids.length).toEqual(2);
+  });
   test("When mounting SettingsForm on init, the Settings now the 'Customer ID' value 'Customer account -1' is selected and validate the display of buttons", async () => {
     const array_of_userid_1 = [
       {
