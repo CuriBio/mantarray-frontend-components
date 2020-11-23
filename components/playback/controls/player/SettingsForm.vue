@@ -350,8 +350,6 @@ export default {
   },
   data() {
     return {
-      // customerid: "",
-      // userid: "",
       valid_customer_focus: false,
       valid_user_focus: false,
       customer_focus_id: 0,
@@ -451,8 +449,7 @@ export default {
           return this.customer_account_ids[this.customer_focus_id].user_ids
             .length;
         } else {
-          return 0; // this was introduced as vue/return-in-computed-property eslint specifies this is needed
-          // on JEST this appears as missing in code-coverage can't reach the above line via JEST testcase
+          return 0;
         }
       }
     },

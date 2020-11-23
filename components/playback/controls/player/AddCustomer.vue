@@ -90,7 +90,7 @@ export default {
   data() {
     return {
       uuid: "",
-      apikey: "",
+      api_key: "",
       nickname: "",
       error_text_uuid: "This field is required",
       error_text_api: "",
@@ -106,7 +106,7 @@ export default {
     },
     on_update_api: function (new_value) {
       this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
-      this.apikey = new_value;
+      this.api_key = new_value;
       this.enable_save_button();
     },
     on_update_nickname: function (new_value) {
@@ -131,7 +131,7 @@ export default {
       const add_customer = {
         cust_id: this.dataindex,
         uuid: this.uuid,
-        api_key: this.apikey,
+        api_key: this.api_key,
         nickname: this.nickname,
         user_ids: [],
       };

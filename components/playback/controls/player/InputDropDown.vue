@@ -35,7 +35,7 @@
         :style="'width: ' + input_width + 'px;'"
       >
         <b-form-input
-          :id="'input-dropdown-widget' + options_id"
+          :id="'input-dropdown-widget-' + options_id"
           v-model="input_dropdown_value_key"
           :list="'option_list' + options_id"
           :placeholder="placeholder"
