@@ -118,7 +118,7 @@ describe("SettingsForm.vue", () => {
       store,
       localVue,
     });
-    wrapper.vm.onCancelAddCustomerId();
+    wrapper.vm.onCancelAddCustomerId(); // Complete Code Coverage
     expect(
       wrapper.find("#input-dropdown-widget-cust-").element.value
     ).toStrictEqual("");
