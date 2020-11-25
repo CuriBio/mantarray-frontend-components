@@ -564,11 +564,12 @@ export default {
     }
   },
   methods: {
-    decoder(str) {
-      const textArea = document.createElement("textArea");
-      textArea.innerHTML = str;
-      return textArea.value;
-    },
+    // Eli (11/25/20): commenting out this method until we are ready to fully implement the feature
+    // decoder(str) {
+    //   const textArea = document.createElement("textArea");
+    //   textArea.innerHTML = str;
+    //   return textArea.value;
+    // },
     save_changes() {
       this.$store.commit(
         "settings/set_customer_details",

@@ -190,20 +190,21 @@ describe("SettingsForm.vue", () => {
     expect(store.getters["settings/customer_index"]).toStrictEqual(1); // this is the real data due to savechanges function Vuex stored data of customer_index
     expect(store.getters["settings/user_index"]).toStrictEqual(0); // this is the real data due to savechanges function Vuex stored data of user_index
   });
-  test("Given that the SettingsForm is loaded with Vuex, When the 'Key Icon' decoder is invoked, Then validate if the decoder string converts UNICODE value to key icon", async () => {
-    store.commit("settings/set_customer_account_ids", array_of_customer_ids);
-    store.commit("settings/set_customer_index", 0);
-    store.commit("settings/set_user_index", 0);
+  // Eli (11/25/20): commenting out this test until we are ready to implement the feature
+  // test("Given that the SettingsForm is loaded with Vuex, When the 'Key Icon' decoder is invoked, Then validate if the decoder string converts UNICODE value to key icon", async () => {
+  //   store.commit("settings/set_customer_account_ids", array_of_customer_ids);
+  //   store.commit("settings/set_customer_index", 0);
+  //   store.commit("settings/set_user_index", 0);
 
-    wrapper = mount(ComponentToTest, {
-      store,
-      localVue,
-    });
+  //   wrapper = mount(ComponentToTest, {
+  //     store,
+  //     localVue,
+  //   });
 
-    const predecoding_str = "&#x1F5DD; " + wrapper.vm.customers_options[0];
-    const customerid = "&#x1F5DD; " + wrapper.vm.entrykey_customer;
+  //   const predecoding_str = "&#x1F5DD; " + wrapper.vm.customers_options[0];
+  //   const customerid = "&#x1F5DD; " + wrapper.vm.entrykey_customer;
 
-    const postdecoding_str = wrapper.vm.decoder(predecoding_str);
-    expect(wrapper.vm.decoder(customerid)).toStrictEqual(postdecoding_str);
-  });
+  //   const postdecoding_str = wrapper.vm.decoder(predecoding_str);
+  //   expect(wrapper.vm.decoder(customerid)).toStrictEqual(postdecoding_str);
+  // });
 });
