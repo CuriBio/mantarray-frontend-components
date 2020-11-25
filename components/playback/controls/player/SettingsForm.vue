@@ -16,7 +16,7 @@
       <div class="div__settingsform-editor-input">
         <InputDropDown
           :title_label="label_customer"
-          :placeholder="keyplaceholder_customer"
+          :placeholder="key_placeholder_customer"
           :invalid_text="error_text_customer"
           :value.sync="entrykey_customer"
           :input_width="entry_width_customer"
@@ -102,7 +102,7 @@
     <div class="div__settingsform-user-input">
       <InputDropDown
         :title_label="label_user"
-        :placeholder="keyplaceholder_user"
+        :placeholder="key_placeholder_user"
         :invalid_text="error_text_user"
         :value.sync="entrykey_user"
         :input_width="entry_width_user"
@@ -133,7 +133,7 @@
           hide-header-close
         >
           <EditUser
-            :dialogdata="transiant_user_ids"
+            :dialogdata="transient_user_ids"
             :dataindex="user_focus_id"
             @cancel-id="onCancelUserId"
             @save-id="onUpdateUserId"
@@ -168,7 +168,7 @@
           hide-header-close
         >
           <AddUser
-            :dataindex="adduserid"
+            :dataindex="add_user_id"
             @cancel-id="onCancelAddUserId"
             @save-id="onSaveUserId"
           ></AddUser>
@@ -304,7 +304,7 @@
             ? 'span__settings-tool-tip-save-btn-txt-disable'
             : 'span__settings-tool-tip-save-btn-txt-enable',
         ]"
-        @click="savechanges()"
+        @click="save_changes()"
         >Save&nbsp;<wbr />Changes</span
       >
     </div>
@@ -354,14 +354,14 @@ export default {
       valid_user_focus: false,
       customer_focus_id: 0,
       user_focus_id: 0,
-      transiant_user_ids: [],
+      transient_user_ids: [],
       disable_edit_customer: true,
       disable_add_user: true,
       disable_edit_user: true,
 
       label_customer: "Customer Account ID",
       entrykey_customer: "",
-      keyplaceholder_customer: "Select the Customer",
+      key_placeholder_customer: "Select the Customer",
       error_text_customer: "An ID is required",
       entry_width_customer: 283,
       disallow_entry_customer: false,
@@ -369,7 +369,7 @@ export default {
 
       label_user: "User Account ID",
       entrykey_user: "",
-      keyplaceholder_user: "Select User",
+      key_placeholder_user: "Select User",
       error_text_user: "An ID is required",
       entry_width_user: 283,
       disallow_entry_user: false,
@@ -411,7 +411,7 @@ export default {
             ) {
               return [];
             } else {
-              const userlist = [];
+              const user_list = [];
               for (
                 let i = 0;
                 i <
@@ -419,12 +419,12 @@ export default {
                   .length;
                 i++
               ) {
-                userlist.push(
+                user_list.push(
                   this.customer_account_ids[this.customer_focus_id].user_ids[i]
                     .nickname
                 );
               }
-              return userlist;
+              return user_list;
             }
           }
         }
@@ -438,7 +438,7 @@ export default {
         return this.customer_account_ids.length;
       }
     },
-    adduserid: function () {
+    add_user_id: function () {
       if (this.customer_account_ids.length == 0) {
         return 0;
       } else {
@@ -526,12 +526,12 @@ export default {
             if (this.entrykey_user != "") {
               this.valid_user_focus = true;
               this.user_focus_id = user_focus.user_id;
-              this.transiant_user_ids = user_focus;
+              this.transient_user_ids = user_focus;
             }
           } else {
             this.on_empty_flag_user = true;
             this.user_focus_id = null;
-            this.transiant_user_ids = null;
+            this.transient_user_ids = null;
           }
           this.nicknames_list_user = this.users_options;
           this.modify_btn_states();
@@ -569,7 +569,7 @@ export default {
       textArea.innerHTML = str;
       return textArea.value;
     },
-    savechanges() {
+    save_changes() {
       this.$store.commit(
         "settings/set_customer_details",
         this.current_customerids
@@ -678,7 +678,7 @@ export default {
       }
       this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
       this.nicknames_list_user = this.users_options;
-      this.transiant_user_ids = null;
+      this.transient_user_ids = null;
       this.user_focus_id = null;
       this.entrykey_user = "";
     },

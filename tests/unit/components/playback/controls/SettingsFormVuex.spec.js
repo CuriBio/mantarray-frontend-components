@@ -52,7 +52,7 @@ describe("SettingsForm.vue", () => {
       nickname: "Intern -1",
     },
   ];
-  const array_of_customerids = [
+  const array_of_customer_ids = [
     {
       cust_id: 0,
       uuid: "4vqyd62oARXqj9nRUNhtLQ",
@@ -68,7 +68,7 @@ describe("SettingsForm.vue", () => {
       user_ids: array_of_userid_2,
     },
   ];
-  const array_of_special_userids = [
+  const array_of_customer_ids_missing_user_ids = [
     {
       cust_id: 0,
       uuid: "4vqyd62oARXqj9nRUNhtLQ",
@@ -76,7 +76,7 @@ describe("SettingsForm.vue", () => {
       nickname: "Customer account -1",
     },
   ];
-  const array_of_special_customerid_null_userids = [
+  const array_of_customerid_null_missing_user_ids = [
     {
       cust_id: 0,
       uuid: "4vqyd62oARXqj9nRUNhtLQ",
@@ -99,7 +99,7 @@ describe("SettingsForm.vue", () => {
   });
 
   test("Given that the SettingsForm is loaded with Vuex store, When user action which generates an event 'cancel-id', Then the Vuex Store is not modified", async () => {
-    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_account_ids", array_of_customer_ids);
     store.commit("settings/set_customer_index", 1);
 
     wrapper = mount(ComponentToTest, {
@@ -109,11 +109,11 @@ describe("SettingsForm.vue", () => {
 
     wrapper.vm.onCancelCustomerId();
     expect(store.getters["settings/customer_account_ids"]).toStrictEqual(
-      array_of_customerids
+      array_of_customer_ids
     );
     expect(store.getters["settings/customer_index"]).toStrictEqual(1); // this is the real data due to savechanges function Vuex stored data of customer_index
   });
-  test("Given that the SettingsForm is loaded with Vuex store, When there is no data in Vuex, Then <empty> is set in the Input of Customer ID and User ID", () => {
+  test("Given that no data are in the Vuex store, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", () => {
     wrapper = mount(ComponentToTest, {
       store,
       localVue,
@@ -126,8 +126,11 @@ describe("SettingsForm.vue", () => {
       wrapper.find("#input-dropdown-widget-user-").element.value
     ).toStrictEqual("");
   });
-  test("Given that the SettingsForm is loaded with Vuex store, When there is no data in the user_ids, Customer Index/User Index is not set in the Vuex, Then <empty> is set in the Input of  Customer ID/User ID", () => {
-    store.commit("settings/set_customer_account_ids", array_of_special_userids);
+  test("Given that badly formed data with missing user_ids are in the Vuex store, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", () => {
+    store.commit(
+      "settings/set_customer_account_ids",
+      array_of_customer_ids_missing_user_ids
+    );
     wrapper = mount(ComponentToTest, {
       store,
       localVue,
@@ -139,10 +142,10 @@ describe("SettingsForm.vue", () => {
       wrapper.find("#input-dropdown-widget-user-").element.value
     ).toStrictEqual("");
   });
-  test("Given that the SettingsForm is loaded with Vuex with different set of null user_ids from store, When there is no data in the user_ids Customer Index/User Index is not set in the Vuex, Then <empty> is set in the Input of  Customer ID/User ID", async () => {
+  test("Given that badly formed data with empty customer account nickname with missing user_ids in the Vuex, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", async () => {
     store.commit(
       "settings/set_customer_account_ids",
-      array_of_special_customerid_null_userids
+      array_of_customerid_null_missing_user_ids
     );
     store.commit("settings/set_customer_index", 0);
     wrapper = mount(ComponentToTest, {
@@ -158,7 +161,7 @@ describe("SettingsForm.vue", () => {
     ).toStrictEqual("");
   });
   test("Given that the SettingsForm is loaded with Vuex with 'Customer account -1' 'User account -1', When user decides to modify Customer ID to 'Customer account -2' 'Lab User -1', Then validate 'Save Changes' updates validate Vuex store with is updated index values", async () => {
-    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_account_ids", array_of_customer_ids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
 
@@ -177,7 +180,10 @@ describe("SettingsForm.vue", () => {
 
     await wrapper.vm.$nextTick(); // wait for update
 
-    wrapper.vm.savechanges();
+    const save_changes = wrapper.find(
+      ".span__settings-tool-tip-save-btn-txt-enable"
+    );
+    await save_changes.trigger("click");
 
     await wrapper.vm.$nextTick(); // wait for update
 
@@ -185,7 +191,7 @@ describe("SettingsForm.vue", () => {
     expect(store.getters["settings/user_index"]).toStrictEqual(0); // this is the real data due to savechanges function Vuex stored data of user_index
   });
   test("Given that the SettingsForm is loaded with Vuex, When the 'Key Icon' decoder is invoked, Then validate if the decoder string converts UNICODE value to key icon", async () => {
-    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_account_ids", array_of_customer_ids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
 
