@@ -6,8 +6,8 @@ import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
-  array_of_customerids,
-  array_of_customerids_one,
+  array_of_customer_ids,
+  array_of_customer_ids_one,
 } from "./SettingsFormCustomerData.js";
 
 let wrapper = null;
@@ -33,7 +33,7 @@ describe("SettingsForm.vue", () => {
   afterEach(() => wrapper.destroy());
 
   test("When the SettingsForm has two Customer ID in the Vuex, Then validate that dropDown of customer contains the nicknames 'Customer account -1' and 'Customer account -2'", () => {
-    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_account_ids", array_of_customer_ids);
     wrapper = mount(ComponentToTest, {
       store,
       localVue,
@@ -42,7 +42,7 @@ describe("SettingsForm.vue", () => {
     expect(wrapper.find("#cust-1").text()).toStrictEqual("Customer account -2");
   });
   test("When the SettingsForm has two Customer ID and two User ID per Customer ID in the Vuex, Then validate that dropDown of user contains the nicknames 'Lab User  -1' and 'Intern -1'", async () => {
-    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_account_ids", array_of_customer_ids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
     wrapper = mount(ComponentToTest, {
@@ -57,7 +57,10 @@ describe("SettingsForm.vue", () => {
     expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
   });
   test("When the SettingsForm has two Customer ID and one User ID for first Customer ID and no User ID for second Customer ID in the Vuex, Then validate that the User ID for second Customer ID does not exist", () => {
-    store.commit("settings/set_customer_account_ids", array_of_customerids_one);
+    store.commit(
+      "settings/set_customer_account_ids",
+      array_of_customer_ids_one
+    );
     store.commit("settings/set_customer_index", 1);
     wrapper = mount(ComponentToTest, {
       store,
@@ -68,7 +71,7 @@ describe("SettingsForm.vue", () => {
     expect(wrapper.find("#user-1").exists()).toBe(false);
   });
   test("When the SettingsForm has two Customer ID and two User ID per Customer ID in the Vuex, Then validate that dropDown of user is update with relevant values when we toggle between 'Customer account -1' to 'Customer account -2", async () => {
-    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    store.commit("settings/set_customer_account_ids", array_of_customer_ids);
 
     wrapper = mount(ComponentToTest, {
       store,

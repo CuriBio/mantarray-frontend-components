@@ -1,4 +1,4 @@
-export const array_of_userid_1 = [
+export const array_of_user_ids_1 = [
   {
     user_id: 0,
     uuid: "2VSckkBYr2An3dqHEyfRRE",
@@ -11,7 +11,7 @@ export const array_of_userid_1 = [
   },
 ];
 
-export const array_of_userid_2 = [
+export const array_of_user_ids_2 = [
   {
     user_id: 0,
     uuid: "2VSckkkkk2An3dqHEyfRRE",
@@ -24,30 +24,30 @@ export const array_of_userid_2 = [
   },
 ];
 
-export const array_of_customerids = [
+export const array_of_customer_ids = [
   {
     cust_id: 0,
     uuid: "4vqyd62oARXqj9nRUNhtLQ",
     api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
     nickname: "Customer account -1",
-    user_ids: array_of_userid_1,
+    user_ids: array_of_user_ids_1,
   },
   {
     cust_id: 1,
     uuid: "6cBaidlJ84Ggc5JA7IYCgv",
     api_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
     nickname: "Customer account -2",
-    user_ids: array_of_userid_2,
+    user_ids: array_of_user_ids_2,
   },
 ];
 
-export const array_of_customerids_one = [
+export const array_of_customer_ids_one = [
   {
     cust_id: 0,
     uuid: "4vqyd62oARXqj9nRUNhtLQ",
     api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
     nickname: "Customer account -1",
-    user_ids: array_of_userid_1,
+    user_ids: array_of_user_ids_1,
   },
   {
     cust_id: 1,

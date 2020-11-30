@@ -4,6 +4,7 @@ import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { array_of_customer_ids } from "./SettingsFormCustomerData.js";
 
 let wrapper = null;
 
@@ -15,23 +16,6 @@ let NuxtStore;
 let store;
 
 describe("SettingsForm.vue", () => {
-  const array_of_userid_1 = [
-    {
-      user_id: 0,
-      uuid: "2VSckkBYr2An3dqHEyfRRE",
-      nickname: "User account -1",
-    },
-  ];
-  const array_of_customer_ids = [
-    {
-      cust_id: 0,
-      uuid: "4vqyd62oARXqj9nRUNhtLQ",
-      api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-      nickname: "Customer account -1",
-      user_ids: array_of_userid_1,
-    },
-  ];
-
   const array_of_customer_ids_no_user_ids = [
     {
       cust_id: 0,
@@ -136,7 +120,7 @@ describe("SettingsForm.vue", () => {
   afterEach(() => {
     wrapper.destroy();
   });
-  describe("Given Vuex has a valid customer account called as 'Customer account -1' with a user account of 'User account -1' but no customer index or user index selected, and the component has been mounted", () => {
+  describe("Given Vuex has a valid customer account called as 'Customer account -1' with a user account of 'User account -1' but no customer index or user index selected", () => {
     beforeEach(() => {
       // commit a deep copy of the template object to the Vuex store using JSON stringify/parse, as it may be modified during tests. https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
       store.commit(
