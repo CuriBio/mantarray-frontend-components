@@ -59,7 +59,7 @@ describe("InputDropDown.vue", () => {
       store,
       localVue,
     });
-    const target_input = wrapper.find("#input-dropdown-widget");
+    const target_input = wrapper.find("#input-dropdown-widget-");
     expect(target_input.attributes().placeholder).toStrictEqual(
       "Select Customer ID"
     );
@@ -77,7 +77,7 @@ describe("InputDropDown.vue", () => {
       localVue,
     });
     const customer = "Customer Account 1"; // new Customer
-    const input_widget = wrapper.find("#input-dropdown-widget");
+    const input_widget = wrapper.find("#input-dropdown-widget-");
     input_widget.element.value = customer;
     await input_widget.trigger("input");
     const parent_id_events = wrapper.emitted("update:value");
@@ -123,7 +123,7 @@ describe("InputDropDown.vue", () => {
       localVue,
     });
     const userdata = "Demo Account"; // some data
-    const input_widget = wrapper.find("#input-dropdown-widget");
+    const input_widget = wrapper.find("#input-dropdown-widget-");
     expect(input_widget.html()).toContain("disabled");
     input_widget.element.value = userdata;
     await input_widget.trigger("input");

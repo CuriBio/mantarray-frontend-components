@@ -35,9 +35,9 @@
         :style="'width: ' + input_width + 'px;'"
       >
         <b-form-input
-          id="input-dropdown-widget"
+          :id="'input-dropdown-widget-' + options_id"
           v-model="input_dropdown_value_key"
-          list="option_list"
+          :list="'option_list' + options_id"
           :placeholder="placeholder"
           :disabled="disabled"
           class="w-100 h-100 edit-id"
@@ -48,7 +48,10 @@
             color: #ffffff;
           "
         ></b-form-input>
-        <datalist v-if="dropdown_options.length" id="option_list">
+        <datalist
+          v-if="dropdown_options.length"
+          :id="'option_list' + options_id"
+        >
           <option v-for="item in dropdown_options" :id="item.id" :key="item.id">
             {{ item.name }}
           </option>
@@ -83,6 +86,7 @@ export default {
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     options_text: { type: Array, required: true },
+    options_id: { type: String, default: "" }, // This prop is utilized by the parent component
     message_if_blank: { type: Boolean, default: false }, // when set to true, will display a simple feedback
   },
   data() {
@@ -99,7 +103,7 @@ export default {
         // the options_text is required true so a minimal of one element is needed
         // if suppose options_text.length is zero(0) then return doesn't change its []
         const name = {
-          id: "opt-" + i,
+          id: this.options_id + i,
           name: this.options_text[i],
         };
         list.push(name);
@@ -124,6 +128,9 @@ export default {
       // any modification to add logic might impact depedent functionalities, request to consult Eli or Raghu
       this.$emit("update:value", this.input_dropdown_value_key);
     },
+    value: function () {
+      this.input_dropdown_value_key = this.value;
+    },
   },
   methods: {},
 };
@@ -134,7 +141,7 @@ export default {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: rgb(17, 17, 17);
+  background: rgb(0, 0, 0);
   position: absolute;
   top: 0px;
   left: 0px;
@@ -163,8 +170,8 @@ export default {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
+  font-size: 19px;
+  color: rgb(255, 255, 255);
   text-align: center;
   z-index: 25;
 }

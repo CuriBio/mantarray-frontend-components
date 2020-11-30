@@ -5,54 +5,26 @@
       <!--  original mockflow ID : cmpD6f871b37d5c9f6c0c0715f4f6ab99523 -->
       <span class="span__settingsform-title">Settings</span>
       <!-- original mockflow ID : cmpD698ee7f9b579fcf64ee501697ea75af9 -->
-      <span class="span__settingsform-customer-account-id"
-        >Customer&nbsp;<wbr />Account&nbsp;<wbr />ID</span
-      >
+
       <!-- original mockflow ID : cmpDd8b22bfae4d2a9945a94972384dacecd -->
       <span class="span__settingsform-customer-sub-title"
         >Select&nbsp;<wbr />Customer&nbsp;<wbr />ID</span
       >
+
       <!-- original mockflow ID : cmpD5a52d34b430ce573300ed527a7b6a37d -->
-      <div class="div__settingsform-editor-icon">
-        <!-- original mockflow ID : cmpD5a52d34b430ce573300ed527a7b6a37d_txt -->
-        <span class="span__settingsform-editor-icon-txt">
-          <!-- <FontAwesomeIcon :icon="['fa', 'key']" /> -->
-          &#x1F5DD;
-        </span>
-      </div>
+
       <div class="div__settingsform-editor-input">
-        <div
-          class="div__settingsform-editor-input-editor"
-          :class="[
-            !valid_customer_focus
-              ? 'div__settingsform-editor-customer-input-editor--invalid'
-              : 'div__settingsform-editor-customer-input-editor--valid',
-          ]"
-        >
-          <b-form-input
-            id="input-customer"
-            v-model="customerid"
-            list="customer_list"
-            placeholder="Select Customer Account"
-            class="w-100 h-100 edit-id"
-            style="
-              border-radius: 0;
-              color: rgb(255, 255, 255);
-              background-color: #1c1c1c;
-              border: 0px;
-              color: #ffffff;
-            "
-          ></b-form-input>
-          <datalist v-if="customers_options.length" id="customer_list">
-            <option
-              v-for="customer in customers_options"
-              :id="customer.id"
-              :key="customer.name"
-            >
-              {{ decoder(customer.name) }}
-            </option>
-          </datalist>
-        </div>
+        <InputDropDown
+          :title_label="label_customer"
+          :placeholder="key_placeholder_customer"
+          :invalid_text="error_text_customer"
+          :value.sync="entrykey_customer"
+          :input_width="entry_width_customer"
+          :disabled="disallow_entry_customer"
+          :options_text="nicknames_list_customer"
+          :message_if_blank="on_empty_flag_customer"
+          :options_id="'cust-'"
+        ></InputDropDown>
       </div>
       <div class="div__settingsform-customer-edit-btn" width="88" height="45">
         <span
@@ -72,13 +44,13 @@
             hide-header
             hide-header-close
           >
-            <PopDialogForm
-              category="Edit Customer"
+            <EditCustomer
               :dialogdata="customer_account_ids[customer_focus_id]"
               :dataindex="customer_focus_id"
+              @cancel-id="onCancelCustomerId"
               @save-id="onUpdateCustomerId"
               @delete-id="onDeleteCustomerId"
-            ></PopDialogForm>
+            ></EditCustomer>
           </b-modal>
         </span>
         <span
@@ -106,11 +78,11 @@
           hide-header
           hide-header-close
         >
-          <PopDialogForm
-            category="Add Customer"
+          <AddCustomer
             :dataindex="addcustomerid"
+            @cancel-id="onCancelAddCustomerId"
             @save-id="onSaveCustomerId"
-          ></PopDialogForm>
+          ></AddCustomer>
         </b-modal>
       </span>
     </div>
@@ -121,43 +93,24 @@
     <canvas class="canvas__settings-user-seperator" width="510" height="20">
     </canvas>
     <!-- original Mockflow ID : cmpD36f04653a57e9f5f716e9c5a7405b38e -->
-    <span class="span__settingsform-user-account-title"
-      >User&nbsp;<wbr />Account&nbsp;<wbr />ID</span
-    >
     <!--  original Mockflow ID : cmpDa220fe036f45bb8db289301ce0d9f6cc -->
     <span class="span__settingsform-user-account-sub-title"
       >Select&nbsp;<wbr />User&nbsp;<wbr />ID</span
     >
+
     <!-- original MockFlow ID : cmpD289dc218dd29cfe1f9a4330b16e40c6f -->
     <div class="div__settingsform-user-input">
-      <!-- original Mockflow ID : cmpD289dc218dd29cfe1f9a4330b16e40c6f_txt -->
-      <div
-        class="div__settingsform-user-input-editor"
-        :class="[
-          !valid_user_focus
-            ? 'div__settingsform-editor-user-input-editor--invalid'
-            : 'div__settingsform-editor-user-input-editor--valid',
-        ]"
-      >
-        <b-form-input
-          id="input-user"
-          v-model="userid"
-          list="user_list"
-          placeholder="Select User"
-          class="w-100 h-100 edit-id"
-          style="
-            border-radius: 0;
-            background-color: #1c1c1c;
-            border: 0px;
-            color: #ffffff;
-          "
-        ></b-form-input>
-        <datalist v-if="users_options.length" id="user_list">
-          <option v-for="user in users_options" :id="user.id" :key="user.id">
-            {{ user.name }}
-          </option>
-        </datalist>
-      </div>
+      <InputDropDown
+        :title_label="label_user"
+        :placeholder="key_placeholder_user"
+        :invalid_text="error_text_user"
+        :value.sync="entrykey_user"
+        :input_width="entry_width_user"
+        :disabled="disallow_entry_user"
+        :options_text="nicknames_list_user"
+        :message_if_blank="on_empty_flag_user"
+        :options_id="'user-'"
+      ></InputDropDown>
     </div>
     <!-- original Mockflow ID : cmpD4c6b34524a3a014988f42e90a7cc071c -->
     <div class="div__settingsform-user-input-edit-btn" width="98" height="45">
@@ -179,13 +132,13 @@
           hide-header
           hide-header-close
         >
-          <PopDialogForm
-            category="Edit User"
-            :dialogdata="transiant_user_ids"
+          <EditUser
+            :dialogdata="transient_user_ids"
             :dataindex="user_focus_id"
+            @cancel-id="onCancelUserId"
             @save-id="onUpdateUserId"
             @delete-id="onDeleteUserId"
-          ></PopDialogForm>
+          ></EditUser>
         </b-modal>
       </span>
       <span
@@ -214,11 +167,11 @@
           hide-header
           hide-header-close
         >
-          <PopDialogForm
-            category="Add User"
-            :dataindex="adduserid"
+          <AddUser
+            :dataindex="add_user_id"
+            @cancel-id="onCancelAddUserId"
             @save-id="onSaveUserId"
-          ></PopDialogForm>
+          ></AddUser>
         </b-modal>
       </span>
       <span
@@ -351,7 +304,7 @@
             ? 'span__settings-tool-tip-save-btn-txt-disable'
             : 'span__settings-tool-tip-save-btn-txt-enable',
         ]"
-        @click="savechanges()"
+        @click="save_changes()"
         >Save&nbsp;<wbr />Changes</span
       >
     </div>
@@ -374,8 +327,11 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
-// import "bootstrap/dist/css/bootstrap.min.css";
-import PopDialogForm from "@/components/playback/controls/player/PopDialogForm.vue";
+import AddCustomer from "@/components/playback/controls/player/AddCustomer.vue";
+import EditCustomer from "@/components/playback/controls/player/EditCustomer.vue";
+import AddUser from "@/components/playback/controls/player/AddUser.vue";
+import EditUser from "@/components/playback/controls/player/EditUser.vue";
+import InputDropDown from "@/components/playback/controls/player/InputDropDown.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -384,19 +340,40 @@ Vue.component("BFormInput", BFormInput);
 
 export default {
   name: "SettingsForm",
-  components: { PopDialogForm, FontAwesomeIcon },
+  components: {
+    FontAwesomeIcon,
+    AddCustomer,
+    EditCustomer,
+    AddUser,
+    EditUser,
+    InputDropDown,
+  },
   data() {
     return {
-      customerid: "",
-      userid: "",
       valid_customer_focus: false,
       valid_user_focus: false,
       customer_focus_id: 0,
       user_focus_id: 0,
-      transiant_user_ids: [],
+      transient_user_ids: [],
       disable_edit_customer: true,
       disable_add_user: true,
       disable_edit_user: true,
+
+      label_customer: "Customer Account ID",
+      entrykey_customer: "",
+      key_placeholder_customer: "Select the Customer",
+      error_text_customer: "An ID is required",
+      entry_width_customer: 283,
+      disallow_entry_customer: false,
+      on_empty_flag_customer: true,
+
+      label_user: "User Account ID",
+      entrykey_user: "",
+      key_placeholder_user: "Select User",
+      error_text_user: "An ID is required",
+      entry_width_user: 283,
+      disallow_entry_user: false,
+      on_empty_flag_user: true,
     };
   },
   computed: {
@@ -416,17 +393,13 @@ export default {
         const list = [];
 
         for (let i = 0; i < this.customer_account_ids.length; i++) {
-          const customer = {
-            id: "cust-" + i,
-            name: this.customer_account_ids[i].nickname,
-          };
-          list.push(customer);
+          list.push(this.customer_account_ids[i].nickname);
         }
         return list;
       }
     },
     users_options: function () {
-      if (this.customerid != "") {
+      if (this.entrykey_customer != "") {
         if (this.customer_account_ids.length != 0) {
           if (
             this.customer_account_ids[this.customer_focus_id].user_ids !==
@@ -438,7 +411,7 @@ export default {
             ) {
               return [];
             } else {
-              const userlist = [];
+              const user_list = [];
               for (
                 let i = 0;
                 i <
@@ -446,18 +419,15 @@ export default {
                   .length;
                 i++
               ) {
-                const user = {
-                  id: "user-" + i,
-                  name: this.customer_account_ids[this.customer_focus_id]
-                    .user_ids[i].nickname,
-                };
-                userlist.push(user);
+                user_list.push(
+                  this.customer_account_ids[this.customer_focus_id].user_ids[i]
+                    .nickname
+                );
               }
-              return userlist;
+              return user_list;
             }
           }
         }
-        return [];
       }
       return [];
     },
@@ -468,7 +438,7 @@ export default {
         return this.customer_account_ids.length;
       }
     },
-    adduserid: function () {
+    add_user_id: function () {
       if (this.customer_account_ids.length == 0) {
         return 0;
       } else {
@@ -485,97 +455,122 @@ export default {
     },
   },
   watch: {
-    customerid: function () {
-      const customer_focus = this.customer_account_ids.find(
-        (customer) => customer.nickname === this.customerid
-      );
-      this.valid_customer_focus = false;
-      this.valid_user_focus = false;
-      if (customer_focus != null) {
-        this.customer_focus_id = customer_focus.cust_id;
-        const new_user_ids = customer_focus.user_ids;
-        this.valid_customer_focus = true;
-        if (this.user_options !== undefined) {
-          this.users_options.splice(0, this.users_options.length);
-          for (let i = 0; i < new_user_ids.length; i++) {
-            const user = {
-              id: "user-" + i,
-              name: new_user_ids[i].nickname,
-            };
-            this.users_options.push(user);
+    entrykey_customer: function () {
+      if (this.entrykey_customer == "") {
+        this.on_empty_flag_customer = true;
+      } else {
+        const nickname_focus = this.nicknames_list_customer.indexOf(
+          this.entrykey_customer
+        );
+        if (nickname_focus == -1) {
+          // logic of "Add New Customer ID" in Settings
+          this.on_empty_flag_customer = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
+          this.entrykey_user = "";
+        } else {
+          // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
+          this.on_empty_flag_customer = false;
+          const customer_focus = this.customer_account_ids.find(
+            (customer) => customer.nickname === this.entrykey_customer
+          );
+          this.valid_customer_focus = false;
+          this.valid_user_focus = false;
+          if (customer_focus != null) {
+            this.customer_focus_id = customer_focus.cust_id;
+            this.valid_customer_focus = true;
+            if (this.nicknames_list_user !== undefined) {
+              this.nicknames_list_user.splice(
+                0,
+                this.nicknames_list_user.length
+              );
+              this.nicknames_list_user = this.users_options;
+            }
+            this.entrykey_user = "";
+            this.nicknames_list_user = this.users_options;
           }
+          this.entrykey_user = "";
+          if (this.created_flag == true) {
+            this.created_flag = false;
+            this.entrykey_user = this.customer_account_ids[
+              this.customer_index
+            ].user_ids[this.user_index].nickname;
+          }
+          this.modify_btn_states();
         }
-        this.userid = "";
-      }
-      this.userid = "";
-      if (this.created_flag == true) {
-        this.created_flag = false;
-        this.userid = this.customer_account_ids[this.customer_index].user_ids[
-          this.user_index
-        ].nickname;
       }
       this.modify_btn_states();
     },
-    userid: function () {
-      const customer_focus = this.customer_account_ids.find(
-        (customer) => customer.nickname === this.customerid
-      );
-      if (customer_focus != null) {
-        const user_focus = customer_focus.user_ids.find(
-          (user) => user.nickname === this.userid
+    entrykey_user: function () {
+      if (this.entrykey_customer == "") {
+        this.on_empty_flag_user = true;
+      } else {
+        const nickname_focus = this.nicknames_list_customer.indexOf(
+          this.entrykey_customer
         );
-        this.valid_user_focus = false;
-        if (user_focus != null) {
-          if (this.userid != "") {
-            this.valid_user_focus = true;
-            this.user_focus_id = user_focus.user_id;
-            this.transiant_user_ids = user_focus;
-          } else {
-            this.user_focus_id = null;
-            this.transiant_user_ids = null;
-          }
+        if (nickname_focus == -1) {
+          // logic of "Add New Customer ID" in Settings
+          this.on_empty_flag_user = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
+          this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
+          this.nicknames_list_user = [];
+          this.modify_btn_states();
         } else {
-          this.user_focus_id = null;
-          this.transiant_user_ids = null;
-        }
-
-        this.users_options.splice(0, this.users_options.length);
-        for (let i = 0; i < customer_focus.user_ids.length; i++) {
-          const user = {
-            id: "user-" + i,
-            name: customer_focus.user_ids[i].nickname,
-          };
-          this.users_options.push(user);
+          // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
+          this.on_empty_flag_user = false;
+          const customer_focus = this.customer_account_ids.find(
+            (customer) => customer.nickname === this.entrykey_customer
+          );
+          const user_focus = customer_focus.user_ids.find(
+            (user) => user.nickname === this.entrykey_user
+          );
+          this.valid_user_focus = false;
+          if (user_focus != null) {
+            if (this.entrykey_user != "") {
+              this.valid_user_focus = true;
+              this.user_focus_id = user_focus.user_id;
+              this.transient_user_ids = user_focus;
+            }
+          } else {
+            this.on_empty_flag_user = true;
+            this.user_focus_id = null;
+            this.transient_user_ids = null;
+          }
+          this.nicknames_list_user = this.users_options;
+          this.modify_btn_states();
         }
       }
-      this.modify_btn_states();
     },
   },
   created: function () {
+    this.nicknames_list_customer = this.customers_options;
+    this.nicknames_list_user = this.users_options;
     if (this.customer_index != null) {
-      this.customerid = this.customer_account_ids[this.customer_index].nickname;
+      this.entrykey_customer = this.customer_account_ids[
+        this.customer_index
+      ].nickname;
       this.valid_customer_focus = true;
       this.customer_focus_id = this.customer_index;
       this.disable_edit_customer = false;
       this.disable_add_user = false;
       if (this.user_index != null) {
-        this.userid = this.customer_account_ids[this.customer_index].user_ids[
-          this.user_index
-        ].nickname;
+        this.entrykey_user = this.customer_account_ids[
+          this.customer_index
+        ].user_ids[this.user_index].nickname;
         this.valid_user_focus = true;
         this.user_focus_id = this.user_index;
         this.disable_edit_user = false;
         this.created_flag = true;
+        this.on_empty_flag_user = false;
       }
+      this.on_empty_flag_customer = false;
     }
   },
   methods: {
-    decoder(str) {
-      const textArea = document.createElement("textArea");
-      textArea.innerHTML = str;
-      return textArea.value;
-    },
-    savechanges() {
+    // Eli (11/25/20): commenting out this method until we are ready to fully implement the feature
+    // decoder(str) {
+    //   const textArea = document.createElement("textArea");
+    //   textArea.innerHTML = str;
+    //   return textArea.value;
+    // },
+    save_changes() {
       this.$store.commit(
         "settings/set_customer_details",
         this.current_customerids
@@ -583,12 +578,24 @@ export default {
       this.$store.commit("settings/set_customer_index", this.customer_focus_id);
       this.$store.commit("settings/set_user_index", this.user_focus_id);
     },
+    onCancelAddCustomerId() {
+      this.$bvModal.hide("add-customer");
+    },
     onSaveCustomerId(add_customer) {
-      this.customerid = add_customer.nickname;
+      this.$bvModal.hide("add-customer");
       this.customer_account_ids.push(add_customer);
+      this.nicknames_list_customer.splice(
+        0,
+        this.nicknames_list_customer.length
+      );
+      this.nicknames_list_customer = this.customers_options;
+      this.entrykey_customer = add_customer.nickname;
+    },
+    onCancelCustomerId() {
+      this.$bvModal.hide("edit-customer");
     },
     onUpdateCustomerId(edit_customer) {
-      this.customerid = edit_customer.nickname;
+      this.$bvModal.hide("edit-customer");
       this.customer_account_ids[edit_customer.cust_id].cust_id =
         edit_customer.cust_id;
       this.customer_account_ids[edit_customer.cust_id].uuid =
@@ -599,39 +606,49 @@ export default {
         edit_customer.nickname;
       this.customer_account_ids[edit_customer.cust_id].user_ids =
         edit_customer.user_ids;
+      this.nicknames_list_customer.splice(
+        0,
+        this.nicknames_list_customer.length
+      );
+      this.nicknames_list_customer = this.customers_options;
+      this.entrykey_customer = edit_customer.nickname;
     },
     onDeleteCustomerId(delete_customer) {
+      this.$bvModal.hide("edit-customer");
       /* Received delete_customer remove from the array */
       this.customer_account_ids.splice(delete_customer.cust_id, 1);
       /* Inside the SettingsVue page the index value has to be reset to startup value of 0 */
       this.customer_focus_id = 0;
-      /* Now that cust_id element is deleted we need to update all the right side customer cust_id value reduced by 1 */
-      if (this.customer_account_ids.length > 1) {
-        for (
-          let i = delete_customer.cust_id;
-          i < this.customer_account_ids.length;
-          i++
-        ) {
-          this.customer_account_ids[i].cust_id =
-            this.customer_account_ids[i].cust_id - 1;
-        }
+      this.user_focus_id = 0;
+      /* Now that customer id element is deleted we need to update all the right side customer cust_id index starting from 0 */
+      for (let i = 0; i < this.customer_account_ids.length; i++) {
+        this.customer_account_ids[i].cust_id = i;
       }
-      this.customerid = "";
-      this.userid = "";
+      this.nicknames_list_customer.splice(
+        0,
+        this.nicknames_list_customer.length
+      );
+      this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
+      this.nicknames_list_customer = this.customers_options;
+      this.nicknames_list_user = this.users_options;
+      this.entrykey_customer = "";
+      this.entrykey_user = "";
+    },
+    onCancelAddUserId() {
+      this.$bvModal.hide("add-user");
     },
     onSaveUserId(add_user) {
-      this.userid = add_user.nickname;
+      this.$bvModal.hide("add-user");
+      this.entrykey_user = add_user.nickname;
       this.customer_account_ids[this.customer_focus_id].user_ids.push(add_user);
-      const user = {
-        id:
-          "user-" +
-          this.customer_account_ids[this.customer_focus_id].user_ids.length,
-        name: add_user.nickname,
-      };
-      this.users_options.push(user);
+      this.users_options.push(add_user.nickname);
+    },
+    onCancelUserId() {
+      this.$bvModal.hide("edit-user");
     },
     onUpdateUserId(edit_user) {
-      this.userid = edit_user.nickname;
+      this.$bvModal.hide("edit-user");
+      this.entrykey_user = edit_user.nickname;
       this.customer_account_ids[this.customer_focus_id].user_ids[
         edit_user.user_id
       ].user_id = edit_user.user_id;
@@ -641,25 +658,30 @@ export default {
       this.customer_account_ids[this.customer_focus_id].user_ids[
         edit_user.user_id
       ].nickname = edit_user.nickname;
+      this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
+      this.nicknames_list_user = this.users_options;
     },
     onDeleteUserId(delete_user) {
+      this.$bvModal.hide("edit-user");
       this.customer_account_ids[this.customer_focus_id].user_ids.splice(
         delete_user.user_id,
         1
       );
-      /* Now that cust_id element is deleted we need to update all the right side customer cust_id value reduced by 1 */
+      /* Now that user_id element is deleted we need to update all the user ids without holes or starting index 0 */
       for (
-        let i = delete_user.user_id;
+        let i = 0;
         i < this.customer_account_ids[this.customer_focus_id].user_ids.length;
         i++
       ) {
-        this.customer_account_ids[this.customer_focus_id].user_ids[i].user_id =
-          this.customer_account_ids[this.customer_focus_id].user_ids[i]
-            .user_id - 1;
+        this.customer_account_ids[this.customer_focus_id].user_ids[
+          i
+        ].user_id = i;
       }
-      this.transiant_user_ids = null;
+      this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
+      this.nicknames_list_user = this.users_options;
+      this.transient_user_ids = null;
       this.user_focus_id = null;
-      this.userid = "";
+      this.entrykey_user = "";
     },
     modify_btn_states() {
       const num_of_customers = this.customer_account_ids.length;
@@ -669,7 +691,7 @@ export default {
           .user_ids.length;
         if (num_of_userids > 0) {
           const customer_focus = this.customer_account_ids.find(
-            (customer) => customer.nickname === this.customerid
+            (customer) => customer.nickname === this.entrykey_customer
           );
           if (customer_focus != null) {
             const new_user_ids = customer_focus.user_ids;
@@ -678,7 +700,7 @@ export default {
             this.disable_edit_user = true;
             if (new_user_ids != undefined) {
               const user_focus = customer_focus.user_ids.find(
-                (user) => user.nickname === this.userid
+                (user) => user.nickname === this.entrykey_user
               );
               if (user_focus != null) {
                 this.disable_edit_customer = false;
@@ -801,7 +823,7 @@ export default {
   position: absolute;
   width: 285px;
   height: 45px;
-  top: 112.422px;
+  top: 70.422px;
   left: calc(962.145px - 734.511px);
   padding: 0px;
   visibility: visible;
@@ -1076,9 +1098,9 @@ export default {
   line-height: 100%;
   transform: rotate(0deg);
   position: absolute;
-  width: 285px;
+  width: 253px;
   height: 45px;
-  top: 291.422px;
+  top: 245.422px;
   left: calc(962.145px - 734.511px);
   padding: 5px;
   visibility: visible;

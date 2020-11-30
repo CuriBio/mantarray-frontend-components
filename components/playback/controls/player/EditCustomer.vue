@@ -28,7 +28,7 @@
         :title_label="'API Key (Optional)'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
         :invalid_text="error_text_api"
-        :initial_value="apikey"
+        :initial_value="api_key"
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'apikey-id'"
@@ -94,9 +94,9 @@ export default {
   data() {
     return {
       uuid: this.dialogdata.uuid,
-      apikey: this.dialogdata.api_key,
+      api_key: this.dialogdata.api_key,
       nickname: this.dialogdata.nickname,
-      userids: this.dialogdata.userids,
+      user_ids: this.dialogdata.user_ids,
       error_text_uuid: "",
       error_text_api: "",
       error_text_nickname: "",
@@ -111,7 +111,7 @@ export default {
     },
     on_update_api: function (new_value) {
       this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
-      this.apikey = new_value;
+      this.api_key = new_value;
       this.enable_save_button();
     },
     on_update_nickname: function (new_value) {
@@ -139,9 +139,9 @@ export default {
       const edit_customer = {
         cust_id: this.dataindex,
         uuid: this.uuid,
-        api_key: this.apikey,
+        api_key: this.api_key,
         nickname: this.nickname,
-        user_ids: this.userids,
+        user_ids: this.user_ids,
       };
       this.$emit("delete-id", edit_customer);
     },
@@ -149,9 +149,9 @@ export default {
       const edit_customer = {
         cust_id: this.dataindex,
         uuid: this.uuid,
-        api_key: this.apikey,
+        api_key: this.api_key,
         nickname: this.nickname,
-        user_ids: this.userids,
+        user_ids: this.user_ids,
       };
       this.$emit("save-id", edit_customer);
     },

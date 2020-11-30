@@ -339,7 +339,7 @@ describe("EditCustomer.clicked_button", () => {
     uuid: "",
     apikey: "",
     nickname: "",
-    userids: [],
+    user_ids: [],
   };
   afterEach(() => wrapper.destroy());
   test.each([
