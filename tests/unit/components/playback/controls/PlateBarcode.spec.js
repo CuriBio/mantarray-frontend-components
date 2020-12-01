@@ -144,10 +144,10 @@ describe("PlateBarcode.vue", () => {
     ],
     ["M120044099", "validate_plate_barcode", "error as M1 is disallowed", null],
     [
-      "MD20044099",
+      "ME20044099",
       "validate_plate_barcode",
       "All criteria matches",
-      "MD20044099",
+      "ME20044099",
     ], // new rule allow MD
   ])(
     "Given a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode or PASSES due %s for a valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode",
