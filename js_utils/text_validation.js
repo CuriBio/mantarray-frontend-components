@@ -85,7 +85,7 @@ export class TextValidation {
     }
     if (start_code.charAt(1) != "A") {
       if (start_code.charAt(1) != "B") {
-        if (start_code.charAt(1) != "D") {
+        if (start_code.charAt(1) != "E") {
           return response;
         }
       }
