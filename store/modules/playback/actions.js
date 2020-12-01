@@ -21,7 +21,19 @@ import { STATUS } from "../flask/enums";
 // =========================================================================
 
 Vue.use(VueAxios, axios);
-
+axios.interceptors.response.use(
+  (response) => {
+    if (response.status === 200 || response.status === 204) {
+      return Promise.resolve(response);
+    } else {
+      return Promise.reject(response);
+    }
+  },
+  (error) => {
+    // console.log("interceptors activated");
+    return Promise.reject(error.response);
+  }
+);
 const centimilliseconds_per_millisecond = 100;
 
 /**

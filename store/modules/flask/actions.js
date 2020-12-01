@@ -22,7 +22,7 @@ export async function ping_system_status() {
     result = await Vue.axios.get(`${whole_url}`);
   } catch (error) {
     if (result.status != 200) {
-      // do nothing.
+      // console.log("Received an status error code of"+JSON.stringify(result));
     }
   }
   // console.log("Result from system_status: " + JSON.stringify(result));
