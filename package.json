@@ -1,6 +1,6 @@
 {
   "name": "@curi-bio/mantarray-frontend-components",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "shared components between web and desktop app.",
   "main": "./dist/mantarray.common.js",
   "author": "Curi Bio <contact@curibio.com> (http://www.curibio.com/)",
@@ -107,6 +107,9 @@
     "vue-jest": "~3.0.5",
     "vue-template-compiler": "^2.6.11",
     "wait-for-expect": "~3.0.2"
+  },
+  "dependenciesComments": {
+    "nuxt": "This is file defines all dependencies to widget library"
   },
   "license": "MIT"
 }
