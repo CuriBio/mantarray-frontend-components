@@ -108,5 +108,8 @@
     "vue-template-compiler": "^2.6.11",
     "wait-for-expect": "~3.0.2"
   },
+  "dependenciesComments": {
+    "nuxt": "This is file defines all dependencies to widget library"
+  },
   "license": "MIT"
 }
