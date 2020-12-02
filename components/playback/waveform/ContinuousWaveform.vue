@@ -19,9 +19,9 @@
 import { get_array_slice_to_display } from "@/js_utils/waveform_data_formatter.js";
 import { mapState } from "vuex";
 import Waveform from "@/components/playback/waveform/Waveform.vue";
-import { WellTitle } from "@/js_utils/labware_calculations.js";
+import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 
-const Well_title_six_cross_four = new WellTitle(4, 6);
+const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 
 /**
  * @vue-prop {Int} samples_per_second - A parameter to define number of Samples per second.
@@ -110,7 +110,7 @@ export default {
     },
 
     title: function () {
-      return Well_title_six_cross_four.get_well_name_from_well_index(
+      return twenty_four_well_plate_definition.get_well_name_from_well_index(
         this.current_quadrant[this.display_waveform_idx],
         true
       );

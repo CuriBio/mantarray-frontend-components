@@ -1,7 +1,6 @@
 import { mount } from "@vue/test-utils";
 import XAxisControls from "@/components/playback/controls/XAxisControls.vue";
 import { shallowMount } from "@vue/test-utils";
-
 import { XAxisControls as dist_XAxisControls } from "@/dist/mantarray.common";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";

@@ -11,6 +11,7 @@ export { get_array_slice_to_display } from "./js_utils/waveform_data_formatter";
 export { convert_from_json_of_well_indices_and_x_y_arrays } from "./js_utils/waveform_data_formatter";
 export { append_get_available_well_data } from "./js_utils/waveform_data_formatter";
 export { WellTitle } from "./js_utils/labware_calculations";
+export { TextValidation } from "./js_utils/text_validation";
 
 // Store
 export { default as playback_store_module } from "./store/modules/playback";
@@ -42,3 +43,14 @@ export { default as PlateBarcode } from "./components/playback/controls/PlateBar
 export { default as StatusBar } from "./components/status/StatusBar.vue";
 export { default as RecordingTime } from "./components/playback/controls/RecordingTime.vue";
 export { default as SimulationMode } from "./components/status/SimulationMode.vue";
+export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
+export { default as PlateMapEditor } from "./components/playback/controls/PlateMapEditor.vue";
+export { default as PlateWell } from "./components/playback/controls/PlateWell.vue";
+export { default as InputWidget } from "./components/playback/controls/player/InputWidget.vue";
+export { default as ButtonWidget } from "./components/playback/controls/player/ButtonWidget.vue";
+export { default as InputDropDown } from "./components/playback/controls/player/InputDropDown.vue";
+
+export { default as AddCustomer } from "./components/playback/controls/player/AddCustomer.vue";
+export { default as EditCustomer } from "./components/playback/controls/player/EditCustomer.vue";
+export { default as AddUser } from "./components/playback/controls/player/AddUser.vue";
+export { default as EditUser } from "./components/playback/controls/player/EditUser.vue";

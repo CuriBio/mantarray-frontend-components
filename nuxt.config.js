@@ -44,7 +44,7 @@ module.exports = {
       }
     }, */
   },
-  mode: "spa",
+  ssr: false,
   server: {
     port: 8080, // default: 3000
     host: "localhost", // default: localhost

@@ -23,7 +23,7 @@ test("Plate Barcode allows text to be typed in to input field", async (t) => {
   await unfocus();
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  await t.typeText(barcode_input_field, "M1202050002");
+  await t.typeText(barcode_input_field, "ME202050002");
 
   // make sure to unfocus off of the element so that the typing cursor is not flashing in the input box creating different results during takeScreenshot
   await unfocus();
