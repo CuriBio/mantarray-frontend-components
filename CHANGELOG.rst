@@ -1,5 +1,9 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.2 (2020-12-02)
+------------------
+
+- Updated new plate barcode series 'ME'
 
 0.1.1 (2020-10-06)
 ------------------
