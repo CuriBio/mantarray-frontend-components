@@ -10,13 +10,15 @@ import { STATUS } from "@/store/modules/flask/enums";
  * @return {Object} the result of the axios call
  */
 export async function call_axios_get_from_vuex(whole_url, action_context) {
-  let result;
+  let result = 0;
   try {
     result = await Vue.axios.get(whole_url);
   } catch (error) {
     action_context.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR, {
       root: true,
     });
+    action_context.dispatch("flask/stop_status_pinging"); // Error reported clear the ping_system_status setInterval
+    action_context.dispatch("flask/stop_waveform_pinging"); // Error reported clear the ping_get_available_data setInterval
   }
 
   return result;

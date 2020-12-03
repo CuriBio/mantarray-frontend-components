@@ -1,7 +1,5 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-import Vue from "vue";
-import axios from "axios";
-import VueAxios from "vue-axios";
+
 import { ENUMS } from "./enums";
 import { STATUS } from "../flask/enums";
 import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
@@ -21,8 +19,6 @@ import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 // |        rollout feature without Python Flask server change its good for|
 // |        to have config.ini allowing App/UI to discover api's           |
 // =========================================================================
-
-Vue.use(VueAxios, axios);
 
 const centimilliseconds_per_millisecond = 100;
 
@@ -224,13 +220,11 @@ export default {
 
     try {
       if (no_barcode == true) {
-        result = await Vue.axios.get(
-          `${baseurl}/${endpoint}?time_index=${time_index}`
-        );
+        const whole_url_no_barcode = `${baseurl}/${endpoint}?time_index=${time_index}`;
+        result = call_axios_get_from_vuex(whole_url_no_barcode, context);
       } else {
-        result = await Vue.axios.get(
-          `${baseurl}/${endpoint}?time_index=${time_index}&barcode=${barcode}&is_hardware_test_recording=${payload.is_hardware_test_recording}`
-        );
+        const whole_url = `${baseurl}/${endpoint}?time_index=${time_index}&barcode=${barcode}&is_hardware_test_recording=${payload.is_hardware_test_recording}`;
+        result = call_axios_get_from_vuex(whole_url, context);
       }
     } catch (error) {
       if (result.status != 200) {
@@ -244,10 +238,8 @@ export default {
     const baseurl = payload.baseurl;
     const endpoint = payload.endpoint;
     const whole_url = `${baseurl}/${endpoint}`;
-    // console.log("sending axios request to mantarray: " + whole_url)
     try {
       result = call_axios_get_from_vuex(whole_url, context);
-      // result = await Vue.axios.get(whole_url);
     } catch (error) {
       if (result.status != 200) {
         return -1;
