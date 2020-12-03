@@ -125,8 +125,26 @@ describe("store/flask", () => {
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
     });
+    test("Given all axios requests are mocked to return 300, When stop_status_pinging is dispatched, Then the system status updates to be in the ERROR state", async () => {
+      mocked_axios.onGet(all_mantarray_commands_regexp).reply(300);
+
+      const bound_ping_system_status = ping_system_status.bind(context);
+      await bound_ping_system_status();
+
+      await store.dispatch("flask/stop_status_pinging");
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+    });
     test("Given all axios requests are mocked to return 404, When stop_status_pinging is dispatched, Then the system status updates to be in the ERROR state", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(404);
+
+      const bound_ping_system_status = ping_system_status.bind(context);
+      await bound_ping_system_status();
+
+      await store.dispatch("flask/stop_status_pinging");
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+    });
+    test("Given all axios requests are mocked to return 500, When stop_status_pinging is dispatched, Then the system status updates to be in the ERROR state", async () => {
+      mocked_axios.onGet(all_mantarray_commands_regexp).reply(500);
 
       const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
