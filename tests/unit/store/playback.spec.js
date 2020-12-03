@@ -256,6 +256,12 @@ describe("store/playback", () => {
         });
       });
     });
+    test("Given all axios requests are mocked to return 404, When stop_live_view is dispatched, Then the system status updates to be in the ERROR state", async () => {
+      mocked_axios.onGet(all_mantarray_commands_regexp).reply(404);
+
+      await store.dispatch("playback/stop_live_view");
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+    });
     test("Given x_time_index is not 0 and playback state is PLAYING, and playback_progression_interval is active, When stop_playback is dispatched, Then x_time_index becomes 0, playback state becomes STOPPED and the playback_progression_interval is cleared", async () => {
       store.commit("playback/set_x_time_index", 200);
       await store.dispatch("playback/start_playback_progression");

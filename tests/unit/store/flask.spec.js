@@ -278,6 +278,18 @@ describe("store/flask", () => {
 
   describe("mutations", () => {
     describe("Given the store in its default state", () => {
+      test("Given the status is set to ERROR, When attempting to commit a different system status, Then it remains in ERROR mode", () => {
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
+
+        store.commit(
+          "flask/set_status_uuid",
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.ERROR
+        );
+      });
+
       test("When set_status_ping_interval_id is committed, the ID mutates", async () => {
         const expected_id = 2993;
         store.commit("flask/set_status_ping_interval_id", expected_id);

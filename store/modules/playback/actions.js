@@ -4,6 +4,8 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 import { ENUMS } from "./enums";
 import { STATUS } from "../flask/enums";
+import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
+
 // =========================================================================
 // |   Following are the list of items called --todo                       |
 // |   a) baseurl {contains the flask server url } {obtain from config.ini}|
@@ -244,7 +246,8 @@ export default {
     const whole_url = `${baseurl}/${endpoint}`;
     // console.log("sending axios request to mantarray: " + whole_url)
     try {
-      result = await Vue.axios.get(whole_url);
+      result = call_axios_get_from_vuex(whole_url, context);
+      // result = await Vue.axios.get(whole_url);
     } catch (error) {
       if (result.status != 200) {
         return -1;
