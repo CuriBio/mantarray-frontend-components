@@ -3,18 +3,9 @@ import axios from "axios";
 const MockAxiosAdapter = require("axios-mock-adapter");
 const sinon = require("sinon");
 import { createLocalVue } from "@vue/test-utils";
-import playback_module from "@/store/modules/playback";
-import flask_module from "@/store/modules/flask";
 import { STATUS } from "@/store/modules/flask/enums";
 
-const wait_for_expect = require("wait-for-expect");
-import {
-  all_mantarray_commands_regexp,
-  system_status_when_calibrating_regexp,
-  system_status_when_buffering_regexp,
-} from "@/store/modules/flask/url_regex";
-import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
-import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
+import { all_mantarray_commands_regexp } from "@/store/modules/flask/url_regex";
 import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 const sandbox = sinon.createSandbox();
 
@@ -56,8 +47,58 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
 
         await call_axios_get_from_vuex(whole_url, context);
 
-        expect(mocked_axios.history.get[0].url).toEqual(whole_url);
+        expect(mocked_axios.history.get[0].url).toStrictEqual(whole_url);
       });
     });
+    test("Given axios is mocked to return status code 200 and a mocked set of data, When the function is called, Then it returns the result of the axios request", async () => {
+      const whole_url = "http://localhost:4567/start_recording";
+      const expected_result = {
+        ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+        in_simulation_mode: true,
+      };
+      mocked_axios.onGet(whole_url).reply(200, expected_result);
+      const actual = await call_axios_get_from_vuex(whole_url, context);
+
+      expect(actual.data).toStrictEqual(expected_result);
+    });
+
+    test.each([
+      [404, "4xx series"],
+      [307, "3xx series"],
+      [550, "5xx series"],
+    ])(
+      "Given axios is mocked to return status code %s (%s), When the function is called with a generic URL, Then the system status in Vuex is updated to axios error mode",
+      async (error_code, description) => {
+        const whole_url = "http://localhost:4567/start_recording";
+        mocked_axios.onGet(whole_url).reply(error_code);
+        await call_axios_get_from_vuex(whole_url, context);
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.ERROR
+        );
+      }
+    );
+  });
+  describe("Given that the context variable is obtained from the Vuex Playback module", () => {
+    beforeEach(async () => {
+      context = await store.dispatch("playback/get_playback_action_context");
+    });
+
+    test.each([
+      [406, "4xx series"],
+      [306, "3xx series"],
+      [504, "5xx series"],
+    ])(
+      "Given axios is mocked to return status code %s (%s), When the function is called with a generic URL, Then the system status in Vuex is updated to axios error mode",
+      async (error_code, description) => {
+        const whole_url = "http://localhost:4567/start_recording";
+        mocked_axios.onGet(whole_url).reply(error_code);
+        await call_axios_get_from_vuex(whole_url, context);
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.ERROR
+        );
+      }
+    );
   });
 });

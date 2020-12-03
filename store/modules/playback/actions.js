@@ -37,6 +37,11 @@ function advance_playback_progression() {
 }
 
 export default {
+  async get_playback_action_context(context) {
+    // useful for testing actions
+    return context;
+  },
+
   async start_recording(context) {
     const time_index = this.state.playback.x_time_index;
     const barcode = this.state.playback.barcode;
