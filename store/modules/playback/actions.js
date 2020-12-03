@@ -212,25 +212,18 @@ export default {
     const time_index = payload.time_index;
     let no_barcode = false;
     let barcode = null;
+    let whole_url = ``;
     if (payload.barcode == undefined) {
       no_barcode = true;
     } else {
       barcode = payload.barcode;
     }
-
-    try {
-      if (no_barcode == true) {
-        const whole_url_no_barcode = `${baseurl}/${endpoint}?time_index=${time_index}`;
-        result = call_axios_get_from_vuex(whole_url_no_barcode, context);
-      } else {
-        const whole_url = `${baseurl}/${endpoint}?time_index=${time_index}&barcode=${barcode}&is_hardware_test_recording=${payload.is_hardware_test_recording}`;
-        result = call_axios_get_from_vuex(whole_url, context);
-      }
-    } catch (error) {
-      if (result.status != 200) {
-        return -1;
-      }
+    if (no_barcode == true) {
+      whole_url = `${baseurl}/${endpoint}?time_index=${time_index}`;
+    } else {
+      whole_url = `${baseurl}/${endpoint}?time_index=${time_index}&barcode=${barcode}&is_hardware_test_recording=${payload.is_hardware_test_recording}`;
     }
+    result = call_axios_get_from_vuex(whole_url, context);
     return result;
   },
   async start_stop_axios_request(context, payload) {
@@ -238,13 +231,7 @@ export default {
     const baseurl = payload.baseurl;
     const endpoint = payload.endpoint;
     const whole_url = `${baseurl}/${endpoint}`;
-    try {
-      result = call_axios_get_from_vuex(whole_url, context);
-    } catch (error) {
-      if (result.status != 200) {
-        return -1;
-      }
-    }
+    result = call_axios_get_from_vuex(whole_url, context);
     return result;
   },
 };

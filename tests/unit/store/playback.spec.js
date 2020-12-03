@@ -258,19 +258,22 @@ describe("store/playback", () => {
     });
     test("Given all axios requests are mocked to return 300, When stop_live_view is dispatched, Then the system status updates to be in the ERROR state", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(300);
-
+      expect(store.state.flask.status_ping_interval_id).toBe(null);
+      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
       await store.dispatch("playback/stop_live_view");
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
     });
     test("Given all axios requests are mocked to return 404, When stop_live_view is dispatched, Then the system status updates to be in the ERROR state", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(404);
-
+      expect(store.state.flask.status_ping_interval_id).toBe(null);
+      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
       await store.dispatch("playback/stop_live_view");
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
     });
     test("Given all axios requests are mocked to return 500, When stop_live_view is dispatched, Then the system status updates to be in the ERROR state", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(500);
-
+      expect(store.state.flask.status_ping_interval_id).toBe(null);
+      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
       await store.dispatch("playback/stop_live_view");
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
     });

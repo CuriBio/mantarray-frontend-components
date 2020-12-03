@@ -17,7 +17,7 @@ export async function ping_get_available_data() {
   };
   let result = 0;
   const whole_url = `${payload.baseurl}/${payload.endpoint}`;
-  result = call_axios_get_from_vuex(whole_url, this);
+  result = await call_axios_get_from_vuex(whole_url, this);
   if (result.status == 200) {
     const data = result.data;
     this.commit("append_plate_waveforms", data);
