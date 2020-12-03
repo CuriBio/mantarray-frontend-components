@@ -10,6 +10,7 @@ import flask_module from "./modules/flask";
 import settings_module from "./modules/settings";
 
 const createStore = () => {
+  // console.log("in create store, axios: " + $axios)
   return new Vuex.Store({
     // namespaced: true, // this doesn't seem to do anything...(Eli 4/1/20) each module seems to need to be namespaced: true individually https://vuex.vuejs.org/guide/modules.html
     modules: {

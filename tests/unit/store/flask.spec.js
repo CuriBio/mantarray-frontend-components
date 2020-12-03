@@ -104,27 +104,6 @@ describe("store/flask", () => {
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
       );
     });
-    test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED, Then the vuex status state should update to CALIBRATION_NEEDED and the Vuex Playback State should update to CALIBRATION_NEEDED", async () => {
-      mocked_axios.onGet(system_status_regexp).reply(201, {
-        ui_status_code: STATUS.MESSAGE.ERROR,
-        in_simulation_mode: true,
-      });
-      store.commit(
-        "playback/set_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
-      );
-      store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
-
-      const bound_ping_system_status = ping_system_status.bind(context);
-      await bound_ping_system_status();
-
-      expect(store.state.flask.status_uuid).toEqual(
-        STATUS.MESSAGE.CALIBRATION_NEEDED
-      );
-      expect(store.state.playback.playback_state).toEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
-      );
-    });
     test("Given the current state is not SERVER_READY and the returned status is having HTTP return status error 404 it should be gracefully handled", async () => {
       mocked_axios.onGet(system_status_regexp).reply(404);
       store.commit(
@@ -166,7 +145,7 @@ describe("store/flask", () => {
         expect(store.state.waveform.waveform_ping_interval_id).not.toBeNull();
       });
     });
-    test("Given playback state is RECORDING and /system_status returns LIVE_VIEW_ACTIVE and /get_available_data returns code 204, When ping_system_status in called, Then start_waveform_pinging is not invoked", async () => {
+    test.only("Given playback state is RECORDING and /system_status returns LIVE_VIEW_ACTIVE and /get_available_data returns code 204, When ping_system_status in called, Then start_waveform_pinging is not invoked", async () => {
       store.commit(
         "playback/set_playback_state",
         playback_module.ENUMS.PLAYBACK_STATES.RECORDING

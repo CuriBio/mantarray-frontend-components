@@ -22,6 +22,14 @@ module.exports = {
     "~/node_modules/typeface-muli/index.css",
     "~/node_modules/typeface-anonymous-pro/index.css",
   ],
+  modules: ["@nuxtjs/axios"],
+  /*
+   ** Axios module configuration
+   */
+  axios: {
+    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: "http://localhost:4567",
+  },
   /*
    ** Customize the progress bar color
    */

@@ -1,6 +1,5 @@
 import Vue from "vue";
 import axios from "axios";
-import VueAxios from "vue-axios";
 
 import { get_recording } from "@/store/ApiService.js";
 
@@ -11,8 +10,8 @@ describe("api to get_recording", () => {
     jest.restoreAllMocks();
   });
 
-  it("Calls axios.get with the correct endpoint URL and returns the result of the HTTP request", async () => {
-    const mocked_axios_get = jest.spyOn(Vue.axios, "get");
+  it.only("Calls axios.get with the correct endpoint URL and returns the result of the HTTP request", async () => {
+    const mocked_axios_get = jest.spyOn(axios, "get");
     mocked_axios_get.mockReturnValue(Promise.resolve({ data: 3 }));
 
     // let mocked_axios_get = jest.fn();
@@ -20,7 +19,7 @@ describe("api to get_recording", () => {
     // Vue.axios.get = mocked_axios_get;
 
     const result = await get_recording("sandbox_eli_waveform");
-    expect(Vue.axios.get).toBeCalledWith(
+    expect(axios.get).toBeCalledWith(
       "https://94fjmm5591.execute-api.us-east-1.amazonaws.com/sandbox_eli_waveform"
     );
 

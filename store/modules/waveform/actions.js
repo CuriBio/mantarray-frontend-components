@@ -1,5 +1,5 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-import Vue from "vue";
+// import Vue from "vue";
 
 import { get_recording } from "../../../store/ApiService.js";
 import { convert_from_json_of_well_indices_and_x_y_arrays } from "../../../js_utils/waveform_data_formatter.js";
@@ -11,14 +11,14 @@ import { convert_from_json_of_well_indices_and_x_y_arrays } from "../../../js_ut
 export async function ping_get_available_data() {
   const current_time_index = this.rootState.playback.x_time_index;
   const payload = {
-    baseurl: "http://localhost:4567",
+    // baseurl: "http://localhost:4567",
     endpoint:
       "get_available_data?currently_displayed_time_index=" + current_time_index,
   };
   let result = 0;
-  const whole_url = `${payload.baseurl}/${payload.endpoint}`;
-
-  result = await Vue.axios.get(whole_url);
+  const whole_url = `/${payload.endpoint}`;
+  // console.log(this.$axios);
+  result = await this.$axios.get(whole_url);
   if (result.status == 200) {
     const data = result.data;
     this.commit("append_plate_waveforms", data);

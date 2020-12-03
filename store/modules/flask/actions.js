@@ -1,5 +1,5 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-import Vue from "vue";
+// import Vue from "vue";
 
 import { ENUMS as PLAYBACK_ENUMS } from "../playback/enums";
 import { STATUS } from "./enums";
@@ -10,19 +10,19 @@ import { STATUS } from "./enums";
  */
 export async function ping_system_status() {
   const payload = {
-    baseurl: "http://localhost:4567",
+    //    baseurl: "http://localhost:4567",  // initialized in nuxt.config.js under axios{}
     endpoint: "system_status?current_vuex_status_uuid=",
     val: this.state.status_uuid,
   };
-  const whole_url = `${payload.baseurl}/${payload.endpoint}${payload.val}`;
+  const whole_url = `/${payload.endpoint}${payload.val}`;
   // console.log("about to ping system status: " + whole_url)
   let result = 0;
   // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
   try {
-    result = await Vue.axios.get(`${whole_url}`);
+    result = await this.$axios.get(`${whole_url}`);
   } catch (error) {
     if (result.status != 200) {
-      // console.log("Received an status error code of"+JSON.stringify(result));
+      // do nothing
     }
   }
   // console.log("Result from system_status: " + JSON.stringify(result));
