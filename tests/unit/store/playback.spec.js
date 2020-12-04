@@ -531,9 +531,6 @@ describe("store/playback", () => {
 
       await store.dispatch("playback/stop_live_view");
 
-      // expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
-      // expect(store.state.flask.playback_progression_interval_id).toBe(null);
-
       expect(mocked_axios.history.get[0].url).toEqual(`${baseurl}/${api}`);
 
       expect(store.state.playback.playback_state).toEqual(

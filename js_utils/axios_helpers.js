@@ -17,10 +17,9 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     action_context.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR, {
       root: true,
     });
-    if (action_context.state.status_ping_interval_id != undefined) {
-      // Python flask server reports error only via system_status so we clear the ping_system_status function.
-      await action_context.dispatch("flask/stop_status_pinging"); // Error reported clear the ping_system_status
-    }
+    action_context.commit("flask/stop_status_pinging"); // Error reported clear the ping_system_status
+    action_context.commit("playback/stop_playback_progression");
+    action_context.commit("waveform/stop_waveform_pinging");
   }
   return result;
 }
