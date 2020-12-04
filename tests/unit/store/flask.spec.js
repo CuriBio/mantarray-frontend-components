@@ -104,7 +104,7 @@ describe("store/flask", () => {
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
       );
     });
-    test("Given the current state is not SERVER_READY and the returned status is having HTTP return status error 404 it should be gracefully handled", async () => {
+    test("Given the current state is not SERVER_READY and the returned status is having HTTP return status error 404 it should be gracefully handled and the status_uuid is set to ERROR and status_ping_interval_id is set to null ", async () => {
       mocked_axios.onGet(system_status_regexp).reply(404);
       store.commit(
         "playback/set_playback_state",
@@ -121,36 +121,10 @@ describe("store/flask", () => {
         STATUS.MESSAGE.CALIBRATION_NEEDED
       );
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+      expect(store.state.flask.status_ping_interval_id).toBe(null);
       expect(store.state.playback.playback_state).toEqual(
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
-    });
-    test("Given all axios requests are mocked to return 300, When stop_status_pinging is dispatched, Then the system status updates to be in the ERROR state", async () => {
-      mocked_axios.onGet(all_mantarray_commands_regexp).reply(300);
-
-      const bound_ping_system_status = ping_system_status.bind(context);
-      await bound_ping_system_status();
-      expect(store.state.flask.status_ping_interval_id).toBe(null);
-      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
-      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
-    });
-    test("Given all axios requests are mocked to return 404, When stop_status_pinging is dispatched, Then the system status updates to be in the ERROR state", async () => {
-      mocked_axios.onGet(all_mantarray_commands_regexp).reply(404);
-
-      const bound_ping_system_status = ping_system_status.bind(context);
-      await bound_ping_system_status();
-      expect(store.state.flask.status_ping_interval_id).toBe(null);
-      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
-      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
-    });
-    test("Given all axios requests are mocked to return 500, When stop_status_pinging is dispatched, Then the system status updates to be in the ERROR state", async () => {
-      mocked_axios.onGet(all_mantarray_commands_regexp).reply(500);
-
-      const bound_ping_system_status = ping_system_status.bind(context);
-      await bound_ping_system_status();
-      expect(store.state.flask.status_ping_interval_id).toBe(null);
-      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
-      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
     });
     test("Given playback state is BUFFERING and /system_status returns LIVE_VIEW_ACTIVE and /get_available_data returns code 204, When ping_system_status in called, Then start_waveform_pinging is invoked", async () => {
       store.commit(
