@@ -374,7 +374,11 @@ describe("store/flask", () => {
         expect(store.state.flask.status_uuid).toStrictEqual(
           STATUS.MESSAGE.ERROR
         );
-        // expect(store.state.flask.status_ping_interval_id).toBe(null); is not clearing receving 112 need to investigate.
+        expect(store.state.flask.status_ping_interval_id).toBe(null);
+        expect(store.state.playback.playback_progression_interval_id).toBe(
+          null
+        );
+        expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
       });
     });
   });
