@@ -5,6 +5,12 @@ const MockAxiosAdapter = require("axios-mock-adapter");
 import { ping_get_available_data } from "../../../store/modules/waveform/actions";
 import { arry, new_arry } from "./../js_utils/waveform_data_provider.js";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
+import {
+  system_status_when_calibrating_regexp,
+  all_mantarray_commands_regexp,
+} from "@/store/modules/flask/url_regex";
+import { STATUS } from "@/store/modules/flask/enums";
+import playback_module from "@/store/modules/playback";
 
 const ar = arry;
 const nr = new_arry;
@@ -209,18 +215,38 @@ describe("store/waveform", () => {
       beforeEach(async () => {
         mocked_axios
           .onGet(get_available_data_regex) // We pass in_simulation_mode true and validate default false is replaced
-          .reply(200, nr);
+          .reply(200, nr)
+          .onGet(system_status_when_calibrating_regexp)
+          .reply(400);
 
         await store.dispatch("waveform/start_get_waveform_pinging");
       });
       test("When start_get_available_data is dispatched, the waveform_ping_interval_id does not change and setInterval is not called again", async () => {
         const spied_set_interval = jest.spyOn(window, "setInterval");
-        const initial_interval_id = store.state.waveform_ping_interval_id;
+        const initial_interval_id =
+          store.state.waveform.waveform_ping_interval_id;
         await store.dispatch("waveform/start_get_waveform_pinging");
 
-        expect(store.state.waveform_ping_interval_id).toEqual(
+        expect(store.state.waveform.waveform_ping_interval_id).toEqual(
           initial_interval_id
         );
+      });
+      test("When start_get_available_data is under progress an systems_status request returns 404, then the interval is cleared and the waveform_ping_interval_id becomes null", async () => {
+        const spied_set_interval = jest.spyOn(window, "setInterval");
+        const initial_interval_id =
+          store.state.waveform.waveform_ping_interval_id;
+
+        expect(initial_interval_id).toBeGreaterThanOrEqual(0);
+
+        await store.dispatch("playback/start_calibration");
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.ERROR
+        );
+        expect(store.state.flask.status_ping_interval_id).toBe(null);
+        expect(store.state.playback.playback_progression_interval_id).toBe(
+          null
+        );
+        expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
       });
     });
   });
