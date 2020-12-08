@@ -22,4 +22,7 @@ export default {
   tooltips_delay(state) {
     return state.tooltips_delay;
   },
+  is_valid_barcode(state) {
+    return state.is_valid_barcode;
+  },
 };
