@@ -24,6 +24,7 @@ export async function ping_system_status() {
     const data = result.data;
     const status_uuid = data.ui_status_code;
     const simulation_mode = data.in_simulation_mode;
+    const plate_bar_code = data.plate_barcode;
     this.commit("set_simulation_status", simulation_mode);
 
     if (status_uuid != this.state.status_uuid) {
@@ -34,6 +35,11 @@ export async function ping_system_status() {
           PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED,
           { root: true }
         );
+        if (simulation_mode == false) {
+          this.dispatch("playback/scanned_barcode_number", plate_bar_code, {
+            root: true,
+          });
+        }
       }
       if (status_uuid == STATUS.MESSAGE.STOPPED_uuid) {
         this.dispatch(
