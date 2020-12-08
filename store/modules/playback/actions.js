@@ -184,13 +184,6 @@ export default {
       context.commit("set_playback_progression_interval_id", new_interval_id);
     }
   },
-  async scanned_barcode_number(context, new_value) {
-    if (new_value != "") {
-      context.commit("set_barcode_number", new_value);
-    } else {
-      context.commit("set_barcode_number", null);
-    }
-  },
   async start_live_view(context) {
     const payload = {
       baseurl: "http://localhost:4567",
