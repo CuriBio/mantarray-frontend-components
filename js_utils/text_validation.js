@@ -69,6 +69,10 @@ export class TextValidation {
   validate_plate_barcode(text) {
     // refactored for 100% code coverage on JEST Unit testcases.
     let response = " "; // let us first assume that incoming text is invalid unless it passes the criteria.
+    // As the validation rules are on Vuex data of barcode and this can be null a check is required.
+    if (text == null) {
+      return response;
+    }
     const platebarcode_len = text.length;
     if (platebarcode_len < 10) {
       // clearly there is no need to process as its not matching basic rule length (< 10)
