@@ -1,5 +1,5 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-import Vue from "vue";
+import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 
 import { ENUMS as PLAYBACK_ENUMS } from "../playback/enums";
 import { STATUS } from "./enums";
@@ -18,15 +18,8 @@ export async function ping_system_status() {
   // console.log("about to ping system status: " + whole_url)
   let result = 0;
   // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
-  try {
-    result = await Vue.axios.get(`${whole_url}`);
-  } catch (error) {
-    if (result.status != 200) {
-      // do nothing.
-    }
-  }
+  result = await call_axios_get_from_vuex(whole_url, this);
   // console.log("Result from system_status: " + JSON.stringify(result));
-
   if (result.status == 200) {
     const data = result.data;
     const status_uuid = data.ui_status_code;

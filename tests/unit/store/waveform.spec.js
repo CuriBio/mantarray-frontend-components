@@ -5,6 +5,13 @@ const MockAxiosAdapter = require("axios-mock-adapter");
 import { ping_get_available_data } from "../../../store/modules/waveform/actions";
 import { arry, new_arry } from "./../js_utils/waveform_data_provider.js";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
+import {
+  system_status_when_calibrating_regexp,
+  all_mantarray_commands_regexp,
+  system_status_regexp,
+} from "@/store/modules/flask/url_regex";
+import { STATUS } from "@/store/modules/flask/enums";
+import playback_module from "@/store/modules/playback";
 
 const ar = arry;
 const nr = new_arry;
@@ -215,12 +222,44 @@ describe("store/waveform", () => {
       });
       test("When start_get_available_data is dispatched, the waveform_ping_interval_id does not change and setInterval is not called again", async () => {
         const spied_set_interval = jest.spyOn(window, "setInterval");
-        const initial_interval_id = store.state.waveform_ping_interval_id;
+        const initial_interval_id =
+          store.state.waveform.waveform_ping_interval_id;
         await store.dispatch("waveform/start_get_waveform_pinging");
 
-        expect(store.state.waveform_ping_interval_id).toEqual(
+        expect(store.state.waveform.waveform_ping_interval_id).toEqual(
           initial_interval_id
         );
+      });
+      test("Given /system_status is mocked to return 200 (and some dummy response) and live_view is started and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then all 3 intervals are cleared in Vuex (status pinging, data pinging, and playback progression)", async () => {
+        mocked_axios
+          .onGet(system_status_regexp)
+          .reply(200, {
+            ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+            in_simulation_mode: true,
+          })
+          .onGet("/start_recording")
+          .reply(405);
+
+        await store.dispatch("flask/start_status_pinging");
+        await store.dispatch("playback/start_playback_progression");
+
+        // confirm pre-conditions
+        expect(store.state.waveform.waveform_ping_interval_id).not.toBeNull();
+        expect(store.state.flask.status_ping_interval_id).not.toBeNull();
+        expect(
+          store.state.playback.playback_progression_interval_id
+        ).not.toBeNull();
+
+        await store.dispatch("playback/start_recording");
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.ERROR
+        );
+        expect(store.state.flask.status_ping_interval_id).toBe(null);
+        expect(store.state.playback.playback_progression_interval_id).toBe(
+          null
+        );
+        expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
       });
     });
   });

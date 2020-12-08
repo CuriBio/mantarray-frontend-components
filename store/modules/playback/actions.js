@@ -1,9 +1,9 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-import Vue from "vue";
-import axios from "axios";
-import VueAxios from "vue-axios";
+
 import { ENUMS } from "./enums";
 import { STATUS } from "../flask/enums";
+import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
+
 // =========================================================================
 // |   Following are the list of items called --todo                       |
 // |   a) baseurl {contains the flask server url } {obtain from config.ini}|
@@ -20,8 +20,6 @@ import { STATUS } from "../flask/enums";
 // |        to have config.ini allowing App/UI to discover api's           |
 // =========================================================================
 
-Vue.use(VueAxios, axios);
-
 const centimilliseconds_per_millisecond = 100;
 
 /**
@@ -37,6 +35,11 @@ function advance_playback_progression() {
 }
 
 export default {
+  async get_playback_action_context(context) {
+    // useful for testing actions
+    return context;
+  },
+
   async start_recording(context) {
     const time_index = this.state.playback.x_time_index;
     const barcode = this.state.playback.barcode;
@@ -209,27 +212,18 @@ export default {
     const time_index = payload.time_index;
     let no_barcode = false;
     let barcode = null;
+    let whole_url = ``;
     if (payload.barcode == undefined) {
       no_barcode = true;
     } else {
       barcode = payload.barcode;
     }
-
-    try {
-      if (no_barcode == true) {
-        result = await Vue.axios.get(
-          `${baseurl}/${endpoint}?time_index=${time_index}`
-        );
-      } else {
-        result = await Vue.axios.get(
-          `${baseurl}/${endpoint}?time_index=${time_index}&barcode=${barcode}&is_hardware_test_recording=${payload.is_hardware_test_recording}`
-        );
-      }
-    } catch (error) {
-      if (result.status != 200) {
-        return -1;
-      }
+    if (no_barcode == true) {
+      whole_url = `${baseurl}/${endpoint}?time_index=${time_index}`;
+    } else {
+      whole_url = `${baseurl}/${endpoint}?time_index=${time_index}&barcode=${barcode}&is_hardware_test_recording=${payload.is_hardware_test_recording}`;
     }
+    result = call_axios_get_from_vuex(whole_url, context);
     return result;
   },
   async start_stop_axios_request(context, payload) {
@@ -237,14 +231,7 @@ export default {
     const baseurl = payload.baseurl;
     const endpoint = payload.endpoint;
     const whole_url = `${baseurl}/${endpoint}`;
-    // console.log("sending axios request to mantarray: " + whole_url)
-    try {
-      result = await Vue.axios.get(whole_url);
-    } catch (error) {
-      if (result.status != 200) {
-        return -1;
-      }
-    }
+    result = call_axios_get_from_vuex(whole_url, context);
     return result;
   },
 };

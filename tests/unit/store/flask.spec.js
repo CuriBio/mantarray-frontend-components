@@ -104,7 +104,7 @@ describe("store/flask", () => {
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
       );
     });
-    test("Given the current state is not SERVER_READY and the returned status is having HTTP return status error 404 it should be gracefully handled", async () => {
+    test("Given the current state is not SERVER_READY and the returned status is having HTTP return status error 404 it should be gracefully handled and the status_uuid is set to ERROR and status_ping_interval_id is set to null ", async () => {
       mocked_axios.onGet(system_status_regexp).reply(404);
       store.commit(
         "playback/set_playback_state",
@@ -120,6 +120,8 @@ describe("store/flask", () => {
       expect(store.state.flask.status_uuid).not.toBe(
         STATUS.MESSAGE.CALIBRATION_NEEDED
       );
+      //expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+      //expect(store.state.flask.status_ping_interval_id).toBe(null);
       expect(store.state.playback.playback_state).toEqual(
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
@@ -278,6 +280,18 @@ describe("store/flask", () => {
 
   describe("mutations", () => {
     describe("Given the store in its default state", () => {
+      test("Given the status is set to ERROR, When attempting to commit a different system status, Then it remains in ERROR mode", () => {
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
+
+        store.commit(
+          "flask/set_status_uuid",
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.ERROR
+        );
+      });
+
       test("When set_status_ping_interval_id is committed, the ID mutates", async () => {
         const expected_id = 2993;
         store.commit("flask/set_status_ping_interval_id", expected_id);
@@ -329,6 +343,42 @@ describe("store/flask", () => {
         store.commit("flask/stop_status_pinging");
         expect(spied_clear_interval).toBeCalledWith(initial_interval_id);
         expect(store.state.flask.status_ping_interval_id).toBe(null);
+      });
+    });
+    describe("Given status pinging is active and response initially is 200 later changes to 404", () => {
+      beforeEach(async () => {
+        mocked_axios
+          .onGet(system_status_regexp)
+          .reply(200, {
+            ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED_uuid,
+            in_simulation_mode: false,
+          })
+          .onGet(system_status_when_calibrating_regexp)
+          .reply(400);
+
+        await store.dispatch("flask/start_status_pinging");
+      });
+
+      test("When flask server responds with 404 status code, the interval is cleared and the status_ping_interval_id state becomes null", async () => {
+        const initial_interval_id = store.state.flask.status_ping_interval_id;
+        // confirm pre-condition
+        expect(initial_interval_id).toBeGreaterThanOrEqual(0);
+
+        const spied_clear_interval = jest.spyOn(window, "clearInterval");
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        await store.dispatch("playback/start_calibration");
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.ERROR
+        );
+        expect(store.state.flask.status_ping_interval_id).toBe(null);
+        expect(store.state.playback.playback_progression_interval_id).toBe(
+          null
+        );
+        expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
       });
     });
   });
