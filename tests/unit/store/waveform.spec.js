@@ -8,6 +8,7 @@ import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import {
   system_status_when_calibrating_regexp,
   all_mantarray_commands_regexp,
+  system_status_regexp,
 } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
 import playback_module from "@/store/modules/playback";
@@ -215,9 +216,7 @@ describe("store/waveform", () => {
       beforeEach(async () => {
         mocked_axios
           .onGet(get_available_data_regex) // We pass in_simulation_mode true and validate default false is replaced
-          .reply(200, nr)
-          .onGet(system_status_when_calibrating_regexp)
-          .reply(400);
+          .reply(200, nr);
 
         await store.dispatch("waveform/start_get_waveform_pinging");
       });
@@ -231,14 +230,28 @@ describe("store/waveform", () => {
           initial_interval_id
         );
       });
-      test("When start_get_available_data is under progress an systems_status request returns 404, then the interval is cleared and the waveform_ping_interval_id becomes null", async () => {
-        const spied_set_interval = jest.spyOn(window, "setInterval");
-        const initial_interval_id =
-          store.state.waveform.waveform_ping_interval_id;
+      test.only("Given /system_status is mocked to return 200 (and some dummy response) and live_view is started and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then all 3 intervals are cleared in Vuex (status pinging, data pinging, and playback progression)", async () => {
+        mocked_axios
+          .onGet(system_status_regexp)
+          .reply(200, {
+            ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+            in_simulation_mode: true,
+          })
+          .onGet("/start_recording")
+          .reply(405);
 
-        expect(initial_interval_id).toBeGreaterThanOrEqual(0);
+        await store.dispatch("flask/start_status_pinging");
+        await store.dispatch("playback/start_playback_progression");
 
-        await store.dispatch("playback/start_calibration");
+        // confirm pre-conditions
+        expect(store.state.waveform.waveform_ping_interval_id).not.toBeNull();
+        expect(store.state.flask.status_ping_interval_id).not.toBeNull();
+        expect(
+          store.state.playback.playback_progression_interval_id
+        ).not.toBeNull();
+
+        await store.dispatch("playback/start_recording");
+
         expect(store.state.flask.status_uuid).toStrictEqual(
           STATUS.MESSAGE.ERROR
         );
