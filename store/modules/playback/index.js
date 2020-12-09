@@ -14,6 +14,7 @@ const default_state = {
   playback_progression_interval_id: null,
   playback_progression_time_interval: 40, // milliseconds
   barcode: null,
+  is_valid_barcode: false,
   tooltips_delay: 2000,
 };
 

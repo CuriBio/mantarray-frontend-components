@@ -76,7 +76,10 @@ describe("TextValidation.validate_plate_barcode", () => {
     ["MB190440991", "11", "YEAR is SET AS 19", ""],
     ["MB210440991", "11", "YEAR is SET AS 21", ""],
     ["MB100440991", "11", "YEAR is SET AS 10", ""],
+    ["MBFF0440991", "11", "YEAR is SET AS FF", " "],
+    ["MB2204409913", "12", "Length more than 11", " "],
     ["MA*#300001", "10", "Invalid symbols", " "],
+    [null, "0", "its null", " "],
   ])(
     "Given a text %s as the platebarcode, When the  [input.length = %s] values in the index range of [2-3] is %s fails the defined criteria of YEAR EQUAL 20, Then validation fails and feedback text is <space>",
     (plate_bar_code, len, error, result) => {

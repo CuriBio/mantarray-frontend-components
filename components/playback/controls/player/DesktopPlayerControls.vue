@@ -215,7 +215,7 @@ library.add(fa_spinner);
  * @vue-data {String} settings_tooltip_text - Tooltips body text for Settings
  * @vue-data {String} schedule_tooltip_text - Tooltips body text for Schedule
  * @vue-computed {String} playback_state - Current value in Vuex store
- * @vue-computed {String} barcode - Current value in Vuex store
+ * @vue-computed {Boolean} is_valid_barcode - Current value in Vuex store
  * @vue-computed {String} tooltips_delay - Current tooltips delay in Vuex store.
  * @vue-event {String} on_activate_record_click - User activated the record.
  * @vue-event {String} on_stop_record_click - User activated the stop record.
@@ -243,7 +243,7 @@ export default {
       playback_state: "playback_state",
     }),
     ...mapState("playback", {
-      barcode: "barcode",
+      is_valid_barcode: "is_valid_barcode",
     }),
     ...mapState("playback", {
       tooltips_delay: "tooltips_delay",
@@ -315,7 +315,7 @@ export default {
       return {
         "span__playback-desktop-player-controls--available":
           this.playback_state === this.playback_state_enums.CALIBRATED &&
-          this.barcode !== null,
+          this.is_valid_barcode != false,
         "span__playback-desktop-player-controls--active":
           this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE,
         "span__playback-desktop-player-controls--running-in-background":
@@ -344,7 +344,7 @@ export default {
         this.$store.dispatch("playback/stop_live_view");
       } else if (
         this.playback_state === this.playback_state_enums.CALIBRATED &&
-        this.barcode !== null
+        this.is_valid_barcode != false
       ) {
         this.$store.dispatch("playback/start_live_view");
       }
