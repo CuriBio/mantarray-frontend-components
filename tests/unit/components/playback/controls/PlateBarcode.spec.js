@@ -57,7 +57,7 @@ describe("PlateBarcode.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find("input").text()).toEqual("");
   });
-  test("Given a valid barcode has been into the Vuex, When system_status is in any state, Then the text of the Barcode Input field should be valid barcode string and Red Box is visible ", async () => {
+  test("Given a valid barcode has been into the Vuex, When the component is mounted, Then the text of the Barcode Input field should be valid barcode string and Red Box is visible ", async () => {
     store.commit("playback/set_barcode_number", "MA200440004");
     const propsData = {};
     let wrapper = mount(PlateBarcode, {
@@ -74,7 +74,7 @@ describe("PlateBarcode.vue", () => {
     );
   });
 
-  test("Given a invalid barcode has been into the Vuex, When system_status is in any state, Then the text of the Barcode Input field should be valid barcode string and Green Box is visible", async () => {
+  test("Given a invalid barcode has been into the Vuex, When the component is mounted, Then the text of the Barcode Input field should be valid barcode string and Green Box is visible", async () => {
     store.commit("playback/set_barcode_number", "MA209990004");
     const propsData = {};
     let wrapper = mount(PlateBarcode, {
