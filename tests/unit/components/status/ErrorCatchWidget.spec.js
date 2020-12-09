@@ -101,22 +101,22 @@ describe("ErrorCatchWidget.vue", () => {
     const target_background_div = wrapper.find(
       ".div__status-error-catch-background"
     );
-    expect(target_background_div.attributes().style).toBe("height: 192px;");
+    expect(target_background_div.attributes().style).toBe("height: 232px;");
     const target_text_area = wrapper.find(".textarea__error-file-path");
     expect(target_text_area.attributes().style).toBe("height: 35px;");
     const target_error_button = wrapper.find(".div__error-button");
     expect(target_error_button.attributes().style).toBe(
-      "top: 172px; left: 0px; position: absolute;"
+      "top: 222px; left: 0px; position: absolute;"
     );
     /* A run time update of prop occured below then observe that height value and top is updated */
     await wrapper.setProps({
       log_filepath:
         "C:\\Users\\Eli\\CuriBio\\AppData\\Roaming\\MantarrayController\\logs_flask\\mantarrally_log__2020_10_21_185640.txt",
     });
-    expect(target_background_div.attributes().style).toBe("height: 216px;");
+    expect(target_background_div.attributes().style).toBe("height: 256px;");
     expect(target_text_area.attributes().style).toBe("height: 55px;");
     expect(target_error_button.attributes().style).toBe(
-      "top: 196px; left: 0px; position: absolute;"
+      "top: 246px; left: 0px; position: absolute;"
     );
   });
 });
