@@ -24,6 +24,14 @@ test("Plate Barcode with no input field", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
+test("Plate Barcode trying to user entry into input field", async (t) => {
+  let screenshot_path = path.join(base_screenshot_path, "basic-entry-failure");
+  // make sure to unfocus off of the element so that the typing cursor is not flashing in the input box creating different results during takeScreenshot
+  await t.typeText(barcode_input_field, "MB190440991");
+  await unfocus();
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
 // the fixture declares what we are testing
 fixture`playback/controls/plate-barcode/basic-with-valid-barcode`
   .page // declare the fixture

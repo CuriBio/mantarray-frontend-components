@@ -9,21 +9,19 @@
       disabled="disabled"
       type="text"
       spellcheck="false"
-      onpaste="return false;"
       class="input__plate-barcode-entry"
       :class="[
         is_valid_barcode
           ? `input__plate-barcode-entry-valid`
           : `input__plate-barcode-entry-invalid`,
       ]"
-      :value="get_barcode_number"
+      :value="barcode"
     />
     <!--</div>-->
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
-import playback_module from "@/store/modules/playback";
 /**
  * @vue-data {String} platebarcode - Current plate bar code
  * @vue-data {String} playback_state_enums - Current state of playback
@@ -32,11 +30,6 @@ import playback_module from "@/store/modules/playback";
  */
 export default {
   name: "PlateBarcode",
-  data() {
-    return {
-      playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
-    };
-  },
   computed: {
     ...mapState("playback", {
       playback_state: "playback_state",
@@ -47,9 +40,6 @@ export default {
     ...mapState("playback", {
       is_valid_barcode: "is_valid_barcode",
     }),
-    get_barcode_number() {
-      return this.barcode;
-    },
   },
 };
 </script>

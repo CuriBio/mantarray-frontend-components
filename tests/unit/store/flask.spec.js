@@ -374,9 +374,7 @@ describe("store/flask", () => {
         expect(store.state.playback.playback_state).toEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
         );
-        await wait_for_expect(() => {
-          expect(store.state.playback.barcode).toEqual(valid_plate_barcode);
-        });
+        expect(store.state.playback.barcode).toEqual(valid_plate_barcode);
       });
       test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED with a invalid plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MD20044099' obtained from JSON object", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
@@ -400,9 +398,7 @@ describe("store/flask", () => {
         expect(store.state.playback.playback_state).toEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
         );
-        await wait_for_expect(() => {
-          expect(store.state.playback.barcode).toEqual(invalid_plate_barcode);
-        });
+        expect(store.state.playback.barcode).toEqual(invalid_plate_barcode);
       });
       test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED with a <empty> plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was rest to `null` as  from JSON object contained <empty>", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
@@ -426,9 +422,7 @@ describe("store/flask", () => {
         expect(store.state.playback.playback_state).toEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
         );
-        await wait_for_expect(() => {
-          expect(store.state.playback.barcode).toEqual(null);
-        });
+        expect(store.state.playback.barcode).toEqual(null);
       });
     });
   });

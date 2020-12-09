@@ -110,6 +110,7 @@ export class TextValidation {
     if (year >= 0 && year <= 99) {
       response = "";
     }
+
     const day_code = text.slice(4, 7); // this is of range 001 to 366 [3 characters]
     const day = parseInt(day_code);
 
