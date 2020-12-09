@@ -220,7 +220,7 @@ describe("store/playback", () => {
         "Given a barcode scanned results in value %s, When validation rule FAILS  or PASSES due %s, Then validation results set is_valid_barcode to %s",
         async (platecode, reason, valid) => {
           store.commit("playback/set_barcode_number", platecode);
-          expect(store.getters["playback/is_valid_barcode"]).toBe(valid);
+          expect(store.state.playback.is_valid_barcode).toBe(valid);
         }
       );
     });
