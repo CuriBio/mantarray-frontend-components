@@ -42,7 +42,7 @@ describe("StatusWidget.vue", () => {
     "When Vuex is mutated to the state %s, Then the status text should update to be: %s",
     async (vuex_state, expected_text) => {
       const propsData = {};
-      wrapper = shallowMount(StatusWidget, {
+      wrapper = mount(StatusWidget, {
         propsData,
         store,
         localVue,
@@ -56,7 +56,7 @@ describe("StatusWidget.vue", () => {
   test("When initially mounted, Then the status text matches the Vuex state", () => {
     const propsData = {};
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING_uuid);
-    wrapper = shallowMount(StatusWidget, {
+    wrapper = mount(StatusWidget, {
       propsData,
       store,
       localVue,
@@ -69,7 +69,7 @@ describe("StatusWidget.vue", () => {
 
   test("When Vuex is mutated to an unknown UUID, Then the status text should update to include that UUID", async () => {
     const propsData = {};
-    wrapper = shallowMount(StatusWidget, {
+    wrapper = mount(StatusWidget, {
       propsData,
       store,
       localVue,

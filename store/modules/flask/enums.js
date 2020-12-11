@@ -19,5 +19,7 @@ export const STATUS = {
     RECORDING: "1e3d76a2-508d-4c99-8bf5-60dac5cc51fe",
     ERROR_uuid: "4551998b-4134-4157-ab16-f4b257b55f5e",
     ERROR: "4551998b-4134-4157-ab16-f4b257b55f5e",
+    SHUTDOWN_uuid: "dfcbe7d6-3b09-11eb-adc1-0242ac120002",
+    SHUTDOWN: "dfcbe7d6-3b09-11eb-adc1-0242ac120002",
   },
 };
