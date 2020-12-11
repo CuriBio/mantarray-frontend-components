@@ -1,15 +1,7 @@
 <template>
   <div class="div__status-bar">
     <span class="span__status-bar-text">{{ alert_txt }}</span>
-    <span
-      ><b-button
-        id="error-popup"
-        v-b-modal.error-catch
-        squared
-        class="w-100 h-100 edit-id"
-        style="background-color: #3f3f3f; border: 0px; color: #ececed"
-        >&nbsp;</b-button
-      >
+    <span>
       <b-modal
         id="error-catch"
         size="sm"
@@ -19,7 +11,7 @@
       >
         <ErrorCatchWidget
           style="top: 200px; left: 400px; position: absolute"
-          log_filepath="C:\Users\Eli\CuriBio\AppData\Roaming\MantarrayController\logs_flask\mantarrally_log__2020_10_21_185640.txt"
+          :log_filepath="log_path"
           @ok-clicked="remove_errorcatch"
         ></ErrorCatchWidget>
       </b-modal>
@@ -28,7 +20,7 @@
 </template>
 <script>
 import Vue from "vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import { STATUS } from "@/store/modules/flask/enums";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
@@ -57,6 +49,9 @@ export default {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
+    ...mapState("settings", {
+      log_path: "log_path",
+    }),
   },
   watch: {
     status_uuid: function (newValue) {
@@ -68,6 +63,7 @@ export default {
   },
   methods: {
     set_text_from_state: function (new_value) {
+      const shutdown_url = "http://localhost:4567/shutdown";
       this.alert_txt = "Status: ";
       switch (new_value) {
         case STATUS.MESSAGE.SERVER_STILL_INITIALIZING:
@@ -98,7 +94,9 @@ export default {
           this.alert_txt += `Recording to File`;
           break;
         case STATUS.MESSAGE.ERROR:
+          Vue.axios.get(shutdown_url);
           this.alert_txt += `Error Occurred`;
+          this.$bvModal.show("error-catch");
           break;
         case STATUS.MESSAGE.SHUTDOWN:
           this.alert_txt += `Shutting Down`;
@@ -108,11 +106,10 @@ export default {
           break;
       }
     },
-    // remove_errorcatch: function() {
-    //   this.alert_txt = `Status: Shutting Down`;
-    //   this.$store.commit("flask/set_status_uuid",STATUS.MESSAGE.SHUTDOWN);
-    //   this.$bvModal.hide("error-catch");
-    // },
+    remove_errorcatch: function () {
+      this.$bvModal.hide("error-catch");
+      this.$store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
+    },
   },
 };
 </script>
