@@ -119,4 +119,21 @@ describe("ErrorCatchWidget.vue", () => {
       "top: 246px; left: 0px; position: absolute;"
     );
   });
+  test("Given that ErrorCatchWidget is mounted, When the ErrorCatchWidget is visible, Then click on 'Okay' results in an event 'ok-clicked' to be emitted", async () => {
+    const propsData = {
+      log_filepath: "C:\\test_file_log.txt",
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+
+    const okay_btn = wrapper.find(".span__button_label");
+    await okay_btn.trigger("click");
+    await wrapper.vm.$nextTick();
+    const okay_btn_events = wrapper.emitted("ok-clicked");
+    expect(okay_btn_events).toHaveLength(1);
+    expect(okay_btn_events[0]).toStrictEqual([]);
+  });
 });

@@ -74,7 +74,7 @@ export default {
     error_catch_button_cssprops: function () {
       return (
         "top: " +
-        (210 + this.compute_number_of_rows * 12) +
+        (220 + this.compute_number_of_rows * 12) +
         "px; left: 0px; position: absolute"
       );
     },
