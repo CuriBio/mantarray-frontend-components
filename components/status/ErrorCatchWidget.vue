@@ -45,6 +45,7 @@
         :button_names="['Okay']"
         :enabled_color="'#B7B7B7'"
         :hover_color="['#FFFFFF']"
+        @btn-click="processok"
       >
       </ButtonWidget>
     </div>
@@ -52,7 +53,6 @@
 </template>
 <script>
 import ButtonWidget from "@/components/playback/controls/player/ButtonWidget.vue";
-// import { ButtonWidget } from "@/dist/mantarray.common";
 export default {
   name: "ErrorCatchWidget",
   components: {
@@ -81,7 +81,11 @@ export default {
   },
   watch: {},
   created() {},
-  methods: {},
+  methods: {
+    processok: function (choice) {
+      this.$emit("ok-clicked");
+    },
+  },
 };
 </script>
 <style>

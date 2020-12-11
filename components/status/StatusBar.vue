@@ -1,12 +1,43 @@
 <template>
   <div class="div__status-bar">
     <span class="span__status-bar-text">{{ alert_txt }}</span>
+    <span
+      ><b-button
+        id="error-popup"
+        v-b-modal.error-catch
+        squared
+        class="w-100 h-100 edit-id"
+        style="background-color: #3f3f3f; border: 0px; color: #ececed"
+        >&nbsp;</b-button
+      >
+      <b-modal
+        id="error-catch"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+      >
+        <ErrorCatchWidget
+          style="top: 200px; left: 400px; position: absolute"
+          log_filepath="C:\Users\Eli\CuriBio\AppData\Roaming\MantarrayController\logs_flask\mantarrally_log__2020_10_21_185640.txt"
+          @ok-clicked="remove_errorcatch"
+        ></ErrorCatchWidget>
+      </b-modal>
+    </span>
   </div>
 </template>
 <script>
+import Vue from "vue";
 import { mapGetters } from "vuex";
 import { STATUS } from "@/store/modules/flask/enums";
+import BootstrapVue from "bootstrap-vue";
+import { BButton } from "bootstrap-vue";
+import { BModal } from "bootstrap-vue";
+import ErrorCatchWidget from "@/components/status/ErrorCatchWidget.vue";
 
+Vue.use(BootstrapVue);
+Vue.component("BButton", BButton);
+Vue.component("BModal", BModal);
 /**
  * @vue-data     {String} alert_txt - Contains the current status of the Application and its updated as status change.
  * @vue-computed {String} status_uuid - Contains a UUID which represents a meaningful information, from Vuex store.
@@ -14,6 +45,9 @@ import { STATUS } from "@/store/modules/flask/enums";
  */
 export default {
   name: "StatusBar",
+  components: {
+    ErrorCatchWidget,
+  },
   data() {
     return {
       alert_txt: "",
@@ -29,7 +63,6 @@ export default {
       this.set_text_from_state(newValue);
     },
   },
-
   created() {
     this.set_text_from_state(this.status_uuid);
   },
@@ -67,11 +100,19 @@ export default {
         case STATUS.MESSAGE.ERROR:
           this.alert_txt += `Error Occurred`;
           break;
+        case STATUS.MESSAGE.SHUTDOWN:
+          this.alert_txt += `Shutting Down`;
+          break;
         default:
           this.alert_txt = `Status:` + new_value; // to be 43 characters and include the UUID, there isn't room for a space
           break;
       }
     },
+    // remove_errorcatch: function() {
+    //   this.alert_txt = `Status: Shutting Down`;
+    //   this.$store.commit("flask/set_status_uuid",STATUS.MESSAGE.SHUTDOWN);
+    //   this.$bvModal.hide("error-catch");
+    // },
   },
 };
 </script>
