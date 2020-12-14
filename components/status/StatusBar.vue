@@ -8,11 +8,9 @@
         hide-footer
         hide-header
         hide-header-close
-        :static="true"
       >
         <ErrorCatchWidget
           id="error"
-          style="top: 200px; left: 400px; position: absolute"
           :log_filepath="log_path"
           @ok-clicked="remove_errorcatch"
         ></ErrorCatchWidget>

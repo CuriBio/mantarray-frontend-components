@@ -22,7 +22,7 @@ export default {
     setTimeout(this.reset_error, 10);
   },
   methods: {
-    reset_error: function () {
+    reset_error: function (event) {
       this.$store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
     },
   },
