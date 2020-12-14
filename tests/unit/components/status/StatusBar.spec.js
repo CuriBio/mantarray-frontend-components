@@ -1,6 +1,9 @@
 import { mount } from "@vue/test-utils";
+import BootstrapVue from "bootstrap-vue";
 import StatusWidget from "@/components/status/StatusBar.vue";
+import ErrorCatchWidget from "@/components/status/ErrorCatchWidget.vue";
 import { shallowMount } from "@vue/test-utils";
+import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 const MockAxiosAdapter = require("axios-mock-adapter");
@@ -11,6 +14,8 @@ let wrapper = null;
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
+localVue.use(BootstrapVue);
+
 let NuxtStore;
 let store;
 let mocked_axios;
@@ -93,7 +98,7 @@ describe("StatusWidget.vue", () => {
       "Status:3dbb8814-09f1-44db-b7d5-7a9f702beac4"
     );
   });
-  test("When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' ", async () => {
+  test("When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' and the the dialog of ErrorCatchWidget is visible ", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
     mocked_axios.onGet(shutdown_url).reply(200, {});
     const propsData = {};
@@ -104,11 +109,18 @@ describe("StatusWidget.vue", () => {
       attachToDocument: true,
     });
 
+    expect(wrapper.contains("#error-catch")).toBe(true);
+    const modal = wrapper.find("#error-catch");
+    expect(modal.isVisible()).toBe(false);
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find(text_selector).text()).toEqual(
       "Status: Error Occurred"
     );
+    Vue.nextTick(() => {
+      expect(modal.isVisible()).toBe(true);
+      done();
+    });
   });
   test("When Vuex is mutated to an SHUTDOWN UUID, Then the status text should update as 'Shutting Down' ", async () => {
     const propsData = {};
@@ -122,5 +134,39 @@ describe("StatusWidget.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find(text_selector).text()).toEqual("Status: Shutting Down");
     await wrapper.vm.$nextTick(); // wait for update
+  });
+  test("When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden", async () => {
+    const shutdown_url = "http://localhost:4567/shutdown";
+    mocked_axios.onGet(shutdown_url).reply(200, {});
+    const propsData = {};
+    wrapper = mount(StatusWidget, {
+      propsData,
+      store,
+      localVue,
+      attachToDocument: true,
+    });
+
+    expect(wrapper.contains("#error-catch")).toBe(true);
+    const modal = wrapper.find("#error-catch");
+
+    store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
+    await wrapper.vm.$nextTick(); // wait for update
+    expect(wrapper.find(text_selector).text()).toEqual(
+      "Status: Error Occurred"
+    );
+    Vue.nextTick(() => {
+      expect(modal.isVisible()).toBe(true);
+      done();
+    });
+
+    wrapper.vm.remove_errorcatch(); // the event of ok-clicked got invoked.
+
+    await wrapper.vm.$nextTick(); // wait for update
+    expect(wrapper.find(text_selector).text()).toEqual("Status: Shutting Down");
+
+    Vue.nextTick(() => {
+      expect(modal.isVisible()).toBe(false);
+      done();
+    });
   });
 });
