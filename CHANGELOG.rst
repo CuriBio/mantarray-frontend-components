@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.3 (2020-12-14)
+------------------
+
+- Updated a Error Catch Handling
+
 0.1.2 (2020-12-02)
 ------------------
 
