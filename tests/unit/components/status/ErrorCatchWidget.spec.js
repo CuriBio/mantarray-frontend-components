@@ -85,9 +85,9 @@ describe("ErrorCatchWidget.vue", () => {
     expect(target_text_area.attributes("rows")).toBe("1");
     await wrapper.setProps({
       log_filepath:
-        "C:\\Users\\Eli\\CuriBio\\AppData\\Roaming\\MantarrayController\\logs_flask\\mantarrally_log__2020_10_21_185640.txt",
+        "C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask",
     });
-    expect(target_text_area.attributes("rows")).toBe("3");
+    expect(target_text_area.attributes("rows")).toBe("2");
   });
   test("Given that ErrorCatchWidget has a props having log_filepath is small, When mounting the component with short log_filepath, Then the height attribute of the status-error-catch-background, textarea__error-file-path and the top attribute of error_catch_button is updated based on the length prop log_filepath", async () => {
     const propsData = {
@@ -106,17 +106,17 @@ describe("ErrorCatchWidget.vue", () => {
     expect(target_text_area.attributes().style).toBe("height: 35px;");
     const target_error_button = wrapper.find(".div__error-button");
     expect(target_error_button.attributes().style).toBe(
-      "top: 222px; left: 0px; position: absolute;"
+      "top: 232px; left: 0px; position: absolute;"
     );
     /* A run time update of prop occured below then observe that height value and top is updated */
     await wrapper.setProps({
       log_filepath:
-        "C:\\Users\\Eli\\CuriBio\\AppData\\Roaming\\MantarrayController\\logs_flask\\mantarrally_log__2020_10_21_185640.txt",
+        "C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask",
     });
-    expect(target_background_div.attributes().style).toBe("height: 256px;");
-    expect(target_text_area.attributes().style).toBe("height: 55px;");
+    expect(target_background_div.attributes().style).toBe("height: 244px;");
+    expect(target_text_area.attributes().style).toBe("height: 45px;");
     expect(target_error_button.attributes().style).toBe(
-      "top: 246px; left: 0px; position: absolute;"
+      "top: 244px; left: 0px; position: absolute;"
     );
   });
   test("Given that ErrorCatchWidget is mounted, When the ErrorCatchWidget is visible, Then click on 'Okay' results in an event 'ok-clicked' to be emitted", async () => {
