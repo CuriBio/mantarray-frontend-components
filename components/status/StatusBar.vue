@@ -8,6 +8,7 @@
         hide-footer
         hide-header
         hide-header-close
+        :static="true"
       >
         <ErrorCatchWidget
           id="error"
