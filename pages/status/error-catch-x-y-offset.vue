@@ -1,7 +1,7 @@
 <template>
   <div style="top: 111px; left: 88px; position: absolute">
     <ComponentToTest
-      log_filepath="C:\Users\Eli\CuriBio\AppData\Roaming\MantarrayController\logs_flask\mantarrally_log__2020_10_21_185640.txt"
+      log_filepath="C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask"
     ></ComponentToTest>
   </div>
 </template>
