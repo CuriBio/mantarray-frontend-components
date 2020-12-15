@@ -85,9 +85,9 @@ describe("ErrorCatchWidget.vue", () => {
     expect(target_text_area.attributes("rows")).toBe("1");
     await wrapper.setProps({
       log_filepath:
-        "C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask",
+        "C:\\Users\\Eli\\CuriBio\\AppData\\Roaming\\MantarrayController\\logs_flask\\mantarray-2020-10-21-185640.txt",
     });
-    expect(target_text_area.attributes("rows")).toBe("2");
+    expect(target_text_area.attributes("rows")).toBe("3");
   });
   test("Given that ErrorCatchWidget has a props having log_filepath is small, When mounting the component with short log_filepath, Then the height attribute of the status-error-catch-background, textarea__error-file-path and the top attribute of error_catch_button is updated based on the length prop log_filepath", async () => {
     const propsData = {
