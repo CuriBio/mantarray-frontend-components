@@ -7,6 +7,9 @@ const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
+const error_active_btn = Selector("#test");
+const okay_btn_label = Selector(".span__button_label");
+
 const shutdown_request_url = "http://localhost:4567/shutdown";
 
 const mocked_shutdown_commands = RequestMock()
@@ -30,10 +33,16 @@ fixture`status/basic-error-catch`
   .page(`http://localhost:8080/status/basic-error-catch`)
   .requestHooks(mocked_shutdown_commands); // specify the start page
 
-test("status widget captures an ERROR Catch Widget", async (t) => {
+test("status widget captures an ERROR Catch Widget and ShutDown", async (t) => {
   const screenshot_path = path.join("status", "basic-status-error-catch");
 
+  await t.click(error_active_btn);
   await testcafe_page_visual_regression(t, screenshot_path);
+
+  const screenshot_path_shutdown = path.join("status", "basic-status-shutdown");
+
+  await t.click(okay_btn_label);
+  await testcafe_page_visual_regression(t, screenshot_path_shutdown);
 });
 
 fixture`status/x-y-offset`.page // declare the fixture

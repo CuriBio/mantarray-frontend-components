@@ -64,7 +64,6 @@ export default {
   },
   methods: {
     set_text_from_state: function (new_value) {
-      const shutdown_url = "http://localhost:4567/shutdown";
       this.alert_txt = "Status: ";
       switch (new_value) {
         case STATUS.MESSAGE.SERVER_STILL_INITIALIZING:
@@ -95,7 +94,7 @@ export default {
           this.alert_txt += `Recording to File`;
           break;
         case STATUS.MESSAGE.ERROR:
-          Vue.axios.get(shutdown_url);
+          this.shutdown_request();
           this.alert_txt += `Error Occurred`;
           this.$bvModal.show("error-catch");
           break;
@@ -110,6 +109,14 @@ export default {
     remove_error_catch: function () {
       this.$bvModal.hide("error-catch");
       this.$store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
+    },
+    shutdown_request: async function () {
+      const shutdown_url = "http://localhost:4567/shutdown";
+      try {
+        await Vue.axios.get(shutdown_url);
+      } catch (error) {
+        return;
+      }
     },
   },
 };

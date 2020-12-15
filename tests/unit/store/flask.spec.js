@@ -291,7 +291,7 @@ describe("store/flask", () => {
           STATUS.MESSAGE.ERROR
         );
       });
-      test("Given the status is set to ERROR, When attempting to commit SHUTDOWN, Then it remains in updates to SHUTDOWN mode", () => {
+      test("Given the status is set to ERROR, When attempting to commit SHUTDOWN, Then updates to SHUTDOWN mode", () => {
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
 
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);

@@ -98,9 +98,9 @@ describe("StatusWidget.vue", () => {
       "Status:3dbb8814-09f1-44db-b7d5-7a9f702beac4"
     );
   });
-  test("When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' and the the dialog of ErrorCatchWidget is visible ", async () => {
+  test("Given that the http response is 404 for api request /shutdown, When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' and the the dialog of ErrorCatchWidget is visible ", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
-    mocked_axios.onGet(shutdown_url).reply(200, {});
+    mocked_axios.onGet(shutdown_url).reply(404);
     const propsData = {};
     wrapper = mount(StatusWidget, {
       propsData,
@@ -114,6 +114,7 @@ describe("StatusWidget.vue", () => {
     expect(modal.isVisible()).toBe(false);
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
     await wrapper.vm.$nextTick(); // wait for update
+    expect(mocked_axios.history.get[0].url).toStrictEqual(shutdown_url);
     expect(wrapper.find(text_selector).text()).toEqual(
       "Status: Error Occurred"
     );
@@ -135,7 +136,7 @@ describe("StatusWidget.vue", () => {
     expect(wrapper.find(text_selector).text()).toEqual("Status: Shutting Down");
     await wrapper.vm.$nextTick(); // wait for update
   });
-  test("When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden and Status is changed to 'Shutting Down", async () => {
+  test("Given that the http response is 200 for api request /shutdown,  When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden and Status is changed to 'Shutting Down", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
     mocked_axios.onGet(shutdown_url).reply(200, {});
     const propsData = {};

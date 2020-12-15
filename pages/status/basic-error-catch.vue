@@ -1,6 +1,12 @@
 <template>
   <div style="top: 111px; position: absolute">
     <ComponentToTest></ComponentToTest>
+    <span
+      id="test"
+      style="top: 0px; position: absolute; left: 800px"
+      @click="reset_error"
+      >Click me</span
+    >
   </div>
 </template>
 
@@ -19,7 +25,6 @@ export default {
       "flask/set_status_uuid",
       STATUS.MESSAGE.CALIBRATION_NEEDED
     );
-    setTimeout(this.reset_error, 10);
   },
   methods: {
     reset_error: function (event) {
