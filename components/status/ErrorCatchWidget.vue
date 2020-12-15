@@ -45,7 +45,7 @@
         :button_names="['Okay']"
         :enabled_color="'#B7B7B7'"
         :hover_color="['#FFFFFF']"
-        @btn-click="processok"
+        @btn-click="process_ok"
       >
       </ButtonWidget>
     </div>
@@ -82,7 +82,7 @@ export default {
   watch: {},
   created() {},
   methods: {
-    processok: function (choice) {
+    process_ok: function (choice) {
       this.$emit("ok-clicked");
     },
   },

@@ -51,7 +51,7 @@ describe("StatusWidget.vue", () => {
     ["RECORDING", "Status: Recording to File"],
     ["ERROR", "Status: Error Occurred"],
   ])(
-    "When Vuex is mutated to the state %s, Then the status text should update to be: %s",
+    "Given that /shutdown is mocked to return status 200, When Vuex is mutated to the state %s, Then the status text should update to be: %s",
     async (vuex_state, expected_text) => {
       const shutdown_url = "http://localhost:4567/shutdown";
       mocked_axios.onGet(shutdown_url).reply(200, {});
@@ -135,7 +135,7 @@ describe("StatusWidget.vue", () => {
     expect(wrapper.find(text_selector).text()).toEqual("Status: Shutting Down");
     await wrapper.vm.$nextTick(); // wait for update
   });
-  test("When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden", async () => {
+  test("When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden and Status is changed to 'Shutting Down", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
     mocked_axios.onGet(shutdown_url).reply(200, {});
     const propsData = {};
@@ -159,7 +159,7 @@ describe("StatusWidget.vue", () => {
       done();
     });
 
-    wrapper.vm.remove_errorcatch(); // the event of ok-clicked got invoked.
+    wrapper.vm.remove_error_catch(); // the event of ok-clicked got invoked.
 
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find(text_selector).text()).toEqual("Status: Shutting Down");

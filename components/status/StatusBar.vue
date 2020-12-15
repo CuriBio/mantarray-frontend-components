@@ -13,7 +13,7 @@
         <ErrorCatchWidget
           id="error"
           :log_filepath="log_path"
-          @ok-clicked="remove_errorcatch"
+          @ok-clicked="remove_error_catch"
         ></ErrorCatchWidget>
       </b-modal>
     </span>
@@ -107,7 +107,7 @@ export default {
           break;
       }
     },
-    remove_errorcatch: function () {
+    remove_error_catch: function () {
       this.$bvModal.hide("error-catch");
       this.$store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
     },
