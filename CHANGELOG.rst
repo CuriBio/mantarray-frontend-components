@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.6 (2020-12-16)
+------------------
+
+- Added log message in call_axios_get_from_vuex to help troubleshoot
+
 0.1.5 (2020-12-16)
 ------------------
 
