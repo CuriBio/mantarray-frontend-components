@@ -24,19 +24,36 @@
     ></div>
     <div
       id="cmpD1f8ff61b9f5d62ff426ef1e5e186f1ab_cvs"
-      width="35"
-      height="35"
+      width="25"
+      height="25"
       style="
         -webkit-transform: translateZ(0);
         position: absolute;
-        width: 35px;
-        height: 35px;
+        width: 25px;
+        height: 25px;
         top: 5px;
         left: 33px;
         color: #00c46f;
+        z-index: 10;
       "
     >
-      <FontAwesomeIcon :icon="['fa', 'check']" />
+      <!-- <FontAwesomeIcon :icon="['fa', 'check']" :style="{ 'color': 'rgb(0, 196, 111);' }" /> -->
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        data-prefix="fa"
+        data-icon="check"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"
+        class="svg-inline--fa fa-check fa-w-16"
+      >
+        <path
+          fill="#00c46f"
+          d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
+          class=""
+        ></path>
+      </svg>
     </div>
     <span
       id="cmpD2eba17f4bc0b8222a44b2a8fffec29f8"
@@ -98,14 +115,14 @@
       :value="value"
       :max="max"
       variant="success"
-      height="2px"
       style="
         position: absolute;
         width: 110px;
-        height: 2px;
+        height: 4px;
         top: 20px;
         left: 281px;
         visibility: visible;
+        color: #111111;
         z-index: 7;
       "
     ></b-progress>
@@ -113,19 +130,11 @@
 </template>
 <script>
 import Vue from "vue";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCheck as fa_check } from "@fortawesome/free-solid-svg-icons";
 import { BProgress } from "bootstrap-vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 Vue.component("BProgress", BProgress);
-
-library.add(fa_check);
 
 export default {
   name: "UploadFilesWidget",
-  components: {
-    FontAwesomeIcon,
-  },
   data() {
     return {
       value: 500,
@@ -137,12 +146,7 @@ export default {
 };
 </script>
 <style>
-.progressbar li,
-.progressbar li:after {
-  top: 20px;
-  left: 100px;
-  width: 500px;
-  z-index: -1;
-  position: relative;
+.bg-success {
+  background-color: #00c46f;
 }
 </style>
