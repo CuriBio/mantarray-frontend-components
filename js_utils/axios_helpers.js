@@ -14,6 +14,10 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
   try {
     result = await Vue.axios.get(whole_url);
   } catch (error) {
+    console.log(
+      // allow-log
+      "Error in call_axios_get_from_vuex for " + whole_url + ": " + error
+    );
     if (error.response) {
       if (error.response.status === 404) {
         if (
