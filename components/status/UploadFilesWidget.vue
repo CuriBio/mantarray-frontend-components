@@ -22,6 +22,22 @@
         pointer-events: all;
       "
     ></div>
+    <div
+      id="cmpD1f8ff61b9f5d62ff426ef1e5e186f1ab_cvs"
+      width="35"
+      height="35"
+      style="
+        -webkit-transform: translateZ(0);
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        top: 5px;
+        left: 33px;
+        color: #00c46f;
+      "
+    >
+      <FontAwesomeIcon :icon="['fa', 'check']" />
+    </div>
     <span
       id="cmpD2eba17f4bc0b8222a44b2a8fffec29f8"
       class="mfWFCompCls"
@@ -81,26 +97,52 @@
     <b-progress
       :value="value"
       :max="max"
-      class="w-25 mb-2"
-      style="z-index: 9"
+      variant="success"
+      height="2px"
+      style="
+        position: absolute;
+        width: 110px;
+        height: 2px;
+        top: 20px;
+        left: 281px;
+        visibility: visible;
+        z-index: 7;
+      "
     ></b-progress>
   </div>
 </template>
 <script>
 import Vue from "vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCheck as fa_check } from "@fortawesome/free-solid-svg-icons";
 import { BProgress } from "bootstrap-vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 Vue.component("BProgress", BProgress);
+
+library.add(fa_check);
 
 export default {
   name: "UploadFilesWidget",
+  components: {
+    FontAwesomeIcon,
+  },
   data() {
     return {
-      value: 10.000001,
-      max: 50,
+      value: 500,
+      max: 900,
     };
   },
   computed: {},
   methods: {},
 };
 </script>
-<style></style>
+<style>
+.progressbar li,
+.progressbar li:after {
+  top: 20px;
+  left: 100px;
+  width: 500px;
+  z-index: -1;
+  position: relative;
+}
+</style>
