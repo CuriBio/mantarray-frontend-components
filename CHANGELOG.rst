@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.4 (2020-12-16)
+------------------
+
+- Moved bootstrap and bootstrap-vue from devDependencies to Dependencies.
+
 0.1.3 (2020-12-14)
 ------------------
 
