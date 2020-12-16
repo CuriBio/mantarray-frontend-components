@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.3 (2020-12-14)
+------------------
+
+- Updated Error Handling capability via ErrorCatchWidget and gracefully shutdown for Electron App
+
 0.1.2 (2020-12-02)
 ------------------
 
