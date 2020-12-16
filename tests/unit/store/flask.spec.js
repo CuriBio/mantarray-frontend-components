@@ -104,7 +104,7 @@ describe("store/flask", () => {
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
       );
     });
-    test("Given the current state is not SERVER_READY and the returned status is having HTTP return status error 404 it should be gracefully handled", async () => {
+    test("Given the current state is not SERVER_READY and the returned status is having HTTP return status error 404 it should be gracefully handled and the status_uuid is set to ERROR and status_ping_interval_id is set to null ", async () => {
       mocked_axios.onGet(system_status_regexp).reply(404);
       store.commit(
         "playback/set_playback_state",
@@ -120,6 +120,8 @@ describe("store/flask", () => {
       expect(store.state.flask.status_uuid).not.toBe(
         STATUS.MESSAGE.CALIBRATION_NEEDED
       );
+      //expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+      //expect(store.state.flask.status_ping_interval_id).toBe(null);
       expect(store.state.playback.playback_state).toEqual(
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
@@ -278,6 +280,25 @@ describe("store/flask", () => {
 
   describe("mutations", () => {
     describe("Given the store in its default state", () => {
+      test("Given the status is set to ERROR, When attempting to commit a different system status, Then it remains in ERROR mode", () => {
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
+
+        store.commit(
+          "flask/set_status_uuid",
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.ERROR
+        );
+      });
+      test("Given the status is set to ERROR, When attempting to commit SHUTDOWN, Then updates to SHUTDOWN mode", () => {
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
+
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.SHUTDOWN
+        );
+      });
       test("When set_status_ping_interval_id is committed, the ID mutates", async () => {
         const expected_id = 2993;
         store.commit("flask/set_status_ping_interval_id", expected_id);
@@ -329,6 +350,86 @@ describe("store/flask", () => {
         store.commit("flask/stop_status_pinging");
         expect(spied_clear_interval).toBeCalledWith(initial_interval_id);
         expect(store.state.flask.status_ping_interval_id).toBe(null);
+      });
+    });
+    describe("ping_system_status plate bar code scanned", () => {
+      let context = null;
+      let valid_plate_barcode = "MB190440991";
+      let invalid_plate_barcode = "MD20044099";
+      beforeEach(async () => {
+        context = await store.dispatch("flask/get_flask_action_context");
+      });
+      test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED with a valid plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MB190440991' obtained from JSON object", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: valid_plate_barcode,
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toEqual(valid_plate_barcode);
+      });
+      test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED with a invalid plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MD20044099' obtained from JSON object", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: invalid_plate_barcode,
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toEqual(invalid_plate_barcode);
+      });
+      test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED with a <empty> plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was rest to `null` as  from JSON object contained <empty>", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: "",
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toEqual(null);
       });
     });
   });

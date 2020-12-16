@@ -6,70 +6,40 @@
     <!-- original Mockflow ID: cmpDd0be63536ca605546f566539e51ad0c3-->
     <input
       id="plateinfo"
-      :disabled="
-        playback_state === playback_state_enums.RECORDING ||
-        playback_state === playback_state_enums.BUFFERING ||
-        playback_state === playback_state_enums.LIVE_VIEW_ACTIVE
-      "
+      disabled="disabled"
       type="text"
       spellcheck="false"
-      onpaste="return false;"
       class="input__plate-barcode-entry"
-      :value="platebarcode"
-      @input="validatePlateBarcode"
+      :class="[
+        is_valid_barcode
+          ? `input__plate-barcode-entry-valid`
+          : `input__plate-barcode-entry-invalid`,
+      ]"
+      :value="barcode"
     />
     <!--</div>-->
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
-import playback_module from "@/store/modules/playback";
-import { TextValidation } from "@/js_utils/text_validation.js";
 /**
  * @vue-data {String} platebarcode - Current plate bar code
  * @vue-data {String} playback_state_enums - Current state of playback
  * @vue-computed {String} playback_state - Current value in Vuex store
  * @vue-event {String} validatePlateBarcode - User entered String parser
  */
-const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 export default {
   name: "PlateBarcode",
-  data() {
-    return {
-      platebarcode: "",
-      playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
-    };
-  },
   computed: {
     ...mapState("playback", {
       playback_state: "playback_state",
     }),
-  },
-  updated() {
-    this.platebarcode = this.$store.state.playback.barcode;
-  },
-  methods: {
-    validatePlateBarcode(event) {
-      const val = event.target.value;
-      const inp = document.getElementById("plateinfo");
-
-      inp.addEventListener("blur", this.set_red_color(inp));
-      this.$store.commit("playback/set_barcode_number", null);
-      const result = TextValidation_plate_barcode.validate(val);
-      if (result == "") {
-        this.set_green_color(inp);
-        this.$store.commit("playback/set_barcode_number", val);
-      }
-      if (result == " ") {
-        this.set_red_color(inp);
-      }
-    },
-    set_green_color(inp) {
-      inp.style.border = "1px solid green";
-    },
-    set_red_color(inp) {
-      inp.style.border = "1px solid red";
-    },
+    ...mapState("playback", {
+      barcode: "barcode",
+    }),
+    ...mapState("playback", {
+      is_valid_barcode: "is_valid_barcode",
+    }),
   },
 };
 </script>
@@ -146,10 +116,15 @@ export default {
   height: 24px;
   top: 3px;
   right: 17px;
+}
 
+.input__plate-barcode-entry-invalid {
   border: 1px solid red;
 }
 
+.input__plate-barcode-entry-valid {
+  border: 1px solid green;
+}
 input:focus {
   outline: none;
   border: 1px solid red;

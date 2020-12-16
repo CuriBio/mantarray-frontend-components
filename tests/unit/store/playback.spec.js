@@ -188,6 +188,42 @@ describe("store/playback", () => {
       store.commit("playback/increment_x_time_index", 150);
       expect(store.getters["playback/x_time_index"]).toBe(250);
     });
+    describe("barcode validation and is_valid_barcode verification", () => {
+      test.each([
+        ["AB200440012", "error not matching MA MB MD", false],
+        ["12200440012", "error not matching MA MB MD", false],
+        ["*#200440012", "error not matching MA MB MD", false],
+        ["MA200000012", "error as day is 0", false],
+        ["MA203670012", "error as day is 367", false],
+        ["MA209990121", "error as day is 999", false],
+        ["MA 13000012", "error due to <space>", false],
+        ["MA  300000", "error due to 2<space>", false],
+        ["MB190440991", "year 19 now allowed", true],
+        ["MB210440991", "year 21 now allowed", true],
+        ["MB100440991", "year 10 now allowed", true],
+        ["MA*#300001", "error as *# asterisk", false],
+        ["MA20222111*", "error as * asterisk", false],
+        ["MA20010*#12", "error as *# asterisk", false],
+        ["MA20001 021", "error due <space> in day", false],
+        ["MA20001º21", "error due to symbol º", false],
+        ["MA20210न21", "error due to unicode", false],
+        ["MA20011浩211", "error due to unicode", false],
+        ["MA二千万一千〇九", "error due to all unicode", false],
+        ["MA", "error due to not matching length (10,11)", false],
+        ["MA20", "error due to not matching length (10,11)", false],
+        ["MA20044", "error due to not matching length (10,11)", false],
+        ["MA20**#*", "error due to not matching length (10,11)", false],
+        ["MA20044001", "All criteria matches", true],
+        ["M120044099", "error as M1 is disallowed", false],
+        ["ME20044099", "All criteria matches", true],
+      ])(
+        "Given a barcode scanned results in value %s, When validation rule FAILS  or PASSES due %s, Then validation results set is_valid_barcode to %s",
+        async (platecode, reason, valid) => {
+          store.commit("playback/set_barcode_number", platecode);
+          expect(store.state.playback.is_valid_barcode).toBe(valid);
+        }
+      );
+    });
   });
 
   describe("actions", () => {
@@ -514,7 +550,24 @@ describe("store/playback", () => {
       expect(spied_clear_interval).toBeCalledWith(expected_interval_id);
       expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
     });
+    test("Given playback_progression interval is active and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the interval playback_progression_interval_id is cleared", async () => {
+      mocked_axios.onGet(all_mantarray_commands_regexp).reply(400);
 
+      await store.dispatch("playback/start_playback_progression");
+
+      const expected_interval_id =
+        store.state.playback.playback_progression_interval_id;
+      // confirm pre-condition
+      expect(expected_interval_id).toBeGreaterThanOrEqual(0);
+
+      const spied_clear_interval = jest.spyOn(window, "clearInterval");
+
+      await store.dispatch("playback/start_calibration");
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+      expect(store.state.flask.status_ping_interval_id).toBe(null);
+      expect(store.state.playback.playback_progression_interval_id).toBe(null);
+      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
+    });
     test("Given x_time_index is not 0, When stop_live_view is called, Then the playback and status states mutate to calibrated and x_time_index mutates to 0", async () => {
       let baseurl = "http://localhost:4567";
       let api = "stop_managed_acquisition";
