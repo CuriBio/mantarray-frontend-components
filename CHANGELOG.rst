@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.5 (2020-12-16)
+------------------
+
+- System no longer goes into error mode if HTTP error occurs while Server is still Initializing
+
 0.1.4 (2020-12-16)
 ------------------
 
