@@ -63,13 +63,13 @@ export default {
   },
   computed: {
     compute_number_of_rows: function () {
-      return Math.ceil(((this.log_filepath.length * 1.0) / 50).toFixed(1));
+      return Math.ceil(((this.log_filepath.length * 1.0) / 40).toFixed(1));
     },
     error_background_cssprops: function () {
       return "height: " + (220 + this.compute_number_of_rows * 12) + "px;";
     },
     textarea__error_cssprops: function () {
-      return "height: " + (25 + this.compute_number_of_rows * 10) + "px;";
+      return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";
     },
     error_catch_button_cssprops: function () {
       return (

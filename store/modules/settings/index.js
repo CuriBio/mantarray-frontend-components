@@ -30,7 +30,7 @@ const default_state = {
   customer_index: null,
   user_index: null,
   log_path:
-    "C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask",
+    "C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask", // Fix of escape issue by additional slash
 };
 
 const state = () => JSON.parse(JSON.stringify(default_state));

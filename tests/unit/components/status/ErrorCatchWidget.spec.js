@@ -43,7 +43,7 @@ describe("ErrorCatchWidget.vue", () => {
   });
   test("Given that ErrorCatchWidget has a props having error file name, When the lifecyle hook mounted is created, Then title, alert text, contact e-mail and error file name is rendered properly", async () => {
     const propsData = {
-      log_filepath: "C:\\test_file_log.txt",
+      log_filepath: "C:\test_file_log.txt",
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -68,12 +68,12 @@ describe("ErrorCatchWidget.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     const target_text_area = wrapper.find(".textarea__error-file-path");
     expect(target_text_area.element.value).toStrictEqual(
-      "C:\\test_file_log.txt"
+      "C:\test_file_log.txt"
     );
   });
   test("Given that ErrorCatchWidget has a props having log_filepath is small, When mounting the component with short log_filepath, Then the text area rows attribute is modified to suite the length of props log_filepath intially, at run time based on new log_filepath then the rows attribute of textarea is updated", async () => {
     const propsData = {
-      log_filepath: "C:\\test_file_log.txt",
+      log_filepath: "C:\test_file_log.txt",
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -85,13 +85,13 @@ describe("ErrorCatchWidget.vue", () => {
     expect(target_text_area.attributes("rows")).toBe("1");
     await wrapper.setProps({
       log_filepath:
-        "C:\\Users\\Eli\\CuriBio\\AppData\\Roaming\\MantarrayController\\logs_flask\\mantarray-2020-10-21-185640.txt",
+        "C:UsersEliCuriBioAppDataRoamingMantarrayControllerlogs_flaskmantarray-2020-10-21-185640.txt",
     });
-    expect(target_text_area.attributes("rows")).toBe("2");
+    expect(target_text_area.attributes("rows")).toBe("3");
   });
   test("Given that ErrorCatchWidget has a props having log_filepath is small, When mounting the component with short log_filepath, Then the height attribute of the status-error-catch-background, textarea__error-file-path and the top attribute of error_catch_button is updated based on the length prop log_filepath", async () => {
     const propsData = {
-      log_filepath: "C:\\test_file_log.txt",
+      log_filepath: "C:\test_file_log.txt",
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -103,7 +103,7 @@ describe("ErrorCatchWidget.vue", () => {
     );
     expect(target_background_div.attributes().style).toBe("height: 232px;");
     const target_text_area = wrapper.find(".textarea__error-file-path");
-    expect(target_text_area.attributes().style).toBe("height: 35px;");
+    expect(target_text_area.attributes().style).toBe("height: 37px;");
     const target_error_button = wrapper.find(".div__error-button");
     expect(target_error_button.attributes().style).toBe(
       "top: 232px; left: 0px; position: absolute;"
@@ -111,17 +111,17 @@ describe("ErrorCatchWidget.vue", () => {
     /* A run time update of prop occured below then observe that height value and top is updated */
     await wrapper.setProps({
       log_filepath:
-        "C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask",
+        "C:UsersMantarrayAppDataRoamingMantarrayControllerlogs_flask",
     });
     expect(target_background_div.attributes().style).toBe("height: 244px;");
-    expect(target_text_area.attributes().style).toBe("height: 45px;");
+    expect(target_text_area.attributes().style).toBe("height: 49px;");
     expect(target_error_button.attributes().style).toBe(
       "top: 244px; left: 0px; position: absolute;"
     );
   });
   test("Given that ErrorCatchWidget is mounted, When the ErrorCatchWidget is visible, Then click on 'Okay' results in an event 'ok-clicked' to be emitted", async () => {
     const propsData = {
-      log_filepath: "C:\\test_file_log.txt",
+      log_filepath: "C:\test_file_log.txt",
     };
     wrapper = mount(ComponentToTest, {
       propsData,
