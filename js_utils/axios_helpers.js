@@ -39,6 +39,9 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     action_context.commit("waveform/stop_waveform_pinging", null, {
       root: true,
     });
+    if (error.response) {
+      return error.response;
+    }
     return;
     // return error.response;
     // }

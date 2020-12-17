@@ -153,4 +153,13 @@ export default {
   text-align: left;
   z-index: 101;
 }
+
+/* Center the error-catch pop-up dialog within the viewport */
+#error-catch {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
+}
 </style>
