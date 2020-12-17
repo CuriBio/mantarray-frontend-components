@@ -550,8 +550,9 @@ describe("store/playback", () => {
       expect(spied_clear_interval).toBeCalledWith(expected_interval_id);
       expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
     });
-    test("Given playback_progression interval is active and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the interval playback_progression_interval_id is cleared", async () => {
+    test("Given playback_progression interval is active and SYSTEM_STATUS is set to PLAYING and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the SYSTEM_STATUS is set to ERROR and the interval playback_progression_interval_id is cleared", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(400);
+      store.commit("flask/set_status_uuid", STATUS.MESSAGE.PLAYING);
 
       await store.dispatch("playback/start_playback_progression");
 
@@ -593,83 +594,75 @@ describe("store/playback", () => {
 
       expect(store.state.flask.status_uuid).toEqual(expected_status_state);
     });
-    describe("When start_calibration is called", () => {
-      beforeEach(() => {
-        jest.restoreAllMocks();
-      });
-      test("Then playback state mutates to calibrating and starts status_pinging in Flask, then playback state mutates to calibrated", async () => {
-        let baseurl = "http://localhost:4567";
-        let api = "start_calibration";
 
-        mocked_axios
-          .onGet(system_status_when_calibrating_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED_uuid });
+    test("When start_calibration is called, Then playback state mutates to calibrating and starts status_pinging in Flask, then playback state mutates to calibrated", async () => {
+      let baseurl = "http://localhost:4567";
+      let api = "start_calibration";
 
-        mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
+      mocked_axios
+        .onGet(system_status_when_calibrating_regexp)
+        .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED_uuid });
 
-        // confirm pre-condition
-        expect(store.state.playback.playback_state).not.toEqual(
-          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
-        );
+      mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
-        await store.dispatch("playback/start_calibration");
+      // confirm pre-condition
+      expect(store.state.playback.playback_state).not.toEqual(
+        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
+      );
 
-        let request_to_start_calibration = mocked_axios.history.get[0];
+      await store.dispatch("playback/start_calibration");
 
-        expect(request_to_start_calibration.url).toMatch(`${baseurl}/${api}`);
+      let request_to_start_calibration = mocked_axios.history.get[0];
 
+      expect(request_to_start_calibration.url).toMatch(`${baseurl}/${api}`);
+
+      expect(store.state.playback.playback_state).toEqual(
+        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
+      );
+
+      await wait_for_expect(() => {
+        expect(
+          store.state.flask.status_ping_interval_id
+        ).toBeGreaterThanOrEqual(0);
         expect(store.state.playback.playback_state).toEqual(
-          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
         );
-
-        await wait_for_expect(() => {
-          expect(
-            store.state.flask.status_ping_interval_id
-          ).toBeGreaterThanOrEqual(0);
-          expect(store.state.playback.playback_state).toEqual(
-            playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
-          );
-        });
       });
     });
-    describe("When start_live_view is called", () => {
-      beforeEach(() => {
-        jest.restoreAllMocks();
-      });
-      test("Then playback state mutates to BUFFERING and starts status_pinging in Flask, then playback state mutates to LIVE_VIEW_ACTIVE", async () => {
-        let baseurl = "http://localhost:4567";
-        let api = "start_managed_acquisition";
 
-        mocked_axios
-          .onGet(system_status_when_buffering_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid })
-          .onGet(get_available_data_regex)
-          .reply(204);
+    test("Then playback state mutates to BUFFERING and starts status_pinging in Flask, then playback state mutates to LIVE_VIEW_ACTIVE", async () => {
+      let baseurl = "http://localhost:4567";
+      let api = "start_managed_acquisition";
 
-        mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
+      mocked_axios
+        .onGet(system_status_when_buffering_regexp)
+        .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid })
+        .onGet(get_available_data_regex)
+        .reply(204);
 
-        expect(store.state.playback.playback_state).not.toEqual(
-          playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
-        );
+      mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
-        await store.dispatch("playback/start_live_view");
+      expect(store.state.playback.playback_state).not.toEqual(
+        playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
+      );
 
-        let request_to_start_acquisition = mocked_axios.history.get[0];
+      await store.dispatch("playback/start_live_view");
 
-        expect(request_to_start_acquisition.url).toMatch(`${baseurl}/${api}`);
+      let request_to_start_acquisition = mocked_axios.history.get[0];
 
+      expect(request_to_start_acquisition.url).toMatch(`${baseurl}/${api}`);
+
+      expect(store.state.playback.playback_state).toEqual(
+        playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
+      );
+
+      await wait_for_expect(() => {
+        expect(
+          store.state.flask.status_ping_interval_id
+        ).toBeGreaterThanOrEqual(0);
         expect(store.state.playback.playback_state).toEqual(
-          playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
+          playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
         );
-
-        await wait_for_expect(() => {
-          expect(
-            store.state.flask.status_ping_interval_id
-          ).toBeGreaterThanOrEqual(0);
-          expect(store.state.playback.playback_state).toEqual(
-            playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
-          );
-        });
       });
     });
   });
