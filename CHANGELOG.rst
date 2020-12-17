@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.8 (2020-12-17)
+------------------
+
+- Made the Simulation Mode widget red instead of seafoam green to be more obvious
+
 0.1.7 (2020-12-17)
 ------------------
 

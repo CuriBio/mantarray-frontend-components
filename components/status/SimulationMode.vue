@@ -23,7 +23,7 @@
           box-sizing: border-box;
           padding: 0px;
           margin: 0px;
-          background: rgb(25, 172, 138);
+          background: #e21e1e;
           position: absolute;
           width: 288px;
           height: 55px;
@@ -33,7 +33,6 @@
           border: 0px solid rgb(0, 0, 0);
           border-radius: 0px;
           box-shadow: none;
-
           pointer-events: all;
         "
       ></div>
@@ -208,7 +207,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 /**
  * @vue-data     {Boolean} mode - Contains a true or false based on if its in simulation mode or not
  * @vue-computed {Boolean} simulation_mode_id - Contains a true or false based based on the value set in Vuex store.
@@ -216,20 +215,10 @@ import { mapGetters } from "vuex";
  */
 export default {
   name: "SimulationMode",
-  data() {
-    return {
-      mode: false,
-    };
-  },
   computed: {
-    ...mapGetters({
-      simulation_mode_id: "flask/simulation_status",
+    ...mapState("flask", {
+      mode: "simulation_mode",
     }),
-  },
-  watch: {
-    simulation_mode_id: function (newValue) {
-      this.mode = newValue;
-    },
   },
 };
 </script>
