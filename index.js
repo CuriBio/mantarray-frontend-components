@@ -16,6 +16,7 @@ export { TextValidation } from "./js_utils/text_validation";
 // Store
 export { default as playback_store_module } from "./store/modules/playback";
 export { ENUMS as PLAYBACK_ENUMS } from "./store/modules/playback/enums";
+export { default as settings_store_module } from "./store/modules/settings";
 export { default as waveform_store_module } from "./store/modules/waveform";
 export { default as twentyfourcontrols_store_module } from "./store/modules/twentyfourcontrols";
 export { default as flask_store_module } from "./store/modules/flask";

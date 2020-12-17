@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.7 (2020-12-17)
+------------------
+
+- Made error handling more lenient so any type of axios error is suppressed if the system state is SERVER_STILL_INITIALIZING
+
 0.1.6 (2020-12-16)
 ------------------
 

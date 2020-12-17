@@ -18,28 +18,30 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
       // allow-log
       "Error in call_axios_get_from_vuex for " + whole_url + ": " + error
     );
-    if (error.response) {
-      if (error.response.status === 404) {
-        if (
-          action_context.rootState.flask.status_uuid ===
-          STATUS.MESSAGE.SERVER_STILL_INITIALIZING
-        ) {
-          return error.response;
-        }
-      }
-
-      action_context.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR, {
-        root: true,
-      });
-      action_context.commit("flask/stop_status_pinging", null, { root: true }); // Error reported clear the ping_system_status
-      action_context.commit("playback/stop_playback_progression", null, {
-        root: true,
-      });
-      action_context.commit("waveform/stop_waveform_pinging", null, {
-        root: true,
-      });
-      return error.response;
+    // if (error.response) {
+    // if (error.response.status === 404) {
+    if (
+      action_context.rootState.flask.status_uuid ===
+      STATUS.MESSAGE.SERVER_STILL_INITIALIZING
+    ) {
+      return error;
+      // return error.response;
     }
+    // }
+
+    action_context.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR, {
+      root: true,
+    });
+    action_context.commit("flask/stop_status_pinging", null, { root: true }); // Error reported clear the ping_system_status
+    action_context.commit("playback/stop_playback_progression", null, {
+      root: true,
+    });
+    action_context.commit("waveform/stop_waveform_pinging", null, {
+      root: true,
+    });
+    return;
+    // return error.response;
+    // }
   }
   return result;
 }
