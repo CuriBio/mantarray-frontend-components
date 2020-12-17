@@ -2,7 +2,7 @@ import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import axios from "axios";
 const MockAxiosAdapter = require("axios-mock-adapter");
-import { ping_get_available_data } from "../../../store/modules/waveform/actions";
+import { ping_get_available_data } from "@/store/modules/waveform/actions";
 import { arry, new_arry } from "./../js_utils/waveform_data_provider.js";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import {

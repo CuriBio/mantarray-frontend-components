@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
-
+import { settings_store_module } from "@/dist/mantarray.common";
 describe("store/settings", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -18,6 +18,11 @@ describe("store/settings", () => {
   });
   test("When initialized, Then the customer_account_ids is an empty with no value assigned", () => {
     const array_of_customerids = store.state.settings.customer_account_ids;
+    expect(array_of_customerids.length).toEqual(0);
+  });
+  test("When imported from the dist file, Then the customer_account_ids is an empty with no value assigned", () => {
+    const array_of_customerids = settings_store_module.state()
+      .customer_account_ids;
     expect(array_of_customerids.length).toEqual(0);
   });
   test("Store a single user detail can be assigned to the user_ids ", () => {
