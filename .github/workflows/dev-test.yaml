@@ -18,6 +18,7 @@ jobs:
       matrix:
         os:
           - "ubuntu-18.04"
+          - "ubuntu-20.04"
           # - "windows-2019"
         node:
           - 12
@@ -28,17 +29,13 @@ jobs:
           - "tests/e2e/waveforms"
         include:
           # only enable coverage on the fastest job
-          - os: "ubuntu-18.04"
-            node: "12"
+          - os: "ubuntu-20.04"
+            node: "14"
             e2e-tests: "tests/e2e/status"
             ENABLE_CODE_COVERAGE: true
             IS_FASTEST_JOB: true
           - e2e-tests: "tests/e2e/status"
             IS_FASTEST_E2E_SUITE: true
-          - os: "ubuntu-18.04"
-            IS_LINUX: true
-          # - os: "windows-2019"
-          #   IS_WINDOWS: true
     env:
       ENABLE_CODE_COVERAGE: ${{ matrix.ENABLE_CODE_COVERAGE }}
       TESTCAFE_VERSION: "1.9.3" # TODO (Eli 10/5/20): get this working as a variable in the Testcafe actions
@@ -70,7 +67,7 @@ jobs:
         run: (Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe').'(Default)').VersionInfo
 
       - name: Display Chrome version (Linux)
-        if: matrix.IS_LINUX == true
+        if: runner.os == 'Linux'
         run: |
           google-chrome --version
           chromedriver --version
@@ -102,7 +99,7 @@ jobs:
       #   version: "1.9.3"
       #   args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ./tests/e2e --screenshots path=./tests/e2e/screenshots --app ''npx nuxt dev --spa'' --app-init-delay 35000'
       - name: Run E2E Tests (Linux)
-        if: matrix.IS_LINUX == true
+        if: runner.os == 'Linux'
         uses: DevExpress/testcafe-action@v0.0.3
         with:
           version: "1.9.3"
