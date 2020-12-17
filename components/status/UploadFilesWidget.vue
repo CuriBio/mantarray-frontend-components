@@ -1,43 +1,9 @@
 <template>
   <div>
-    <div
-      id="cmpDaf090556edcfaef1fa3dae32a48c3cd8"
-      class="mfWFCompCls"
-      style="
-        transform: rotate(0deg);
-        box-sizing: border-box;
-        padding: 0px;
-        margin: 0px;
-        background: rgb(17, 17, 17);
-        position: absolute;
-        width: 400px;
-        height: 45px;
-        top: 0px;
-        left: 0px;
-        visibility: visible;
-        border: 0px none rgb(0, 0, 0);
-        border-radius: 0px;
-        box-shadow: none;
-        z-index: 1;
-        pointer-events: all;
-      "
-    ></div>
-    <div
-      id="cmpD1f8ff61b9f5d62ff426ef1e5e186f1ab_cvs"
-      width="25"
-      height="25"
-      style="
-        -webkit-transform: translateZ(0);
-        position: absolute;
-        width: 25px;
-        height: 25px;
-        top: 5px;
-        left: 33px;
-        color: #00c46f;
-        z-index: 10;
-      "
-    >
-      <!-- <FontAwesomeIcon :icon="['fa', 'check']" :style="{ 'color': 'rgb(0, 196, 111);' }" /> -->
+    <!-- original mockflow ID: cmpDaf090556edcfaef1fa3dae32a48c3cd8 -->
+    <div class="div__upload-file-background"></div>
+    <!-- original mockflow ID: cmpD1f8ff61b9f5d62ff426ef1e5e186f1ab_cvs -->
+    <div class="div__upload-custom-check-mark">
       <svg
         aria-hidden="true"
         focusable="false"
@@ -55,76 +21,19 @@
         ></path>
       </svg>
     </div>
-    <span
-      id="cmpD2eba17f4bc0b8222a44b2a8fffec29f8"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 170px;
-        height: 30px;
-        top: 9px;
-        left: 61.3571px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 15px;
-        color: rgb(255, 255, 255);
-        text-align: right;
-        z-index: 3;
-      "
-    >
+    <!--  original mockflow ID: cmpD2eba17f4bc0b8222a44b2a8fffec29f8 -->
+    <span class="span__upload-file-label-txt">
       Successfully&nbsp;<wbr />Uploaded:
     </span>
-    <span
-      id="cmpD58c69d7de8aa0934dca9ef4e8beabbdc"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 84px;
-        height: 30px;
-        top: 9.6663px;
-        left: 200.909px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: 'Anonymous Pro';
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 15px;
-        color: rgb(183, 183, 183);
-        text-align: right;
-        z-index: 9;
-      "
-    >
-      24/900
+    <!-- original mockflow ID: cmpD58c69d7de8aa0934dca9ef4e8beabbdc -->
+    <span class="span__upload-file-count-container">
+      {{ value }}/{{ max }}
     </span>
     <b-progress
+      id="upload-progress-bar"
       :value="value"
       :max="max"
       variant="success"
-      style="
-        position: absolute;
-        width: 110px;
-        height: 4px;
-        top: 20px;
-        left: 281px;
-        visibility: visible;
-        color: #111111;
-        z-index: 7;
-      "
     ></b-progress>
   </div>
 </template>
@@ -135,18 +44,100 @@ Vue.component("BProgress", BProgress);
 
 export default {
   name: "UploadFilesWidget",
-  data() {
-    return {
-      value: 500,
-      max: 900,
-    };
+  props: {
+    value: { type: Number, default: 0 },
+    max: { type: Number, default: 0 },
   },
-  computed: {},
   methods: {},
 };
 </script>
 <style>
+.div__upload-file-background {
+  transform: rotate(0deg);
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+  background: rgb(17, 17, 17);
+  position: absolute;
+  width: 400px;
+  height: 45px;
+  top: 0px;
+  left: 0px;
+  visibility: visible;
+  border: 0px none rgb(0, 0, 0);
+  border-radius: 0px;
+  box-shadow: none;
+  z-index: 1;
+  pointer-events: all;
+}
+
+.div__upload-custom-check-mark {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 5px;
+  left: 33px;
+  color: #00c46f;
+  z-index: 10;
+}
+
+.span__upload-file-label-txt {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 170px;
+  height: 30px;
+  top: 9px;
+  left: 50.3571px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 15px;
+  color: rgb(255, 255, 255);
+  text-align: right;
+  z-index: 3;
+}
+
+.span__upload-file-count-container {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 84px;
+  height: 30px;
+  top: 9.6663px;
+  left: 200.909px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: "Anonymous Pro";
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 15px;
+  color: rgb(183, 183, 183);
+  text-align: right;
+  z-index: 9;
+}
+
 .bg-success {
   background-color: #00c46f;
+}
+#upload-progress-bar {
+  position: absolute;
+  width: 110px;
+  height: 4px;
+  top: 20px;
+  left: 281px;
+  visibility: visible;
+  color: #111111;
+  z-index: 7;
 }
 </style>
