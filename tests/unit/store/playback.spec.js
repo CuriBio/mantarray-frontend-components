@@ -17,7 +17,7 @@ import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
 
 const sandbox = sinon.createSandbox();
-
+const base_url = "http://localhost:4567";
 describe("store/playback", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -431,7 +431,6 @@ describe("store/playback", () => {
       );
     });
     test("When start_recording is called the playback and status states mutate to recording", async () => {
-      let baseurl = "http://localhost:4567";
       let api = "start_recording";
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
@@ -451,7 +450,7 @@ describe("store/playback", () => {
       await store.dispatch("playback/start_recording");
 
       expect(mocked_axios.history.get[0].url).toEqual(
-        `${baseurl}/${api}?time_index=12345&barcode=MB2036078&is_hardware_test_recording=false`
+        `${base_url}/${api}?time_index=12345&barcode=MB2036078&is_hardware_test_recording=false`
       );
 
       expect(store.state.playback.playback_state).toEqual(
@@ -461,7 +460,6 @@ describe("store/playback", () => {
       expect(store.state.playback.recording_start_time).toEqual(12345);
     });
     test("When stop_recording is called the playback and status states mutate to live_view_active", async () => {
-      let baseurl = "http://localhost:4567";
       let api = "stop_recording";
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
@@ -479,7 +477,7 @@ describe("store/playback", () => {
       await store.dispatch("playback/stop_recording");
 
       expect(mocked_axios.history.get[0].url).toEqual(
-        `${baseurl}/${api}?time_index=456789`
+        `${base_url}/${api}?time_index=456789`
       );
 
       expect(store.state.playback.playback_state).toEqual(
@@ -570,7 +568,6 @@ describe("store/playback", () => {
       expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
     });
     test("Given x_time_index is not 0, When stop_live_view is called, Then the playback and status states mutate to calibrated and x_time_index mutates to 0", async () => {
-      let baseurl = "http://localhost:4567";
       let api = "stop_managed_acquisition";
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
@@ -585,7 +582,7 @@ describe("store/playback", () => {
 
       await store.dispatch("playback/stop_live_view");
 
-      expect(mocked_axios.history.get[0].url).toEqual(`${baseurl}/${api}`);
+      expect(mocked_axios.history.get[0].url).toEqual(`${base_url}/${api}`);
 
       expect(store.state.playback.playback_state).toEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
@@ -596,7 +593,6 @@ describe("store/playback", () => {
     });
 
     test("When start_calibration is called, Then playback state mutates to calibrating and starts status_pinging in Flask, then playback state mutates to calibrated", async () => {
-      let baseurl = "http://localhost:4567";
       let api = "start_calibration";
 
       mocked_axios
@@ -614,7 +610,7 @@ describe("store/playback", () => {
 
       let request_to_start_calibration = mocked_axios.history.get[0];
 
-      expect(request_to_start_calibration.url).toMatch(`${baseurl}/${api}`);
+      expect(request_to_start_calibration.url).toMatch(`${base_url}/${api}`);
 
       expect(store.state.playback.playback_state).toEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
@@ -631,7 +627,6 @@ describe("store/playback", () => {
     });
 
     test("Then playback state mutates to BUFFERING and starts status_pinging in Flask, then playback state mutates to LIVE_VIEW_ACTIVE", async () => {
-      let baseurl = "http://localhost:4567";
       let api = "start_managed_acquisition";
 
       mocked_axios
@@ -650,7 +645,7 @@ describe("store/playback", () => {
 
       let request_to_start_acquisition = mocked_axios.history.get[0];
 
-      expect(request_to_start_acquisition.url).toMatch(`${baseurl}/${api}`);
+      expect(request_to_start_acquisition.url).toMatch(`${base_url}/${api}`);
 
       expect(store.state.playback.playback_state).toEqual(
         playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
