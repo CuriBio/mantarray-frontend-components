@@ -14,4 +14,10 @@ export default {
   set_user_index(state, new_value) {
     state.user_index = new_value;
   },
+  set_file_count(state, new_value) {
+    state.file_count = new_value;
+  },
+  set_max_file_count(state, new_value) {
+    state.max_file_count = new_value;
+  },
 };

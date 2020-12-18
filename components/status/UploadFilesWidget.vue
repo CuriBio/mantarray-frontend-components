@@ -39,14 +39,19 @@
 </template>
 <script>
 import Vue from "vue";
+import { mapState } from "vuex";
 import { BProgress } from "bootstrap-vue";
 Vue.component("BProgress", BProgress);
 
 export default {
   name: "UploadFilesWidget",
-  props: {
-    value: { type: Number, default: 0 },
-    max: { type: Number, default: 0 },
+  computed: {
+    ...mapState("settings", {
+      value: "file_count",
+    }),
+    ...mapState("settings", {
+      max: "max_file_count",
+    }),
   },
   methods: {},
 };
@@ -127,9 +132,10 @@ export default {
   z-index: 9;
 }
 
-.bg-success {
-  background-color: #00c46f;
+.progress {
+  background-color: #4c4c4c;
 }
+
 #upload-progress-bar {
   position: absolute;
   width: 110px;
@@ -137,7 +143,11 @@ export default {
   top: 20px;
   left: 281px;
   visibility: visible;
-  color: #111111;
+  background-color: #4c4c4c;
   z-index: 7;
+}
+
+#upload-progress-bar > .bg-success {
+  background-color: #00c46f !important;
 }
 </style>

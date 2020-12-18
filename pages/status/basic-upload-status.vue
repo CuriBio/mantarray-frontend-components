@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ComponentToTest :value="start" :max="max"></ComponentToTest>
+    <ComponentToTest></ComponentToTest>
   </div>
 </template>
 
@@ -12,23 +12,21 @@ export default {
   components: {
     ComponentToTest,
   },
-  data() {
-    return {
-      start: 0,
-      max: 900,
-      interval_id: 0,
-    };
-  },
   created: function () {
-    this.interval_id = setInterval(this.strtincrement, 100);
+    this.start = 800;
+    this.max = 900;
+    this.$store.commit("settings/set_file_count", this.start);
+    this.$store.commit("settings/set_max_file_count", this.max);
+    // this.interval_id = setInterval(this.strtincrement, 100);
   },
   methods: {
-    strtincrement() {
-      this.start = this.start + 1;
-      if (this.start + 1 > this.max) {
-        clearInterval(this.interval_id);
-      }
-    },
+    // strtincrement() {
+    //   this.start = this.start + 1;
+    //   this.$store.commit("settings/set_file_count", this.start);
+    //   if (this.start + 1 > this.max) {
+    //     clearInterval(this.interval_id);
+    //   }
+    // },
   },
 };
 </script>
