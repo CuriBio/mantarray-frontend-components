@@ -3,7 +3,7 @@
     <!-- original mockflow ID: cmpDaf090556edcfaef1fa3dae32a48c3cd8 -->
     <div class="div__upload-file-background"></div>
     <!-- original mockflow ID: cmpD1f8ff61b9f5d62ff426ef1e5e186f1ab_cvs -->
-    <div class="div__upload-custom-check-mark">
+    <div v-show="tick" class="div__upload-custom-check-mark">
       <svg
         aria-hidden="true"
         focusable="false"
@@ -12,12 +12,12 @@
         role="img"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
-        class="svg-inline--fa fa-check fa-w-16"
+        class="svg-inline--fa-check"
       >
         <path
           fill="#00c46f"
           d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"
-          class=""
+          class="svg-inline-fa-check-path"
         ></path>
       </svg>
     </div>
@@ -45,6 +45,11 @@ Vue.component("BProgress", BProgress);
 
 export default {
   name: "UploadFilesWidget",
+  data() {
+    return {
+      tick: false,
+    };
+  },
   computed: {
     ...mapState("settings", {
       value: "file_count",
@@ -53,7 +58,23 @@ export default {
       max: "max_file_count",
     }),
   },
-  methods: {},
+  watch: {
+    value() {
+      if (this.value != 0) {
+        if (this.max == this.value) {
+          this.tick = true;
+          setTimeout(
+            function () {
+              this.tick = false;
+            }.bind(this),
+            1500
+          );
+        } else {
+          this.tick = false;
+        }
+      }
+    },
+  },
 };
 </script>
 <style>

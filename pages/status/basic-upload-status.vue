@@ -1,6 +1,18 @@
 <template>
   <div>
     <ComponentToTest></ComponentToTest>
+    <span
+      id="test-1"
+      style="top: 0px; position: absolute; left: 500px"
+      @click="midpointincrement"
+      >mid point</span
+    >
+    <span
+      id="test-2"
+      style="top: 0px; position: absolute; left: 700px"
+      @click="lastpointincrement"
+      >last point</span
+    >
   </div>
 </template>
 
@@ -13,20 +25,20 @@ export default {
     ComponentToTest,
   },
   created: function () {
-    this.start = 800;
+    this.start = 0;
     this.max = 900;
     this.$store.commit("settings/set_file_count", this.start);
     this.$store.commit("settings/set_max_file_count", this.max);
-    // this.interval_id = setInterval(this.strtincrement, 100);
   },
   methods: {
-    // strtincrement() {
-    //   this.start = this.start + 1;
-    //   this.$store.commit("settings/set_file_count", this.start);
-    //   if (this.start + 1 > this.max) {
-    //     clearInterval(this.interval_id);
-    //   }
-    // },
+    midpointincrement() {
+      this.start = 500;
+      this.$store.commit("settings/set_file_count", this.start);
+    },
+    lastpointincrement() {
+      this.start = 900;
+      this.$store.commit("settings/set_file_count", this.start);
+    },
   },
 };
 </script>
