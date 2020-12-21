@@ -20,12 +20,12 @@ describe("store/settings", () => {
     const array_of_customerids = store.state.settings.customer_account_ids;
     expect(array_of_customerids.length).toEqual(0);
   });
-  test("When imported from the dist file, Then the customer_account_ids is an empty with no value assigned", () => {
+  test("When initialized, Then the customer_account_ids is an empty with no value assigned", () => {
     const array_of_customerids = settings_store_module.state()
       .customer_account_ids;
     expect(array_of_customerids.length).toEqual(0);
   });
-  test("When imported from the dist file, Then the file_count and max_file_count is zero 0 as with no value assigned", () => {
+  test("When initialized, Then the file_count and max_file_count is zero 0 as with no value assigned", () => {
     const value = store.state.settings.file_count;
     const max = store.state.settings.max_file_count;
     expect(value).toEqual(0);

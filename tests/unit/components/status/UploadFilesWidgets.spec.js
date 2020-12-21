@@ -54,7 +54,7 @@ describe("UploadFilesWidget.vue", () => {
     );
     expect(target_upload_file_count_container.text()).toStrictEqual("500/900");
   });
-  test("Given that the uploaded_files is equal to max_file_count, When complete upload is successful, Then the 'check mark' is visible indicating the completion of file upload activity", async () => {
+  test("Given that the uploaded_files is equal to max_file_count, When uploaded_files is 900 and all files are uploaded successfully, Then the 'check mark' is visible indicating the completion of file upload activity", async () => {
     const propsData = {};
     wrapper = mount(UploadFilesWidget, {
       propsData,
@@ -80,17 +80,18 @@ describe("UploadFilesWidget.vue", () => {
     ).toStrictEqual("#00c46f");
   });
   test("Given that the uploaded_files is less than max_file_count, When the upload of files is about 88%, Then the 'progress bar' is visible indicating and its less than the max 110px max length of progress bar attribute", async () => {
-    const uploaded_files = 800;
-    const total_files_to_upload = 900;
-    store.commit("settings/set_file_count", uploaded_files);
-    store.commit("settings/set_max_file_count", total_files_to_upload);
-
     const propsData = {};
     wrapper = mount(UploadFilesWidget, {
       propsData,
       store,
       localVue,
     });
+
+    const uploaded_files = 800;
+    const total_files_to_upload = 900;
+    store.commit("settings/set_file_count", uploaded_files);
+    store.commit("settings/set_max_file_count", total_files_to_upload);
+    await wrapper.vm.$nextTick();
 
     const target_upload_progress_bar = wrapper.find(".progress-bar");
     expect(target_upload_progress_bar.attributes("style")).toBe(
