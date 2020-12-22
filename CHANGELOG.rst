@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.9 (2020-12-22)
+------------------
+
+- Added the File Upload Widget and SettingsForm E2E testing VRT to validate Overlap for the dialog of Add/Edit options for Customer and User
+
 0.1.8 (2020-12-17)
 ------------------
 
