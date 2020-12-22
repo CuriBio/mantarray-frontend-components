@@ -167,6 +167,14 @@ export default {
   background-color: #4c4c4c;
   z-index: 7;
 }
+/* As the Bootstrap contains the below mentioned CSS property:-
+file path : /mantarray-frontend-components/node_modules/bootstrap/dist/css/bootstrap.css
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+The MockFlowUI provides a different color code and the only way to override is to have !important
+We override the background-color:#00c46f !important */
 
 #upload-progress-bar > .bg-success {
   background-color: #00c46f !important;
