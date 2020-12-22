@@ -31,6 +31,7 @@
           v-show="!disable_edit_customer"
           class="span__settingsform-customer-edit-btn-txt"
           ><b-button
+            id="edit-a-customer"
             v-b-modal.edit-customer
             squared
             class="w-100 h-100 edit-id"
@@ -64,6 +65,7 @@
     <div class="div__settingsform-customer-add-btn" width="285" height="45">
       <span class="span__settingsform-customer-add-btn_txt"
         ><b-button
+          id="add-a-customer"
           v-b-modal.add-customer
           squared
           class="w-100 h-100 edit-id"
@@ -119,6 +121,7 @@
         v-show="!disable_edit_user"
         class="span__settingsform-user-input-edit-btn-txt"
         ><b-button
+          id="edit-a-user"
           v-b-modal.edit-user
           squared
           class="w-100 h-100 edit-id"
@@ -154,6 +157,7 @@
         v-show="!disable_add_user"
         class="span__settingsform_user-input-editor"
         ><b-button
+          id="add-a-user"
           v-b-modal.add-user
           squared
           class="w-100 h-100 edit-id"
@@ -1738,5 +1742,15 @@ datalist {
   background: #2f2f2f;
   font: 17px Muli;
   color: #ececed;
+}
+#add-customer,
+#edit-customer,
+#add-user,
+#edit-user {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
 }
 </style>
