@@ -60,7 +60,7 @@ describe("UploadFilesWidget.vue", () => {
     );
     expect(target_upload_file_count_container.text()).toStrictEqual("500/900");
   });
-  test("Given that the uploaded_files is equal to max_file_count, When uploaded_files is 900 and all files are uploaded successfully, Then the 'check mark' is visible indicating the completion of file upload activity", async () => {
+  test("When uploaded_files is set to equal the max_file_count (all files are uploaded successfully), Then the 'check mark' is visible indicating the completion of file upload activity", async () => {
     const propsData = {};
     wrapper = mount(UploadFilesWidget, {
       propsData,
@@ -85,7 +85,7 @@ describe("UploadFilesWidget.vue", () => {
       target_upload_custom_check_mark_color.attributes("fill")
     ).toStrictEqual("#00c46f");
   });
-  test("Given that the uploaded_files is less than max_file_count, When the upload of files is about 88%, Then the 'progress bar' is visible indicating and its less than the max 110px max length of progress bar attribute", async () => {
+  test("When Vuex is updated so that the upload of files is about 88%, Then the 'progress bar' is visible indicating and its less than the max 110px max length of progress bar attribute", async () => {
     const propsData = {};
     wrapper = mount(UploadFilesWidget, {
       propsData,
@@ -104,7 +104,7 @@ describe("UploadFilesWidget.vue", () => {
       "width: 88.88888888888889%;"
     );
   });
-  test("Given that the uploaded_files is equal to max_file_count, When uploaded_files is 900 and all files are uploaded successfully, Then the 'check mark' is visible indicating the completion of file upload activity for only 1500 milli second and TimeOut callback function sets 'check mark' to invisible", async () => {
+  test("When Vuex is updated so that the uploaded file count equals the total file count (all files are uploaded successfully), Then the 'check mark' is visible indicating the completion of file upload activity for only 1500 milli second and then the checkmark disappears", async () => {
     const propsData = {};
     wrapper = mount(UploadFilesWidget, {
       propsData,
@@ -121,8 +121,10 @@ describe("UploadFilesWidget.vue", () => {
     const target_upload_custom_check_mark = wrapper.find(
       ".div__upload-custom-check-mark"
     );
+    sandbox.clock.tick(1499);
+    await wrapper.vm.$nextTick();
     expect(target_upload_custom_check_mark.isVisible()).toBe(true);
-    sandbox.clock.tick(1500);
+    sandbox.clock.tick(1);
     await wrapper.vm.$nextTick();
     expect(target_upload_custom_check_mark.isVisible()).toBe(false);
   });

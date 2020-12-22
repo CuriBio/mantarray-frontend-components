@@ -83,7 +83,7 @@ export default {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: rgb(17, 17, 17);
+  background: #111111;
   position: absolute;
   width: 400px;
   height: 45px;
@@ -148,7 +148,7 @@ export default {
   font-style: normal;
   text-decoration: none;
   font-size: 15px;
-  color: rgb(183, 183, 183);
+  color: #cccccc;
   text-align: right;
   z-index: 9;
 }
@@ -167,7 +167,7 @@ export default {
   background-color: #4c4c4c;
   z-index: 7;
 }
-/* As the Bootstrap contains the below mentioned CSS property:-
+/* Raghu (12/22/20): As the Bootstrap contains the below mentioned CSS property:-
 file path : /mantarray-frontend-components/node_modules/bootstrap/dist/css/bootstrap.css
 .bg-success {
   background-color: #28a745 !important;
