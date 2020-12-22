@@ -3,6 +3,7 @@ import UploadFilesWidget from "@/components/status/UploadFilesWidget.vue";
 import { UploadFilesWidget as dist_UploadFilesWidget } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 import Vuex from "vuex";
+const sinon = require("sinon");
 import { createLocalVue } from "@vue/test-utils";
 
 let wrapper = null;
@@ -12,6 +13,7 @@ localVue.use(Vuex);
 
 let NuxtStore;
 let store;
+const sandbox = sinon.createSandbox();
 
 describe("UploadFilesWidget.vue", () => {
   beforeAll(async () => {
@@ -22,9 +24,13 @@ describe("UploadFilesWidget.vue", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    sandbox.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
   });
 
-  afterEach(() => wrapper.destroy());
+  afterEach(async () => {
+    wrapper.destroy();
+    sandbox.restore();
+  });
   test("When mounting UploadFilesWidget from the build dist file, Then it loads successfully and the background black box is displayed", () => {
     const propsData = {};
     wrapper = shallowMount(dist_UploadFilesWidget, {
@@ -97,5 +103,27 @@ describe("UploadFilesWidget.vue", () => {
     expect(target_upload_progress_bar.attributes("style")).toBe(
       "width: 88.88888888888889%;"
     );
+  });
+  test("Given that the uploaded_files is equal to max_file_count, When uploaded_files is 900 and all files are uploaded successfully, Then the 'check mark' is visible indicating the completion of file upload activity for only 1500 milli second and TimeOut callback function sets 'check mark' to invisible", async () => {
+    const propsData = {};
+    wrapper = mount(UploadFilesWidget, {
+      propsData,
+      store,
+      localVue,
+    });
+    const uploaded_files = 900;
+    const total_files_to_upload = 900;
+
+    store.commit("settings/set_file_count", uploaded_files);
+    store.commit("settings/set_max_file_count", total_files_to_upload);
+
+    await wrapper.vm.$nextTick();
+    const target_upload_custom_check_mark = wrapper.find(
+      ".div__upload-custom-check-mark"
+    );
+    expect(target_upload_custom_check_mark.isVisible()).toBe(true);
+    sandbox.clock.tick(1500);
+    await wrapper.vm.$nextTick();
+    expect(target_upload_custom_check_mark.isVisible()).toBe(false);
   });
 });
