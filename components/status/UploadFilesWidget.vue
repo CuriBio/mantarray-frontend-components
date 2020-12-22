@@ -148,7 +148,7 @@ export default {
   font-style: normal;
   text-decoration: none;
   font-size: 15px;
-  color: #cccccc;
+  color: #b7b7b7;
   text-align: right;
   z-index: 9;
 }
