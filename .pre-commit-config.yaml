@@ -4,21 +4,20 @@ minimum_pre_commit_version: "2.5.1"
 repos:
   # Git-related
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.3.0 # Use the ref you want to point at
+    rev: v3.4.0
     hooks:
       - id: forbid-new-submodules
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 2.1.4 #2.0.0 # Use the ref you want to point at
+    rev: 2.1.4
     hooks:
       - id: git-dirty
 
   # Reformatting (should generally come before any file format or other checks, because reformatting can change things)
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.3.0 # Use the ref you want to point at
+    rev: v3.4.0
     hooks:
       - id: trailing-whitespace
-        exclude: dist/ # apparently sometimes the build adds in whitespace, so this can cause the git repo to be dirty unnecessarily
       - id: pretty-format-json
         args: [--autofix, --no-sort-keys]
         exclude: sample_waveform_data/|jsdoc.json|.babelrc
@@ -32,22 +31,18 @@ repos:
 
   # Safety/Security Issues
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.3.0 # Use the ref you want to point at
+    rev: v3.4.0
     hooks:
       - id: detect-private-key
 
   # Invalid File Checks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.3.0 # Use the ref you want to point at
+    rev: v3.4.0
     hooks:
       - id: check-added-large-files
         name: general-large-file-check
         args: ["--maxkb=123"]
         exclude: package-lock.json|tests/sample_waveform_data/mantarray/|dist
-      - id: check-added-large-files
-        name: large-files-in-dist
-        args: ["--maxkb=200"]
-        files: dist/
       - id: check-json
       - id: check-yaml
       - id: check-xml
@@ -61,7 +56,7 @@ repos:
         exclude: dist
       - id: vuejs-check-no-import-from-vue-file
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v7.15.0
+    rev: v7.16.0
     hooks:
       - id: eslint
         exclude: (dist/)|(tests/unit/components/status/StatusBar.spec.js)|(tests/unit/components/status/SimulationMode.spec.js)|(tests/unit/components/playback/ContinuousWaveform.spec.js)|(tests/unit/components/playback/controls/WebPlayerControls.spec.js)|(tests/unit/components/playback/controls/YAxisControls.spec.js)|(tests/unit/components/playback/controls/PlateBarcode.spec.js)|(tests/unit/components/playback/controls/PlateNavigator.spec.js)|(tests/unit/components/playback/controls/DesktopPlayerControls.spec.js)|(tests/unit/components/playback/controls/PopDialogForm.spec.js)|(tests/unit/components/playback/controls/RecordingTime.spec.js)|(tests/unit/components/playback/controls/XAxisControls.spec.js)|(tests/unit/store/twentyfour.spec.js)|(tests/unit/store/playback.spec.js)|(tests/unit/store/flask.spec.js)|(tests/unit/store/waveform.spec.js)|(tests/unit/store/api_service.spec.js)|(tests/unit/store/settings.spec.js)|(tests/e2e/)|(server.js)
@@ -75,7 +70,7 @@ repos:
           - eslint-config-prettier@7.0.0
           - eslint-config-standard@14.1.1
           - eslint-loader@4.0.2
-          - eslint-plugin-import@2.22.0
+          - eslint-plugin-import@2.22.1
           - eslint-plugin-jest@24.1.3
           - eslint-plugin-node@11.1.0
           - eslint-plugin-promise@4.2.1
