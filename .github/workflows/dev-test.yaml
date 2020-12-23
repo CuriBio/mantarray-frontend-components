@@ -100,7 +100,7 @@ jobs:
       - name: Get Testcafe Version
         if: runner.os == 'Linux'
         id: testcafe-version
-        uses: notiz-dev/github-action-json-property@0.1.0
+        uses: notiz-dev/github-action-json-property@v0.1.0
         with:
           path: "package-lock.json"
           prop_path: "dependencies.testcafe.version"
