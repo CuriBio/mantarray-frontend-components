@@ -1,5 +1,11 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.9 (unreleased)
+------------------
+
+- Added the File Upload Widget which provides the details of files upload to the cloud.
+- Included additional E2E VRT testcases for SettingsForm and Add/Edit dialogs for Customer and User.
+
 0.1.8 (2020-12-17)
 ------------------
 
