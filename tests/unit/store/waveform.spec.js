@@ -6,12 +6,12 @@ import { ping_get_available_data } from "@/store/modules/waveform/actions";
 import { arry, new_arry } from "./../js_utils/waveform_data_provider.js";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import {
-  system_status_when_calibrating_regexp,
-  all_mantarray_commands_regexp,
+  //  system_status_when_calibrating_regexp,
+  //  all_mantarray_commands_regexp,
   system_status_regexp,
 } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
-import playback_module from "@/store/modules/playback";
+// import playback_module from "@/store/modules/playback";
 
 const ar = arry;
 const nr = new_arry;
@@ -33,14 +33,14 @@ describe("store/waveform", () => {
   });
   test("When initialized, Then the plate_waveforms is an empty representation of a 96-well plate", () => {
     const array_of_waveforms = store.state.waveform.plate_waveforms;
-    expect(array_of_waveforms.length).toEqual(96);
-    expect(array_of_waveforms[0]).toEqual(
+    expect(array_of_waveforms).toHaveLength(96);
+    expect(array_of_waveforms[0]).toStrictEqual(
       expect.objectContaining({
         x_data_points: [],
         y_data_points: [],
       })
     );
-    expect(array_of_waveforms[95]).toEqual(
+    expect(array_of_waveforms[95]).toStrictEqual(
       expect.objectContaining({
         x_data_points: [],
         y_data_points: [],
@@ -55,27 +55,27 @@ describe("store/waveform", () => {
     ]);
 
     store.commit("waveform/clear_plate_waveforms");
-    expect(store.state.waveform.plate_waveforms.length).toEqual(2);
-    expect(
-      store.state.waveform.plate_waveforms[0].x_data_points.length
-    ).toEqual(0);
-    expect(
-      store.state.waveform.plate_waveforms[0].y_data_points.length
-    ).toEqual(0);
-    expect(
-      store.state.waveform.plate_waveforms[1].x_data_points.length
-    ).toEqual(0);
-    expect(
-      store.state.waveform.plate_waveforms[1].y_data_points.length
-    ).toEqual(0);
+    expect(store.state.waveform.plate_waveforms).toHaveLength(2);
+    expect(store.state.waveform.plate_waveforms[0].x_data_points).toHaveLength(
+      0
+    );
+    expect(store.state.waveform.plate_waveforms[0].y_data_points).toHaveLength(
+      0
+    );
+    expect(store.state.waveform.plate_waveforms[1].x_data_points).toHaveLength(
+      0
+    );
+    expect(store.state.waveform.plate_waveforms[1].y_data_points).toHaveLength(
+      0
+    );
   });
 
-  it("sets active_plate_waveforms to the hardcoded value initially", () => {
+  test("When initialized, Then active_plate_waveforms is having hardcoded value initially", () => {
     const dictionary_of_waveforms =
       store.getters["waveform/active_plate_waveforms"];
     const well_0_waveform = dictionary_of_waveforms[0];
-    expect(well_0_waveform.x_data_points[0]).toEqual(0);
-    expect(well_0_waveform.y_data_points[0]).toEqual(290.429978);
+    expect(well_0_waveform.x_data_points[0]).toStrictEqual(0);
+    expect(well_0_waveform.y_data_points[0]).toStrictEqual(290.429978);
   });
 
   // it("Calls axios real API to obtain the raw waveform data from the HTTP GET and stores the waveform in plate_waveforms", async () => {
@@ -96,55 +96,58 @@ describe("store/waveform", () => {
   //   expect(store_0_waveform.y_data_points[0]).toEqual(230.417297);
   // });
 
-  it("Calls the mutations and starts appending new_value to the exisitng plate_waveforms", async () => {
+  test("When waveforms is initially mutated with few data points, Then subsequent mutations appends data points to the exisitng plate_waveforms", async () => {
     store.commit("waveform/set_plate_waveforms", ar);
 
     const stored_waveform = store.getters["waveform/plate_waveforms"];
 
-    expect(stored_waveform.length).toEqual(24);
-    expect(stored_waveform[0].x_data_points.length).toEqual(4);
+    expect(stored_waveform).toHaveLength(24);
+    expect(stored_waveform[0].x_data_points).toHaveLength(4);
 
     store.commit("waveform/append_plate_waveforms", nr);
 
-    const new_stored_waveform = store.getters["waveform/plate_waveforms"];
-    expect(stored_waveform.length).toEqual(24);
-    expect(stored_waveform[0].x_data_points.length).toEqual(8);
+    expect(stored_waveform).toHaveLength(24);
+    expect(stored_waveform[0].x_data_points).toHaveLength(8);
   });
-  it("Calls the mutations to set the x-zoom levels and x-zoom-idx and confirm the values are retained", async () => {
-    let samples_per_second = 100000;
-    let x_zoom_levels = [
+  test("When the x-zoom levels and x-zoom-idx  are updated in Vuex, Then assert that the values are retained", async () => {
+    const samples_per_second = 100000;
+    const x_zoom_levels = [
       { x_scale: 30 * samples_per_second },
       { x_scale: 15 * samples_per_second },
       { x_scale: 5 * samples_per_second },
       { x_scale: 2 * samples_per_second },
       { x_scale: 1 * samples_per_second },
     ];
-    let default_x_axis_zoom_idx = 2;
+    const default_x_axis_zoom_idx = 2;
     store.commit("waveform/set_x_axis_zoom_levels", x_zoom_levels);
     store.commit("waveform/set_x_axis_zoom_idx", default_x_axis_zoom_idx);
 
-    expect(store.getters["waveform/x_zoom_level_idx"]).toEqual(
+    expect(store.getters["waveform/x_zoom_level_idx"]).toStrictEqual(
       default_x_axis_zoom_idx
     );
-    expect(store.getters["waveform/x_zoom_levels"]).toEqual(x_zoom_levels);
+    expect(store.getters["waveform/x_zoom_levels"]).toStrictEqual(
+      x_zoom_levels
+    );
   });
-  test("Calls the mutations to set the y-zoom levels and y-zoom-idx and confirm the values are retained", async () => {
-    let y_zoom_levels = [
+  test("When the y-zoom levels and y-zoom-idx are updated in Vuex, Then assert that the values are retained", async () => {
+    const y_zoom_levels = [
       { y_min: -10000000, y_max: 10000000 },
       { y_min: -100000, y_max: 100000 },
       { y_min: -1000, y_max: 1000 },
     ];
-    let default_y_axis_zoom_idx = 0;
+    const default_y_axis_zoom_idx = 0;
     store.commit("waveform/set_y_axis_zoom_levels", y_zoom_levels);
     store.commit("waveform/set_y_axis_zoom_idx", default_y_axis_zoom_idx);
 
-    expect(store.getters["waveform/y_axis_zoom_idx"]).toEqual(
+    expect(store.getters["waveform/y_axis_zoom_idx"]).toStrictEqual(
       default_y_axis_zoom_idx
     );
-    expect(store.getters["waveform/y_axis_zoom_levels"]).toEqual(y_zoom_levels);
+    expect(store.getters["waveform/y_axis_zoom_levels"]).toStrictEqual(
+      y_zoom_levels
+    );
   });
 
-  describe("ping_get_available_data testing", () => {
+  describe("get_available_data", () => {
     let mocked_axios;
     let context = null;
 
@@ -162,7 +165,7 @@ describe("store/waveform", () => {
         context
       );
       await bound_ping_get_waveform_data();
-      expect(mocked_axios.history.get.length).toBe(1);
+      expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(
         "http://localhost:4567/get_available_data"
       );
@@ -176,13 +179,13 @@ describe("store/waveform", () => {
         context
       );
       await bound_ping_get_waveform_data();
-      expect(mocked_axios.history.get.length).toBe(1);
+      expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(
         "http://localhost:4567/get_available_data?currently_displayed_time_index=" +
           expected_idx
       );
     });
-    test("verify if the get_available_data is invoked with http error response empty data its handled ", async () => {
+    test("When the get_available_data is invoked, Then http error response of empty data its handled", async () => {
       mocked_axios
         .onGet(get_available_data_regex) // We pass in_simulation_mode true and validate default false is replaced
         .reply(204, {}); // 513 there is no HTTP status code with this value so it will be caught in the server.
@@ -191,7 +194,7 @@ describe("store/waveform", () => {
         context
       );
       await bound_ping_get_waveform_data();
-      expect(mocked_axios.history.get.length).toBe(1);
+      expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(
         "http://localhost:4567/get_available_data"
       );
@@ -200,14 +203,14 @@ describe("store/waveform", () => {
       mocked_axios.onGet(get_available_data_regex).reply(200, nr);
 
       // confirm pre-condition
-      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
+      expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
       const expected_interval_id = 173;
       const spied_set_interval = jest.spyOn(window, "setInterval");
       spied_set_interval.mockReturnValueOnce(expected_interval_id);
 
       await store.dispatch("waveform/start_get_waveform_pinging");
-      expect(spied_set_interval.mock.calls.length).toBe(1);
-      expect(store.state.waveform.waveform_ping_interval_id).toEqual(
+      expect(spied_set_interval.mock.calls).toHaveLength(1);
+      expect(store.state.waveform.waveform_ping_interval_id).toStrictEqual(
         expected_interval_id
       );
     });
@@ -220,13 +223,12 @@ describe("store/waveform", () => {
 
         await store.dispatch("waveform/start_get_waveform_pinging");
       });
-      test("When start_get_available_data is dispatched, the waveform_ping_interval_id does not change and setInterval is not called again", async () => {
-        const spied_set_interval = jest.spyOn(window, "setInterval");
+      test("When start_get_available_data is dispatched, Then the waveform_ping_interval_id does not change and setInterval is not called again", async () => {
         const initial_interval_id =
           store.state.waveform.waveform_ping_interval_id;
         await store.dispatch("waveform/start_get_waveform_pinging");
 
-        expect(store.state.waveform.waveform_ping_interval_id).toEqual(
+        expect(store.state.waveform.waveform_ping_interval_id).toStrictEqual(
           initial_interval_id
         );
       });
@@ -255,11 +257,11 @@ describe("store/waveform", () => {
         expect(store.state.flask.status_uuid).toStrictEqual(
           STATUS.MESSAGE.ERROR
         );
-        expect(store.state.flask.status_ping_interval_id).toBe(null);
-        expect(store.state.playback.playback_progression_interval_id).toBe(
-          null
-        );
-        expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
+        expect(store.state.flask.status_ping_interval_id).toBeNull();
+        expect(
+          store.state.playback.playback_progression_interval_id
+        ).toBeNull();
+        expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
       });
     });
   });
