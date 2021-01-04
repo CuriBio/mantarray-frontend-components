@@ -148,19 +148,29 @@ describe("store/playback", () => {
     });
 
     test("When the playback store is initialized, Then is_playing is set to false", () => {
-      expect(store.getters["playback/is_playing"]).toBe(false);
+      expect(
+        store.state.playback.playback_state ===
+          playback_module.ENUMS.PLAYBACK_STATES.PLAYING
+      ).toBe(false);
     });
     test("When playback_state is set to PLAYING and STOPPED, Then is_playing is true and false respectively", () => {
       store.commit(
         "playback/set_playback_state",
         playback_module.ENUMS.PLAYBACK_STATES.PLAYING
       );
-      expect(store.getters["playback/is_playing"]).toBe(true);
+
+      expect(
+        store.state.playback.playback_state ===
+          playback_module.ENUMS.PLAYBACK_STATES.PLAYING
+      ).toBe(true);
       store.commit(
         "playback/set_playback_state",
         playback_module.ENUMS.PLAYBACK_STATES.STOPPED
       );
-      expect(store.getters["playback/is_playing"]).toBe(false);
+      expect(
+        store.state.playback.playback_state ===
+          playback_module.ENUMS.PLAYBACK_STATES.PLAYING
+      ).toBe(false);
     });
 
     test("When the playback store is initialized, Then loop_playback is set to false", () => {
