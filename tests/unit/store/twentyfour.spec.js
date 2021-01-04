@@ -10,8 +10,6 @@ describe("store/twentyfourcontrols", () => {
   const quadrant_options = {
     QUADRANT_ONE: [0, 1, 4, 5, 8, 9],
     QUADRANT_TWO: [12, 13, 16, 17, 20, 21],
-    QUADRANT_THREE: [2, 3, 6, 7, 10, 11],
-    QUADRANT_FOUR: [14, 15, 18, 19, 22, 23],
   };
 
   const quadrant_options_api_set = {
@@ -31,39 +29,19 @@ describe("store/twentyfourcontrols", () => {
   // Make sure the testcases are modified only if the MockFlowUI changes.
   // UT is bounded to the possible icon's different visibility.
 
-  it("should set by default QUADRANT_ONE status and retrive initially", () => {
-    var name = "twentyfourcontrols/is_quadrant";
-
-    expect(store.getters[name]).toStrictEqual(quadrant_options.QUADRANT_ONE); // Can't understand as the only way to clear the TC was to replace toBe with toStrictEqual
+  test("When twentyfourcontrols store is initialized, Then by default it should be QUADRANT_ONE", () => {
+    expect(store.state.twentyfourcontrols.is_quadrant).toStrictEqual(
+      quadrant_options.QUADRANT_ONE
+    );
   });
 
-  it("should be able to set QUADRANT_TWO and retrive the same", () => {
-    var name = "twentyfourcontrols/is_quadrant";
-
+  test("When twentyfourcontrols store is mutated with QUADRANT_TWO, Then assert the QUADRANT_TWO is updated", () => {
     store.commit(
       quadrant_options_api_set.QUADRANT,
       quadrant_options.QUADRANT_TWO
     );
-    expect(store.getters[name]).toBe(quadrant_options.QUADRANT_TWO);
-  });
-
-  it("should be able to set QUADRANT_TWO and retrive the same", () => {
-    var name = "twentyfourcontrols/is_quadrant";
-
-    store.commit(
-      quadrant_options_api_set.QUADRANT,
-      quadrant_options.QUADRANT_THREE
+    expect(store.state.twentyfourcontrols.is_quadrant).toBe(
+      quadrant_options.QUADRANT_TWO
     );
-    expect(store.getters[name]).toBe(quadrant_options.QUADRANT_THREE);
-  });
-
-  it("should be able to set QUADRANT_TWO and retrive the same", () => {
-    var name = "twentyfourcontrols/is_quadrant";
-
-    store.commit(
-      quadrant_options_api_set.QUADRANT,
-      quadrant_options.QUADRANT_FOUR
-    );
-    expect(store.getters[name]).toBe(quadrant_options.QUADRANT_FOUR);
   });
 });
