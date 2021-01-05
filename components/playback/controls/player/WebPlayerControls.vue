@@ -84,7 +84,7 @@ export default {
   computed: {
     loop_playback: {
       get() {
-        return this.$store.getters["playback/loop_playback"];
+        return this.$store.state.playback.loop_playback;
       },
       set(new_state) {
         this.$store.commit("playback/set_loop_playback", new_state);

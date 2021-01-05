@@ -174,14 +174,14 @@ describe("store/playback", () => {
     });
 
     test("When the playback store is initialized, Then loop_playback is set to false", () => {
-      expect(store.getters["playback/loop_playback"]).toBe(false);
+      expect(store.state.playback.loop_playback).toBe(false);
     });
 
     test("When the loop_playback mutates, Then value set is true or false", () => {
       store.commit("playback/set_loop_playback", true);
-      expect(store.getters["playback/loop_playback"]).toBe(true);
+      expect(store.state.playback.loop_playback).toBe(true);
       store.commit("playback/set_loop_playback", false);
-      expect(store.getters["playback/loop_playback"]).toBe(false);
+      expect(store.state.playback.loop_playback).toBe(false);
     });
 
     test("When the playback store is initialized, Then the x_time_index is initially 0", () => {
