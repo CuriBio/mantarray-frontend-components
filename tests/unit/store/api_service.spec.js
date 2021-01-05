@@ -3,12 +3,10 @@ import { get_recording } from "@/store/ApiService.js";
 
 describe("APIService", () => {
   beforeEach(() => {
-    // jest.resetModules()
-    // jest.clearAllMocks()
     jest.restoreAllMocks();
   });
 
-  test("Given the endpoint URL is valid, When Axios does a get method call which is mocked, Then assert the value matches the mocked json object", async () => {
+  test("Given that the get method is mocked, When the endpoint URL is valid, Then assert the response value matches the mocked json object", async () => {
     const mocked_axios_get = jest.spyOn(Vue.axios, "get");
     mocked_axios_get.mockReturnValue(Promise.resolve({ data: 3 }));
 
@@ -18,8 +16,7 @@ describe("APIService", () => {
     );
     expect(result).toStrictEqual({ data: 3 });
   }),
-    test("Given the endpoint URL is valid, When Axios obtains the response waveform data from the get method call, Then assert the value of the parameter total_recording_length", async () => {
-      // const data = {}
+    test("Given the endpoint URL is valid, When Axios obtains the response from AWS API, in the form of waveform data from the get method call, Then assert the value of the parameter total_recording_length", async () => {
       jest.setTimeout(10000);
       const result = await get_recording("sandbox_eli_waveform");
       expect(result.data["total_recording_length"]).toStrictEqual(11200000);

@@ -51,7 +51,7 @@ describe("store/flask", () => {
     store.commit("playback/stop_playback_progression");
     mocked_axios.restore();
   });
-  test("When functions are imported from a pre-built library, Then functions can be invoked successfully", () => {
+  test("When Enums are imported from pre-defined library, Then assert the values of enums", () => {
     expect(FLASK_STATUS_ENUMS.MESSAGE.CALIBRATION_NEEDED_uuid).toStrictEqual(
       STATUS.MESSAGE.CALIBRATION_NEEDED_uuid
     );
@@ -104,7 +104,7 @@ describe("store/flask", () => {
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
       );
     });
-    test("Given the current state is not SERVER_READY, When the status returned error 404, Then error 404 should be gracefully handled and the status_uuid is set to ERROR and status_ping_interval_id is set to null", async () => {
+    test("Given the Axios Get method is mocked with response of 404, When ping_system_status is invoked, Then assert playback_state is set NOT_CONNECTED_TO_INSTRUMENT", async () => {
       mocked_axios.onGet(system_status_regexp).reply(404);
       store.commit(
         "playback/set_playback_state",
@@ -120,8 +120,6 @@ describe("store/flask", () => {
       expect(store.state.flask.status_uuid).not.toBe(
         STATUS.MESSAGE.CALIBRATION_NEEDED
       );
-      // expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
-      // expect(store.state.flask.status_ping_interval_id).toBe(null);
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
