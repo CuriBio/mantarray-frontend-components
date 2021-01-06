@@ -162,7 +162,8 @@ jobs:
       - name: Confirm package builds correctly # Some tests rely on testing the built files in the dist folder, so make sure to do this before running the test suite
         run: npm run build
 
-      - name: Run Tests
+      - name: Run Unit Tests
+        if: matrix.IS_FASTEST_E2E_SUITE == true
         run: npm run test:unit-no-prebuild -- --ci --verbose
 
       - name: Get Testcafe Version
