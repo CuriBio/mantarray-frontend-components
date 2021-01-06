@@ -63,7 +63,7 @@ describe("RecordingTime.vue", () => {
       "00:00:00.000"
     );
   });
-  test("When the x time index is committed in Vuex to a new value, Then the text display updates to show the difference between the x time index when recording started and the new value (the amount of time elapsed since the recording was started)", async () => {
+  test("Given that get method is mocked with a http response 200, When the x time index is committed in Vuex to a new value, Then the text display updates to show the difference between the x time index when recording started and the new value (the amount of time elapsed since the recording was started)", async () => {
     const propsData = {};
     wrapper = shallowMount(RecordingTime, {
       propsData,
@@ -93,7 +93,7 @@ describe("RecordingTime.vue", () => {
       "00:00:55.018"
     );
   });
-  test("Given that Get method is mocked with a http response 200, When Recording start is initiated at x_time_index moved by 6736300, Then the text updates 00:00:55.018 and stop_recording initiates resets text to null", async () => {
+  test("Given that get method is mocked with a http response 200, When Recording start is initiated at x_time_index moved by 6736300, Then the text updates 00:00:55.018 and stop_recording initiates resets text to null", async () => {
     const propsData = {};
     wrapper = shallowMount(RecordingTime, {
       propsData,
@@ -124,7 +124,6 @@ describe("RecordingTime.vue", () => {
     await store.dispatch("playback/stop_recording");
     await wrapper.vm.$nextTick(); // wait for update
 
-    // expect(wrapper.find(".span__recording-text").text()).toEqual("Not Recording");
     expect(wrapper.find(".span__time-text").text()).toStrictEqual("");
   });
 });

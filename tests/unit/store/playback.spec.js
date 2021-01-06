@@ -42,7 +42,7 @@ describe("store/playback", () => {
     jest.restoreAllMocks();
     sandbox.restore();
   });
-  test("When functions are imported from a pre-built library, Then functions can be invoked successfully", () => {
+  test("When imported from a pre-built library, Then assert the ENUM values to match the original", () => {
     expect(PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE).toStrictEqual(
       playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
     );
@@ -85,7 +85,7 @@ describe("store/playback", () => {
 
       expect(spied_clear_interval).not.toHaveBeenCalled();
     });
-    test("Given tooltips_delay is having a default value of 2 sec, When modified to 1 sec, Then the Vuex state is updated", () => {
+    test("Given tooltips_delay is having a default value of 2 sec, When a value different than the default value is committed to tooltips_delay, Then the Vuex state is updated", () => {
       const expected_tooltips_delay = 1000;
       expect(store.state.playback.tooltips_delay).toStrictEqual(2000);
       store.commit("playback/set_tooltips_delay", expected_tooltips_delay);
@@ -146,48 +146,10 @@ describe("store/playback", () => {
         playback_module.ENUMS.PLAYBACK_STATES.STOPPED
       );
     });
-
-    test("When the playback store is initialized, Then is_playing is set to false", () => {
-      expect(
-        store.state.playback.playback_state ===
-          playback_module.ENUMS.PLAYBACK_STATES.PLAYING
-      ).toBe(false);
-    });
-    test("When playback_state is set to PLAYING and STOPPED, Then is_playing is true and false respectively", () => {
-      store.commit(
-        "playback/set_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.PLAYING
-      );
-
-      expect(
-        store.state.playback.playback_state ===
-          playback_module.ENUMS.PLAYBACK_STATES.PLAYING
-      ).toBe(true);
-      store.commit(
-        "playback/set_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.STOPPED
-      );
-      expect(
-        store.state.playback.playback_state ===
-          playback_module.ENUMS.PLAYBACK_STATES.PLAYING
-      ).toBe(false);
-    });
-
-    test("When the playback store is initialized, Then loop_playback is set to false", () => {
-      expect(store.state.playback.loop_playback).toBe(false);
-    });
-
-    test("When the loop_playback mutates, Then value set is true or false", () => {
-      store.commit("playback/set_loop_playback", true);
-      expect(store.state.playback.loop_playback).toBe(true);
-      store.commit("playback/set_loop_playback", false);
-      expect(store.state.playback.loop_playback).toBe(false);
-    });
-
     test("When the playback store is initialized, Then the x_time_index is initially 0", () => {
       expect(store.getters["playback/x_time_index"]).toBe(0);
     });
-    test("When the x_time_index mutates, Then the value set to 12345", () => {
+    test("When a value is committed to set_x_time_index, Then the x_time_index in the store gets updated to that value", () => {
       store.commit("playback/set_x_time_index", 12345);
       expect(store.getters["playback/x_time_index"]).toBe(12345);
     });
@@ -647,7 +609,7 @@ describe("store/playback", () => {
       });
     });
 
-    test("When playback state mutates to BUFFERING and starts status_pinging in Flask, Then playback state mutates to LIVE_VIEW_ACTIVE", async () => {
+    test("Given the /system_status is mocked with LIVE_VIEW_ACTIVE as response and /get_available_data as 204, When playback state mutates to BUFFERING and starts status_pinging in Flask, Then playback state mutates to LIVE_VIEW_ACTIVE", async () => {
       const api = "start_managed_acquisition";
 
       mocked_axios

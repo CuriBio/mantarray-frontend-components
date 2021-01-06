@@ -171,7 +171,7 @@ describe("store/flask", () => {
         expected_interval_id
       );
     });
-    test("Given the current state is calibrating, When the returned status returned as CALIBRATED, Then the URL should include the current state UUID and the vuex status  should update to CALIBRATED and the Vuex Playback State should update to CALIBRATED", async () => {
+    test("Given /system_status is mocked to return CALIBRATED as the status and the current status is CALIBRATING, When ping_system_status is called, Then the URL should include the current state UUID and the vuex status should update to CALIBRATED and the Vuex Playback State should update to CALIBRATED", async () => {
       mocked_axios.onGet(system_status_regexp).reply(200, {
         ui_status_code: STATUS.MESSAGE.CALIBRATED,
         in_simulation_mode: false,
@@ -194,7 +194,7 @@ describe("store/flask", () => {
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
     });
-    test("Given the current state is BUFFERING, When the status returned state is LIVE_VIEW_ACTIVE, Then the URL should include the current state UUID and the vuex status state should update to LIVE_VIEW_ACTIVE and the Vuex Playback State should update to LIVE_VIEW_ACTIVE", async () => {
+    test("Given /system_status is mocked to return LIVE_VIEW_ACTIVE as the status and the current status is BUFFERING, When ping_system_status is called, Then the URL should include the current state UUID and the vuex status state should update to LIVE_VIEW_ACTIVE and the Vuex Playback State should update to LIVE_VIEW_ACTIVE", async () => {
       mocked_axios
         .onGet(system_status_regexp) // We pass in_simulation_mode true and validate default false is replaced
         .reply(200, {
@@ -227,7 +227,7 @@ describe("store/flask", () => {
         jest.restoreAllMocks();
       });
 
-      test("Given the current state is BUFFERING and system_status returns LIVE_VIEW_ACTIVE, When start_status_pinging is dispatched, Then setInterval is called and returned ID set as the status_ping_interval_id state, and the Vuex state for status ID and Playback states are updated", async () => {
+      test("When start_status_pinging is dispatched, Then setInterval is called and returned ID set as the status_ping_interval_id state, and the Vuex state for status ID and Playback states are updated", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid,
           in_simulation_mode: false,
@@ -363,7 +363,7 @@ describe("store/flask", () => {
       beforeEach(async () => {
         context = await store.dispatch("flask/get_flask_action_context");
       });
-      test("Given the current state is SERVER_READY, When the returned state is CALIBRATION_NEEDED with a valid plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MB190440991' obtained from JSON object", async () => {
+      test("Given that the /system_status is mocked with a response of CALIBRATION_NEEDED, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MB190440991' obtained from JSON object", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: valid_plate_barcode,
@@ -387,7 +387,7 @@ describe("store/flask", () => {
         );
         expect(store.state.playback.barcode).toStrictEqual(valid_plate_barcode);
       });
-      test("Given the current state is SERVER_READY, When the returned state is CALIBRATION_NEEDED with a invalid plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MD20044099' obtained from JSON object", async () => {
+      test("Given that the /system_status is mocked with a response of CALIBRATION_NEEDED, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MD20044099' obtained from JSON object", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: invalid_plate_barcode,
@@ -413,7 +413,7 @@ describe("store/flask", () => {
           invalid_plate_barcode
         );
       });
-      test("Given the current state is SERVER_READY , When the returned state is CALIBRATION_NEEDED with a <empty> plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was rest to `null` as  from JSON object contained <empty>", async () => {
+      test("Given that the /system_status is mocked with a response of CALIBRATION_NEEDED, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was rest to `null` as  from JSON object contained <empty>", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: "",

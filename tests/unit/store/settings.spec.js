@@ -31,7 +31,7 @@ describe("store/settings", () => {
     expect(value).toStrictEqual(0);
     expect(max).toStrictEqual(0);
   });
-  test("When a single user detail is stored in the structure of user_details, Then assert the values of user_details object", () => {
+  test("When initialized user_details of UUID, Nickname is empty, Then commit user_details which have valid user_id UUID and nickname assert the values in Vuex for user_id, UUID and nickname", () => {
     const array_of_userid = [
       {
         user_id: 0,
@@ -50,7 +50,7 @@ describe("store/settings", () => {
       "User account -1"
     );
   });
-  test("When a single customer_detail with single user_detail is stored in Vuex, Then assert the values of customer and user", () => {
+  test("When initialized customer_details UUID, API-key, customer name and user_details UUID, nickname is empty, Then commit customer_details with valid cust_id, UUID, API-key, customer name and user_details of user_id, UUID, nickname to the Vuex and assert the same", () => {
     const array_of_userid = [
       {
         user_id: 0,
@@ -94,7 +94,7 @@ describe("store/settings", () => {
       store.state.settings.customer_details[0].user_ids[0].nickname
     ).toStrictEqual("User account -1");
   });
-  test("When the customer detail is stored with the customer_index/user_index values setup, Then assert the values of the customer_details attributes", () => {
+  test("When initialized the array of customer_account_ids is empty and size 0, Then commit a single valid record of customer_details as the first record in customer_account_ids, customer_index/user_index and assert the same", () => {
     const array_of_userid = [
       {
         user_id: 0,
@@ -146,7 +146,7 @@ describe("store/settings", () => {
       ].user_ids[store.state.settings.user_index].nickname
     ).toStrictEqual("User account -1");
   });
-  test("When the Vuex store has customer details with multiple userids, Then validate the number of user_ids match the value set in the store", () => {
+  test("When initialized the array of customer_account_ids is empty and size 0, Then commit customer_details with multiple user_ids in customer_account_ids and assert the number of user_ids to match the number of user_ids", () => {
     const array_of_userid = [
       {
         user_id: 0,
@@ -180,7 +180,7 @@ describe("store/settings", () => {
       3
     );
   });
-  test("When the Vuex store has multiple customer details, Then validate the number of customer details match the value in the store.", () => {
+  test("When initialized the array of customer_account_ids is empty and size 0, Then commit an array of customer details in customer_account_ids and assert the number of customer records", () => {
     const array_of_userid_1 = [
       {
         user_id: 0,
@@ -235,7 +235,7 @@ describe("store/settings", () => {
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     expect(store.state.settings.customer_account_ids).toHaveLength(2);
   });
-  test("Given the store has multiple customer details, When the user adds new customer, Then validate the number of customer increments by one", () => {
+  test("Given the store has multiple customer details, When the mutations adds new customer, Then validate the number of customer increments by one", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Add Customer)        |    -------- >  ======================== */
@@ -310,7 +310,7 @@ describe("store/settings", () => {
       3
     ); /*  assert the number of customer_account_ids to three */
   });
-  test("Given the store has multiple customer details, When the user updates one Customer details, Then validate the updates is reflecting in the store", () => {
+  test("Given the store has multiple customer details, When the mutation updates one Customer details, Then validate the updates is reflecting in the store", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Edit Customer)       |    -------- >  ======================== */
@@ -406,7 +406,7 @@ describe("store/settings", () => {
       "Updated account -2"
     );
   });
-  test("Given the store has multiple customer details, When the user deletes one Customer details, Then validate the number of the customer decrements by one", () => {
+  test("Given the store has multiple customer details, When the mutation deletes one Customer details, Then validate the number of the customer decrements by one", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Edit Customer)       |    -------- >  ======================== */
@@ -490,7 +490,7 @@ describe("store/settings", () => {
     );
     expect(store.state.settings.customer_account_ids).toHaveLength(1);
   });
-  test("Given the Vuex has customer details with single user id, When a new user details is added, Then the number of user details increments by one", () => {
+  test("Given the Vuex has customer details with single user id, When mutation adds user details, Then the number of user details increments by one", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Add  User)           |    -------- >  ======================== */
@@ -541,7 +541,7 @@ describe("store/settings", () => {
         .user_ids;
     expect(updated_list_of_user_ids).toHaveLength(2);
   });
-  test("Given the Vuex has customer details with multiple user id, When the user updates one of the User ID details, Then validate only modified user ID details are stored in Vuex", () => {
+  test("Given the Vuex has customer details with multiple user id, When the mutation updates one of the User ID details, Then validate only modified user ID details are stored in Vuex", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Edit  User)           |    -------- >  ======================== */
@@ -604,7 +604,7 @@ describe("store/settings", () => {
     expect(modified_userids.nickname).toStrictEqual("Updated Account -1");
     expect(updated_list_of_user_ids).toHaveLength(2);
   });
-  test("Given the Vuex has customer details with multiple user id, When the user deletes one of the User ID details, Then validate that the number of user ids is reduced by one in the Vuex", () => {
+  test("Given the Vuex has customer details with multiple user id, When the mutation deletes one of the User ID details, Then validate that the number of user ids is reduced by one in the Vuex", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Edit  User)          |    -------- >  ======================== */

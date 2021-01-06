@@ -11,7 +11,6 @@ import {
   system_status_regexp,
 } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
-// import playback_module from "@/store/modules/playback";
 
 const ar = arry;
 const nr = new_arry;
@@ -77,24 +76,6 @@ describe("store/waveform", () => {
     expect(well_0_waveform.x_data_points[0]).toStrictEqual(0);
     expect(well_0_waveform.y_data_points[0]).toStrictEqual(290.429978);
   });
-
-  // it("Calls axios real API to obtain the raw waveform data from the HTTP GET and stores the waveform in plate_waveforms", async () => {
-  //   jest.setTimeout(10000);
-
-  //   const parsed_data = await store.dispatch("waveform/fetchApi");
-
-  //   const well_0_waveform = parsed_data[0];
-  //   expect(parsed_data.length).toEqual(24);
-  //   expect(well_0_waveform.x_data_points[0]).toEqual(0);
-  //   expect(well_0_waveform.y_data_points[0]).toEqual(230.417297);
-
-  //   const stored_waveform = store.getters["waveform/plate_waveforms"];
-
-  //   const store_0_waveform = stored_waveform[0];
-  //   expect(stored_waveform.length).toEqual(24);
-  //   expect(store_0_waveform.x_data_points[0]).toEqual(0);
-  //   expect(store_0_waveform.y_data_points[0]).toEqual(230.417297);
-  // });
 
   test("When waveforms is initially mutated with few data points, Then subsequent mutations appends data points to the exisitng plate_waveforms", async () => {
     store.commit("waveform/set_plate_waveforms", ar);
@@ -199,7 +180,7 @@ describe("store/waveform", () => {
         "http://localhost:4567/get_available_data"
       );
     });
-    test("When the start_get_waveform_pinging action is dispatched, Then setInterval is invoked and the interval ID stored in Vuex", async () => {
+    test("Given that the axios get method to respond with http status 200, When the start_get_waveform_pinging action is dispatched, Then setInterval is invoked and the interval ID stored in Vuex", async () => {
       mocked_axios.onGet(get_available_data_regex).reply(200, nr);
 
       // confirm pre-condition
@@ -217,9 +198,7 @@ describe("store/waveform", () => {
 
     describe("Given get waveform pinging is active", () => {
       beforeEach(async () => {
-        mocked_axios
-          .onGet(get_available_data_regex) // We pass in_simulation_mode true and validate default false is replaced
-          .reply(200, nr);
+        mocked_axios.onGet(get_available_data_regex).reply(200, nr);
 
         await store.dispatch("waveform/start_get_waveform_pinging");
       });
