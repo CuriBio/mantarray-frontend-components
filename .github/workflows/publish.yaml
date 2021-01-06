@@ -295,6 +295,11 @@ jobs:
     name: Test installation from NPM for Node ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout # needed to get the package.json to get version info
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.4
         with:
@@ -313,6 +318,9 @@ jobs:
         with:
           path: "package.json"
           prop_path: "name"
+
+      - name: Delete package.json so that published package can be installed
+        run: rm package.json
 
       - name: Install Main Package From NPM
         if: github.event.inputs.publish_package == '1'
