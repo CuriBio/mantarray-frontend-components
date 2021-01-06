@@ -1,0 +1,358 @@
+# Based on https://github.com/prettier/prettier/blob/master/.github/workflows/dev-test.yml
+name: Publish to NPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_package:
+        description: "Publish to NPM"
+        required: false
+        default: "0"
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - "ubuntu-18.04"
+          - "ubuntu-20.04"
+          - "windows-2019"
+        node:
+          - 12
+          - 14
+        e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
+          - "tests/e2e/playback"
+          - "tests/e2e/status"
+          - "tests/e2e/waveforms"
+        include:
+          # only enable coverage on the fastest job
+          - os: "ubuntu-20.04"
+            node: "14"
+            e2e-tests: "tests/e2e/status"
+            IS_FASTEST_JOB: true
+          - e2e-tests: "tests/e2e/status"
+            IS_FASTEST_E2E_SUITE: true
+
+    name: Test code before publishing in Node ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Get Version
+        id: package-version
+        uses: notiz-dev/github-action-json-property@v0.1.0
+        with:
+          path: "package.json"
+          prop_path: "version"
+
+      - name: Display extracted version number
+        shell: bash
+        run: |
+          echo Version: ${{steps.package-version.outputs.prop}}
+
+      - name: Confirming tag not already present on remote (if publishing)
+        if: github.event.inputs.publish_package == '1' && matrix.IS_FASTEST_JOB == true
+        run: if [$(git ls-remote --tags origin | grep ${{ steps.extract_version.outputs.package-version }}) = '']; then echo Tag does not exist on remote; else echo Tag already exists on remote && exit 1; fi
+
+      - name: Extract branch name # Adapted from: https://stackoverflow.com/questions/58033366/how-to-get-current-branch-within-github-actions
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          git branch -av
+          echo '##[set-output name=sha-of-main-branch;]$(echo $(git branch -av | grep remotes/origin/main | grep -oP "main\s+\K\w+"))'
+          echo '##[set-output name=sha-of-development-branch;]$(echo $(git branch -av | grep remotes/origin/development | grep -oP "development\s+\K\w+"))'
+          echo '##[set-output name=sha-of-current-branch;]$(echo $(git branch -av | grep "*" | grep -oP " \s+\K\w+"))'
+        id: extract_branch
+
+      - name: Display extracted branch information
+        if: runner.os == 'Linux'
+        run: |
+          echo "SHA of current branch: ${{ steps.extract_branch.outputs.sha-of-current-branch }}"
+          echo "SHA of main branch: ${{ steps.extract_branch.outputs.sha-of-main-branch }}"
+          echo "SHA of development branch: ${{ steps.extract_branch.outputs.sha-of-development-branch }}"
+
+      - name: Is this running on development branch?
+        if: runner.os == 'Linux'
+        run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-development-branch}}" ] ; then echo "Running on development branch."; else echo "Not running on development branch."; fi
+
+      - name: Is this running on main branch?
+        if: runner.os == 'Linux'
+        run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-main-branch}}" ] ; then echo "Running on main branch."; else echo "Not running on main branch."; fi
+
+      - name: Fail if attempting to publish from a branch other than main
+        if: runner.os == 'Linux' && github.event.inputs.publish_package == '1'
+        run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-main-branch}}" ] ; then echo "Running on main branch, can proceed to publish."; else exit 1; fi
+
+      - name: Set up Python for use with pre-commit
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Display Language Dependency Versions
+        run: |
+          python --version
+          pip --version
+          node --version
+          npm --version
+
+      - name: Display Chrome version (Windows)
+        if: runner.os == 'Windows'
+        run: (Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe').'(Default)').VersionInfo
+
+      - name: Display Chrome version (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          google-chrome --version
+          chromedriver --version
+
+      - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./.npm_cache
+          key: ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
+
+      - name: Cache Python modules # needed for pre-commit
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-python-modules
+        with:
+          path: ./.cache/pip
+          key: ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-
+
+      - name: Cache Pre-commit hooks
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pre-commit-hooks
+        if: matrix.IS_FASTEST_JOB == true
+        with:
+          path: ~/.precommit_cache # Eli (10/22/20): Having the pre-commit cache inside the repo creates problems with Pytest detecting test files inside the cache
+          key: ${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
+
+      - name: Install Node Dependencies and list installed python dev dependencies
+        # not sure why CodeBuild fails without the --unsafe-perm flag for npm ci, but it seems to help when running the "prepare" scripts after the install https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
+        run: |
+          npm ci --unsafe-perm --cache .npm_cache/
+          pip freeze
+
+      - name: Run pre-commit hooks
+        if: matrix.IS_FASTEST_JOB == true
+        env:
+          PRE_COMMIT_HOME: ~/.precommit_cache
+        # only enable pre-commit on the fastest job
+        run: |
+          pre-commit install
+          pre-commit run -a
+
+      - name: Confirm package builds correctly # Some tests rely on testing the built files in the dist folder, so make sure to do this before running the test suite
+        run: npm run build
+
+      - name: Run Tests
+        run: npm run test:unit-no-prebuild -- --ci --verbose
+
+      - name: Get Testcafe Version
+        if: runner.os == 'Linux'
+        id: testcafe-version
+        uses: notiz-dev/github-action-json-property@v0.1.0
+        with:
+          path: "package-lock.json"
+          prop_path: "dependencies.testcafe.version"
+
+      - name: Display Testcafe Version
+        if: runner.os == 'Linux'
+        run: echo ${{steps.testcafe-version.outputs.prop}}
+
+      - name: Run E2E Tests (Linux)
+        if: runner.os == 'Linux'
+        uses: DevExpress/testcafe-action@v0.0.3
+        with:
+          version: "1.9.3"
+          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 40000'
+
+      - name: Confirm Sphinx Docs build correctly
+        # only check Sphinx docs build on the fastest job
+        if: matrix.IS_FASTEST_JOB == true
+        run: SPHINXOPTS="-W" make --directory=docs html # the -W flag treats warnings as errors to cause build failures
+
+      # - name: Confirm can install in other directory # https://docs.npmjs.com/cli/v6/using-npm/developers
+      #   run: |
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist--${{ matrix.os }}--${{ matrix.node-version }}
+          path: dist/*
+
+      - name: Archive visual regression
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node }}
+          path: "tests/e2e/screenshots/**/*"
+
+  publish_package:
+    needs: [test]
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - "ubuntu-20.04"
+        node-version:
+          - 14
+    name: Publish to NPM using ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./.npm_cache
+          key: ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
+
+      - name: Set up Python for use with dev dependencies used during publishing # this pins the Python version instead of using whatever github decides should be the default
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Display Language Dependency Versions
+        run: |
+          python --version
+          pip --version
+          node --version
+          npm --version
+
+      - name: Download built dist folder from previous step
+        uses: actions/download-artifact@v2
+        with:
+          name: dist--${{ matrix.os }}--${{ matrix.node-version }}
+          path: dist
+
+      - name: Install Node Dependencies and list installed python dev dependencies
+        # not sure why CodeBuild fails without the --unsafe-perm flag for npm ci, but it seems to help when running the "prepare" scripts after the install https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
+        run: |
+          npm ci --unsafe-perm --cache .npm_cache/
+          pip freeze
+
+      - name: Logging into NPM
+        env:
+          NPM_USER: ${{ secrets.NPM_USERNAME }}
+          NPM_PASS: ${{ secrets.NPM_PASSWORD }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+
+        run: |
+          npm install -g npm-cli-login@0.1.1
+          npm-cli-login
+
+      - name: Uploading to NPM
+        if: github.event.inputs.publish_package == '1'
+        run: npm publish --access public
+
+      - name: Sleep for 180 seconds to allow NPM Index to update before proceeding to the next step
+        if: github.event.inputs.publish_package == '1'
+        uses: juliangruber/sleep-action@v1
+        with:
+          time: 180s
+
+  install_from_npm:
+    needs: [publish_package]
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - "ubuntu-18.04"
+          - "ubuntu-20.04"
+          - "windows-2019"
+        node-version:
+          - 14
+    name: Test installation from NPM for Node ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Get Version
+        id: package-version
+        uses: notiz-dev/github-action-json-property@v0.1.0
+        with:
+          path: "package.json"
+          prop_path: "version"
+
+      - name: Get Package Name
+        id: package-name
+        uses: notiz-dev/github-action-json-property@v0.1.0
+        with:
+          path: "package.json"
+          prop_path: "name"
+
+      - name: Install Main Package From NPM
+        if: github.event.inputs.publish_package == '1'
+        run: npm install ${{steps.package-name.outputs.prop}}@${{steps.package-version.outputs.prop}}
+
+      - name: Create tiny .js file to require package
+        run: |
+          echo 'require("${{steps.package-name.outputs.prop}}")' > tmp.js
+
+      - name: Confirm to import errors when opening package
+        if: github.event.inputs.publish_package == '1'
+        run: node tmp.js
+
+  create_tag:
+    needs: [install_from_npm]
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - "ubuntu-20.04"
+    name: Creating tag on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Get Version
+        id: package-version
+        uses: notiz-dev/github-action-json-property@v0.1.0
+        with:
+          path: "package.json"
+          prop_path: "version"
+
+      - name: Tagging commit
+        run: |
+          echo "About to tag with: ${{steps.package-version.outputs.prop}}"
+          git tag "${{steps.package-version.outputs.prop}}"
+
+      - name: Pushing Tag
+        if: github.event.inputs.publish_package == '1'
+        run: git push --tags
