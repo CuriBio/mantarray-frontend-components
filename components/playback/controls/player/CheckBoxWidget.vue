@@ -4,6 +4,7 @@
       <div class="div__checkbox_selected" @click="check_toggle()">
         <FontAwesomeIcon v-show="status" :icon="['fa', 'check-square']" />
         <FontAwesomeIcon v-show="!status" :icon="['fa', 'square']" />
+        Ascorbic&nbsp;Acid
       </div>
     </div>
   </div>
