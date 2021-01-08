@@ -93,7 +93,7 @@ describe("RecordingTime.vue", () => {
       "00:00:55.018"
     );
   });
-  test("Given that get method is mocked with a http response 200, When Recording start is initiated at x_time_index moved by 6736300, Then the text updates 00:00:55.018 and stop_recording initiates resets text to null", async () => {
+  test("Given that get method is mocked with a http response 200, When Recording start is initiated at x_time_index is mutated to 6736300, Then the text updates 00:00:55.018 and stop_recording initiates resets text to null", async () => {
     const propsData = {};
     wrapper = shallowMount(RecordingTime, {
       propsData,

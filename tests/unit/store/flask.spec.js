@@ -264,7 +264,7 @@ describe("store/flask", () => {
         await store.dispatch("flask/start_status_pinging");
       });
 
-      test("Given start_status_pinging is dispatched, When status_ping_interval_id state does not change, Then setInterval is not called", async () => {
+      test("When status_ping_interval_id state does not change, Then setInterval is not called", async () => {
         const spied_set_interval = jest.spyOn(window, "setInterval");
         const initial_interval_id = store.state.flask.status_ping_interval_id;
         await store.dispatch("flask/start_status_pinging");
@@ -321,7 +321,7 @@ describe("store/flask", () => {
         );
       });
 
-      test("When simulation_mode is set to true, Then assert if the value in store is matching for 'true'", async () => {
+      test("When Vuex is initialized to its default state, Then assert if the value in store is matching for 'true'", async () => {
         const need_simulation = true;
 
         store.commit("flask/set_simulation_status", need_simulation);
@@ -363,7 +363,7 @@ describe("store/flask", () => {
       beforeEach(async () => {
         context = await store.dispatch("flask/get_flask_action_context");
       });
-      test("Given that the /system_status is mocked with a response of CALIBRATION_NEEDED, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MB190440991' obtained from JSON object", async () => {
+      test("Given that /system_status is mocked to include a valid plate barcode, When the ping_system_status is active, Then the barcode value in Vuex is set to the value from the JSON object in /system_status", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: valid_plate_barcode,
@@ -387,7 +387,7 @@ describe("store/flask", () => {
         );
         expect(store.state.playback.barcode).toStrictEqual(valid_plate_barcode);
       });
-      test("Given that the /system_status is mocked with a response of CALIBRATION_NEEDED, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MD20044099' obtained from JSON object", async () => {
+      test("Given that /system_status is mocked to include a invalid plate barcode, When the ping_system_status is active, Then the barcode value in Vuex is set to the value from the JSON object in /system_status", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: invalid_plate_barcode,
@@ -413,7 +413,7 @@ describe("store/flask", () => {
           invalid_plate_barcode
         );
       });
-      test("Given that the /system_status is mocked with a response of CALIBRATION_NEEDED, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was rest to `null` as  from JSON object contained <empty>", async () => {
+      test("Given that /system_status is mocked to include a <empty> plate barcode, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was reset to `null` as  from JSON object contained <empty>", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: "",
