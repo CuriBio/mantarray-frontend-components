@@ -56,3 +56,5 @@ export { default as AddCustomer } from "./components/playback/controls/player/Ad
 export { default as EditCustomer } from "./components/playback/controls/player/EditCustomer.vue";
 export { default as AddUser } from "./components/playback/controls/player/AddUser.vue";
 export { default as EditUser } from "./components/playback/controls/player/EditUser.vue";
+
+export { default as BarcodeEditDialog } from "./components/playback/controls/player/BarcodeEditDialog.vue";
