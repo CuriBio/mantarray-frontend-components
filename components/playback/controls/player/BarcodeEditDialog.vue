@@ -109,7 +109,7 @@ export default {
 </script>
 <style type="text/css">
 .div__barcode-edit-dialog-button {
-  top: 220px;
+  top: 191px;
   left: 0px;
   position: absolute;
 }
