@@ -88,7 +88,7 @@
           :button_widget_left="0"
           :button_names="['Cancel', 'Yes']"
           :enabled_color="'#B7B7B7'"
-          :hover_color="['#bd4932', '#19ac8a']"
+          :hover_color="['#FFFFFF', '#FFFFFF']"
         >
         </ButtonWidget>
       </div>
