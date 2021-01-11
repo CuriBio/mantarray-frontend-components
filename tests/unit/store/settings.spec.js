@@ -18,20 +18,20 @@ describe("store/settings", () => {
   });
   test("When initialized, Then the customer_account_ids is an empty with no value assigned", () => {
     const array_of_customerids = store.state.settings.customer_account_ids;
-    expect(array_of_customerids.length).toEqual(0);
+    expect(array_of_customerids).toHaveLength(0);
   });
-  test("When initialized, Then the customer_account_ids is an empty with no value assigned", () => {
+  test("When initialized, Then the customer_account_ids when accessed via settings_store_module is an empty with no value assigned", () => {
     const array_of_customerids = settings_store_module.state()
       .customer_account_ids;
-    expect(array_of_customerids.length).toEqual(0);
+    expect(array_of_customerids).toHaveLength(0);
   });
   test("When initialized, Then the file_count and max_file_count is zero 0 as with no value assigned", () => {
     const value = store.state.settings.file_count;
     const max = store.state.settings.max_file_count;
-    expect(value).toEqual(0);
-    expect(max).toEqual(0);
+    expect(value).toStrictEqual(0);
+    expect(max).toStrictEqual(0);
   });
-  test("Store a single user detail can be assigned to the user_ids ", () => {
+  test("When initialized user_details of UUID, Nickname is empty, Then commit user_details which have valid user_id UUID and nickname assert the values in Vuex for user_id, UUID and nickname", () => {
     const array_of_userid = [
       {
         user_id: 0,
@@ -42,15 +42,15 @@ describe("store/settings", () => {
     expect(store.state.settings.user_details.uuid).toBeNull();
     expect(store.state.settings.user_details.nickname).toBeNull();
     store.commit("settings/set_user_details", array_of_userid);
-    expect(store.state.settings.user_details[0].user_id).toEqual(0);
-    expect(store.state.settings.user_details[0].uuid).toEqual(
+    expect(store.state.settings.user_details[0].user_id).toStrictEqual(0);
+    expect(store.state.settings.user_details[0].uuid).toStrictEqual(
       "2VSckkBYr2An3dqHEyfRRE"
     );
-    expect(store.state.settings.user_details[0].nickname).toEqual(
+    expect(store.state.settings.user_details[0].nickname).toStrictEqual(
       "User account -1"
     );
   });
-  test("Store a single customer detail can be assigned to the customer_details", () => {
+  test("When initialized customer_details UUID, API-key, customer name and user_details UUID, nickname is empty, Then commit customer_details with valid cust_id, UUID, API-key, customer name and user_details of user_id, UUID, nickname to the Vuex and assert the same", () => {
     const array_of_userid = [
       {
         user_id: 0,
@@ -71,30 +71,30 @@ describe("store/settings", () => {
     expect(store.state.settings.customer_details.uuid).toBeNull();
     expect(store.state.settings.customer_details.api_key).toBeNull();
     expect(store.state.settings.customer_details.nickname).toBeNull();
-    expect(store.state.settings.customer_details.user_ids.length).toEqual(0);
+    expect(store.state.settings.customer_details.user_ids).toHaveLength(0);
     store.commit("settings/set_customer_details", array_of_customerids);
-    expect(store.state.settings.customer_details[0].cust_id).toEqual(0);
-    expect(store.state.settings.customer_details[0].uuid).toEqual(
+    expect(store.state.settings.customer_details[0].cust_id).toStrictEqual(0);
+    expect(store.state.settings.customer_details[0].uuid).toStrictEqual(
       "4vqyd62oARXqj9nRUNhtLQ"
     );
-    expect(store.state.settings.customer_details[0].api_key).toEqual(
+    expect(store.state.settings.customer_details[0].api_key).toStrictEqual(
       "941532a0-6be1-443a-a9d5-d57bdf180a52"
     );
-    expect(store.state.settings.customer_details[0].nickname).toEqual(
+    expect(store.state.settings.customer_details[0].nickname).toStrictEqual(
       "Customer account -1"
     );
-    expect(store.state.settings.customer_details[0].user_ids.length).toEqual(1);
+    expect(store.state.settings.customer_details[0].user_ids).toHaveLength(1);
     expect(
       store.state.settings.customer_details[0].user_ids[0].user_id
-    ).toEqual(0);
-    expect(store.state.settings.customer_details[0].user_ids[0].uuid).toEqual(
-      "2VSckkBYr2An3dqHEyfRRE"
-    );
+    ).toStrictEqual(0);
+    expect(
+      store.state.settings.customer_details[0].user_ids[0].uuid
+    ).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
     expect(
       store.state.settings.customer_details[0].user_ids[0].nickname
-    ).toEqual("User account -1");
+    ).toStrictEqual("User account -1");
   });
-  test("Store a single customer detail can be assigned to the customer_ids array", () => {
+  test("When initialized the array of customer_account_ids is empty and size 0, Then commit a single valid record of customer_details as the first record in customer_account_ids, customer_index/user_index and assert the same", () => {
     const array_of_userid = [
       {
         user_id: 0,
@@ -111,7 +111,7 @@ describe("store/settings", () => {
         user_ids: array_of_userid,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
@@ -119,34 +119,34 @@ describe("store/settings", () => {
       store.state.settings.customer_account_ids[
         store.state.settings.customer_index
       ].uuid
-    ).toEqual("4vqyd62oARXqj9nRUNhtLQ");
+    ).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
     expect(
       store.state.settings.customer_account_ids[
         store.state.settings.customer_index
       ].api_key
-    ).toEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
+    ).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
     expect(
       store.state.settings.customer_account_ids[
         store.state.settings.customer_index
       ].nickname
-    ).toEqual("Customer account -1");
+    ).toStrictEqual("Customer account -1");
     expect(
       store.state.settings.customer_account_ids[
         store.state.settings.customer_index
-      ].user_ids.length
-    ).toEqual(1);
+      ].user_ids
+    ).toHaveLength(1);
     expect(
       store.state.settings.customer_account_ids[
         store.state.settings.customer_index
       ].user_ids[store.state.settings.user_index].uuid
-    ).toEqual("2VSckkBYr2An3dqHEyfRRE");
+    ).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
     expect(
       store.state.settings.customer_account_ids[
         store.state.settings.customer_index
       ].user_ids[store.state.settings.user_index].nickname
-    ).toEqual("User account -1");
+    ).toStrictEqual("User account -1");
   });
-  test("Store a single customer detail with multiple user ids can be assigned to the customer_ids array", () => {
+  test("When initialized the array of customer_account_ids is empty and size 0, Then commit customer_details with multiple user_ids in customer_account_ids and assert the number of user_ids to match the number of user_ids", () => {
     const array_of_userid = [
       {
         user_id: 0,
@@ -172,15 +172,15 @@ describe("store/settings", () => {
         user_ids: array_of_userid,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
-    expect(
-      store.getters["settings/user_ids_for_selected_customer_account"].length
-    ).toEqual(3);
+    expect(store.state.settings.customer_account_ids[0].user_ids).toHaveLength(
+      3
+    );
   });
-  test("Store a multiple customer detail with multiple user ids can be assigned to the customer_ids array", () => {
+  test("When initialized the array of customer_account_ids is empty and size 0, Then commit an array of customer details in customer_account_ids and assert the number of customer records", () => {
     const array_of_userid_1 = [
       {
         user_id: 0,
@@ -231,15 +231,15 @@ describe("store/settings", () => {
         user_ids: array_of_userid_2,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
-    expect(store.getters["settings/customer_account_ids"].length).toEqual(2);
+    expect(store.state.settings.customer_account_ids).toHaveLength(2);
   });
-  test("Store a multiple customer detail with multiple user ids can be assigned to the customer_ids array an 'Add Customer' ==>  PopopUpDialog (SaveID) ==> SettingsForm (SaveChanges) ", () => {
+  test("Given the store has multiple customer details, When the mutations adds new customer, Then validate the number of customer increments by one", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Add Customer)        |    -------- >  ======================== */
-    /* |                        |                | PopUpDialog.vue      | */
+    /* |                        |                | AddCustomer.vue      | */
     /* |                        |    < --------  |  (Save ID)           | */
     /* |  (SaveChanges)         |                ======================== */
     /* ========================== */
@@ -283,7 +283,7 @@ describe("store/settings", () => {
         user_ids: array_of_userid_2,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
 
     /* User now does Add Customer Click  */
@@ -300,21 +300,21 @@ describe("store/settings", () => {
       "settings/set_customer_details",
       add_customer
     ); /*  (Save ID) selected */
-    let current_customerids = store.getters["settings/customer_account_ids"];
+    const current_customerids = store.state.settings.customer_account_ids;
     current_customerids.push(store.getters["settings/customer_details"]);
     store.commit(
       "settings/set_customer_details",
       current_customerids
     ); /*  (SaveChanges) selected */
-    expect(store.getters["settings/customer_account_ids"].length).toEqual(
+    expect(store.state.settings.customer_account_ids).toHaveLength(
       3
     ); /*  assert the number of customer_account_ids to three */
   });
-  test("Store a multiple customer detail with multiple user ids can be assigned to the customer_ids array an 'Edit Customer' ==>  PopopUpDialog (SaveID) ==> SettingsForm (SaveChanges) ", () => {
+  test("Given the store has multiple customer details, When the mutation updates one Customer details, Then validate the updates is reflecting in the store", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Edit Customer)       |    -------- >  ======================== */
-    /* |                        |                | PopUpDialog.vue      | */
+    /* |                        |                | EditCustomer.vue      | */
     /* |                        |    < --------  |  (Save ID)           | */
     /* |  (SaveChanges)         |                ======================== */
     /* ========================== */
@@ -358,13 +358,16 @@ describe("store/settings", () => {
         user_ids: array_of_userid_2,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
 
     /* User now does Edit Customer Click on the "Customer account - 2*/
     store.commit("settings/set_customer_index", 1);
-    let current_focus_customerid = store.getters["settings/customer_details"];
-    expect(current_focus_customerid.nickname).toEqual("Customer account -2");
+    const current_focus_customerid =
+      store.state.settings.customer_account_ids[1];
+    expect(current_focus_customerid.nickname).toStrictEqual(
+      "Customer account -2"
+    );
     current_focus_customerid.uuid =
       "7N42dgm5tFLK9N8MT7fHC7"; /* UUID modified */
     current_focus_customerid.nickname =
@@ -374,8 +377,8 @@ describe("store/settings", () => {
       current_focus_customerid
     ); /*  (Save ID) selected */
 
-    let current_customerids = store.getters["settings/customer_account_ids"];
-    let modified_customerids = store.getters["settings/customer_details"];
+    const current_customerids = store.state.settings.customer_account_ids;
+    const modified_customerids = store.state.settings.customer_account_ids[1];
 
     /* Javascript array provides an internal api array.find(v => v.id === match.id).data = new.data  so we update object in array and store in Vuex*/
     current_customerids.find(
@@ -394,15 +397,20 @@ describe("store/settings", () => {
     store.commit("settings/set_customer_account_ids", current_customerids);
 
     /*  assert the uuid and nickname from settings store is updated */
-    let updated_focus_customerid = store.getters["settings/customer_details"];
-    expect(updated_focus_customerid.uuid).toEqual("7N42dgm5tFLK9N8MT7fHC7");
-    expect(updated_focus_customerid.nickname).toEqual("Updated account -2");
+    const updated_focus_customerid =
+      store.state.settings.customer_account_ids[1];
+    expect(updated_focus_customerid.uuid).toStrictEqual(
+      "7N42dgm5tFLK9N8MT7fHC7"
+    );
+    expect(updated_focus_customerid.nickname).toStrictEqual(
+      "Updated account -2"
+    );
   });
-  test("Store a multiple customer detail with multiple user ids can be assigned to the customer_ids array an 'Edit Customer' ==>  PopopUpDialog (DeleteID) ==> SettingsForm (SaveChanges) ", () => {
+  test("Given the store has multiple customer details, When the mutation deletes one Customer details, Then validate the number of the customer decrements by one", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Edit Customer)       |    -------- >  ======================== */
-    /* |                        |                | PopUpDialog.vue      | */
+    /* |                        |                | EditCustomer.vue      | */
     /* |                        |    < --------  |  (Delete ID)         | */
     /* |  (SaveChanges)         |                ======================== */
     /* ========================== */
@@ -446,37 +454,47 @@ describe("store/settings", () => {
         user_ids: array_of_userid_2,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
 
     /* User now does Edit Customer Click on the "Customer account - 1*/
     store.commit("settings/set_customer_index", 0);
-    let current_focus_customerid = store.getters["settings/customer_details"];
-    expect(current_focus_customerid.nickname).toEqual("Customer account -1");
-    expect(current_focus_customerid.uuid).toEqual("4vqyd62oARXqj9nRUNhtLQ");
-    expect(current_focus_customerid.api_key).toEqual(
+    const current_focus_customerid =
+      store.state.settings.customer_account_ids[0];
+    expect(current_focus_customerid.nickname).toStrictEqual(
+      "Customer account -1"
+    );
+    expect(current_focus_customerid.uuid).toStrictEqual(
+      "4vqyd62oARXqj9nRUNhtLQ"
+    );
+    expect(current_focus_customerid.api_key).toStrictEqual(
       "941532a0-6be1-443a-a9d5-d57bdf180a52"
     );
     /*  (Delete ID) selected */
-    let current_customerids = store.getters["settings/customer_account_ids"];
-    let focus_customer_index = store.state.settings.customer_index;
+    const current_customerids = store.state.settings.customer_account_ids;
+    const focus_customer_index = store.state.settings.customer_index;
     /* Javascript array provides an internal api array.splice(idx,1)  so we delete object in array and store in Vuex*/
     current_customerids.splice(focus_customer_index, 1);
     /*  (SaveChanges) selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
-    let updated_focus_customerid = store.getters["settings/customer_details"];
-    expect(updated_focus_customerid.uuid).toEqual("6cBaidlJ84Ggc5JA7IYCgv");
-    expect(updated_focus_customerid.api_key).toEqual(
+    const updated_focus_customerid =
+      store.state.settings.customer_account_ids[0];
+    expect(updated_focus_customerid.uuid).toStrictEqual(
+      "6cBaidlJ84Ggc5JA7IYCgv"
+    );
+    expect(updated_focus_customerid.api_key).toStrictEqual(
       "941532a0-6be1-443a-cdee-d57bdf180a52"
     );
-    expect(updated_focus_customerid.nickname).toEqual("Customer account -2");
-    expect(store.state.settings.customer_account_ids.length).toEqual(1);
+    expect(updated_focus_customerid.nickname).toStrictEqual(
+      "Customer account -2"
+    );
+    expect(store.state.settings.customer_account_ids).toHaveLength(1);
   });
-  test("Store has a single customer  with single user ids can be assigned to the customer_ids array an 'Add User' ==>  PopopUpDialog (Save ID) ==> SettingsForm (SaveChanges) ", () => {
+  test("Given the Vuex has customer details with single user id, When mutation adds user details, Then the number of user details increments by one", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Add  User)           |    -------- >  ======================== */
-    /* |                        |                | PopUpDialog.vue      | */
+    /* |                        |                | AddUser.vue      | */
     /* |                        |    < --------  |  (Save ID)           | */
     /* |  (SaveChanges)         |                ======================== */
     /* ========================== */
@@ -496,15 +514,15 @@ describe("store/settings", () => {
         user_ids: array_of_userid_1,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
 
-    let current_customerids = store.getters["settings/customer_account_ids"];
-    let current_list_of_user_ids =
-      store.getters["settings/user_ids_for_selected_customer_account"];
-    expect(current_list_of_user_ids.length).toEqual(1);
+    const current_customerids = store.state.settings.customer_account_ids;
+    const current_list_of_user_ids =
+      store.state.settings.customer_account_ids[0].user_ids;
+    expect(current_list_of_user_ids).toHaveLength(1);
     const add_new_user = {
       user_id: 1,
       uuid: "5FY8KwTsQaUJ2KzHJGetfE",
@@ -512,21 +530,22 @@ describe("store/settings", () => {
     };
     /*  (Save ID) user selected */
     current_list_of_user_ids.push(add_new_user);
-    let current_customer_index = store.getters["settings/customer_index"];
+    const current_customer_index = store.state.settings.customer_index;
     current_customerids[
       current_customer_index
     ].user_ids = current_list_of_user_ids;
     /* SaveChanges selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
-    let updated_list_of_user_ids =
-      store.getters["settings/user_ids_for_selected_customer_account"];
-    expect(updated_list_of_user_ids.length).toEqual(2);
+    const updated_list_of_user_ids =
+      store.state.settings.customer_account_ids[current_customer_index]
+        .user_ids;
+    expect(updated_list_of_user_ids).toHaveLength(2);
   });
-  test("Store has a single customer  with multiple user ids can be assigned to the customer_ids array an 'Edit User' ==>  PopopUpDialog (Save ID) ==> SettingsForm (SaveChanges) ", () => {
+  test("Given the Vuex has customer details with multiple user id, When the mutation updates one of the User ID details, Then validate only modified user ID details are stored in Vuex", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Edit  User)           |    -------- >  ======================== */
-    /* |                        |                | PopUpDialog.vue      | */
+    /* |                        |                | EditUser.vue         | */
     /* |                        |    < --------  |  (Save ID)           | */
     /* |  (SaveChanges)         |                ======================== */
     /* ========================== */
@@ -551,19 +570,19 @@ describe("store/settings", () => {
         user_ids: array_of_userid_1,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 1);
 
-    let current_customerids = store.getters["settings/customer_account_ids"];
-    let current_list_of_user_ids =
-      store.getters["settings/user_ids_for_selected_customer_account"];
-    expect(current_list_of_user_ids.length).toEqual(2);
-    let userid_under_focus = store.getters["settings/user_index"];
+    const current_customerids = store.state.settings.customer_account_ids;
+    const current_list_of_user_ids =
+      store.state.settings.customer_account_ids[0].user_ids;
+    expect(current_list_of_user_ids).toHaveLength(2);
 
-    let focused_user_details = store.getters["settings/user_details"];
-    let focused_user_id = store.getters["settings/user_index"];
+    const focused_user_details =
+      store.state.settings.customer_account_ids[0].user_ids;
+    const focused_user_id = store.state.settings.user_index;
 
     focused_user_details.uuid = "6cBaidlJ84Ggc5JA7IYCgv";
     focused_user_details.nickname = "Updated Account -1";
@@ -577,18 +596,19 @@ describe("store/settings", () => {
     current_customerids.user_ids = current_list_of_user_ids;
     /* SaveChanges selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
-    let updated_list_of_user_ids =
-      store.getters["settings/user_ids_for_selected_customer_account"];
-    let modified_userids = store.getters["settings/user_details"];
-    expect(modified_userids.uuid).toEqual("6cBaidlJ84Ggc5JA7IYCgv");
-    expect(modified_userids.nickname).toEqual("Updated Account -1");
-    expect(updated_list_of_user_ids.length).toEqual(2);
+    const updated_list_of_user_ids =
+      store.state.settings.customer_account_ids[0].user_ids;
+    const modified_userids =
+      store.state.settings.customer_account_ids[0].user_ids[1];
+    expect(modified_userids.uuid).toStrictEqual("6cBaidlJ84Ggc5JA7IYCgv");
+    expect(modified_userids.nickname).toStrictEqual("Updated Account -1");
+    expect(updated_list_of_user_ids).toHaveLength(2);
   });
-  test("Store has a single customer  with multiple user ids can be assigned to the customer_ids array an 'Edit User' ==>  PopopUpDialog (Delete ID) ==> SettingsForm (SaveChanges) ", () => {
+  test("Given the Vuex has customer details with multiple user id, When the mutation deletes one of the User ID details, Then validate that the number of user ids is reduced by one in the Vuex", () => {
     /* ========================== */
     /* |  Settings.vue          | */
     /* |  (Edit  User)          |    -------- >  ======================== */
-    /* |                        |                | PopUpDialog.vue      | */
+    /* |                        |                | EditUser.vue      | */
     /* |                        |    < --------  |  (Delete ID)         | */
     /* |  (SaveChanges)         |                ======================== */
     /* ========================== */
@@ -613,30 +633,30 @@ describe("store/settings", () => {
         user_ids: array_of_userid_1,
       },
     ];
-    expect(store.state.settings.customer_account_ids.length).toEqual(0);
+    expect(store.state.settings.customer_account_ids).toHaveLength(0);
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
 
-    let current_customerids = store.getters["settings/customer_account_ids"];
-    let current_list_of_user_ids =
-      store.getters["settings/user_ids_for_selected_customer_account"];
-    expect(current_list_of_user_ids.length).toEqual(2);
-    let userid_under_focus = store.getters["settings/user_index"];
+    const current_customerids = store.state.settings.customer_account_ids;
+    const current_list_of_user_ids =
+      store.state.settings.customer_account_ids[0].user_ids;
+    expect(current_list_of_user_ids).toHaveLength(2);
 
-    let focused_user_details = store.getters["settings/user_details"];
-    expect(focused_user_details.uuid).toEqual("2VSckkBYr2An3dqHEyfRRE");
-    expect(focused_user_details.nickname).toEqual("User account -1");
+    const focused_user_details =
+      store.state.settings.customer_account_ids[0].user_ids[0];
+    expect(focused_user_details.uuid).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
+    expect(focused_user_details.nickname).toStrictEqual("User account -1");
 
-    let focused_user_id = store.getters["settings/user_index"];
+    const focused_user_id = store.state.settings.user_index;
     /* Delete ID selected */
     /* Javascript array provides an internal api array.splice(idx,1)  so we delete object in array and store in Vuex*/
     current_list_of_user_ids.splice(focused_user_id, 1);
     current_customerids.user_ids = current_list_of_user_ids;
     /* SaveChanges selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
-    let modified_userids =
-      store.getters["settings/user_ids_for_selected_customer_account"];
-    expect(modified_userids.length).toEqual(1);
+    const modified_userids =
+      store.state.settings.customer_account_ids[0].user_ids;
+    expect(modified_userids).toHaveLength(1);
   });
 });

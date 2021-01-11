@@ -131,7 +131,7 @@ describe("PlateNavigator.vue", () => {
       const well_to_click = wrapper.find("#well_" + well_index);
       well_to_click.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
-      expect(store.getters["twentyfourcontrols/is_quadrant"]).toEqual(
+      expect(store.state.twentyfourcontrols.is_quadrant).toEqual(
         quadrants[expected_quadrant_name]
       );
     }

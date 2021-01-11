@@ -74,14 +74,14 @@ describe("WebPlayerControls.vue", () => {
     );
 
     // confirm initial state
-    expect(store.getters["playback/loop_playback"]).toEqual(false);
+    expect(store.state.playback.loop_playback).toEqual(false);
 
     loop_playback_button.trigger("click");
     await wrapper.vm.$nextTick(); // wait for update
-    expect(store.getters["playback/loop_playback"]).toEqual(true);
+    expect(store.state.playback.loop_playback).toEqual(true);
     loop_playback_button.trigger("click");
     await wrapper.vm.$nextTick(); // wait for update
-    expect(store.getters["playback/loop_playback"]).toEqual(false);
+    expect(store.state.playback.loop_playback).toEqual(false);
   });
   it("updates display of Loop button when Vuex is updated", async () => {
     const propsData = {};
@@ -95,7 +95,7 @@ describe("WebPlayerControls.vue", () => {
     );
 
     // confirm initial state
-    expect(store.getters["playback/loop_playback"]).toEqual(false);
+    expect(store.state.playback.loop_playback).toEqual(false);
     expect(loop_playback_button.classes()).not.toContain(
       "span__playback-web-player-controls--active"
     );

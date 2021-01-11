@@ -59,7 +59,7 @@ repos:
     rev: v7.16.0
     hooks:
       - id: eslint
-        exclude: (dist/)|(tests/unit/components/status/StatusBar.spec.js)|(tests/unit/components/status/SimulationMode.spec.js)|(tests/unit/components/playback/ContinuousWaveform.spec.js)|(tests/unit/components/playback/controls/WebPlayerControls.spec.js)|(tests/unit/components/playback/controls/YAxisControls.spec.js)|(tests/unit/components/playback/controls/PlateBarcode.spec.js)|(tests/unit/components/playback/controls/PlateNavigator.spec.js)|(tests/unit/components/playback/controls/DesktopPlayerControls.spec.js)|(tests/unit/components/playback/controls/PopDialogForm.spec.js)|(tests/unit/components/playback/controls/RecordingTime.spec.js)|(tests/unit/components/playback/controls/XAxisControls.spec.js)|(tests/unit/store/twentyfour.spec.js)|(tests/unit/store/playback.spec.js)|(tests/unit/store/flask.spec.js)|(tests/unit/store/waveform.spec.js)|(tests/unit/store/api_service.spec.js)|(tests/unit/store/settings.spec.js)|(tests/e2e/)|(server.js)
+        exclude: (dist/)|(tests/unit/components/status/StatusBar.spec.js)|(tests/unit/components/status/SimulationMode.spec.js)|(tests/unit/components/playback/ContinuousWaveform.spec.js)|(tests/unit/components/playback/controls/WebPlayerControls.spec.js)|(tests/unit/components/playback/controls/YAxisControls.spec.js)|(tests/unit/components/playback/controls/PlateBarcode.spec.js)|(tests/unit/components/playback/controls/PlateNavigator.spec.js)|(tests/unit/components/playback/controls/DesktopPlayerControls.spec.js)|(tests/unit/components/playback/controls/XAxisControls.spec.js)|(tests/e2e/)|(server.js)
         files: \.(vue)|(js)$
         types: [file]
         args: [--fix]
