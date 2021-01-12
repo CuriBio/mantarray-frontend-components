@@ -2,8 +2,8 @@
   <div>
     <div class="div__radiobutton-background">
       <div class="div__radio_selected" @click="radio_toggle()">
-        <FontAwesomeIcon v-show="status" :icon="['fa', 'dot-circle']" />
-        <FontAwesomeIcon v-show="!status" :icon="['fa', 'circle']" />
+        <FontAwesomeIcon v-show="status" :icon="['far', 'dot-circle']" />
+        <FontAwesomeIcon v-show="!status" :icon="['far', 'circle']" />
         Spike&nbsp;Amplitude
       </div>
     </div>
@@ -11,8 +11,8 @@
 </template>
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCircle as fa_circle } from "@fortawesome/free-solid-svg-icons";
-import { faDotCircle as fa_dotcircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircle as fa_circle } from "@fortawesome/free-regular-svg-icons";
+import { faDotCircle as fa_dotcircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fa_circle);

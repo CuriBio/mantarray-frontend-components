@@ -12,7 +12,11 @@ export default {
   components: {
     RadioButtonWidget,
   },
-  data() {},
+  data() {
+    return {
+      test: 1,
+    };
+  },
   methods: {},
 };
 </script>
