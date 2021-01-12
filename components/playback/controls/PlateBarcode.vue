@@ -17,11 +17,23 @@
       ]"
       :value="barcode"
     />
+    <div class="input__plate-barcode-manual-entry-enable">
+      <span class="input__plate-barcode-manual-entry-enable-icon">
+        <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
+      </span>
+    </div>
+
     <!--</div>-->
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faPencilAlt);
+
 /**
  * @vue-data {String} platebarcode - Current plate bar code
  * @vue-data {String} playback_state_enums - Current state of playback
@@ -30,6 +42,9 @@ import { mapState } from "vuex";
  */
 export default {
   name: "PlateBarcode",
+  components: {
+    FontAwesomeIcon,
+  },
   computed: {
     ...mapState("playback", {
       playback_state: "playback_state",
@@ -128,5 +143,33 @@ export default {
 input:focus {
   outline: none;
   border: 1px solid red;
+}
+
+.input__plate-barcode-manual-entry-enable {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  top: 0px;
+  left: 263px;
+  visibility: visible;
+  z-index: 176;
+}
+
+.input__plate-barcode-manual-entry-enable-icon {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  top: 5px;
+  left: 5px;
+  font-size: 14px;
+  color: rgb(183, 183, 183);
 }
 </style>
