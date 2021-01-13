@@ -42,4 +42,7 @@ export default {
   set_tooltips_delay(state, new_value) {
     state.tooltips_delay = new_value;
   },
+  set_barcode_manual_mode(state, new_value) {
+    state.barcode_manual_mode = new_value;
+  },
 };

@@ -16,13 +16,33 @@
           : `input__plate-barcode-entry-invalid`,
       ]"
       :value="barcode"
+      @input="manual_entry"
     />
-    <div class="input__plate-barcode-manual-entry-enable">
+    <div v-show="manual" class="input__plate-barcode-manual-entry-enable">
       <span class="input__plate-barcode-manual-entry-enable-icon">
-        <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
+        <b-button
+          id="edit-platebarcode"
+          v-b-modal.edit-platebarcode
+          squared
+          class="w-80 h-80 edit-id"
+          style="background-color: #3f3f3f; border: 0px; color: #ececed"
+        >
+          <FontAwesomeIcon :icon="['fa', 'pencil-alt']"
+        /></b-button>
+        <b-modal
+          id="edit-platebarcode"
+          size="sm"
+          hide-footer
+          hide-header
+          hide-header-close
+        >
+          <BarcodeEditDialog
+            @cancel-platebarcode="manual_mode_off"
+            @yes-platebarcode="manual_mode_on"
+          ></BarcodeEditDialog>
+        </b-modal>
       </span>
     </div>
-
     <!--</div>-->
   </div>
 </template>
@@ -31,6 +51,7 @@ import { mapState } from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import BarcodeEditDialog from "@/components/playback/controls/player/BarcodeEditDialog.vue";
 
 library.add(faPencilAlt);
 
@@ -44,6 +65,12 @@ export default {
   name: "PlateBarcode",
   components: {
     FontAwesomeIcon,
+    BarcodeEditDialog,
+  },
+  data() {
+    return {
+      manual: true,
+    };
   },
   computed: {
     ...mapState("playback", {
@@ -55,6 +82,20 @@ export default {
     ...mapState("playback", {
       is_valid_barcode: "is_valid_barcode",
     }),
+  },
+  methods: {
+    manual_mode_off: function () {
+      this.$bvModal.hide("edit-platebarcode");
+    },
+    manual_mode_on: function () {
+      document.getElementById("plateinfo").disabled = false;
+      this.manual = false;
+      this.$bvModal.hide("edit-platebarcode");
+      this.$store.commit("playback/set_barcode_manual_mode", true);
+    },
+    manual_entry: function () {
+      this.$store.commit("playback/set_barcode_number", this.value);
+    },
   },
 };
 </script>
@@ -127,7 +168,7 @@ export default {
   border: none;
   position: absolute;
 
-  width: 125px;
+  width: 120px;
   height: 24px;
   top: 3px;
   right: 17px;
@@ -171,5 +212,14 @@ input:focus {
   left: 5px;
   font-size: 14px;
   color: rgb(183, 183, 183);
+}
+
+/* Center the edit-platebarcode pop-up dialog within the viewport */
+#edit-platebarcode {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
 }
 </style>

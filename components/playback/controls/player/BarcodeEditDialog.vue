@@ -19,6 +19,7 @@
           :button_names="['Cancel', 'Yes']"
           :enabled_color="'#B7B7B7'"
           :hover_color="['#FFFFFF', '#FFFFFF']"
+          @btn-click="manual_entry"
         >
         </ButtonWidget>
       </div>
@@ -33,12 +34,18 @@ export default {
   components: {
     ButtonWidget,
   },
-  data() {
-    return {
-      button_selected: 1,
-    };
+  methods: {
+    manual_entry: function (choice) {
+      switch (choice) {
+        case 0:
+          this.$emit("cancel-platebarcode");
+          break;
+        case 1:
+          this.$emit("yes-platebarcode");
+          break;
+      }
+    },
   },
-  methods: {},
 };
 </script>
 <style type="text/css">
