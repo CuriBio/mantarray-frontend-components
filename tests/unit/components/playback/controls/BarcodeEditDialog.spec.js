@@ -54,7 +54,7 @@ describe("BarcodeEditDialog.vue", () => {
     const cancel_yes_btn = wrapper.findAll(".span__button_label");
     await cancel_yes_btn.at(1).trigger("click");
     await wrapper.vm.$nextTick();
-    const yes_btn_events = wrapper.emitted("yes-pb");
+    const yes_btn_events = wrapper.emitted("yes-platebarcode");
     expect(yes_btn_events).toHaveLength(1);
     expect(yes_btn_events[0]).toStrictEqual([]);
   });
@@ -66,7 +66,7 @@ describe("BarcodeEditDialog.vue", () => {
     const cancel_yes_btn = wrapper.findAll(".span__button_label");
     await cancel_yes_btn.at(0).trigger("click");
     await wrapper.vm.$nextTick();
-    const yes_btn_events = wrapper.emitted("cancel-pb");
+    const yes_btn_events = wrapper.emitted("cancel-platebarcode");
     expect(yes_btn_events).toHaveLength(1);
     expect(yes_btn_events[0]).toStrictEqual([]);
   });
