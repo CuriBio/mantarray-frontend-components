@@ -6,6 +6,7 @@ const wait_for_expect = require("wait-for-expect");
 import { shallowMount } from "@vue/test-utils";
 import { createLocalVue } from "@vue/test-utils";
 import { TextValidation } from "@/js_utils/text_validation.js";
+import Vue from "vue";
 
 let wrapper = null;
 
@@ -203,7 +204,7 @@ describe("PlateBarcode.vue", () => {
       "ME20044099",
     ], // new rule allow ME
   ])(
-    "Given a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode or PASSES due %s for a valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode",
+    "Given that its in manual mode and a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode or PASSES due %s for a valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode",
     async (platecode, validation_rule, reason, store_data) => {
       const spied_text_validator = jest.spyOn(
         TextValidation.prototype,
@@ -225,15 +226,15 @@ describe("PlateBarcode.vue", () => {
         attachToDocument: true,
       });
 
-      await wrapper.vm.manual_mode_on();
-
+      await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+      // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
       const input_id = wrapper.find("#plateinfo");
       wrapper.find("input").setValue(platecode);
       expect(spied_text_validator).toHaveBeenCalledWith(platecode);
       expect(store.state.playback.barcode).toEqual(store_data);
     }
   );
-  test("Given a valid barcode has been entered in the [input.length = 11]  and playback state is BUFFERING, When Playback State is mutated to BUFFERING, Then the text of the Barcode Inpput remains as the valid barcode instead of becoming blank", async () => {
+  test("Given that its in manual mode and a valid barcode has been entered in the [input.length = 11]  and playback state is BUFFERING, When Playback State is mutated to BUFFERING, Then the text of the Barcode Inpput remains as the valid barcode instead of becoming blank", async () => {
     const propsData = {};
 
     let wrapper = mount(PlateBarcode, {
@@ -243,7 +244,8 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on();
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     wrapper.find("input").setValue("MA200440012");
     await wrapper.vm.$nextTick(); // wait for update
@@ -256,7 +258,7 @@ describe("PlateBarcode.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.vm.platebarcode).toEqual("MA200440012");
   });
-  test("Given a valid barcode has been entered in the [input.length = 11] and playback state is CALIBRATED, When Playback State is mutated to CALIBRATING, Then the text of the Barcode Inpput remains as the valid barcode instead of becoming blank", async () => {
+  test("Given that its in manual mode and a valid barcode has been entered in the [input.length = 11] and playback state is CALIBRATED, When Playback State is mutated to CALIBRATING, Then the text of the Barcode Inpput remains as the valid barcode instead of becoming blank", async () => {
     const propsData = {};
 
     let wrapper = mount(PlateBarcode, {
@@ -266,7 +268,8 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on();
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     wrapper.find("input").setValue("MA200440012");
     await wrapper.vm.$nextTick(); // wait for update
@@ -280,7 +283,7 @@ describe("PlateBarcode.vue", () => {
     expect(wrapper.vm.platebarcode).toEqual("MA200440012");
   });
 
-  test("Given that the User entered a valid barcode of 11 characters, When user tries to enter barcode with an additional 12th digit, then it is not considered valid in Vuex", async () => {
+  test("Given that its in manual mode and that the User entered a valid barcode of 11 characters, When user tries to enter barcode with an additional 12th digit, then it is not considered valid in Vuex", async () => {
     const propsData = {};
 
     let wrapper = mount(PlateBarcode, {
@@ -290,7 +293,8 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on();
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     wrapper.find("input").setValue("MA200440012"); // test case will fail on delating if (barcode_len >= 10 && barcode_len < 12) in API validatePlateBarcode()
     await wrapper.vm.$nextTick(); // wait for update
@@ -315,7 +319,8 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on();
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     const mEvent = {
       clipboardData: { getData: jest.fn().mockReturnValueOnce("12") },
@@ -335,7 +340,8 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on();
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     store.commit(
       "playback/set_playback_state",
@@ -353,5 +359,23 @@ describe("PlateBarcode.vue", () => {
     wrapper.find("input").setValue("MA20044001");
     await wrapper.vm.$nextTick(); // wait for update
     expect(store.state.playback.barcode).toBeNull();
+  });
+  test("On BarcodeEditDialog if the user chooses to 'Cancel' manual mode and the event 'cancel-platebarcode' is emitted then BarcodeEditDialog is hidden", async () => {
+    const propsData = {};
+
+    let wrapper = mount(PlateBarcode, {
+      propsData,
+      store,
+      localVue,
+      attachToDocument: true,
+    });
+
+    await wrapper.vm.manual_mode_off(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
+
+    Vue.nextTick(() => {
+      expect(modal.isVisible()).toBe(false);
+      done();
+    });
   });
 });

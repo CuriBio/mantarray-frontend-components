@@ -24,7 +24,7 @@ export async function ping_system_status() {
     const data = result.data;
     const status_uuid = data.ui_status_code;
     const simulation_mode = data.in_simulation_mode;
-    if (this.state.barcode_manual_mode == false) {
+    if (this.state.barcode_manual_mode === false) {
       if (data.plate_barcode != undefined) {
         const plate_barcode = data.plate_barcode;
         if (plate_barcode == "") {

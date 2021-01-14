@@ -22,4 +22,7 @@ export default {
   set_simulation_status(state, new_id) {
     state.simulation_mode = new_id;
   },
+  set_barcode_manual_mode(state, new_value) {
+    state.barcode_manual_mode = new_value;
+  },
 };
