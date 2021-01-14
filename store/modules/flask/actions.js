@@ -24,14 +24,16 @@ export async function ping_system_status() {
     const data = result.data;
     const status_uuid = data.ui_status_code;
     const simulation_mode = data.in_simulation_mode;
-    if (data.plate_barcode != undefined) {
-      const plate_barcode = data.plate_barcode;
-      if (plate_barcode == "") {
-        this.commit("playback/set_barcode_number", null, { root: true });
-      } else {
-        this.commit("playback/set_barcode_number", plate_barcode, {
-          root: true,
-        });
+    if (this.state.barcode_manual_mode === false) {
+      if (data.plate_barcode != undefined) {
+        const plate_barcode = data.plate_barcode;
+        if (plate_barcode == "") {
+          this.commit("playback/set_barcode_number", null, { root: true });
+        } else {
+          this.commit("playback/set_barcode_number", plate_barcode, {
+            root: true,
+          });
+        }
       }
     }
     this.commit("set_simulation_status", simulation_mode);

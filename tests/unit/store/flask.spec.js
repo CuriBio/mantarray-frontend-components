@@ -387,6 +387,31 @@ describe("store/flask", () => {
         );
         expect(store.state.playback.barcode).toStrictEqual(valid_plate_barcode);
       });
+      test("Given that /system_status is mocked to include a valid plate barcode and the manual mode is true, When the ping_system_status is active, Then the barcode value in not set in  Vuex from the JSON object in /system_status", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: valid_plate_barcode,
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+        store.commit("flask/set_barcode_manual_mode", true);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toBeNull();
+      });
       test("Given that /system_status is mocked to include a invalid plate barcode, When the ping_system_status is active, Then the barcode value in Vuex is set to the value from the JSON object in /system_status", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
@@ -413,6 +438,31 @@ describe("store/flask", () => {
           invalid_plate_barcode
         );
       });
+      test("Given that /system_status is mocked to include a invalid plate barcode and the manual mode is true, When the ping_system_status is active, Then the barcode value in not set in  Vuex from the JSON object in /system_status", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: invalid_plate_barcode,
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+        store.commit("flask/set_barcode_manual_mode", true);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toBeNull();
+      });
       test("Given that /system_status is mocked to include a <empty> plate barcode, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was reset to `null` as  from JSON object contained <empty>", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
@@ -424,6 +474,31 @@ describe("store/flask", () => {
           playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
         );
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toBeNull();
+      });
+      test("Given that /system_status is mocked to include a <empty> plate barcode and the manual mode is true, When the ping_system_status is active, Then the barcode value in not set in  Vuex from the JSON object in /system_status", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: "",
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+        store.commit("flask/set_barcode_manual_mode", true);
 
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();

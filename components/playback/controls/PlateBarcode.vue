@@ -5,6 +5,7 @@
     >
     <!-- original Mockflow ID: cmpDd0be63536ca605546f566539e51ad0c3-->
     <input
+      v-if="manual"
       id="plateinfo"
       disabled="disabled"
       type="text"
@@ -17,11 +18,60 @@
       ]"
       :value="barcode"
     />
+    <input
+      v-if="!manual"
+      id="plateinfo"
+      :disabled="
+        playback_state === playback_state_enums.RECORDING ||
+        playback_state === playback_state_enums.BUFFERING ||
+        playback_state === playback_state_enums.LIVE_VIEW_ACTIVE
+      "
+      type="text"
+      spellcheck="false"
+      onpaste="return false;"
+      class="input__plate-barcode-entry"
+      :value="platebarcode"
+      @input="validatePlateBarcode"
+    />
+    <div v-show="manual" class="input__plate-barcode-manual-entry-enable">
+      <span class="input__plate-barcode-manual-entry-enable-icon">
+        <b-button
+          id="edit-platebarcode"
+          v-b-modal.edit-platebarcode
+          squared
+          class="w-80 h-80 edit-id"
+          style="background-color: #3f3f3f; border: 0px; color: #ececed"
+        >
+          <FontAwesomeIcon :icon="['fa', 'pencil-alt']"
+        /></b-button>
+        <b-modal
+          id="edit-platebarcode"
+          size="sm"
+          hide-footer
+          hide-header
+          hide-header-close
+        >
+          <BarcodeEditDialog
+            @cancel-platebarcode="manual_mode_off"
+            @yes-platebarcode="manual_mode_on"
+          ></BarcodeEditDialog>
+        </b-modal>
+      </span>
+    </div>
     <!--</div>-->
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
+import playback_module from "@/store/modules/playback";
+import { TextValidation } from "@/js_utils/text_validation.js";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import BarcodeEditDialog from "@/components/playback/controls/player/BarcodeEditDialog.vue";
+
+library.add(faPencilAlt);
+const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 /**
  * @vue-data {String} platebarcode - Current plate bar code
  * @vue-data {String} playback_state_enums - Current state of playback
@@ -30,6 +80,17 @@ import { mapState } from "vuex";
  */
 export default {
   name: "PlateBarcode",
+  components: {
+    FontAwesomeIcon,
+    BarcodeEditDialog,
+  },
+  data() {
+    return {
+      manual: true,
+      platebarcode: "",
+      playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
+    };
+  },
   computed: {
     ...mapState("playback", {
       playback_state: "playback_state",
@@ -40,6 +101,43 @@ export default {
     ...mapState("playback", {
       is_valid_barcode: "is_valid_barcode",
     }),
+  },
+  updated() {
+    this.platebarcode = this.$store.state.playback.barcode;
+  },
+  methods: {
+    manual_mode_off: function () {
+      this.$bvModal.hide("edit-platebarcode");
+    },
+    manual_mode_on: function () {
+      this.manual = false;
+      this.$bvModal.hide("edit-platebarcode");
+      this.$store.commit("flask/set_barcode_manual_mode", true);
+      this.$store.commit("playback/set_barcode_number_manual_mode", null);
+    },
+    validatePlateBarcode: function (event) {
+      const val = event.target.value;
+      const inp = document.getElementById("plateinfo");
+
+      inp.addEventListener("blur", this.set_red_color(inp));
+      this.$store.commit("playback/set_barcode_number_manual_mode", null);
+      this.$store.commit("playback/set_barcode_valid_manual_mode", false);
+      const result = TextValidation_plate_barcode.validate(val);
+      if (result == "") {
+        this.set_green_color(inp);
+        this.$store.commit("playback/set_barcode_number_manual_mode", val);
+        this.$store.commit("playback/set_barcode_valid_manual_mode", true);
+      }
+      if (result == " ") {
+        this.set_red_color(inp);
+      }
+    },
+    set_green_color(inp) {
+      inp.style.border = "1px solid green";
+    },
+    set_red_color(inp) {
+      inp.style.border = "1px solid red";
+    },
   },
 };
 </script>
@@ -106,13 +204,13 @@ export default {
   background-color: black;
 
   color: #b7b7b7;
-  font-family: Muli;
-  font-weight: bold;
+  font-family: Anonymous Pro;
+  font-weight: normal;
   box-shadow: none;
   border: none;
   position: absolute;
 
-  width: 125px;
+  width: 120px;
   height: 24px;
   top: 3px;
   right: 17px;
@@ -128,5 +226,45 @@ export default {
 input:focus {
   outline: none;
   border: 1px solid red;
+}
+
+.input__plate-barcode-manual-entry-enable {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  top: 0px;
+  left: 263px;
+  visibility: visible;
+  z-index: 176;
+}
+
+.input__plate-barcode-manual-entry-enable-icon {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  top: 5px;
+  left: 5px;
+  font-size: 14px;
+  color: rgb(183, 183, 183);
+}
+
+.fa-pencil-alt:hover {
+  color: rgb(255, 255, 255);
+}
+/* Center the edit-platebarcode pop-up dialog within the viewport */
+#edit-platebarcode {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
 }
 </style>

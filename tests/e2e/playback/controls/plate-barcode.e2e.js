@@ -11,6 +11,10 @@ const unfocus = ClientFunction(() => {
 const base_screenshot_path = path.join("playback", "controls", "plate-barcode");
 
 const barcode_input_field = Selector(".input__plate-barcode-entry");
+const barcode_pencil = Selector(".fa-pencil-alt");
+const barcode_pencil_click = Selector(
+  ".input__plate-barcode-manual-entry-enable-icon"
+);
 
 // the fixture declares what we are testing
 fixture`playback/controls/plate-barcode/basic`
@@ -24,8 +28,70 @@ test("Plate Barcode with no input field", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
+test("Plate Barcode with no input field and hover on the Pencil identifies", async (t) => {
+  let screenshot_path = path.join(base_screenshot_path, "basic-pencil-hover");
+  await t.hover(barcode_pencil);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
+test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog", async (t) => {
+  let screenshot_path = path.join(
+    base_screenshot_path,
+    "basic-pencil-selected"
+  );
+  await t.click(barcode_pencil_click);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
+test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog and click on 'Yes'", async (t) => {
+  let screenshot_path = path.join(
+    base_screenshot_path,
+    "basic-on-manual-platebarcode"
+  );
+
+  await t.click(barcode_pencil_click);
+  const span__button_label = Selector(".span__button_label");
+  const yes_btn = span__button_label.nth(1);
+  await t.click(yes_btn);
+
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
+test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog and click on 'Yes' and valid plate-platecode", async (t) => {
+  let screenshot_path = path.join(
+    base_screenshot_path,
+    "basic-on-manual-valid-platebarcode"
+  );
+
+  await t.click(barcode_pencil_click);
+  const span__button_label = Selector(".span__button_label");
+  const yes_btn = span__button_label.nth(1);
+  await t.click(yes_btn);
+  await t.typeText(barcode_input_field, "ME202050002");
+  await unfocus();
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
+test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog, click on 'Yes' and invalid plate-platecode", async (t) => {
+  let screenshot_path = path.join(
+    base_screenshot_path,
+    "basic-on-manual-invalid-platebarcode"
+  );
+
+  await t.click(barcode_pencil_click);
+  const span__button_label = Selector(".span__button_label");
+  const yes_btn = span__button_label.nth(1);
+  await t.click(yes_btn);
+  await t.typeText(barcode_input_field, "MC190440991");
+  await unfocus();
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
 test("Plate Barcode trying to user entry into input field", async (t) => {
-  let screenshot_path = path.join(base_screenshot_path, "basic-entry-failure");
+  let screenshot_path = path.join(
+    base_screenshot_path,
+    "basic-scanner-failure"
+  );
   // make sure to unfocus off of the element so that the typing cursor is not flashing in the input box creating different results during takeScreenshot
   await t.typeText(barcode_input_field, "MB190440991");
   await unfocus();
@@ -38,7 +104,7 @@ fixture`playback/controls/plate-barcode/basic-with-valid-barcode`
 `http://localhost:8080/playback/controls/plate-barcode/basic-with-valid-barcode`; // specify the start page
 
 test("Plate Barcode with valid barcode field", async (t) => {
-  let screenshot_path = path.join(base_screenshot_path, "with-typed-barcode");
+  let screenshot_path = path.join(base_screenshot_path, "with-scanner-barcode");
 
   // make sure to unfocus off of the element so that the typing cursor is not flashing in the input box creating different results during takeScreenshot
   await unfocus();
@@ -53,7 +119,7 @@ fixture`playback/controls/plate-barcode/basic-with-error-barcode`
 test("Plate Barcode with valid barcode field", async (t) => {
   let screenshot_path = path.join(
     base_screenshot_path,
-    "with-typed-error-barcode"
+    "with-scanner-error-barcode"
   );
 
   // make sure to unfocus off of the element so that the typing cursor is not flashing in the input box creating different results during takeScreenshot
@@ -68,7 +134,7 @@ fixture`playback/controls/plate-barcode/basic-with-twelve-barcode`
 test("Plate Barcode identifies the error on size more than 11 text to be typed in to input field", async (t) => {
   const screenshot_path = path.join(
     base_screenshot_path,
-    "with-typed-12-characters-size-error-barcode"
+    "with-scanner-12-characters-size-error-barcode"
   );
 
   // make sure to unfocus off of the element so that the typing cursor is not flashing in the input box creating different results during takeScreenshot
