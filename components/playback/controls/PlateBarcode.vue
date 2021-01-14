@@ -256,6 +256,9 @@ input:focus {
   color: rgb(183, 183, 183);
 }
 
+.fa-pencil-alt:hover {
+  color: rgb(255, 255, 255);
+}
 /* Center the edit-platebarcode pop-up dialog within the viewport */
 #edit-platebarcode {
   position: fixed;
