@@ -77,10 +77,10 @@ describe("SettingsForm.vue", () => {
       });
 
       wrapper.vm.onCancelCustomerId();
-      expect(store.getters["settings/customer_account_ids"]).toStrictEqual(
+      expect(store.state.settings.customer_account_ids).toStrictEqual(
         array_of_customer_ids
       );
-      expect(store.getters["settings/customer_index"]).toStrictEqual(1); // this is the real data due to savechanges function Vuex stored data of customer_index
+      expect(store.state.settings.customer_index).toStrictEqual(1); // this is the real data due to savechanges function Vuex stored data of customer_index
     });
     test("Given a customer and user account selected in Vuex and the textbox for Customer Account is changed to an account different than the one in Vuex and a user account is selected in thet textbox, When the Save Changes button is clicked, Then the selected indices in Vuex for Customer and User accounts are updated to reflect the chosen options in the textboxes", async () => {
       store.commit("settings/set_customer_index", 0);
@@ -107,8 +107,8 @@ describe("SettingsForm.vue", () => {
 
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(store.getters["settings/customer_index"]).toStrictEqual(1); // this is the real data due to savechanges function Vuex stored data of customer_index
-      expect(store.getters["settings/user_index"]).toStrictEqual(0); // this is the real data due to savechanges function Vuex stored data of user_index
+      expect(store.state.settings.customer_index).toStrictEqual(1); // this is the real data due to savechanges function Vuex stored data of customer_index
+      expect(store.state.settings.user_index).toStrictEqual(0); // this is the real data due to savechanges function Vuex stored data of user_index
     });
   });
   test("Given that no data are in the Vuex store, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", () => {

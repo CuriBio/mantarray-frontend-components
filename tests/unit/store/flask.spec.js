@@ -51,30 +51,30 @@ describe("store/flask", () => {
     store.commit("playback/stop_playback_progression");
     mocked_axios.restore();
   });
-  test("Confirm these items can be successfully imported from the built library", () => {
-    expect(FLASK_STATUS_ENUMS.MESSAGE.CALIBRATION_NEEDED_uuid).toEqual(
+  test("When Enums are imported from pre-defined library, Then assert the values of enums", () => {
+    expect(FLASK_STATUS_ENUMS.MESSAGE.CALIBRATION_NEEDED_uuid).toStrictEqual(
       STATUS.MESSAGE.CALIBRATION_NEEDED_uuid
     );
-    expect(dist_all_mantarray_commands_regexp).toEqual(
+    expect(dist_all_mantarray_commands_regexp).toStrictEqual(
       all_mantarray_commands_regexp
     );
-    expect(dist_system_status_regexp).toEqual(system_status_regexp);
-    expect(dist_system_status_when_server_ready_regexp).toEqual(
+    expect(dist_system_status_regexp).toStrictEqual(system_status_regexp);
+    expect(dist_system_status_when_server_ready_regexp).toStrictEqual(
       system_status_when_server_ready_regexp
     );
-    expect(dist_system_status_when_initializing_instrument_regexp).toEqual(
-      system_status_when_initializing_instrument_regexp
-    );
-    expect(dist_system_status_when_server_initializing_regexp).toEqual(
+    expect(
+      dist_system_status_when_initializing_instrument_regexp
+    ).toStrictEqual(system_status_when_initializing_instrument_regexp);
+    expect(dist_system_status_when_server_initializing_regexp).toStrictEqual(
       system_status_when_server_initializing_regexp
     );
   });
   describe("Given the store in its default state", () => {
-    test("Then port should be 4567", () => {
-      expect(store.state.flask.port).toEqual(4567);
+    test("When the flask Vuex store is initialized, Then port should be 4567", () => {
+      expect(store.state.flask.port).toStrictEqual(4567);
     });
-    test("Then status_ping_interval_id should be null", () => {
-      expect(store.state.flask.status_ping_interval_id).toBe(null);
+    test("When the flask Vuex store is initialized, Then status_ping_interval_id should be null", () => {
+      expect(store.state.flask.status_ping_interval_id).toBeNull();
     });
   });
 
@@ -83,7 +83,7 @@ describe("store/flask", () => {
     beforeEach(async () => {
       context = await store.dispatch("flask/get_flask_action_context");
     });
-    test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED, Then the vuex status state should update to CALIBRATION_NEEDED and the Vuex Playback State should update to CALIBRATION_NEEDED", async () => {
+    test("Given the current state is SERVER_READY, When the status response is CALIBRATION_NEEDED, Then the vuex status state should update to CALIBRATION_NEEDED and the Vuex Playback State should update to CALIBRATION_NEEDED", async () => {
       mocked_axios.onGet(system_status_regexp).reply(200, {
         ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
         in_simulation_mode: true,
@@ -97,14 +97,14 @@ describe("store/flask", () => {
       const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
 
-      expect(store.state.flask.status_uuid).toEqual(
+      expect(store.state.flask.status_uuid).toStrictEqual(
         STATUS.MESSAGE.CALIBRATION_NEEDED
       );
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
       );
     });
-    test("Given the current state is not SERVER_READY and the returned status is having HTTP return status error 404 it should be gracefully handled and the status_uuid is set to ERROR and status_ping_interval_id is set to null ", async () => {
+    test("Given the Axios Get method is mocked with response of 404, When ping_system_status is invoked, Then assert playback_state is set NOT_CONNECTED_TO_INSTRUMENT", async () => {
       mocked_axios.onGet(system_status_regexp).reply(404);
       store.commit(
         "playback/set_playback_state",
@@ -120,9 +120,7 @@ describe("store/flask", () => {
       expect(store.state.flask.status_uuid).not.toBe(
         STATUS.MESSAGE.CALIBRATION_NEEDED
       );
-      //expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
-      //expect(store.state.flask.status_ping_interval_id).toBe(null);
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
     });
@@ -168,12 +166,12 @@ describe("store/flask", () => {
       spied_set_interval.mockReturnValueOnce(expected_interval_id);
 
       await store.dispatch("waveform/start_get_waveform_pinging");
-      expect(spied_set_interval.mock.calls.length).toBe(1);
-      expect(store.state.waveform.waveform_ping_interval_id).toEqual(
+      expect(spied_set_interval.mock.calls).toHaveLength(1);
+      expect(store.state.waveform.waveform_ping_interval_id).toStrictEqual(
         expected_interval_id
       );
     });
-    test("Given the current state is calibrating and the returned state is CALIBRATED, Then the URL should include the current state UUID and the vuex status state should update to CALIBRATED and the Vuex Playback State should update to CALIBRATED", async () => {
+    test("Given /system_status is mocked to return CALIBRATED as the status and the current status is CALIBRATING, When ping_system_status is called, Then the URL should include the current state UUID and the vuex status should update to CALIBRATED and the Vuex Playback State should update to CALIBRATED", async () => {
       mocked_axios.onGet(system_status_regexp).reply(200, {
         ui_status_code: STATUS.MESSAGE.CALIBRATED,
         in_simulation_mode: false,
@@ -184,19 +182,19 @@ describe("store/flask", () => {
       const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
 
-      expect(mocked_axios.history.get.length).toBe(1);
+      expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(
         system_status_when_calibrating_regexp
       );
 
-      expect(store.state.flask.status_uuid).toEqual(
+      expect(store.state.flask.status_uuid).toStrictEqual(
         STATUS.MESSAGE.STOPPED_uuid
       );
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
     });
-    test("Given the current state is BUFFERING and the returned state is LIVE_VIEW_ACTIVE, Then the URL should include the current state UUID and the vuex status state should update to LIVE_VIEW_ACTIVE and the Vuex Playback State should update to LIVE_VIEW_ACTIVE", async () => {
+    test("Given /system_status is mocked to return LIVE_VIEW_ACTIVE as the status and the current status is BUFFERING, When ping_system_status is called, Then the URL should include the current state UUID and the vuex status state should update to LIVE_VIEW_ACTIVE and the Vuex Playback State should update to LIVE_VIEW_ACTIVE", async () => {
       mocked_axios
         .onGet(system_status_regexp) // We pass in_simulation_mode true and validate default false is replaced
         .reply(200, {
@@ -208,17 +206,17 @@ describe("store/flask", () => {
 
       const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
-      expect(mocked_axios.history.get.length).toBe(1);
+      expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(
         system_status_when_buffering_regexp
       );
 
-      expect(store.state.flask.status_uuid).toEqual(
+      expect(store.state.flask.status_uuid).toStrictEqual(
         STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid
       );
-      expect(store.state.flask.simulation_mode).toEqual(true);
+      expect(store.state.flask.simulation_mode).toStrictEqual(true);
 
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
     });
@@ -229,7 +227,7 @@ describe("store/flask", () => {
         jest.restoreAllMocks();
       });
 
-      test("Given the current state is BUFFERING and system_status returns LIVE_VIEW_ACTIVE, When start_status_pinging is dispatched, Then setInterval is called and returned ID set as the status_ping_interval_id state, and the Vuex state for status ID and Playback states are updated", async () => {
+      test("When start_status_pinging is dispatched, Then setInterval is called and returned ID set as the status_ping_interval_id state, and the Vuex state for status ID and Playback states are updated", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid,
           in_simulation_mode: false,
@@ -238,20 +236,20 @@ describe("store/flask", () => {
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.BUFFERING_uuid);
 
         // confirm pre-condition
-        expect(store.state.flask.status_ping_interval_id).toBe(null);
+        expect(store.state.flask.status_ping_interval_id).toBeNull();
         const expected_interval_id = 173;
         const spied_set_interval = jest.spyOn(window, "setInterval");
         spied_set_interval.mockReturnValueOnce(expected_interval_id);
 
         await store.dispatch("flask/start_status_pinging");
-        expect(spied_set_interval.mock.calls.length).toBe(1);
-        expect(store.state.flask.status_ping_interval_id).toEqual(
+        expect(spied_set_interval.mock.calls).toHaveLength(1);
+        expect(store.state.flask.status_ping_interval_id).toStrictEqual(
           expected_interval_id
         );
-        expect(store.state.flask.status_uuid).toEqual(
+        expect(store.state.flask.status_uuid).toStrictEqual(
           STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid
         );
-        expect(store.state.playback.playback_state).toEqual(
+        expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
         );
       });
@@ -266,12 +264,12 @@ describe("store/flask", () => {
         await store.dispatch("flask/start_status_pinging");
       });
 
-      test("When start_status_pinging is dispatched, the status_ping_interval_id state does not change and setInterval is not called", async () => {
+      test("When status_ping_interval_id state does not change, Then setInterval is not called", async () => {
         const spied_set_interval = jest.spyOn(window, "setInterval");
         const initial_interval_id = store.state.flask.status_ping_interval_id;
         await store.dispatch("flask/start_status_pinging");
-        expect(spied_set_interval).not.toBeCalled();
-        expect(store.state.flask.status_ping_interval_id).toEqual(
+        expect(spied_set_interval).not.toHaveBeenCalled();
+        expect(store.state.flask.status_ping_interval_id).toStrictEqual(
           initial_interval_id
         );
       });
@@ -299,35 +297,41 @@ describe("store/flask", () => {
           STATUS.MESSAGE.SHUTDOWN
         );
       });
-      test("When set_status_ping_interval_id is committed, the ID mutates", async () => {
+      test("When set_status_ping_interval_id is committed, Then ID mutates", async () => {
         const expected_id = 2993;
         store.commit("flask/set_status_ping_interval_id", expected_id);
-        expect(store.state.flask.status_ping_interval_id).toEqual(expected_id);
+        expect(store.state.flask.status_ping_interval_id).toStrictEqual(
+          expected_id
+        );
       });
 
-      test("When stop_status_pinging is committed, clearInterval is not called unnecessarily", async () => {
+      test("When stop_status_pinging is committed, Then clearInterval is not called unnecessarily", async () => {
         const spied_clear_interval = jest.spyOn(window, "clearInterval");
 
         store.commit("flask/stop_status_pinging");
-        expect(spied_clear_interval).not.toBeCalled();
+        expect(spied_clear_interval).not.toHaveBeenCalled();
       });
 
-      test("UUID setting for known ids", async () => {
+      test("When UUID setting for known ids, Then assert if the value in store is matching the UUID", async () => {
         const need_calibration_uuid = "009301eb-625c-4dc4-9e92-1a4d0762465f";
 
         store.commit("flask/set_status_uuid", need_calibration_uuid);
-        expect(store.state.flask.status_uuid).toEqual(need_calibration_uuid);
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          need_calibration_uuid
+        );
       });
 
-      test("Simulation setting for known ids", async () => {
+      test("When Vuex is initialized to its default state, Then assert if the value in store is matching for 'true'", async () => {
         const need_simulation = true;
 
         store.commit("flask/set_simulation_status", need_simulation);
-        expect(store.state.flask.simulation_mode).toEqual(need_simulation);
+        expect(store.state.flask.simulation_mode).toStrictEqual(
+          need_simulation
+        );
       });
 
-      test("Simulation default settings is false", async () => {
-        expect(store.state.flask.simulation_mode).toEqual(false);
+      test("When simulation_mode is not set, Then assert simulation_mode default settings is false", async () => {
+        expect(store.state.flask.simulation_mode).toStrictEqual(false);
       });
     });
     describe("Given status pinging is active", () => {
@@ -340,7 +344,7 @@ describe("store/flask", () => {
         await store.dispatch("flask/start_status_pinging");
       });
 
-      test("When stop_status_pinging is committed, the interval is cleared and the status_ping_interval_id state becomes null", async () => {
+      test("When stop_status_pinging is committed, Then the interval is cleared and the status_ping_interval_id state becomes null", async () => {
         const initial_interval_id = store.state.flask.status_ping_interval_id;
         // confirm pre-condition
         expect(initial_interval_id).toBeGreaterThanOrEqual(0);
@@ -348,18 +352,18 @@ describe("store/flask", () => {
         const spied_clear_interval = jest.spyOn(window, "clearInterval");
 
         store.commit("flask/stop_status_pinging");
-        expect(spied_clear_interval).toBeCalledWith(initial_interval_id);
-        expect(store.state.flask.status_ping_interval_id).toBe(null);
+        expect(spied_clear_interval).toHaveBeenCalledWith(initial_interval_id);
+        expect(store.state.flask.status_ping_interval_id).toBeNull();
       });
     });
-    describe("ping_system_status plate bar code scanned", () => {
+    describe("SERVER_READY", () => {
       let context = null;
-      let valid_plate_barcode = "MB190440991";
-      let invalid_plate_barcode = "MD20044099";
+      const valid_plate_barcode = "MB190440991";
+      const invalid_plate_barcode = "MD20044099";
       beforeEach(async () => {
         context = await store.dispatch("flask/get_flask_action_context");
       });
-      test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED with a valid plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MB190440991' obtained from JSON object", async () => {
+      test("Given that /system_status is mocked to include a valid plate barcode, When the ping_system_status is active, Then the barcode value in Vuex is set to the value from the JSON object in /system_status", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: valid_plate_barcode,
@@ -374,16 +378,41 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toEqual(
+        expect(store.state.flask.status_uuid).toStrictEqual(
           STATUS.MESSAGE.CALIBRATION_NEEDED
         );
 
-        expect(store.state.playback.playback_state).toEqual(
+        expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
         );
-        expect(store.state.playback.barcode).toEqual(valid_plate_barcode);
+        expect(store.state.playback.barcode).toStrictEqual(valid_plate_barcode);
       });
-      test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED with a invalid plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate_barcode contains the value of SCANNED of barcode value 'MD20044099' obtained from JSON object", async () => {
+      test("Given that /system_status is mocked to include a valid plate barcode and the manual mode is true, When the ping_system_status is active, Then the barcode value in not set in  Vuex from the JSON object in /system_status", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: valid_plate_barcode,
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+        store.commit("flask/set_barcode_manual_mode", true);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toBeNull();
+      });
+      test("Given that /system_status is mocked to include a invalid plate barcode, When the ping_system_status is active, Then the barcode value in Vuex is set to the value from the JSON object in /system_status", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: invalid_plate_barcode,
@@ -398,16 +427,43 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toEqual(
+        expect(store.state.flask.status_uuid).toStrictEqual(
           STATUS.MESSAGE.CALIBRATION_NEEDED
         );
 
-        expect(store.state.playback.playback_state).toEqual(
+        expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
         );
-        expect(store.state.playback.barcode).toEqual(invalid_plate_barcode);
+        expect(store.state.playback.barcode).toStrictEqual(
+          invalid_plate_barcode
+        );
       });
-      test("Given the current state is SERVER_READY and the returned state is CALIBRATION_NEEDED with a <empty> plate bar code value, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was rest to `null` as  from JSON object contained <empty>", async () => {
+      test("Given that /system_status is mocked to include a invalid plate barcode and the manual mode is true, When the ping_system_status is active, Then the barcode value in not set in  Vuex from the JSON object in /system_status", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: invalid_plate_barcode,
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+        store.commit("flask/set_barcode_manual_mode", true);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toBeNull();
+      });
+      test("Given that /system_status is mocked to include a <empty> plate barcode, When the ping_system_status is active, Then the  Playback State should update to CALIBRATION_NEEDED and the plate was removed so the value of plate_barcode was reset to `null` as  from JSON object contained <empty>", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           plate_barcode: "",
@@ -422,14 +478,39 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toEqual(
+        expect(store.state.flask.status_uuid).toStrictEqual(
           STATUS.MESSAGE.CALIBRATION_NEEDED
         );
 
-        expect(store.state.playback.playback_state).toEqual(
+        expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
         );
-        expect(store.state.playback.barcode).toEqual(null);
+        expect(store.state.playback.barcode).toBeNull();
+      });
+      test("Given that /system_status is mocked to include a <empty> plate barcode and the manual mode is true, When the ping_system_status is active, Then the barcode value in not set in  Vuex from the JSON object in /system_status", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: "",
+          in_simulation_mode: false,
+        });
+        store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
+        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
+        store.commit("flask/set_barcode_manual_mode", true);
+
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.CALIBRATION_NEEDED
+        );
+
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
+        );
+        expect(store.state.playback.barcode).toBeNull();
       });
     });
   });

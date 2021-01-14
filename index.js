@@ -38,7 +38,7 @@ export { default as WebPlayerControls } from "./components/playback/controls/pla
 export { default as DesktopPlayerControls } from "./components/playback/controls/player/DesktopPlayerControls.vue";
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
 export { default as SettingsForm } from "./components/playback/controls/player/SettingsForm.vue";
-export { default as PopDialogForm } from "./components/playback/controls/player/PopDialogForm.vue";
+
 export { default as PlateNavigator } from "./components/playback/controls/PlateNavigator.vue";
 export { default as PlateBarcode } from "./components/playback/controls/PlateBarcode.vue";
 export { default as StatusBar } from "./components/status/StatusBar.vue";
@@ -56,3 +56,5 @@ export { default as AddCustomer } from "./components/playback/controls/player/Ad
 export { default as EditCustomer } from "./components/playback/controls/player/EditCustomer.vue";
 export { default as AddUser } from "./components/playback/controls/player/AddUser.vue";
 export { default as EditUser } from "./components/playback/controls/player/EditUser.vue";
+
+export { default as BarcodeEditDialog } from "./components/playback/controls/player/BarcodeEditDialog.vue";

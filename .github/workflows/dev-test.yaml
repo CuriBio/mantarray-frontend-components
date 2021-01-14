@@ -19,9 +19,8 @@ jobs:
         os:
           - "ubuntu-18.04"
           - "ubuntu-20.04"
-          # - "windows-2019"
-        node:
-          - 12
+          - "windows-2019"
+        node-version:
           - 14
         e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
           - "tests/e2e/playback"
@@ -30,14 +29,12 @@ jobs:
         include:
           # only enable coverage on the fastest job
           - os: "ubuntu-20.04"
-            node: "14"
+            node-version: "14"
             e2e-tests: "tests/e2e/status"
             IS_FASTEST_JOB: true
           - e2e-tests: "tests/e2e/status"
             IS_FASTEST_E2E_SUITE: true
-    env:
-      TESTCAFE_VERSION: "1.9.3" # TODO (Eli 10/5/20): get this working as a variable in the Testcafe actions
-    name: Node.js ${{ matrix.node }} on ${{ matrix.os }} for E2E test suite ${{ matrix.e2e-tests }}
+    name: Node.js ${{ matrix.node-version }} on ${{ matrix.os }} for E2E test suite ${{ matrix.e2e-tests }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -47,12 +44,12 @@ jobs:
       - name: Set up Python for use with pre-commit
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.node-version }}
       - name: Display Language Dependency Versions
         run: |
           python --version
@@ -70,6 +67,37 @@ jobs:
           google-chrome --version
           chromedriver --version
 
+      - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ./.npm_cache
+          key: ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
+
+      - name: Cache Python modules # needed for pre-commit
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-python-modules
+        with:
+          path: ./.cache/pip
+          key: ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-
+
+      - name: Cache Pre-commit hooks
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pre-commit-hooks
+        if: matrix.IS_FASTEST_JOB == true
+        with:
+          path: ~/.precommit_cache # Eli (10/22/20): Having the pre-commit cache inside the repo creates problems with Pytest detecting test files inside the cache
+          key: ${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
+
       - name: Install Node Dependencies and list installed python dev dependencies
         # not sure why CodeBuild fails without the --unsafe-perm flag for npm ci, but it seems to help when running the "prepare" scripts after the install https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
         run: |
@@ -78,8 +106,11 @@ jobs:
 
       - name: Run pre-commit hooks
         if: matrix.IS_FASTEST_JOB == true
-        # only enable pre-commit on the fastest job
-        run: pre-commit run -a
+        env:
+          PRE_COMMIT_HOME: ~/.precommit_cache
+        run: |
+          pre-commit install
+          pre-commit run -a
 
       - name: Confirm package builds correctly # Some tests rely on testing the built files in the dist folder, so make sure to do this before running the test suite
         run: npm run build
@@ -91,11 +122,6 @@ jobs:
       # - name: Run E2E Tests (Windows)
       #   if: matrix.IS_WINDOWS == true
       #   run: npx testcafe chrome:headless:emulation:width=1920;height=930;cdpPort=9223; ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app "npm run dev" --app-init-delay 35000
-
-      # uses: DevExpress/testcafe-action@v0.0.3
-      # with:
-      #   version: "1.9.3"
-      #   args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ./tests/e2e --screenshots path=./tests/e2e/screenshots --app ''npx nuxt dev --spa'' --app-init-delay 35000'
 
       - name: Get Testcafe Version
         if: runner.os == 'Linux'
@@ -113,7 +139,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: DevExpress/testcafe-action@v0.0.3
         with:
-          version: "1.9.3"
+          version: ${{steps.testcafe-version.outputs.prop}}
           args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 40000'
 
       - name: Confirm Sphinx Docs build correctly
@@ -138,5 +164,5 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node }}
+          name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node-version }}
           path: "tests/e2e/screenshots/**/*"

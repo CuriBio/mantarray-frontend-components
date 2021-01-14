@@ -10,6 +10,7 @@ const default_state = {
   status_ping_interval_id: null,
   status_uuid: STATUS.MESSAGE.SERVER_STILL_INITIALIZING,
   simulation_mode: false,
+  barcode_manual_mode: false,
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2

@@ -4,7 +4,6 @@ const MockAxiosAdapter = require("axios-mock-adapter");
 const sinon = require("sinon");
 import { createLocalVue } from "@vue/test-utils";
 import playback_module from "@/store/modules/playback";
-import flask_module from "@/store/modules/flask";
 import { STATUS } from "@/store/modules/flask/enums";
 
 const wait_for_expect = require("wait-for-expect");
@@ -43,35 +42,35 @@ describe("store/playback", () => {
     jest.restoreAllMocks();
     sandbox.restore();
   });
-  test("Confirm these items can be successfully imported from the built library", () => {
-    expect(PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE).toEqual(
+  test("When imported from a pre-built library, Then assert the ENUM values to match the original", () => {
+    expect(PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE).toStrictEqual(
       playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
     );
   });
 
-  describe("When default state is initialized", () => {
-    test("Then playback_state should be FILE_NOT_LOADED", () => {
-      expect(store.state.playback.playback_state).toEqual(
+  describe("Playback", () => {
+    test("When the playback store is initialized, Then playback_state should be FILE_NOT_LOADED", () => {
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.FILE_NOT_LOADED
       );
     });
-    test("Then playback_progression_time_interval should be 40", () => {
-      expect(store.state.playback.playback_progression_time_interval).toEqual(
-        40
-      );
+    test("When the playback store is initialized, Then playback_progression_time_interval should be 40", () => {
+      expect(
+        store.state.playback.playback_progression_time_interval
+      ).toStrictEqual(40);
     });
   });
 
   describe("mutations", () => {
-    test("When set_playback_progression_interval_id is called, then the Vuex state is updated", () => {
+    test("When set_playback_progression_interval_id is invoked, Then the Vuex state is updated", () => {
       const expected_interval_id = 223;
       store.commit(
         "playback/set_playback_progression_interval_id",
         expected_interval_id
       );
-      expect(store.state.playback.playback_progression_interval_id).toEqual(
-        expected_interval_id
-      );
+      expect(
+        store.state.playback.playback_progression_interval_id
+      ).toStrictEqual(expected_interval_id);
     });
 
     test("Given playback_progression_interval is not active, When stop_playback_progression is committed, Then clearInterval is not called", async () => {
@@ -84,13 +83,13 @@ describe("store/playback", () => {
 
       store.commit("playback/stop_playback_progression");
 
-      expect(spied_clear_interval).not.toBeCalled();
+      expect(spied_clear_interval).not.toHaveBeenCalled();
     });
-    test("Given tooltips_delay is having a default value of 2 sec, then modified to 1 sec, the Vuex state is updated", () => {
+    test("Given tooltips_delay is having a default value of 2 sec, When a value different than the default value is committed to tooltips_delay, Then the Vuex state is updated", () => {
       const expected_tooltips_delay = 1000;
-      expect(store.state.playback.tooltips_delay).toEqual(2000);
+      expect(store.state.playback.tooltips_delay).toStrictEqual(2000);
       store.commit("playback/set_tooltips_delay", expected_tooltips_delay);
-      expect(store.state.playback.tooltips_delay).toEqual(
+      expect(store.state.playback.tooltips_delay).toStrictEqual(
         expected_tooltips_delay
       );
     });
@@ -109,10 +108,10 @@ describe("store/playback", () => {
 
         await store.dispatch("playback/start_playback_progression");
 
-        expect(spied_set_interval.mock.calls.length).toBe(0);
-        expect(store.state.playback.playback_progression_interval_id).toEqual(
-          expected_interval_id
-        );
+        expect(spied_set_interval.mock.calls).toHaveLength(0);
+        expect(
+          store.state.playback.playback_progression_interval_id
+        ).toStrictEqual(expected_interval_id);
       });
       test("When stop_playback_progression is committed, Then clearInterval is called and the interval ID in Vuex is set to null", async () => {
         const expected_interval_id =
@@ -124,71 +123,43 @@ describe("store/playback", () => {
 
         store.commit("playback/stop_playback_progression");
 
-        expect(spied_clear_interval).toBeCalledWith(expected_interval_id);
+        expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
         expect(
           store.state.playback.playback_progression_interval_id
         ).toBeNull();
       });
     });
 
-    test("When set_playback_state is committed the playback_state is mutated", () => {
+    test("When set_playback_state is committed, Then the playback_state is mutated", () => {
       store.commit(
         "playback/set_playback_state",
         playback_module.ENUMS.PLAYBACK_STATES.PLAYING
       );
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.PLAYING
       );
       store.commit(
         "playback/set_playback_state",
         playback_module.ENUMS.PLAYBACK_STATES.STOPPED
       );
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.STOPPED
       );
     });
-
-    it("should set is_playing to false initially", () => {
-      expect(store.getters["playback/is_playing"]).toBe(false);
-    });
-    it("mutates is_playing", () => {
-      store.commit(
-        "playback/set_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.PLAYING
-      );
-      expect(store.getters["playback/is_playing"]).toBe(true);
-      store.commit(
-        "playback/set_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.STOPPED
-      );
-      expect(store.getters["playback/is_playing"]).toBe(false);
-    });
-
-    it("should set loop_playback to false initially", () => {
-      expect(store.getters["playback/loop_playback"]).toBe(false);
-    });
-
-    it("mutates loop_playback", () => {
-      store.commit("playback/set_loop_playback", true);
-      expect(store.getters["playback/loop_playback"]).toBe(true);
-      store.commit("playback/set_loop_playback", false);
-      expect(store.getters["playback/loop_playback"]).toBe(false);
-    });
-
-    it("should set x_time_index to 0 initially", () => {
+    test("When the playback store is initialized, Then the x_time_index is initially 0", () => {
       expect(store.getters["playback/x_time_index"]).toBe(0);
     });
-    it("mutates x_time_index", () => {
+    test("When a value is committed to set_x_time_index, Then the x_time_index in the store gets updated to that value", () => {
       store.commit("playback/set_x_time_index", 12345);
       expect(store.getters["playback/x_time_index"]).toBe(12345);
     });
-    it("increments x_time_index through mutatin", () => {
+    test("When the increment_x_time_index is mutated, Then the x_time_index is incremented", () => {
       store.commit("playback/increment_x_time_index", 100);
       expect(store.getters["playback/x_time_index"]).toBe(100);
       store.commit("playback/increment_x_time_index", 150);
       expect(store.getters["playback/x_time_index"]).toBe(250);
     });
-    describe("barcode validation and is_valid_barcode verification", () => {
+    describe("is_valid_barcode", () => {
       test.each([
         ["AB200440012", "error not matching MA MB MD", false],
         ["12200440012", "error not matching MA MB MD", false],
@@ -231,9 +202,9 @@ describe("store/playback", () => {
       beforeEach(() => {
         sandbox.useFakeTimers({ toFake: ["setInterval", "clearInterval"] });
       });
-      test("Given playback_progression is not active, When time is advanced, x_time_index does not change", () => {
+      test("Given playback_progression is not active, When time is advanced, Then the x_time_index does not change", () => {
         sandbox.clock.tick(10000);
-        expect(store.state.playback.x_time_index).toEqual(0);
+        expect(store.state.playback.x_time_index).toStrictEqual(0);
       });
       describe("Given playback_progression is active", () => {
         let playback_update_time_interval;
@@ -245,9 +216,9 @@ describe("store/playback", () => {
         });
         test("Given x_time_index started at 0, When time is advanced 4 updated intervals, Then x_time_index moves the correct number of centimilliseconds", () => {
           // confirm pre-condition
-          expect(store.state.playback.x_time_index).toEqual(0);
+          expect(store.state.playback.x_time_index).toStrictEqual(0);
           sandbox.clock.tick(4 * playback_update_time_interval);
-          expect(store.state.playback.x_time_index).toEqual(
+          expect(store.state.playback.x_time_index).toStrictEqual(
             4 *
               playback_update_time_interval *
               centimilliseconds_per_millisecond
@@ -255,38 +226,38 @@ describe("store/playback", () => {
         });
         test("Given x_time_index started at 0, When time is advanced not quite 1 time interval, Then x_time_index does not change", () => {
           // confirm pre-condition
-          expect(store.state.playback.x_time_index).toEqual(0);
+          expect(store.state.playback.x_time_index).toStrictEqual(0);
           sandbox.clock.tick(playback_update_time_interval - 1);
-          expect(store.state.playback.x_time_index).toEqual(0);
+          expect(store.state.playback.x_time_index).toStrictEqual(0);
         });
         test("Given x_time_index started at 0, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of centimilliseconds_per_millisecond", () => {
           // confirm pre-condition
-          expect(store.state.playback.x_time_index).toEqual(0);
+          expect(store.state.playback.x_time_index).toStrictEqual(0);
           sandbox.clock.tick(playback_update_time_interval);
-          expect(store.state.playback.x_time_index).toEqual(
+          expect(store.state.playback.x_time_index).toStrictEqual(
             playback_update_time_interval * centimilliseconds_per_millisecond
           );
         });
         test("Given x_time_index started at 10, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of centimilliseconds_per_millisecond", () => {
           store.commit("playback/set_x_time_index", 10);
           sandbox.clock.tick(playback_update_time_interval);
-          expect(store.state.playback.x_time_index).toEqual(
+          expect(store.state.playback.x_time_index).toStrictEqual(
             playback_update_time_interval * centimilliseconds_per_millisecond +
               10
           );
         });
         test("Given x_time_index started at 0, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of centimilliseconds_per_millisecond, When playback_progression is stopped and time is advanced another time interval, Then x_time_index does not change", () => {
           // confirm pre-condition
-          expect(store.state.playback.x_time_index).toEqual(0);
+          expect(store.state.playback.x_time_index).toStrictEqual(0);
           sandbox.clock.tick(playback_update_time_interval);
           const expected_x_time_index =
             playback_update_time_interval * centimilliseconds_per_millisecond;
-          expect(store.state.playback.x_time_index).toEqual(
+          expect(store.state.playback.x_time_index).toStrictEqual(
             expected_x_time_index
           );
           store.commit("playback/stop_playback_progression");
           sandbox.clock.tick(playback_update_time_interval);
-          expect(store.state.playback.x_time_index).toEqual(
+          expect(store.state.playback.x_time_index).toStrictEqual(
             expected_x_time_index
           );
         });
@@ -307,17 +278,17 @@ describe("store/playback", () => {
 
       await store.dispatch("playback/stop_playback");
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
-      expect(store.state.playback.x_time_index).toEqual(0);
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.x_time_index).toStrictEqual(0);
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.STOPPED
       );
     });
-    test("When transition_playback_state is dispatched the playback_state is mutated", async () => {
+    test("When transition_playback_state is dispatched, Then the playback_state is mutated", async () => {
       store.dispatch(
         "playback/transition_playback_state",
         playback_module.ENUMS.PLAYBACK_STATES.PLAYING
       );
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.PLAYING
       );
     });
@@ -415,7 +386,7 @@ describe("store/playback", () => {
       ).not.toBeNull();
     });
 
-    test("Given playback_progression interval is not active, when start_playback_progression is dispatched, Then setInterval is called and the interval ID committed to Vuex", async () => {
+    test("Given playback_progression interval is not active, When start_playback_progression is dispatched, Then setInterval is called and the interval ID committed to Vuex", async () => {
       // confirm pre-condition
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
 
@@ -425,23 +396,25 @@ describe("store/playback", () => {
 
       await store.dispatch("playback/start_playback_progression");
 
-      expect(spied_set_interval.mock.calls.length).toBe(1);
-      expect(store.state.playback.playback_progression_interval_id).toEqual(
-        expected_interval_id
-      );
+      expect(spied_set_interval.mock.calls).toHaveLength(1);
+      expect(
+        store.state.playback.playback_progression_interval_id
+      ).toStrictEqual(expected_interval_id);
     });
-    test("When start_recording is called the playback and status states mutate to recording", async () => {
-      let api = "start_recording";
+    test("When start_recording is invoked, Then the playback and status states mutate to recording", async () => {
+      const api = "start_recording";
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
       const expected_status_state = STATUS.MESSAGE.RECORDING_uuid;
 
       // confirm pre-condition
-      expect(store.state.playback.playback_state).not.toEqual(
+      expect(store.state.playback.playback_state).not.toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.RECORDING
       );
-      expect(store.state.flask.status_uuid).not.toEqual(expected_status_state);
+      expect(store.state.flask.status_uuid).not.toStrictEqual(
+        expected_status_state
+      );
 
       store.commit("playback/set_x_time_index", 12345);
 
@@ -449,26 +422,30 @@ describe("store/playback", () => {
 
       await store.dispatch("playback/start_recording");
 
-      expect(mocked_axios.history.get[0].url).toEqual(
+      expect(mocked_axios.history.get[0].url).toStrictEqual(
         `${base_url}/${api}?time_index=12345&barcode=MB2036078&is_hardware_test_recording=false`
       );
 
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.RECORDING
       );
-      expect(store.state.flask.status_uuid).toEqual(expected_status_state);
-      expect(store.state.playback.recording_start_time).toEqual(12345);
+      expect(store.state.flask.status_uuid).toStrictEqual(
+        expected_status_state
+      );
+      expect(store.state.playback.recording_start_time).toStrictEqual(12345);
     });
-    test("When stop_recording is called the playback and status states mutate to live_view_active", async () => {
-      let api = "stop_recording";
+    test("When stop_recording is invoked, Then the playback and status states mutate to live_view_active", async () => {
+      const api = "stop_recording";
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
       const expected_status_state = STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid;
       // confirm pre-condition
-      expect(store.state.playback.playback_state).not.toEqual(
+      expect(store.state.playback.playback_state).not.toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
-      expect(store.state.flask.status_uuid).not.toEqual(expected_status_state);
+      expect(store.state.flask.status_uuid).not.toStrictEqual(
+        expected_status_state
+      );
 
       store.commit("playback/set_x_time_index", 456789);
 
@@ -476,15 +453,17 @@ describe("store/playback", () => {
 
       await store.dispatch("playback/stop_recording");
 
-      expect(mocked_axios.history.get[0].url).toEqual(
+      expect(mocked_axios.history.get[0].url).toStrictEqual(
         `${base_url}/${api}?time_index=456789`
       );
 
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
-      expect(store.state.playback.recording_start_time).toEqual(0);
-      expect(store.state.flask.status_uuid).toEqual(expected_status_state);
+      expect(store.state.playback.recording_start_time).toStrictEqual(0);
+      expect(store.state.flask.status_uuid).toStrictEqual(
+        expected_status_state
+      );
     });
     describe("Given Waveform Pinging is active and /get_available_data returns 204 and Mantarray Command routes return status 200", () => {
       beforeEach(async () => {
@@ -504,7 +483,7 @@ describe("store/playback", () => {
 
         await store.dispatch("playback/stop_live_view");
 
-        expect(spied_clear_interval).toBeCalledWith(expected_interval_id);
+        expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
         expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
       });
       test("Given the Vuex plate_waveforms state has some values, When stop_live_view is dispatched, Then the plate_waveforms x/y data points are reset to empty arrays", async () => {
@@ -514,19 +493,19 @@ describe("store/playback", () => {
         ]);
         await store.dispatch("playback/stop_live_view");
 
-        expect(store.state.waveform.plate_waveforms.length).toEqual(2);
+        expect(store.state.waveform.plate_waveforms).toHaveLength(2);
         expect(
-          store.state.waveform.plate_waveforms[0].x_data_points.length
-        ).toEqual(0);
+          store.state.waveform.plate_waveforms[0].x_data_points
+        ).toHaveLength(0);
         expect(
-          store.state.waveform.plate_waveforms[0].y_data_points.length
-        ).toEqual(0);
+          store.state.waveform.plate_waveforms[0].y_data_points
+        ).toHaveLength(0);
         expect(
-          store.state.waveform.plate_waveforms[1].x_data_points.length
-        ).toEqual(0);
+          store.state.waveform.plate_waveforms[1].x_data_points
+        ).toHaveLength(0);
         expect(
-          store.state.waveform.plate_waveforms[1].y_data_points.length
-        ).toEqual(0);
+          store.state.waveform.plate_waveforms[1].y_data_points
+        ).toHaveLength(0);
       });
     });
     test("Given playback_progression interval is active and Mantarray Commands are mocked to return status 200, When stop_live_view is called, Then the interval is cleared", async () => {
@@ -545,7 +524,7 @@ describe("store/playback", () => {
 
       await store.dispatch("playback/stop_live_view");
 
-      expect(spied_clear_interval).toBeCalledWith(expected_interval_id);
+      expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
       expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
     });
     test("Given playback_progression interval is active and SYSTEM_STATUS is set to PLAYING and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the SYSTEM_STATUS is set to ERROR and the interval playback_progression_interval_id is cleared", async () => {
@@ -559,41 +538,45 @@ describe("store/playback", () => {
       // confirm pre-condition
       expect(expected_interval_id).toBeGreaterThanOrEqual(0);
 
-      const spied_clear_interval = jest.spyOn(window, "clearInterval");
-
       await store.dispatch("playback/start_calibration");
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
-      expect(store.state.flask.status_ping_interval_id).toBe(null);
-      expect(store.state.playback.playback_progression_interval_id).toBe(null);
-      expect(store.state.waveform.waveform_ping_interval_id).toBe(null);
+      expect(store.state.flask.status_ping_interval_id).toBeNull();
+      expect(store.state.playback.playback_progression_interval_id).toBeNull();
+      expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
     });
     test("Given x_time_index is not 0, When stop_live_view is called, Then the playback and status states mutate to calibrated and x_time_index mutates to 0", async () => {
-      let api = "stop_managed_acquisition";
+      const api = "stop_managed_acquisition";
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
       const expected_status_state = STATUS.MESSAGE.STOPPED_uuid;
       store.commit("playback/set_x_time_index", 400);
       // confirm pre-condition
-      expect(store.state.playback.playback_state).not.toEqual(
+      expect(store.state.playback.playback_state).not.toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
-      expect(store.state.flask.status_uuid).not.toEqual(expected_status_state);
+      expect(store.state.flask.status_uuid).not.toStrictEqual(
+        expected_status_state
+      );
 
       await store.dispatch("playback/stop_live_view");
 
-      expect(mocked_axios.history.get[0].url).toEqual(`${base_url}/${api}`);
+      expect(mocked_axios.history.get[0].url).toStrictEqual(
+        `${base_url}/${api}`
+      );
 
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
-      expect(store.state.playback.x_time_index).toEqual(0);
+      expect(store.state.playback.x_time_index).toStrictEqual(0);
 
-      expect(store.state.flask.status_uuid).toEqual(expected_status_state);
+      expect(store.state.flask.status_uuid).toStrictEqual(
+        expected_status_state
+      );
     });
 
     test("When start_calibration is called, Then playback state mutates to calibrating and starts status_pinging in Flask, then playback state mutates to calibrated", async () => {
-      let api = "start_calibration";
+      const api = "start_calibration";
 
       mocked_axios
         .onGet(system_status_when_calibrating_regexp)
@@ -602,17 +585,17 @@ describe("store/playback", () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
       // confirm pre-condition
-      expect(store.state.playback.playback_state).not.toEqual(
+      expect(store.state.playback.playback_state).not.toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
       );
 
       await store.dispatch("playback/start_calibration");
 
-      let request_to_start_calibration = mocked_axios.history.get[0];
+      const request_to_start_calibration = mocked_axios.history.get[0];
 
       expect(request_to_start_calibration.url).toMatch(`${base_url}/${api}`);
 
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
       );
 
@@ -620,14 +603,14 @@ describe("store/playback", () => {
         expect(
           store.state.flask.status_ping_interval_id
         ).toBeGreaterThanOrEqual(0);
-        expect(store.state.playback.playback_state).toEqual(
+        expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
         );
       });
     });
 
-    test("Then playback state mutates to BUFFERING and starts status_pinging in Flask, then playback state mutates to LIVE_VIEW_ACTIVE", async () => {
-      let api = "start_managed_acquisition";
+    test("Given the /system_status is mocked with LIVE_VIEW_ACTIVE as response and /get_available_data as 204, When playback state mutates to BUFFERING and starts status_pinging in Flask, Then playback state mutates to LIVE_VIEW_ACTIVE", async () => {
+      const api = "start_managed_acquisition";
 
       mocked_axios
         .onGet(system_status_when_buffering_regexp)
@@ -637,17 +620,17 @@ describe("store/playback", () => {
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
-      expect(store.state.playback.playback_state).not.toEqual(
+      expect(store.state.playback.playback_state).not.toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
       );
 
       await store.dispatch("playback/start_live_view");
 
-      let request_to_start_acquisition = mocked_axios.history.get[0];
+      const request_to_start_acquisition = mocked_axios.history.get[0];
 
       expect(request_to_start_acquisition.url).toMatch(`${base_url}/${api}`);
 
-      expect(store.state.playback.playback_state).toEqual(
+      expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
       );
 
@@ -655,7 +638,7 @@ describe("store/playback", () => {
         expect(
           store.state.flask.status_ping_interval_id
         ).toBeGreaterThanOrEqual(0);
-        expect(store.state.playback.playback_state).toEqual(
+        expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
         );
       });

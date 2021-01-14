@@ -153,7 +153,6 @@ jobs:
         if: matrix.IS_FASTEST_JOB == true
         env:
           PRE_COMMIT_HOME: ~/.precommit_cache
-        # only enable pre-commit on the fastest job
         run: |
           pre-commit install
           pre-commit run -a
@@ -181,7 +180,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: DevExpress/testcafe-action@v0.0.3
         with:
-          version: "1.9.3"
+          version: ${{steps.testcafe-version.outputs.prop}}
           args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 40000'
 
       - name: Confirm Sphinx Docs build correctly
@@ -271,9 +270,13 @@ jobs:
           npm install -g npm-cli-login@0.1.1
           npm-cli-login
 
-      - name: Uploading to NPM
+      - name: Uploading to NPM (if publishing)
         if: github.event.inputs.publish_package == '1'
         run: npm publish --access public
+
+      - name: Uploading to NPM (if dry run)
+        if: github.event.inputs.publish_package != '1'
+        run: npm publish --access public --dry-run
 
       - name: Sleep for 180 seconds to allow NPM Index to update before proceeding to the next step
         if: github.event.inputs.publish_package == '1'
@@ -319,19 +322,30 @@ jobs:
           path: "package.json"
           prop_path: "name"
 
-      - name: Delete package.json so that published package can be installed
-        run: rm package.json
+      - name: Delete everything in the folder once the information from package.json has been extracted (Linux)
+        if: runner.os == 'Linux'
+        run: rm -rf $(ls -A)
+      - name: Delete everything in the folder once the information from package.json has been extracted (Windows)
+        if: runner.os == 'Windows'
+        run: rm -r -Force *
 
-      - name: Install Main Package From NPM
+      - name: Create tiny package.json file to allow a test installation
+        run: |
+          echo '{"name":"test_package"}' > package.json
+
+      - name: Install Just Published Package From NPM
         if: github.event.inputs.publish_package == '1'
         run: npm install ${{steps.package-name.outputs.prop}}@${{steps.package-version.outputs.prop}}
+
+      - name: Install Most Recently Available Package From NPM
+        if: github.event.inputs.publish_package != '1'
+        run: npm install ${{steps.package-name.outputs.prop}}
 
       - name: Create tiny .js file to require package
         run: |
           echo 'require("${{steps.package-name.outputs.prop}}")' > tmp.js
 
       - name: Confirm to import errors when opening package
-        if: github.event.inputs.publish_package == '1'
         run: node tmp.js
 
   create_tag:
