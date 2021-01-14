@@ -204,7 +204,7 @@ describe("PlateBarcode.vue", () => {
       "ME20044099",
     ], // new rule allow ME
   ])(
-    "Given that its in manual mode and a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode or PASSES due %s for a valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode",
+    "Given that its in manual mode and a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode or PASSES due %s for a valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode and flask.barcode_manual_mode is set to true",
     async (platecode, validation_rule, reason, store_data) => {
       const spied_text_validator = jest.spyOn(
         TextValidation.prototype,
@@ -232,6 +232,8 @@ describe("PlateBarcode.vue", () => {
       wrapper.find("input").setValue(platecode);
       expect(spied_text_validator).toHaveBeenCalledWith(platecode);
       expect(store.state.playback.barcode).toEqual(store_data);
+      // check if the flask barcode_manual_mode is set to true.
+      expect(store.state.flask.barcode_manual_mode).toBe(true);
     }
   );
   test("Given that its in manual mode and a valid barcode has been entered in the [input.length = 11]  and playback state is BUFFERING, When Playback State is mutated to BUFFERING, Then the text of the Barcode Inpput remains as the valid barcode instead of becoming blank", async () => {
