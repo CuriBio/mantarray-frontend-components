@@ -35,15 +35,14 @@
     />
     <div v-show="manual" class="input__plate-barcode-manual-entry-enable">
       <span class="input__plate-barcode-manual-entry-enable-icon">
-        <b-button
+        <div
           id="edit-platebarcode"
           v-b-modal.edit-platebarcode
           squared
           class="w-80 h-80 edit-id"
-          style="background-color: #3f3f3f; border: 0px; color: #ececed"
         >
-          <FontAwesomeIcon :icon="['fa', 'pencil-alt']"
-        /></b-button>
+          <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
+        </div>
         <b-modal
           id="edit-platebarcode"
           size="sm"
@@ -210,10 +209,10 @@ export default {
   border: none;
   position: absolute;
 
-  width: 120px;
+  width: 110px;
   height: 24px;
   top: 3px;
-  right: 17px;
+  right: 27px;
 }
 
 .input__plate-barcode-entry-invalid {
@@ -253,11 +252,11 @@ input:focus {
   top: 5px;
   left: 5px;
   font-size: 14px;
-  color: rgb(183, 183, 183);
+  color: #b7b7b7;
 }
 
 .fa-pencil-alt:hover {
-  color: rgb(255, 255, 255);
+  color: #ececed;
 }
 /* Center the edit-platebarcode pop-up dialog within the viewport */
 #edit-platebarcode {

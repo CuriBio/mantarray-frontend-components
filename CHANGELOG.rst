@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.11 (2021-01-15)
+------------------
+
+ - Fixed visual issues with button to manually edit barcode
+
 0.1.10 (2021-01-14)
 ------------------
 
