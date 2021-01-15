@@ -35,30 +35,24 @@
     />
     <div v-show="manual" class="input__plate-barcode-manual-entry-enable">
       <span class="input__plate-barcode-manual-entry-enable-icon">
-        <b-button
-          id="edit-platebarcode"
-          v-b-modal.edit-platebarcode
-          squared
-          class="w-80 h-80 edit-id"
-          style="background-color: #3f3f3f; border: 0px; color: #ececed"
-        >
-          <FontAwesomeIcon :icon="['fa', 'pencil-alt']"
-        /></b-button>
-        <b-modal
-          id="edit-platebarcode"
-          size="sm"
-          hide-footer
-          hide-header
-          hide-header-close
-        >
-          <BarcodeEditDialog
-            @cancel-platebarcode="manual_mode_off"
-            @yes-platebarcode="manual_mode_on"
-          ></BarcodeEditDialog>
-        </b-modal>
+        <div id="edit-platebarcode" v-b-modal.edit-platebarcode-modal>
+          <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
+        </div>
       </span>
     </div>
     <!--</div>-->
+    <b-modal
+      id="edit-platebarcode-modal"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+    >
+      <BarcodeEditDialog
+        @cancel-platebarcode="manual_mode_off"
+        @yes-platebarcode="manual_mode_on"
+      ></BarcodeEditDialog>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -107,11 +101,11 @@ export default {
   },
   methods: {
     manual_mode_off: function () {
-      this.$bvModal.hide("edit-platebarcode");
+      this.$bvModal.hide("edit-platebarcode-modal");
     },
     manual_mode_on: function () {
       this.manual = false;
-      this.$bvModal.hide("edit-platebarcode");
+      this.$bvModal.hide("edit-platebarcode-modal");
       this.$store.commit("flask/set_barcode_manual_mode", true);
       this.$store.commit("playback/set_barcode_number_manual_mode", null);
     },
@@ -201,7 +195,7 @@ export default {
   text-decoration: none;
   font-size: 15px;
 
-  background-color: black;
+  background-color: #000000;
 
   color: #b7b7b7;
   font-family: Anonymous Pro;
@@ -210,10 +204,10 @@ export default {
   border: none;
   position: absolute;
 
-  width: 120px;
+  width: 110px;
   height: 24px;
   top: 3px;
-  right: 17px;
+  right: 27px;
 }
 
 .input__plate-barcode-entry-invalid {
@@ -230,14 +224,11 @@ input:focus {
 
 .input__plate-barcode-manual-entry-enable {
   pointer-events: all;
-  transform: rotate(0deg);
   position: absolute;
   width: 34px;
   height: 34px;
   top: 0px;
   left: 263px;
-  visibility: visible;
-  z-index: 176;
 }
 
 .input__plate-barcode-manual-entry-enable-icon {
@@ -251,16 +242,16 @@ input:focus {
   height: 24px;
   line-height: 24px;
   top: 5px;
-  left: 5px;
+  left: 0px;
   font-size: 14px;
-  color: rgb(183, 183, 183);
+  color: #b7b7b7;
 }
 
 .fa-pencil-alt:hover {
-  color: rgb(255, 255, 255);
+  color: #ececed;
 }
-/* Center the edit-platebarcode pop-up dialog within the viewport */
-#edit-platebarcode {
+/* Center the edit-platebarcode-modal pop-up dialog within the viewport */
+#edit-platebarcode-modal {
   position: fixed;
   margin: 5% auto;
   top: 15%;
