@@ -1,11 +1,14 @@
 <template>
   <div>
-    <div class="div__radiobutton-background">
-      <div class="div__radio_selected" @click="radio_toggle()">
-        <FontAwesomeIcon v-show="status" :icon="['far', 'dot-circle']" />
-        <FontAwesomeIcon v-show="!status" :icon="['far', 'circle']" />
-        Spike&nbsp;Amplitude
-      </div>
+    <div
+      v-for="btn_index in num_of_btn"
+      :key="btn_index"
+      class="div__radio_selected"
+      @click="radio_toggle()"
+    >
+      <FontAwesomeIcon v-show="status" :icon="['far', 'dot-circle']" />
+      <FontAwesomeIcon v-show="!status" :icon="['far', 'circle']" />
+      {{ radio_buttons[btn_index - 1] }}
     </div>
   </div>
 </template>
@@ -22,10 +25,21 @@ export default {
   components: {
     FontAwesomeIcon,
   },
+  props: {
+    radio_buttons: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
       status: false,
     };
+  },
+  computed: {
+    num_of_btn: function () {
+      return this.radio_buttons.length;
+    },
   },
   methods: {
     radio_toggle: function () {

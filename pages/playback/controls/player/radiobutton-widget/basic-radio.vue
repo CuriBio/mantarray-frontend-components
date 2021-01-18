@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RadioButtonWidget></RadioButtonWidget>
+    <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
   </div>
 </template>
 
@@ -15,6 +15,7 @@ export default {
   data() {
     return {
       test: 1,
+      button_names: ["warm", "cool", "blue/red", "purple/green"],
     };
   },
   methods: {},
