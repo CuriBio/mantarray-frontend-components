@@ -4,10 +4,16 @@
       v-for="btn_index in num_of_btn"
       :key="btn_index"
       class="div__radio_selected"
-      @click="radio_toggle()"
+      @click="radio_toggle(btn_index - 1)"
     >
-      <FontAwesomeIcon v-show="status" :icon="['far', 'dot-circle']" />
-      <FontAwesomeIcon v-show="!status" :icon="['far', 'circle']" />
+      <FontAwesomeIcon
+        v-show="status[btn_index - 1]"
+        :icon="['far', 'dot-circle']"
+      />
+      <FontAwesomeIcon
+        v-show="!status[btn_index - 1]"
+        :icon="['far', 'circle']"
+      />
       {{ radio_buttons[btn_index - 1] }}
     </div>
   </div>
@@ -33,7 +39,9 @@ export default {
   },
   data() {
     return {
-      status: false,
+      status: function () {
+        return new Array(this.num_of_btn).fill(false);
+      },
     };
   },
   computed: {
@@ -42,41 +50,26 @@ export default {
     },
   },
   methods: {
-    radio_toggle: function () {
-      this.status = !this.status;
+    radio_toggle: function (index) {
+      const button_status = new Array(this.num_of_btn).fill(false);
+      button_status[index] = true;
+      this.status = button_status;
+      this.$emit("radio-btn-selected", index);
     },
   },
 };
 </script>
 <style type="text/css">
-.div__radiobutton-background {
-  transform: rotate(0deg);
-  box-sizing: border-box;
-  padding: 0px;
-  margin: 0px;
-  background: rgb(17, 17, 17);
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 140px;
-  height: 50px;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 15px;
-  color: rgb(183, 183, 183);
-  visibility: visible;
-  border: 2px solid rgb(17, 17, 17);
-  border-radius: 0px;
-  box-shadow: none;
-  z-index: 3;
-  pointer-events: all;
-}
 .div__radio_selected {
   white-space: nowrap;
   padding-top: 15px;
   color: #b7b7b7;
   padding-bottom: 7px;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 15px;
 }
 </style>

@@ -36,7 +36,7 @@ describe("RadioButtonWidget.vue", () => {
 
     expect(target_span.text()).toStrictEqual("warm");
   });
-  test("When mounting from the built dist file, Then it loads successfully and the props has multiple defined radio button text is rendered in the sequence", () => {
+  test("When mounted, Then it loads successfully multiple defined in props as array rendered in the sequence", () => {
     const propsData = {
       radio_buttons: ["warm", "cool", "blue/red", "purple/green"],
     };
@@ -51,5 +51,21 @@ describe("RadioButtonWidget.vue", () => {
     expect(target_span.at(1).text()).toStrictEqual("cool");
     expect(target_span.at(2).text()).toStrictEqual("blue/red");
     expect(target_span.at(3).text()).toStrictEqual("purple/green");
+  });
+  test("Given that the radio buttons are rendered in a sequence, When a click-select of radio button occurs, Then an event 'radio-btn-selected' with index of the radio button is emitted", async () => {
+    const propsData = {
+      radio_buttons: ["warm", "cool", "blue/red", "purple/green"],
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_span = wrapper.findAll(".div__radio_selected");
+
+    await target_span.at(0).trigger("click");
+    const parent_id_events = wrapper.emitted("radio-btn-selected");
+    expect(parent_id_events).toHaveLength(1);
+    expect(parent_id_events).toStrictEqual([[0]]);
   });
 });
