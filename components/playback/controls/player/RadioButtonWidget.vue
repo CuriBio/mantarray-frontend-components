@@ -1,36 +1,29 @@
 <template>
   <div>
-    <div
-      v-for="btn_index in num_of_btn"
-      :key="btn_index"
-      class="div__radio_selected"
-      @click="radio_toggle(btn_index - 1)"
-    >
-      <FontAwesomeIcon
-        v-show="status[btn_index - 1]"
-        :icon="['far', 'dot-circle']"
-      />
-      <FontAwesomeIcon
-        v-show="!status[btn_index - 1]"
-        :icon="['far', 'circle']"
-      />
-      {{ radio_buttons[btn_index - 1] }}
-    </div>
+    <b-form-radio-group
+      v-model="selected"
+      :options="radio_buttons"
+      :aria-describedby="ariaDescribedby"
+      name="plain-stacked"
+      plain
+      stacked
+    ></b-form-radio-group>
   </div>
 </template>
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCircle as fa_circle } from "@fortawesome/free-regular-svg-icons";
 import { faDotCircle as fa_dotcircle } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
+// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import Vue from "vue";
 library.add(fa_circle);
 library.add(fa_dotcircle);
+
+import { BFormRadioGroup } from "bootstrap-vue";
+Vue.component("BFormRadioGroup", BFormRadioGroup);
+
 export default {
   name: "RadioButtonWidget",
-  components: {
-    FontAwesomeIcon,
-  },
   props: {
     radio_buttons: {
       type: Array,
@@ -39,9 +32,7 @@ export default {
   },
   data() {
     return {
-      status: function () {
-        return new Array(this.num_of_btn).fill(false);
-      },
+      status: [],
     };
   },
   computed: {
@@ -50,11 +41,11 @@ export default {
     },
   },
   methods: {
-    radio_toggle: function (index) {
-      const button_status = new Array(this.num_of_btn).fill(false);
-      button_status[index] = true;
-      this.status = button_status;
-      this.$emit("radio-btn-selected", index);
+    radio_toggle: function (ev) {
+      this.$emit(
+        "radio-btn-selected",
+        this.radio_buttons.indexOf(this.selected)
+      );
     },
   },
 };

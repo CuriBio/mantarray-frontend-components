@@ -14,7 +14,6 @@ export default {
   },
   data() {
     return {
-      test: 1,
       button_names: ["warm", "cool", "blue/red", "purple/green"],
     };
   },
