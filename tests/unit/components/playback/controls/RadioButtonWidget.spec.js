@@ -32,7 +32,7 @@ describe("RadioButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_span = wrapper.find(".div__radio_selected");
+    const target_span = wrapper.find(".form-check-label > span");
 
     expect(target_span.text()).toStrictEqual("warm");
   });
@@ -45,7 +45,7 @@ describe("RadioButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_span = wrapper.findAll(".div__radio_selected");
+    const target_span = wrapper.findAll(".form-check-label > span");
 
     expect(target_span.at(0).text()).toStrictEqual("warm");
     expect(target_span.at(1).text()).toStrictEqual("cool");
@@ -54,18 +54,18 @@ describe("RadioButtonWidget.vue", () => {
   });
   test("Given that the radio buttons are rendered in a sequence, When a click-select of radio button occurs, Then an event 'radio-btn-selected' with index of the radio button is emitted", async () => {
     const propsData = {
-      radio_buttons: ["warm", "cool", "blue/red", "purple/green"],
+      radio_buttons: ["warm"],
     };
     wrapper = mount(ComponentToTest, {
       propsData,
       store,
       localVue,
     });
-    const target_span = wrapper.findAll(".div__radio_selected");
+    const target_radio_btn = wrapper.find("input");
+    target_radio_btn.setChecked(true);
+    target_radio_btn.trigger("change");
+    // manually force Vue to update
 
-    await target_span.at(0).trigger("click");
-    const parent_id_events = wrapper.emitted("radio-btn-selected");
-    expect(parent_id_events).toHaveLength(1);
-    expect(parent_id_events).toStrictEqual([[0]]);
+    expect(wrapper.emitted().input).toStrictEqual([true]);
   });
 });

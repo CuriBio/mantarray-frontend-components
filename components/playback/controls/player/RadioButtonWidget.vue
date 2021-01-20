@@ -11,14 +11,7 @@
   </div>
 </template>
 <script>
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCircle as fa_circle } from "@fortawesome/free-regular-svg-icons";
-import { faDotCircle as fa_dotcircle } from "@fortawesome/free-regular-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Vue from "vue";
-library.add(fa_circle);
-library.add(fa_dotcircle);
-
 import { BFormRadioGroup } from "bootstrap-vue";
 Vue.component("BFormRadioGroup", BFormRadioGroup);
 
@@ -29,10 +22,14 @@ export default {
       type: Array,
       required: true,
     },
+    pre_selected: {
+      type: Number,
+      default: 0,
+    },
   },
-  data() {
+  data: function () {
     return {
-      status: [],
+      selected: false,
     };
   },
   computed: {
@@ -40,30 +37,23 @@ export default {
       return this.radio_buttons.length;
     },
   },
+  created: function () {
+    if (this.pre_selected != undefined) {
+      this.selected = this.radio_buttons[this.pre_selected];
+    }
+  },
   methods: {
     radio_toggle: function (ev) {
-      this.$emit(
-        "radio-btn-selected",
-        this.radio_buttons.indexOf(this.selected)
-      );
+      const btn_info = {
+        name: this.selected,
+        index: this.radio_buttons.indexOf(this.selected),
+      };
+      this.$emit("radio-btn-selected", btn_info);
     },
   },
 };
 </script>
 <style type="text/css">
-.div__radio_selected {
-  white-space: nowrap;
-  padding-top: 15px;
-  color: #b7b7b7;
-  padding-bottom: 7px;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 15px;
-}
-
 .form-check-label {
   white-space: nowrap;
   margin-bottom: 0;
@@ -74,5 +64,37 @@ export default {
   font-style: normal;
   text-decoration: none;
   font-size: 15px;
+}
+
+.form-check-input {
+  color: #b7b7b7;
+  border-color: #b7b7b7;
+  background-color: #b7b7b7;
+  border: 5px solid #b7b7b7;
+  margin-top: 0.5rem;
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #b7b7b7;
+  border-radius: 50%;
+  outline: none;
+  box-shadow: 0 0 5px 0px #b7b7b7 inset;
+}
+input[type="radio"]:hover {
+  box-shadow: 0 0 5px 0px orange inset;
+}
+input[type="radio"]:before {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 60%;
+  margin: 20% auto;
+  border-radius: 50%;
+}
+input[type="radio"]:checked:before {
+  background: #19ac8a;
 }
 </style>
