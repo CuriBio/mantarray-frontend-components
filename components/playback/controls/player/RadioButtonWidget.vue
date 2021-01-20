@@ -63,4 +63,16 @@ export default {
   text-decoration: none;
   font-size: 15px;
 }
+
+.form-check-label {
+  white-space: nowrap;
+  margin-bottom: 0;
+  color: #b7b7b7;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 15px;
+}
 </style>
