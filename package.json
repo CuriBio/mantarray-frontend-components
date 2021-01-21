@@ -65,7 +65,6 @@
     "autoprefixer": "~9.8.6",
     "axios-mock-adapter": "^1.18.1",
     "babel-core": "~7.0.0-bridge.0",
-    "babel-eslint": "10.1.0",
     "babel-helper-vue-jsx-merge-props": "~2.0.3",
     "babel-loader": "~8.2.2",
     "babel-plugin-syntax-jsx": "~6.18.0",
