@@ -50,7 +50,6 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@babel/runtime-corejs2": "~7.12.5",
     "@curi-bio/frontend-test-utils": "~0.1.1",
     "@fortawesome/fontawesome-free": "~5.15.1",
     "@fortawesome/fontawesome-svg-core": "~1.2.27",
