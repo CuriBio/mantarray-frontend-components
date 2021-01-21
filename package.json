@@ -62,7 +62,6 @@
     "axios-mock-adapter": "^1.18.1",
     "babel-core": "~7.0.0-bridge.0",
     "babel-loader": "~8.2.2",
-    "babel-plugin-syntax-jsx": "~6.18.0",
     "babel-plugin-transform-runtime": "~6.23.0",
     "core-js": "~3.8.2",
     "eslint": "~7.18.0",
