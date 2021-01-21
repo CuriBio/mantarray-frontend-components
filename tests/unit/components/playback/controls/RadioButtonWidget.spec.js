@@ -52,20 +52,43 @@ describe("RadioButtonWidget.vue", () => {
     expect(target_span.at(2).text()).toStrictEqual("blue/red");
     expect(target_span.at(3).text()).toStrictEqual("purple/green");
   });
-  test("Given that the radio buttons are rendered in a sequence, When a click-select of radio button occurs, Then an event 'radio-btn-selected' with index of the radio button is emitted", async () => {
+  test("Given that the radio buttons are rendered in a sequence, When a click-select of radio button occurs, Then an event 'radio-btn-selected' with index and name of the radio button is emitted", async () => {
     const propsData = {
-      radio_buttons: ["warm"],
+      radio_buttons: ["warm", "cold"],
     };
     wrapper = mount(ComponentToTest, {
       propsData,
       store,
       localVue,
     });
-    const target_radio_btn = wrapper.find("input");
-    target_radio_btn.setChecked(true);
-    target_radio_btn.trigger("change");
+    const target_radio_btn = wrapper.findAll("input[type='radio']");
+    target_radio_btn.at(1).setChecked(true);
+    await target_radio_btn.at(1).trigger("change");
     // manually force Vue to update
+    const parent_id_events = wrapper.emitted("radio-btn-selected");
+    expect(parent_id_events).toHaveLength(1);
+    expect(parent_id_events).toStrictEqual([
+      [
+        {
+          index: 1,
+          name: "cold",
+        },
+      ],
+    ]);
+  });
+  test("Given that there is a pre-selected radio button, When the RadioButtonWidget is mounted, Then the state of the pre-selected radio button is `selected`", async () => {
+    const propsData = {
+      radio_buttons: ["warm", "cold"],
+      pre_selected: 1,
+    };
 
-    expect(wrapper.emitted().input).toStrictEqual([true]);
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const target_radio_btn = wrapper.findAll("input[type='radio']");
+
+    expect(target_radio_btn.at(1).element.checked).toBeTruthy();
   });
 });

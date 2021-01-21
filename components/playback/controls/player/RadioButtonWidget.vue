@@ -7,6 +7,7 @@
       name="plain-stacked"
       plain
       stacked
+      @input="radio_toggle"
     ></b-form-radio-group>
   </div>
 </template>
