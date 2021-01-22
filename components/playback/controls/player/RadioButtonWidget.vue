@@ -54,7 +54,7 @@ export default {
 };
 </script>
 <style type="text/css">
-.custom-control-label {
+.radio-button-widget {
   white-space: nowrap;
   margin-bottom: 0;
   color: #b7b7b7;

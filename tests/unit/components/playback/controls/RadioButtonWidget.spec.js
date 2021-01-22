@@ -32,7 +32,7 @@ describe("RadioButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_span = wrapper.find(".form-check-label > span");
+    const target_span = wrapper.find(".custom-control-label > span");
 
     expect(target_span.text()).toStrictEqual("warm");
   });
@@ -45,7 +45,7 @@ describe("RadioButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_span = wrapper.findAll(".form-check-label > span");
+    const target_span = wrapper.findAll(".custom-control-label > span");
 
     expect(target_span.at(0).text()).toStrictEqual("warm");
     expect(target_span.at(1).text()).toStrictEqual("cool");
