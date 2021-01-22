@@ -93,9 +93,6 @@
       </path>
       <path
         class="svg__playback-desktop-player-controls-live-view-button-iris"
-        :class="
-          svg__playback_desktop_player_controls_live_view_button_iris__dynamic_class
-        "
         d="M15,10.73A4.27,4.27,0,1,0,19.28,15,4.27,4.27,0,0,0,15,10.73Zm0,6.52a2.25,2.25,0,0,1,0-4.5,2.21,2.21,0,0,1,.68.12,1.12,1.12,0,0,0-.33.8,1.14,1.14,0,0,0,1.14,1.14,1.11,1.11,0,0,0,.71-.26,2.3,2.3,0,0,1,.05.45A2.25,2.25,0,0,1,15,17.25Z"
       >
         <!-- the iris -->
