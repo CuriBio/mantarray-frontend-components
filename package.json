@@ -83,7 +83,6 @@
     "jsdoc-vuejs": "^3.0.8",
     "npm-merge-driver": "~2.3.6",
     "nuxt": "2.14.7",
-    "popper.js": "~1.16.0",
     "sinon": "^9.0.2",
     "testcafe": "^1.10.1",
     "vue-jest": "~3.0.5",
