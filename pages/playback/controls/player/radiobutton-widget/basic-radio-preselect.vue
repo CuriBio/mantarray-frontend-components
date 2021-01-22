@@ -1,6 +1,9 @@
 <template>
   <div>
-    <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
+    <RadioButtonWidget
+      :radio_buttons="button_names"
+      :pre_selected="1"
+    ></RadioButtonWidget>
   </div>
 </template>
 

@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <div class="radio-button-widget">
     <b-form-radio-group
       v-model="selected"
       :options="radio_buttons"
       :aria-describedby="ariaDescribedby"
       name="plain-stacked"
-      plain
       stacked
       @input="radio_toggle"
     ></b-form-radio-group>
@@ -25,7 +24,7 @@ export default {
     },
     pre_selected: {
       type: Number,
-      default: 0,
+      default: undefined,
     },
   },
   data: function () {
@@ -55,7 +54,7 @@ export default {
 };
 </script>
 <style type="text/css">
-.form-check-label {
+.custom-control-label {
   white-space: nowrap;
   margin-bottom: 0;
   color: #b7b7b7;
@@ -67,35 +66,61 @@ export default {
   font-size: 15px;
 }
 
-.form-check-input {
-  color: #b7b7b7;
-  border-color: #b7b7b7;
-  background-color: #b7b7b7;
-  border: 5px solid #b7b7b7;
-  margin-top: 0.5rem;
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  border-color: #7b1fa2;
+  background-color: #7b1fa2;
 }
 
-input[type="radio"] {
-  -webkit-appearance: none;
-  width: 15px;
-  height: 15px;
-  border: 1px solid #b7b7b7;
-  border-radius: 50%;
-  outline: none;
-  box-shadow: 0 0 5px 0px #b7b7b7 inset;
-}
-input[type="radio"]:hover {
-  box-shadow: 0 0 5px 0px orange inset;
-}
-input[type="radio"]:before {
-  content: "";
-  display: block;
-  width: 60%;
-  height: 60%;
-  margin: 20% auto;
-  border-radius: 50%;
-}
-input[type="radio"]:checked:before {
-  background: #19ac8a;
-}
+/*.custom-radio .custom-control-input:checked {*/
+/*  color: #b7b7b7;*/
+/*  border-color: #b7b7b7;*/
+/*  background-color: #19ac8a;*/
+/*  border: 5px solid #19ac8a;*/
+/*  margin-top: 0.0rem;*/
+/*}*/
+/*.custom-radio .custom-control-input:active::before*/
+/*{*/
+/*  color: #ffffff;*/
+/*  border-color: #ffffff;*/
+/*  background-color: #ffffff;*/
+/*  border: 5px solid #ffffff;*/
+/*  margin-top: 0.0rem;*/
+/*}*/
+
+/*input[type="radio"] {*/
+/*  -webkit-appearance: none;*/
+/*  width: 15px;*/
+/*  height: 15px;*/
+/*  border: 1px solid #b7b7b7;*/
+/*  border-radius: 50%;*/
+/*  outline: none;*/
+/*   box-shadow: 0 0 5px 0px #b7b7b7 inset; */
+/*}*/
+/*input[type="radio"]:hover {*/
+/*  box-shadow: 0 0 5px 0px solid #ffffff;*/
+/*}*/
+/*input[type="radio"]:before {*/
+/*  content: "";*/
+/*  display: block;*/
+/*  width: 60%;*/
+/*  height: 60%;*/
+/*  margin: 20% auto;*/
+/*  border-radius: 50%;*/
+/*}*/
+/*.radio-button-widget .active {*/
+/*  color: #19ac8a;*/
+/*  border-color: #19ac8a;*/
+/*  border: 5px solid #ffffff;*/
+/*  background-color: #19ac8a;*/
+/*  box-shadow: none !important;*/
+/*}*/
+
+/*.custom-control-input:hover {*/
+/*  color: #ececed;*/
+/*  border-color: #ececed;*/
+/*  border: 5px solid #ececed;*/
+/*  background-color: #ececed;*/
+/*  box-shadow: none !important;*/
+/*}*/
 </style>
