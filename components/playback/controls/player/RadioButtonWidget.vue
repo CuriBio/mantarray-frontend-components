@@ -4,7 +4,7 @@
       v-model="selected"
       :options="radio_buttons"
       :aria-describedby="ariaDescribedby"
-      name="plain-stacked"
+      name="radios-stacked"
       stacked
       @input="radio_toggle"
     ></b-form-radio-group>
@@ -66,27 +66,53 @@ export default {
   font-size: 15px;
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
-  color: #fff;
-  border-color: #7b1fa2;
-  background-color: #7b1fa2;
+.custom-radio .custom-control-label::before {
+  background-color: #000; /* black */
 }
 
-/*.custom-radio .custom-control-input:checked {*/
-/*  color: #b7b7b7;*/
-/*  border-color: #b7b7b7;*/
-/*  background-color: #19ac8a;*/
-/*  border: 5px solid #19ac8a;*/
-/*  margin-top: 0.0rem;*/
-/*}*/
-/*.custom-radio .custom-control-input:active::before*/
-/*{*/
-/*  color: #ffffff;*/
-/*  border-color: #ffffff;*/
-/*  background-color: #ffffff;*/
-/*  border: 5px solid #ffffff;*/
-/*  margin-top: 0.0rem;*/
-/*}*/
+/* This is the checked state */
+.custom-radio .custom-control-input:checked ~ .custom-control-label::before,
+.custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+  background-color: #000; /* black */
+  /* this bg image SVG is just a white circle, you can replace it with any valid SVG code */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='3' fill='%2319ac8a'/%3E%3C/svg%3E");
+  border-radius: 50%;
+}
+
+/* This is the checked state */
+.custom-radio
+  .custom-control-input:checked:hover
+  ~ .custom-control-label::before,
+.custom-radio
+  .custom-control-input:checked:hover
+  ~ .custom-control-label::after {
+  background-color: #000; /* black */
+  /* this bg image SVG is just a white circle, you can replace it with any valid SVG code */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='4' fill='%2319ac8a'/%3E%3C/svg%3E");
+  border-radius: 50%;
+}
+
+/* active state i.e. displayed while the mouse is being pressed down */
+.custom-radio .custom-control-input:active ~ .custom-control-label::before {
+  color: #fff;
+  background-color: #fff; /* black */
+}
+
+/* the shadow; displayed while the element is in focus */
+.custom-radio .custom-control-input:focus ~ .custom-control-label::before,
+.custom-radio .custom-control-input:focus ~ .custom-control-label::after {
+  color: #19ac8a;
+  box-shadow: 0 0 0 1px #19ac8a; /* 0 0 0 0.2rem rgba(255, 123, 255, 0.25);  pink, 25% opacity */
+}
+
+.custom-control-input:hover ~ .custom-control-label::before,
+.custom-control-input:hover ~ .custom-control-label::after {
+  /* color:  #fff;  0 0 0 0.2rem rgba(255, 123, 255, 0.25);  pink, 25% opacity */
+  /* background-color: #fff;   black */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='1.5' fill='%23fff'/%3E%3C/svg%3E");
+  z-index: 3;
+  /* border-radius: 60%; */
+}
 
 /*input[type="radio"] {*/
 /*  -webkit-appearance: none;*/
@@ -95,10 +121,11 @@ export default {
 /*  border: 1px solid #b7b7b7;*/
 /*  border-radius: 50%;*/
 /*  outline: none;*/
-/*   box-shadow: 0 0 5px 0px #b7b7b7 inset; */
+/*   box-shadow: none;*/
+
 /*}*/
 /*input[type="radio"]:hover {*/
-/*  box-shadow: 0 0 5px 0px solid #ffffff;*/
+/*  box-shadow: 0 0 5px 0px solid #ececed;*/
 /*}*/
 /*input[type="radio"]:before {*/
 /*  content: "";*/
@@ -107,20 +134,5 @@ export default {
 /*  height: 60%;*/
 /*  margin: 20% auto;*/
 /*  border-radius: 50%;*/
-/*}*/
-/*.radio-button-widget .active {*/
-/*  color: #19ac8a;*/
-/*  border-color: #19ac8a;*/
-/*  border: 5px solid #ffffff;*/
-/*  background-color: #19ac8a;*/
-/*  box-shadow: none !important;*/
-/*}*/
-
-/*.custom-control-input:hover {*/
-/*  color: #ececed;*/
-/*  border-color: #ececed;*/
-/*  border: 5px solid #ececed;*/
-/*  background-color: #ececed;*/
-/*  box-shadow: none !important;*/
 /*}*/
 </style>
