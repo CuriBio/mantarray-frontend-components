@@ -1,9 +1,9 @@
 <template>
-  <div class="div__radio-button-group-background">
-    <RadioButtonWidget
-      :radio_buttons="button_names"
-      :pre_selected="1"
-    ></RadioButtonWidget>
+  <div
+    class="div__radio-button-group-background"
+    style="top: 50px; left: 88px; position: absolute"
+  >
+    <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
   </div>
 </template>
 

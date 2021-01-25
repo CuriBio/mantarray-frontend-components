@@ -32,11 +32,6 @@ export default {
       selected: false,
     };
   },
-  computed: {
-    num_of_btn: function () {
-      return this.radio_buttons.length;
-    },
-  },
   created: function () {
     if (this.pre_selected != undefined) {
       this.selected = this.radio_buttons[this.pre_selected];
@@ -113,26 +108,4 @@ export default {
   z-index: 3;
   /* border-radius: 60%; */
 }
-
-/*input[type="radio"] {*/
-/*  -webkit-appearance: none;*/
-/*  width: 15px;*/
-/*  height: 15px;*/
-/*  border: 1px solid #b7b7b7;*/
-/*  border-radius: 50%;*/
-/*  outline: none;*/
-/*   box-shadow: none;*/
-
-/*}*/
-/*input[type="radio"]:hover {*/
-/*  box-shadow: 0 0 5px 0px solid #ececed;*/
-/*}*/
-/*input[type="radio"]:before {*/
-/*  content: "";*/
-/*  display: block;*/
-/*  width: 60%;*/
-/*  height: 60%;*/
-/*  margin: 20% auto;*/
-/*  border-radius: 50%;*/
-/*}*/
 </style>
