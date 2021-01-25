@@ -59,3 +59,4 @@ export { default as EditUser } from "./components/playback/controls/player/EditU
 
 export { default as BarcodeEditDialog } from "./components/playback/controls/player/BarcodeEditDialog.vue";
 export { default as RadioButtonWidget } from "./components/playback/controls/player/RadioButtonWidget.vue";
+export { default as SimulationStudioWidget } from "./components/playback/controls/SimulationStudioWidget.vue";
