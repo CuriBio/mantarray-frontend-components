@@ -587,37 +587,60 @@ describe("store/playback", () => {
       );
     });
 
-    test("When start_calibration is called, Then playback state mutates to calibrating and starts status_pinging in Flask, then playback state mutates to calibrated", async () => {
+    describe("Given /system_status is mocked to return the status CALIBRATED and all other routes are mocked to return status 200", () => {
       const api = "start_calibration";
+      beforeEach(() => {
+        mocked_axios
+          .onGet(system_status_when_calibrating_regexp)
+          .reply(200, { ui_status_code: STATUS.MESSAGE.CALIBRATED });
 
-      mocked_axios
-        .onGet(system_status_when_calibrating_regexp)
-        .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED });
-
-      mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
-
-      // confirm pre-condition
-      expect(store.state.playback.playback_state).not.toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
-      );
-
-      await store.dispatch("playback/start_calibration");
-
-      const request_to_start_calibration = mocked_axios.history.get[0];
-
-      expect(request_to_start_calibration.url).toMatch(`${base_url}/${api}`);
-
-      expect(store.state.playback.playback_state).toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
-      );
-
-      await wait_for_expect(() => {
+        mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
+      });
+      test("Given the flask status is set to CALIBRATION_NEEDED, When start_calibration is called, Then and ignore_next_system_status_if_matching_this_status is mutated to CALIBRATION_NEEDED", async () => {
+        const expected_state = STATUS.MESSAGE.CALIBRATION_NEEDED;
+        store.commit("flask/set_status_uuid", expected_state);
+        // confirm pre-condition
+        expect(store.state.flask.status_uuid).toStrictEqual(expected_state);
+        await store.dispatch("playback/start_calibration");
         expect(
-          store.state.flask.status_ping_interval_id
-        ).toBeGreaterThanOrEqual(0);
-        expect(store.state.playback.playback_state).toStrictEqual(
-          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).toStrictEqual(expected_state);
+      });
+      test("Given the flask status is set to CALIBRATED, When start_calibration is called, Then and ignore_next_system_status_if_matching_this_status is mutated to CALIBRATED", async () => {
+        const expected_state = STATUS.MESSAGE.CALIBRATED;
+        store.commit("flask/set_status_uuid", expected_state);
+        // confirm pre-condition
+        expect(store.state.flask.status_uuid).toStrictEqual(expected_state);
+        await store.dispatch("playback/start_calibration");
+        expect(
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).toStrictEqual(expected_state);
+      });
+
+      test("When start_calibration is called, Then playback state mutates to calibrating and starts status_pinging in Flask, then playback state mutates to calibrated", async () => {
+        // confirm pre-condition
+        expect(store.state.playback.playback_state).not.toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
         );
+
+        await store.dispatch("playback/start_calibration");
+
+        const request_to_start_calibration = mocked_axios.history.get[0];
+
+        expect(request_to_start_calibration.url).toMatch(`${base_url}/${api}`);
+
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING
+        );
+
+        await wait_for_expect(() => {
+          expect(
+            store.state.flask.status_ping_interval_id
+          ).toBeGreaterThanOrEqual(0);
+          expect(store.state.playback.playback_state).toStrictEqual(
+            playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
+          );
+        });
       });
     });
 

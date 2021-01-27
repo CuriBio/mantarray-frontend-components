@@ -146,6 +146,12 @@ export default {
       endpoint: "start_calibration",
     };
     await this.dispatch("playback/start_stop_axios_request", payload);
+    context.commit(
+      "flask/ignore_next_system_status_if_matching_status",
+      this.state.flask.status_uuid,
+      { root: true }
+    );
+
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING, {
       root: true,
     });
