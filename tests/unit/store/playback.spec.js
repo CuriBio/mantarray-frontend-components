@@ -596,26 +596,25 @@ describe("store/playback", () => {
 
         mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
       });
-      test("Given the flask status is set to CALIBRATION_NEEDED, When start_calibration is called, Then and ignore_next_system_status_if_matching_this_status is mutated to CALIBRATION_NEEDED", async () => {
-        const expected_state = STATUS.MESSAGE.CALIBRATION_NEEDED;
-        store.commit("flask/set_status_uuid", expected_state);
-        // confirm pre-condition
-        expect(store.state.flask.status_uuid).toStrictEqual(expected_state);
-        await store.dispatch("playback/start_calibration");
-        expect(
-          store.state.flask.ignore_next_system_status_if_matching_this_status
-        ).toStrictEqual(expected_state);
-      });
-      test("Given the flask status is set to CALIBRATED, When start_calibration is called, Then and ignore_next_system_status_if_matching_this_status is mutated to CALIBRATED", async () => {
-        const expected_state = STATUS.MESSAGE.CALIBRATED;
-        store.commit("flask/set_status_uuid", expected_state);
-        // confirm pre-condition
-        expect(store.state.flask.status_uuid).toStrictEqual(expected_state);
-        await store.dispatch("playback/start_calibration");
-        expect(
-          store.state.flask.ignore_next_system_status_if_matching_this_status
-        ).toStrictEqual(expected_state);
-      });
+      test.each([
+        ["CALIBRATION_NEEDED", "CALIBRATION_NEEDED"],
+        ["CALIBRATED", "CALIBRATED"],
+      ])(
+        "Given the flask status is set to %s, When start_calibration is called, Then ignore_next_system_status_if_matching_this_status is mutated to %s",
+        async (
+          expected_state_str,
+          copy_of_expected_state_for_test_title_display
+        ) => {
+          const expected_state = STATUS.MESSAGE[expected_state_str];
+          store.commit("flask/set_status_uuid", expected_state);
+          // confirm pre-condition
+          expect(store.state.flask.status_uuid).toStrictEqual(expected_state);
+          await store.dispatch("playback/start_calibration");
+          expect(
+            store.state.flask.ignore_next_system_status_if_matching_this_status
+          ).toStrictEqual(expected_state);
+        }
+      );
 
       test("When start_calibration is called, Then playback state mutates to calibrating and starts status_pinging in Flask, then playback state mutates to calibrated", async () => {
         // confirm pre-condition
