@@ -92,12 +92,13 @@ export default {
     );
     context.commit("stop_recording");
     context.commit(
-      "flask/set_status_uuid",
-      STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid,
-      {
-        root: true,
-      }
+      "flask/ignore_next_system_status_if_matching_status",
+      STATUS.MESSAGE.RECORDING,
+      { root: true }
     );
+    context.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
+      root: true,
+    });
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
     //   context.commit(

@@ -401,73 +401,78 @@ describe("store/playback", () => {
         store.state.playback.playback_progression_interval_id
       ).toStrictEqual(expected_interval_id);
     });
-    test("Given all axios requests are mocked to return status 200 and a valid barcode is set in Vuex and a playback x time index has been set, When start_recording is invoked, Then the playback and status states mutate to recording and the start of recording time is mutated to the x_time_index and an axios call was made to /start_recording with the correct time index and barcode and hardware_test_recording parameter and ignore_next_system_status_if_matching_this_status is mutated to LIVE_VIEW_ACTIVE", async () => {
-      const api = "start_recording";
+    describe("Given all axios requests are mocked to return status 200", () => {
+      beforeEach(() => {
+        mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
+      });
+      test("Given a valid barcode is set in Vuex and a playback x time index has been set, When start_recording is invoked, Then the playback and status states mutate to recording and the start of recording time is mutated to the x_time_index and an axios call was made to /start_recording with the correct time index and barcode and hardware_test_recording parameter and ignore_next_system_status_if_matching_this_status is mutated to LIVE_VIEW_ACTIVE", async () => {
+        const api = "start_recording";
 
-      mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
+        const expected_status_state = STATUS.MESSAGE.RECORDING;
 
-      const expected_status_state = STATUS.MESSAGE.RECORDING;
+        // confirm pre-condition
+        expect(store.state.playback.playback_state).not.toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.RECORDING
+        );
+        expect(store.state.flask.status_uuid).not.toStrictEqual(
+          expected_status_state
+        );
 
-      // confirm pre-condition
-      expect(store.state.playback.playback_state).not.toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.RECORDING
-      );
-      expect(store.state.flask.status_uuid).not.toStrictEqual(
-        expected_status_state
-      );
+        store.commit("playback/set_x_time_index", 12345);
 
-      store.commit("playback/set_x_time_index", 12345);
+        store.commit("playback/set_barcode_number", "MB2036078");
 
-      store.commit("playback/set_barcode_number", "MB2036078");
+        await store.dispatch("playback/start_recording");
 
-      await store.dispatch("playback/start_recording");
+        expect(mocked_axios.history.get[0].url).toStrictEqual(
+          `${base_url}/${api}?time_index=12345&barcode=MB2036078&is_hardware_test_recording=false`
+        );
 
-      expect(mocked_axios.history.get[0].url).toStrictEqual(
-        `${base_url}/${api}?time_index=12345&barcode=MB2036078&is_hardware_test_recording=false`
-      );
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.RECORDING
+        );
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          expected_status_state
+        );
+        expect(store.state.playback.recording_start_time).toStrictEqual(12345);
 
-      expect(store.state.playback.playback_state).toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.RECORDING
-      );
-      expect(store.state.flask.status_uuid).toStrictEqual(
-        expected_status_state
-      );
-      expect(store.state.playback.recording_start_time).toStrictEqual(12345);
+        expect(
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).toStrictEqual(STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
+      });
+      test("Given an x_time_index is set in Vuex and a valid barcode is set in Vuex, When stop_recording is invoked, Then the playback and status states mutate to live_view_active and the /stop_recording route is called with the x_time_index parameter and the recording start time is reset to 0 in Vuex and the ignore_next_system_status_if_matching_this_status state in Vuex is set to RECORDING", async () => {
+        const api = "stop_recording";
 
-      expect(
-        store.state.flask.ignore_next_system_status_if_matching_this_status
-      ).toStrictEqual(STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
-    });
-    test("When stop_recording is invoked, Then the playback and status states mutate to live_view_active", async () => {
-      const api = "stop_recording";
+        const expected_status_state = STATUS.MESSAGE.LIVE_VIEW_ACTIVE;
+        // confirm pre-condition
+        expect(store.state.playback.playback_state).not.toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
+        );
+        expect(store.state.flask.status_uuid).not.toStrictEqual(
+          expected_status_state
+        );
 
-      mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
-      const expected_status_state = STATUS.MESSAGE.LIVE_VIEW_ACTIVE;
-      // confirm pre-condition
-      expect(store.state.playback.playback_state).not.toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
-      );
-      expect(store.state.flask.status_uuid).not.toStrictEqual(
-        expected_status_state
-      );
+        store.commit("playback/set_x_time_index", 456789);
 
-      store.commit("playback/set_x_time_index", 456789);
+        store.commit("playback/set_barcode_number", "MB2024599");
 
-      store.commit("playback/set_barcode_number", "MB2024599");
+        await store.dispatch("playback/stop_recording");
 
-      await store.dispatch("playback/stop_recording");
+        expect(mocked_axios.history.get[0].url).toStrictEqual(
+          `${base_url}/${api}?time_index=456789`
+        );
 
-      expect(mocked_axios.history.get[0].url).toStrictEqual(
-        `${base_url}/${api}?time_index=456789`
-      );
-
-      expect(store.state.playback.playback_state).toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
-      );
-      expect(store.state.playback.recording_start_time).toStrictEqual(0);
-      expect(store.state.flask.status_uuid).toStrictEqual(
-        expected_status_state
-      );
+        expect(store.state.playback.playback_state).toStrictEqual(
+          playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
+        );
+        expect(store.state.playback.recording_start_time).toStrictEqual(0);
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          expected_status_state
+        );
+        expect(
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).toStrictEqual(STATUS.MESSAGE.RECORDING);
+      });
     });
     describe("Given Waveform Pinging is active and /get_available_data returns 204 and Mantarray Command routes return status 200", () => {
       beforeEach(async () => {
