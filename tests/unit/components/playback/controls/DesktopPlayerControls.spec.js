@@ -169,26 +169,26 @@ describe("DesktopPlayerControls.vue", () => {
 
         mocked_axios
           .onGet(system_status_when_calibrating_regexp)
-          .replyOnce(200, { ui_status_code: STATUS.MESSAGE.CALIBRATING_uuid });
+          .replyOnce(200, { ui_status_code: STATUS.MESSAGE.CALIBRATING });
         mocked_axios
           .onGet(system_status_when_calibrating_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED_uuid });
+          .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED });
 
         mocked_axios
           .onGet(system_status_when_recording_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.RECORDING_uuid });
+          .reply(200, { ui_status_code: STATUS.MESSAGE.RECORDING });
 
         mocked_axios
           .onGet(system_status_when_live_view_active_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid });
+          .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE });
 
         mocked_axios
           .onGet(system_status_when_calibrated_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED_uuid });
+          .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED });
 
         mocked_axios
           .onGet(system_status_when_buffering_regexp)
-          .replyOnce(200, { ui_status_code: STATUS.MESSAGE.BUFFERING_uuid });
+          .replyOnce(200, { ui_status_code: STATUS.MESSAGE.BUFFERING });
         mocked_axios
           .onGet(system_status_when_buffering_regexp)
           .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid });

@@ -23,6 +23,7 @@ export async function ping_system_status() {
   if (result.status == 200) {
     const data = result.data;
     const status_uuid = data.ui_status_code;
+
     const simulation_mode = data.in_simulation_mode;
     if (this.state.barcode_manual_mode === false) {
       if (data.plate_barcode != undefined) {
@@ -37,41 +38,48 @@ export async function ping_system_status() {
       }
     }
     this.commit("set_simulation_status", simulation_mode);
-
-    if (status_uuid != this.state.status_uuid) {
-      this.commit("set_status_uuid", status_uuid);
-      if (status_uuid == STATUS.MESSAGE.CALIBRATION_NEEDED_uuid) {
-        this.dispatch(
-          "playback/transition_playback_state",
-          PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED,
-          { root: true }
-        );
-      }
-      if (status_uuid == STATUS.MESSAGE.STOPPED_uuid) {
-        this.dispatch(
-          "playback/transition_playback_state",
-          PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED,
-          { root: true }
-        );
-      }
-
-      if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid) {
-        if (
-          this.rootState.playback.playback_state ==
-          PLAYBACK_ENUMS.PLAYBACK_STATES.BUFFERING
-        ) {
-          this.dispatch("waveform/start_get_waveform_pinging", null, {
-            root: true,
-          });
+    if (
+      this.state.ignore_next_system_status_if_matching_this_status !==
+      status_uuid
+    ) {
+      if (status_uuid != this.state.status_uuid) {
+        this.commit("set_status_uuid", status_uuid);
+        if (status_uuid == STATUS.MESSAGE.CALIBRATION_NEEDED_uuid) {
+          this.dispatch(
+            "playback/transition_playback_state",
+            PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED,
+            { root: true }
+          );
         }
-        this.dispatch(
-          "playback/transition_playback_state",
-          PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,
-          { root: true }
-        );
+        if (status_uuid == STATUS.MESSAGE.STOPPED) {
+          this.dispatch(
+            "playback/transition_playback_state",
+            PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED,
+            { root: true }
+          );
+        }
+
+        if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid) {
+          if (
+            this.rootState.playback.playback_state ==
+            PLAYBACK_ENUMS.PLAYBACK_STATES.BUFFERING
+          ) {
+            this.dispatch("waveform/start_get_waveform_pinging", null, {
+              root: true,
+            });
+          }
+          this.dispatch(
+            "playback/transition_playback_state",
+            PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,
+            { root: true }
+          );
+        }
       }
     }
   }
+  this.commit("flask/ignore_next_system_status_if_matching_status", null, {
+    root: true,
+  }); // reset back to NULL now that a full call to /system_status has been processed
 }
 
 export default {

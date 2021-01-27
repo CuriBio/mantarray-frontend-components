@@ -9,7 +9,7 @@ export const STATUS = {
     CALIBRATION_NEEDED: "009301eb-625c-4dc4-9e92-1a4d0762465f",
     CALIBRATING_uuid: "43c08fc5-ca2f-4dcd-9dff-5e9324cb5dbf",
     CALIBRATING: "43c08fc5-ca2f-4dcd-9dff-5e9324cb5dbf",
-    STOPPED_uuid: "b480373b-9466-4fa0-92a6-fa5f8e340d30",
+    STOPPED: "b480373b-9466-4fa0-92a6-fa5f8e340d30",
     CALIBRATED: "b480373b-9466-4fa0-92a6-fa5f8e340d30",
     BUFFERING_uuid: "dc774d4b-6bd1-4717-b36e-6df6f1ef6cf4",
     BUFFERING: "dc774d4b-6bd1-4717-b36e-6df6f1ef6cf4",
