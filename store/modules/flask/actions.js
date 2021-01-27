@@ -51,7 +51,7 @@ export async function ping_system_status() {
             { root: true }
           );
         }
-        if (status_uuid == STATUS.MESSAGE.STOPPED_uuid) {
+        if (status_uuid == STATUS.MESSAGE.STOPPED) {
           this.dispatch(
             "playback/transition_playback_state",
             PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED,

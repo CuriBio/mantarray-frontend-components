@@ -187,7 +187,7 @@ describe("store/flask", () => {
       );
 
       expect(store.state.flask.status_uuid).toStrictEqual(
-        STATUS.MESSAGE.STOPPED_uuid
+        STATUS.MESSAGE.STOPPED
       );
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED

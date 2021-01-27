@@ -59,7 +59,12 @@ export default {
       "transition_playback_state",
       ENUMS.PLAYBACK_STATES.RECORDING
     );
-    context.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING_uuid, {
+    context.commit(
+      "flask/ignore_next_system_status_if_matching_status",
+      STATUS.MESSAGE.LIVE_VIEW_ACTIVE,
+      { root: true }
+    );
+    context.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING, {
       root: true,
     });
 
@@ -115,7 +120,7 @@ export default {
       ENUMS.PLAYBACK_STATES.CALIBRATED
     );
     context.commit("set_x_time_index", 0);
-    context.commit("flask/set_status_uuid", STATUS.MESSAGE.STOPPED_uuid, {
+    context.commit("flask/set_status_uuid", STATUS.MESSAGE.STOPPED, {
       root: true,
     });
     context.commit("stop_playback_progression");

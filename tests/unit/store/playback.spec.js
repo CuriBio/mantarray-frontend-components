@@ -401,12 +401,12 @@ describe("store/playback", () => {
         store.state.playback.playback_progression_interval_id
       ).toStrictEqual(expected_interval_id);
     });
-    test("When start_recording is invoked, Then the playback and status states mutate to recording", async () => {
+    test("Given all axios requests are mocked to return status 200 and a valid barcode is set in Vuex and a playback x time index has been set, When start_recording is invoked, Then the playback and status states mutate to recording and the start of recording time is mutated to the x_time_index and an axios call was made to /start_recording with the correct time index and barcode and hardware_test_recording parameter and ignore_next_system_status_if_matching_this_status is mutated to LIVE_VIEW_ACTIVE", async () => {
       const api = "start_recording";
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
-      const expected_status_state = STATUS.MESSAGE.RECORDING_uuid;
+      const expected_status_state = STATUS.MESSAGE.RECORDING;
 
       // confirm pre-condition
       expect(store.state.playback.playback_state).not.toStrictEqual(
@@ -433,12 +433,16 @@ describe("store/playback", () => {
         expected_status_state
       );
       expect(store.state.playback.recording_start_time).toStrictEqual(12345);
+
+      expect(
+        store.state.flask.ignore_next_system_status_if_matching_this_status
+      ).toStrictEqual(STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
     });
     test("When stop_recording is invoked, Then the playback and status states mutate to live_view_active", async () => {
       const api = "stop_recording";
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
-      const expected_status_state = STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid;
+      const expected_status_state = STATUS.MESSAGE.LIVE_VIEW_ACTIVE;
       // confirm pre-condition
       expect(store.state.playback.playback_state).not.toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
@@ -549,7 +553,7 @@ describe("store/playback", () => {
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
-      const expected_status_state = STATUS.MESSAGE.STOPPED_uuid;
+      const expected_status_state = STATUS.MESSAGE.STOPPED;
       store.commit("playback/set_x_time_index", 400);
       // confirm pre-condition
       expect(store.state.playback.playback_state).not.toStrictEqual(
@@ -580,7 +584,7 @@ describe("store/playback", () => {
 
       mocked_axios
         .onGet(system_status_when_calibrating_regexp)
-        .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED_uuid });
+        .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED });
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
@@ -614,7 +618,7 @@ describe("store/playback", () => {
 
       mocked_axios
         .onGet(system_status_when_buffering_regexp)
-        .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid })
+        .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE })
         .onGet(get_available_data_regex)
         .reply(204);
 
