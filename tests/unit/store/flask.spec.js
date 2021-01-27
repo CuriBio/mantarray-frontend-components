@@ -27,6 +27,8 @@ import {
   all_mantarray_commands_regexp as dist_all_mantarray_commands_regexp,
 } from "@/dist/mantarray.common";
 
+const valid_plate_barcode = "MB190440991";
+
 describe("store/flask", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -191,6 +193,48 @@ describe("store/flask", () => {
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
     });
+    describe("Given /system_status is mocked to return CALIBRATED as the status anda valid place barcode, and the current status is LIVE_VIEW_ACTIVE", () => {
+      beforeEach(() => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATED,
+          in_simulation_mode: false,
+          plate_barcode: valid_plate_barcode,
+        });
+
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
+      });
+      test("Given the ignore_next_system_status_if_matching_this_status state is not null, When ping_system_status is called, Then the ignore_next_system_status_if_matching_this_status state becomes null", async () => {
+        store.commit(
+          "flask/ignore_next_system_status_if_matching_status",
+          STATUS.MESSAGE.RECORDING
+        );
+
+        // confirm pre-condition
+        expect(
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).not.toBeNull();
+
+        await bound_ping_system_status();
+
+        expect(
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).toBeNull();
+      });
+      test("Given the ignore_next_system_status_if_matching_this_status state is set to CALIBRATED, When ping_system_status is called, Then the state stays as LIVE_VIEW_ACTIVE (no change) but the barcode does update in Vuex", async () => {
+        store.commit(
+          "flask/ignore_next_system_status_if_matching_status",
+          STATUS.MESSAGE.CALIBRATED
+        );
+
+        await bound_ping_system_status();
+
+        expect(store.state.flask.status_uuid).toStrictEqual(
+          STATUS.MESSAGE.LIVE_VIEW_ACTIVE
+        );
+        expect(store.state.playback.barcode).toStrictEqual(valid_plate_barcode);
+      });
+    });
+
     test("Given /system_status is mocked to return LIVE_VIEW_ACTIVE as the status and the current status is BUFFERING, When ping_system_status is called, Then the URL should include the current state UUID and the vuex status state should update to LIVE_VIEW_ACTIVE and the Vuex Playback State should update to LIVE_VIEW_ACTIVE", async () => {
       mocked_axios
         .onGet(system_status_regexp) // We pass in_simulation_mode true and validate default false is replaced
@@ -371,7 +415,7 @@ describe("store/flask", () => {
     });
     describe("SERVER_READY", () => {
       let context = null;
-      const valid_plate_barcode = "MB190440991";
+
       const invalid_plate_barcode = "MD20044099";
       beforeEach(async () => {
         context = await store.dispatch("flask/get_flask_action_context");
