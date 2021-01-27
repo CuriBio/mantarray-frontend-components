@@ -621,7 +621,7 @@ describe("store/playback", () => {
       });
     });
 
-    test("Given the /system_status is mocked with LIVE_VIEW_ACTIVE as response and /get_available_data as 204, When playback state mutates to BUFFERING and starts status_pinging in Flask, Then playback state mutates to LIVE_VIEW_ACTIVE", async () => {
+    test("Given the /system_status is mocked with LIVE_VIEW_ACTIVE as response and /get_available_data as 204, When playback state mutates to BUFFERING and starts status_pinging in Flask, Then playback state mutates to LIVE_VIEW_ACTIVE and ignore_next_system_status_if_matching_this_status mutates to CALIBRATED", async () => {
       const api = "start_managed_acquisition";
 
       mocked_axios
@@ -645,7 +645,9 @@ describe("store/playback", () => {
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
       );
-
+      expect(
+        store.state.flask.ignore_next_system_status_if_matching_this_status
+      ).toStrictEqual(STATUS.MESSAGE.CALIBRATED);
       await wait_for_expect(() => {
         expect(
           store.state.flask.status_ping_interval_id

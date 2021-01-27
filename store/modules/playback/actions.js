@@ -205,6 +205,11 @@ export default {
       "transition_playback_state",
       ENUMS.PLAYBACK_STATES.BUFFERING
     );
+    context.commit(
+      "flask/ignore_next_system_status_if_matching_status",
+      STATUS.MESSAGE.CALIBRATED,
+      { root: true }
+    );
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.BUFFERING, {
       root: true,
     });
