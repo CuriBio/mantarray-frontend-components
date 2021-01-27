@@ -79,9 +79,11 @@ describe("store/flask", () => {
   });
 
   describe("ping_system_status", () => {
-    let context = null;
+    let context;
+    let bound_ping_system_status;
     beforeEach(async () => {
       context = await store.dispatch("flask/get_flask_action_context");
+      bound_ping_system_status = ping_system_status.bind(context);
     });
     test("Given the current state is SERVER_READY, When the status response is CALIBRATION_NEEDED, Then the vuex status state should update to CALIBRATION_NEEDED and the Vuex Playback State should update to CALIBRATION_NEEDED", async () => {
       mocked_axios.onGet(system_status_regexp).reply(200, {
@@ -94,7 +96,6 @@ describe("store/flask", () => {
       );
       store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_READY);
 
-      const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
 
       expect(store.state.flask.status_uuid).toStrictEqual(
@@ -114,7 +115,6 @@ describe("store/flask", () => {
         "flask/set_status_uuid",
         STATUS.MESSAGE.SERVER_STILL_INITIALIZING
       );
-      const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
 
       expect(store.state.flask.status_uuid).not.toBe(
@@ -138,7 +138,6 @@ describe("store/flask", () => {
         .onGet(get_available_data_regex)
         .reply(204);
 
-      const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
 
       await wait_for_expect(() => {
@@ -159,7 +158,6 @@ describe("store/flask", () => {
         .onGet(get_available_data_regex)
         .reply(204);
 
-      const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
       const expected_interval_id = 173;
       const spied_set_interval = jest.spyOn(window, "setInterval");
@@ -179,7 +177,6 @@ describe("store/flask", () => {
 
       store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING);
 
-      const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
 
       expect(mocked_axios.history.get).toHaveLength(1);
@@ -204,7 +201,6 @@ describe("store/flask", () => {
 
       store.commit("flask/set_status_uuid", STATUS.MESSAGE.BUFFERING_uuid);
 
-      const bound_ping_system_status = ping_system_status.bind(context);
       await bound_ping_system_status();
       expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(
@@ -278,6 +274,23 @@ describe("store/flask", () => {
 
   describe("mutations", () => {
     describe("Given the store in its default state", () => {
+      test("When ignore_next_system_status_if_matching_status is committed, Then the state updates", () => {
+        // confirm pre-condition
+        expect(
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).toBeNull();
+
+        const expected = STATUS.MESSAGE.CALIBRATION_NEEDED;
+
+        store.commit(
+          "flask/ignore_next_system_status_if_matching_status",
+          expected
+        );
+        expect(
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).toStrictEqual(expected);
+      });
+
       test("Given the status is set to ERROR, When attempting to commit a different system status, Then it remains in ERROR mode", () => {
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
 

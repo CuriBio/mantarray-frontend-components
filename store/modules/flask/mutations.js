@@ -25,4 +25,7 @@ export default {
   set_barcode_manual_mode(state, new_value) {
     state.barcode_manual_mode = new_value;
   },
+  ignore_next_system_status_if_matching_status(state, new_status) {
+    state.ignore_next_system_status_if_matching_this_status = new_status;
+  },
 };

@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.12 (2021-01-27)
+------------------
+
+ - Fixed issue where an immediately returned /system_status could change the state if a start/stop calibration/recording/liveview command was just sent
+
 0.1.11 (2021-01-15)
 ------------------
 
