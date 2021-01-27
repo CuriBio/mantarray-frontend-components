@@ -59,7 +59,12 @@ export default {
       "transition_playback_state",
       ENUMS.PLAYBACK_STATES.RECORDING
     );
-    context.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING_uuid, {
+    context.commit(
+      "flask/ignore_next_system_status_if_matching_status",
+      STATUS.MESSAGE.LIVE_VIEW_ACTIVE,
+      { root: true }
+    );
+    context.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING, {
       root: true,
     });
 
@@ -87,12 +92,13 @@ export default {
     );
     context.commit("stop_recording");
     context.commit(
-      "flask/set_status_uuid",
-      STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid,
-      {
-        root: true,
-      }
+      "flask/ignore_next_system_status_if_matching_status",
+      STATUS.MESSAGE.RECORDING,
+      { root: true }
     );
+    context.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
+      root: true,
+    });
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
     //   context.commit(
@@ -115,7 +121,12 @@ export default {
       ENUMS.PLAYBACK_STATES.CALIBRATED
     );
     context.commit("set_x_time_index", 0);
-    context.commit("flask/set_status_uuid", STATUS.MESSAGE.STOPPED_uuid, {
+    context.commit(
+      "flask/ignore_next_system_status_if_matching_status",
+      STATUS.MESSAGE.LIVE_VIEW_ACTIVE,
+      { root: true }
+    );
+    context.commit("flask/set_status_uuid", STATUS.MESSAGE.STOPPED, {
       root: true,
     });
     context.commit("stop_playback_progression");
@@ -135,6 +146,12 @@ export default {
       endpoint: "start_calibration",
     };
     await this.dispatch("playback/start_stop_axios_request", payload);
+    context.commit(
+      "flask/ignore_next_system_status_if_matching_status",
+      this.state.flask.status_uuid,
+      { root: true }
+    );
+
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING, {
       root: true,
     });
@@ -193,6 +210,11 @@ export default {
     context.dispatch(
       "transition_playback_state",
       ENUMS.PLAYBACK_STATES.BUFFERING
+    );
+    context.commit(
+      "flask/ignore_next_system_status_if_matching_status",
+      STATUS.MESSAGE.CALIBRATED,
+      { root: true }
     );
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.BUFFERING, {
       root: true,

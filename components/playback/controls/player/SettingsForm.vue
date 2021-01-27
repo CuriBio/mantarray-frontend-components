@@ -231,7 +231,6 @@
     <!-- original MockFlow ID : cmpDe38625daffd1c35fa289a74e6dbbe4ff_txt -->
     <span class="span__settings_tool-tip_input-editor">
       <b-form-input
-        v-model="text"
         class="form-control input-sm pull-right"
         placeholder="2"
         style="visibility: visible"
