@@ -485,7 +485,7 @@ describe("store/playback", () => {
         await store.dispatch("waveform/start_get_waveform_pinging");
       });
 
-      test("When stop_live_view is dispatched, Then the clearInterval is called on the waveform_ping_interval_id", async () => {
+      test("When stop_live_view is dispatched, Then the clearInterval is called on the waveform_ping_interval_id and ignore_next_system_status_if_matching_this_status is set to LIVE_VIEW_ACTIVE", async () => {
         const spied_clear_interval = jest.spyOn(window, "clearInterval");
         const expected_interval_id =
           store.state.waveform.waveform_ping_interval_id;
@@ -494,6 +494,9 @@ describe("store/playback", () => {
 
         expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
         expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
+        expect(
+          store.state.flask.ignore_next_system_status_if_matching_this_status
+        ).toStrictEqual(STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
       });
       test("Given the Vuex plate_waveforms state has some values, When stop_live_view is dispatched, Then the plate_waveforms x/y data points are reset to empty arrays", async () => {
         store.commit("waveform/set_plate_waveforms", [
