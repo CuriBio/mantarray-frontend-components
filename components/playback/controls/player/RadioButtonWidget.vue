@@ -1,7 +1,6 @@
 <template>
   <div class="radio-button-widget">
     <b-form-radio-group
-      :ref="anchor - radio"
       v-model="selected"
       :options="radio_buttons"
       :aria-describedby="ariaDescribedby"
