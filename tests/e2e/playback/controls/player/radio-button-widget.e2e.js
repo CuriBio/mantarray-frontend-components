@@ -75,3 +75,20 @@ test("testing the Radio Button Widget with a x y offset Entered", async (t) => {
   );
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+
+fixture`playback/controls/player/radiobutton-widget/basic-radio-space`
+  .page // declare the fixture
+`http://localhost:8080/playback/controls/player/radiobutton-widget/basic-radio-space`; // specify the start page
+test("testing the Radio Button Widget with a x y offset Entered", async (t) => {
+  const screenshot_path_base = path.join(
+    "playback",
+    "controls",
+    "player",
+    "radio-widget"
+  );
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "basic-radio-space-between-button"
+  );
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
