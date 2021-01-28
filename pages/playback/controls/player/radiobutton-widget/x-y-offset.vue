@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      button_names: ["warm", "cool", "blue/red", "purple/green"],
+      button_names: ["Option A", "Option B", "Option C"],
     };
   },
 };
