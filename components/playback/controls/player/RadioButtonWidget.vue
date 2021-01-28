@@ -89,22 +89,18 @@ export default {
 /* active state i.e. displayed while the mouse is being pressed down */
 .custom-radio .custom-control-input:active ~ .custom-control-label::before {
   color: #fff;
-  background-color: #fff; /* black */
+  background-color: #fff; /* white */
 }
 
 /* the shadow; displayed while the element is in focus */
 .custom-radio .custom-control-input:focus ~ .custom-control-label::before,
 .custom-radio .custom-control-input:focus ~ .custom-control-label::after {
   color: #19ac8a;
-  box-shadow: 0 0 0 1px #19ac8a; /* 0 0 0 0.2rem rgba(255, 123, 255, 0.25);  pink, 25% opacity */
+  box-shadow: 0 0 0 1px #19ac8a;
 }
 
 .custom-control-input:hover ~ .custom-control-label::before,
 .custom-control-input:hover ~ .custom-control-label::after {
-  /* color:  #fff;  0 0 0 0.2rem rgba(255, 123, 255, 0.25);  pink, 25% opacity */
-  /* background-color: #fff;   black */
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='1.5' fill='%23fff'/%3E%3C/svg%3E");
-  z-index: 3;
-  /* border-radius: 60%; */
 }
 </style>

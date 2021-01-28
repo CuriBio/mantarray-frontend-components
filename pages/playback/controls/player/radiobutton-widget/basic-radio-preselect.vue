@@ -3,7 +3,11 @@
     <RadioButtonWidget
       :radio_buttons="button_names"
       :pre_selected="1"
+      @radio-btn-selected="handle_radio_click"
     ></RadioButtonWidget>
+    <div style="top: 100px; left: 108px; position: absolute">
+      Label : {{ label }} Index : {{ index }}
+    </div>
   </div>
 </template>
 
@@ -18,9 +22,16 @@ export default {
   data() {
     return {
       button_names: ["warm", "cool", "blue/red", "purple/green"],
+      label: "",
+      index: null,
     };
   },
-  methods: {},
+  methods: {
+    handle_radio_click: function (value) {
+      this.label = value.name;
+      this.index = value.index;
+    },
+  },
 };
 </script>
 <style>

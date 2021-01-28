@@ -17,10 +17,10 @@ export default {
       button_names: ["warm", "cool", "blue/red", "purple/green"],
     };
   },
-  methods: {},
 };
 </script>
 <style>
+/* custom control is a class for the div which contains the radio button and label */
 .custom-control {
   height: 80px;
 }
