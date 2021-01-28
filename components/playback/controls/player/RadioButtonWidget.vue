@@ -3,7 +3,6 @@
     <b-form-radio-group
       v-model="selected"
       :options="radio_buttons"
-      :aria-describedby="ariaDescribedby"
       name="radios-stacked"
       stacked
       @input="radio_toggle"
@@ -30,7 +29,6 @@ export default {
   data: function () {
     return {
       selected: false,
-      ariaDescribedby: true,
     };
   },
   created: function () {
