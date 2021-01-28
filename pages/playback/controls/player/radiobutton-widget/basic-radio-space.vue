@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      button_names: ["warm", "cool", "blue/red", "purple/green"],
+      button_names: ["email", "phone"],
     };
   },
 };

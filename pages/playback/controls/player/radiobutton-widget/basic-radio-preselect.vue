@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      button_names: ["warm", "cool", "blue/red", "purple/green"],
+      button_names: ["Daily", "Every 4 hours", "Every 12 hours", "Custom"],
       label: "",
       index: null,
     };

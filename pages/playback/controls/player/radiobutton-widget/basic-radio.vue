@@ -17,7 +17,6 @@ export default {
       button_names: ["warm", "cool", "blue/red", "purple/green"],
     };
   },
-  methods: {},
 };
 </script>
 <style>
