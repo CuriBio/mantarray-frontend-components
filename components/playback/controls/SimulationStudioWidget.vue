@@ -96,11 +96,38 @@
         :circle_y="36"
         :radius="28"
         :strk="'#1C1C1C'"
-        :plate_fill="'#B7B7B7'"
+        :plate_fill="'#005470'"
         :stroke_wdth="4"
         :index="3"
       ></PlateWell>
     </div>
+    <span
+      id="cmpD769c164e2146ba68914da5afd25e5655"
+      class="mfWFCompCls"
+      style="
+        pointer-events: all;
+        line-height: 100%;
+        transform: rotate(0deg);
+        overflow: hidden;
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        top: 137.356px;
+        left: 975px;
+        padding: 5px;
+        visibility: visible;
+        user-select: none;
+        font-family: Muli;
+        font-weight: bold;
+        font-style: normal;
+        text-decoration: none;
+        font-size: 20px;
+        color: rgb(255, 255, 255);
+        text-align: left;
+        z-index: 259;
+      "
+      >B</span
+    >
     <!-- original mockflow ID: id="cmpDc680429ca0a8c56f1514d8d454fd76b4" -->
     <div class="div__simulationstudio-plate-well-location-four">
       <PlateWell
@@ -171,11 +198,38 @@
         :circle_y="36"
         :radius="28"
         :strk="'#1C1C1C'"
-        :plate_fill="'#B7B7B7'"
+        :plate_fill="'#F9D78C'"
         :stroke_wdth="4"
         :index="8"
       ></PlateWell>
     </div>
+    <span
+      id="cmpDb41b8e7986b10ad60457b51fe58a7d71"
+      class="mfWFCompCls"
+      style="
+        pointer-events: all;
+        line-height: 100%;
+        transform: rotate(0deg);
+        overflow: hidden;
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        top: 197.356px;
+        left: 915px;
+        padding: 5px;
+        visibility: visible;
+        user-select: none;
+        font-family: Muli;
+        font-weight: bold;
+        font-style: normal;
+        text-decoration: none;
+        font-size: 20px;
+        color: rgb(255, 255, 255);
+        text-align: left;
+        z-index: 261;
+      "
+      >B</span
+    >
     <!-- original mockflow ID : id="cmpD2557f27c702e01f9903f46a1a0b39d9b" -->
     <div class="div__simulationstudio-plate-well-location-nine">
       <PlateWell
@@ -186,11 +240,38 @@
         :circle_y="36"
         :radius="28"
         :strk="'#1C1C1C'"
-        :plate_fill="'#B7B7B7'"
+        :plate_fill="'#DF6147'"
         :stroke_wdth="4"
         :index="9"
       ></PlateWell>
     </div>
+    <span
+      id="cmpD9c0907ae9cfcb82ad1fee1f5b69c1762"
+      class="mfWFCompCls"
+      style="
+        pointer-events: all;
+        line-height: 100%;
+        transform: rotate(0deg);
+        overflow: hidden;
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        top: 197.356px;
+        left: 975px;
+        padding: 5px;
+        visibility: visible;
+        user-select: none;
+        font-family: Muli;
+        font-weight: bold;
+        font-style: normal;
+        text-decoration: none;
+        font-size: 20px;
+        color: rgb(255, 255, 255);
+        text-align: left;
+        z-index: 263;
+      "
+      >B</span
+    >
     <!-- original mockflow ID : id="cmpD6d28fb7c7b3f10d8133f9e8f6e183970" -->
     <div class="div__simulationstudio-plate-well-location-ten">
       <PlateWell
@@ -206,23 +287,8 @@
         :index="10"
       ></PlateWell>
     </div>
-    <div
-      id="cmpDbc499ed7c179685301ef8cbde86d5ebc"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 179.352px;
-        left: 1075.5px;
-        visibility: visible;
-        z-index: 29;
-      "
-    >
+    <!-- original mockflow ID : id="cmpDbc499ed7c179685301ef8cbde86d5ebc" -->
+    <div class="div__simulationstudio-plate-well-location-eleven">
       <PlateWell
         :classname="'plate_11'"
         :svg_height="72"
@@ -236,23 +302,8 @@
         :index="11"
       ></PlateWell>
     </div>
-    <div
-      id="cmpD0959b9c2a8d6c2c9cea3880e25b3269e"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 239.278px;
-        left: 767.479px;
-        visibility: visible;
-        z-index: 31;
-      "
-    >
+    <!-- original mockflow ID : id="cmpD0959b9c2a8d6c2c9cea3880e25b3269e" -->
+    <div class="div__simulationstudio-plate-well-location-twelve">
       <PlateWell
         :classname="'plate_12'"
         :svg_height="72"
@@ -266,23 +317,8 @@
         :index="12"
       ></PlateWell>
     </div>
-    <div
-      id="cmpD37f37409867ab94ded6091c26b0b1690"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 239.278px;
-        left: 829.084px;
-        visibility: visible;
-        z-index: 33;
-      "
-    >
+    <!-- original mockflow ID :  id="cmpD37f37409867ab94ded6091c26b0b1690" -->
+    <div class="div__simulationstudio-plate-well-location-thirteen">
       <PlateWell
         :classname="'plate_13'"
         :svg_height="72"
@@ -296,23 +332,8 @@
         :index="13"
       ></PlateWell>
     </div>
-    <div
-      id="cmpD4c7dcc2a9caab65555dff4890816b811"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 239.278px;
-        left: 890.688px;
-        visibility: visible;
-        z-index: 35;
-      "
-    >
+    <!-- original mockflow ID :  id="cmpD4c7dcc2a9caab65555dff4890816b811" -->
+    <div class="div__simulationstudio-plate-well-location-fourteen">
       <PlateWell
         :classname="'plate_14'"
         :svg_height="72"
@@ -326,23 +347,8 @@
         :index="14"
       ></PlateWell>
     </div>
-    <div
-      id="cmpDf6f7e88135857174a5b423d6f5c6015e"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 239.278px;
-        left: 952.292px;
-        visibility: visible;
-        z-index: 37;
-      "
-    >
+    <!-- original mockflow ID : id="cmpDf6f7e88135857174a5b423d6f5c6015e" -->
+    <div class="div__simulationstudio-plate-well-location-fifteen">
       <PlateWell
         :classname="'plate_15'"
         :svg_height="72"
@@ -356,23 +362,8 @@
         :index="15"
       ></PlateWell>
     </div>
-    <div
-      id="cmpD15d70aa3324fc5ceace7904234dbbba5"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 239.278px;
-        left: 1013.9px;
-        visibility: visible;
-        z-index: 39;
-      "
-    >
+    <!-- original mockflow ID :  id="cmpD15d70aa3324fc5ceace7904234dbbba5" -->
+    <div class="div__simulationstudio-plate-well-location-sixteen">
       <PlateWell
         :classname="'plate_16'"
         :svg_height="72"
@@ -386,23 +377,8 @@
         :index="16"
       ></PlateWell>
     </div>
-    <div
-      id="cmpD032a9777a1b2b69dd5319852a34474e9"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 239.278px;
-        left: 1075.5px;
-        visibility: visible;
-        z-index: 41;
-      "
-    >
+    <!-- original mockflow ID :  id="cmpD032a9777a1b2b69dd5319852a34474e9" -->
+    <div class="div__simulationstudio-plate-well-location-seventeen">
       <PlateWell
         :classname="'plate_17'"
         :svg_height="72"
@@ -416,23 +392,8 @@
         :index="17"
       ></PlateWell>
     </div>
-    <div
-      id="cmpD320608a6ca596f39b31c8dae1b9bc1a8"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 299.157px;
-        left: 767.479px;
-        visibility: visible;
-        z-index: 43;
-      "
-    >
+    <!-- original mockflow ID : id="cmpD320608a6ca596f39b31c8dae1b9bc1a8" -->
+    <div class="div__simulationstudio-plate-well-location-eighteen">
       <PlateWell
         :classname="'plate_18'"
         :svg_height="72"
@@ -446,23 +407,8 @@
         :index="18"
       ></PlateWell>
     </div>
-    <div
-      id="cmpDa42d5045b1cac30acfb30ed673e6219d"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 299.203px;
-        left: 829.084px;
-        visibility: visible;
-        z-index: 45;
-      "
-    >
+    <!-- original mockflow ID : id="cmpDa42d5045b1cac30acfb30ed673e6219d" -->
+    <div class="div__simulationstudio-plate-well-location-nineteen">
       <PlateWell
         :classname="'plate_19'"
         :svg_height="72"
@@ -476,23 +422,8 @@
         :index="19"
       ></PlateWell>
     </div>
-    <div
-      id="cmpDc27ccb4aa19e9b3afff73e688924132d"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 299.203px;
-        left: 890.688px;
-        visibility: visible;
-        z-index: 47;
-      "
-    >
+    <!-- original mockflow ID :  id="cmpDc27ccb4aa19e9b3afff73e688924132d" -->
+    <div class="div__simulationstudio-plate-well-location-twenty">
       <PlateWell
         :classname="'plate_20'"
         :svg_height="72"
@@ -506,23 +437,8 @@
         :index="20"
       ></PlateWell>
     </div>
-    <div
-      id="cmpD8a9ecf6b662b877dc53fc21aea6adbac"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 299.203px;
-        left: 952.292px;
-        visibility: visible;
-        z-index: 49;
-      "
-    >
+    <!-- original mockflow ID : id="cmpD8a9ecf6b662b877dc53fc21aea6adbac" -->
+    <div class="div__simulationstudio-plate-well-location-twentyone">
       <PlateWell
         :classname="'plate_21'"
         :svg_height="72"
@@ -536,23 +452,8 @@
         :index="21"
       ></PlateWell>
     </div>
-    <div
-      id="cmpDa76d35a54ecbf373fd350d2a5ab020eb"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 299.203px;
-        left: 1013.9px;
-        visibility: visible;
-        z-index: 51;
-      "
-    >
+    <!-- original mockflow ID : id="cmpDa76d35a54ecbf373fd350d2a5ab020eb"  -->
+    <div class="div__simulationstudio-plate-well-location-twentytwo">
       <PlateWell
         :classname="'plate_22'"
         :svg_height="72"
@@ -566,23 +467,8 @@
         :index="22"
       ></PlateWell>
     </div>
-    <div
-      id="cmpDab5a3edfa307390da919175d89ea498a"
-      class="mfWFCompCls"
-      width="66"
-      height="66"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 66px;
-        height: 66px;
-        top: 299.203px;
-        left: 1075.5px;
-        visibility: visible;
-        z-index: 53;
-      "
-    >
+    <!-- original mockflow ID : id="cmpDab5a3edfa307390da919175d89ea498a"  -->
+    <div class="div__simulationstudio-plate-well-location-twentythree">
       <PlateWell
         :classname="'plate_23'"
         :svg_height="72"
@@ -919,13 +805,14 @@ export default {
   visibility: visible;
   user-select: none;
   font-family: Muli;
-  font-weight: bold;
+  font-weight: 700;
   font-style: normal;
   text-decoration: none;
   font-size: 20px;
   color: rgb(255, 255, 255);
   text-align: left;
   z-index: 101;
+  -webkit-font-smoothing: antialiased;
 }
 
 .div__simulationstudio-plate-well-location-one {
@@ -1092,5 +979,161 @@ export default {
   left: 1013.9px;
   visibility: visible;
   z-index: 27;
+}
+
+.div__simulationstudio-plate-well-location-eleven {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 179.352px;
+  left: 1075.5px;
+  visibility: visible;
+  z-index: 29;
+}
+
+.div__simulationstudio-plate-well-location-twelve {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 239.278px;
+  left: 767.479px;
+  visibility: visible;
+  z-index: 31;
+}
+
+.div__simulationstudio-plate-well-location-thirteen {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 239.278px;
+  left: 829.084px;
+  visibility: visible;
+  z-index: 33;
+}
+
+.div__simulationstudio-plate-well-location-fourteen {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 239.278px;
+  left: 890.688px;
+  visibility: visible;
+  z-index: 35;
+}
+
+.div__simulationstudio-plate-well-location-fifteen {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 239.278px;
+  left: 952.292px;
+  visibility: visible;
+  z-index: 37;
+}
+
+.div__simulationstudio-plate-well-location-sixteen {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 239.278px;
+  left: 1013.9px;
+  visibility: visible;
+  z-index: 39;
+}
+
+.div__simulationstudio-plate-well-location-seventeen {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 239.278px;
+  left: 1075.5px;
+  visibility: visible;
+  z-index: 41;
+}
+
+.div__simulationstudio-plate-well-location-eighteen {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 299.157px;
+  left: 767.479px;
+  visibility: visible;
+  z-index: 43;
+}
+
+.div__simulationstudio-plate-well-location-nineteen {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 299.203px;
+  left: 829.084px;
+  visibility: visible;
+  z-index: 45;
+}
+
+.div__simulationstudio-plate-well-location-twenty {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 299.203px;
+  left: 890.688px;
+  visibility: visible;
+  z-index: 47;
+}
+
+.div__simulationstudio-plate-well-location-twentyone {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 299.203px;
+  left: 952.292px;
+  visibility: visible;
+  z-index: 49;
+}
+
+.div__simulationstudio-plate-well-location-twentytwo {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 299.203px;
+  left: 1013.9px;
+  visibility: visible;
+  z-index: 51;
+}
+
+.div__simulationstudio-plate-well-location-twentythree {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  top: 299.203px;
+  left: 1075.5px;
+  visibility: visible;
+  z-index: 53;
 }
 </style>
