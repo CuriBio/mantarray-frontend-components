@@ -805,14 +805,13 @@ export default {
   visibility: visible;
   user-select: none;
   font-family: Muli;
-  font-weight: 700;
+  font-weight: bold;
   font-style: normal;
   text-decoration: none;
   font-size: 20px;
   color: rgb(255, 255, 255);
   text-align: left;
   z-index: 101;
-  -webkit-font-smoothing: antialiased;
 }
 
 .div__simulationstudio-plate-well-location-one {
