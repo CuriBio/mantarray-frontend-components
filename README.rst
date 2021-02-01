@@ -22,3 +22,13 @@ Frontend components for use in the desktop and cloud Mantarray Applications.
 .. image:: https://img.shields.io/badge/code_style-prettier-ff69b4.svg
    :target: https://github.com/prettier/prettier
    :alt: code style: prettier
+
+NodeJS Dependencies:
+
+.. image:: https://david-dm.org/CuriBio/mantarray-frontend-components/status.svg
+   :target: https://david-dm.org/CuriBio/mantarray-frontend-components
+   :alt: NodeDevDependency Status
+
+.. image:: https://david-dm.org/CuriBio/mantarray-frontend-components/dev-status.svg
+   :target: https://david-dm.org/CuriBio/mantarray-frontend-components?type=dev
+   :alt: NodeDependency Status
