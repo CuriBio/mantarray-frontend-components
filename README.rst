@@ -27,8 +27,8 @@ NodeJS Dependencies:
 
 .. image:: https://david-dm.org/CuriBio/mantarray-frontend-components/status.svg
    :target: https://david-dm.org/CuriBio/mantarray-frontend-components
-   :alt: NodeDevDependency Status
+   :alt: NodeDependency Status
 
 .. image:: https://david-dm.org/CuriBio/mantarray-frontend-components/dev-status.svg
    :target: https://david-dm.org/CuriBio/mantarray-frontend-components?type=dev
-   :alt: NodeDependency Status
+   :alt: NodeDevDependency Status
