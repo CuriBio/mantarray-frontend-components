@@ -61,4 +61,4 @@ export { default as BarcodeEditDialog } from "./components/playback/controls/pla
 export { default as RadioButtonWidget } from "./components/playback/controls/player/RadioButtonWidget.vue";
 
 export { default as StimulationStudioWidget } from "./components/playback/controls/StimulationStudioWidget.vue";
-export { default as StimulationStudioPlateMap } from "./components/playback/controls/StimulationStudioPlateMap.vue";
+export { default as StimulationStudioPlateWell } from "./components/playback/controls/StimulationStudioPlateWell.vue";

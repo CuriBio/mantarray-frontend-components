@@ -49,7 +49,7 @@
       >A</span
     >  -->
 
-    <StimulationStudioPlateMap :protocol_type="A"></StimulationStudioPlateMap>
+    <StimulationStudioPlateWell :protocol_type="A"></StimulationStudioPlateWell>
     <!-- original mockflow ID: id="cmpDbd8878d603962e4ba7ef88f8b0a71104" -->
     <div class="div__simulationstudio-plate-well-location-one">
       <PlateWell
@@ -488,7 +488,7 @@
 </template>
 <script>
 import PlateWell from "@/components/playback/controls/PlateWell.vue";
-import StimulationStudioPlateMap from "@/components/playback/controls/StimulationStudioPlateMap.vue";
+import StimulationStudioPlateWell from "@/components/playback/controls/StimulationStudioPlateWell.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -497,7 +497,7 @@ library.add(faPlusCircle);
 
 export default {
   name: "StimulationStudioWidget",
-  components: { FontAwesomeIcon, PlateWell, StimulationStudioPlateMap },
+  components: { FontAwesomeIcon, PlateWell, StimulationStudioPlateWell },
   props: {},
   data: function () {
     return {};
@@ -515,8 +515,8 @@ export default {
   position: absolute;
   width: 415px;
   height: 280px;
-  top: 94px;
-  left: 737.5px;
+  top: calc(94px - 94px);
+  left: calc(737.5px - 737.5px);
   visibility: visible;
   border: 0px none rgb(0, 0, 0);
   border-radius: 10px;
@@ -530,8 +530,8 @@ export default {
   position: absolute;
   width: 30px;
   height: 30px;
-  top: 97.5px;
-  left: 743.5px;
+  top: calc(97.5px - 94px);
+  left: calc(743.5px - 737.5px);
   visibility: visible;
   z-index: 96;
 }
@@ -560,8 +560,8 @@ export default {
   position: absolute;
   width: 53px;
   height: 27px;
-  top: 96px;
-  left: 773.479px;
+  top: calc(96px - 94px);
+  left: calc(773.479px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -583,8 +583,8 @@ export default {
   position: absolute;
   width: 53px;
   height: 27px;
-  top: 96px;
-  left: 835.084px;
+  top: calc(96px - 94px);
+  left: calc(835.084px -737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -606,8 +606,8 @@ export default {
   position: absolute;
   width: 53px;
   height: 27px;
-  top: 96px;
-  left: 896.688px;
+  top: calc(96px - 94px);
+  left: calc(896.688px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -629,8 +629,8 @@ export default {
   position: absolute;
   width: 53px;
   height: 27px;
-  top: 96px;
-  left: 958.292px;
+  top: calc(96px - 94px);
+  left: calc(958.292px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -652,8 +652,8 @@ export default {
   position: absolute;
   width: 53px;
   height: 27px;
-  top: 96px;
-  left: 1019.9px;
+  top: calc(96px - 94px);
+  left: calc(1019.9px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -675,8 +675,8 @@ export default {
   position: absolute;
   width: 53px;
   height: 27px;
-  top: 96px;
-  left: 1081.5px;
+  top: calc(96px - 94px);
+  left: calc(1081.5px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -698,8 +698,8 @@ export default {
   position: absolute;
   width: 22px;
   height: 25px;
-  top: 135.928px;
-  left: 744.5px;
+  top: calc(135.928px - 94px);
+  left: calc(744.5px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -721,8 +721,8 @@ export default {
   position: absolute;
   width: 22px;
   height: 25px;
-  top: 197.621px;
-  left: 744.5px;
+  top: calc(197.621px - 94px);
+  left: calc(744.5px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -744,8 +744,8 @@ export default {
   position: absolute;
   width: 22px;
   height: 25px;
-  top: 259.779px;
-  left: 744.5px;
+  top: calc(259.779px - 94px);
+  left: calc(744.5px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -767,8 +767,8 @@ export default {
   position: absolute;
   width: 22px;
   height: 25px;
-  top: 318.1px;
-  left: 744.5px;
+  top: calc(318.1px - 94px);
+  left: calc(744.5px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -786,10 +786,10 @@ export default {
   pointer-events: all;
   transform: rotate(0deg);
   position: absolute;
-  width: 72px;
-  height: 72px;
-  top: 116.427px;
-  left: 764.479px;
+  width: 66px;
+  height: 66px;
+  top: calc(119.427px - 94px);
+  left: calc(767.479px - 737.5px);
   visibility: visible;
   z-index: 9;
 }
@@ -802,8 +802,8 @@ export default {
   position: absolute;
   width: 25px;
   height: 25px;
-  top: 137px;
-  left: 788px;
+  top: calc(137px - 94px);
+  left: calc(790px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -823,8 +823,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 119.427px;
-  left: 829.084px;
+  top: calc(119.427px - 94px);
+  left: calc(829.084px - 737.5px);
   visibility: visible;
   z-index: 11;
 }
@@ -837,8 +837,8 @@ export default {
   position: absolute;
   width: 25px;
   height: 25px;
-  top: 137px;
-  left: 852px;
+  top: calc(137px - 94px);
+  left: calc(852px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -858,8 +858,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 119.427px;
-  left: 890.688px;
+  top: calc(119.427px - 94px);
+  left: calc(890.688px -737.5px);
   visibility: visible;
   z-index: 13;
 }
@@ -872,8 +872,8 @@ export default {
   position: absolute;
   width: 25px;
   height: 25px;
-  top: 137px;
-  left: 914px;
+  top: calc(137px - 94px);
+  left: calc(914px - 737.5px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -893,8 +893,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 119.427px;
-  left: 952.292px;
+  top: calc(119.427px - 94px);
+  left: calc(952.292px - 737.5px);
   visibility: visible;
   z-index: 15;
 }
@@ -905,8 +905,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 119.427px;
-  left: 1013.9px;
+  top: calc(119.427px - 94px);
+  left: calc(1013.9px - 737.5px);
   visibility: visible;
   z-index: 17;
 }
@@ -917,8 +917,8 @@ export default {
   position: absolute;
   width: 64px;
   height: 64px;
-  top: 119.992px;
-  left: 1076.5px;
+  top: calc(119.992px - 94px);
+  left: calc(1076.5px - 737.5px);
   visibility: visible;
   z-index: 87;
 }
@@ -929,8 +929,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 179.352px;
-  left: 767.479px;
+  top: calc(179.352px - 94px);
+  left: calc(767.479px - 737.5px);
   visibility: visible;
   z-index: 19;
 }
@@ -941,8 +941,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 179.352px;
-  left: 829.084px;
+  top: calc(179.352px - 94px);
+  left: calc(829.084px - 737.5px);
   visibility: visible;
   z-index: 21;
 }
@@ -953,8 +953,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 179.352px;
-  left: 890.688px;
+  top: calc(179.352px - 94px);
+  left: calc(890.688px - 737.5px);
   visibility: visible;
   z-index: 23;
 }
@@ -965,8 +965,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 179.352px;
-  left: 952.292px;
+  top: calc(179.352px - 94px);
+  left: calc(952.292px - 737.5px);
   visibility: visible;
   z-index: 25;
 }
@@ -977,8 +977,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 179.352px;
-  left: 1013.9px;
+  top: calc(179.352px - 94px);
+  left: calc(1013.9px - 737.5px);
   visibility: visible;
   z-index: 27;
 }
@@ -989,8 +989,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 179.352px;
-  left: 1075.5px;
+  top: calc(179.352px - 94px);
+  left: calc(1075.5px - 737.5px);
   visibility: visible;
   z-index: 29;
 }
@@ -1001,8 +1001,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 239.278px;
-  left: 767.479px;
+  top: calc(239.278px - 94px);
+  left: calc(767.479px - 737.5px);
   visibility: visible;
   z-index: 31;
 }
@@ -1013,8 +1013,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 239.278px;
-  left: 829.084px;
+  top: calc(239.278px - 94px);
+  left: calc(829.084px - 737.5px);
   visibility: visible;
   z-index: 33;
 }
@@ -1025,8 +1025,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 239.278px;
-  left: 890.688px;
+  top: calc(239.278px - 94px);
+  left: calc(890.688px - 737.5px);
   visibility: visible;
   z-index: 35;
 }
@@ -1037,8 +1037,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 239.278px;
-  left: 952.292px;
+  top: calc(239.278px - 94px);
+  left: calc(952.292px - 737.5px);
   visibility: visible;
   z-index: 37;
 }
@@ -1049,8 +1049,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 239.278px;
-  left: 1013.9px;
+  top: calc(239.278px - 94px);
+  left: calc(1013.9px - 737.5px);
   visibility: visible;
   z-index: 39;
 }
@@ -1061,8 +1061,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 239.278px;
-  left: 1075.5px;
+  top: calc(239.278px - 94px);
+  left: calc(1075.5px - 737.5px);
   visibility: visible;
   z-index: 41;
 }
@@ -1073,8 +1073,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 299.157px;
-  left: 767.479px;
+  top: calc(299.157px - 94px);
+  left: calc(767.479px - 737.5px);
   visibility: visible;
   z-index: 43;
 }
@@ -1085,8 +1085,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 299.203px;
-  left: 829.084px;
+  top: calc(299.203px - 94px);
+  left: calc(829.084px - 737.5px);
   visibility: visible;
   z-index: 45;
 }
@@ -1097,8 +1097,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 299.203px;
-  left: 890.688px;
+  top: calc(299.203px - 94px);
+  left: calc(890.688px - 737.5px);
   visibility: visible;
   z-index: 47;
 }
@@ -1109,8 +1109,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 299.203px;
-  left: 952.292px;
+  top: calc(299.203px - 94px);
+  left: calc(952.292px - 737.5px);
   visibility: visible;
   z-index: 49;
 }
@@ -1121,8 +1121,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 299.203px;
-  left: 1013.9px;
+  top: calc(299.203px - 94px);
+  left: calc(1013.9px - 737.5px);
   visibility: visible;
   z-index: 51;
 }
@@ -1133,8 +1133,8 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 299.203px;
-  left: 1075.5px;
+  top: calc(299.203px - 94px);
+  left: calc(1075.5px - 737.5px);
   visibility: visible;
   z-index: 53;
 }

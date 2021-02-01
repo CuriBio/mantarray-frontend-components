@@ -9,15 +9,14 @@
         :circle_y="36"
         :radius="28"
         :strk="'#FFFFFF'"
-        :plate_fill="'#19AC8A'"
-        :stroke_wdth="4"
+        :plate_fill="'#B7B7B7'"
+        :stroke_wdth="0"
         :index="0"
       ></PlateWell>
     </div>
     <span
       class="span__simulationstudio-plate-well-location-zero-protocol-value"
     >
-      A
     </span>
   </div>
 </template>
@@ -25,7 +24,7 @@
 import PlateWell from "@/components/playback/controls/PlateWell.vue";
 
 export default {
-  name: "StimulationStudioPlateMap",
+  name: "StimulationStudioPlateWell",
   components: {
     PlateWell,
   },
