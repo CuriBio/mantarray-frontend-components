@@ -29,7 +29,7 @@
     <span class="span__simulationstudio-row-C-label">C</span>
     <!-- original mockflow ID: id="cmpD98faa95f3101aa71b43be46356df0458" -->
     <span class="span__simulationstudio-row-D-label">D</span>
-    <!-- original mockflow ID: id="cmpDf03bac424694ec763a3e1153bfd596d8" -->
+    <!-- original mockflow ID: id="cmpDf03bac424694ec763a3e1153bfd596d8"
     <div class="div__simulationstudio-plate-well-location-zero">
       <PlateWell
         :classname="'plate_0'"
@@ -44,10 +44,12 @@
         :index="0"
       ></PlateWell>
     </div>
-    <!-- original mockflow ID: id="cmpD051dbde2494bd4cdd4b996b1c1e9a7c6" -->
+    original mockflow ID: id="cmpD051dbde2494bd4cdd4b996b1c1e9a7c6"
     <span class="span__simulationstudio-plate-well-location-zero-protocol-value"
       >A</span
-    >
+    >  -->
+
+    <StimulationStudioPlateMap :protocol_type="A"></StimulationStudioPlateMap>
     <!-- original mockflow ID: id="cmpDbd8878d603962e4ba7ef88f8b0a71104" -->
     <div class="div__simulationstudio-plate-well-location-one">
       <PlateWell
@@ -486,6 +488,7 @@
 </template>
 <script>
 import PlateWell from "@/components/playback/controls/PlateWell.vue";
+import StimulationStudioPlateMap from "@/components/playback/controls/StimulationStudioPlateMap.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -493,8 +496,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faPlusCircle);
 
 export default {
-  name: "SimulationStudioWidget",
-  components: { FontAwesomeIcon, PlateWell },
+  name: "StimulationStudioWidget",
+  components: { FontAwesomeIcon, PlateWell, StimulationStudioPlateMap },
   props: {},
   data: function () {
     return {};
