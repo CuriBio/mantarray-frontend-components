@@ -59,22 +59,146 @@ export default {
     };
   },
   computed: {
-    /* 0 5  9 13 17 21     In order to speed the rendering its better to pre-compute
-         1 6 10 14 18 22     top and left postions for the simulated well and center
-         2 7 11 15 19 23
-         3 8 12 16 20 24
+    /*   0 4  8 12 16 20     In order to speed the rendering its better to pre-compute
+         1 5  9 13 17 21     top and left postions for the simulated well and center
+         2 6 10 14 18 22
+         3 7 11 15 19 23
       */
     computed_top: function () {
-      return 25.427;
+      switch (this.index) {
+        case 0:
+        case 4:
+        case 8:
+        case 12:
+        case 16:
+        case 20:
+          return 25.427;
+        case 1:
+        case 5:
+        case 9:
+        case 13:
+        case 17:
+        case 21:
+          return 85.352;
+        case 2:
+        case 6:
+        case 10:
+        case 14:
+        case 18:
+        case 22:
+          return 145.278;
+        case 3:
+        case 7:
+        case 11:
+        case 15:
+        case 19:
+        case 23:
+          return 205.157;
+      }
+      return 0;
     },
     computed_left: function () {
-      return 29.979;
+      switch (this.index) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+          return 29.979;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+          return 91.584;
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+          return 153.188;
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+          return 214.792;
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+          return 276.4;
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+          return 339;
+      }
+      return 0;
     },
     computed_protocol_top: function () {
-      return 43;
+      switch (this.index) {
+        case 0:
+        case 4:
+        case 8:
+        case 12:
+        case 16:
+        case 20:
+          return 43;
+        case 1:
+        case 5:
+        case 9:
+        case 13:
+        case 17:
+        case 21:
+          return 102.925;
+        case 2:
+        case 6:
+        case 10:
+        case 14:
+        case 18:
+        case 22:
+          return 162.851;
+        case 3:
+        case 7:
+        case 11:
+        case 15:
+        case 19:
+        case 23:
+          return 222.73;
+      }
+      return 0;
     },
     computed_protocol_left: function () {
-      return 52.5;
+      switch (this.index) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+          return 52.5;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+          return 114.105;
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+          return 175.709;
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+          return 237.313;
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+          return 298.921;
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+          return 361.521;
+      }
+      return 0;
     },
   },
 };
