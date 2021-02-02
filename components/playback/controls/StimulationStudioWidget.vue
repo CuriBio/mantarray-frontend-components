@@ -49,7 +49,19 @@
       >A</span
     >  -->
 
-    <StimulationStudioPlateWell :protocol_type="A"></StimulationStudioPlateWell>
+    <StimulationStudioPlateWell
+      :classname="'plate_0'"
+      :protocol_type="''"
+      :svg_height="72"
+      :svg_width="72"
+      :circle_x="36"
+      :circle_y="36"
+      :radius="28"
+      :strk="'#1C1C1C'"
+      :protocol_fill="'#B7B7B7'"
+      :stroke_wdth="0"
+      :index="0"
+    ></StimulationStudioPlateWell>
     <!-- original mockflow ID: id="cmpDbd8878d603962e4ba7ef88f8b0a71104" -->
     <div class="div__simulationstudio-plate-well-location-one">
       <PlateWell
