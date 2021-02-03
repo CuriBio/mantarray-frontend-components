@@ -28,7 +28,7 @@
         'px;'
       "
     >
-      {{ protocol }}
+      {{ protocol_type }}
     </span>
   </div>
 </template>
@@ -52,11 +52,6 @@ export default {
     stroke_wdth: { type: Number, default: 0 },
     index: { type: Number, default: 0 },
     protocol_type: { type: String, default: "" },
-  },
-  data() {
-    return {
-      protocol: this.protocol_type,
-    };
   },
   computed: {
     /*   0 4  8 12 16 20     In order to speed the rendering its better to pre-compute
@@ -210,8 +205,6 @@ export default {
   position: absolute;
   width: 66px;
   height: 66px;
-  /*top: calc(119.427px - 94px);*/
-  /*left: calc(767.479px - 737.5px);*/
   visibility: visible;
   z-index: 9;
 }
@@ -224,8 +217,6 @@ export default {
   position: absolute;
   width: 25px;
   height: 25px;
-  /*top: calc(137px - 94px);*/
-  /*left: calc(790px - 737.5px);*/
   padding: 5px;
   visibility: visible;
   user-select: none;
