@@ -235,7 +235,7 @@ export default {
   text-decoration: none;
   font-size: 20px;
   color: rgb(255, 255, 255);
-  text-align: left;
+  text-align: center;
   z-index: 101;
 }
 </style>

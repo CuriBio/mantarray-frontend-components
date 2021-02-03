@@ -45,7 +45,7 @@ describe("StimulationStudioPlateWell.vue", () => {
     const well = wrapper.findAll("circle");
     expect(well).toHaveLength(1);
   });
-  test("Given that a protocol type is A is set index 0  and stroke_wdth = 4 as propsData, When the mounted successfully, Then validate that protocol Text A and color as provided is applied", async () => {
+  test("Given that a protocol type is A is set index 0  and stroke_wdth = 4 as propsData, When the mounted successfully, Then validate that protocol Text A and color as provided is applied on the circle with white cirlce of 4px", async () => {
     const propsData = {
       classname: "'plate_0'",
       protocol_type: "'A'",
@@ -71,5 +71,28 @@ describe("StimulationStudioPlateWell.vue", () => {
 
     expect(protocol_name.text()).toStrictEqual("'A'");
     expect(well_circle.attributes("fill")).toStrictEqual("'#19AC8A'");
+    expect(well_circle.attributes("stroke")).toStrictEqual("'#FFFFFF'");
+  });
+  test("Given that a protocol type is A is set index -1  and stroke_wdth = 4 as propsData, When the mounted successfully, Then validate that protocol Text A and color as provided is applied on the circle with white cirlce of 4px", async () => {
+    const propsData = {
+      classname: "'plate_0'",
+      protocol_type: "'A'",
+      svg_height: 72,
+      svg_width: 72,
+      circle_x: 36,
+      circle_y: 36,
+      radius: 28,
+      strk: "'#FFFFFF'",
+      protocol_fill: "'#19AC8A'",
+      stroke_wdth: 4,
+      index: -1,
+    };
+    wrapper = mount(StimulationStudioPlateWell, {
+      propsData,
+      store,
+      localVue,
+    });
+    const well = wrapper.findAll("circle");
+    expect(well).toHaveLength(1);
   });
 });

@@ -33,14 +33,14 @@
       v-for="well_index in Array(24).keys()"
       :key="well_index"
       :classname="'plate_' + well_index"
-      :protocol_type="''"
+      :protocol_type="getProtocolAlphabet(protocol_code[well_index])"
       :svg_height="72"
       :svg_width="72"
       :circle_x="36"
       :circle_y="36"
       :radius="28"
       :strk="'#1C1C1C'"
-      :protocol_fill="'#B7B7B7'"
+      :protocol_fill="getProtocolColor(protocol_code[well_index])"
       :stroke_wdth="0"
       :index="well_index"
     ></StimulationStudioPlateWell>
@@ -57,11 +57,51 @@ library.add(faPlusCircle);
 export default {
   name: "StimulationStudioWidget",
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
-  props: {},
-  data: function () {
-    return {};
+  props: {
+    protocol_code: {
+      type: Array /* This Eslint rule forces to have an function vue/require-valid-default-prop  and creates a function which cannot be code covered */,
+      default() {
+        return [];
+      },
+    },
   },
-  methods: {},
+  methods: {
+    getProtocolColor(index) {
+      if (index >= 0 && index <= 25) {
+        return "#19AC8A";
+      }
+      if (index >= 26 && index <= 51) {
+        return "#005470";
+      }
+      if (index >= 52 && index <= 77) {
+        return "#f9d78c";
+      }
+      if (index >= 78 && index <= 95) {
+        return "#df6147";
+      }
+      return "#B7B7B7";
+    },
+    getProtocolAlphabet(value) {
+      if (value >= 0 && value <= 25) {
+        return this.generateAlphabetArray()[value];
+      }
+      if (value >= 26 && value <= 51) {
+        return this.generateAlphabetArray()[value - 26];
+      }
+      if (value >= 52 && value <= 77) {
+        return this.generateAlphabetArray()[value - 52];
+      }
+      if (value >= 78 && value <= 95) {
+        return this.generateAlphabetArray()[value - 78];
+      }
+      return "";
+    },
+    generateAlphabetArray() {
+      const alpha = Array.from(Array(26)).map((e, i) => i + 65);
+      const alphabet = alpha.map((x) => String.fromCharCode(x));
+      return alphabet;
+    },
+  },
 };
 </script>
 <style>
@@ -339,362 +379,5 @@ export default {
   color: rgb(183, 183, 183);
   text-align: left;
   z-index: 59;
-}
-
-.div__simulationstudio-plate-well-location-zero {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(119.427px - 94px);
-  left: calc(767.479px - 737.5px);
-  visibility: visible;
-  z-index: 9;
-}
-
-.span__simulationstudio-plate-well-location-zero-protocol-value {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  top: calc(137px - 94px);
-  left: calc(790px - 737.5px);
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: bold;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 20px;
-  color: rgb(255, 255, 255);
-  text-align: left;
-  z-index: 101;
-}
-
-.div__simulationstudio-plate-well-location-one {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(119.427px - 94px);
-  left: calc(829.084px - 737.5px);
-  visibility: visible;
-  z-index: 11;
-}
-
-.span__simulationstudio-plate-well-location-one-protocol-value {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  top: calc(137px - 94px);
-  left: calc(852px - 737.5px);
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: bold;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 20px;
-  color: rgb(255, 255, 255);
-  text-align: left;
-  z-index: 103;
-}
-
-.div__simulationstudio-plate-well-location-two {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(119.427px - 94px);
-  left: calc(890.688px -737.5px);
-  visibility: visible;
-  z-index: 13;
-}
-
-.span__simulationstudio-plate-well-location-two-protocol-value {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  top: calc(137px - 94px);
-  left: calc(914px - 737.5px);
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: bold;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 20px;
-  color: rgb(255, 255, 255);
-  text-align: left;
-  z-index: 105;
-}
-
-.div__simulationstudio-plate-well-location-three {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(119.427px - 94px);
-  left: calc(952.292px - 737.5px);
-  visibility: visible;
-  z-index: 15;
-}
-
-.div__simulationstudio-plate-well-location-four {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(119.427px - 94px);
-  left: calc(1013.9px - 737.5px);
-  visibility: visible;
-  z-index: 17;
-}
-
-.div__simulationstudio-plate-well-location-five {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  top: calc(119.992px - 94px);
-  left: calc(1076.5px - 737.5px);
-  visibility: visible;
-  z-index: 87;
-}
-
-.div__simulationstudio-plate-well-location-six {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(179.352px - 94px);
-  left: calc(767.479px - 737.5px);
-  visibility: visible;
-  z-index: 19;
-}
-
-.div__simulationstudio-plate-well-location-seven {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(179.352px - 94px);
-  left: calc(829.084px - 737.5px);
-  visibility: visible;
-  z-index: 21;
-}
-
-.div__simulationstudio-plate-well-location-eight {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(179.352px - 94px);
-  left: calc(890.688px - 737.5px);
-  visibility: visible;
-  z-index: 23;
-}
-
-.div__simulationstudio-plate-well-location-nine {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(179.352px - 94px);
-  left: calc(952.292px - 737.5px);
-  visibility: visible;
-  z-index: 25;
-}
-
-.div__simulationstudio-plate-well-location-ten {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(179.352px - 94px);
-  left: calc(1013.9px - 737.5px);
-  visibility: visible;
-  z-index: 27;
-}
-
-.div__simulationstudio-plate-well-location-eleven {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(179.352px - 94px);
-  left: calc(1075.5px - 737.5px);
-  visibility: visible;
-  z-index: 29;
-}
-
-.div__simulationstudio-plate-well-location-twelve {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(239.278px - 94px);
-  left: calc(767.479px - 737.5px);
-  visibility: visible;
-  z-index: 31;
-}
-
-.div__simulationstudio-plate-well-location-thirteen {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(239.278px - 94px);
-  left: calc(829.084px - 737.5px);
-  visibility: visible;
-  z-index: 33;
-}
-
-.div__simulationstudio-plate-well-location-fourteen {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(239.278px - 94px);
-  left: calc(890.688px - 737.5px);
-  visibility: visible;
-  z-index: 35;
-}
-
-.div__simulationstudio-plate-well-location-fifteen {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(239.278px - 94px);
-  left: calc(952.292px - 737.5px);
-  visibility: visible;
-  z-index: 37;
-}
-
-.div__simulationstudio-plate-well-location-sixteen {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(239.278px - 94px);
-  left: calc(1013.9px - 737.5px);
-  visibility: visible;
-  z-index: 39;
-}
-
-.div__simulationstudio-plate-well-location-seventeen {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(239.278px - 94px);
-  left: calc(1075.5px - 737.5px);
-  visibility: visible;
-  z-index: 41;
-}
-
-.div__simulationstudio-plate-well-location-eighteen {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(299.157px - 94px);
-  left: calc(767.479px - 737.5px);
-  visibility: visible;
-  z-index: 43;
-}
-
-.div__simulationstudio-plate-well-location-nineteen {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(299.203px - 94px);
-  left: calc(829.084px - 737.5px);
-  visibility: visible;
-  z-index: 45;
-}
-
-.div__simulationstudio-plate-well-location-twenty {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(299.203px - 94px);
-  left: calc(890.688px - 737.5px);
-  visibility: visible;
-  z-index: 47;
-}
-
-.div__simulationstudio-plate-well-location-twentyone {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(299.203px - 94px);
-  left: calc(952.292px - 737.5px);
-  visibility: visible;
-  z-index: 49;
-}
-
-.div__simulationstudio-plate-well-location-twentytwo {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(299.203px - 94px);
-  left: calc(1013.9px - 737.5px);
-  visibility: visible;
-  z-index: 51;
-}
-
-.div__simulationstudio-plate-well-location-twentythree {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: calc(299.203px - 94px);
-  left: calc(1075.5px - 737.5px);
-  visibility: visible;
-  z-index: 53;
 }
 </style>
