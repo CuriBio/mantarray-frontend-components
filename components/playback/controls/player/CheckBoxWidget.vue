@@ -2,17 +2,27 @@
   <div>
     <div class="div__checkbox-background">
       <div class="div__checkbox_selected" @click="check_toggle()">
-        <FontAwesomeIcon v-show="status" :icon="['fa', 'check-square']" />
-        <FontAwesomeIcon v-show="!status" :icon="['fa', 'square']" />
+        <FontAwesomeIcon v-show="status" :icon="['far', 'check-square']" />
+        <FontAwesomeIcon v-show="!status" :icon="['far', 'square']" />
         Ascorbic&nbsp;Acid
+      </div>
+      <div class="div__checkbox_selected" @click="check_toggle1()">
+        <FontAwesomeIcon v-show="status1" :icon="['far', 'check-square']" />
+        <FontAwesomeIcon v-show="!status1" :icon="['far', 'square']" />
+        &nbsp;&nbsp;&nbsp;&nbsp;B27
+      </div>
+      <div class="div__checkbox_selected" @click="check_toggle2()">
+        <FontAwesomeIcon v-show="status2" :icon="['far', 'check-square']" />
+        <FontAwesomeIcon v-show="!status2" :icon="['far', 'square']" />
+        &nbsp;&nbsp;&nbsp;&nbsp;B27 (-insulin)
       </div>
     </div>
   </div>
 </template>
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCheckSquare as fa_checksquare } from "@fortawesome/free-solid-svg-icons";
-import { faSquare as fa_square } from "@fortawesome/free-solid-svg-icons";
+import { faCheckSquare as fa_checksquare } from "@fortawesome/free-regular-svg-icons";
+import { faSquare as fa_square } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fa_checksquare);
@@ -25,11 +35,19 @@ export default {
   data() {
     return {
       status: false,
+      status1: false,
+      status2: false,
     };
   },
   methods: {
     check_toggle: function () {
       this.status = !this.status;
+    },
+    check_toggle1: function () {
+      this.status1 = !this.status1;
+    },
+    check_toggle2: function () {
+      this.status2 = !this.status2;
     },
   },
 };
@@ -45,7 +63,7 @@ export default {
   top: 0px;
   left: 0px;
   width: 140px;
-  height: 50px;
+  height: 150px;
   font-family: Muli;
   font-weight: normal;
   font-style: normal;
