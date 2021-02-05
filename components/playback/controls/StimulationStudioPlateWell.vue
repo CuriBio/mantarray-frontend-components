@@ -50,7 +50,14 @@ export default {
     strk: { type: String, default: "" },
     protocol_fill: { type: String, default: "" },
     stroke_wdth: { type: Number, default: 0 },
-    index: { type: Number, default: 0 },
+    index: {
+      type: Number,
+      default: 0,
+      validator: (value) => {
+        // Eli (2/5/21) The way this component currently computes the top/left positions requires that the index be within the valid range for a 24-well plate.
+        return value >= 0 && value < 24;
+      },
+    },
     protocol_type: { type: String, default: "" },
   },
   computed: {
@@ -67,6 +74,8 @@ export default {
                              as a result in the renderer the execution improves to a great extent
 
       */
+    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
+    // eslint-disable-next-line vue/return-in-computed-property
     computed_top: function () {
       switch (this.index) {
         case 0:
@@ -98,8 +107,9 @@ export default {
         case 23:
           return 205.157;
       }
-      return 0;
     },
+    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
+    // eslint-disable-next-line vue/return-in-computed-property
     computed_left: function () {
       switch (this.index) {
         case 0:
@@ -133,8 +143,9 @@ export default {
         case 23:
           return 339;
       }
-      return 0;
     },
+    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
+    // eslint-disable-next-line vue/return-in-computed-property
     computed_protocol_top: function () {
       switch (this.index) {
         case 0:
@@ -166,8 +177,9 @@ export default {
         case 23:
           return 222.73;
       }
-      return 0;
     },
+    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
+    // eslint-disable-next-line vue/return-in-computed-property
     computed_protocol_left: function () {
       switch (this.index) {
         case 0:
@@ -201,7 +213,6 @@ export default {
         case 23:
           return 361.521;
       }
-      return 0;
     },
   },
 };
