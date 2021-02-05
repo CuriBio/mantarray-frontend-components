@@ -147,7 +147,6 @@ export default {
   border: 0px none rgb(0, 0, 0);
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
-  z-index: 7;
   pointer-events: all;
 }
 .div__simulationstudio-plus-icon-container {
@@ -159,7 +158,6 @@ export default {
   top: calc(97.5px - 94px);
   left: calc(743.5px - 737.5px);
   visibility: visible;
-  z-index: 96;
 }
 
 .span__simulationstudio-plus-icon {
@@ -198,7 +196,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: center;
-  z-index: 63;
 }
 
 .span__simulationstudio-column-two-label {
@@ -221,7 +218,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: center;
-  z-index: 65;
 }
 
 .span__simulationstudio-column-three-label {
@@ -244,7 +240,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: center;
-  z-index: 67;
 }
 
 .span__simulationstudio-column-four-label {
@@ -267,7 +262,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: center;
-  z-index: 69;
 }
 
 .span__simulationstudio-column-five-label {
@@ -290,7 +284,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: center;
-  z-index: 71;
 }
 
 .span__simulationstudio-column-six-label {
@@ -313,7 +306,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: center;
-  z-index: 73;
 }
 
 .span__simulationstudio-row-A-label {
@@ -336,7 +328,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: left;
-  z-index: 57;
 }
 
 .span__simulationstudio-row-B-label {
@@ -359,7 +350,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: left;
-  z-index: 55;
 }
 
 .span__simulationstudio-row-C-label {
@@ -382,7 +372,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: left;
-  z-index: 61;
 }
 
 .span__simulationstudio-row-D-label {
@@ -405,6 +394,5 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: left;
-  z-index: 59;
 }
 </style>
