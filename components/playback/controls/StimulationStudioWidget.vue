@@ -33,14 +33,14 @@
       v-for="well_index in Array(24).keys()"
       :key="well_index"
       :classname="'plate_' + well_index"
-      :protocol_type="getProtocolAlphabet(protocol_code[well_index])"
+      :protocol_type="getProtocolAlphabet(protocol_codes[well_index])"
       :svg_height="72"
       :svg_width="72"
       :circle_x="36"
       :circle_y="36"
       :radius="28"
       :strk="'#1C1C1C'"
-      :protocol_fill="getProtocolColor(protocol_code[well_index])"
+      :protocol_fill="getProtocolColor(protocol_codes[well_index])"
       :stroke_wdth="0"
       :index="well_index"
     ></StimulationStudioPlateWell>
@@ -58,12 +58,44 @@ export default {
   name: "StimulationStudioWidget",
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
   props: {
-    protocol_code: {
-      type: Array /* This Eslint rule forces to have an function vue/require-valid-default-prop  and creates a function which cannot be code covered */,
+    protocol_codes: {
+      type: Array,
       default() {
         return [];
       },
     },
+  },
+  data() {
+    return {
+      alphabet: [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+      ],
+    };
   },
   methods: {
     getProtocolColor(index) {
@@ -83,23 +115,18 @@ export default {
     },
     getProtocolAlphabet(value) {
       if (value >= 0 && value <= 25) {
-        return this.generateAlphabetArray()[value];
+        return this.alphabet[value];
       }
       if (value >= 26 && value <= 51) {
-        return this.generateAlphabetArray()[value - 26];
+        return this.alphabet[value - 26];
       }
       if (value >= 52 && value <= 77) {
-        return this.generateAlphabetArray()[value - 52];
+        return this.alphabet[value - 52];
       }
       if (value >= 78 && value <= 95) {
-        return this.generateAlphabetArray()[value - 78];
+        return this.alphabet[value - 78];
       }
       return "";
-    },
-    generateAlphabetArray() {
-      const alpha = Array.from(Array(26)).map((e, i) => i + 65);
-      const alphabet = alpha.map((x) => String.fromCharCode(x));
-      return alphabet;
     },
   },
 };

@@ -58,6 +58,14 @@ export default {
          1 5  9 13 17 21     top and left postions for the simulated well and center
          2 6 10 14 18 22
          3 7 11 15 19 23
+                             The Stimulation studio, always comprises of 24 wells and placed in a japanese order,
+                             as such left to right is a faster way and its quicker way of finding values and just
+                             incrementing the left offset where in the top offset remains the same during rendering
+                             but, our bussiness logic of japanese order makes to recompute top and left offset to
+                             arrange in the japanese order resulting in more computation.
+                             So in order to reduce the same at present we compute the offset and return for left and top
+                             as a result in the renderer the execution improves to a great extent
+
       */
     computed_top: function () {
       switch (this.index) {

@@ -1,6 +1,6 @@
 <template>
   <div style="top: 111px; left: 88px; position: absolute">
-    <ComponentToTest :protocol_code="protocol_list"></ComponentToTest>
+    <ComponentToTest :protocol_codes="protocol_list"></ComponentToTest>
   </div>
 </template>
 

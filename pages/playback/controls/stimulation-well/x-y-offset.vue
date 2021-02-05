@@ -2,14 +2,14 @@
   <div style="top: 111px; left: 88px; position: absolute">
     <ComponentToTest
       :classname="'plate_0'"
-      :protocol_type="''"
+      :protocol_type="'A'"
       :svg_height="72"
       :svg_width="72"
       :circle_x="36"
       :circle_y="36"
       :radius="28"
       :strk="'#1C1C1C'"
-      :protocol_fill="'#B7B7B7'"
+      :protocol_fill="'#df6147'"
       :stroke_wdth="0"
       :index="0"
     ></ComponentToTest>

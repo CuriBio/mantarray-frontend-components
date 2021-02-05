@@ -1,28 +1,28 @@
 <template>
   <div>
-    <ComponentToTest :protocol_code="protocol_list"></ComponentToTest>
+    <ComponentToTest :protocol_codes="protocol_list"></ComponentToTest>
     <span
       id="test-1"
       style="top: 0px; position: absolute; left: 500px"
-      @click="tealcolor"
+      @click="teal_color"
       >Teal</span
     >
     <span
       id="test-2"
       style="top: 0px; position: absolute; left: 700px"
-      @click="bluecolor"
+      @click="blue_color"
       >Blue</span
     >
     <span
       id="test-3"
       style="top: 0px; position: absolute; left: 900px"
-      @click="yellowcolor"
+      @click="yellow_color"
       >Yellow</span
     >
     <span
       id="test-4"
       style="top: 0px; position: absolute; left: 1100px"
-      @click="orangecolor"
+      @click="orange_color"
       >Orange</span
     >
   </div>
@@ -52,16 +52,16 @@ export default {
     for (let l = 0; l < 9; l++) this.protocol_list4.push(l);
   },
   methods: {
-    tealcolor() {
+    teal_color() {
       this.protocol_list = this.protocol_list1;
     },
-    bluecolor() {
+    blue_color() {
       this.protocol_list = this.protocol_list2;
     },
-    yellowcolor() {
+    yellow_color() {
       this.protocol_list = this.protocol_list3;
     },
-    orangecolor() {
+    orange_color() {
       this.protocol_list = this.protocol_list4;
     },
   },

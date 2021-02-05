@@ -1,29 +1,15 @@
 import { mount } from "@vue/test-utils";
 import StimulationStudioPlateWell from "@/components/playback/controls/StimulationStudioPlateWell.vue";
 import { StimulationStudioPlateWell as DistComponentToTest } from "@/dist/mantarray.common";
-import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 
 let wrapper = null;
 
 const localVue = createLocalVue();
-localVue.use(Vuex);
-let NuxtStore;
-let store;
 
 describe("StimulationStudioPlateWell.vue", () => {
-  beforeAll(async () => {
-    // note the store will mutate across tests, so make sure to re-create it in beforeEach
-    const storePath = `${process.env.buildDir}/store.js`;
-    NuxtStore = await import(storePath);
-  });
-
-  beforeEach(async () => {
-    store = await NuxtStore.createStore();
-  });
-
   afterEach(() => wrapper.destroy());
-  test("When mounting StimulationStudioPlateWell from the build dist file, Then it loads successfully", async () => {
+  test("When mounting StimulationStudioPlateWell from the built dist file, Then it loads successfully", async () => {
     const propsData = {
       classname: "'plate_0'",
       protocol_type: "''",
@@ -39,7 +25,6 @@ describe("StimulationStudioPlateWell.vue", () => {
     };
     wrapper = mount(DistComponentToTest, {
       propsData,
-      store,
       localVue,
     });
     const well = wrapper.findAll("circle");
@@ -61,7 +46,6 @@ describe("StimulationStudioPlateWell.vue", () => {
     };
     wrapper = mount(StimulationStudioPlateWell, {
       propsData,
-      store,
       localVue,
     });
     const protocol_name = wrapper.find(
@@ -89,7 +73,6 @@ describe("StimulationStudioPlateWell.vue", () => {
     };
     wrapper = mount(StimulationStudioPlateWell, {
       propsData,
-      store,
       localVue,
     });
     const well = wrapper.findAll("circle");
