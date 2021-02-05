@@ -99,8 +99,8 @@ export default {
   box-shadow: 0 0 0 1px #19ac8a;
 }
 
-.custom-control-input:hover ~ .custom-control-label::before,
-.custom-control-input:hover ~ .custom-control-label::after {
+.custom-radio .custom-control-input:hover ~ .custom-control-label::before,
+.custom-radio .custom-control-input:hover ~ .custom-control-label::after {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='1.5' fill='%23fff'/%3E%3C/svg%3E");
 }
 </style>
