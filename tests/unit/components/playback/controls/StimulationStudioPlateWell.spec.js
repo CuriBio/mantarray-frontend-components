@@ -57,25 +57,15 @@ describe("StimulationStudioPlateWell.vue", () => {
     expect(well_circle.attributes("fill")).toStrictEqual("'#19AC8A'");
     expect(well_circle.attributes("stroke")).toStrictEqual("'#FFFFFF'");
   });
-  test("Given that a protocol type is A is set index -1  and stroke_wdth = 4 as propsData, When the mounted successfully, Then validate that protocol Text A and color as provided is applied on the circle with white cirlce of 4px", async () => {
-    const propsData = {
-      classname: "'plate_0'",
-      protocol_type: "'A'",
-      svg_height: 72,
-      svg_width: 72,
-      circle_x: 36,
-      circle_y: 36,
-      radius: 28,
-      strk: "'#FFFFFF'",
-      protocol_fill: "'#19AC8A'",
-      stroke_wdth: 4,
-      index: -1,
-    };
-    wrapper = mount(StimulationStudioPlateWell, {
-      propsData,
-      localVue,
-    });
-    const well = wrapper.findAll("circle");
-    expect(well).toHaveLength(1);
-  });
+  test.each([
+    ["too small", -1],
+    ["too large", 24],
+  ])(
+    "When the index prop validator is called on a value that is %s (%s), Then it declares it invalid",
+    async (test_description, test_index) => {
+      // adapted from https://vueschool.io/articles/vuejs-tutorials/how-to-test-custom-prop-validators-in-vuejs/
+      const validator = StimulationStudioPlateWell.props.index.validator;
+      expect(validator(test_index)).toBe(false);
+    }
+  );
 });
