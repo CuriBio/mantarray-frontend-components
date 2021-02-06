@@ -8,9 +8,9 @@
       :circle_x="36"
       :circle_y="36"
       :radius="28"
-      :strk="'#000000'"
+      :stroke="'#000000'"
       :protocol_fill="'#19AC8A'"
-      :stroke_wdth="4"
+      :stroke_width="4"
       :index="0"
     ></ComponentToTest>
   </div>

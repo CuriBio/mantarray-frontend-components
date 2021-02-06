@@ -39,9 +39,9 @@
       :circle_x="36"
       :circle_y="36"
       :radius="28"
-      :strk="'#1C1C1C'"
+      :stroke="'#1C1C1C'"
       :protocol_fill="getProtocolColor(protocol_codes[well_index])"
-      :stroke_wdth="0"
+      :stroke_width="0"
       :index="well_index"
     ></StimulationStudioPlateWell>
   </div>

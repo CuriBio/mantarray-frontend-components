@@ -11,9 +11,9 @@
         :circle_x="circle_x"
         :circle_y="circle_y"
         :radius="radius"
-        :strk="strk"
+        :strk="stroke"
         :plate_fill="protocol_fill"
-        :stroke_wdth="stroke_wdth"
+        :stroke_wdth="stroke_width"
         :index="index"
       ></PlateWell>
     </div>
@@ -47,9 +47,9 @@ export default {
     circle_x: { type: Number, default: 0 },
     circle_y: { type: Number, default: 0 },
     radius: { type: Number, default: 0 },
-    strk: { type: String, default: "" },
+    stroke: { type: String, default: "" },
     protocol_fill: { type: String, default: "" },
-    stroke_wdth: { type: Number, default: 0 },
+    stroke_width: { type: Number, default: 0 },
     index: {
       type: Number,
       default: 0,

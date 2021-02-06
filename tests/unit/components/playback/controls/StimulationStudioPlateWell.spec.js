@@ -18,9 +18,9 @@ describe("StimulationStudioPlateWell.vue", () => {
       circle_x: 36,
       circle_y: 36,
       radius: 28,
-      strk: "'#1C1C1C'",
+      stroke: "'#1C1C1C'",
       protocol_fill: "'#B7B7B7'",
-      stroke_wdth: 0,
+      stroke_width: 0,
       index: 0,
     };
     wrapper = mount(DistComponentToTest, {
@@ -39,9 +39,9 @@ describe("StimulationStudioPlateWell.vue", () => {
       circle_x: 36,
       circle_y: 36,
       radius: 28,
-      strk: "'#FFFFFF'",
+      stroke: "'#FFFFFF'",
       protocol_fill: "'#19AC8A'",
-      stroke_wdth: 4,
+      stroke_width: 4,
       index: 0,
     };
     wrapper = mount(StimulationStudioPlateWell, {
