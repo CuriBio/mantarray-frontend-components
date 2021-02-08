@@ -1,0 +1,251 @@
+<template>
+  <div>
+    <div
+      class="div__simulationstudio-plate-well-location"
+      :style="'top:' + computed_top + 'px;' + 'left:' + computed_left + 'px;'"
+    >
+      <PlateWell
+        :classname="classname"
+        :svg_height="svg_height"
+        :svg_width="svg_width"
+        :circle_x="circle_x"
+        :circle_y="circle_y"
+        :radius="radius"
+        :strk="stroke"
+        :plate_fill="protocol_fill"
+        :stroke_wdth="stroke_width"
+        :index="index"
+      ></PlateWell>
+    </div>
+    <span
+      class="span__simulationstudio-plate-well-protocol-location"
+      :style="
+        'top:' +
+        computed_protocol_top +
+        'px;' +
+        'left:' +
+        computed_protocol_left +
+        'px;'
+      "
+    >
+      {{ protocol_type }}
+    </span>
+  </div>
+</template>
+<script>
+import PlateWell from "@/components/playback/controls/PlateWell.vue";
+
+export default {
+  name: "StimulationStudioPlateWell",
+  components: {
+    PlateWell,
+  },
+  props: {
+    classname: { type: String, default: "" },
+    svg_height: { type: Number, default: 0 },
+    svg_width: { type: Number, default: 0 },
+    circle_x: { type: Number, default: 0 },
+    circle_y: { type: Number, default: 0 },
+    radius: { type: Number, default: 0 },
+    stroke: { type: String, default: "" },
+    protocol_fill: { type: String, default: "" },
+    stroke_width: { type: Number, default: 0 },
+    index: {
+      type: Number,
+      default: 0,
+      validator: (value) => {
+        // Eli (2/5/21) The way this component currently computes the top/left positions requires that the index be within the valid range for a 24-well plate.
+        return value >= 0 && value < 24;
+      },
+    },
+    protocol_type: { type: String, default: "" },
+  },
+  computed: {
+    /*   0 4  8 12 16 20     In order to speed the rendering its better to pre-compute
+         1 5  9 13 17 21     top and left postions for the simulated well and center
+         2 6 10 14 18 22
+         3 7 11 15 19 23
+                             The Stimulation studio, always comprises of 24 wells and placed in a japanese order,
+                             as such left to right is a faster way and its quicker way of finding values and just
+                             incrementing the left offset where in the top offset remains the same during rendering
+                             but, our bussiness logic of japanese order makes to recompute top and left offset to
+                             arrange in the japanese order resulting in more computation.
+                             So in order to reduce the same at present we compute the offset and return for left and top
+                             as a result in the renderer the execution improves to a great extent
+
+      */
+    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
+    // eslint-disable-next-line vue/return-in-computed-property
+    computed_top: function () {
+      switch (this.index) {
+        case 0:
+        case 4:
+        case 8:
+        case 12:
+        case 16:
+        case 20:
+          return 25.427;
+        case 1:
+        case 5:
+        case 9:
+        case 13:
+        case 17:
+        case 21:
+          return 85.352;
+        case 2:
+        case 6:
+        case 10:
+        case 14:
+        case 18:
+        case 22:
+          return 145.278;
+        case 3:
+        case 7:
+        case 11:
+        case 15:
+        case 19:
+        case 23:
+          return 205.157;
+      }
+    },
+    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
+    // eslint-disable-next-line vue/return-in-computed-property
+    computed_left: function () {
+      switch (this.index) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+          return 29.979;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+          return 91.584;
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+          return 153.188;
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+          return 214.792;
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+          return 276.4;
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+          return 339;
+      }
+    },
+    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
+    // eslint-disable-next-line vue/return-in-computed-property
+    computed_protocol_top: function () {
+      switch (this.index) {
+        case 0:
+        case 4:
+        case 8:
+        case 12:
+        case 16:
+        case 20:
+          return 43;
+        case 1:
+        case 5:
+        case 9:
+        case 13:
+        case 17:
+        case 21:
+          return 102.925;
+        case 2:
+        case 6:
+        case 10:
+        case 14:
+        case 18:
+        case 22:
+          return 162.851;
+        case 3:
+        case 7:
+        case 11:
+        case 15:
+        case 19:
+        case 23:
+          return 222.73;
+      }
+    },
+    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
+    // eslint-disable-next-line vue/return-in-computed-property
+    computed_protocol_left: function () {
+      switch (this.index) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+          return 52.5;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+          return 114.105;
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+          return 175.709;
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+          return 237.313;
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+          return 298.921;
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+          return 361.521;
+      }
+    },
+  },
+};
+</script>
+<style>
+.div__simulationstudio-plate-well-location {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  visibility: visible;
+  z-index: 9;
+}
+
+.span__simulationstudio-plate-well-protocol-location {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 20px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  z-index: 101;
+}
+</style>
