@@ -7,6 +7,8 @@ let wrapper = null;
 
 const localVue = createLocalVue();
 
+const color_series_hex_codes = ["#19AC8A", "#005470", "#f9d78c", "#df6147"];
+
 describe("StimulationStudioWidget.vue", () => {
   afterEach(() => wrapper.destroy());
   test("When mounting StimulationStudioWidget from the built dist file, Then it loads successfully", async () => {
@@ -20,7 +22,7 @@ describe("StimulationStudioWidget.vue", () => {
     const well = wrapper.findAll("circle");
     expect(well).toHaveLength(24);
   });
-  test("Given the StimulationStudioWidget is in the range of 0 - 25, When mounted successfully, Then verify that Stimulation Plate Well is teal color", async () => {
+  test("When mounted with protocol codes 0-25, Then representative wells are all colored teal", async () => {
     const protocol_list = Array.from(Array(26).keys());
 
     const propsData = {
@@ -31,9 +33,14 @@ describe("StimulationStudioWidget.vue", () => {
       localVue,
     });
     const well = wrapper.findAll("circle");
-    expect(well.at(0).attributes("fill")).toStrictEqual("#19AC8A");
+    expect(well.at(0).attributes("fill")).toStrictEqual(
+      color_series_hex_codes[0]
+    );
+    expect(well.at(19).attributes("fill")).toStrictEqual(
+      color_series_hex_codes[0]
+    );
   });
-  test("Given the StimulationStudioWidget is having null for the prop protocol_code, When mounted successfully, Then verify that Stimulation Plate Well is grey color and no Alphabets applied visible", async () => {
+  test("When mounted without an explicitly supplied protocol_code prop, Then representative wells are all colored grey and without any displayed letter", async () => {
     const propsData = {};
     wrapper = mount(StimulationStudioWidget, {
       propsData,
@@ -49,7 +56,7 @@ describe("StimulationStudioWidget.vue", () => {
     expect(protocol_name.at(23).text()).toStrictEqual("");
   });
 
-  test("Given the StimulationStudioWidget is in the range of 0 - 23, When mounted successfully, Then verify that Stimulation Plate Well is teal color and Alphabets A-X is visible", async () => {
+  test("When mounted with protocol codes in the range 0-23, Then representative wells are all teal in color and display the letter corresponding to the protocol code", async () => {
     const protocol_list = Array.from(Array(24).keys());
 
     const propsData = {
@@ -63,12 +70,16 @@ describe("StimulationStudioWidget.vue", () => {
     const protocol_name = wrapper.findAll(
       ".span__simulationstudio-plate-well-protocol-location"
     );
-    expect(well.at(0).attributes("fill")).toStrictEqual("#19AC8A");
+    expect(well.at(0).attributes("fill")).toStrictEqual(
+      color_series_hex_codes[0]
+    );
     expect(protocol_name.at(0).text()).toStrictEqual("A");
-    expect(well.at(23).attributes("fill")).toStrictEqual("#19AC8A");
+    expect(well.at(23).attributes("fill")).toStrictEqual(
+      color_series_hex_codes[0]
+    );
     expect(protocol_name.at(23).text()).toStrictEqual("X");
   });
-  test("Given the StimulationStudioWidget is in the range of 24 - 48, When mounted successfully, Then verify that Stimulation Plate Well is teal color(at 0) and blue color(at 23) and Alphabets Y-V is visible", async () => {
+  test("When mounted with protocol codes 24-47, Then the well color should change at the code 25/26 border and the displayed letter should reset to the beginning of the alphabet", async () => {
     const protocol_list = [];
 
     for (let i = 24; i < 48; i++) protocol_list.push(i);
@@ -83,12 +94,24 @@ describe("StimulationStudioWidget.vue", () => {
     const protocol_name = wrapper.findAll(
       ".span__simulationstudio-plate-well-protocol-location"
     );
-    expect(well.at(0).attributes("fill")).toStrictEqual("#19AC8A");
-    expect(protocol_name.at(0).text()).toStrictEqual("Y");
-    expect(well.at(23).attributes("fill")).toStrictEqual("#005470");
-    expect(protocol_name.at(23).text()).toStrictEqual("V");
+    const index_of_last_well_in_first_color_series = protocol_list.indexOf(25);
+    const index_of_first_well_in_second_color_series = protocol_list.indexOf(
+      26
+    );
+    expect(
+      well.at(index_of_last_well_in_first_color_series).attributes("fill")
+    ).toStrictEqual(color_series_hex_codes[0]);
+    expect(
+      protocol_name.at(index_of_last_well_in_first_color_series).text()
+    ).toStrictEqual("Z");
+    expect(
+      well.at(index_of_first_well_in_second_color_series).attributes("fill")
+    ).toStrictEqual(color_series_hex_codes[1]);
+    expect(
+      protocol_name.at(index_of_first_well_in_second_color_series).text()
+    ).toStrictEqual("A");
   });
-  test("Given the StimulationStudioWidget is in the range of 48 - 71, When mounted successfully, Then verify that Stimulation Plate Well is blue color(at 0) and yellow color(at 23) and Alphabets W-V is visible", async () => {
+  test("When mounted with protocol codes 48-71, Then the well color should change at the code 51/52 border and the displayed letter should reset to the beginning of the alphabet", async () => {
     const protocol_list = [];
 
     for (let i = 48; i < 72; i++) protocol_list.push(i);
@@ -103,15 +126,26 @@ describe("StimulationStudioWidget.vue", () => {
     const protocol_name = wrapper.findAll(
       ".span__simulationstudio-plate-well-protocol-location"
     );
-    expect(well.at(0).attributes("fill")).toStrictEqual("#005470");
-    expect(protocol_name.at(0).text()).toStrictEqual("W");
-    expect(well.at(23).attributes("fill")).toStrictEqual("#f9d78c");
-    expect(protocol_name.at(23).text()).toStrictEqual("T");
+    const index_of_last_well_in_second_color_series = protocol_list.indexOf(51);
+    const index_of_first_well_in_third_color_series = protocol_list.indexOf(52);
+
+    expect(
+      well.at(index_of_last_well_in_second_color_series).attributes("fill")
+    ).toStrictEqual(color_series_hex_codes[1]);
+    expect(
+      protocol_name.at(index_of_last_well_in_second_color_series).text()
+    ).toStrictEqual("Z");
+    expect(
+      well.at(index_of_first_well_in_third_color_series).attributes("fill")
+    ).toStrictEqual(color_series_hex_codes[2]);
+    expect(
+      protocol_name.at(index_of_first_well_in_third_color_series).text()
+    ).toStrictEqual("A");
   });
-  test("Given the StimulationStudioWidget is in the range of 72 - 96, When mounted successfully, Then verify that Stimulation Plate Well is yellow color(at 0) and orange color(at 23) and Alphabets W-V is visible", async () => {
+  test("When mounted with protocol codes 72-95, Then the well color should change at the code 77/78 border and the displayed letter should reset to the beginning of the alphabet and the final well should have the correct letter & color", async () => {
     const protocol_list = [];
 
-    for (let i = 72; i < 95; i++) protocol_list.push(i);
+    for (let i = 72; i < 96; i++) protocol_list.push(i);
     protocol_list.push(0);
 
     const propsData = {
@@ -125,14 +159,28 @@ describe("StimulationStudioWidget.vue", () => {
     const protocol_name = wrapper.findAll(
       ".span__simulationstudio-plate-well-protocol-location"
     );
-    expect(well.at(0).attributes("fill")).toStrictEqual("#f9d78c");
-    expect(protocol_name.at(0).text()).toStrictEqual("U");
-    expect(well.at(6).attributes("fill")).toStrictEqual("#df6147");
-    expect(protocol_name.at(6).text()).toStrictEqual("A");
-    expect(well.at(23).attributes("fill")).toStrictEqual("#19AC8A");
-    expect(protocol_name.at(23).text()).toStrictEqual("A");
+    const index_of_last_well_in_third_color_series = protocol_list.indexOf(77);
+    const index_of_first_well_in_fourth_color_series = protocol_list.indexOf(
+      78
+    );
+    expect(
+      well.at(index_of_last_well_in_third_color_series).attributes("fill")
+    ).toStrictEqual(color_series_hex_codes[2]);
+    expect(
+      protocol_name.at(index_of_last_well_in_third_color_series).text()
+    ).toStrictEqual("Z");
+    expect(
+      well.at(index_of_first_well_in_fourth_color_series).attributes("fill")
+    ).toStrictEqual(color_series_hex_codes[3]);
+    expect(
+      protocol_name.at(index_of_first_well_in_fourth_color_series).text()
+    ).toStrictEqual("A");
+    expect(well.at(23).attributes("fill")).toStrictEqual(
+      color_series_hex_codes[3]
+    );
+    expect(protocol_name.at(23).text()).toStrictEqual("R");
   });
-  test("Given the StimulationStudioWidget is null, When mounted successfully, Then verify that Stimulation Plate Well is grey color(at 0)  and no letters are visible in the first or last wells", async () => {
+  test("When mounted with an empty protocol code array, Then representative wells are all colored grey and without any displayed letter", async () => {
     const protocol_list = [];
 
     const propsData = {
