@@ -18,28 +18,17 @@ const edit_user_cancel_btn = span__button_label.nth(0);
 const edit_user_delete_btn = span__button_label.nth(1);
 const edit_user_save_btn = span__button_label.nth(2);
 
-fixture`playback/controls/player/settings-button/edit-user`
-  .page // declare the fixture
-`http://localhost:8080/playback/controls/player/settings-button/edit-user`; // specify the start page
+fixture`settings/edit-user`.page // declare the fixture
+`http://localhost:8080/settings/edit-user`; // specify the start page
 
 test("testing for the edit user Valid State", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "edit-user"
-  );
+  const screenshot_path_base = path.join("settings", "edit-user");
   const screenshot_path = path.join(screenshot_path_base, "edit-user-valid");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("testing for the edit user Valid State Cancel Hover", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "edit-user"
-  );
+  const screenshot_path_base = path.join("settings", "edit-user");
   const screenshot_path = path.join(
     screenshot_path_base,
     "edit-user-Cancel-Hover"
@@ -49,12 +38,7 @@ test("testing for the edit user Valid State Cancel Hover", async (t) => {
 });
 
 test("testing for the edit user Valid State Delete Hover", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "edit-user"
-  );
+  const screenshot_path_base = path.join("settings", "edit-user");
   const screenshot_path = path.join(
     screenshot_path_base,
     "edit-user-Delete-Hover"
@@ -64,12 +48,7 @@ test("testing for the edit user Valid State Delete Hover", async (t) => {
 });
 
 test("testing for the edit user Valid State Save Hover", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "edit-user"
-  );
+  const screenshot_path_base = path.join("settings", "edit-user");
   const screenshot_path = path.join(
     screenshot_path_base,
     "edit-user-Save-Hover"
@@ -79,12 +58,7 @@ test("testing for the edit user Valid State Save Hover", async (t) => {
 });
 
 test("testing the edit user INVALID State", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "edit-user"
-  );
+  const screenshot_path_base = path.join("settings", "edit-user");
   await t.click(user_alphanumeric_input_field).pressKey("ctrl+a delete");
   await t.click(user_id_nickname_input_field).pressKey("ctrl+a delete");
   const screenshot_path = path.join(screenshot_path_base, "edit-user-invalid");

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { PlayerControlsSettingsButton } from "../../../../../dist/mantarray.common";
+import { PlayerControlsSettingsButton } from "@/dist/mantarray.common";
 
 export default {
   components: {

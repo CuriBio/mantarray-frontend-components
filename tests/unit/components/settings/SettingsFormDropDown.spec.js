@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/playback/controls/player/SettingsForm.vue";
+import ComponentToTest from "@/components/settings/SettingsForm.vue";
 
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";

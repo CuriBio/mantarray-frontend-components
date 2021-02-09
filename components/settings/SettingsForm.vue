@@ -330,10 +330,10 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
-import AddCustomer from "@/components/playback/controls/player/AddCustomer.vue";
-import EditCustomer from "@/components/playback/controls/player/EditCustomer.vue";
-import AddUser from "@/components/playback/controls/player/AddUser.vue";
-import EditUser from "@/components/playback/controls/player/EditUser.vue";
+import AddCustomer from "@/components/settings/AddCustomer.vue";
+import EditCustomer from "@/components/settings/EditCustomer.vue";
+import AddUser from "@/components/settings/AddUser.vue";
+import EditUser from "@/components/settings/EditUser.vue";
 import InputDropDown from "@/components/playback/controls/player/InputDropDown.vue";
 
 Vue.use(BootstrapVue);

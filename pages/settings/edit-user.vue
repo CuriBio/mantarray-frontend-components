@@ -6,7 +6,7 @@
 
 <script>
 import { EditUser } from "@/dist/mantarray.common";
-// import EditUser from "@/components/playback/controls/player/EditUser.vue";
+// import EditUser from "@/components/settings/EditUser.vue";
 export default {
   components: {
     EditUser,

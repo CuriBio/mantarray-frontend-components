@@ -6,7 +6,7 @@
 
 <script>
 import { EditCustomer } from "@/dist/mantarray.common";
-// import EditCustomer from "@/components/playback/controls/player/EditCustomer.vue";
+// import EditCustomer from "@/components/settings/EditCustomer.vue";
 export default {
   components: {
     EditCustomer,
