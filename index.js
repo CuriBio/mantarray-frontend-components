@@ -37,7 +37,7 @@ export { default as YAxisControls } from "./components/playback/controls/YAxisCo
 export { default as WebPlayerControls } from "./components/playback/controls/player/WebPlayerControls.vue";
 export { default as DesktopPlayerControls } from "./components/playback/controls/player/DesktopPlayerControls.vue";
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
-export { default as SettingsForm } from "./components/playback/controls/player/SettingsForm.vue";
+export { default as SettingsForm } from "./components/settings/SettingsForm.vue";
 
 export { default as PlateNavigator } from "./components/playback/controls/PlateNavigator.vue";
 export { default as PlateBarcode } from "./components/playback/controls/PlateBarcode.vue";
@@ -52,10 +52,10 @@ export { default as InputWidget } from "./components/playback/controls/player/In
 export { default as ButtonWidget } from "./components/playback/controls/player/ButtonWidget.vue";
 export { default as InputDropDown } from "./components/playback/controls/player/InputDropDown.vue";
 
-export { default as AddCustomer } from "./components/playback/controls/player/AddCustomer.vue";
-export { default as EditCustomer } from "./components/playback/controls/player/EditCustomer.vue";
-export { default as AddUser } from "./components/playback/controls/player/AddUser.vue";
-export { default as EditUser } from "./components/playback/controls/player/EditUser.vue";
+export { default as AddCustomer } from "./components/settings/AddCustomer.vue";
+export { default as EditCustomer } from "./components/settings/EditCustomer.vue";
+export { default as AddUser } from "./components/settings/AddUser.vue";
+export { default as EditUser } from "./components/settings/EditUser.vue";
 
 export { default as BarcodeEditDialog } from "./components/playback/controls/player/BarcodeEditDialog.vue";
 export { default as RadioButtonWidget } from "./components/playback/controls/player/RadioButtonWidget.vue";
