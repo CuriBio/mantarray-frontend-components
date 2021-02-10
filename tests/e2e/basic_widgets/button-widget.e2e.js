@@ -7,17 +7,12 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 const span__button_label = Selector(".span__button_label");
 const button_event_handler = Selector(".button-event-handler");
 
-fixture`playback/controls/player/button-widget/basic-button`
+fixture`basic_widgets/button-widget/basic-button`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/button-widget/basic-button`; // specify the start page
+`http://localhost:8080/basic_widgets/button-widget/basic-button`; // specify the start page
 
 test("testing the button Widget basic display", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "button-widget"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "button-widget");
   const screenshot_path = path.join(
     screenshot_path_base,
     "basic-button-widget"
@@ -26,12 +21,7 @@ test("testing the button Widget basic display", async (t) => {
 });
 
 test("testing the ButtonWidget and hover on the buttons", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "button-widget"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "button-widget");
 
   const buttons = ["cancel", "delete", "save"];
   var count = await span__button_label.count;
@@ -46,17 +36,12 @@ test("testing the ButtonWidget and hover on the buttons", async (t) => {
   }
 });
 
-fixture`playback/controls/player/button-widget/button-grey`
+fixture`basic_widgets/button-widget/button-grey`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/button-widget/button-grey`; // specify the start page
+`http://localhost:8080/basic_widgets/button-widget/button-grey`; // specify the start page
 
 test("testing the button Widget basic display with Greyed button", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "button-widget"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "button-widget");
   const screenshot_path = path.join(
     screenshot_path_base,
     "button-grey-display"
@@ -64,24 +49,19 @@ test("testing the button Widget basic display with Greyed button", async (t) => 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/button-widget/multiple-button`
+fixture`basic_widgets/button-widget/multiple-button`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/button-widget/multiple-button`; // specify the start page
+`http://localhost:8080/basic_widgets/button-widget/multiple-button`; // specify the start page
 
 test("testing the multiple options capability using Button Widget with an X-Y Offset", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "button-widget"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "button-widget");
   const screenshot_path = path.join(screenshot_path_base, "multiple-button");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/button-widget/button-event`
+fixture`basic_widgets/button-widget/button-event`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/button-widget/button-event`; // specify the start page
+`http://localhost:8080/basic_widgets/button-widget/button-event`; // specify the start page
 test("testing the ButtonWidget and hover on the buttons", async (t) => {
   const buttons_label = ["Cancel", "Delete ID", "Save ID"];
   var count = await span__button_label.count;

@@ -334,7 +334,7 @@ import AddCustomer from "@/components/settings/AddCustomer.vue";
 import EditCustomer from "@/components/settings/EditCustomer.vue";
 import AddUser from "@/components/settings/AddUser.vue";
 import EditUser from "@/components/settings/EditUser.vue";
-import InputDropDown from "@/components/playback/controls/player/InputDropDown.vue";
+import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);

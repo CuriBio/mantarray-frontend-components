@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/playback/controls/PlateWell.vue";
+import ComponentToTest from "@/components/basic_widgets/PlateWell.vue";
 import { PlateWell as DistComponentToTest } from "@/dist/mantarray.common";
 // import { shallowMount } from "@vue/test-utils";
 

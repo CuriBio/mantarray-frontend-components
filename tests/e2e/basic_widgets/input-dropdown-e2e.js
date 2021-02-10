@@ -8,17 +8,12 @@ const input_field = Selector("#input-dropdown-widget-");
 const input_label = Selector(".span__input-dropdown-content-label");
 const input_selected_handler = Selector(".input-selected-handler");
 
-fixture`playback/controls/player/input-dropdown/basic-dropdown`
+fixture`basic_widgets/input-dropdown/basic-dropdown`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/input-dropdown/basic-dropdown`; // specify the start page
+`http://localhost:8080/basic_widgets/input-dropdown/basic-dropdown`; // specify the start page
 
 test("testing the Input DropDown for the NO Value Entered", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "input-dropdown"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
   const screenshot_path = path.join(
     screenshot_path_base,
     "input-dropdown-no-value"
@@ -27,12 +22,7 @@ test("testing the Input DropDown for the NO Value Entered", async (t) => {
 });
 
 test("testing the Input DropDown for the VALID Value Entered", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "input-dropdown"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
   const screenshot_path = path.join(
     screenshot_path_base,
     "input-dropdown-valid-value"
@@ -43,12 +33,7 @@ test("testing the Input DropDown for the VALID Value Entered", async (t) => {
 });
 
 test("testing the Input DropDown for the INVALID Value Entered", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "input-dropdown"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
   const screenshot_path = path.join(
     screenshot_path_base,
     "input-dropdown-invalid-value"
@@ -58,32 +43,22 @@ test("testing the Input DropDown for the INVALID Value Entered", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/input-dropdown/x-y-offset`
+fixture`basic_widgets/input-dropdown/x-y-offset`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/input-dropdown/x-y-offset`; // specify the start page
+`http://localhost:8080/basic_widgets/input-dropdown/x-y-offset`; // specify the start page
 
 test("testing the Input Widget for the X-Y Offset", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "input-dropdown"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
   const screenshot_path = path.join(screenshot_path_base, "x-y-offset");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/input-dropdown/input-dropdown-width-200`
+fixture`basic_widgets/input-dropdown/input-dropdown-width-200`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/input-dropdown/input-dropdown-width-200`; // specify the start page
+`http://localhost:8080/basic_widgets/input-dropdown/input-dropdown-width-200`; // specify the start page
 
 test("testing the Input DropDown for width of 200px", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "input-dropdown"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
   const screenshot_path = path.join(
     screenshot_path_base,
     "input-dropdown-width-200px"
@@ -91,17 +66,12 @@ test("testing the Input DropDown for width of 200px", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/input-dropdown/input-dropdown-width-300`
+fixture`basic_widgets/input-dropdown/input-dropdown-width-300`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/input-dropdown/input-dropdown-width-300`; // specify the start page
+`http://localhost:8080/basic_widgets/input-dropdown/input-dropdown-width-300`; // specify the start page
 
 test("testing the Input Widget for width of 300px", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "input-dropdown"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
   const screenshot_path = path.join(
     screenshot_path_base,
     "input-dropdown-width-300px"
@@ -109,17 +79,12 @@ test("testing the Input Widget for width of 300px", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/input-dropdown/input-dropdown-disallow`
+fixture`basic_widgets/input-dropdown/input-dropdown-disallow`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/input-dropdown/input-dropdown-disallow`; // specify the start page
+`http://localhost:8080/basic_widgets/input-dropdown/input-dropdown-disallow`; // specify the start page
 
 test("testing the Input Widget when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "input-dropdown"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
   const screenshot_path = path.join(
     screenshot_path_base,
     "input-dropdown-disallow"
@@ -129,17 +94,12 @@ test("testing the Input Widget when the input is disabled or not allowed then en
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/input-dropdown/input-no-title-dropdown`
+fixture`basic_widgets/input-dropdown/input-no-title-dropdown`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/input-dropdown/input-no-title-dropdown`; // specify the start page
+`http://localhost:8080/basic_widgets/input-dropdown/input-no-title-dropdown`; // specify the start page
 
 test("testing the Input Widget when the title of widget is <empty> the widget height correction happens and the rest of input dropdown features are rendered", async (t) => {
-  const screenshot_path_base = path.join(
-    "playback",
-    "controls",
-    "player",
-    "input-dropdown"
-  );
+  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
   const screenshot_path = path.join(
     screenshot_path_base,
     "input-dropdown-no-title-dropdown"
@@ -147,9 +107,9 @@ test("testing the Input Widget when the title of widget is <empty> the widget he
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/player/input-dropdown/input-dropdown-event`
+fixture`basic_widgets/input-dropdown/input-dropdown-event`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/player/input-dropdown/input-dropdown-event`; // specify the start page
+`http://localhost:8080/basic_widgetsr/input-dropdown/input-dropdown-event`; // specify the start page
 test("testing the InputDropDown and options in the dropdown 1,2,3 choosen and asserted", async (t) => {
   const nicknames_list = [
     "Customer Account 1",

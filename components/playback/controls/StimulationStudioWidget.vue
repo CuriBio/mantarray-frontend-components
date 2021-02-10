@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import StimulationStudioPlateWell from "@/components/playback/controls/StimulationStudioPlateWell.vue";
+import StimulationStudioPlateWell from "@/components/basic_widgets/StimulationStudioPlateWell.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

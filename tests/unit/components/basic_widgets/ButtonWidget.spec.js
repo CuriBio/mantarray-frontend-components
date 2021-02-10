@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/playback/controls/player/ButtonWidget.vue";
+import ComponentToTest from "@/components/basic_widgets/ButtonWidget.vue";
 import { ButtonWidget as DistComponentToTest } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 
