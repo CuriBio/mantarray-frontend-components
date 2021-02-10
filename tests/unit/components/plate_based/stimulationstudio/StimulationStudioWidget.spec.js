@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import StimulationStudioWidget from "@/components/playback/controls/StimulationStudioWidget.vue";
+import StimulationStudioWidget from "@/components/plate_based/stimulationstudio/StimulationStudioWidget.vue";
 import { StimulationStudioWidget as DistComponentToTest } from "@/dist/mantarray.common";
 import { createLocalVue } from "@vue/test-utils";
 

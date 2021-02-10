@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { PlateNavigator as ComponentToTest } from "../../../../dist/mantarray.common";
+import { PlateNavigator as ComponentToTest } from "@/dist/mantarray.common";
 // import ComponentToTest from "@/components/playback/controls/PlateNavigator.vue";
 
 export default {

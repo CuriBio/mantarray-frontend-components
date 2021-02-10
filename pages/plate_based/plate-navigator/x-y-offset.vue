@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { PlateNavigator as ComponentToTest } from "../../../../dist/mantarray.common";
+import { PlateNavigator as ComponentToTest } from "@/dist/mantarray.common";
 
 export default {
   components: {

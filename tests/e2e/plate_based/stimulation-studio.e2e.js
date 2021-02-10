@@ -10,14 +10,13 @@ const orange = Selector("#test-4");
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 // the fixture declares what we are testing
-fixture`playback/controls/stimulation-studio/basic`
+fixture`plate_based/stimulation-studio/basic`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/stimulation-studio/basic`; // specify the start page
+`http://localhost:8080/plate_based/stimulation-studio/basic`; // specify the start page
 
 test("StimulationStudioWidget when the no protocol is applied to any StimulationStudioPlateWell", async (t) => {
   const screenshot_path = path.join(
-    "playback",
-    "controls",
+    "plate_based",
     "simulation-studio",
     "basic-simulation"
   );
@@ -26,8 +25,7 @@ test("StimulationStudioWidget when the no protocol is applied to any Stimulation
 
 test("StimulationStudioWidget when the Teal color is applied to any StimulationStudioPlateWell", async (t) => {
   const screenshot_path = path.join(
-    "playback",
-    "controls",
+    "plate_based",
     "simulation-studio",
     "basic-teal-color"
   );
@@ -37,8 +35,7 @@ test("StimulationStudioWidget when the Teal color is applied to any StimulationS
 
 test("StimulationStudioWidget when the Blue color is applied to any StimulationStudioPlateWell", async (t) => {
   const screenshot_path = path.join(
-    "playback",
-    "controls",
+    "plate_based",
     "simulation-studio",
     "basic-blue-color"
   );
@@ -48,8 +45,7 @@ test("StimulationStudioWidget when the Blue color is applied to any StimulationS
 
 test("StimulationStudioWidget when the Yellow color is applied to any StimulationStudioPlateWell", async (t) => {
   const screenshot_path = path.join(
-    "playback",
-    "controls",
+    "plate_based",
     "simulation-studio",
     "basic-yellow-color"
   );
@@ -59,8 +55,7 @@ test("StimulationStudioWidget when the Yellow color is applied to any Stimulatio
 
 test("StimulationStudioWidget when the Yellow color is applied to any StimulationStudioPlateWell", async (t) => {
   const screenshot_path = path.join(
-    "playback",
-    "controls",
+    "plate_based",
     "simulation-studio",
     "basic-orange-color"
   );
@@ -68,14 +63,13 @@ test("StimulationStudioWidget when the Yellow color is applied to any Stimulatio
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/stimulation-studio/x-y-offset`
+fixture`plate_based/stimulation-studio/x-y-offset`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/stimulation-studio/x-y-offset`; // specify the start page
+`http://localhost:8080/plate_based/stimulation-studio/x-y-offset`; // specify the start page
 
 test("StimulationStudioWidget when the no protocol is applied to any StimulationStudioPlateWell with x-y offset", async (t) => {
   const screenshot_path = path.join(
-    "playback",
-    "controls",
+    "plate_based",
     "simulation-studio",
     "x-y-offset-simulation"
   );

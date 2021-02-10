@@ -1,4 +1,4 @@
-import ComponentToTest from "@/components/playback/controls/PlateNavigator.vue";
+import ComponentToTest from "@/components/plate_based/navigator/PlateNavigator.vue";
 import { PlateNavigator as DistComponentToTest } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 
@@ -190,7 +190,7 @@ describe("PlateNavigator.vue", () => {
     }
   );
 
-  it("Applies the 'selected' CSS class to wells in the quadrant specified in the Vuex store initially when the component mounts", async () => {
+  test("Applies the 'selected' CSS class to wells in the quadrant specified in the Vuex store initially when the component mounts", async () => {
     const expected_selected_wells = quadrants.TOP_RIGHT;
     store.commit("twentyfourcontrols/set_is_quadrant", expected_selected_wells);
     const propsData = {};
@@ -224,7 +224,7 @@ describe("PlateNavigator.vue", () => {
     expect(this_well_wrapper.classes()).not.toContain(expected_class_name);
   });
 
-  it("updates the wells that have the CSS 'selected' class when Vuex store changes after component has been mounted", async () => {
+  test("updates the wells that have the CSS 'selected' class when Vuex store changes after component has been mounted", async () => {
     const propsData = {};
     wrapper = shallowMount(ComponentToTest, {
       propsData,

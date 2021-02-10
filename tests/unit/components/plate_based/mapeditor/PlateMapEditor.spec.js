@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/playback/controls/PlateMapEditor.vue";
+import ComponentToTest from "@/components/plate_based/mapeditor/PlateMapEditor.vue";
 import { PlateMapEditor as DistComponentToTest } from "@/dist/mantarray.common";
 // import { shallowMount } from "@vue/test-utils";
 
