@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/playback/controls/player/InputWidget.vue";
+import ComponentToTest from "@/components/basic_widgets/InputWidget.vue";
 import { InputWidget as DistComponentToTest } from "@/dist/mantarray.common";
 
 import Vuex from "vuex";

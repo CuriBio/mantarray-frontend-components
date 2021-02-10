@@ -17,7 +17,7 @@
 
 <script>
 import { ButtonWidget } from "@/dist/mantarray.common";
-// import ButtonWidget from "@/components/playback/controls/player/ButtonWidget.vue";
+// import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 
 export default {
   components: {
@@ -25,7 +25,7 @@ export default {
   },
   created: function () {
     this.btnnames = ["Cancel", "Delete ID", "Save ID"];
-    this.enablelist = [true, true, false];
+    this.enablelist = [true, true, true];
     this.visiblecolor = "#FFFFFF";
     this.hidecolor = "#3F3F3F";
     this.hovercolors = ["#BD4932", "#BD4932", "#19ac8a"];

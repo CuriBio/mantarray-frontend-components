@@ -23,7 +23,7 @@
 
 <script>
 import { ButtonWidget } from "@/dist/mantarray.common";
-// import ButtonWidget from "@/components/playback/controls/player/ButtonWidget.vue";
+// import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 
 export default {
   components: {

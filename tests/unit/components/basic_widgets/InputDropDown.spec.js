@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/playback/controls/player/InputDropDown.vue";
+import ComponentToTest from "@/components/basic_widgets/InputDropDown.vue";
 import { InputDropDown as DistComponentToTest } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 

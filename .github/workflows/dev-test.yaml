@@ -27,6 +27,7 @@ jobs:
           - "tests/e2e/status"
           - "tests/e2e/waveforms"
           - "tests/e2e/settings"
+          - "tests/e2e/basic_widgets"
         include:
           # only enable coverage on the fastest job
           - os: "ubuntu-20.04"

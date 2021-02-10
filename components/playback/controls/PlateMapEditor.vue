@@ -256,7 +256,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import PlateWell from "@/components/playback/controls/PlateWell.vue";
+import PlateWell from "@/components/basic_widgets/PlateWell.vue";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 
 const twenty_four_well_labware_definition = new LabwareDefinition(4, 6);

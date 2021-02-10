@@ -33,7 +33,7 @@
   </div>
 </template>
 <script>
-import PlateWell from "@/components/playback/controls/PlateWell.vue";
+import PlateWell from "@/components/basic_widgets/PlateWell.vue";
 
 export default {
   name: "StimulationStudioPlateWell",

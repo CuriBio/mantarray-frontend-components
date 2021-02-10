@@ -47,10 +47,10 @@ export { default as SimulationMode } from "./components/status/SimulationMode.vu
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
 export { default as PlateMapEditor } from "./components/playback/controls/PlateMapEditor.vue";
-export { default as PlateWell } from "./components/playback/controls/PlateWell.vue";
-export { default as InputWidget } from "./components/playback/controls/player/InputWidget.vue";
-export { default as ButtonWidget } from "./components/playback/controls/player/ButtonWidget.vue";
-export { default as InputDropDown } from "./components/playback/controls/player/InputDropDown.vue";
+export { default as PlateWell } from "./components/basic_widgets/PlateWell.vue";
+export { default as InputWidget } from "./components/basic_widgets/InputWidget.vue";
+export { default as ButtonWidget } from "./components/basic_widgets/ButtonWidget.vue";
+export { default as InputDropDown } from "./components/basic_widgets/InputDropDown.vue";
 
 export { default as AddCustomer } from "./components/settings/AddCustomer.vue";
 export { default as EditCustomer } from "./components/settings/EditCustomer.vue";
@@ -58,7 +58,7 @@ export { default as AddUser } from "./components/settings/AddUser.vue";
 export { default as EditUser } from "./components/settings/EditUser.vue";
 
 export { default as BarcodeEditDialog } from "./components/playback/controls/player/BarcodeEditDialog.vue";
-export { default as RadioButtonWidget } from "./components/playback/controls/player/RadioButtonWidget.vue";
+export { default as RadioButtonWidget } from "./components/basic_widgets/RadioButtonWidget.vue";
 
 export { default as StimulationStudioWidget } from "./components/playback/controls/StimulationStudioWidget.vue";
-export { default as StimulationStudioPlateWell } from "./components/playback/controls/StimulationStudioPlateWell.vue";
+export { default as StimulationStudioPlateWell } from "./components/basic_widgets/StimulationStudioPlateWell.vue";

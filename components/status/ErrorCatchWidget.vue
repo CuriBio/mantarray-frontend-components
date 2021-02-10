@@ -52,7 +52,7 @@
   </div>
 </template>
 <script>
-import ButtonWidget from "@/components/playback/controls/player/ButtonWidget.vue";
+import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 export default {
   name: "ErrorCatchWidget",
   components: {
