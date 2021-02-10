@@ -42,7 +42,7 @@ export { default as SettingsForm } from "./components/settings/SettingsForm.vue"
 export { default as PlateNavigator } from "./components/playback/controls/PlateNavigator.vue";
 export { default as PlateBarcode } from "./components/playback/controls/PlateBarcode.vue";
 export { default as StatusBar } from "./components/status/StatusBar.vue";
-export { default as RecordingTime } from "./components/playback/controls/RecordingTime.vue";
+export { default as RecordingTime } from "./components/status/RecordingTime.vue";
 export { default as SimulationMode } from "./components/status/SimulationMode.vue";
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
@@ -57,7 +57,7 @@ export { default as EditCustomer } from "./components/settings/EditCustomer.vue"
 export { default as AddUser } from "./components/settings/AddUser.vue";
 export { default as EditUser } from "./components/settings/EditUser.vue";
 
-export { default as BarcodeEditDialog } from "./components/playback/controls/player/BarcodeEditDialog.vue";
+export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
 export { default as RadioButtonWidget } from "./components/basic_widgets/RadioButtonWidget.vue";
 
 export { default as StimulationStudioWidget } from "./components/playback/controls/StimulationStudioWidget.vue";

@@ -1,4 +1,4 @@
-import RecordingTime from "@/components/playback/controls/RecordingTime.vue";
+import RecordingTime from "@/components/status/RecordingTime.vue";
 import { RecordingTime as dist_RecordingTime } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 import Vuex from "vuex";

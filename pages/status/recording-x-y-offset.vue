@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { RecordingTime as ComponentToTest } from "../../../../dist/mantarray.common";
+import { RecordingTime as ComponentToTest } from "../../dist/mantarray.common";
 //  import ComponentToTest from "@/components/playback/controls/RecordingTime.vue";
 export default {
   components: {

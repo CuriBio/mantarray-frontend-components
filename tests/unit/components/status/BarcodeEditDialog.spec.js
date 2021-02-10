@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/playback/controls/player/BarcodeEditDialog.vue";
+import ComponentToTest from "@/components/status/BarcodeEditDialog.vue";
 import { BarcodeEditDialog as DistComponentToTest } from "@/dist/mantarray.common";
 
 import { createLocalVue } from "@vue/test-utils";

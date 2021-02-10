@@ -8,14 +8,10 @@ import {
   system_status_when_recording_regexp,
   system_status_when_calibration_needed_regexp,
   all_mantarray_commands_regexp,
-} from "../../../../store/modules/flask/url_regex";
-import { STATUS } from "../../../../store/modules/flask/enums";
+} from "../../../store/modules/flask/url_regex";
+import { STATUS } from "../../../store/modules/flask/enums";
 
-const base_screenshot_path = path.join(
-  "playback",
-  "controls",
-  "recording-time"
-);
+const base_screenshot_path = path.join("status", "recording-time");
 
 const mocked_all_mantarray_commands = RequestMock()
   .onRequestTo(all_mantarray_commands_regexp)
@@ -32,9 +28,9 @@ const mocked_static_system_status_states = RequestMock()
   });
 
 // the fixture declares what we are testing
-fixture`playback/controls/recording-time/basic`
+fixture`status/recording-basic`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/recording-time/basic`; // specify the start page
+`http://localhost:8080/status/recording-basic`; // specify the start page
 
 test("recording time looks as expected when not recording", async (t) => {
   const screenshot_path = path.join(base_screenshot_path, "basic-init");
@@ -42,9 +38,9 @@ test("recording time looks as expected when not recording", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/recording-time/x-y-offset`
+fixture`status/recording-x-y-offset`
   .page // declare the fixture
-`http://localhost:8080/playback/controls/recording-time/x-y-offset`; // specify the start page
+`http://localhost:8080/status/recording-x-y-offset`; // specify the start page
 
 test("recording looks as expected when anchored at an offset from top left", async (t) => {
   const screenshot_path = path.join(base_screenshot_path, "x-y-offset");
@@ -52,10 +48,10 @@ test("recording looks as expected when anchored at an offset from top left", asy
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/recording-time/on-recording-init`
+fixture`status/on-recording-init`
   .page(
     // declare the fixture
-    `http://localhost:8080/playback/controls/recording-time/on-recording-init`
+    `http://localhost:8080/status/on-recording-init`
   )
   .requestHooks(
     mocked_all_mantarray_commands,
@@ -69,10 +65,10 @@ test.requestHooks()("recording time text displays as 0", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`playback/controls/recording-time/on-recording-after-time-elapsed`
+fixture`status/on-recording-after-time-elapsed`
   .page(
     // declare the fixture
-    `http://localhost:8080/playback/controls/recording-time/on-recording-after-time-elapsed`
+    `http://localhost:8080/status/on-recording-after-time-elapsed`
   )
   .requestHooks(
     mocked_all_mantarray_commands,
