@@ -3,7 +3,7 @@
     <div class="div__checkbox-background">
       <b-form-checkbox-group
         v-model="selected"
-        :options="options"
+        :options="checkbox_options"
         stacked
       ></b-form-checkbox-group>
     </div>
@@ -16,15 +16,11 @@ Vue.component("BFormCheckboxGroup", BFormCheckboxGroup);
 
 export default {
   name: "CheckBoxWidget",
-  data() {
-    return {
-      options: [
-        { text: "Ascorbic  Acid", value: "Ascorbic Acid" },
-        { text: "B27", value: "b27" },
-        { text: "B27 (-insulin)", value: "b27_insulin", disabled: true },
-        { text: "Lab-Exp-1", value: "lab_exp_1" },
-      ],
-    };
+  props: {
+    checkbox_options: {
+      type: Array,
+      required: true,
+    },
   },
   methods: {},
 };
