@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { UploadFilesWidget as ComponentToTest } from "../../dist/mantarray.common";
+import { UploadFilesWidget as ComponentToTest } from "@/dist/mantarray.common";
 // import ComponentToTest from "@/components/status/UploadFilesWidget.vue";
 
 export default {

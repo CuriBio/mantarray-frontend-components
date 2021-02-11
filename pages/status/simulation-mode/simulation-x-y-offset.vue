@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { SimulationMode as ComponentToTest } from "../../dist/mantarray.common";
+import { SimulationMode as ComponentToTest } from "@/dist/mantarray.common";
 //  import ComponentToTest from "@/components/status/StatusBar.vue";
 
 export default {

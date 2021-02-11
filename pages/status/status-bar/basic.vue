@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { StatusBar as ComponentToTest } from "../../dist/mantarray.common";
+import { StatusBar as ComponentToTest } from "@/dist/mantarray.common";
 //  import ComponentToTest from "@/components/status/StatusBar.vue";
 
 import { STATUS } from "@/store/modules/flask/enums";

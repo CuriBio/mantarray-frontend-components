@@ -6,16 +6,15 @@
 
 <script>
 // import ComponentToTest from "@/components/playback/controls/RecordingTime.vue";
-import { RecordingTime as ComponentToTest } from "../../dist/mantarray.common";
+import { RecordingTime as ComponentToTest } from "@/dist/mantarray.common";
 
 export default {
   components: {
     ComponentToTest,
   },
   computed: {},
-  created: async function () {
-    await this.$store.dispatch("playback/start_recording");
-    this.$store.commit("playback/set_x_time_index", 1234500);
+  created: function () {
+    this.$store.dispatch("playback/start_recording");
   },
 };
 </script>

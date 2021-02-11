@@ -12,7 +12,7 @@
 
 <script>
 // import ComponentToTest from "@/components/status/StatusBar.vue";
-import { StatusBar as ComponentToTest } from "../../dist/mantarray.common";
+import { StatusBar as ComponentToTest } from "@/dist/mantarray.common";
 
 import { STATUS } from "@/store/modules/flask/enums";
 

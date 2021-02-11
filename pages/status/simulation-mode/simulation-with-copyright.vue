@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { SimulationMode as ComponentToTest } from "../../dist/mantarray.common";
+import { SimulationMode as ComponentToTest } from "@/dist/mantarray.common";
 // import ComponentToTest from "@/components/status/SimulationMode.vue";
 
 export default {
