@@ -57,9 +57,9 @@ export { default as RadioButtonWidget } from "./components/basic_widgets/RadioBu
 export { default as StimulationStudioPlateWell } from "./components/basic_widgets/StimulationStudioPlateWell.vue";
 
 // Plate Based
-export { default as PlateNavigator } from "./components/plate_based/navigator/PlateNavigator.vue";
-export { default as PlateMapEditor } from "./components/plate_based/mapeditor/PlateMapEditor.vue";
-export { default as StimulationStudioWidget } from "./components/plate_based/stimulationstudio/StimulationStudioWidget.vue";
+export { default as PlateNavigator } from "./components/plate_based_widgets/navigator/PlateNavigator.vue";
+export { default as PlateMapEditor } from "./components/plate_based_widgets/mapeditor/PlateMapEditor.vue";
+export { default as StimulationStudioWidget } from "./components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 
 // Status Related
 export { default as StatusBar } from "./components/status/StatusBar.vue";

@@ -3,7 +3,10 @@ import { Selector } from "testcafe";
 const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
-const base_screenshot_path = path.join("plate_based", "plate-mapeditor");
+const base_screenshot_path = path.join(
+  "plate_based_widgets",
+  "plate-mapeditor"
+);
 
 const backdrop_div = Selector(".div__platemap-editor-backdrop");
 
@@ -26,9 +29,9 @@ const well_2 = Selector(".well_2");
 const well_22 = Selector(".well_22");
 
 // the fixture declares what we are testing
-fixture`plate_based/plate-mapeditor/basic`
+fixture`plate_based_widgets/plate-mapeditor/basic`
   .page // declare the fixture
-`http://localhost:8080/plate_based/plate-mapeditor/basic`; // specify the start page
+`http://localhost:8080/plate_based_widgets/plate-mapeditor/basic`; // specify the start page
 
 test("testing the Plate-MapEditor page should display as designed in the mockflow", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "basic-init");
@@ -216,9 +219,9 @@ test("testing the Plate-MapEditor page should display Ctr+click on WELL Display 
 });
 
 // the fixture declares what we are testing
-fixture`plate_based/plate-mapeditor/x-y-offset`
+fixture`plate_based_widgets/plate-mapeditor/x-y-offset`
   .page // declare the fixture
-`http://localhost:8080/plate_based/plate-mapeditor/x-y-offset`; // specify the start page
+`http://localhost:8080/plate_based_widgets/plate-mapeditor/x-y-offset`; // specify the start page
 
 test("testing the Plate-MapEditor should display at an x-y-offset as a widget as per in the mockflow", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "x-y-offset");
@@ -226,9 +229,9 @@ test("testing the Plate-MapEditor should display at an x-y-offset as a widget as
 });
 
 // the fixture declares what we are testing
-fixture`plate_based/plate-mapeditor/pre-select`
+fixture`plate_based_widgets/plate-mapeditor/pre-select`
   .page // declare the fixture
-`http://localhost:8080/plate_based/plate-mapeditor/pre-select`; // specify the start page
+`http://localhost:8080/plate_based_widgets/plate-mapeditor/pre-select`; // specify the start page
 test("testing the Plate-MapEditor page should display as designed in the mockflow", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "pre-select-init");
   await testcafe_page_visual_regression(t, screenshot_path);

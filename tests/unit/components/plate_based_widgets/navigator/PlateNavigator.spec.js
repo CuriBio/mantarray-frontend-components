@@ -1,4 +1,4 @@
-import ComponentToTest from "@/components/plate_based/navigator/PlateNavigator.vue";
+import ComponentToTest from "@/components/plate_based_widgets/navigator/PlateNavigator.vue";
 import { PlateNavigator as DistComponentToTest } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 
