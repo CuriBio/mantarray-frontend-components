@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CheckBoxWidget></CheckBoxWidget>
+    <CheckBoxWidget :checkbox_options="options"></CheckBoxWidget>
   </div>
 </template>
 
@@ -12,7 +12,16 @@ export default {
   components: {
     CheckBoxWidget,
   },
-  data() {},
+  data() {
+    return {
+      options: [
+        { text: "Ascorbic  Acid", value: "Ascorbic Acid" },
+        { text: "B27", value: "b27" },
+        { text: "B27 (-insulin)", value: "b27_insulin", disabled: true },
+        { text: "Lab-Exp-1", value: "lab_exp_1" },
+      ],
+    };
+  },
   methods: {},
 };
 </script>
