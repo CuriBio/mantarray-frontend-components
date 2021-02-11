@@ -7,9 +7,9 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 const mid_point = Selector("#test-1");
 const last_point = Selector("#test-2");
 
-fixture`status/basic-upload-status`
+fixture`status/upload-files-widget/basic-upload-status`
   .page // declare the fixture
-`http://localhost:8080/status/basic-upload-status`; // specify the start page
+`http://localhost:8080/status/upload-files-widget/basic-upload-status`; // specify the start page
 
 test("testing the UploadFilesWidget with start, midpoint and lastpoint", async (t) => {
   const screenshot_path_base = path.join("status", "uploadfiles");

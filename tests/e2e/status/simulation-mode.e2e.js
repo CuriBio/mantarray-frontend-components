@@ -9,30 +9,42 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 import VueSelector from "testcafe-vue-selectors";
 
 // the fixture declares what we are testing
-fixture`status/simulation-basic`
+fixture`status/simulation-mode/simulation-basic`
   .page // declare the fixture
-`http://localhost:8080/status/simulation-basic`; // specify the start page
+`http://localhost:8080/status/simulation-mode/simulation-basic`; // specify the start page
 
 test("Simulation mode widget looks as expected with default values", async (t) => {
-  const screenshot_path = path.join("status", "simulation-basic");
+  const screenshot_path = path.join(
+    "status",
+    "simulation-mode",
+    "simulation-basic"
+  );
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`status/simulation-x-y-offset`
+fixture`status/simulation-mode/simulation-x-y-offset`
   .page // declare the fixture
-`http://localhost:8080/status/simulation-x-y-offset`; // specify the start page
+`http://localhost:8080/status/simulation-mode/simulation-x-y-offset`; // specify the start page
 
 test("Simulation Mode widget looks as expected when anchored at an offset from top left", async (t) => {
-  const screenshot_path = path.join("status", "simulation-x-y-offset");
+  const screenshot_path = path.join(
+    "status",
+    "simulation-mode",
+    "simulation-x-y-offset"
+  );
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`status/simulation-with-copyright`
+fixture`status/simulation-mode/simulation-with-copyright`
   .page // declare the fixture
-`http://localhost:8080/status/simulation-with-copyright`; // specify the start page
+`http://localhost:8080/status/simulation-mode/simulation-with-copyright`; // specify the start page
 
 test("Simulation Mode widget looks as expected when copyright text is externally added on top of it", async (t) => {
-  const screenshot_path = path.join("status", "simulation-with-copyright");
+  const screenshot_path = path.join(
+    "status",
+    "simulation-mode",
+    "simulation-with-copyright"
+  );
   await testcafe_page_visual_regression(t, screenshot_path);
 });

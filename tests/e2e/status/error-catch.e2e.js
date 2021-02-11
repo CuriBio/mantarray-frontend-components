@@ -7,9 +7,9 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 const okay_btn_label = Selector(".span__button_label");
 const error_catch_contact = Selector("#error_contact");
 
-fixture`status/error-catch-basic`
+fixture`status/error-catch/error-catch-basic`
   .page // declare the fixture
-`http://localhost:8080/status/error-catch-basic`; // specify the start page
+`http://localhost:8080/status/error-catch/error-catch-basic`; // specify the start page
 
 test("testing the ErrorCatchWidget with a error log file path", async (t) => {
   const screenshot_path_base = path.join("status", "errorcatch");
@@ -37,9 +37,9 @@ test("testing the ErrorCatchWidget with a error log file path and hover on the c
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`status/error-catch-x-y-offset`
+fixture`status/error-catch/error-catch-x-y-offset`
   .page // declare the fixture
-`http://localhost:8080/status/error-catch-x-y-offset`; // specify the start page
+`http://localhost:8080/status/error-catch/error-catch-x-y-offset`; // specify the start page
 
 test("testing the ErrorCatchWidget with an offset of X and Y position", async (t) => {
   const screenshot_path_base = path.join("status", "errorcatch");
@@ -50,9 +50,9 @@ test("testing the ErrorCatchWidget with an offset of X and Y position", async (t
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`status/error-catch-small-path`
+fixture`status/error-catch/error-catch-small-path`
   .page // declare the fixture
-`http://localhost:8080/status/error-catch-small-path`; // specify the start page
+`http://localhost:8080/status/error-catch/error-catch-small-path`; // specify the start page
 
 test("testing the ErrorCatchWidget with a error log file with just small size file path and height adjusted based on length error log file", async (t) => {
   const screenshot_path_base = path.join("status", "errorcatch");
