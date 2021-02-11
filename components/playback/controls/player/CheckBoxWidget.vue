@@ -21,7 +21,7 @@ export default {
       options: [
         { text: "Ascorbic  Acid", value: "Ascorbic Acid" },
         { text: "B27", value: "b27" },
-        { text: "B27 (-insulin)", value: "b27_insulin" },
+        { text: "B27 (-insulin)", value: "b27_insulin", disabled: true },
         { text: "Lab-Exp-1", value: "lab_exp_1" },
       ],
     };
@@ -87,7 +87,8 @@ export default {
   color: #19ac8a;
 }
 
-input[type="checkbox"]:disabled {
-  color: #ececed;
+input[type="checkbox"]:disabled,
+input[type="checkbox"]:disabled + span {
+  background: #6e6f72;
 }
 </style>
