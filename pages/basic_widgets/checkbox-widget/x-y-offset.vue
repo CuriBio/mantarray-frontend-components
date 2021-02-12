@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="top: 50px; left: 88px; position: absolute">
     <CheckBoxWidget :checkbox_options="options"></CheckBoxWidget>
   </div>
 </template>

@@ -15,10 +15,10 @@ export default {
   data() {
     return {
       options: [
-        { text: "Ascorbic Acid", value: "Ascorbic Acid" },
-        { text: "b27", value: "b27" },
-        { text: "B27 (-insulin)", value: "B27 (-insulin)", disabled: true },
-        { text: "Lab-Exp-1", value: "Lab-Exp-1" },
+        { text: "", value: "Ascorbic Acid" },
+        { text: "", value: "b27" },
+        { text: "", value: "B27 (-insulin)" },
+        { text: "", value: "Lab-Exp-1" },
       ],
     };
   },
