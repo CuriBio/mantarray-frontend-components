@@ -56,7 +56,7 @@ test("testing the Check Box Widget with no text NO option selected", async (t) =
 fixture`basic_widgets/checkbox-widget/x-y-offset`
   .page // declare the fixture
 `http://localhost:8080/basic_widgets/checkbox-widget/x-y-offset`; // specify the start page
-test("testing the Radio Button Widget with a x y offset Entered", async (t) => {
+test("testing the Check Box Widget with a x y offset Entered", async (t) => {
   const screenshot_path_base = path.join("basic_widgets", "checkbox-widget");
   const screenshot_path = path.join(
     screenshot_path_base,

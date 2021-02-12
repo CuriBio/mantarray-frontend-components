@@ -57,7 +57,6 @@ export default {
   border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;
   box-shadow: none;
-  z-index: 3;
   pointer-events: all;
 }
 .div__checkbox_selected {
