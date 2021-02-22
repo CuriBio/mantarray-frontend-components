@@ -126,6 +126,12 @@ jobs:
       #   if: matrix.IS_WINDOWS == true
       #   run: npx testcafe chrome:headless:emulation:width=1920;height=930;cdpPort=9223; ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app "npm run dev" --app-init-delay 35000
 
+      - name: Confirm no modifications to the repository files occurred when running the test suite
+        if: matrix.IS_FASTEST_JOB == true # only enable pre-commit on the fastest job
+        env:
+          PRE_COMMIT_HOME: ./.precommit_cache
+        run: pre-commit run git-dirty -a
+
       - name: Get Testcafe Version
         if: runner.os == 'Linux'
         id: testcafe-version
@@ -138,12 +144,24 @@ jobs:
         if: runner.os == 'Linux'
         run: echo ${{steps.testcafe-version.outputs.prop}}
 
+      - name: Confirm no modifications to the repository files occurred when running the test suite
+        if: matrix.IS_FASTEST_JOB == true # only enable pre-commit on the fastest job
+        env:
+          PRE_COMMIT_HOME: ./.precommit_cache
+        run: pre-commit run git-dirty -a
+
       - name: Run E2E Tests (Linux)
         if: runner.os == 'Linux'
         uses: DevExpress/testcafe-action@v0.0.3
         with:
           version: ${{steps.testcafe-version.outputs.prop}}
           args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 45000'
+
+      - name: Confirm no modifications to the repository files occurred when running the test suite
+        if: matrix.IS_FASTEST_JOB == true # only enable pre-commit on the fastest job
+        env:
+          PRE_COMMIT_HOME: ./.precommit_cache
+        run: pre-commit run git-dirty -a
 
       - name: Confirm Sphinx Docs build correctly
         # only check Sphinx docs build on the fastest job
