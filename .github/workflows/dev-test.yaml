@@ -150,6 +150,12 @@ jobs:
         if: matrix.IS_FASTEST_JOB == true
         run: SPHINXOPTS="-W" make --directory=docs html # the -W flag treats warnings as errors to cause build failures
 
+      - name: Confirm no modifications to the repository files occurred when running the test suite
+        if: matrix.IS_FASTEST_JOB == true # only enable pre-commit on the fastest job
+        env:
+          PRE_COMMIT_HOME: ./.precommit_cache
+        run: pre-commit run git-dirty -a
+
       - name: Upload coverage to Codecov
         # only upload coverage from fastest job
         if: matrix.IS_FASTEST_JOB == true
