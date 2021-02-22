@@ -6,13 +6,7 @@ module.exports = {
     "jest/globals": true,
     node: true,
   },
-  extends: [
-    "plugin:vue/essential",
-    "eslint:recommended",
-    "google",
-    "prettier",
-    "prettier/vue",
-  ],
+  extends: ["plugin:vue/essential", "eslint:recommended", "google", "prettier"],
   parserOptions: {
     ecmaVersion: 11,
     sourceType: "module",
