@@ -48,12 +48,12 @@ describe("HeatMapColorBar.vue", () => {
       "height: 481px;"
     );
 
-    const renderwrapper = await renderToString(ComponentToTest, {
+    const rendered_wrapper = await renderToString(ComponentToTest, {
       propsData,
       localVue,
     });
-    expect(renderwrapper).toContain(
-      '<div data-server-rendered="true"><div class="div__heatmap-gradient-holder" style="height:481px;background:linear-gradient(to top,  #2c7bb6 0%,#00a6ca 12.5%,#00ccbc 25%,#90eb9d 37.5%,#ffff8c 50%,#f9d057 62.5%,#f29e2e 75%,#e76818 87.5%,#d7191c 100%);"></div> <span class="span__heatmap-scale-higher-value">100 μN</span> <span class="span__heatmap-scale-lower-value" style="top:465px;">0 μN</span></div>'
+    expect(rendered_wrapper).toMatch(
+      "background:linear-gradient(to top,  #2c7bb6 0%,#00a6ca 12.5%,#00ccbc 25%,#90eb9d 37.5%,#ffff8c 50%,#f9d057 62.5%,#f29e2e 75%,#e76818 87.5%,#d7191c 100%)"
     );
   });
   test("Given that the uuid is empty, upper_range, lower_range, height, and gradient_range, When mounted successfully, Then assert that upper_range,lower_range, height are applied on HeatMapColorBar and as uuid is empty then gradient_range values are applied on linear-gradient", async () => {
