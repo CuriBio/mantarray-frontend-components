@@ -20,8 +20,15 @@ export default {
   },
   data() {
     return {
-      value: "0f81155d-23ec-4790-a3fe-92a6cc7c3c47",
+      value: "",
       height: 481,
+      range: [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#00a6ca", offset: "25%" },
+        { color: "#00ccbc", offset: "50%" },
+        { color: "#90eb9d", offset: "75%" },
+        { color: "#ffff8c", offset: "100%" },
+      ],
     };
   },
 };

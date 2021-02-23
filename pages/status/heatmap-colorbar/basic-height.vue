@@ -4,7 +4,7 @@
       :gradient_uuid="value"
       :lower_range="'0'"
       :upper_range="'100'"
-      :heatmap_height="481"
+      :heatmap_height="50"
       :gradient_range="range"
     ></ComponentToTest>
   </div>
