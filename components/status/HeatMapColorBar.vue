@@ -1,11 +1,10 @@
 <template>
   <div>
     <div class="div__heatmap-gradient-holder" :style="value"></div>
-    <span class="span__heatmap-scale-higher-value">
-      {{ upper_range }}&nbsp;<wbr />μN</span
-    >
-    <span class="span__heatmap-scale-lower-value" :style="top_shift"
-      >{{ lower_range }}&nbsp;<wbr />μN</span
+    <!-- prettier-ignore -->
+    <span class="span__heatmap-scale-higher-value">{{ upper_range }} μN</span>
+    <!-- prettier-ignore -->
+    <span class="span__heatmap-scale-lower-value" :style="top_shift">{{ lower_range }} μN</span
     >
   </div>
 </template>

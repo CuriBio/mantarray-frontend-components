@@ -23,7 +23,7 @@ export default {
   },
   data() {
     return {
-      value: "0",
+      value: "0f81155d-23ec-4790-a3fe-92a6cc7c3c47",
       range: [
         { color: "#2c7bb6", offset: "0%" },
         { color: "#00a6ca", offset: "25%" },
