@@ -1,10 +1,16 @@
 <template>
   <div>
-    <div class="div__heatmap-gradient-holder" :style="value"></div>
+    <div id="parent-container">
+      <div
+        id="startup-heatmap"
+        class="div__heatmap-gradient-holder"
+        :style="value"
+      ></div>
+    </div>
     <!-- prettier-ignore -->
-    <span class="span__heatmap-scale-higher-value">{{ upper_range }} μN</span>
+    <span class="span__heatmap-scale-higher-value">{{ upper_range }} {{ units }}</span>
     <!-- prettier-ignore -->
-    <span class="span__heatmap-scale-lower-value" :style="top_shift">{{ lower_range }} μN</span
+    <span class="span__heatmap-scale-lower-value" :style="top_shift">{{ lower_range }} {{ units }}</span
     >
   </div>
 </template>
@@ -34,6 +40,10 @@ export default {
       type: Number,
       default: 0,
     },
+    units: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
@@ -51,79 +61,24 @@ export default {
       ],
     };
   },
+  computed: {
+    top_shift() {
+      return "top: " + (this.heatmap_height - 16).toString() + "px;";
+    },
+  },
   watch: {
     gradient_uuid: function () {
-      let uuid_gradient = "";
-      if (this.gradient_uuid == this.heatmap_uuid) {
-        this.value =
-          "height: " +
-          this.heatmap_height +
-          "px; background: linear-gradient(to top,";
-        for (let i = 0; i < this.uuid_defined_colormap.length; i++) {
-          uuid_gradient =
-            uuid_gradient +
-            this.uuid_defined_colormap[i].color +
-            " " +
-            this.uuid_defined_colormap[i].offset +
-            ", ";
-        }
-        this.value = this.value + uuid_gradient.slice(0, -1) + ");";
-      }
+      this.common_api();
     },
     gradient_range: function () {
-      let uuid_gradient = "";
-      if (this.gradient_uuid != this.heatmap_uuid) {
-        this.value =
-          "height: " +
-          this.heatmap_height +
-          "px; background: linear-gradient(to top,";
-        for (let i = 0; i < this.gradient_range.length; i++) {
-          const color = this.gradient_range[i].color.toString();
-          const offset = this.gradient_range[i].offset.toString();
-          uuid_gradient = uuid_gradient + color + " " + offset + ", ";
-        }
-        this.value = this.value + uuid_gradient.slice(0, -1) + ");";
-      }
+      this.common_api();
     },
     heatmap_height: function () {
-      const top_change = this.heatmap_height - 16;
-      this.top_shift = "top: " + top_change.toString() + "px;";
-      let uuid_gradient = " ";
-      if (this.gradient_uuid === this.heatmap_uuid) {
-        this.value =
-          "height: " +
-          this.heatmap_height +
-          "px; background: linear-gradient(to top, ";
-        for (let i = 0; i < this.uuid_defined_colormap.length; i++) {
-          uuid_gradient =
-            uuid_gradient +
-            this.uuid_defined_colormap[i].color +
-            " " +
-            this.uuid_defined_colormap[i].offset +
-            ",";
-        }
-        this.value = this.value + uuid_gradient.slice(0, -1) + ");";
-      } else {
-        if (this.gradient_uuid != this.heatmap_uuid) {
-          this.value =
-            "height: " +
-            this.heatmap_height +
-            "px; background: linear-gradient(to top,";
-          for (let i = 0; i < this.gradient_range.length; i++) {
-            const color = this.gradient_range[i].color.toString();
-            const offset = this.gradient_range[i].offset.toString();
-            uuid_gradient = uuid_gradient + color + " " + offset + ",";
-          }
-          this.value = this.value + uuid_gradient.slice(0, -1) + ");";
-        }
-      }
+      this.common_api();
     },
   },
   created() {
-    this.top_shift = "";
     this.value = "";
-    const top_change = this.heatmap_height - 16;
-    this.top_shift = "top: " + top_change.toString() + "px;";
     let uuid_gradient = " ";
     if (this.gradient_uuid == this.heatmap_uuid) {
       this.value =
@@ -140,19 +95,59 @@ export default {
       }
       this.value = this.value + uuid_gradient.slice(0, -1) + ");";
     } else {
-      if (this.gradient_uuid != this.heatmap_uuid) {
+      this.value =
+        "height: " +
+        this.heatmap_height +
+        "px; background: linear-gradient(to top,";
+      for (let j = 0; j < this.gradient_range.length; j++) {
+        const color = this.gradient_range[j].color.toString();
+        const offset = this.gradient_range[j].offset.toString();
+        uuid_gradient = uuid_gradient + color + " " + offset + ",";
+      }
+      this.value = this.value + uuid_gradient.slice(0, -1) + ");";
+    }
+  },
+  methods: {
+    common_api: function () {
+      let uuid_gradient = " ";
+
+      let elem = document.getElementById("startup-heatmap");
+      elem.parentNode.removeChild(elem);
+
+      if (this.gradient_uuid === this.heatmap_uuid) {
+        this.value =
+          "height: " +
+          this.heatmap_height +
+          "px; background: linear-gradient(to top, ";
+        for (let i = 0; i < this.uuid_defined_colormap.length; i++) {
+          uuid_gradient =
+            uuid_gradient +
+            this.uuid_defined_colormap[i].color +
+            " " +
+            this.uuid_defined_colormap[i].offset +
+            ",";
+        }
+        this.value = this.value + uuid_gradient.slice(0, -1) + ");";
+      } else {
         this.value =
           "height: " +
           this.heatmap_height +
           "px; background: linear-gradient(to top,";
-        for (let j = 0; j < this.gradient_range.length; j++) {
-          const color = this.gradient_range[j].color.toString();
-          const offset = this.gradient_range[j].offset.toString();
+        for (let i = 0; i < this.gradient_range.length; i++) {
+          const color = this.gradient_range[i].color.toString();
+          const offset = this.gradient_range[i].offset.toString();
           uuid_gradient = uuid_gradient + color + " " + offset + ",";
         }
         this.value = this.value + uuid_gradient.slice(0, -1) + ");";
       }
-    }
+      const new_elem = document.createElement("div");
+      new_elem.id = "startup-heatmap";
+      new_elem.className = "div__heatmap-gradient-holder";
+      const new_cssText = this.value;
+      new_elem.style.cssText = new_cssText;
+      elem = document.getElementById("parent-container");
+      elem.appendChild(new_elem);
+    },
   },
 };
 </script>
