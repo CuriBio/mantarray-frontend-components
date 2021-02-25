@@ -15,6 +15,8 @@
   </div>
 </template>
 <script>
+/**
+ **/
 export default {
   name: "HeatMapColorBar",
   props: {
@@ -23,12 +25,12 @@ export default {
       default: "",
     },
     lower_range: {
-      type: String,
-      default: "",
+      type: Number,
+      required: true,
     },
     upper_range: {
-      type: String,
-      default: "",
+      type: Number,
+      required: true,
     },
     gradient_range: {
       type: Array,
@@ -38,11 +40,11 @@ export default {
     },
     heatmap_height: {
       type: Number,
-      default: 0,
+      required: true,
     },
     units: {
       type: String,
-      default: "",
+      required: true,
     },
   },
   data() {

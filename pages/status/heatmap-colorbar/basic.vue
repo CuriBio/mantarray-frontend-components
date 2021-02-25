@@ -1,7 +1,7 @@
 <template>
   <div>
     <ComponentToTest
-      :gradient_uuid="value"
+      :gradient_uuid="provided_uuid"
       :lower_range="lower"
       :upper_range="upper"
       :heatmap_height="height"
@@ -57,17 +57,17 @@ export default {
   },
   data() {
     return {
-      value: "0f81155d-23ec-4790-a3fe-92a6cc7c3c47",
+      provided_uuid: "0f81155d-23ec-4790-a3fe-92a6cc7c3c47",
       height: 481,
-      lower: "0",
-      upper: "100",
+      lower: 0,
+      upper: 100,
       range: [],
       unit: "μN",
     };
   },
   methods: {
     change_gradient: function () {
-      this.value = " ";
+      this.provided_uuid = " ";
       this.range = [
         { color: "#2c7bb6", offset: "0%" },
         { color: "#00a6ca", offset: "25%" },
@@ -77,15 +77,15 @@ export default {
       ];
     },
     change_uuid: function () {
-      this.value = "0f81155d-23ec-4790-a3fe-92a6cc7c3c47";
+      this.provided_uuid = "0f81155d-23ec-4790-a3fe-92a6cc7c3c47";
       this.range = [];
     },
     change_height: function () {
       this.height = 400;
     },
     change_range: function () {
-      this.lower = "10";
-      this.upper = "900";
+      this.lower = 10;
+      this.upper = 900;
     },
     change_units: function () {
       this.unit = "mA";

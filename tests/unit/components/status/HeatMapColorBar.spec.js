@@ -13,21 +13,25 @@ describe("HeatMapColorBar.vue", () => {
   afterEach(() => wrapper.destroy());
   test("When mounting HeatMapColorBar from the build dist file, Then it loads successfully and upper_range text '100 μN' is rendered as defined", () => {
     const propsData = {
-      upper_range: "100",
+      upper_range: 100,
+      lower_range: 0,
+      heatmap_height: 481,
+      units: "uA",
     };
     wrapper = shallowMount(DistComponentToTest, {
       propsData,
       localVue,
     });
     const target_span = wrapper.find(".span__heatmap-scale-higher-value");
-    expect(target_span.text()).toStrictEqual("100");
+    expect(target_span.text()).toStrictEqual("100 uA");
   });
   test("Given that the uuid, upper_range, lower_range and height, When mounted successfully, Then assert that upper_range,lower_range,height are applied and as uuid is match a default linear-gradient is applied on HeatMapColorBar", async () => {
     const propsData = {
-      upper_range: "100",
-      lower_range: "0",
+      upper_range: 100,
+      lower_range: 0,
       gradient_uuid: "0f81155d-23ec-4790-a3fe-92a6cc7c3c47",
       heatmap_height: 481,
+      units: "mA",
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -36,9 +40,9 @@ describe("HeatMapColorBar.vue", () => {
     const target_span_higher = wrapper.find(
       ".span__heatmap-scale-higher-value"
     );
-    expect(target_span_higher.text()).toStrictEqual("100");
+    expect(target_span_higher.text()).toStrictEqual("100 mA");
     const target_span_lower = wrapper.find(".span__heatmap-scale-lower-value");
-    expect(target_span_lower.text()).toStrictEqual("0");
+    expect(target_span_lower.text()).toStrictEqual("0 mA");
 
     const target_div_gradient_holder = wrapper.find(
       ".div__heatmap-gradient-holder"
@@ -49,10 +53,11 @@ describe("HeatMapColorBar.vue", () => {
   });
   test("Given that the uuid is empty, upper_range, lower_range, height, and gradient_range, When mounted successfully, Then assert that upper_range,lower_range, height are applied on HeatMapColorBar and as uuid is empty then gradient_range values are applied on linear-gradient", async () => {
     const propsData = {
-      upper_range: "100",
-      lower_range: "0",
+      upper_range: 100,
+      lower_range: 0,
       gradient_uuid: "",
       heatmap_height: 481,
+      units: "mA",
       gradient_range: [
         { color: "#2c7bb6", offset: "0%" },
         { color: "#00a6ca", offset: "25%" },
@@ -69,9 +74,9 @@ describe("HeatMapColorBar.vue", () => {
     const target_span_higher = wrapper.find(
       ".span__heatmap-scale-higher-value"
     );
-    expect(target_span_higher.text()).toStrictEqual("100");
+    expect(target_span_higher.text()).toStrictEqual("100 mA");
     const target_span_lower = wrapper.find(".span__heatmap-scale-lower-value");
-    expect(target_span_lower.text()).toStrictEqual("0");
+    expect(target_span_lower.text()).toStrictEqual("0 mA");
 
     const target_div_gradient_holder = wrapper.find(
       ".div__heatmap-gradient-holder"
@@ -83,10 +88,11 @@ describe("HeatMapColorBar.vue", () => {
 
   test("Given that the uuid, upper_range, lower_range and height, When mounted successfully, Then prop update of the heatmap_height to 400, assert height is updated to 400 and as uuid is match a default linear-gradient is applied on HeatMapColorBar", async () => {
     const propsData = {
-      upper_range: "100",
-      lower_range: "0",
+      upper_range: 100,
+      lower_range: 0,
       gradient_uuid: "0f81155d-23ec-4790-a3fe-92a6cc7c3c47",
       heatmap_height: 481,
+      units: "mA",
     };
     wrapper = await mount(ComponentToTest, {
       propsData,
@@ -115,10 +121,11 @@ describe("HeatMapColorBar.vue", () => {
   });
   test("Given that the uuid is null, upper_range, lower_range and height, When mounted successfully, Then prop update of the heatmap_height to 400, assert height is updated to 400 and as uuid is empty then gradient_range values are applied on linear-gradient", async () => {
     const propsData = {
-      upper_range: "100",
-      lower_range: "0",
+      upper_range: 100,
+      lower_range: 0,
       gradient_uuid: "",
       heatmap_height: 481,
+      units: "mA",
       gradient_range: [
         { color: "#2c7bb6", offset: "0%" },
         { color: "#00a6ca", offset: "25%" },

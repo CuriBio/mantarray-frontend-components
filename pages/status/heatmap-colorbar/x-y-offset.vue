@@ -1,10 +1,10 @@
 <template>
   <div style="top: 111px; left: 88px; position: absolute">
     <ComponentToTest
-      :gradient_uuid="value"
-      :lower_range="'0'"
-      :upper_range="'100'"
-      :heatmap_height="481"
+      :gradient_uuid="provided_uuid"
+      :lower_range="lower"
+      :upper_range="upper"
+      :heatmap_height="height"
       :gradient_range="range"
     ></ComponentToTest>
   </div>
@@ -20,9 +20,12 @@ export default {
   },
   data() {
     return {
-      value: "0",
+      provided_uuid: "0",
+      height: 481,
+      lower: 500,
+      upper: 1500,
       range: [
-        { color: "#2c7bb6", offset: "0%" },
+        { color: "#ffffff", offset: "0%" },
         { color: "#00a6ca", offset: "25%" },
         { color: "#00ccbc", offset: "50%" },
         { color: "#90eb9d", offset: "75%" },
