@@ -1,13 +1,7 @@
 <template>
   <div>
-    <ComponentToTest
-      :gradient_uuid="provided_uuid"
-      :lower_range="lower"
-      :upper_range="upper"
-      :heatmap_height="height"
-      :gradient_range="range"
-      :units="unit"
-    ></ComponentToTest>
+    <!-- prettier-ignore -->
+    <ComponentToTest :gradient_uuid="provided_uuid" :lower_range="lower" :upper_range="upper" :heatmap_height="height" :gradient_range="range" :units="unit"></ComponentToTest>
 
     <div
       class="test1"
@@ -46,7 +40,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { HeatMapColorBar as ComponentToTest } from "@/dist/mantarray.common";
 // import ComponentToTest from "@/components/status/HeatMapColorBar.vue";

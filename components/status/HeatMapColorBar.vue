@@ -4,18 +4,23 @@
       <div
         id="startup-heatmap"
         class="div__heatmap-gradient-holder"
-        :style="value"
+        :style="gradient_cssproperty"
       ></div>
     </div>
     <!-- prettier-ignore -->
-    <span class="span__heatmap-scale-higher-value">{{ upper_range }} {{ units }}</span>
+    <span class="span__heatmap-scale-higher-value" >{{ upper_range }} {{ units }}</span>
     <!-- prettier-ignore -->
-    <span class="span__heatmap-scale-lower-value" :style="top_shift">{{ lower_range }} {{ units }}</span
-    >
+    <span class="span__heatmap-scale-lower-value" :style="top_shift" > {{ lower_range }} {{ units }}</span>
   </div>
 </template>
 <script>
 /**
+ * @vue-prop {String} gradient_uuid  - Current uuid for the heatmapcolorbar
+ * @vue-prop {Number} lower_range    - Lower range value of heatmapcolorbar  (This prop is  required)
+ * @vue-prop {Number} upper_range    - Upper range value of heatmapcolorbar    (This prop is  required)
+ * @vue-prop {Array}  gradient_range - Array of Object which contains color and offset of heatmapcolorbar
+ * @vue-prop {Number} heatmap_height - Height value of the heatmapcolorbar (This prop is  required)
+ * @vue-prop {String} units          - Units used to measure the heatmapcolorbar (This prop is  required)
  **/
 export default {
   name: "HeatMapColorBar",
@@ -80,10 +85,10 @@ export default {
     },
   },
   created() {
-    this.value = "";
+    this.gradient_cssproperty = "";
     let uuid_gradient = " ";
     if (this.gradient_uuid == this.heatmap_uuid) {
-      this.value =
+      this.gradient_cssproperty =
         "height: " +
         this.heatmap_height +
         "px; background: linear-gradient(to top, ";
@@ -95,9 +100,10 @@ export default {
           this.uuid_defined_colormap[i].offset +
           ",";
       }
-      this.value = this.value + uuid_gradient.slice(0, -1) + ");";
+      this.gradient_cssproperty =
+        this.gradient_cssproperty + uuid_gradient.slice(0, -1) + ");";
     } else {
-      this.value =
+      this.gradient_cssproperty =
         "height: " +
         this.heatmap_height +
         "px; background: linear-gradient(to top,";
@@ -106,7 +112,8 @@ export default {
         const offset = this.gradient_range[j].offset.toString();
         uuid_gradient = uuid_gradient + color + " " + offset + ",";
       }
-      this.value = this.value + uuid_gradient.slice(0, -1) + ");";
+      this.gradient_cssproperty =
+        this.gradient_cssproperty + uuid_gradient.slice(0, -1) + ");";
     }
   },
   methods: {
@@ -117,7 +124,7 @@ export default {
       elem.parentNode.removeChild(elem);
 
       if (this.gradient_uuid === this.heatmap_uuid) {
-        this.value =
+        this.gradient_cssproperty =
           "height: " +
           this.heatmap_height +
           "px; background: linear-gradient(to top, ";
@@ -129,9 +136,10 @@ export default {
             this.uuid_defined_colormap[i].offset +
             ",";
         }
-        this.value = this.value + uuid_gradient.slice(0, -1) + ");";
+        this.gradient_cssproperty =
+          this.gradient_cssproperty + uuid_gradient.slice(0, -1) + ");";
       } else {
-        this.value =
+        this.gradient_cssproperty =
           "height: " +
           this.heatmap_height +
           "px; background: linear-gradient(to top,";
@@ -140,12 +148,13 @@ export default {
           const offset = this.gradient_range[i].offset.toString();
           uuid_gradient = uuid_gradient + color + " " + offset + ",";
         }
-        this.value = this.value + uuid_gradient.slice(0, -1) + ");";
+        this.gradient_cssproperty =
+          this.gradient_cssproperty + uuid_gradient.slice(0, -1) + ");";
       }
       const new_elem = document.createElement("div");
       new_elem.id = "startup-heatmap";
       new_elem.className = "div__heatmap-gradient-holder";
-      const new_cssText = this.value;
+      const new_cssText = this.gradient_cssproperty;
       new_elem.style.cssText = new_cssText;
       elem = document.getElementById("parent-container");
       elem.appendChild(new_elem);
