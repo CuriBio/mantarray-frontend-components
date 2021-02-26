@@ -69,3 +69,4 @@ export { default as SimulationMode } from "./components/status/SimulationMode.vu
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
 export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
+export { default as HeatMapColorBar } from "./components/status/HeatMapColorBar.vue";
