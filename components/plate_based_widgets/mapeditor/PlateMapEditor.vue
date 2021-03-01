@@ -1,58 +1,28 @@
 <template>
   <div>
     <div class="div__platemap-editor-backdrop"></div>
-    <span
-      v-show="a_column_toggle_one"
-      class="span__platemap-editor-column-index-one"
-    >
-      01</span
-    >
-    <span
-      v-show="a_column_toggle_two"
-      class="span__platemap-editor-column-index-two"
-    >
-      02</span
-    >
-    <span
-      v-show="a_column_toggle_three"
-      class="span__platemap-editor-column-index-three"
-    >
-      03</span
-    >
-    <span
-      v-show="a_column_toggle_four"
-      class="span__platemap-editor-column-index-four"
-    >
-      04</span
-    >
-    <span
-      v-show="a_column_toggle_five"
-      class="span__platemap-editor-column-index-five"
-      >05</span
-    ><span
-      v-show="a_column_toggle_six"
-      class="span__platemap-editor-column-index-six"
-    >
-      06</span
-    >
-    <span v-show="a_row_toggle_A" class="span__platemap-editor-row-index-A">
-      A</span
-    >
-    <span v-show="a_row_toggle_B" class="span__platemap-editor-row-index-B">
-      B</span
-    >
-    <span v-show="a_row_toggle_C" class="span__platemap-editor-row-index-C">
-      C</span
-    >
-    <span v-show="a_row_toggle_D" class="span__platemap-editor-row-index-D">
-      D</span
-    >
+    <span class="span__platemap-editor-column-index-one"> 01</span>
+    <span class="span__platemap-editor-column-index-two"> 02</span>
+    <span class="span__platemap-editor-column-index-three"> 03</span>
+    <span class="span__platemap-editor-column-index-four"> 04</span>
+    <span class="span__platemap-editor-column-index-five">05</span
+    ><span class="span__platemap-editor-column-index-six"> 06</span>
+    <span class="span__platemap-editor-row-index-A"> A</span>
+    <span class="span__platemap-editor-row-index-B"> B</span>
+    <span class="span__platemap-editor-row-index-C"> C</span>
+    <span class="span__platemap-editor-row-index-D"> D</span>
     <span
       class="span__platemap-toggle-plus-minus-icon"
-      @click="on_toggle_all(all_toggle)"
+      @click="on_select_cancel_all(all_select_or_cancel)"
     >
-      <FontAwesomeIcon v-show="all_toggle" :icon="['fa', 'plus-circle']" />
-      <FontAwesomeIcon v-show="!all_toggle" :icon="['fa', 'minus-circle']" />
+      <FontAwesomeIcon
+        v-show="all_select_or_cancel"
+        :icon="['fa', 'plus-circle']"
+      />
+      <FontAwesomeIcon
+        v-show="!all_select_or_cancel"
+        :icon="['fa', 'minus-circle']"
+      />
     </span>
     <span
       v-for="well_index in Array(24).keys()"
@@ -60,9 +30,9 @@
       :class="'well_' + well_index"
       width="66"
       height="66"
-      @click.exact="basic_toggle(well_index)"
-      @click.ctrl.exact="basic_shift_or_ctrl_toggle(well_index)"
-      @click.shift.exact="basic_shift_or_ctrl_toggle(well_index)"
+      @click.exact="basic_select(well_index)"
+      @click.ctrl.exact="basic_shift_or_ctrl_select(well_index)"
+      @click.shift.exact="basic_shift_or_ctrl_select(well_index)"
     >
       <PlateWell
         :classname="'plate_' + well_index"
@@ -114,18 +84,7 @@ export default {
   },
   data() {
     return {
-      all_toggle: true,
-      a_row_toggle_A: true,
-      a_row_toggle_B: true,
-      a_row_toggle_C: true,
-      a_row_toggle_D: true,
-      a_column_toggle_one: true,
-      a_column_toggle_two: true,
-      a_column_toggle_three: true,
-      a_column_toggle_four: true,
-      a_column_toggle_five: true,
-      a_column_toggle_six: true,
-      a_drag_drop_toggle: false,
+      all_select_or_cancel: true,
       x_origin: 0,
       y_origin: 0,
       rect_width: 0,
@@ -144,247 +103,14 @@ export default {
         return 4;
       }
     },
-    on_toggle_all(state) {
-      this.all_toggle = !state;
+    on_select_cancel_all(state) {
+      this.all_select_or_cancel = !state;
       for (let count = 0; count < 24; count++) {
         this.all_select[count] = state;
       }
-      // this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_C = this.a_row_toggle_D = this.all_toggle;
-      // this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = this.all_toggle;
       this.on_plate_well_selected();
     },
-    on_hover_all_enter() {
-      // this.hover_color = "#ececed";
-      // for (let count = 0; count < 24; count++) {
-      //   this.hover[count] = false;
-      // }
-    },
-    on_hover_all_leave() {
-      // this.hover_color = "#FFFFFF";
-      // for (let count = 0; count < 24; count++) {
-      //   this.hover[count] = true;
-      // }
-    },
-    on_row_toggle(value) {
-      let row_toggle_flag = false;
-      for (let i = 0; i < 24; i++) {
-        this.all_select[i] = false;
-      }
-      this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = false;
-      switch (value) {
-        case "A":
-          this.a_row_toggle_A = !this.a_row_toggle_A;
-          row_toggle_flag = this.a_row_toggle_A;
-          this.a_row_toggle_B = this.a_row_toggle_C = this.a_row_toggle_D = false;
-          break;
-        case "B":
-          this.a_row_toggle_B = !this.a_row_toggle_B;
-          row_toggle_flag = this.a_row_toggle_B;
-          this.a_row_toggle_A = this.a_row_toggle_C = this.a_row_toggle_D = false;
-          break;
-        case "C":
-          this.a_row_toggle_C = !this.a_row_toggle_C;
-          row_toggle_flag = this.a_row_toggle_C;
-          this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_D = false;
-          break;
-        case "D":
-          this.a_row_toggle_D = !this.a_row_toggle_D;
-          row_toggle_flag = this.a_row_toggle_D;
-          this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_C = false;
-          break;
-      }
-      const row_index = value.charCodeAt(0) - 65;
-      for (
-        let column_index = 0;
-        column_index < twenty_four_well_labware_definition.num_columns;
-        column_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.all_select[well_index] = row_toggle_flag;
-      }
-      this.on_plate_well_selected();
-    },
-    on_shift_or_ctrl_row_toggle(value) {
-      switch (value) {
-        case "A":
-          this.a_row_toggle_A = !this.a_row_toggle_A;
-          this.all_select[0] = this.a_column_toggle_one
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[4] = this.a_column_toggle_two
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[8] = this.a_column_toggle_three
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[12] = this.a_column_toggle_four
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[16] = this.a_column_toggle_five
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[20] = this.a_column_toggle_six
-            ? true
-            : this.a_row_toggle_A;
-          break;
-        case "B":
-          this.a_row_toggle_B = !this.a_row_toggle_B;
-          this.all_select[1] = this.a_column_toggle_one
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[5] = this.a_column_toggle_two
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[9] = this.a_column_toggle_three
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[13] = this.a_column_toggle_four
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[17] = this.a_column_toggle_five
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[21] = this.a_column_toggle_six
-            ? true
-            : this.a_row_toggle_B;
-          break;
-        case "C":
-          this.a_row_toggle_C = !this.a_row_toggle_C;
-          this.all_select[2] = this.a_column_toggle_one
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[6] = this.a_column_toggle_two
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[10] = this.a_column_toggle_three
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[14] = this.a_column_toggle_four
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[18] = this.a_column_toggle_five
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[22] = this.a_column_toggle_six
-            ? true
-            : this.a_row_toggle_C;
-          break;
-        case "D":
-          this.a_row_toggle_D = !this.a_row_toggle_D;
-          this.all_select[3] = this.a_column_toggle_one
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[7] = this.a_column_toggle_two
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[11] = this.a_column_toggle_three
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[15] = this.a_column_toggle_four
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[19] = this.a_column_toggle_five
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[23] = this.a_column_toggle_six
-            ? true
-            : this.a_row_toggle_D;
-          break;
-      }
-      this.on_plate_well_selected();
-    },
-    on_shift_or_ctrl_row_toggle_negate(value) {
-      switch (value) {
-        case "A":
-          this.a_row_toggle_A = !this.a_row_toggle_A;
-          this.all_select[0] = this.a_column_toggle_one
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[4] = this.a_column_toggle_two
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[8] = this.a_column_toggle_three
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[12] = this.a_column_toggle_four
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[16] = this.a_column_toggle_five
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[20] = this.a_column_toggle_six
-            ? false
-            : this.a_row_toggle_A;
-          break;
-        case "B":
-          this.a_row_toggle_B = !this.a_row_toggle_B;
-          this.all_select[1] = this.a_column_toggle_one
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[5] = this.a_column_toggle_two
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[9] = this.a_column_toggle_three
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[13] = this.a_column_toggle_four
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[17] = this.a_column_toggle_five
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[21] = this.a_column_toggle_six
-            ? false
-            : this.a_row_toggle_B;
-          break;
-        case "C":
-          this.a_row_toggle_C = !this.a_row_toggle_C;
-          this.all_select[2] = this.a_column_toggle_one
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[6] = this.a_column_toggle_two
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[10] = this.a_column_toggle_three
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[14] = this.a_column_toggle_four
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[18] = this.a_column_toggle_five
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[22] = this.a_column_toggle_six
-            ? false
-            : this.a_row_toggle_C;
-          break;
-        case "D":
-          this.a_row_toggle_D = !this.a_row_toggle_D;
-          this.all_select[3] = this.a_column_toggle_one
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[7] = this.a_column_toggle_two
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[11] = this.a_column_toggle_three
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[15] = this.a_column_toggle_four
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[19] = this.a_column_toggle_five
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[23] = this.a_column_toggle_six
-            ? false
-            : this.a_row_toggle_D;
-          break;
-      }
-      this.on_plate_well_selected();
-    },
+
     on_row_hover_enter(value) {
       this.hover_color = "#ececed";
 
@@ -417,248 +143,6 @@ export default {
         );
         this.hover[well_index] = true;
       }
-    },
-    on_column_toggle(value) {
-      let column_toggle_flag = false;
-      for (let i = 0; i < 24; i++) {
-        this.all_select[i] = false;
-      }
-      this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_C = this.a_row_toggle_D = false;
-      switch (value) {
-        case "01":
-          this.a_column_toggle_one = !this.a_column_toggle_one;
-          column_toggle_flag = this.a_column_toggle_one;
-          this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = false;
-          break;
-        case "02":
-          this.a_column_toggle_two = !this.a_column_toggle_two;
-          column_toggle_flag = this.a_column_toggle_two;
-          this.a_column_toggle_one = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = false;
-          break;
-        case "03":
-          this.a_column_toggle_three = !this.a_column_toggle_three;
-          column_toggle_flag = this.a_column_toggle_three;
-          this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = false;
-          break;
-        case "04":
-          this.a_column_toggle_four = !this.a_column_toggle_four;
-          column_toggle_flag = this.a_column_toggle_four;
-          this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_five = this.a_column_toggle_six = false;
-          break;
-        case "05":
-          this.a_column_toggle_five = !this.a_column_toggle_five;
-          column_toggle_flag = this.a_column_toggle_five;
-          this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_six = false;
-          break;
-        case "06":
-          this.a_column_toggle_six = !this.a_column_toggle_six;
-          column_toggle_flag = this.a_column_toggle_six;
-          this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = false;
-          break;
-      }
-      const column_index = parseInt(value) - 1; // as incoming values start from 01
-      for (
-        let row_index = 0;
-        row_index < twenty_four_well_labware_definition.num_rows;
-        row_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.all_select[well_index] = column_toggle_flag;
-      }
-      this.on_plate_well_selected();
-    },
-    on_shift_or_ctrl_column_toggle(value) {
-      switch (value) {
-        case "01":
-          this.a_column_toggle_one = !this.a_column_toggle_one;
-          this.all_select[0] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_one;
-          this.all_select[1] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_one;
-          this.all_select[2] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_one;
-          this.all_select[3] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_one;
-          break;
-        case "02":
-          this.a_column_toggle_two = !this.a_column_toggle_two;
-          this.all_select[4] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_two;
-          this.all_select[5] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_two;
-          this.all_select[6] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_two;
-          this.all_select[7] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_two;
-          break;
-        case "03":
-          this.a_column_toggle_three = !this.a_column_toggle_three;
-          this.all_select[8] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_three;
-          this.all_select[9] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_three;
-          this.all_select[10] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_three;
-          this.all_select[11] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_three;
-          break;
-        case "04":
-          this.a_column_toggle_four = !this.a_column_toggle_four;
-          this.all_select[12] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_four;
-          this.all_select[13] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_four;
-          this.all_select[14] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_four;
-          this.all_select[15] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_four;
-          break;
-        case "05":
-          this.a_column_toggle_five = !this.a_column_toggle_five;
-          this.all_select[16] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_five;
-          this.all_select[17] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_five;
-          this.all_select[18] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_five;
-          this.all_select[19] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_five;
-          break;
-        case "06":
-          this.a_column_toggle_six = !this.a_column_toggle_six;
-          this.all_select[20] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_six;
-          this.all_select[21] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_six;
-          this.all_select[22] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_six;
-          this.all_select[23] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_six;
-          break;
-      }
-      this.on_plate_well_selected();
-    },
-    on_shift_or_ctrl_column_toggle_negate(value) {
-      switch (value) {
-        case "01":
-          this.a_column_toggle_one = !this.a_column_toggle_one;
-          this.all_select[0] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_one;
-          this.all_select[1] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_one;
-          this.all_select[2] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_one;
-          this.all_select[3] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_one;
-          break;
-        case "02":
-          this.a_column_toggle_two = !this.a_column_toggle_two;
-          this.all_select[4] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_two;
-          this.all_select[5] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_two;
-          this.all_select[6] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_two;
-          this.all_select[7] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_two;
-          break;
-        case "03":
-          this.a_column_toggle_three = !this.a_column_toggle_three;
-          this.all_select[8] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_three;
-          this.all_select[9] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_three;
-          this.all_select[10] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_three;
-          this.all_select[11] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_three;
-          break;
-        case "04":
-          this.a_column_toggle_four = !this.a_column_toggle_four;
-          this.all_select[12] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_four;
-          this.all_select[13] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_four;
-          this.all_select[14] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_four;
-          this.all_select[15] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_four;
-          break;
-        case "05":
-          this.a_column_toggle_five = !this.a_column_toggle_five;
-          this.all_select[16] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_five;
-          this.all_select[17] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_five;
-          this.all_select[18] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_five;
-          this.all_select[19] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_five;
-          break;
-        case "06":
-          this.a_column_toggle_six = !this.a_column_toggle_six;
-          this.all_select[20] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_six;
-          this.all_select[21] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_six;
-          this.all_select[22] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_six;
-          this.all_select[23] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_six;
-          break;
-      }
-      this.on_plate_well_selected();
     },
     on_column_hover_enter(value) {
       this.hover_color = "#ececed";
@@ -693,40 +177,29 @@ export default {
         this.hover[well_index] = true;
       }
     },
-    basic_toggle(value) {
+    basic_select(value) {
       const new_list = new Array(24).fill(false);
 
       new_list[value] = true;
       this.all_select = new_list;
+      if (this.all_select_or_cancel == false) {
+        this.all_select_or_cancel = true;
+      }
       this.hover_color = "#FFFFFF";
 
       this.on_plate_well_selected();
     },
-    basic_shift_or_ctrl_toggle(value) {
+    basic_shift_or_ctrl_select(value) {
       this.testerf = !this.testerf;
       const allEqual = (arr) => arr.every((v) => v === arr[0]);
       this.all_select[value] = !this.all_select[value];
       if (allEqual(this.all_select)) {
-        this.all_toggle = false;
+        this.all_select_or_cancel = false;
       } else {
-        this.all_toggle = true;
+        this.all_select_or_cancel = true;
       }
       this.on_plate_well_selected();
     },
-    // drag_startselect(event) {
-    //   this.a_drag_drop_toggle = true;
-    //   this.x_origin = event.pageX - 20;
-    //   this.y_origin = event.pageY - 30;
-    // },
-    // track_position(event) {
-    //   this.rect_width = event.pageX - this.x_origin;
-    //   this.rect_height = event.pageY - this.y_origin;
-    // },
-    // drag_endselect(event) {
-    //   this.rect_width = event.pageX - this.x_origin;
-    //   this.rect_height = event.pageY - this.y_origin;
-    //   this.a_drag_drop_toggle = false;
-    // },
     on_wellenter(value) {
       // this.hover[value] = false;
       // this.hover_color = "#ececed";
