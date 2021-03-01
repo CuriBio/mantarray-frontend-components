@@ -2,228 +2,58 @@
   <div>
     <div class="div__platemap-editor-backdrop"></div>
     <span
-      v-show="!a_column_toggle_one"
-      class="span__platemap-editor-column-index-one"
-      @click.exact="on_column_toggle('01')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('01')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('01')"
-      @mouseenter="on_column_hover_enter('01')"
-      @mouseleave="on_column_hover_leave('01')"
-      >01</span
-    >
-    <span
       v-show="a_column_toggle_one"
-      class="span__platemap-editor-column-index-one-negate"
-      @click.exact="on_column_toggle('01')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('01')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('01')"
-      @mouseenter="on_column_hover_enter('01')"
-      @mouseleave="on_column_hover_leave('01')"
-      >01</span
+      class="span__platemap-editor-column-index-one"
     >
-    <span
-      v-show="!a_column_toggle_two"
-      class="span__platemap-editor-column-index-two"
-      @click.exact="on_column_toggle('02')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('02')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('02')"
-      @mouseenter="on_column_hover_enter('02')"
-      @mouseleave="on_column_hover_leave('02')"
-      >02</span
+      01</span
     >
     <span
       v-show="a_column_toggle_two"
-      class="span__platemap-editor-column-index-two-negate"
-      @click.exact="on_column_toggle('02')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('02')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('02')"
-      @mouseenter="on_column_hover_enter('02')"
-      @mouseleave="on_column_hover_leave('02')"
-      >02</span
+      class="span__platemap-editor-column-index-two"
     >
-    <span
-      v-show="!a_column_toggle_three"
-      class="span__platemap-editor-column-index-three"
-      @click.exact="on_column_toggle('03')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('03')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('03')"
-      @mouseenter="on_column_hover_enter('03')"
-      @mouseleave="on_column_hover_leave('03')"
-      >03</span
+      02</span
     >
     <span
       v-show="a_column_toggle_three"
-      class="span__platemap-editor-column-index-three-negate"
-      @click.exact="on_column_toggle('03')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('03')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('03')"
-      @mouseenter="on_column_hover_enter('03')"
-      @mouseleave="on_column_hover_leave('03')"
-      >03</span
+      class="span__platemap-editor-column-index-three"
     >
-    <span
-      v-show="!a_column_toggle_four"
-      class="span__platemap-editor-column-index-four"
-      @click.exact="on_column_toggle('04')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('04')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('04')"
-      @mouseenter="on_column_hover_enter('04')"
-      @mouseleave="on_column_hover_leave('04')"
-      >04</span
+      03</span
     >
     <span
       v-show="a_column_toggle_four"
-      class="span__platemap-editor-column-index-four-negate"
-      @click.exact="on_column_toggle('04')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('04')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('04')"
-      @mouseenter="on_column_hover_enter('04')"
-      @mouseleave="on_column_hover_leave('04')"
-      >04</span
+      class="span__platemap-editor-column-index-four"
     >
-    <span
-      v-show="!a_column_toggle_five"
-      class="span__platemap-editor-column-index-five"
-      @click.exact="on_column_toggle('05')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('05')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('05')"
-      @mouseenter="on_column_hover_enter('05')"
-      @mouseleave="on_column_hover_leave('05')"
-      >05</span
+      04</span
     >
     <span
       v-show="a_column_toggle_five"
-      class="span__platemap-editor-column-index-five-negate"
-      @click.exact="on_column_toggle('05')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('05')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('05')"
-      @mouseenter="on_column_hover_enter('05')"
-      @mouseleave="on_column_hover_leave('05')"
+      class="span__platemap-editor-column-index-five"
       >05</span
-    >
-    <span
-      v-show="!a_column_toggle_six"
-      class="span__platemap-editor-column-index-six"
-      @click.exact="on_column_toggle('06')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('06')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('06')"
-      @mouseenter="on_column_hover_enter('06')"
-      @mouseleave="on_column_hover_leave('06')"
-      >06</span
-    >
-    <span
+    ><span
       v-show="a_column_toggle_six"
-      class="span__platemap-editor-column-index-six-negate"
-      @click.exact="on_column_toggle('06')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('06')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('06')"
-      @mouseenter="on_column_hover_enter('06')"
-      @mouseleave="on_column_hover_leave('06')"
-      >06</span
+      class="span__platemap-editor-column-index-six"
+    >
+      06</span
+    >
+    <span v-show="a_row_toggle_A" class="span__platemap-editor-row-index-A">
+      A</span
+    >
+    <span v-show="a_row_toggle_B" class="span__platemap-editor-row-index-B">
+      B</span
+    >
+    <span v-show="a_row_toggle_C" class="span__platemap-editor-row-index-C">
+      C</span
+    >
+    <span v-show="a_row_toggle_D" class="span__platemap-editor-row-index-D">
+      D</span
     >
     <span
-      v-show="!a_row_toggle_A"
-      class="span__platemap-editor-row-index-A"
-      @click.exact="on_row_toggle('A')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle('A')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle('A')"
-      @mouseenter="on_row_hover_enter('A')"
-      @mouseleave="on_row_hover_leave('A')"
-      >A</span
+      class="span__platemap-toggle-plus-minus-icon"
+      @click="on_toggle_all(all_toggle)"
     >
-    <span
-      v-show="a_row_toggle_A"
-      class="span__platemap-editor-row-index-A-negate"
-      @click.exact="on_row_toggle('A')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle_negate('A')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle_negate('A')"
-      @mouseenter="on_row_hover_enter('A')"
-      @mouseleave="on_row_hover_leave('A')"
-      >A</span
-    >
-    <span
-      v-show="!a_row_toggle_B"
-      class="span__platemap-editor-row-index-B"
-      @click.exact="on_row_toggle('B')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle('B')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle('B')"
-      @mouseenter="on_row_hover_enter('B')"
-      @mouseleave="on_row_hover_leave('B')"
-      >B</span
-    >
-    <span
-      v-show="a_row_toggle_B"
-      class="span__platemap-editor-row-index-B-negate"
-      @click.exact="on_row_toggle('B')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle_negate('B')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle_negate('B')"
-      @mouseenter="on_row_hover_enter('B')"
-      @mouseleave="on_row_hover_leave('B')"
-      >B</span
-    >
-    <span
-      v-show="!a_row_toggle_C"
-      class="span__platemap-editor-row-index-C"
-      @click.exact="on_row_toggle('C')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle('C')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle('C')"
-      @mouseenter="on_row_hover_enter('C')"
-      @mouseleave="on_row_hover_leave('C')"
-      >C</span
-    >
-    <span
-      v-show="a_row_toggle_C"
-      class="span__platemap-editor-row-index-C-negate"
-      @click.exact="on_row_toggle('C')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle_negate('C')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle_negate('C')"
-      @mouseenter="on_row_hover_enter('C')"
-      @mouseleave="on_row_hover_leave('C')"
-      >C</span
-    >
-    <span
-      v-show="!a_row_toggle_D"
-      class="span__platemap-editor-row-index-D"
-      @click.exact="on_row_toggle('D')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle('D')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle('D')"
-      @mouseenter="on_row_hover_enter('D')"
-      @mouseleave="on_row_hover_leave('D')"
-      >D</span
-    >
-    <span
-      v-show="a_row_toggle_D"
-      class="span__platemap-editor-row-index-D-negate"
-      @click.exact="on_row_toggle('D')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle_negate('D')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle_negate('D')"
-      @mouseenter="on_row_hover_enter('D')"
-      @mouseleave="on_row_hover_leave('D')"
-      >D</span
-    >
-    <span
-      v-show="!all_toggle"
-      class="span__platemap-toggle-plus-icon"
-      @click="on_toggle_all()"
-      @mouseenter="on_hover_all_enter()"
-      @mouseleave="on_hover_all_leave()"
-    >
-      <FontAwesomeIcon :icon="['fa', 'plus-circle']" />
+      <FontAwesomeIcon v-show="all_toggle" :icon="['fa', 'plus-circle']" />
+      <FontAwesomeIcon v-show="!all_toggle" :icon="['fa', 'minus-circle']" />
     </span>
-    <span
-      v-show="all_toggle"
-      class="span__platemap-toggle-minus-icon"
-      @click="on_toggle_all()"
-      @mouseenter="on_hover_all_enter()"
-      @mouseleave="on_hover_all_leave()"
-    >
-      <FontAwesomeIcon :icon="['fa', 'minus-circle']" />
-    </span>
-    <!-- <div class="div__platemap-drag-drop-selector" @mousedown="drag_startselect" @mousemove="track_position" @mouseup="drag_endselect">
-      <svg width="400" height="260" v-show="a_drag_drop_toggle">
-        <rect v-bind:x="x_origin" v-bind:y="y_origin" v-bind:width="rect_width" v-bind:height="rect_height"
-          style="fill:none;stroke:#b7b7b7;stroke-width:1;fill-opacity:0.9;stroke-opacity:0.9" />
-      </svg> -->
     <span
       v-for="well_index in Array(24).keys()"
       :key="well_index"
@@ -243,10 +73,10 @@
         :radius="25"
         :strk="hover_color"
         :plate_fill="platecolor[well_index]"
-        :stroke_wdth="!all_select[well_index] && hover[well_index] ? 0 : 4"
+        :stroke_wdth="compute_hover_stk_wdth(well_index)"
         :index="well_index"
-        @enter-well="on_wellenter"
-        @leave-well="on_wellleave"
+        @enter-well="on_wellenter(well_index)"
+        @leave-well="on_wellleave(well_index)"
       ></PlateWell>
     </span>
     <div v-show="testerf"></div>
@@ -260,6 +90,8 @@ import PlateWell from "@/components/basic_widgets/PlateWell.vue";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 
 const twenty_four_well_labware_definition = new LabwareDefinition(4, 6);
+
+// :stroke_wdth="!all_select[well_index] && hover[well_index] ? 0 : 4"
 
 library.add(faMinusCircle);
 library.add(faPlusCircle);
@@ -282,17 +114,17 @@ export default {
   },
   data() {
     return {
-      all_toggle: false,
-      a_row_toggle_A: false,
-      a_row_toggle_B: false,
-      a_row_toggle_C: false,
-      a_row_toggle_D: false,
-      a_column_toggle_one: false,
-      a_column_toggle_two: false,
-      a_column_toggle_three: false,
-      a_column_toggle_four: false,
-      a_column_toggle_five: false,
-      a_column_toggle_six: false,
+      all_toggle: true,
+      a_row_toggle_A: true,
+      a_row_toggle_B: true,
+      a_row_toggle_C: true,
+      a_row_toggle_D: true,
+      a_column_toggle_one: true,
+      a_column_toggle_two: true,
+      a_column_toggle_three: true,
+      a_column_toggle_four: true,
+      a_column_toggle_five: true,
+      a_column_toggle_six: true,
       a_drag_drop_toggle: false,
       x_origin: 0,
       y_origin: 0,
@@ -305,26 +137,33 @@ export default {
     };
   },
   methods: {
-    on_toggle_all() {
-      this.all_toggle = !this.all_toggle;
-      for (let count = 0; count < 24; count++) {
-        this.all_select[count] = this.all_toggle;
+    compute_hover_stk_wdth(index) {
+      if (!this.all_select[index] && this.hover[index]) {
+        return 0;
+      } else {
+        return 4;
       }
-      this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_C = this.a_row_toggle_D = this.all_toggle;
-      this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = this.all_toggle;
+    },
+    on_toggle_all(state) {
+      this.all_toggle = !state;
+      for (let count = 0; count < 24; count++) {
+        this.all_select[count] = state;
+      }
+      // this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_C = this.a_row_toggle_D = this.all_toggle;
+      // this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = this.all_toggle;
       this.on_plate_well_selected();
     },
     on_hover_all_enter() {
-      this.hover_color = "#ececed";
-      for (let count = 0; count < 24; count++) {
-        this.hover[count] = false;
-      }
+      // this.hover_color = "#ececed";
+      // for (let count = 0; count < 24; count++) {
+      //   this.hover[count] = false;
+      // }
     },
     on_hover_all_leave() {
-      this.hover_color = "#FFFFFF";
-      for (let count = 0; count < 24; count++) {
-        this.hover[count] = true;
-      }
+      // this.hover_color = "#FFFFFF";
+      // for (let count = 0; count < 24; count++) {
+      //   this.hover[count] = true;
+      // }
     },
     on_row_toggle(value) {
       let row_toggle_flag = false;
@@ -856,13 +695,22 @@ export default {
     },
     basic_toggle(value) {
       const new_list = new Array(24).fill(false);
+
       new_list[value] = true;
       this.all_select = new_list;
+      this.hover_color = "#FFFFFF";
+
       this.on_plate_well_selected();
     },
     basic_shift_or_ctrl_toggle(value) {
       this.testerf = !this.testerf;
+      const allEqual = (arr) => arr.every((v) => v === arr[0]);
       this.all_select[value] = !this.all_select[value];
+      if (allEqual(this.all_select)) {
+        this.all_toggle = false;
+      } else {
+        this.all_toggle = true;
+      }
       this.on_plate_well_selected();
     },
     // drag_startselect(event) {
@@ -880,12 +728,12 @@ export default {
     //   this.a_drag_drop_toggle = false;
     // },
     on_wellenter(value) {
-      this.hover[value] = false;
-      this.hover_color = "#ececed";
+      // this.hover[value] = false;
+      // this.hover_color = "#ececed";
     },
     on_wellleave(value) {
-      this.hover[value] = true;
-      this.hover_color = "#FFFFFF";
+      // this.hover[value] = true;
+      // this.hover_color = "#FFFFFF";
     },
     on_plate_well_selected() {
       this.$emit("platewell-selected", this.all_select);
@@ -894,12 +742,12 @@ export default {
 };
 </script>
 <style>
-.well_not_selected {
-  stroke-width: 0;
-}
-.well_selected {
-  stroke-width: 2;
-}
+/*.well_not_selected {*/
+/*  stroke-width: 0;*/
+/*}*/
+/*.well_selected {*/
+/*  stroke-width: 2;*/
+/*}*/
 
 .div__platemap-editor-backdrop {
   transform: rotate(0deg);
@@ -935,8 +783,7 @@ export default {
   pointer-events: all;
 }
 
-.span__platemap-editor-column-index-one,
-.span__platemap-editor-column-index-one-negate {
+.span__platemap-editor-column-index-one {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -960,35 +807,23 @@ export default {
 }
 
 .span__platemap-editor-column-index-one:hover,
-.span__platemap-editor-column-index-one-negate:hover,
 .span__platemap-editor-column-index-two:hover,
-.span__platemap-editor-column-index-two-negate:hover,
 .span__platemap-editor-column-index-three:hover,
-.span__platemap-editor-column-index-three-negate:hover,
 .span__platemap-editor-column-index-four:hover,
-.span__platemap-editor-column-index-four-negate:hover,
 .span__platemap-editor-column-index-five:hover,
-.span__platemap-editor-column-index-five-negate:hover,
 .span__platemap-editor-column-index-six:hover,
-.span__platemap-editor-column-index-six-negate:hover,
 .span__platemap-editor-row-index-A:hover,
-.span__platemap-editor-row-index-A-negate:hover,
 .span__platemap-editor-row-index-B:hover,
-.span__platemap-editor-row-index-B-negate:hover,
 .span__platemap-editor-row-index-C:hover,
-.span__platemap-editor-row-index-C-negate:hover,
-.span__platemap-editor-row-index-D:hover,
-.span__platemap-editor-row-index-D-negate:hover {
+.span__platemap-editor-row-index-D:hover {
   color: #ececed;
 }
 
-.span__platemap-toggle-plus-icon:hover,
-.span__platemap-toggle-minus-icon:hover {
+.span__platemap-toggle-plus-minus-icon:hover {
   color: #ffffff;
 }
 
-.span__platemap-editor-column-index-two,
-.span__platemap-editor-column-index-two-negate {
+.span__platemap-editor-column-index-two {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1010,8 +845,7 @@ export default {
   text-align: center;
   z-index: 59;
 }
-.span__platemap-editor-column-index-three,
-.span__platemap-editor-column-index-three-negate {
+.span__platemap-editor-column-index-three {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1033,8 +867,7 @@ export default {
   text-align: center;
   z-index: 61;
 }
-.span__platemap-editor-column-index-four,
-.span__platemap-editor-column-index-four-negate {
+.span__platemap-editor-column-index-four {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1056,8 +889,7 @@ export default {
   text-align: center;
   z-index: 63;
 }
-.span__platemap-editor-column-index-five,
-.span__platemap-editor-column-index-five-negate {
+.span__platemap-editor-column-index-five {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1080,8 +912,7 @@ export default {
   z-index: 65;
 }
 
-.span__platemap-editor-column-index-six,
-.span__platemap-editor-column-index-six-negate {
+.span__platemap-editor-column-index-six {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1103,8 +934,7 @@ export default {
   text-align: center;
   z-index: 67;
 }
-.span__platemap-editor-row-index-A,
-.span__platemap-editor-row-index-A-negate {
+.span__platemap-editor-row-index-A {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1126,8 +956,7 @@ export default {
   text-align: left;
   z-index: 51;
 }
-.span__platemap-editor-row-index-B,
-.span__platemap-editor-row-index-B-negate {
+.span__platemap-editor-row-index-B {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1149,8 +978,7 @@ export default {
   text-align: left;
   z-index: 51;
 }
-.span__platemap-editor-row-index-C,
-.span__platemap-editor-row-index-C-negate {
+.span__platemap-editor-row-index-C {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1172,8 +1000,7 @@ export default {
   text-align: left;
   z-index: 55;
 }
-.span__platemap-editor-row-index-D,
-.span__platemap-editor-row-index-D-negate {
+.span__platemap-editor-row-index-D {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1195,8 +1022,7 @@ export default {
   text-align: left;
   z-index: 53;
 }
-.span__platemap-toggle-plus-icon,
-.span__platemap-toggle-minus-icon {
+.span__platemap-toggle-plus-minus-icon {
   overflow: hidden;
   white-space: nowrap;
   text-align: center;
