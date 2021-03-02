@@ -44,70 +44,66 @@ describe("PlateMapEditor.vue", () => {
     const all_wells = wrapper.findAll("circle");
     expect(all_wells).toHaveLength(24);
   });
-  // test("Given that none of the wells are selected, minus button should not be visible and stroke outlines should be zero on all wells, When user clicks the plus button, Then all 24 wells should have a stroke outline", async () => {
-  //   const select = [];
-  //   for (let i = 0; i < 24; i++) {
-  //     select.push(false);
-  //   }
-  //   const color = new Array(24).fill("#b7b7b7");
+  test("Given that none of the wells are selected, minus button should not be visible and stroke outlines should be zero on all wells, When user clicks the plus button, Then all 24 wells should have a stroke outline", async () => {
+    const select = [];
+    for (let i = 0; i < 24; i++) {
+      select.push(false);
+    }
+    const color = new Array(24).fill("#b7b7b7");
 
-  //   const propsData = {
-  //     selected: select,
-  //     platecolor: color,
-  //   };
-  //   wrapper = mount(ComponentToTest, {
-  //     propsData,
-  //     store,
-  //     localVue,
-  //   });
+    const propsData = {
+      selected: select,
+      platecolor: color,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
 
-  //   const icon_minus_btn = wrapper.find(".span__platemap-toggle-minus-icon");
-  //   expect(icon_minus_btn.isVisible()).toBe(false);
+    const icon_btn = wrapper.find(".span__platemap-toggle-plus-minus-icon");
 
-  //   for (let count = 0; count < 24; count++) {
-  //     const well1 = wrapper.find(".plate_" + count);
-  //     expect(well1.attributes("stroke-width")).toBe("0");
-  //   }
-  //   const icon_plus_btn = wrapper.find(".span__platemap-toggle-plus-icon");
-  //   await icon_plus_btn.trigger("click");
-  //   for (let count = 0; count < 24; count++) {
-  //     const well2 = wrapper.find(".plate_" + count);
-  //     expect(well2.attributes("stroke-width")).toBe("4");
-  //   }
-  // });
-  // test("Given that all of the wells are selected, plus button should not be visible and stroke outlines should be present on all wells, When user clicks the minus button, Then all 24 wells should no longer have a stroke outline", async () => {
-  //   const select = [];
-  //   for (let i = 0; i < 24; i++) {
-  //     select.push(false);
-  //   }
-  //   const color = new Array(24).fill("#b7b7b7");
+    for (let count = 0; count < 24; count++) {
+      const well1 = wrapper.find(".plate_" + count);
+      expect(well1.attributes("stroke-width")).toBe("0");
+    }
 
-  //   const propsData = {
-  //     selected: select,
-  //     platecolor: color,
-  //   };
-  //   wrapper = mount(ComponentToTest, {
-  //     propsData,
-  //     store,
-  //     localVue,
-  //   });
+    await icon_btn.trigger("click");
+    for (let count = 0; count < 24; count++) {
+      const well2 = wrapper.find(".plate_" + count);
+      expect(well2.attributes("stroke-width")).toBe("4");
+    }
+  });
+  test("Given that all of the wells are selected, plus button should not be visible and stroke outlines should be present on all wells, When user clicks the minus button, Then all 24 wells should no longer have a stroke outline", async () => {
+    const select = [];
+    for (let i = 0; i < 24; i++) {
+      select.push(true);
+    }
+    const color = new Array(24).fill("#b7b7b7");
 
-  //   const icon_minus_btn = wrapper.find(".span__platemap-toggle-minus-icon");
-  //   const icon_plus_btn = wrapper.find(".span__platemap-toggle-plus-icon");
+    const propsData = {
+      selected: select,
+      platecolor: color,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
 
-  //   await icon_plus_btn.trigger("click");
-  //   for (let count = 0; count < 24; count++) {
-  //     const well1 = wrapper.find(".plate_" + count);
-  //     expect(well1.attributes("stroke-width")).toBe("4");
-  //   }
-  //   expect(icon_plus_btn.isVisible()).toBe(false);
+    const icon_btn = wrapper.find(".span__platemap-toggle-plus-minus-icon");
 
-  //   await icon_minus_btn.trigger("click");
-  //   for (let count = 0; count < 24; count++) {
-  //     const well2 = wrapper.find(".plate_" + count);
-  //     expect(well2.attributes("stroke-width")).toBe("0");
-  //   }
-  // });
+    for (let count = 0; count < 24; count++) {
+      const well1 = wrapper.find(".plate_" + count);
+      expect(well1.attributes("stroke-width")).toBe("4");
+    }
+
+    await icon_btn.trigger("click");
+    for (let count = 0; count < 24; count++) {
+      const well2 = wrapper.find(".plate_" + count);
+      expect(well2.attributes("stroke-width")).toBe("0");
+    }
+  });
   // test("Given that none of the wells are selected, minus button should not be visible and stroke outlines should be zero on all wells, When hovers the plus button, Then all 24 wells should have a stroke hover outline", async () => {
   //   const select = [];
   //   for (let i = 0; i < 24; i++) {

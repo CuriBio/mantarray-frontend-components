@@ -13,7 +13,7 @@
     <span class="span__platemap-editor-row-index-D"> D</span>
     <span
       class="span__platemap-toggle-plus-minus-icon"
-      @click="on_select_cancel_all(all_select_or_cancel)"
+      @click.exact="on_select_cancel_all(all_select_or_cancel)"
     >
       <FontAwesomeIcon
         v-show="all_select_or_cancel"
@@ -41,9 +41,9 @@
         :circle_x="33"
         :circle_y="33"
         :radius="25"
-        :strk="hover_color"
+        :strk="hover_color[well_index]"
         :plate_fill="platecolor[well_index]"
-        :stroke_wdth="compute_hover_stk_wdth(well_index)"
+        :stroke_wdth="stroke_width[well_index]"
         :index="well_index"
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
@@ -57,9 +57,9 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
-import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
+// import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 
-const twenty_four_well_labware_definition = new LabwareDefinition(4, 6);
+// const twenty_four_well_labware_definition = new LabwareDefinition(4, 6);
 
 // :stroke_wdth="!all_select[well_index] && hover[well_index] ? 0 : 4"
 
@@ -90,123 +90,148 @@ export default {
       rect_width: 0,
       rect_height: 0,
       all_select: this.selected,
-      hover: new Array(24).fill(true),
-      hover_color: "#FFFFFF",
+      hover: new Array(24).fill(false),
+      hover_color: new Array(24).fill("#ececed"),
+      stroke_width: new Array(24).fill(0),
+      temp_stroke_width: [],
       testerf: false,
     };
   },
+  created() {
+    this.stroke_width.splice(0, this.stroke_width.length);
+    for (let j = 0; j < this.all_select.length; j++) {
+      this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
+    }
+    const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+    this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+  },
   methods: {
-    compute_hover_stk_wdth(index) {
-      if (!this.all_select[index] && this.hover[index]) {
-        return 0;
-      } else {
-        return 4;
-      }
-    },
     on_select_cancel_all(state) {
       this.all_select_or_cancel = !state;
       for (let count = 0; count < 24; count++) {
         this.all_select[count] = state;
       }
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
+      }
       this.on_plate_well_selected();
     },
 
-    on_row_hover_enter(value) {
-      this.hover_color = "#ececed";
+    // on_row_hover_enter(value) {
+    //   this.hover_color = "#ececed";
 
-      const row_index = value.charCodeAt(0) - 65;
+    //   const row_index = value.charCodeAt(0) - 65;
 
-      for (
-        let column_index = 0;
-        column_index < twenty_four_well_labware_definition.num_columns;
-        column_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.hover[well_index] = false;
-      }
-    },
-    on_row_hover_leave(value) {
-      this.hover_color = "#FFFFFF";
-      const row_index = value.charCodeAt(0) - 65;
+    //   for (
+    //     let column_index = 0;
+    //     column_index < twenty_four_well_labware_definition.num_columns;
+    //     column_index++
+    //   ) {
+    //     const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
+    //       row_index,
+    //       column_index
+    //     );
+    //     this.hover[well_index] = false;
+    //   }
+    // },
+    // on_row_hover_leave(value) {
+    //   this.hover_color = "#FFFFFF";
+    //   const row_index = value.charCodeAt(0) - 65;
 
-      for (
-        let column_index = 0;
-        column_index < twenty_four_well_labware_definition.num_columns;
-        column_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.hover[well_index] = true;
-      }
-    },
-    on_column_hover_enter(value) {
-      this.hover_color = "#ececed";
+    //   for (
+    //     let column_index = 0;
+    //     column_index < twenty_four_well_labware_definition.num_columns;
+    //     column_index++
+    //   ) {
+    //     const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
+    //       row_index,
+    //       column_index
+    //     );
+    //     this.hover[well_index] = true;
+    //   }
+    // },
+    // on_column_hover_enter(value) {
+    //   this.hover_color = "#ececed";
 
-      const column_index = parseInt(value) - 1; // as incoming values start from 01
+    //   const column_index = parseInt(value) - 1; // as incoming values start from 01
 
-      for (
-        let row_index = 0;
-        row_index < twenty_four_well_labware_definition.num_rows;
-        row_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.hover[well_index] = false;
-      }
-    },
-    on_column_hover_leave(value) {
-      this.hover_color = "#FFFFFF";
-      const column_index = parseInt(value) - 1; // as incoming values start from 01
+    //   for (
+    //     let row_index = 0;
+    //     row_index < twenty_four_well_labware_definition.num_rows;
+    //     row_index++
+    //   ) {
+    //     const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
+    //       row_index,
+    //       column_index
+    //     );
+    //     this.hover[well_index] = false;
+    //   }
+    // },
+    // on_column_hover_leave(value) {
+    //   this.hover_color = "#FFFFFF";
+    //   const column_index = parseInt(value) - 1; // as incoming values start from 01
 
-      for (
-        let row_index = 0;
-        row_index < twenty_four_well_labware_definition.num_rows;
-        row_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.hover[well_index] = true;
-      }
-    },
+    //   for (
+    //     let row_index = 0;
+    //     row_index < twenty_four_well_labware_definition.num_rows;
+    //     row_index++
+    //   ) {
+    //     const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
+    //       row_index,
+    //       column_index
+    //     );
+    //     this.hover[well_index] = true;
+    //   }
+    // },
     basic_select(value) {
       const new_list = new Array(24).fill(false);
 
       new_list[value] = true;
+      this.stroke_width[value] = 4;
       this.all_select = new_list;
       if (this.all_select_or_cancel == false) {
         this.all_select_or_cancel = true;
       }
-      this.hover_color = "#FFFFFF";
-
+      this.on_wellenter(value);
       this.on_plate_well_selected();
     },
     basic_shift_or_ctrl_select(value) {
       this.testerf = !this.testerf;
       const allEqual = (arr) => arr.every((v) => v === arr[0]);
       this.all_select[value] = !this.all_select[value];
+      this.stroke_width[value] = 4;
       if (allEqual(this.all_select)) {
         this.all_select_or_cancel = false;
       } else {
         this.all_select_or_cancel = true;
       }
+
       this.on_plate_well_selected();
     },
     on_wellenter(value) {
-      // this.hover[value] = false;
-      // this.hover_color = "#ececed";
+      this.hover[value] = true;
+      this.hover_color[value] = "#ececed";
+      // for(let i = 0; i < this.all_select.length; i++) {
+      //     this.temp_stroke_width[i] = this.stroke_width[i];
+      //   }
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
+      }
+      if (this.all_select[value] == true) {
+        this.stroke_width[value] = 4;
+      } else {
+        this.stroke_width[value] = 2;
+      }
     },
     on_wellleave(value) {
-      // this.hover[value] = true;
-      // this.hover_color = "#FFFFFF";
+      this.hover[value] = false;
+      this.hover_color[value] = "#FFFFFF";
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
+      }
     },
     on_plate_well_selected() {
       this.$emit("platewell-selected", this.all_select);
