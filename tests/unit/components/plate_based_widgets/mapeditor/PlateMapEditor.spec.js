@@ -62,17 +62,23 @@ describe("PlateMapEditor.vue", () => {
     });
 
     const icon_btn = wrapper.find(".span__platemap-toggle-plus-minus-icon");
+    const svg_plus = wrapper.find("#plus");
+    const svg_minus = wrapper.find("#minus");
 
+    expect(svg_plus.isVisible()).toBe(true);
     for (let count = 0; count < 24; count++) {
       const well1 = wrapper.find(".plate_" + count);
       expect(well1.attributes("stroke-width")).toBe("0");
     }
+    expect(svg_minus.isVisible()).toBe(false);
 
     await icon_btn.trigger("click");
+    expect(svg_plus.isVisible()).toBe(false);
     for (let count = 0; count < 24; count++) {
       const well2 = wrapper.find(".plate_" + count);
       expect(well2.attributes("stroke-width")).toBe("4");
     }
+    expect(svg_minus.isVisible()).toBe(true);
   });
   test("Given that all of the wells are selected, plus button should not be visible and stroke outlines should be present on all wells, When user clicks the minus button, Then all 24 wells should no longer have a stroke outline", async () => {
     const select = [];
@@ -92,16 +98,22 @@ describe("PlateMapEditor.vue", () => {
     });
 
     const icon_btn = wrapper.find(".span__platemap-toggle-plus-minus-icon");
+    const svg_plus = wrapper.find("#plus");
+    const svg_minus = wrapper.find("#minus");
 
+    expect(svg_minus.isVisible()).toBe(true);
     for (let count = 0; count < 24; count++) {
       const well1 = wrapper.find(".plate_" + count);
       expect(well1.attributes("stroke-width")).toBe("4");
     }
+    expect(svg_plus.isVisible()).toBe(false);
 
     await icon_btn.trigger("click");
     for (let count = 0; count < 24; count++) {
       const well2 = wrapper.find(".plate_" + count);
       expect(well2.attributes("stroke-width")).toBe("0");
+      expect(svg_minus.isVisible()).toBe(false);
+      expect(svg_plus.isVisible()).toBe(true);
     }
   });
   // test("Given that none of the wells are selected, minus button should not be visible and stroke outlines should be zero on all wells, When hovers the plus button, Then all 24 wells should have a stroke hover outline", async () => {

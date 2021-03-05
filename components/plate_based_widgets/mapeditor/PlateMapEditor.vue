@@ -1,26 +1,96 @@
 <template>
   <div>
     <div class="div__platemap-editor-backdrop"></div>
-    <span class="span__platemap-editor-column-index-one"> 01</span>
-    <span class="span__platemap-editor-column-index-two"> 02</span>
-    <span class="span__platemap-editor-column-index-three"> 03</span>
-    <span class="span__platemap-editor-column-index-four"> 04</span>
-    <span class="span__platemap-editor-column-index-five">05</span
-    ><span class="span__platemap-editor-column-index-six"> 06</span>
-    <span class="span__platemap-editor-row-index-A"> A</span>
-    <span class="span__platemap-editor-row-index-B"> B</span>
-    <span class="span__platemap-editor-row-index-C"> C</span>
-    <span class="span__platemap-editor-row-index-D"> D</span>
+    <span class="span__platemap-editor-column-index-one">
+      <label
+        @click.exact="on_column_select('1')"
+        @click.shift.exact="on_ctrl_click_or_shift_click('1')"
+        >01</label
+      >
+    </span>
+    <span class="span__platemap-editor-column-index-two">
+      <label
+        @click.exact="on_column_select('2')"
+        @click.shift.exact="on_ctrl_click_or_shift_click('2')"
+      >
+        02</label
+      >
+    </span>
+    <span class="span__platemap-editor-column-index-three">
+      <label
+        @click.exact="on_column_select('3')"
+        @click.shift.exact="on_ctrl_click_or_shift_click('3')"
+      >
+        03</label
+      >
+    </span>
+    <span class="span__platemap-editor-column-index-four">
+      <label
+        @click.exact="on_column_select('4')"
+        @click.shift.exact="on_ctrl_click_or_shift_click('4')"
+      >
+        04</label
+      >
+    </span>
+    <span class="span__platemap-editor-column-index-five">
+      <label
+        @click.exact="on_column_select('5')"
+        @click.shift.exact="on_ctrl_click_or_shift_click('5')"
+        >05</label
+      >
+    </span>
+    <span class="span__platemap-editor-column-index-six">
+      <label
+        @click.exact="on_column_select('6')"
+        @click.shift.exact="on_ctrl_click_or_shift_click('6')"
+      >
+        06</label
+      >
+    </span>
+    <span class="span__platemap-editor-row-index-A">
+      <label
+        @click.exact="on_row_select('A')"
+        @click.shift.exact="on_row_ctrl_click_or_shift_click('A')"
+      >
+        A</label
+      >
+    </span>
+    <span class="span__platemap-editor-row-index-B">
+      <label
+        @click.exact="on_row_select('B')"
+        @click.shift.exact="on_row_ctrl_click_or_shift_click('B')"
+      >
+        B</label
+      >
+    </span>
+    <span class="span__platemap-editor-row-index-C">
+      <label
+        @click.exact="on_row_select('C')"
+        @click.shift.exact="on_row_ctrl_click_or_shift_click('C')"
+      >
+        C</label
+      >
+    </span>
+    <span class="span__platemap-editor-row-index-D">
+      <label
+        @click.exact="on_row_select('D')"
+        @click.shift.exact="on_row_ctrl_click_or_shift_click('D')"
+      >
+        D</label
+      >
+    </span>
     <span
       class="span__platemap-toggle-plus-minus-icon"
       @click.exact="on_select_cancel_all(all_select_or_cancel)"
     >
       <FontAwesomeIcon
         v-show="all_select_or_cancel"
+        id="plus"
         :icon="['fa', 'plus-circle']"
       />
       <FontAwesomeIcon
         v-show="!all_select_or_cancel"
+        id="minus"
         :icon="['fa', 'minus-circle']"
       />
     </span>
@@ -30,9 +100,6 @@
       :class="'well_' + well_index"
       width="66"
       height="66"
-      @click.exact="basic_select(well_index)"
-      @click.ctrl.exact="basic_shift_or_ctrl_select(well_index)"
-      @click.shift.exact="basic_shift_or_ctrl_select(well_index)"
     >
       <PlateWell
         :classname="'plate_' + well_index"
@@ -47,6 +114,9 @@
         :index="well_index"
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
+        @click-exact="basic_select(well_index)"
+        @click-ctrl-exact="basic_shift_or_ctrl_select(well_index)"
+        @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
       ></PlateWell>
     </span>
     <div v-show="testerf"></div>
@@ -57,12 +127,6 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
-// import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
-
-// const twenty_four_well_labware_definition = new LabwareDefinition(4, 6);
-
-// :stroke_wdth="!all_select[well_index] && hover[well_index] ? 0 : 4"
-
 library.add(faMinusCircle);
 library.add(faPlusCircle);
 export default {
@@ -117,73 +181,6 @@ export default {
       }
       this.on_plate_well_selected();
     },
-
-    // on_row_hover_enter(value) {
-    //   this.hover_color = "#ececed";
-
-    //   const row_index = value.charCodeAt(0) - 65;
-
-    //   for (
-    //     let column_index = 0;
-    //     column_index < twenty_four_well_labware_definition.num_columns;
-    //     column_index++
-    //   ) {
-    //     const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-    //       row_index,
-    //       column_index
-    //     );
-    //     this.hover[well_index] = false;
-    //   }
-    // },
-    // on_row_hover_leave(value) {
-    //   this.hover_color = "#FFFFFF";
-    //   const row_index = value.charCodeAt(0) - 65;
-
-    //   for (
-    //     let column_index = 0;
-    //     column_index < twenty_four_well_labware_definition.num_columns;
-    //     column_index++
-    //   ) {
-    //     const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-    //       row_index,
-    //       column_index
-    //     );
-    //     this.hover[well_index] = true;
-    //   }
-    // },
-    // on_column_hover_enter(value) {
-    //   this.hover_color = "#ececed";
-
-    //   const column_index = parseInt(value) - 1; // as incoming values start from 01
-
-    //   for (
-    //     let row_index = 0;
-    //     row_index < twenty_four_well_labware_definition.num_rows;
-    //     row_index++
-    //   ) {
-    //     const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-    //       row_index,
-    //       column_index
-    //     );
-    //     this.hover[well_index] = false;
-    //   }
-    // },
-    // on_column_hover_leave(value) {
-    //   this.hover_color = "#FFFFFF";
-    //   const column_index = parseInt(value) - 1; // as incoming values start from 01
-
-    //   for (
-    //     let row_index = 0;
-    //     row_index < twenty_four_well_labware_definition.num_rows;
-    //     row_index++
-    //   ) {
-    //     const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-    //       row_index,
-    //       column_index
-    //     );
-    //     this.hover[well_index] = true;
-    //   }
-    // },
     basic_select(value) {
       const new_list = new Array(24).fill(false);
 
@@ -206,15 +203,11 @@ export default {
       } else {
         this.all_select_or_cancel = true;
       }
-
       this.on_plate_well_selected();
     },
     on_wellenter(value) {
       this.hover[value] = true;
       this.hover_color[value] = "#ececed";
-      // for(let i = 0; i < this.all_select.length; i++) {
-      //     this.temp_stroke_width[i] = this.stroke_width[i];
-      //   }
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
         this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
@@ -233,6 +226,132 @@ export default {
         this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
       }
     },
+    on_row_select(row) {
+      const new_list = new Array(24).fill(false);
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (row) {
+        case "A":
+          new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
+          break;
+        case "B":
+          new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
+          break;
+        case "C":
+          new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
+          break;
+        case "D":
+          new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
+          break;
+      }
+      if (this.all_select_or_cancel == false) {
+        this.all_select_or_cancel = true;
+      }
+      this.all_select = new_list;
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
+        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+      }
+      this.on_plate_well_selected();
+    },
+    on_column_select(column) {
+      const new_list = new Array(24).fill(false);
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (column) {
+        case "1":
+          new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
+          break;
+        case "2":
+          new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
+          break;
+        case "3":
+          new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
+          break;
+        case "4":
+          new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
+          break;
+        case "5":
+          new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
+          break;
+        case "6":
+          new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
+          break;
+      }
+      if (this.all_select_or_cancel == false) {
+        this.all_select_or_cancel = true;
+      }
+      this.all_select = new_list;
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
+        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+      }
+      this.on_plate_well_selected();
+    },
+    on_row_ctrl_click_or_shift_click(row) {
+      const new_list = [];
+      for (let j = 0; j < this.all_select.length; j++)
+        new_list[j] = this.all_select[j];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (row) {
+        case "A":
+          new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = !new_list[0];
+          break;
+        case "B":
+          new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = !new_list[1];
+          break;
+        case "C":
+          new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = !new_list[2];
+          break;
+        case "D":
+          new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = !new_list[3];
+          break;
+      }
+
+      this.all_select = new_list;
+      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
+        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+      }
+      this.on_plate_well_selected();
+    },
+    on_ctrl_click_or_shift_click(column) {
+      const new_list = [];
+      for (let j = 0; j < this.all_select.length; j++)
+        new_list[j] = this.all_select[j];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (column) {
+        case "1":
+          new_list[0] = new_list[1] = new_list[2] = new_list[3] = !new_list[0];
+          break;
+        case "2":
+          new_list[4] = new_list[5] = new_list[6] = new_list[7] = !new_list[4];
+          break;
+        case "3":
+          new_list[8] = new_list[9] = new_list[10] = new_list[11] = !new_list[8];
+          break;
+        case "4":
+          new_list[12] = new_list[13] = new_list[14] = new_list[15] = !new_list[12];
+          break;
+        case "5":
+          new_list[16] = new_list[17] = new_list[18] = new_list[19] = !new_list[16];
+          break;
+        case "6":
+          new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
+          break;
+      }
+
+      this.all_select = new_list;
+      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
+        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+      }
+      this.on_plate_well_selected();
+    },
     on_plate_well_selected() {
       this.$emit("platewell-selected", this.all_select);
     },
@@ -240,13 +359,6 @@ export default {
 };
 </script>
 <style>
-/*.well_not_selected {*/
-/*  stroke-width: 0;*/
-/*}*/
-/*.well_selected {*/
-/*  stroke-width: 2;*/
-/*}*/
-
 .div__platemap-editor-backdrop {
   transform: rotate(0deg);
   box-sizing: border-box;
@@ -304,16 +416,16 @@ export default {
   z-index: 57;
 }
 
-.span__platemap-editor-column-index-one:hover,
-.span__platemap-editor-column-index-two:hover,
-.span__platemap-editor-column-index-three:hover,
-.span__platemap-editor-column-index-four:hover,
-.span__platemap-editor-column-index-five:hover,
-.span__platemap-editor-column-index-six:hover,
-.span__platemap-editor-row-index-A:hover,
-.span__platemap-editor-row-index-B:hover,
-.span__platemap-editor-row-index-C:hover,
-.span__platemap-editor-row-index-D:hover {
+.span__platemap-editor-column-index-one label:hover,
+.span__platemap-editor-column-index-two label:hover,
+.span__platemap-editor-column-index-three label:hover,
+.span__platemap-editor-column-index-four label:hover,
+.span__platemap-editor-column-index-five label:hover,
+.span__platemap-editor-column-index-six label:hover,
+.span__platemap-editor-row-index-A label:hover,
+.span__platemap-editor-row-index-B label:hover,
+.span__platemap-editor-row-index-C label:hover,
+.span__platemap-editor-row-index-D label:hover {
   color: #ececed;
 }
 
@@ -538,6 +650,7 @@ export default {
 }
 .well_0 {
   pointer-events: all;
+  border-radius: 50%;
   transform: rotate(0deg);
   position: absolute;
   width: 66px;
