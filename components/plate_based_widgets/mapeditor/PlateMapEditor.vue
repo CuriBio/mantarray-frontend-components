@@ -119,7 +119,6 @@
         @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
       ></PlateWell>
     </span>
-    <div v-show="testerf"></div>
   </div>
 </template>
 <script>
@@ -171,6 +170,11 @@ export default {
   },
   methods: {
     on_select_cancel_all(state) {
+      if (this.all_select_or_cancel == true) {
+        this.test_event("+ icon clicked");
+      } else {
+        this.test_event("- icon clicked");
+      }
       this.all_select_or_cancel = !state;
       for (let count = 0; count < 24; count++) {
         this.all_select[count] = state;
@@ -185,6 +189,7 @@ export default {
       const new_list = new Array(24).fill(false);
 
       new_list[value] = true;
+      this.test_event("Well clicked");
       this.stroke_width[value] = 4;
       this.all_select = new_list;
       if (this.all_select_or_cancel == false) {
@@ -194,6 +199,7 @@ export default {
       this.on_plate_well_selected();
     },
     basic_shift_or_ctrl_select(value) {
+      this.test_event("Well Shift or Ctrl clicked");
       this.testerf = !this.testerf;
       const allEqual = (arr) => arr.every((v) => v === arr[0]);
       this.all_select[value] = !this.all_select[value];
@@ -228,6 +234,7 @@ export default {
     },
     on_row_select(row) {
       const new_list = new Array(24).fill(false);
+      this.test_event(row + " clicked");
       this.stroke_width.splice(0, this.stroke_width.length);
       switch (row) {
         case "A":
@@ -255,6 +262,7 @@ export default {
     },
     on_column_select(column) {
       const new_list = new Array(24).fill(false);
+      this.test_event(column + " clicked");
       this.stroke_width.splice(0, this.stroke_width.length);
       switch (column) {
         case "1":
@@ -288,21 +296,42 @@ export default {
     },
     on_row_ctrl_click_or_shift_click(row) {
       const new_list = [];
+      this.test_event(row + " ctrl or shift clicked");
       for (let j = 0; j < this.all_select.length; j++)
         new_list[j] = this.all_select[j];
       this.stroke_width.splice(0, this.stroke_width.length);
       switch (row) {
         case "A":
-          new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = !new_list[0];
+          new_list[0] = !new_list[0];
+          new_list[4] = !new_list[4];
+          new_list[8] = !new_list[8];
+          new_list[12] = !new_list[12];
+          new_list[16] = !new_list[16];
+          new_list[20] = !new_list[20];
           break;
         case "B":
-          new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = !new_list[1];
+          new_list[1] = !new_list[1];
+          new_list[5] = !new_list[5];
+          new_list[9] = !new_list[9];
+          new_list[13] = !new_list[13];
+          new_list[17] = !new_list[17];
+          new_list[21] = !new_list[21];
           break;
         case "C":
-          new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = !new_list[2];
+          new_list[2] = !new_list[2];
+          new_list[6] = !new_list[6];
+          new_list[10] = !new_list[10];
+          new_list[14] = !new_list[14];
+          new_list[18] = !new_list[18];
+          new_list[22] = !new_list[22];
           break;
         case "D":
-          new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = !new_list[3];
+          new_list[3] = !new_list[3];
+          new_list[7] = !new_list[7];
+          new_list[11] = !new_list[11];
+          new_list[15] = !new_list[15];
+          new_list[19] = !new_list[19];
+          new_list[23] = !new_list[23];
           break;
       }
 
@@ -317,28 +346,47 @@ export default {
       this.on_plate_well_selected();
     },
     on_ctrl_click_or_shift_click(column) {
+      this.test_event(column + " ctrl or shift clicked");
       const new_list = [];
       for (let j = 0; j < this.all_select.length; j++)
         new_list[j] = this.all_select[j];
       this.stroke_width.splice(0, this.stroke_width.length);
       switch (column) {
         case "1":
-          new_list[0] = new_list[1] = new_list[2] = new_list[3] = !new_list[0];
+          new_list[0] = !new_list[0];
+          new_list[1] = !new_list[1];
+          new_list[2] = !new_list[2];
+          new_list[3] = !new_list[3];
           break;
         case "2":
-          new_list[4] = new_list[5] = new_list[6] = new_list[7] = !new_list[4];
+          new_list[4] = !new_list[4];
+          new_list[5] = !new_list[5];
+          new_list[6] = !new_list[6];
+          new_list[7] = !new_list[7];
           break;
         case "3":
-          new_list[8] = new_list[9] = new_list[10] = new_list[11] = !new_list[8];
+          new_list[8] = !new_list[8];
+          new_list[9] = !new_list[9];
+          new_list[10] = !new_list[10];
+          new_list[11] = !new_list[11];
           break;
         case "4":
-          new_list[12] = new_list[13] = new_list[14] = new_list[15] = !new_list[12];
+          new_list[12] = !new_list[12];
+          new_list[13] = !new_list[13];
+          new_list[14] = !new_list[14];
+          new_list[15] = !new_list[15];
           break;
         case "5":
-          new_list[16] = new_list[17] = new_list[18] = new_list[19] = !new_list[16];
+          new_list[16] = !new_list[16];
+          new_list[17] = !new_list[17];
+          new_list[18] = !new_list[18];
+          new_list[19] = !new_list[19];
           break;
         case "6":
-          new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
+          new_list[20] = !new_list[20];
+          new_list[21] = !new_list[21];
+          new_list[22] = !new_list[22];
+          new_list[23] = !new_list[23];
           break;
       }
 
@@ -354,6 +402,9 @@ export default {
     },
     on_plate_well_selected() {
       this.$emit("platewell-selected", this.all_select);
+    },
+    test_event(evnt) {
+      this.$emit("test-event", evnt);
     },
   },
 };

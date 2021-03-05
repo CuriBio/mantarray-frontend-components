@@ -1,6 +1,12 @@
 <template>
   <div>
-    <ComponentToTest :platecolor="passing_plate_colors"></ComponentToTest>
+    <ComponentToTest
+      :platecolor="passing_plate_colors"
+      @test-event="display_event"
+    ></ComponentToTest>
+    <div style="top: 155px; left: 500px; position: absolute">
+      {{ userevent }}
+    </div>
   </div>
 </template>
 
@@ -11,6 +17,11 @@ import { PlateMapEditor as ComponentToTest } from "@/dist/mantarray.common";
 export default {
   components: {
     ComponentToTest,
+  },
+  data() {
+    return {
+      userevent: "",
+    };
   },
   created: function () {
     const plate_colors = [
@@ -40,6 +51,11 @@ export default {
       "#133836",
     ];
     this.passing_plate_colors = plate_colors;
+  },
+  methods: {
+    display_event(value) {
+      this.userevent = value;
+    },
   },
 };
 </script>
