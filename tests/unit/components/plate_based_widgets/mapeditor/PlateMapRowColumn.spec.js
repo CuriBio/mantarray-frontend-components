@@ -274,10 +274,13 @@ describe("PlateMapEditor.vue", () => {
       for (let count = 0; count < array_of_well_indices.length; count++) {
         const well_index = array_of_well_indices[count];
         const well = wrapper.find(".plate_" + well_index);
-        if (well_index % 2 == 0) {
-          expect(well.attributes("stroke-width")).toBe("4");
-        } else {
+        if (
+          string_name_of_button == "Row B" ||
+          string_name_of_button == "Row D"
+        ) {
           expect(well.attributes("stroke-width")).toBe("0");
+        } else {
+          expect(well.attributes("stroke-width")).toBe("4");
         }
       }
     }
@@ -366,11 +369,11 @@ describe("PlateMapEditor.vue", () => {
       for (let count = 0; count < array_of_well_indices.length; count++) {
         const well_index = array_of_well_indices[count];
         const well = wrapper.find(".plate_" + well_index);
-        if (well_index % 3 == 0) {
-          expect(well.attributes("stroke-width")).toBe("4");
-        } else {
-          expect(well.attributes("stroke-width")).toBe("0");
-        }
+        // if (well_index % 3 == 0) {
+        expect(well.attributes("stroke-width")).toBe("4");
+        // } else {
+        //  expect(well.attributes("stroke-width")).toBe("0");
+        // }
       }
     }
   );

@@ -209,6 +209,7 @@ export default {
       } else {
         this.all_select_or_cancel = true;
       }
+      this.on_wellenter(value);
       this.on_plate_well_selected();
     },
     on_wellenter(value) {
@@ -296,42 +297,67 @@ export default {
     },
     on_row_ctrl_click_or_shift_click(row) {
       const new_list = [];
+      let result = false;
       this.test_event(row + " ctrl or shift clicked");
       for (let j = 0; j < this.all_select.length; j++)
         new_list[j] = this.all_select[j];
       this.stroke_width.splice(0, this.stroke_width.length);
       switch (row) {
         case "A":
-          new_list[0] = !new_list[0];
-          new_list[4] = !new_list[4];
-          new_list[8] = !new_list[8];
-          new_list[12] = !new_list[12];
-          new_list[16] = !new_list[16];
-          new_list[20] = !new_list[20];
+          result =
+            new_list[0] &&
+            new_list[4] &&
+            new_list[8] &&
+            new_list[12] &&
+            new_list[16] &&
+            new_list[20];
+          if (result == true) {
+            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = false;
+          } else {
+            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
+          }
           break;
         case "B":
-          new_list[1] = !new_list[1];
-          new_list[5] = !new_list[5];
-          new_list[9] = !new_list[9];
-          new_list[13] = !new_list[13];
-          new_list[17] = !new_list[17];
-          new_list[21] = !new_list[21];
+          result =
+            new_list[1] &&
+            new_list[5] &&
+            new_list[9] &&
+            new_list[13] &&
+            new_list[17] &&
+            new_list[21];
+          if (result == true) {
+            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = false;
+          } else {
+            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
+          }
           break;
         case "C":
-          new_list[2] = !new_list[2];
-          new_list[6] = !new_list[6];
-          new_list[10] = !new_list[10];
-          new_list[14] = !new_list[14];
-          new_list[18] = !new_list[18];
-          new_list[22] = !new_list[22];
+          result =
+            new_list[2] &&
+            new_list[6] &&
+            new_list[10] &&
+            new_list[14] &&
+            new_list[18] &&
+            new_list[22];
+          if (result == true) {
+            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = false;
+          } else {
+            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
+          }
           break;
         case "D":
-          new_list[3] = !new_list[3];
-          new_list[7] = !new_list[7];
-          new_list[11] = !new_list[11];
-          new_list[15] = !new_list[15];
-          new_list[19] = !new_list[19];
-          new_list[23] = !new_list[23];
+          result =
+            new_list[3] &&
+            new_list[7] &&
+            new_list[11] &&
+            new_list[15] &&
+            new_list[19] &&
+            new_list[23];
+          if (result == true) {
+            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = false;
+          } else {
+            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
+          }
           break;
       }
 
@@ -348,45 +374,58 @@ export default {
     on_ctrl_click_or_shift_click(column) {
       this.test_event(column + " ctrl or shift clicked");
       const new_list = [];
+      let result = false;
       for (let j = 0; j < this.all_select.length; j++)
         new_list[j] = this.all_select[j];
       this.stroke_width.splice(0, this.stroke_width.length);
       switch (column) {
         case "1":
-          new_list[0] = !new_list[0];
-          new_list[1] = !new_list[1];
-          new_list[2] = !new_list[2];
-          new_list[3] = !new_list[3];
+          result = new_list[0] && new_list[1] && new_list[2] && new_list[3];
+          if (result == true) {
+            new_list[0] = new_list[1] = new_list[2] = new_list[3] = false;
+          } else {
+            new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
+          }
           break;
         case "2":
-          new_list[4] = !new_list[4];
-          new_list[5] = !new_list[5];
-          new_list[6] = !new_list[6];
-          new_list[7] = !new_list[7];
+          result = new_list[4] && new_list[5] && new_list[6] && new_list[7];
+          if (result == true) {
+            new_list[4] = new_list[5] = new_list[6] = new_list[7] = false;
+          } else {
+            new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
+          }
           break;
         case "3":
-          new_list[8] = !new_list[8];
-          new_list[9] = !new_list[9];
-          new_list[10] = !new_list[10];
-          new_list[11] = !new_list[11];
+          result = new_list[8] && new_list[9] && new_list[10] && new_list[11];
+          if (result == true) {
+            new_list[8] = new_list[9] = new_list[10] = new_list[11] = false;
+          } else {
+            new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
+          }
           break;
         case "4":
-          new_list[12] = !new_list[12];
-          new_list[13] = !new_list[13];
-          new_list[14] = !new_list[14];
-          new_list[15] = !new_list[15];
+          result = new_list[12] && new_list[13] && new_list[14] && new_list[15];
+          if (result == true) {
+            new_list[12] = new_list[13] = new_list[14] = new_list[15] = false;
+          } else {
+            new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
+          }
           break;
         case "5":
-          new_list[16] = !new_list[16];
-          new_list[17] = !new_list[17];
-          new_list[18] = !new_list[18];
-          new_list[19] = !new_list[19];
+          result = new_list[16] && new_list[17] && new_list[18] && new_list[19];
+          if (result == true) {
+            new_list[16] = new_list[17] = new_list[18] = new_list[19] = false;
+          } else {
+            new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
+          }
           break;
         case "6":
-          new_list[20] = !new_list[20];
-          new_list[21] = !new_list[21];
-          new_list[22] = !new_list[22];
-          new_list[23] = !new_list[23];
+          result = new_list[20] && new_list[21] && new_list[22] && new_list[23];
+          if (result == true) {
+            new_list[20] = new_list[21] = new_list[22] = new_list[23] = false;
+          } else {
+            new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
+          }
           break;
       }
 

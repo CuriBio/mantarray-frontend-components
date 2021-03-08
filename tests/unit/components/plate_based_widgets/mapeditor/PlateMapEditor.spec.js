@@ -336,15 +336,12 @@ describe("PlateMapEditor.vue", () => {
         const well1 = wrapper.find(".plate_" + count);
         expect(well1.attributes("stroke-width")).toBe("0");
       }
-
-      const buttonclicked = wrapper.find(string_name_of_button);
-
-      await buttonclicked.trigger("click", {
-        ctrlKey: true, // For testing @click.ctrl handlers
-      });
-
+      await wrapper.vm.basic_shift_or_ctrl_select(well_indices);
       await wrapper.vm.$nextTick(); // wait for update
-      expect(wrapper.find(selector_str).attributes("stroke-width")).toBe("4");
+
+      expect(
+        wrapper.find(".plate_" + well_indices).attributes("stroke-width")
+      ).toBe("4");
     }
   );
   test.each([
@@ -395,13 +392,12 @@ describe("PlateMapEditor.vue", () => {
         expect(well1.attributes("stroke-width")).toBe("0");
       }
 
-      const buttonclicked = wrapper.find(string_name_of_button);
-
-      await buttonclicked.trigger("click", {
-        shiftKey: true, // For testing @click.shift handlers
-      });
+      await wrapper.vm.basic_shift_or_ctrl_select(well_indices);
       await wrapper.vm.$nextTick(); // wait for update
-      expect(wrapper.find(selector_str).attributes("stroke-width")).toBe("4");
+
+      expect(
+        wrapper.find(".plate_" + well_indices).attributes("stroke-width")
+      ).toBe("4");
     }
   );
   // test.each([
