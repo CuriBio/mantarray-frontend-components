@@ -92,6 +92,8 @@
     <span
       class="span__platemap-toggle-plus-minus-icon"
       @click.exact="on_select_cancel_all(all_select_or_cancel)"
+      @mouseenter="on_plus_minus_enter_hover(all_select_or_cancel)"
+      @mouseleave="on_plus_minus_leave_hover(all_select_or_cancel)"
     >
       <FontAwesomeIcon
         v-show="all_select_or_cancel"
@@ -192,8 +194,24 @@ export default {
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
         this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
+        this.hover_color[j] = !this.all_select[j] ? "#ececed" : "#FFFFFF";
       }
       this.on_plate_well_selected();
+    },
+    on_plus_minus_enter_hover(state) {
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j] ? 4 : 4;
+      }
+    },
+    on_plus_minus_leave_hover(state) {
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
+        if (state == false) {
+          this.hover_color[j] = "#FFFFFF";
+        }
+      }
     },
     basic_select(value) {
       const new_list = new Array(24).fill(false);
