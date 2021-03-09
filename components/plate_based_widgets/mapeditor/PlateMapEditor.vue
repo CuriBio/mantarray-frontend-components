@@ -199,12 +199,22 @@ export default {
       this.on_plate_well_selected();
     },
     on_plus_minus_enter_hover(state) {
+      if (state == true) {
+        this.test_event("+ icon enter => Hover");
+      } else {
+        this.test_event("- icon enter => Hover");
+      }
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
         this.stroke_width[j] = !this.all_select[j] ? 4 : 4;
       }
     },
     on_plus_minus_leave_hover(state) {
+      if (state == true) {
+        this.test_event("+ icon leave => Hover");
+      } else {
+        this.test_event("- icon leave => Hover");
+      }
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
         this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
@@ -244,6 +254,7 @@ export default {
       this.hover[value] = true;
       this.hover_color[value] = "#ececed";
       this.stroke_width.splice(0, this.stroke_width.length);
+      this.test_event("well enter =>" + value + " Hover");
       for (let j = 0; j < this.all_select.length; j++) {
         this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
       }
@@ -257,6 +268,7 @@ export default {
       this.hover[value] = false;
       this.hover_color[value] = "#FFFFFF";
       this.stroke_width.splice(0, this.stroke_width.length);
+      this.test_event("well leave =>" + value + " Hover");
       for (let i = 0; i < this.all_select.length; i++) {
         this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
       }
