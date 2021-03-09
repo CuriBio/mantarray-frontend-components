@@ -206,7 +206,7 @@ export default {
       }
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? 4 : 4;
+        this.stroke_width[j] = !this.all_select[j] ? 2 : 4;
       }
     },
     on_plus_minus_leave_hover(state) {
@@ -239,7 +239,7 @@ export default {
     basic_shift_or_ctrl_select(value) {
       this.test_event("Well Shift or Ctrl clicked");
       this.testerf = !this.testerf;
-      const allEqual = (arr) => arr.every((v) => v === arr[0]);
+      const allEqual = (arr) => arr.every((v) => v === true);
       this.all_select[value] = !this.all_select[value];
       this.stroke_width[value] = 4;
       if (allEqual(this.all_select)) {
