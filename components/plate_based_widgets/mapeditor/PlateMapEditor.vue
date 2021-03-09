@@ -6,6 +6,8 @@
         @click.exact="on_column_select('1')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('1')"
         @click.ctrl.exact="on_column_ctrl_click_or_shift_click('1')"
+        @mouseenter="on_column_enter_hover('1')"
+        @mouseleave="on_column_leave_hover('1')"
         >01</label
       >
     </span>
@@ -14,6 +16,8 @@
         @click.exact="on_column_select('2')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('2')"
         @click.ctrl.exact="on_column_ctrl_click_or_shift_click('2')"
+        @mouseenter="on_column_enter_hover('2')"
+        @mouseleave="on_column_leave_hover('2')"
       >
         02</label
       >
@@ -23,6 +27,8 @@
         @click.exact="on_column_select('3')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('3')"
         @click.ctrl.exact="on_column_ctrl_click_or_shift_click('3')"
+        @mouseenter="on_column_enter_hover('3')"
+        @mouseleave="on_column_leave_hover('3')"
       >
         03</label
       >
@@ -32,6 +38,8 @@
         @click.exact="on_column_select('4')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('4')"
         @click.ctrl.exact="on_column_ctrl_click_or_shift_click('4')"
+        @mouseenter="on_column_enter_hover('4')"
+        @mouseleave="on_column_leave_hover('4')"
       >
         04</label
       >
@@ -41,6 +49,8 @@
         @click.exact="on_column_select('5')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('5')"
         @click.ctrl.exact="on_column_ctrl_click_or_shift_click('5')"
+        @mouseenter="on_column_enter_hover('5')"
+        @mouseleave="on_column_leave_hover('5')"
         >05</label
       >
     </span>
@@ -49,6 +59,8 @@
         @click.exact="on_column_select('6')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('6')"
         @click.ctrl.exact="on_column_ctrl_click_or_shift_click('6')"
+        @mouseenter="on_column_enter_hover('6')"
+        @mouseleave="on_column_leave_hover('6')"
       >
         06</label
       >
@@ -58,6 +70,8 @@
         @click.exact="on_row_select('A')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('A')"
         @click.ctrl.exact="on_row_ctrl_click_or_shift_click('A')"
+        @mouseenter="on_row_enter_hover('A')"
+        @mouseleave="on_row_leave_hover('A')"
       >
         A</label
       >
@@ -67,6 +81,8 @@
         @click.exact="on_row_select('B')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('B')"
         @click.ctrl.exact="on_row_ctrl_click_or_shift_click('B')"
+        @mouseenter="on_row_enter_hover('B')"
+        @mouseleave="on_row_leave_hover('B')"
       >
         B</label
       >
@@ -76,6 +92,8 @@
         @click.exact="on_row_select('C')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('C')"
         @click.ctrl.exact="on_row_ctrl_click_or_shift_click('C')"
+        @mouseenter="on_row_enter_hover('C')"
+        @mouseleave="on_row_leave_hover('C')"
       >
         C</label
       >
@@ -85,6 +103,8 @@
         @click.exact="on_row_select('D')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('D')"
         @click.ctrl.exact="on_row_ctrl_click_or_shift_click('D')"
+        @mouseenter="on_row_enter_hover('D')"
+        @mouseleave="on_row_leave_hover('D')"
       >
         D</label
       >
@@ -478,6 +498,18 @@ export default {
         this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
       }
       this.on_plate_well_selected();
+    },
+    on_column_enter_hover(value) {
+      this.test_event(value + " hover enter");
+    },
+    on_column_leave_hover(value) {
+      this.test_event(value + " hover leave");
+    },
+    on_row_enter_hover(value) {
+      this.test_event(value + " hover enter");
+    },
+    on_row_leave_hover(value) {
+      this.test_event(value + " hover leave");
     },
     on_plate_well_selected() {
       this.$emit("platewell-selected", this.all_select);
