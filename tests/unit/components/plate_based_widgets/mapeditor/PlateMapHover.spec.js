@@ -57,7 +57,7 @@ describe("PlateMapEditor.vue", () => {
     await icon_btn.trigger("mouseenter");
     for (let count = 0; count < 24; count++) {
       const well2 = wrapper.find(".plate_" + count);
-      expect(well2.attributes("stroke-width")).toBe("4");
+      expect(well2.attributes("stroke-width")).toBe("2");
       expect(well2.attributes("stroke")).toBe("#ececed");
     }
     await icon_btn.trigger("mouseleave");
