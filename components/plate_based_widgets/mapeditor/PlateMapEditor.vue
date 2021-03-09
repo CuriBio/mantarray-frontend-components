@@ -501,15 +501,109 @@ export default {
     },
     on_column_enter_hover(value) {
       this.test_event(value + " hover enter");
+      const new_list = [];
+      for (let i = 0; i < this.stroke_width.length; i++)
+        new_list[i] = this.stroke_width[i];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (value) {
+        case "1":
+          new_list[0] = new_list[0] == 0 ? 2 : new_list[0];
+          new_list[1] = new_list[1] == 0 ? 2 : new_list[1];
+          new_list[2] = new_list[2] == 0 ? 2 : new_list[2];
+          new_list[3] = new_list[3] == 0 ? 2 : new_list[3];
+          break;
+        case "2":
+          new_list[4] = new_list[4] == 0 ? 2 : new_list[4];
+          new_list[5] = new_list[5] == 0 ? 2 : new_list[5];
+          new_list[6] = new_list[6] == 0 ? 2 : new_list[6];
+          new_list[7] = new_list[7] == 0 ? 2 : new_list[7];
+          break;
+        case "3":
+          new_list[8] = new_list[8] == 0 ? 2 : new_list[8];
+          new_list[9] = new_list[9] == 0 ? 2 : new_list[9];
+          new_list[10] = new_list[10] == 0 ? 2 : new_list[10];
+          new_list[11] = new_list[11] == 0 ? 2 : new_list[11];
+          break;
+        case "4":
+          new_list[12] = new_list[12] == 0 ? 2 : new_list[12];
+          new_list[13] = new_list[13] == 0 ? 2 : new_list[13];
+          new_list[14] = new_list[14] == 0 ? 2 : new_list[14];
+          new_list[15] = new_list[15] == 0 ? 2 : new_list[15];
+          break;
+        case "5":
+          new_list[16] = new_list[16] == 0 ? 2 : new_list[16];
+          new_list[17] = new_list[17] == 0 ? 2 : new_list[17];
+          new_list[18] = new_list[18] == 0 ? 2 : new_list[18];
+          new_list[19] = new_list[19] == 0 ? 2 : new_list[19];
+          break;
+        case "6":
+          new_list[20] = new_list[20] == 0 ? 2 : new_list[20];
+          new_list[21] = new_list[21] == 0 ? 2 : new_list[21];
+          new_list[22] = new_list[22] == 0 ? 2 : new_list[22];
+          new_list[23] = new_list[23] == 0 ? 2 : new_list[23];
+          break;
+      }
+      for (let j = 0; j < new_list.length; j++)
+        this.stroke_width[j] = new_list[j];
     },
     on_column_leave_hover(value) {
       this.test_event(value + " hover leave");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
+        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+      }
     },
     on_row_enter_hover(value) {
       this.test_event(value + " hover enter");
+      const new_list = [];
+      for (let i = 0; i < this.stroke_width.length; i++)
+        new_list[i] = this.stroke_width[i];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (value) {
+        case "A":
+          new_list[0] = new_list[0] == 0 ? 2 : new_list[0];
+          new_list[4] = new_list[4] == 0 ? 2 : new_list[4];
+          new_list[8] = new_list[8] == 0 ? 2 : new_list[8];
+          new_list[12] = new_list[12] == 0 ? 2 : new_list[12];
+          new_list[16] = new_list[16] == 0 ? 2 : new_list[16];
+          new_list[20] = new_list[20] == 0 ? 2 : new_list[20];
+          break;
+        case "B":
+          new_list[1] = new_list[1] == 0 ? 2 : new_list[1];
+          new_list[5] = new_list[5] == 0 ? 2 : new_list[5];
+          new_list[9] = new_list[9] == 0 ? 2 : new_list[9];
+          new_list[13] = new_list[13] == 0 ? 2 : new_list[13];
+          new_list[17] = new_list[17] == 0 ? 2 : new_list[17];
+          new_list[21] = new_list[21] == 0 ? 2 : new_list[21];
+          break;
+        case "C":
+          new_list[2] = new_list[2] == 0 ? 2 : new_list[2];
+          new_list[6] = new_list[6] == 0 ? 2 : new_list[6];
+          new_list[10] = new_list[10] == 0 ? 2 : new_list[10];
+          new_list[14] = new_list[14] == 0 ? 2 : new_list[14];
+          new_list[18] = new_list[18] == 0 ? 2 : new_list[18];
+          new_list[22] = new_list[22] == 0 ? 2 : new_list[22];
+          break;
+        case "D":
+          new_list[3] = new_list[3] == 0 ? 2 : new_list[3];
+          new_list[7] = new_list[7] == 0 ? 2 : new_list[7];
+          new_list[11] = new_list[11] == 0 ? 2 : new_list[11];
+          new_list[15] = new_list[15] == 0 ? 2 : new_list[15];
+          new_list[19] = new_list[19] == 0 ? 2 : new_list[19];
+          new_list[23] = new_list[23] == 0 ? 2 : new_list[23];
+          break;
+      }
+      for (let j = 0; j < new_list.length; j++)
+        this.stroke_width[j] = new_list[j];
     },
     on_row_leave_hover(value) {
       this.test_event(value + " hover leave");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
+        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+      }
     },
     on_plate_well_selected() {
       this.$emit("platewell-selected", this.all_select);

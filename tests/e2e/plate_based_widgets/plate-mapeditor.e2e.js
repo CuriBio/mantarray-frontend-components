@@ -70,11 +70,11 @@ test("testing the Plate-MapEditor page should display click on B Row as designed
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-// test("testing the Plate-MapEditor page should display hover on B Row as designed in the mockflow", async (t) => {
-//   let screenshot_path = path.join(base_screenshot_path, "B-Row-hover");
-//   await t.hover(row_B_btn);
-//   await testcafe_page_visual_regression(t, screenshot_path);
-// });
+test("testing the Plate-MapEditor page should display hover on B Row as designed in the mockflow", async (t) => {
+  let screenshot_path = path.join(base_screenshot_path, "B-Row-hover");
+  await t.hover(row_B_btn);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
 
 test("testing the Plate-MapEditor page should display Shift+click on B Row as designed in the mockflow", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "B-Row-shift-click");
@@ -90,11 +90,11 @@ test("testing the Plate-MapEditor page should display click on D Row as designed
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-// test("testing the Plate-MapEditor page should display click on D Row as designed in the mockflow", async (t) => {
-//   let screenshot_path = path.join(base_screenshot_path, "D-Row-hover");
-//   await t.hover(row_D_btn);
-//   await testcafe_page_visual_regression(t, screenshot_path);
-// });
+test("testing the Plate-MapEditor page should display click on D Row as designed in the mockflow", async (t) => {
+  let screenshot_path = path.join(base_screenshot_path, "D-Row-hover");
+  await t.hover(row_D_btn);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
 
 test("testing the Plate-MapEditor page should display Shift+click on D Row as designed in the mockflow", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "D-Row-shift-click");
@@ -118,11 +118,11 @@ test("testing the Plate-MapEditor page should display click on 01 Column as desi
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-//test("testing the Plate-MapEditor page should display hover on 01 Column as designed in the mockflow", async (t) => {
-//  let screenshot_path = path.join(base_screenshot_path, "One-Column-hover");
-//  await t.hover(column_one_btn);
-//  await testcafe_page_visual_regression(t, screenshot_path);
-//});
+test("testing the Plate-MapEditor page should display hover on 01 Column as designed in the mockflow", async (t) => {
+  let screenshot_path = path.join(base_screenshot_path, "One-Column-hover");
+  await t.hover(column_one_btn);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
 
 test("testing the Plate-MapEditor page should display Shift+click on 01 Column as designed in the mockflow", async (t) => {
   let screenshot_path = path.join(
@@ -141,11 +141,11 @@ test("testing the Plate-MapEditor page should display click on 05 Column as desi
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-//test("testing the Plate-MapEditor page should display hover on 05 Column as designed in the mockflow", async (t) => {
-//  let screenshot_path = path.join(base_screenshot_path, "Five-Column-hover");
-//  await t.hover(column_five_btn);
-//  await testcafe_page_visual_regression(t, screenshot_path);
-//});
+test("testing the Plate-MapEditor page should display hover on 05 Column as designed in the mockflow", async (t) => {
+  let screenshot_path = path.join(base_screenshot_path, "Five-Column-hover");
+  await t.hover(column_five_btn);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
 
 test("testing the Plate-MapEditor page should display Shift+click on 05 Column  as designed in the mockflow", async (t) => {
   let screenshot_path = path.join(
