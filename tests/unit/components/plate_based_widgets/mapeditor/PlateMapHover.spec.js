@@ -99,4 +99,65 @@ describe("PlateMapEditor.vue", () => {
       expect(well2.attributes("stroke")).toBe("#FFFFFF");
     }
   });
+  test.each([
+    [".well_0", 0, ".plate_0", "Hover"],
+    [".well_1", 1, ".plate_1", "Hover"],
+    [".well_2", 2, ".plate_2", "Hover"],
+    [".well_3", 3, ".plate_3", "Hover"],
+    [".well_4", 4, ".plate_4", "Hover"],
+    [".well_5", 5, ".plate_5", "Hover"],
+    [".well_6", 6, ".plate_6", "Hover"],
+    [".well_7", 7, ".plate_7", "Hover"],
+    [".well_8", 8, ".plate_8", "Hover"],
+    [".well_9", 9, ".plate_9", "Hover"],
+    [".well_10", 10, ".plate_10", "Hover"],
+    [".well_11", 11, ".plate_11", "Hover"],
+    [".well_12", 12, ".plate_12", "Hover"],
+    [".well_13", 13, ".plate_13", "Hover"],
+    [".well_14", 14, ".plate_14", "Hover"],
+    [".well_15", 15, ".plate_15", "Hover"],
+    [".well_16", 16, ".plate_16", "Hover"],
+    [".well_17", 17, ".plate_17", "Hover"],
+    [".well_18", 18, ".plate_18", "Hover"],
+    [".well_19", 19, ".plate_19", "Hover"],
+    [".well_20", 20, ".plate_20", "Hover"],
+    [".well_21", 21, ".plate_21", "Hover"],
+    [".well_22", 22, ".plate_22", "Hover"],
+    [".well_23", 23, ".plate_23", "Hover"],
+  ])(
+    "Given that no wells are selected, When user Hover on %s, Then then well %s visually gets highlighted with %s effect, upon user focus change it gets un-highlighted",
+    async (string_name_of_button, well_indices, selector_str, event) => {
+      const select = [];
+      for (let i = 0; i < 24; i++) {
+        select.push(false);
+      }
+      const color = new Array(24).fill("#b7b7b7");
+
+      const propsData = {
+        selected: select,
+        platecolor: color,
+      };
+      wrapper = mount(ComponentToTest, {
+        propsData,
+        store,
+        localVue,
+      });
+      for (let count = 0; count < 24; count++) {
+        const well1 = wrapper.find(".plate_" + count);
+        expect(well1.attributes("stroke-width")).toBe("0");
+      }
+
+      const well_enter = wrapper.find(selector_str);
+      await well_enter.trigger("mouseenter");
+      await wrapper.vm.$nextTick(); // wait for update
+      expect(wrapper.find(selector_str).attributes("stroke")).toBe("#ececed");
+      expect(wrapper.find(selector_str).attributes("stroke-width")).toBe("2");
+
+      const well_leave = wrapper.find(selector_str);
+      await well_leave.trigger("mouseleave");
+      await wrapper.vm.$nextTick(); // wait for update
+      expect(wrapper.find(selector_str).attributes("stroke")).toBe("#FFFFFF");
+      expect(wrapper.find(selector_str).attributes("stroke-width")).toBe("0");
+    }
+  );
 });
