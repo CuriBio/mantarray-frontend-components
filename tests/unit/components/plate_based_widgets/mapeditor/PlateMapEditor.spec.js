@@ -235,60 +235,59 @@ describe("PlateMapEditor.vue", () => {
   //     }
   //   }
   // );
-  // test.each([
-  //   [".well_0", 0, ".plate_0", "Click"],
-  //   [".well_1", 1, ".plate_1", "Click"],
-  //   [".well_2", 2, ".plate_2", "Click"],
-  //   [".well_3", 3, ".plate_3", "Click"],
-  //   [".well_4", 4, ".plate_4", "Click"],
-  //   [".well_5", 5, ".plate_5", "Click"],
-  //   [".well_6", 6, ".plate_6", "Click"],
-  //   [".well_7", 7, ".plate_7", "Click"],
-  //   [".well_8", 8, ".plate_8", "Click"],
-  //   [".well_9", 9, ".plate_9", "Click"],
-  //   [".well_10", 10, ".plate_10", "Click"],
-  //   [".well_11", 11, ".plate_11", "Click"],
-  //   [".well_12", 12, ".plate_12", "Click"],
-  //   [".well_13", 13, ".plate_13", "Click"],
-  //   [".well_14", 14, ".plate_14", "Click"],
-  //   [".well_15", 15, ".plate_15", "Click"],
-  //   [".well_16", 16, ".plate_16", "Click"],
-  //   [".well_17", 17, ".plate_17", "Click"],
-  //   [".well_18", 18, ".plate_18", "Click"],
-  //   [".well_19", 19, ".plate_19", "Click"],
-  //   [".well_20", 20, ".plate_20", "Click"],
-  //   [".well_21", 21, ".plate_21", "Click"],
-  //   [".well_22", 22, ".plate_22", "Click"],
-  //   [".well_23", 23, ".plate_23", "Click"],
-  // ])(
-  //   "Given that no wells are selected, When user on %s, Then then well %s due to user action %s visually become selected (have the stroke outline)",
-  //   async (string_name_of_button, well_indices, selector_str, event) => {
-  //     const select = [];
-  //     for (let i = 0; i < 24; i++) {
-  //       select.push(false);
-  //     }
-  //     const color = new Array(24).fill("#b7b7b7");
+  test.each([
+    [".well_0", 0, ".plate_0", "Click"],
+    [".well_1", 1, ".plate_1", "Click"],
+    [".well_2", 2, ".plate_2", "Click"],
+    [".well_3", 3, ".plate_3", "Click"],
+    [".well_4", 4, ".plate_4", "Click"],
+    [".well_5", 5, ".plate_5", "Click"],
+    [".well_6", 6, ".plate_6", "Click"],
+    [".well_7", 7, ".plate_7", "Click"],
+    [".well_8", 8, ".plate_8", "Click"],
+    [".well_9", 9, ".plate_9", "Click"],
+    [".well_10", 10, ".plate_10", "Click"],
+    [".well_11", 11, ".plate_11", "Click"],
+    [".well_12", 12, ".plate_12", "Click"],
+    [".well_13", 13, ".plate_13", "Click"],
+    [".well_14", 14, ".plate_14", "Click"],
+    [".well_15", 15, ".plate_15", "Click"],
+    [".well_16", 16, ".plate_16", "Click"],
+    [".well_17", 17, ".plate_17", "Click"],
+    [".well_18", 18, ".plate_18", "Click"],
+    [".well_19", 19, ".plate_19", "Click"],
+    [".well_20", 20, ".plate_20", "Click"],
+    [".well_21", 21, ".plate_21", "Click"],
+    [".well_22", 22, ".plate_22", "Click"],
+    [".well_23", 23, ".plate_23", "Click"],
+  ])(
+    "Given that no wells are selected, When user on %s, Then then well %s due to user action %s visually become selected (have the stroke outline)",
+    async (string_name_of_button, well_indices, selector_str, event) => {
+      const select = [];
+      for (let i = 0; i < 24; i++) {
+        select.push(false);
+      }
+      const color = new Array(24).fill("#b7b7b7");
 
-  //     const propsData = {
-  //       selected: select,
-  //       platecolor: color,
-  //     };
-  //     wrapper = mount(ComponentToTest, {
-  //       propsData,
-  //       store,
-  //       localVue,
-  //     });
-  //     for (let count = 0; count < 24; count++) {
-  //       const well1 = wrapper.find(".plate_" + count);
-  //       expect(well1.attributes("stroke-width")).toBe("0");
-  //     }
+      const propsData = {
+        selected: select,
+        platecolor: color,
+      };
+      wrapper = mount(ComponentToTest, {
+        propsData,
+        store,
+        localVue,
+      });
+      for (let count = 0; count < 24; count++) {
+        const well1 = wrapper.find(".plate_" + count);
+        expect(well1.attributes("stroke-width")).toBe("0");
+      }
 
-  //     const buttonclicked = wrapper.find(string_name_of_button);
-  //     await buttonclicked.trigger("click");
-  //     await wrapper.vm.$nextTick(); // wait for update
-  //     expect(wrapper.find(selector_str).attributes("stroke-width")).toBe("4");
-  //   }
-  // );
+      await await wrapper.vm.basic_select(well_indices);
+      await wrapper.vm.$nextTick(); // wait for update
+      expect(wrapper.find(selector_str).attributes("stroke-width")).toBe("4");
+    }
+  );
   test.each([
     [".well_0", 0, ".plate_0", "ctrl+click"],
     [".well_1", 1, ".plate_1", "ctrl+click"],
@@ -336,7 +335,7 @@ describe("PlateMapEditor.vue", () => {
         const well1 = wrapper.find(".plate_" + count);
         expect(well1.attributes("stroke-width")).toBe("0");
       }
-      await wrapper.vm.basic_shift_or_ctrl_select(well_indices);
+      await wrapper.vm.basic_select(well_indices);
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(

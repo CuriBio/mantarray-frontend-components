@@ -4,14 +4,16 @@
     <span class="span__platemap-editor-column-index-one">
       <label
         @click.exact="on_column_select('1')"
-        @click.shift.exact="on_ctrl_click_or_shift_click('1')"
+        @click.shift.exact="on_column_ctrl_click_or_shift_click('1')"
+        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('1')"
         >01</label
       >
     </span>
     <span class="span__platemap-editor-column-index-two">
       <label
         @click.exact="on_column_select('2')"
-        @click.shift.exact="on_ctrl_click_or_shift_click('2')"
+        @click.shift.exact="on_column_ctrl_click_or_shift_click('2')"
+        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('2')"
       >
         02</label
       >
@@ -19,7 +21,8 @@
     <span class="span__platemap-editor-column-index-three">
       <label
         @click.exact="on_column_select('3')"
-        @click.shift.exact="on_ctrl_click_or_shift_click('3')"
+        @click.shift.exact="on_column_ctrl_click_or_shift_click('3')"
+        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('3')"
       >
         03</label
       >
@@ -27,7 +30,8 @@
     <span class="span__platemap-editor-column-index-four">
       <label
         @click.exact="on_column_select('4')"
-        @click.shift.exact="on_ctrl_click_or_shift_click('4')"
+        @click.shift.exact="on_column_ctrl_click_or_shift_click('4')"
+        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('4')"
       >
         04</label
       >
@@ -35,14 +39,16 @@
     <span class="span__platemap-editor-column-index-five">
       <label
         @click.exact="on_column_select('5')"
-        @click.shift.exact="on_ctrl_click_or_shift_click('5')"
+        @click.shift.exact="on_column_ctrl_click_or_shift_click('5')"
+        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('5')"
         >05</label
       >
     </span>
     <span class="span__platemap-editor-column-index-six">
       <label
         @click.exact="on_column_select('6')"
-        @click.shift.exact="on_ctrl_click_or_shift_click('6')"
+        @click.shift.exact="on_column_ctrl_click_or_shift_click('6')"
+        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('6')"
       >
         06</label
       >
@@ -51,6 +57,7 @@
       <label
         @click.exact="on_row_select('A')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('A')"
+        @click.ctrl.exact="on_row_ctrl_click_or_shift_click('A')"
       >
         A</label
       >
@@ -59,6 +66,7 @@
       <label
         @click.exact="on_row_select('B')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('B')"
+        @click.ctrl.exact="on_row_ctrl_click_or_shift_click('B')"
       >
         B</label
       >
@@ -67,6 +75,7 @@
       <label
         @click.exact="on_row_select('C')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('C')"
+        @click.ctrl.exact="on_row_ctrl_click_or_shift_click('C')"
       >
         C</label
       >
@@ -75,6 +84,7 @@
       <label
         @click.exact="on_row_select('D')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('D')"
+        @click.ctrl.exact="on_row_ctrl_click_or_shift_click('D')"
       >
         D</label
       >
@@ -371,7 +381,7 @@ export default {
       }
       this.on_plate_well_selected();
     },
-    on_ctrl_click_or_shift_click(column) {
+    on_column_ctrl_click_or_shift_click(column) {
       this.test_event(column + " ctrl or shift clicked");
       const new_list = [];
       let result = false;
