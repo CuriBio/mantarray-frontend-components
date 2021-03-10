@@ -44,6 +44,16 @@ describe("PlateMapEditor.vue", () => {
     const all_wells = wrapper.findAll("circle");
     expect(all_wells).toHaveLength(24);
   });
+  test("When mounting PlateMapEditor with empty propdata, Then it loads successfully", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const all_wells = wrapper.findAll("circle");
+    expect(all_wells).toHaveLength(24);
+  });
   test("Given that none of the wells are selected, minus button should not be visible and stroke outlines should be zero on all wells, When user clicks the plus button, Then all 24 wells should have a stroke outline", async () => {
     const select = [];
     for (let i = 0; i < 24; i++) {
@@ -329,6 +339,74 @@ describe("PlateMapEditor.vue", () => {
     }
   );
 
+  test("Given that no wells are selected, When user Shift+Click on all the wells from 1 to 24, Then the icon (+) changes to (-)", async () => {
+    const select = [];
+    for (let i = 0; i < 24; i++) {
+      select.push(false);
+    }
+    const color = new Array(24).fill("#b7b7b7");
+
+    const propsData = {
+      selected: select,
+      platecolor: color,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    for (let count = 0; count < 24; count++) {
+      const well1 = wrapper.find(".plate_" + count);
+      expect(well1.attributes("stroke-width")).toBe("0");
+    }
+
+    const svg_plus = wrapper.find("#plus");
+    const svg_minus = wrapper.find("#minus");
+    expect(svg_plus.isVisible()).toBe(true);
+    expect(svg_minus.isVisible()).toBe(false);
+
+    const well_indices = Array.from(Array(24).keys());
+
+    for (let i = 0; i < 24; i++) {
+      await wrapper.vm.basic_shift_or_ctrl_select(well_indices[i]);
+      await wrapper.vm.$nextTick(); // wait for update
+    }
+    expect(svg_plus.isVisible()).toBe(false);
+    expect(svg_minus.isVisible()).toBe(true);
+  });
+  test("Given that all wells are pre-selected, When user Click on well 0, Then the icon (-) changes to (+)", async () => {
+    const select = [];
+    for (let i = 0; i < 24; i++) {
+      select.push(true);
+    }
+    const color = new Array(24).fill("#b7b7b7");
+
+    const propsData = {
+      selected: select,
+      platecolor: color,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    for (let count = 0; count < 24; count++) {
+      const well1 = wrapper.find(".plate_" + count);
+      expect(well1.attributes("stroke-width")).toBe("4");
+    }
+
+    const svg_plus = wrapper.find("#plus");
+    const svg_minus = wrapper.find("#minus");
+    expect(svg_plus.isVisible()).toBe(false);
+    expect(svg_minus.isVisible()).toBe(true);
+
+    const well_indices = 0;
+    await wrapper.vm.basic_select(well_indices);
+    await wrapper.vm.$nextTick(); // wait for update
+
+    expect(svg_plus.isVisible()).toBe(true);
+    expect(svg_minus.isVisible()).toBe(false);
+  });
   // test.each([
   //   [
   //     "Row A",
