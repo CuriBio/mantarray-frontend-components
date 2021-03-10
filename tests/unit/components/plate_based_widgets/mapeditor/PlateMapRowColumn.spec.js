@@ -640,4 +640,58 @@ describe("PlateMapEditor.vue", () => {
       }
     }
   );
+  test("Given that all the wells are pre-selected, When user clicks on Row A, Then only the Wells in the Row A are selected and icon (-) is updated to (+)", async () => {
+    const select = [];
+    for (let i = 0; i < 24; i++) {
+      select.push(true);
+    }
+    const color = new Array(24).fill("#b7b7b7");
+
+    const propsData = {
+      selected: select,
+      platecolor: color,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const svg_plus = wrapper.find("#plus");
+    const svg_minus = wrapper.find("#minus");
+
+    expect(svg_minus.isVisible()).toBe(true);
+    expect(svg_plus.isVisible()).toBe(false);
+    const row_a = wrapper.find(".span__platemap-editor-row-index-A > label");
+    await row_a.trigger("click");
+    expect(svg_minus.isVisible()).toBe(false);
+    expect(svg_plus.isVisible()).toBe(true);
+  });
+  test("Given that all the wells are pre-selected, When user clicks on Column 1, Then only the Wells in the Column 1 are selected and icon (-) is updated to (+)", async () => {
+    const select = [];
+    for (let i = 0; i < 24; i++) {
+      select.push(true);
+    }
+    const color = new Array(24).fill("#b7b7b7");
+
+    const propsData = {
+      selected: select,
+      platecolor: color,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const svg_plus = wrapper.find("#plus");
+    const svg_minus = wrapper.find("#minus");
+
+    expect(svg_minus.isVisible()).toBe(true);
+    expect(svg_plus.isVisible()).toBe(false);
+    const column_one = wrapper.find(
+      ".span__platemap-editor-column-index-one > label"
+    );
+    await column_one.trigger("click");
+    expect(svg_minus.isVisible()).toBe(false);
+    expect(svg_plus.isVisible()).toBe(true);
+  });
 });
