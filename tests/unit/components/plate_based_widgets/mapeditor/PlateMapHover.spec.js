@@ -260,4 +260,156 @@ describe("PlateMapEditor.vue", () => {
       }
     }
   );
+  test.each([
+    [
+      "Row A",
+      [0, 4, 8, 12, 16, 20],
+      ".span__platemap-editor-row-index-A > label",
+    ],
+    [
+      "Row B",
+      [1, 5, 9, 13, 17, 21],
+      ".span__platemap-editor-row-index-B > label",
+    ],
+    [
+      "Row C",
+      [2, 6, 10, 14, 18, 22],
+      ".span__platemap-editor-row-index-C > label",
+    ],
+    [
+      "Row D",
+      [3, 7, 11, 15, 19, 23],
+      ".span__platemap-editor-row-index-D > label",
+    ],
+  ])(
+    "Given that even wells are selected, When user Hover on %s, Then then wells %s visually become selected (have the stroke outline), user does a hover on rows and columns (have the hover stroke outline)",
+    async (string_name_of_button, array_of_well_indices, selector_str) => {
+      const select = [];
+      for (let i = 0; i < 24; i++) {
+        if (i % 2 == 0) {
+          select.push(true);
+        } else {
+          select.push(false);
+        }
+      }
+      const color = new Array(24).fill("#b7b7b7");
+
+      const propsData = {
+        selected: select,
+        platecolor: color,
+      };
+      wrapper = mount(ComponentToTest, {
+        propsData,
+        store,
+        localVue,
+      });
+
+      const icon_one_btn = wrapper.find(selector_str);
+
+      await icon_one_btn.trigger("mouseenter");
+      await wrapper.vm.$nextTick();
+      for (let i = 0; i < array_of_well_indices.length; i++) {
+        const iter_well_idx = array_of_well_indices[i];
+        if (
+          string_name_of_button == "Row A" ||
+          string_name_of_button == "Row C"
+        ) {
+          expect(
+            wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
+          ).toBe("4");
+        } else {
+          expect(
+            wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
+          ).toBe("2");
+        }
+        expect(
+          wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
+        ).toBe("#ececed");
+      }
+
+      await icon_one_btn.trigger("mouseleave");
+      await wrapper.vm.$nextTick();
+      for (let i = 0; i < array_of_well_indices.length; i++) {
+        const iter_well_idx = array_of_well_indices[i];
+        if (
+          string_name_of_button == "Row A" ||
+          string_name_of_button == "Row C"
+        ) {
+          expect(
+            wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
+          ).toBe("4");
+          expect(
+            wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
+          ).toBe("#FFFFFF");
+        } else {
+          expect(
+            wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
+          ).toBe("0");
+          expect(
+            wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
+          ).toBe("#ececed");
+        }
+      }
+    }
+  );
+  test.each([
+    [
+      "Row A",
+      [0, 4, 8, 12, 16, 20],
+      ".span__platemap-editor-row-index-A > label",
+    ],
+    [
+      "Row B",
+      [1, 5, 9, 13, 17, 21],
+      ".span__platemap-editor-row-index-B > label",
+    ],
+    [
+      "Row C",
+      [2, 6, 10, 14, 18, 22],
+      ".span__platemap-editor-row-index-C > label",
+    ],
+    [
+      "Row D",
+      [3, 7, 11, 15, 19, 23],
+      ".span__platemap-editor-row-index-D > label",
+    ],
+  ])(
+    "Given that odd wells are selected, When user Hover on %s, Then then wells %s visually become selected (have the stroke outline), user does a hover on rows and columns (have the hover stroke outline)",
+    async (string_name_of_button, array_of_well_indices, selector_str) => {
+      const select = [];
+      for (let i = 0; i < 24; i++) {
+        if (i % 3 == 0) {
+          select.push(true);
+        } else {
+          select.push(false);
+        }
+      }
+      const color = new Array(24).fill("#b7b7b7");
+
+      const propsData = {
+        selected: select,
+        platecolor: color,
+      };
+      wrapper = mount(ComponentToTest, {
+        propsData,
+        store,
+        localVue,
+      });
+
+      const icon_one_btn = wrapper.find(selector_str);
+
+      await icon_one_btn.trigger("mouseenter");
+      await wrapper.vm.$nextTick();
+      for (let i = 0; i < array_of_well_indices.length; i++) {
+        const iter_well_idx = array_of_well_indices[i];
+        expect(
+          wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
+        ).toBe("#ececed");
+      }
+
+      await icon_one_btn.trigger("mouseleave");
+      await wrapper.vm.$nextTick();
+      // just code coverage perspective.
+    }
+  );
 });
