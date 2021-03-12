@@ -166,6 +166,7 @@ const selected_stroke_width = 4;
 const hover_color = "#ececed";
 const selected_color = "#FFFFFF";
 const default_color = "#b7b7b7";
+const debug_mode = undefined;
 export default {
   name: "PlateMapEditor",
   components: { FontAwesomeIcon, PlateWell },
@@ -701,7 +702,9 @@ export default {
       this.$emit("platewell-selected", this.all_select);
     },
     test_event(evnt) {
-      this.$emit("test-event", evnt);
+      if (debug_mode != undefined) {
+        this.$emit("test-event", evnt);
+      }
     },
   },
 };
