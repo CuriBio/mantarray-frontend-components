@@ -160,6 +160,12 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
 library.add(faMinusCircle);
 library.add(faPlusCircle);
+const no_stroke_width = 0;
+const hover_stroke_width = 2;
+const selected_stroke_width = 4;
+const hover_color = "#ececed";
+const selected_color = "#FFFFFF";
+const default_color = "#b7b7b7";
 export default {
   name: "PlateMapEditor",
   components: { FontAwesomeIcon, PlateWell },
@@ -173,7 +179,7 @@ export default {
     platecolor: {
       type: Array,
       default: function () {
-        return new Array(24).fill("#b7b7b7");
+        return new Array(24).fill(default_color);
       },
     },
   },
@@ -186,8 +192,8 @@ export default {
       rect_height: 0,
       all_select: this.selected,
       hover: new Array(24).fill(false),
-      hover_color: new Array(24).fill("#ececed"),
-      stroke_width: new Array(24).fill(0),
+      hover_color: new Array(24).fill(hover_color),
+      stroke_width: new Array(24).fill(no_stroke_width),
       temp_stroke_width: [],
       testerf: false,
     };
@@ -195,7 +201,9 @@ export default {
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);
     for (let j = 0; j < this.all_select.length; j++) {
-      this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
+      this.stroke_width[j] = !this.all_select[j]
+        ? no_stroke_width
+        : selected_stroke_width;
     }
     const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
@@ -213,8 +221,12 @@ export default {
       }
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
-        this.hover_color[j] = !this.all_select[j] ? "#ececed" : "#FFFFFF";
+        this.stroke_width[j] = !this.all_select[j]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[j] = !this.all_select[j]
+          ? hover_color
+          : selected_color;
       }
       this.on_plate_well_selected();
     },
@@ -226,7 +238,9 @@ export default {
       }
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? 2 : 4;
+        this.stroke_width[j] = !this.all_select[j]
+          ? hover_stroke_width
+          : selected_stroke_width;
       }
     },
     on_plus_minus_leave_hover(state) {
@@ -237,9 +251,11 @@ export default {
       }
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
+        this.stroke_width[j] = !this.all_select[j]
+          ? no_stroke_width
+          : selected_stroke_width;
         if (state == false) {
-          this.hover_color[j] = "#FFFFFF";
+          this.hover_color[j] = selected_color;
         }
       }
     },
@@ -248,7 +264,7 @@ export default {
 
       new_list[value] = true;
       this.test_event("Well clicked");
-      this.stroke_width[value] = 4;
+      this.stroke_width[value] = selected_stroke_width;
       this.all_select = new_list;
       if (this.all_select_or_cancel == false) {
         this.all_select_or_cancel = true;
@@ -261,7 +277,7 @@ export default {
       this.testerf = !this.testerf;
       const allEqual = (arr) => arr.every((v) => v === true);
       this.all_select[value] = !this.all_select[value];
-      this.stroke_width[value] = 4;
+      this.stroke_width[value] = selected_stroke_width;
       if (allEqual(this.all_select)) {
         this.all_select_or_cancel = false;
       } else {
@@ -272,25 +288,29 @@ export default {
     },
     on_wellenter(value) {
       this.hover[value] = true;
-      this.hover_color[value] = "#ececed";
+      this.hover_color[value] = hover_color;
       this.stroke_width.splice(0, this.stroke_width.length);
       this.test_event("well enter =>" + value + " Hover");
       for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? 0 : 4;
+        this.stroke_width[j] = !this.all_select[j]
+          ? no_stroke_width
+          : selected_stroke_width;
       }
       if (this.all_select[value] == true) {
-        this.stroke_width[value] = 4;
+        this.stroke_width[value] = selected_stroke_width;
       } else {
-        this.stroke_width[value] = 2;
+        this.stroke_width[value] = hover_stroke_width;
       }
     },
     on_wellleave(value) {
       this.hover[value] = false;
-      this.hover_color[value] = "#FFFFFF";
+      this.hover_color[value] = selected_color;
       this.stroke_width.splice(0, this.stroke_width.length);
       this.test_event("well leave =>" + value + " Hover");
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
       }
     },
     on_row_select(row) {
@@ -316,8 +336,12 @@ export default {
       }
       this.all_select = new_list;
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
-        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
       }
       this.on_plate_well_selected();
     },
@@ -350,8 +374,12 @@ export default {
       }
       this.all_select = new_list;
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
-        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
       }
       this.on_plate_well_selected();
     },
@@ -426,8 +454,12 @@ export default {
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
 
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
-        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
       }
       this.on_plate_well_selected();
     },
@@ -494,8 +526,12 @@ export default {
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
 
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
-        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
       }
       this.on_plate_well_selected();
     },
@@ -507,40 +543,64 @@ export default {
       this.stroke_width.splice(0, this.stroke_width.length);
       switch (value) {
         case "1":
-          new_list[0] = new_list[0] == 0 ? 2 : new_list[0];
-          new_list[1] = new_list[1] == 0 ? 2 : new_list[1];
-          new_list[2] = new_list[2] == 0 ? 2 : new_list[2];
-          new_list[3] = new_list[3] == 0 ? 2 : new_list[3];
+          new_list[0] =
+            new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
+          new_list[1] =
+            new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
+          new_list[2] =
+            new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
+          new_list[3] =
+            new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
           break;
         case "2":
-          new_list[4] = new_list[4] == 0 ? 2 : new_list[4];
-          new_list[5] = new_list[5] == 0 ? 2 : new_list[5];
-          new_list[6] = new_list[6] == 0 ? 2 : new_list[6];
-          new_list[7] = new_list[7] == 0 ? 2 : new_list[7];
+          new_list[4] =
+            new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
+          new_list[5] =
+            new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
+          new_list[6] =
+            new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
+          new_list[7] =
+            new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
           break;
         case "3":
-          new_list[8] = new_list[8] == 0 ? 2 : new_list[8];
-          new_list[9] = new_list[9] == 0 ? 2 : new_list[9];
-          new_list[10] = new_list[10] == 0 ? 2 : new_list[10];
-          new_list[11] = new_list[11] == 0 ? 2 : new_list[11];
+          new_list[8] =
+            new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
+          new_list[9] =
+            new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
+          new_list[10] =
+            new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
+          new_list[11] =
+            new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
           break;
         case "4":
-          new_list[12] = new_list[12] == 0 ? 2 : new_list[12];
-          new_list[13] = new_list[13] == 0 ? 2 : new_list[13];
-          new_list[14] = new_list[14] == 0 ? 2 : new_list[14];
-          new_list[15] = new_list[15] == 0 ? 2 : new_list[15];
+          new_list[12] =
+            new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
+          new_list[13] =
+            new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
+          new_list[14] =
+            new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
+          new_list[15] =
+            new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
           break;
         case "5":
-          new_list[16] = new_list[16] == 0 ? 2 : new_list[16];
-          new_list[17] = new_list[17] == 0 ? 2 : new_list[17];
-          new_list[18] = new_list[18] == 0 ? 2 : new_list[18];
-          new_list[19] = new_list[19] == 0 ? 2 : new_list[19];
+          new_list[16] =
+            new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
+          new_list[17] =
+            new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
+          new_list[18] =
+            new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
+          new_list[19] =
+            new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
           break;
         case "6":
-          new_list[20] = new_list[20] == 0 ? 2 : new_list[20];
-          new_list[21] = new_list[21] == 0 ? 2 : new_list[21];
-          new_list[22] = new_list[22] == 0 ? 2 : new_list[22];
-          new_list[23] = new_list[23] == 0 ? 2 : new_list[23];
+          new_list[20] =
+            new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
+          new_list[21] =
+            new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
+          new_list[22] =
+            new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
+          new_list[23] =
+            new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
           break;
       }
       for (let j = 0; j < new_list.length; j++)
@@ -550,8 +610,12 @@ export default {
       this.test_event(value + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
-        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
       }
     },
     on_row_enter_hover(value) {
@@ -562,36 +626,60 @@ export default {
       this.stroke_width.splice(0, this.stroke_width.length);
       switch (value) {
         case "A":
-          new_list[0] = new_list[0] == 0 ? 2 : new_list[0];
-          new_list[4] = new_list[4] == 0 ? 2 : new_list[4];
-          new_list[8] = new_list[8] == 0 ? 2 : new_list[8];
-          new_list[12] = new_list[12] == 0 ? 2 : new_list[12];
-          new_list[16] = new_list[16] == 0 ? 2 : new_list[16];
-          new_list[20] = new_list[20] == 0 ? 2 : new_list[20];
+          new_list[0] =
+            new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
+          new_list[4] =
+            new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
+          new_list[8] =
+            new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
+          new_list[12] =
+            new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
+          new_list[16] =
+            new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
+          new_list[20] =
+            new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
           break;
         case "B":
-          new_list[1] = new_list[1] == 0 ? 2 : new_list[1];
-          new_list[5] = new_list[5] == 0 ? 2 : new_list[5];
-          new_list[9] = new_list[9] == 0 ? 2 : new_list[9];
-          new_list[13] = new_list[13] == 0 ? 2 : new_list[13];
-          new_list[17] = new_list[17] == 0 ? 2 : new_list[17];
-          new_list[21] = new_list[21] == 0 ? 2 : new_list[21];
+          new_list[1] =
+            new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
+          new_list[5] =
+            new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
+          new_list[9] =
+            new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
+          new_list[13] =
+            new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
+          new_list[17] =
+            new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
+          new_list[21] =
+            new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
           break;
         case "C":
-          new_list[2] = new_list[2] == 0 ? 2 : new_list[2];
-          new_list[6] = new_list[6] == 0 ? 2 : new_list[6];
-          new_list[10] = new_list[10] == 0 ? 2 : new_list[10];
-          new_list[14] = new_list[14] == 0 ? 2 : new_list[14];
-          new_list[18] = new_list[18] == 0 ? 2 : new_list[18];
-          new_list[22] = new_list[22] == 0 ? 2 : new_list[22];
+          new_list[2] =
+            new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
+          new_list[6] =
+            new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
+          new_list[10] =
+            new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
+          new_list[14] =
+            new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
+          new_list[18] =
+            new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
+          new_list[22] =
+            new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
           break;
         case "D":
-          new_list[3] = new_list[3] == 0 ? 2 : new_list[3];
-          new_list[7] = new_list[7] == 0 ? 2 : new_list[7];
-          new_list[11] = new_list[11] == 0 ? 2 : new_list[11];
-          new_list[15] = new_list[15] == 0 ? 2 : new_list[15];
-          new_list[19] = new_list[19] == 0 ? 2 : new_list[19];
-          new_list[23] = new_list[23] == 0 ? 2 : new_list[23];
+          new_list[3] =
+            new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
+          new_list[7] =
+            new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
+          new_list[11] =
+            new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
+          new_list[15] =
+            new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
+          new_list[19] =
+            new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
+          new_list[23] =
+            new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
           break;
       }
       for (let j = 0; j < new_list.length; j++)
@@ -601,8 +689,12 @@ export default {
       this.test_event(value + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? 0 : 4;
-        this.hover_color[i] = !this.all_select[i] ? "#ececed" : "#FFFFFF";
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
       }
     },
     on_plate_well_selected() {
