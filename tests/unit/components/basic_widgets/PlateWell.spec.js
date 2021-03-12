@@ -96,4 +96,88 @@ describe("PlateWell.vue", () => {
     expect(leave_well_events).toHaveLength(1);
     expect(leave_well_events[0]).toStrictEqual([1]);
   });
+
+  test("When the PlateWell is mouted, Then click event on the circle would emit and event 'click-exact' with plate index range [0..23]", async () => {
+    const propsData = {
+      classname: "plate",
+      svg_height: 100,
+      svg_width: 100,
+      circle_x: 50,
+      circle_y: 50,
+      radius: 50,
+      strk: "#ececed",
+      stroke_wdth: 0,
+      plate_fill: "#b7b7b7",
+      index: 1,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const plate = wrapper.find(".plate");
+
+    await plate.trigger("click");
+    const click_well_events = wrapper.emitted("click-exact");
+    expect(click_well_events).toHaveLength(1);
+    expect(click_well_events[0]).toStrictEqual([1]);
+  });
+
+  test("When the PlateWell is mouted, Then click+shift event on the circle would emit and event 'click-shift-exact' with plate index range [0..23]", async () => {
+    const propsData = {
+      classname: "plate",
+      svg_height: 100,
+      svg_width: 100,
+      circle_x: 50,
+      circle_y: 50,
+      radius: 50,
+      strk: "#ececed",
+      stroke_wdth: 0,
+      plate_fill: "#b7b7b7",
+      index: 5,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const plate = wrapper.find(".plate");
+
+    await plate.trigger("click", {
+      shiftKey: true, // For testing @click.shift handlers
+    });
+    await wrapper.vm.$nextTick(); // wait for update
+    const click_well_events = wrapper.emitted("click-shift-exact");
+    expect(click_well_events).toHaveLength(1);
+    expect(click_well_events[0]).toStrictEqual([5]);
+  });
+
+  test("When the PlateWell is mouted, Then click+ctrl event on the circle would emit and event 'click-ctrl-exact' with plate index range [0..23]", async () => {
+    const propsData = {
+      classname: "plate",
+      svg_height: 100,
+      svg_width: 100,
+      circle_x: 50,
+      circle_y: 50,
+      radius: 50,
+      strk: "#ececed",
+      stroke_wdth: 0,
+      plate_fill: "#b7b7b7",
+      index: 10,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const plate = wrapper.find(".plate");
+
+    await plate.trigger("click", {
+      ctrlKey: true, // For testing @click.ctrl handlers
+    });
+    await wrapper.vm.$nextTick(); // wait for update
+    const click_well_events = wrapper.emitted("click-ctrl-exact");
+    expect(click_well_events).toHaveLength(1);
+    expect(click_well_events[0]).toStrictEqual([10]);
+  });
 });
