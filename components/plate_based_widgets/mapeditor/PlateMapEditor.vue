@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="div__platemap-editor-backdrop"></div>
-    <span class="span__platemap-editor-column-index-one">
+    <span
+      class="span__platemap-editor-column-index-one"
+      :style="'left:' + column_left_offset('1') + 'px;'"
+    >
       <label
         @click.exact="on_column_select('1')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('1')"
@@ -11,7 +14,10 @@
         >01</label
       >
     </span>
-    <span class="span__platemap-editor-column-index-two">
+    <span
+      class="span__platemap-editor-column-index-two"
+      :style="'left:' + column_left_offset('2') + 'px;'"
+    >
       <label
         @click.exact="on_column_select('2')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('2')"
@@ -22,7 +28,10 @@
         02</label
       >
     </span>
-    <span class="span__platemap-editor-column-index-three">
+    <span
+      class="span__platemap-editor-column-index-three"
+      :style="'left:' + column_left_offset('3') + 'px;'"
+    >
       <label
         @click.exact="on_column_select('3')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('3')"
@@ -33,7 +42,10 @@
         03</label
       >
     </span>
-    <span class="span__platemap-editor-column-index-four">
+    <span
+      class="span__platemap-editor-column-index-four"
+      :style="'left:' + column_left_offset('4') + 'px;'"
+    >
       <label
         @click.exact="on_column_select('4')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('4')"
@@ -44,7 +56,10 @@
         04</label
       >
     </span>
-    <span class="span__platemap-editor-column-index-five">
+    <span
+      class="span__platemap-editor-column-index-five"
+      :style="'left:' + column_left_offset('5') + 'px;'"
+    >
       <label
         @click.exact="on_column_select('5')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('5')"
@@ -54,7 +69,10 @@
         >05</label
       >
     </span>
-    <span class="span__platemap-editor-column-index-six">
+    <span
+      class="span__platemap-editor-column-index-six"
+      :style="'left:' + column_left_offset('6') + 'px;'"
+    >
       <label
         @click.exact="on_column_select('6')"
         @click.shift.exact="on_column_ctrl_click_or_shift_click('6')"
@@ -65,7 +83,10 @@
         06</label
       >
     </span>
-    <span class="span__platemap-editor-row-index-A">
+    <span
+      class="span__platemap-editor-row-index-A"
+      :style="'top:' + row_top_offset('A') + 'px;'"
+    >
       <label
         @click.exact="on_row_select('A')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('A')"
@@ -76,7 +97,10 @@
         A</label
       >
     </span>
-    <span class="span__platemap-editor-row-index-B">
+    <span
+      class="span__platemap-editor-row-index-B"
+      :style="'top:' + row_top_offset('B') + 'px;'"
+    >
       <label
         @click.exact="on_row_select('B')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('B')"
@@ -87,7 +111,10 @@
         B</label
       >
     </span>
-    <span class="span__platemap-editor-row-index-C">
+    <span
+      class="span__platemap-editor-row-index-C"
+      :style="'top:' + row_top_offset('C') + 'px;'"
+    >
       <label
         @click.exact="on_row_select('C')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('C')"
@@ -98,7 +125,10 @@
         C</label
       >
     </span>
-    <span class="span__platemap-editor-row-index-D">
+    <span
+      class="span__platemap-editor-row-index-D"
+      :style="'top:' + row_top_offset('D') + 'px;'"
+    >
       <label
         @click.exact="on_row_select('D')"
         @click.shift.exact="on_row_ctrl_click_or_shift_click('D')"
@@ -130,6 +160,7 @@
       v-for="well_index in Array(24).keys()"
       :key="well_index"
       :class="'well_' + well_index"
+      :style="well_top_left_offset(well_index)"
       width="66"
       height="66"
     >
@@ -210,6 +241,86 @@ export default {
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
   },
   methods: {
+    column_left_offset(column) {
+      switch (column) {
+        case "1":
+          return "35.9792";
+        case "2":
+          return "97.5836";
+        case "3":
+          return "159.188";
+        case "4":
+          return "220.792";
+        case "5":
+          return "282.397";
+        case "6":
+          return "344.001";
+      }
+    },
+    row_top_offset(row) {
+      switch (row) {
+        case "A":
+          return "41.928";
+        case "B":
+          return "103.621";
+        case "C":
+          return "165.779";
+        case "D":
+          return "224.1";
+      }
+    },
+    well_top_left_offset(index) {
+      switch (index) {
+        case 0:
+          return "top: 25px; left: 29.9792px;";
+        case 1:
+          return "top: 85.3524px; left: 29.9792px;";
+        case 2:
+          return "top: 145.278px; left: 29.9792px;";
+        case 3:
+          return "top: 205.157px; left: 29.9792px;";
+        case 4:
+          return "top: 25.427px; left: 91.5836px;";
+        case 5:
+          return "top: 85.3524px; left: 91.5836px;";
+        case 6:
+          return "top: 145.278px; left: 91.5836px;";
+        case 7:
+          return "top: 205.203px; left: 91.5836px;";
+        case 8:
+          return "top: 25.427px; left: 153.188px;";
+        case 9:
+          return "top: 85.3524px; left: 153.188px;";
+        case 10:
+          return "top: 145.278px; left: 153.188px;";
+        case 11:
+          return "top: 205.203px; left: 153.188px;";
+        case 12:
+          return "top: 25.427px; left: 214.792px;";
+        case 13:
+          return "top: 85.3524px; left: 214.792px;";
+        case 14:
+          return "top: 145.278px; left: 214.792px;";
+        case 15:
+          return "top: 205.203px; left: 214.792px;";
+        case 16:
+          return "top: 25.427px; left: 276.397px;";
+        case 17:
+          return "top: 85.3524px; left: 276.397px;";
+        case 18:
+          return "top: 145.278px; left: 276.397px;";
+        case 19:
+          return "top: 205.203px; left: 276.397px;";
+        case 20:
+          return "top: 25.427px; left: 338.001px;";
+        case 21:
+          return "top: 85.3524px; left: 338.001px;";
+        case 22:
+          return "top: 145.278px; left: 338.001px;";
+        case 23:
+          return "top: 205.203px; left: 338.001px;";
+      }
+    },
     on_select_cancel_all(state) {
       if (this.all_select_or_cancel == true) {
         this.test_event("+ icon clicked");
@@ -725,7 +836,6 @@ export default {
   border: 0px none rgb(0, 0, 0);
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
-  z-index: 1;
   pointer-events: all;
 }
 
@@ -740,11 +850,15 @@ export default {
   top: 0px;
   left: 0px;
   visibility: visible;
-  z-index: 50;
   pointer-events: all;
 }
 
-.span__platemap-editor-column-index-one {
+.span__platemap-editor-column-index-one,
+.span__platemap-editor-column-index-two,
+.span__platemap-editor-column-index-three,
+.span__platemap-editor-column-index-four,
+.span__platemap-editor-column-index-five,
+.span__platemap-editor-column-index-six {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -753,7 +867,6 @@ export default {
   width: 53px;
   height: 27px;
   top: 2px;
-  left: 35.9792px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -764,7 +877,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: center;
-  z-index: 57;
 }
 
 .span__platemap-editor-column-index-one label:hover,
@@ -784,183 +896,9 @@ export default {
   color: #ffffff;
 }
 
-.span__platemap-editor-column-index-two {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 97.5836px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 59;
-}
-.span__platemap-editor-column-index-three {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 159.188px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 61;
-}
-.span__platemap-editor-column-index-four {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 220.792px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 63;
-}
-.span__platemap-editor-column-index-five {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 282.397px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 65;
-}
-
-.span__platemap-editor-column-index-six {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 344.001px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 67;
-}
-.span__platemap-editor-row-index-A {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 22px;
-  height: 25px;
-  top: 41.928px;
-  left: 7px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: left;
-  z-index: 51;
-}
-.span__platemap-editor-row-index-B {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 22px;
-  height: 25px;
-  top: 103.621px;
-  left: 7px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: left;
-  z-index: 51;
-}
-.span__platemap-editor-row-index-C {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 22px;
-  height: 25px;
-  top: 165.779px;
-  left: 7px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: left;
-  z-index: 55;
-}
+.span__platemap-editor-row-index-A,
+.span__platemap-editor-row-index-B,
+.span__platemap-editor-row-index-C,
 .span__platemap-editor-row-index-D {
   pointer-events: all;
   line-height: 100%;
@@ -969,7 +907,6 @@ export default {
   position: absolute;
   width: 22px;
   height: 25px;
-  top: 224.1px;
   left: 7px;
   padding: 5px;
   visibility: visible;
@@ -981,7 +918,6 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: left;
-  z-index: 53;
 }
 .span__platemap-toggle-plus-minus-icon {
   overflow: hidden;
@@ -997,272 +933,37 @@ export default {
   left: 5px;
   font-size: 20px;
   color: rgb(183, 183, 183);
-  z-index: 53;
 }
-.well_0 {
+.well_0,
+.well_1,
+.well_2,
+.well_3,
+.well_4,
+.well_5,
+.well_6,
+.well_7,
+.well_8,
+.well_9,
+.well_10,
+.well_11,
+.well_12,
+.well_13,
+.well_14,
+.well_15,
+.well_16,
+.well_17,
+.well_18,
+.well_19,
+.well_20,
+.well_21,
+.well_22,
+.well_23 {
   pointer-events: all;
   border-radius: 50%;
   transform: rotate(0deg);
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 25px;
-  left: 29.9792px;
   visibility: visible;
-  z-index: 68;
-}
-.well_1 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 29.9792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_2 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 29.9792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_3 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.157px;
-  left: 29.9792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_4 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 91.5836px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_5 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 91.5836px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_6 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 91.5836px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_7 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 91.5836px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_8 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 153.188px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_9 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 153.188px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_10 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 153.188px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_11 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 153.188px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_12 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 214.792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_13 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 214.792px;
-  visibility: visible;
-  z-index: 68;
-}
-
-.well_14 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 214.792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_15 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 214.792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_16 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 276.397px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_17 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 276.397px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_18 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 276.397px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_19 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 276.397px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_20 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 338.001px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_21 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 338.001px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_22 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 338.001px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_23 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 338.001px;
-  visibility: visible;
-  z-index: 68;
 }
 </style>
