@@ -24,7 +24,7 @@ describe("PlateMapEditor.vue", () => {
   });
 
   afterEach(() => wrapper.destroy());
-  test("Given that none of the wells are selected, minus button should not be visible and stroke outlines should be zero on all wells, When hovers the plus button, Then all 24 wells should have a stroke hover outline", async () => {
+  test("Given that none of the wells are selected, minus button should not be visible and stroke outlines should be zero on all wells, When user hovers the plus button and later un hovers the plus button, Then all 24 wells should have a stroke hover outline of 2px during hover and stroke hover outline is reset to 0px when un-hover the plus button", async () => {
     const select = [];
     for (let i = 0; i < 24; i++) {
       select.push(false);
@@ -67,7 +67,7 @@ describe("PlateMapEditor.vue", () => {
       expect(well2.attributes("stroke")).toBe("#ececed");
     }
   });
-  test("Given that all of the wells are selected, plus button should not be visible and stroke outlines should be present on all wells, When user hovers the minus button, Then all 24 wells should no longer have a hover stroke outline", async () => {
+  test("Given that all of the wells are selected, plus button should not be visible and stroke outlines of 4px is present on all wells, When user hovers the minus button, Then all 24 wells would have color of hover #ececed with 4px stroke outline, on un-hover the color would be #ffffff with 4px stroke outline", async () => {
     const select = [];
     for (let i = 0; i < 24; i++) {
       select.push(true);
