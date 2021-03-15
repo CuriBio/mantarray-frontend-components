@@ -174,8 +174,10 @@ describe("PlateMapEditor.vue", () => {
         expect(well1.attributes("stroke-width")).toBe("0");
       }
 
-      await await wrapper.vm.basic_select(well_indices);
+      const plate = wrapper.find(selector_str);
+      await plate.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
+
       expect(wrapper.find(selector_str).attributes("stroke-width")).toBe("4");
     }
   );
@@ -226,7 +228,11 @@ describe("PlateMapEditor.vue", () => {
         const well1 = wrapper.find(".plate_" + count);
         expect(well1.attributes("stroke-width")).toBe("0");
       }
-      await wrapper.vm.basic_select(well_indices);
+
+      const plate = wrapper.find(selector_str);
+      await plate.trigger("click", {
+        ctrlKey: true, // For testing @click.ctrl handlers
+      });
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(
@@ -282,7 +288,10 @@ describe("PlateMapEditor.vue", () => {
         expect(well1.attributes("stroke-width")).toBe("0");
       }
 
-      await wrapper.vm.basic_shift_or_ctrl_select(well_indices);
+      const plate = wrapper.find(selector_str);
+      await plate.trigger("click", {
+        shiftKey: true, // For testing @click.ctrl handlers
+      });
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(
@@ -320,8 +329,10 @@ describe("PlateMapEditor.vue", () => {
     const well_indices = Array.from(Array(24).keys());
 
     for (let i = 0; i < 24; i++) {
-      await wrapper.vm.basic_shift_or_ctrl_select(well_indices[i]);
-      await wrapper.vm.$nextTick(); // wait for update
+      const plate = wrapper.find(".plate_" + well_indices[i]);
+      await plate.trigger("click", {
+        shiftKey: true, // For testing @click.ctrl handlers
+      });
     }
     expect(svg_plus.isVisible()).toBe(false);
     expect(svg_minus.isVisible()).toBe(true);
@@ -353,7 +364,10 @@ describe("PlateMapEditor.vue", () => {
     expect(svg_minus.isVisible()).toBe(true);
 
     const well_indices = 0;
-    await wrapper.vm.basic_select(well_indices);
+    const plate = wrapper.find(".plate_" + well_indices);
+    await plate.trigger("click", {
+      shiftKey: true, // For testing @click.ctrl handlers
+    });
     await wrapper.vm.$nextTick(); // wait for update
 
     expect(svg_plus.isVisible()).toBe(true);
