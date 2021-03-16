@@ -3,7 +3,7 @@
     <div class="div__platemap-editor-backdrop"></div>
     <span
       v-for="column_index in 6"
-      :key="column_index"
+      :key="'column_' + column_index"
       class="span__platemap-editor-column-index"
       :style="
         'left:' + column_left_offset(column_values[column_index - 1]) + 'px;'
@@ -26,7 +26,7 @@
 
     <span
       v-for="row_index in 4"
-      :key="row_index"
+      :key="'row_' + row_index"
       class="span__platemap-editor-row-index"
       :style="'top:' + row_top_offset(row_values[row_index - 1]) + 'px;'"
     >
@@ -784,10 +784,6 @@ export default {
 }
 
 .span__platemap-editor-column-index label:hover,
-.span__platemap-editor-row-index-A label:hover,
-.span__platemap-editor-row-index-B label:hover,
-.span__platemap-editor-row-index-C label:hover,
-.span__platemap-editor-row-index-D label:hover,
 .span__platemap-editor-row-index label:hover {
   color: #ececed;
 }
@@ -796,10 +792,6 @@ export default {
   color: #ffffff;
 }
 
-.span__platemap-editor-row-index-A,
-.span__platemap-editor-row-index-B,
-.span__platemap-editor-row-index-C,
-.span__platemap-editor-row-index-D,
 .span__platemap-editor-row-index {
   pointer-events: all;
   line-height: 100%;
