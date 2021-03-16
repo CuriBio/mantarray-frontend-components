@@ -161,58 +161,18 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
-    "Given that no wells are selected, When user Hover on %s, Then then wells %s visually become selected (have the stroke outline), user does a hover on rows and columns (have the hover stroke outline)",
+    "Given that no wells are selected, When user Hover on %s, Then then wells %s visually become selected with outline of 4px and color or #ececed, on un-hover the outline color #ececed  and not visible as  0px stroke outline",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
       const select = [];
       for (let i = 0; i < 24; i++) {
@@ -261,28 +221,12 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
   ])(
-    "Given that even wells are selected, When user Hover on %s, Then then wells %s visually become selected (have the stroke outline), user does a hover on rows and columns (have the hover stroke outline)",
+    "Given that even wells are selected, When user Hover on %s, Then then wells which are even on hover renders the output of stroke 4px and color #ececed, and odd number wells have stroke 2px and color #ececed",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
       const select = [];
       for (let i = 0; i < 24; i++) {
@@ -353,28 +297,12 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
   ])(
-    "Given that odd wells are selected, When user Hover on %s, Then then wells %s visually become selected (have the stroke outline), user does a hover on rows and columns (have the hover stroke outline)",
+    "Given that odd wells are selected, When user Hover on %s, Then then wells with odd numbered are selected and have stroke outline of 4px and color #ececed, and other wells have stroke outline of 2px and color #ececed",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
       const select = [];
       for (let i = 0; i < 24; i++) {

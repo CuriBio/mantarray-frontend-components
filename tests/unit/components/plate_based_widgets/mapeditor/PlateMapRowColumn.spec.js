@@ -25,56 +25,16 @@ describe("PlateMapEditor.vue", () => {
 
   afterEach(() => wrapper.destroy());
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that none of the wells are selected, When user clicks the Row/Column button, Then wells corresponding to that row is seleced with outline of 4px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -107,56 +67,16 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that none of the wells are selected, When user Shift+clicks the Row/Column button, Then wells corresponding to that row is seleced with outline of 4px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -191,56 +111,16 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that none of the wells are selected, When user Ctrl+clicks the Row/Column button, Then wells corresponding to that row is seleced with outline of 4px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -275,56 +155,16 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that odd numbered  wells are selected, When user Shift+clicks the Row/Column button, Then wells corresponding to even numbered is seleced with outline of 4px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -370,56 +210,16 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that even numbered  wells are selected, When user Shift+clicks the Row/Column button, Then wells corresponding to odd numbered is seleced with outline of 4px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -458,56 +258,16 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that all the wells are selected, When user Shift+clicks the Row/Column button, Then wells corresponding row/columns get deselected and with outline of 0px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -542,56 +302,16 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that none of the wells are selected, When user Ctrl+clicks the Row/Column button, Then wells corresponding to that row is seleced with outline of 4px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -626,56 +346,16 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that odd numbered  wells are selected, When user Shift+clicks the Row/Column button, Then wells corresponding to even numbered is seleced with outline of 4px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -721,56 +401,16 @@ describe("PlateMapEditor.vue", () => {
     }
   );
   test.each([
-    [
-      "Row A",
-      [0, 4, 8, 12, 16, 20],
-      ".span__platemap-editor-row-index-A > label",
-    ],
-    [
-      "Row B",
-      [1, 5, 9, 13, 17, 21],
-      ".span__platemap-editor-row-index-B > label",
-    ],
-    [
-      "Row C",
-      [2, 6, 10, 14, 18, 22],
-      ".span__platemap-editor-row-index-C > label",
-    ],
-    [
-      "Row D",
-      [3, 7, 11, 15, 19, 23],
-      ".span__platemap-editor-row-index-D > label",
-    ],
-    [
-      "Column 01",
-      [0, 1, 2, 3],
-      ".span__platemap-editor-column-index-one > label",
-    ],
-    [
-      "Column 02",
-      [4, 5, 6, 7],
-      ".span__platemap-editor-column-index-two > label",
-    ],
-    [
-      "Column 03",
-      [8, 9, 10, 11],
-      ".span__platemap-editor-column-index-three > label",
-    ],
-    [
-      "Column 04",
-      [12, 13, 14, 15],
-      ".span__platemap-editor-column-index-four > label",
-    ],
-    [
-      "Column 05",
-      [16, 17, 18, 19],
-      ".span__platemap-editor-column-index-five > label",
-    ],
-    [
-      "Column 06",
-      [20, 21, 22, 23],
-      ".span__platemap-editor-column-index-six > label",
-    ],
+    ["Row A", [0, 4, 8, 12, 16, 20], "#row_1"],
+    ["Row B", [1, 5, 9, 13, 17, 21], "#row_2"],
+    ["Row C", [2, 6, 10, 14, 18, 22], "#row_3"],
+    ["Row D", [3, 7, 11, 15, 19, 23], "#row_4"],
+    ["Column 01", [0, 1, 2, 3], "#column_1"],
+    ["Column 02", [4, 5, 6, 7], "#column_2"],
+    ["Column 03", [8, 9, 10, 11], "#column_3"],
+    ["Column 04", [12, 13, 14, 15], "#column_4"],
+    ["Column 05", [16, 17, 18, 19], "#column_5"],
+    ["Column 06", [20, 21, 22, 23], "#column_6"],
   ])(
     "Given that even numbered  wells are selected, When user Shift+clicks the Row/Column button, Then wells corresponding to odd numbered is seleced with outline of 4px;",
     async (string_name_of_button, array_of_well_indices, selector_str) => {
@@ -829,7 +469,7 @@ describe("PlateMapEditor.vue", () => {
 
     expect(svg_minus.isVisible()).toBe(true);
     expect(svg_plus.isVisible()).toBe(false);
-    const row_a = wrapper.find(".span__platemap-editor-row-index-A > label");
+    const row_a = wrapper.find("#row_1");
     await row_a.trigger("click");
     expect(svg_minus.isVisible()).toBe(false);
     expect(svg_plus.isVisible()).toBe(true);
@@ -855,9 +495,7 @@ describe("PlateMapEditor.vue", () => {
 
     expect(svg_minus.isVisible()).toBe(true);
     expect(svg_plus.isVisible()).toBe(false);
-    const column_one = wrapper.find(
-      ".span__platemap-editor-column-index-one > label"
-    );
+    const column_one = wrapper.find("#column_1");
     await column_one.trigger("click");
     expect(svg_minus.isVisible()).toBe(false);
     expect(svg_plus.isVisible()).toBe(true);

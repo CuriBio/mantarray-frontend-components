@@ -2,143 +2,50 @@
   <div>
     <div class="div__platemap-editor-backdrop"></div>
     <span
-      class="span__platemap-editor-column-index-one"
-      :style="'left:' + column_left_offset('1') + 'px;'"
+      v-for="column_index in 6"
+      :key="column_index"
+      class="span__platemap-editor-column-index"
+      :style="
+        'left:' + column_left_offset(column_values[column_index - 1]) + 'px;'
+      "
     >
       <label
-        @click.exact="on_column_select('1')"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click('1')"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('1')"
-        @mouseenter="on_column_enter_hover('1')"
-        @mouseleave="on_column_leave_hover('1')"
-        >01</label
+        :id="'column_' + column_index"
+        @click.exact="on_column_select(column_values[column_index - 1])"
+        @click.shift.exact="
+          on_column_ctrl_click_or_shift_click(column_values[column_index - 1])
+        "
+        @click.ctrl.exact="
+          on_column_ctrl_click_or_shift_click(column_values[column_index - 1])
+        "
+        @mouseenter="on_column_enter_hover(column_values[column_index - 1])"
+        @mouseleave="on_column_leave_hover(column_values[column_index - 1])"
+        >0{{ column_values[column_index - 1] }}</label
       >
     </span>
+
     <span
-      class="span__platemap-editor-column-index-two"
-      :style="'left:' + column_left_offset('2') + 'px;'"
+      v-for="row_index in 4"
+      :key="row_index"
+      class="span__platemap-editor-row-index"
+      :style="'top:' + row_top_offset(row_values[row_index - 1]) + 'px;'"
     >
       <label
-        @click.exact="on_column_select('2')"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click('2')"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('2')"
-        @mouseenter="on_column_enter_hover('2')"
-        @mouseleave="on_column_leave_hover('2')"
+        :id="'row_' + row_index"
+        @click.exact="on_row_select(row_values[row_index - 1])"
+        @click.shift.exact="
+          on_row_ctrl_click_or_shift_click(row_values[row_index - 1])
+        "
+        @click.ctrl.exact="
+          on_row_ctrl_click_or_shift_click(row_values[row_index - 1])
+        "
+        @mouseenter="on_row_enter_hover(row_values[row_index - 1])"
+        @mouseleave="on_row_leave_hover(row_values[row_index - 1])"
       >
-        02</label
-      >
-    </span>
-    <span
-      class="span__platemap-editor-column-index-three"
-      :style="'left:' + column_left_offset('3') + 'px;'"
-    >
-      <label
-        @click.exact="on_column_select('3')"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click('3')"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('3')"
-        @mouseenter="on_column_enter_hover('3')"
-        @mouseleave="on_column_leave_hover('3')"
-      >
-        03</label
+        {{ row_values[row_index - 1] }}</label
       >
     </span>
-    <span
-      class="span__platemap-editor-column-index-four"
-      :style="'left:' + column_left_offset('4') + 'px;'"
-    >
-      <label
-        @click.exact="on_column_select('4')"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click('4')"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('4')"
-        @mouseenter="on_column_enter_hover('4')"
-        @mouseleave="on_column_leave_hover('4')"
-      >
-        04</label
-      >
-    </span>
-    <span
-      class="span__platemap-editor-column-index-five"
-      :style="'left:' + column_left_offset('5') + 'px;'"
-    >
-      <label
-        @click.exact="on_column_select('5')"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click('5')"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('5')"
-        @mouseenter="on_column_enter_hover('5')"
-        @mouseleave="on_column_leave_hover('5')"
-        >05</label
-      >
-    </span>
-    <span
-      class="span__platemap-editor-column-index-six"
-      :style="'left:' + column_left_offset('6') + 'px;'"
-    >
-      <label
-        @click.exact="on_column_select('6')"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click('6')"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click('6')"
-        @mouseenter="on_column_enter_hover('6')"
-        @mouseleave="on_column_leave_hover('6')"
-      >
-        06</label
-      >
-    </span>
-    <span
-      class="span__platemap-editor-row-index-A"
-      :style="'top:' + row_top_offset('A') + 'px;'"
-    >
-      <label
-        @click.exact="on_row_select('A')"
-        @click.shift.exact="on_row_ctrl_click_or_shift_click('A')"
-        @click.ctrl.exact="on_row_ctrl_click_or_shift_click('A')"
-        @mouseenter="on_row_enter_hover('A')"
-        @mouseleave="on_row_leave_hover('A')"
-      >
-        A</label
-      >
-    </span>
-    <span
-      class="span__platemap-editor-row-index-B"
-      :style="'top:' + row_top_offset('B') + 'px;'"
-    >
-      <label
-        @click.exact="on_row_select('B')"
-        @click.shift.exact="on_row_ctrl_click_or_shift_click('B')"
-        @click.ctrl.exact="on_row_ctrl_click_or_shift_click('B')"
-        @mouseenter="on_row_enter_hover('B')"
-        @mouseleave="on_row_leave_hover('B')"
-      >
-        B</label
-      >
-    </span>
-    <span
-      class="span__platemap-editor-row-index-C"
-      :style="'top:' + row_top_offset('C') + 'px;'"
-    >
-      <label
-        @click.exact="on_row_select('C')"
-        @click.shift.exact="on_row_ctrl_click_or_shift_click('C')"
-        @click.ctrl.exact="on_row_ctrl_click_or_shift_click('C')"
-        @mouseenter="on_row_enter_hover('C')"
-        @mouseleave="on_row_leave_hover('C')"
-      >
-        C</label
-      >
-    </span>
-    <span
-      class="span__platemap-editor-row-index-D"
-      :style="'top:' + row_top_offset('D') + 'px;'"
-    >
-      <label
-        @click.exact="on_row_select('D')"
-        @click.shift.exact="on_row_ctrl_click_or_shift_click('D')"
-        @click.ctrl.exact="on_row_ctrl_click_or_shift_click('D')"
-        @mouseenter="on_row_enter_hover('D')"
-        @mouseleave="on_row_leave_hover('D')"
-      >
-        D</label
-      >
-    </span>
+
     <span
       class="span__platemap-toggle-plus-minus-icon"
       @click.exact="on_select_cancel_all(all_select_or_cancel)"
@@ -227,6 +134,8 @@ export default {
       hover_color: new Array(24).fill(hover_color),
       stroke_width: new Array(24).fill(no_stroke_width),
       temp_stroke_width: [],
+      row_values: ["A", "B", "C", "D"],
+      column_values: ["1", "2", "3", "4", "5", "6"],
       testerf: false,
     };
   },
@@ -853,12 +762,7 @@ export default {
   pointer-events: all;
 }
 
-.span__platemap-editor-column-index-one,
-.span__platemap-editor-column-index-two,
-.span__platemap-editor-column-index-three,
-.span__platemap-editor-column-index-four,
-.span__platemap-editor-column-index-five,
-.span__platemap-editor-column-index-six {
+.span__platemap-editor-column-index {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -879,16 +783,12 @@ export default {
   text-align: center;
 }
 
-.span__platemap-editor-column-index-one label:hover,
-.span__platemap-editor-column-index-two label:hover,
-.span__platemap-editor-column-index-three label:hover,
-.span__platemap-editor-column-index-four label:hover,
-.span__platemap-editor-column-index-five label:hover,
-.span__platemap-editor-column-index-six label:hover,
+.span__platemap-editor-column-index label:hover,
 .span__platemap-editor-row-index-A label:hover,
 .span__platemap-editor-row-index-B label:hover,
 .span__platemap-editor-row-index-C label:hover,
-.span__platemap-editor-row-index-D label:hover {
+.span__platemap-editor-row-index-D label:hover,
+.span__platemap-editor-row-index label:hover {
   color: #ececed;
 }
 
@@ -899,7 +799,8 @@ export default {
 .span__platemap-editor-row-index-A,
 .span__platemap-editor-row-index-B,
 .span__platemap-editor-row-index-C,
-.span__platemap-editor-row-index-D {
+.span__platemap-editor-row-index-D,
+.span__platemap-editor-row-index {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);

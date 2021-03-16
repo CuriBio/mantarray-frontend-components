@@ -10,12 +10,12 @@ const base_screenshot_path = path.join(
 
 const backdrop_div = Selector(".div__platemap-editor-backdrop");
 
-const column_one_btn = Selector(".span__platemap-editor-column-index-one");
-const column_five_btn = Selector(".span__platemap-editor-column-index-five");
+const column_one_btn = Selector("#column_1");
+const column_five_btn = Selector("#column_5");
 
-const row_A_btn = Selector(".span__platemap-editor-row-index-A");
-const row_B_btn = Selector(".span__platemap-editor-row-index-B");
-const row_D_btn = Selector(".span__platemap-editor-row-index-D");
+const row_A_btn = Selector("#row_1");
+const row_B_btn = Selector("#row_2");
+const row_D_btn = Selector("#row_4");
 
 const plus_btn = Selector("#plus");
 const minus_btn = Selector("#minus");
