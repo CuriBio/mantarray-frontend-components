@@ -10,19 +10,15 @@ const base_screenshot_path = path.join(
 
 const backdrop_div = Selector(".div__platemap-editor-backdrop");
 
-const column_one_btn = Selector(".span__platemap-editor-column-index-one");
-const column_five_btn = Selector(".span__platemap-editor-column-index-five");
-const column_five_btn_negate = Selector(
-  ".span__platemap-editor-column-index-five-negate"
-);
+const column_one_btn = Selector("#column_1");
+const column_five_btn = Selector("#column_5");
 
-const row_A_btn = Selector(".span__platemap-editor-row-index-A");
-const row_A_btn_negate = Selector(".span__platemap-editor-row-index-A-negate");
-const row_B_btn = Selector(".span__platemap-editor-row-index-B");
-const row_D_btn = Selector(".span__platemap-editor-row-index-D");
+const row_A_btn = Selector("#row_1");
+const row_B_btn = Selector("#row_2");
+const row_D_btn = Selector("#row_4");
 
-const plus_btn = Selector(".span__platemap-toggle-plus-icon");
-const minus_btn = Selector(".span__platemap-toggle-minus-icon");
+const plus_btn = Selector("#plus");
+const minus_btn = Selector("#minus");
 
 const well_2 = Selector(".well_2");
 
@@ -189,8 +185,8 @@ test("testing the Plate-MapEditor page should display click on (+) , A Row and  
     "plus-icon-A-Row-Five-Column-ctrl-click"
   );
   await t.click(plus_btn);
-  await t.click(row_A_btn_negate, { modifiers: { ctrl: true } });
-  await t.click(column_five_btn_negate, { modifiers: { ctrl: true } });
+  await t.click(row_A_btn, { modifiers: { ctrl: true } });
+  await t.click(column_five_btn, { modifiers: { ctrl: true } });
   await t.hover(backdrop_div);
   await testcafe_page_visual_regression(t, screenshot_path);
 });

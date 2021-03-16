@@ -10,6 +10,9 @@
       :stroke-width="stroke_wdth"
       @mouseenter="on_enter_well(index)"
       @mouseleave="on_leave_well(index)"
+      @click.exact="on_click_exact(index)"
+      @click.shift.exact="on_click_shift_exact(index)"
+      @click.ctrl.exact="on_click_ctrl_exact(index)"
     />
   </svg>
 </template>
@@ -34,6 +37,15 @@ export default {
     },
     on_leave_well(index) {
       this.$emit("leave-well", index);
+    },
+    on_click_exact(index) {
+      this.$emit("click-exact", index);
+    },
+    on_click_shift_exact(index) {
+      this.$emit("click-shift-exact", index);
+    },
+    on_click_ctrl_exact(index) {
+      this.$emit("click-ctrl-exact", index);
     },
   },
 };

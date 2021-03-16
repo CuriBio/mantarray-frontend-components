@@ -2,237 +2,74 @@
   <div>
     <div class="div__platemap-editor-backdrop"></div>
     <span
-      v-show="!a_column_toggle_one"
-      class="span__platemap-editor-column-index-one"
-      @click.exact="on_column_toggle('01')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('01')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('01')"
-      @mouseenter="on_column_hover_enter('01')"
-      @mouseleave="on_column_hover_leave('01')"
-      >01</span
+      v-for="column_index in 6"
+      :key="'column_' + column_index"
+      class="span__platemap-editor-column-index"
+      :style="
+        'left:' + column_left_offset(column_values[column_index - 1]) + 'px;'
+      "
     >
-    <span
-      v-show="a_column_toggle_one"
-      class="span__platemap-editor-column-index-one-negate"
-      @click.exact="on_column_toggle('01')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('01')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('01')"
-      @mouseenter="on_column_hover_enter('01')"
-      @mouseleave="on_column_hover_leave('01')"
-      >01</span
-    >
-    <span
-      v-show="!a_column_toggle_two"
-      class="span__platemap-editor-column-index-two"
-      @click.exact="on_column_toggle('02')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('02')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('02')"
-      @mouseenter="on_column_hover_enter('02')"
-      @mouseleave="on_column_hover_leave('02')"
-      >02</span
-    >
-    <span
-      v-show="a_column_toggle_two"
-      class="span__platemap-editor-column-index-two-negate"
-      @click.exact="on_column_toggle('02')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('02')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('02')"
-      @mouseenter="on_column_hover_enter('02')"
-      @mouseleave="on_column_hover_leave('02')"
-      >02</span
-    >
-    <span
-      v-show="!a_column_toggle_three"
-      class="span__platemap-editor-column-index-three"
-      @click.exact="on_column_toggle('03')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('03')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('03')"
-      @mouseenter="on_column_hover_enter('03')"
-      @mouseleave="on_column_hover_leave('03')"
-      >03</span
-    >
-    <span
-      v-show="a_column_toggle_three"
-      class="span__platemap-editor-column-index-three-negate"
-      @click.exact="on_column_toggle('03')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('03')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('03')"
-      @mouseenter="on_column_hover_enter('03')"
-      @mouseleave="on_column_hover_leave('03')"
-      >03</span
-    >
-    <span
-      v-show="!a_column_toggle_four"
-      class="span__platemap-editor-column-index-four"
-      @click.exact="on_column_toggle('04')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('04')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('04')"
-      @mouseenter="on_column_hover_enter('04')"
-      @mouseleave="on_column_hover_leave('04')"
-      >04</span
-    >
-    <span
-      v-show="a_column_toggle_four"
-      class="span__platemap-editor-column-index-four-negate"
-      @click.exact="on_column_toggle('04')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('04')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('04')"
-      @mouseenter="on_column_hover_enter('04')"
-      @mouseleave="on_column_hover_leave('04')"
-      >04</span
-    >
-    <span
-      v-show="!a_column_toggle_five"
-      class="span__platemap-editor-column-index-five"
-      @click.exact="on_column_toggle('05')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('05')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('05')"
-      @mouseenter="on_column_hover_enter('05')"
-      @mouseleave="on_column_hover_leave('05')"
-      >05</span
-    >
-    <span
-      v-show="a_column_toggle_five"
-      class="span__platemap-editor-column-index-five-negate"
-      @click.exact="on_column_toggle('05')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('05')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('05')"
-      @mouseenter="on_column_hover_enter('05')"
-      @mouseleave="on_column_hover_leave('05')"
-      >05</span
-    >
-    <span
-      v-show="!a_column_toggle_six"
-      class="span__platemap-editor-column-index-six"
-      @click.exact="on_column_toggle('06')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle('06')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle('06')"
-      @mouseenter="on_column_hover_enter('06')"
-      @mouseleave="on_column_hover_leave('06')"
-      >06</span
-    >
-    <span
-      v-show="a_column_toggle_six"
-      class="span__platemap-editor-column-index-six-negate"
-      @click.exact="on_column_toggle('06')"
-      @click.shift.exact="on_shift_or_ctrl_column_toggle_negate('06')"
-      @click.ctrl.exact="on_shift_or_ctrl_column_toggle_negate('06')"
-      @mouseenter="on_column_hover_enter('06')"
-      @mouseleave="on_column_hover_leave('06')"
-      >06</span
-    >
-    <span
-      v-show="!a_row_toggle_A"
-      class="span__platemap-editor-row-index-A"
-      @click.exact="on_row_toggle('A')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle('A')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle('A')"
-      @mouseenter="on_row_hover_enter('A')"
-      @mouseleave="on_row_hover_leave('A')"
-      >A</span
-    >
-    <span
-      v-show="a_row_toggle_A"
-      class="span__platemap-editor-row-index-A-negate"
-      @click.exact="on_row_toggle('A')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle_negate('A')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle_negate('A')"
-      @mouseenter="on_row_hover_enter('A')"
-      @mouseleave="on_row_hover_leave('A')"
-      >A</span
-    >
-    <span
-      v-show="!a_row_toggle_B"
-      class="span__platemap-editor-row-index-B"
-      @click.exact="on_row_toggle('B')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle('B')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle('B')"
-      @mouseenter="on_row_hover_enter('B')"
-      @mouseleave="on_row_hover_leave('B')"
-      >B</span
-    >
-    <span
-      v-show="a_row_toggle_B"
-      class="span__platemap-editor-row-index-B-negate"
-      @click.exact="on_row_toggle('B')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle_negate('B')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle_negate('B')"
-      @mouseenter="on_row_hover_enter('B')"
-      @mouseleave="on_row_hover_leave('B')"
-      >B</span
-    >
-    <span
-      v-show="!a_row_toggle_C"
-      class="span__platemap-editor-row-index-C"
-      @click.exact="on_row_toggle('C')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle('C')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle('C')"
-      @mouseenter="on_row_hover_enter('C')"
-      @mouseleave="on_row_hover_leave('C')"
-      >C</span
-    >
-    <span
-      v-show="a_row_toggle_C"
-      class="span__platemap-editor-row-index-C-negate"
-      @click.exact="on_row_toggle('C')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle_negate('C')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle_negate('C')"
-      @mouseenter="on_row_hover_enter('C')"
-      @mouseleave="on_row_hover_leave('C')"
-      >C</span
-    >
-    <span
-      v-show="!a_row_toggle_D"
-      class="span__platemap-editor-row-index-D"
-      @click.exact="on_row_toggle('D')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle('D')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle('D')"
-      @mouseenter="on_row_hover_enter('D')"
-      @mouseleave="on_row_hover_leave('D')"
-      >D</span
-    >
-    <span
-      v-show="a_row_toggle_D"
-      class="span__platemap-editor-row-index-D-negate"
-      @click.exact="on_row_toggle('D')"
-      @click.shift.exact="on_shift_or_ctrl_row_toggle_negate('D')"
-      @click.ctrl.exact="on_shift_or_ctrl_row_toggle_negate('D')"
-      @mouseenter="on_row_hover_enter('D')"
-      @mouseleave="on_row_hover_leave('D')"
-      >D</span
-    >
-    <span
-      v-show="!all_toggle"
-      class="span__platemap-toggle-plus-icon"
-      @click="on_toggle_all()"
-      @mouseenter="on_hover_all_enter()"
-      @mouseleave="on_hover_all_leave()"
-    >
-      <FontAwesomeIcon :icon="['fa', 'plus-circle']" />
+      <label
+        :id="'column_' + column_index"
+        @click.exact="on_column_select(column_values[column_index - 1])"
+        @click.shift.exact="
+          on_column_ctrl_click_or_shift_click(column_values[column_index - 1])
+        "
+        @click.ctrl.exact="
+          on_column_ctrl_click_or_shift_click(column_values[column_index - 1])
+        "
+        @mouseenter="on_column_enter_hover(column_values[column_index - 1])"
+        @mouseleave="on_column_leave_hover(column_values[column_index - 1])"
+        >0{{ column_values[column_index - 1] }}</label
+      >
     </span>
+
     <span
-      v-show="all_toggle"
-      class="span__platemap-toggle-minus-icon"
-      @click="on_toggle_all()"
-      @mouseenter="on_hover_all_enter()"
-      @mouseleave="on_hover_all_leave()"
+      v-for="row_index in 4"
+      :key="'row_' + row_index"
+      class="span__platemap-editor-row-index"
+      :style="'top:' + row_top_offset(row_values[row_index - 1]) + 'px;'"
     >
-      <FontAwesomeIcon :icon="['fa', 'minus-circle']" />
+      <label
+        :id="'row_' + row_index"
+        @click.exact="on_row_select(row_values[row_index - 1])"
+        @click.shift.exact="
+          on_row_ctrl_click_or_shift_click(row_values[row_index - 1])
+        "
+        @click.ctrl.exact="
+          on_row_ctrl_click_or_shift_click(row_values[row_index - 1])
+        "
+        @mouseenter="on_row_enter_hover(row_values[row_index - 1])"
+        @mouseleave="on_row_leave_hover(row_values[row_index - 1])"
+      >
+        {{ row_values[row_index - 1] }}</label
+      >
     </span>
-    <!-- <div class="div__platemap-drag-drop-selector" @mousedown="drag_startselect" @mousemove="track_position" @mouseup="drag_endselect">
-      <svg width="400" height="260" v-show="a_drag_drop_toggle">
-        <rect v-bind:x="x_origin" v-bind:y="y_origin" v-bind:width="rect_width" v-bind:height="rect_height"
-          style="fill:none;stroke:#b7b7b7;stroke-width:1;fill-opacity:0.9;stroke-opacity:0.9" />
-      </svg> -->
+
+    <span
+      class="span__platemap-toggle-plus-minus-icon"
+      @click.exact="on_select_cancel_all(all_select_or_cancel)"
+      @mouseenter="on_plus_minus_enter_hover(all_select_or_cancel)"
+      @mouseleave="on_plus_minus_leave_hover(all_select_or_cancel)"
+    >
+      <FontAwesomeIcon
+        v-show="all_select_or_cancel"
+        id="plus"
+        :icon="['fa', 'plus-circle']"
+      />
+      <FontAwesomeIcon
+        v-show="!all_select_or_cancel"
+        id="minus"
+        :icon="['fa', 'minus-circle']"
+      />
+    </span>
     <span
       v-for="well_index in Array(24).keys()"
       :key="well_index"
       :class="'well_' + well_index"
+      :style="well_top_left_offset(well_index)"
       width="66"
       height="66"
-      @click.exact="basic_toggle(well_index)"
-      @click.ctrl.exact="basic_shift_or_ctrl_toggle(well_index)"
-      @click.shift.exact="basic_shift_or_ctrl_toggle(well_index)"
     >
       <PlateWell
         :classname="'plate_' + well_index"
@@ -241,15 +78,17 @@
         :circle_x="33"
         :circle_y="33"
         :radius="25"
-        :strk="hover_color"
+        :strk="hover_color[well_index]"
         :plate_fill="platecolor[well_index]"
-        :stroke_wdth="!all_select[well_index] && hover[well_index] ? 0 : 4"
+        :stroke_wdth="stroke_width[well_index]"
         :index="well_index"
-        @enter-well="on_wellenter"
-        @leave-well="on_wellleave"
+        @enter-well="on_wellenter(well_index)"
+        @leave-well="on_wellleave(well_index)"
+        @click-exact="basic_select(well_index)"
+        @click-ctrl-exact="basic_shift_or_ctrl_select(well_index)"
+        @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
       ></PlateWell>
     </span>
-    <div v-show="testerf"></div>
   </div>
 </template>
 <script>
@@ -257,12 +96,15 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
-import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
-
-const twenty_four_well_labware_definition = new LabwareDefinition(4, 6);
-
 library.add(faMinusCircle);
 library.add(faPlusCircle);
+const no_stroke_width = 0;
+const hover_stroke_width = 2;
+const selected_stroke_width = 4;
+const hover_color = "#ececed";
+const selected_color = "#FFFFFF";
+const default_color = "#b7b7b7";
+const debug_mode = undefined;
 export default {
   name: "PlateMapEditor",
   components: { FontAwesomeIcon, PlateWell },
@@ -276,631 +118,618 @@ export default {
     platecolor: {
       type: Array,
       default: function () {
-        return new Array(24).fill("#b7b7b7");
+        return new Array(24).fill(default_color);
       },
     },
   },
   data() {
     return {
-      all_toggle: false,
-      a_row_toggle_A: false,
-      a_row_toggle_B: false,
-      a_row_toggle_C: false,
-      a_row_toggle_D: false,
-      a_column_toggle_one: false,
-      a_column_toggle_two: false,
-      a_column_toggle_three: false,
-      a_column_toggle_four: false,
-      a_column_toggle_five: false,
-      a_column_toggle_six: false,
-      a_drag_drop_toggle: false,
+      all_select_or_cancel: true,
       x_origin: 0,
       y_origin: 0,
       rect_width: 0,
       rect_height: 0,
       all_select: this.selected,
-      hover: new Array(24).fill(true),
-      hover_color: "#FFFFFF",
+      hover: new Array(24).fill(false),
+      hover_color: new Array(24).fill(hover_color),
+      stroke_width: new Array(24).fill(no_stroke_width),
+      temp_stroke_width: [],
+      row_values: ["A", "B", "C", "D"],
+      column_values: ["1", "2", "3", "4", "5", "6"],
       testerf: false,
     };
   },
+  created() {
+    this.stroke_width.splice(0, this.stroke_width.length);
+    for (let j = 0; j < this.all_select.length; j++) {
+      this.stroke_width[j] = !this.all_select[j]
+        ? no_stroke_width
+        : selected_stroke_width;
+    }
+    const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+    this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+  },
   methods: {
-    on_toggle_all() {
-      this.all_toggle = !this.all_toggle;
-      for (let count = 0; count < 24; count++) {
-        this.all_select[count] = this.all_toggle;
-      }
-      this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_C = this.a_row_toggle_D = this.all_toggle;
-      this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = this.all_toggle;
-      this.on_plate_well_selected();
-    },
-    on_hover_all_enter() {
-      this.hover_color = "#ececed";
-      for (let count = 0; count < 24; count++) {
-        this.hover[count] = false;
-      }
-    },
-    on_hover_all_leave() {
-      this.hover_color = "#FFFFFF";
-      for (let count = 0; count < 24; count++) {
-        this.hover[count] = true;
+    column_left_offset(column) {
+      switch (column) {
+        case "1":
+          return "35.9792";
+        case "2":
+          return "97.5836";
+        case "3":
+          return "159.188";
+        case "4":
+          return "220.792";
+        case "5":
+          return "282.397";
+        case "6":
+          return "344.001";
       }
     },
-    on_row_toggle(value) {
-      let row_toggle_flag = false;
-      for (let i = 0; i < 24; i++) {
-        this.all_select[i] = false;
-      }
-      this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = false;
-      switch (value) {
+    row_top_offset(row) {
+      switch (row) {
         case "A":
-          this.a_row_toggle_A = !this.a_row_toggle_A;
-          row_toggle_flag = this.a_row_toggle_A;
-          this.a_row_toggle_B = this.a_row_toggle_C = this.a_row_toggle_D = false;
-          break;
+          return "41.928";
         case "B":
-          this.a_row_toggle_B = !this.a_row_toggle_B;
-          row_toggle_flag = this.a_row_toggle_B;
-          this.a_row_toggle_A = this.a_row_toggle_C = this.a_row_toggle_D = false;
-          break;
+          return "103.621";
         case "C":
-          this.a_row_toggle_C = !this.a_row_toggle_C;
-          row_toggle_flag = this.a_row_toggle_C;
-          this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_D = false;
-          break;
+          return "165.779";
         case "D":
-          this.a_row_toggle_D = !this.a_row_toggle_D;
-          row_toggle_flag = this.a_row_toggle_D;
-          this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_C = false;
-          break;
+          return "224.1";
       }
-      const row_index = value.charCodeAt(0) - 65;
-      for (
-        let column_index = 0;
-        column_index < twenty_four_well_labware_definition.num_columns;
-        column_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.all_select[well_index] = row_toggle_flag;
+    },
+    well_top_left_offset(index) {
+      switch (index) {
+        case 0:
+          return "top: 25px; left: 29.9792px;";
+        case 1:
+          return "top: 85.3524px; left: 29.9792px;";
+        case 2:
+          return "top: 145.278px; left: 29.9792px;";
+        case 3:
+          return "top: 205.157px; left: 29.9792px;";
+        case 4:
+          return "top: 25.427px; left: 91.5836px;";
+        case 5:
+          return "top: 85.3524px; left: 91.5836px;";
+        case 6:
+          return "top: 145.278px; left: 91.5836px;";
+        case 7:
+          return "top: 205.203px; left: 91.5836px;";
+        case 8:
+          return "top: 25.427px; left: 153.188px;";
+        case 9:
+          return "top: 85.3524px; left: 153.188px;";
+        case 10:
+          return "top: 145.278px; left: 153.188px;";
+        case 11:
+          return "top: 205.203px; left: 153.188px;";
+        case 12:
+          return "top: 25.427px; left: 214.792px;";
+        case 13:
+          return "top: 85.3524px; left: 214.792px;";
+        case 14:
+          return "top: 145.278px; left: 214.792px;";
+        case 15:
+          return "top: 205.203px; left: 214.792px;";
+        case 16:
+          return "top: 25.427px; left: 276.397px;";
+        case 17:
+          return "top: 85.3524px; left: 276.397px;";
+        case 18:
+          return "top: 145.278px; left: 276.397px;";
+        case 19:
+          return "top: 205.203px; left: 276.397px;";
+        case 20:
+          return "top: 25.427px; left: 338.001px;";
+        case 21:
+          return "top: 85.3524px; left: 338.001px;";
+        case 22:
+          return "top: 145.278px; left: 338.001px;";
+        case 23:
+          return "top: 205.203px; left: 338.001px;";
+      }
+    },
+    on_select_cancel_all(state) {
+      if (this.all_select_or_cancel == true) {
+        this.test_event("+ icon clicked");
+      } else {
+        this.test_event("- icon clicked");
+      }
+      this.all_select_or_cancel = !state;
+      for (let count = 0; count < 24; count++) {
+        this.all_select[count] = state;
+      }
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[j] = !this.all_select[j]
+          ? hover_color
+          : selected_color;
       }
       this.on_plate_well_selected();
     },
-    on_shift_or_ctrl_row_toggle(value) {
-      switch (value) {
-        case "A":
-          this.a_row_toggle_A = !this.a_row_toggle_A;
-          this.all_select[0] = this.a_column_toggle_one
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[4] = this.a_column_toggle_two
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[8] = this.a_column_toggle_three
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[12] = this.a_column_toggle_four
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[16] = this.a_column_toggle_five
-            ? true
-            : this.a_row_toggle_A;
-          this.all_select[20] = this.a_column_toggle_six
-            ? true
-            : this.a_row_toggle_A;
-          break;
-        case "B":
-          this.a_row_toggle_B = !this.a_row_toggle_B;
-          this.all_select[1] = this.a_column_toggle_one
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[5] = this.a_column_toggle_two
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[9] = this.a_column_toggle_three
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[13] = this.a_column_toggle_four
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[17] = this.a_column_toggle_five
-            ? true
-            : this.a_row_toggle_B;
-          this.all_select[21] = this.a_column_toggle_six
-            ? true
-            : this.a_row_toggle_B;
-          break;
-        case "C":
-          this.a_row_toggle_C = !this.a_row_toggle_C;
-          this.all_select[2] = this.a_column_toggle_one
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[6] = this.a_column_toggle_two
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[10] = this.a_column_toggle_three
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[14] = this.a_column_toggle_four
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[18] = this.a_column_toggle_five
-            ? true
-            : this.a_row_toggle_C;
-          this.all_select[22] = this.a_column_toggle_six
-            ? true
-            : this.a_row_toggle_C;
-          break;
-        case "D":
-          this.a_row_toggle_D = !this.a_row_toggle_D;
-          this.all_select[3] = this.a_column_toggle_one
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[7] = this.a_column_toggle_two
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[11] = this.a_column_toggle_three
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[15] = this.a_column_toggle_four
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[19] = this.a_column_toggle_five
-            ? true
-            : this.a_row_toggle_D;
-          this.all_select[23] = this.a_column_toggle_six
-            ? true
-            : this.a_row_toggle_D;
-          break;
+    on_plus_minus_enter_hover(state) {
+      if (state == true) {
+        this.test_event("+ icon enter => Hover");
+      } else {
+        this.test_event("- icon enter => Hover");
       }
-      this.on_plate_well_selected();
-    },
-    on_shift_or_ctrl_row_toggle_negate(value) {
-      switch (value) {
-        case "A":
-          this.a_row_toggle_A = !this.a_row_toggle_A;
-          this.all_select[0] = this.a_column_toggle_one
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[4] = this.a_column_toggle_two
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[8] = this.a_column_toggle_three
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[12] = this.a_column_toggle_four
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[16] = this.a_column_toggle_five
-            ? false
-            : this.a_row_toggle_A;
-          this.all_select[20] = this.a_column_toggle_six
-            ? false
-            : this.a_row_toggle_A;
-          break;
-        case "B":
-          this.a_row_toggle_B = !this.a_row_toggle_B;
-          this.all_select[1] = this.a_column_toggle_one
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[5] = this.a_column_toggle_two
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[9] = this.a_column_toggle_three
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[13] = this.a_column_toggle_four
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[17] = this.a_column_toggle_five
-            ? false
-            : this.a_row_toggle_B;
-          this.all_select[21] = this.a_column_toggle_six
-            ? false
-            : this.a_row_toggle_B;
-          break;
-        case "C":
-          this.a_row_toggle_C = !this.a_row_toggle_C;
-          this.all_select[2] = this.a_column_toggle_one
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[6] = this.a_column_toggle_two
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[10] = this.a_column_toggle_three
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[14] = this.a_column_toggle_four
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[18] = this.a_column_toggle_five
-            ? false
-            : this.a_row_toggle_C;
-          this.all_select[22] = this.a_column_toggle_six
-            ? false
-            : this.a_row_toggle_C;
-          break;
-        case "D":
-          this.a_row_toggle_D = !this.a_row_toggle_D;
-          this.all_select[3] = this.a_column_toggle_one
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[7] = this.a_column_toggle_two
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[11] = this.a_column_toggle_three
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[15] = this.a_column_toggle_four
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[19] = this.a_column_toggle_five
-            ? false
-            : this.a_row_toggle_D;
-          this.all_select[23] = this.a_column_toggle_six
-            ? false
-            : this.a_row_toggle_D;
-          break;
-      }
-      this.on_plate_well_selected();
-    },
-    on_row_hover_enter(value) {
-      this.hover_color = "#ececed";
-
-      const row_index = value.charCodeAt(0) - 65;
-
-      for (
-        let column_index = 0;
-        column_index < twenty_four_well_labware_definition.num_columns;
-        column_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.hover[well_index] = false;
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j]
+          ? hover_stroke_width
+          : selected_stroke_width;
       }
     },
-    on_row_hover_leave(value) {
-      this.hover_color = "#FFFFFF";
-      const row_index = value.charCodeAt(0) - 65;
-
-      for (
-        let column_index = 0;
-        column_index < twenty_four_well_labware_definition.num_columns;
-        column_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.hover[well_index] = true;
+    on_plus_minus_leave_hover(state) {
+      if (state == true) {
+        this.test_event("+ icon leave => Hover");
+      } else {
+        this.test_event("- icon leave => Hover");
+      }
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j]
+          ? no_stroke_width
+          : selected_stroke_width;
+        if (state == false) {
+          this.hover_color[j] = selected_color;
+        }
       }
     },
-    on_column_toggle(value) {
-      let column_toggle_flag = false;
-      for (let i = 0; i < 24; i++) {
-        this.all_select[i] = false;
-      }
-      this.a_row_toggle_A = this.a_row_toggle_B = this.a_row_toggle_C = this.a_row_toggle_D = false;
-      switch (value) {
-        case "01":
-          this.a_column_toggle_one = !this.a_column_toggle_one;
-          column_toggle_flag = this.a_column_toggle_one;
-          this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = false;
-          break;
-        case "02":
-          this.a_column_toggle_two = !this.a_column_toggle_two;
-          column_toggle_flag = this.a_column_toggle_two;
-          this.a_column_toggle_one = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = false;
-          break;
-        case "03":
-          this.a_column_toggle_three = !this.a_column_toggle_three;
-          column_toggle_flag = this.a_column_toggle_three;
-          this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_four = this.a_column_toggle_five = this.a_column_toggle_six = false;
-          break;
-        case "04":
-          this.a_column_toggle_four = !this.a_column_toggle_four;
-          column_toggle_flag = this.a_column_toggle_four;
-          this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_five = this.a_column_toggle_six = false;
-          break;
-        case "05":
-          this.a_column_toggle_five = !this.a_column_toggle_five;
-          column_toggle_flag = this.a_column_toggle_five;
-          this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_six = false;
-          break;
-        case "06":
-          this.a_column_toggle_six = !this.a_column_toggle_six;
-          column_toggle_flag = this.a_column_toggle_six;
-          this.a_column_toggle_one = this.a_column_toggle_two = this.a_column_toggle_three = this.a_column_toggle_four = this.a_column_toggle_five = false;
-          break;
-      }
-      const column_index = parseInt(value) - 1; // as incoming values start from 01
-      for (
-        let row_index = 0;
-        row_index < twenty_four_well_labware_definition.num_rows;
-        row_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.all_select[well_index] = column_toggle_flag;
-      }
-      this.on_plate_well_selected();
-    },
-    on_shift_or_ctrl_column_toggle(value) {
-      switch (value) {
-        case "01":
-          this.a_column_toggle_one = !this.a_column_toggle_one;
-          this.all_select[0] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_one;
-          this.all_select[1] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_one;
-          this.all_select[2] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_one;
-          this.all_select[3] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_one;
-          break;
-        case "02":
-          this.a_column_toggle_two = !this.a_column_toggle_two;
-          this.all_select[4] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_two;
-          this.all_select[5] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_two;
-          this.all_select[6] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_two;
-          this.all_select[7] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_two;
-          break;
-        case "03":
-          this.a_column_toggle_three = !this.a_column_toggle_three;
-          this.all_select[8] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_three;
-          this.all_select[9] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_three;
-          this.all_select[10] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_three;
-          this.all_select[11] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_three;
-          break;
-        case "04":
-          this.a_column_toggle_four = !this.a_column_toggle_four;
-          this.all_select[12] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_four;
-          this.all_select[13] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_four;
-          this.all_select[14] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_four;
-          this.all_select[15] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_four;
-          break;
-        case "05":
-          this.a_column_toggle_five = !this.a_column_toggle_five;
-          this.all_select[16] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_five;
-          this.all_select[17] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_five;
-          this.all_select[18] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_five;
-          this.all_select[19] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_five;
-          break;
-        case "06":
-          this.a_column_toggle_six = !this.a_column_toggle_six;
-          this.all_select[20] = this.a_row_toggle_A
-            ? true
-            : this.a_column_toggle_six;
-          this.all_select[21] = this.a_row_toggle_B
-            ? true
-            : this.a_column_toggle_six;
-          this.all_select[22] = this.a_row_toggle_C
-            ? true
-            : this.a_column_toggle_six;
-          this.all_select[23] = this.a_row_toggle_D
-            ? true
-            : this.a_column_toggle_six;
-          break;
-      }
-      this.on_plate_well_selected();
-    },
-    on_shift_or_ctrl_column_toggle_negate(value) {
-      switch (value) {
-        case "01":
-          this.a_column_toggle_one = !this.a_column_toggle_one;
-          this.all_select[0] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_one;
-          this.all_select[1] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_one;
-          this.all_select[2] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_one;
-          this.all_select[3] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_one;
-          break;
-        case "02":
-          this.a_column_toggle_two = !this.a_column_toggle_two;
-          this.all_select[4] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_two;
-          this.all_select[5] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_two;
-          this.all_select[6] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_two;
-          this.all_select[7] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_two;
-          break;
-        case "03":
-          this.a_column_toggle_three = !this.a_column_toggle_three;
-          this.all_select[8] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_three;
-          this.all_select[9] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_three;
-          this.all_select[10] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_three;
-          this.all_select[11] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_three;
-          break;
-        case "04":
-          this.a_column_toggle_four = !this.a_column_toggle_four;
-          this.all_select[12] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_four;
-          this.all_select[13] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_four;
-          this.all_select[14] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_four;
-          this.all_select[15] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_four;
-          break;
-        case "05":
-          this.a_column_toggle_five = !this.a_column_toggle_five;
-          this.all_select[16] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_five;
-          this.all_select[17] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_five;
-          this.all_select[18] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_five;
-          this.all_select[19] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_five;
-          break;
-        case "06":
-          this.a_column_toggle_six = !this.a_column_toggle_six;
-          this.all_select[20] = this.a_row_toggle_A
-            ? false
-            : this.a_column_toggle_six;
-          this.all_select[21] = this.a_row_toggle_B
-            ? false
-            : this.a_column_toggle_six;
-          this.all_select[22] = this.a_row_toggle_C
-            ? false
-            : this.a_column_toggle_six;
-          this.all_select[23] = this.a_row_toggle_D
-            ? false
-            : this.a_column_toggle_six;
-          break;
-      }
-      this.on_plate_well_selected();
-    },
-    on_column_hover_enter(value) {
-      this.hover_color = "#ececed";
-
-      const column_index = parseInt(value) - 1; // as incoming values start from 01
-
-      for (
-        let row_index = 0;
-        row_index < twenty_four_well_labware_definition.num_rows;
-        row_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.hover[well_index] = false;
-      }
-    },
-    on_column_hover_leave(value) {
-      this.hover_color = "#FFFFFF";
-      const column_index = parseInt(value) - 1; // as incoming values start from 01
-
-      for (
-        let row_index = 0;
-        row_index < twenty_four_well_labware_definition.num_rows;
-        row_index++
-      ) {
-        const well_index = twenty_four_well_labware_definition.get_well_idx_from_row_and_column(
-          row_index,
-          column_index
-        );
-        this.hover[well_index] = true;
-      }
-    },
-    basic_toggle(value) {
+    basic_select(value) {
       const new_list = new Array(24).fill(false);
+
       new_list[value] = true;
+      this.test_event("Well clicked");
+      this.stroke_width[value] = selected_stroke_width;
       this.all_select = new_list;
+      if (this.all_select_or_cancel == false) {
+        this.all_select_or_cancel = true;
+      }
+      this.on_wellenter(value);
       this.on_plate_well_selected();
     },
-    basic_shift_or_ctrl_toggle(value) {
+    basic_shift_or_ctrl_select(value) {
+      this.test_event("Well Shift or Ctrl clicked");
       this.testerf = !this.testerf;
+      const allEqual = (arr) => arr.every((v) => v === true);
       this.all_select[value] = !this.all_select[value];
+      this.stroke_width[value] = selected_stroke_width;
+      if (allEqual(this.all_select)) {
+        this.all_select_or_cancel = false;
+      } else {
+        this.all_select_or_cancel = true;
+      }
+      this.on_wellenter(value);
       this.on_plate_well_selected();
     },
-    // drag_startselect(event) {
-    //   this.a_drag_drop_toggle = true;
-    //   this.x_origin = event.pageX - 20;
-    //   this.y_origin = event.pageY - 30;
-    // },
-    // track_position(event) {
-    //   this.rect_width = event.pageX - this.x_origin;
-    //   this.rect_height = event.pageY - this.y_origin;
-    // },
-    // drag_endselect(event) {
-    //   this.rect_width = event.pageX - this.x_origin;
-    //   this.rect_height = event.pageY - this.y_origin;
-    //   this.a_drag_drop_toggle = false;
-    // },
     on_wellenter(value) {
-      this.hover[value] = false;
-      this.hover_color = "#ececed";
+      this.hover[value] = true;
+      this.hover_color[value] = hover_color;
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.test_event("well enter =>" + value + " Hover");
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j]
+          ? no_stroke_width
+          : selected_stroke_width;
+      }
+      if (this.all_select[value] == true) {
+        this.stroke_width[value] = selected_stroke_width;
+      } else {
+        this.stroke_width[value] = hover_stroke_width;
+      }
     },
     on_wellleave(value) {
-      this.hover[value] = true;
-      this.hover_color = "#FFFFFF";
+      this.hover[value] = false;
+      this.hover_color[value] = selected_color;
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.test_event("well leave =>" + value + " Hover");
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+      }
+    },
+    on_row_select(row) {
+      const new_list = new Array(24).fill(false);
+      this.test_event(row + " clicked");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (row) {
+        case "A":
+          new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
+          break;
+        case "B":
+          new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
+          break;
+        case "C":
+          new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
+          break;
+        case "D":
+          new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
+          break;
+      }
+      if (this.all_select_or_cancel == false) {
+        this.all_select_or_cancel = true;
+      }
+      this.all_select = new_list;
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
+      }
+      this.on_plate_well_selected();
+    },
+    on_column_select(column) {
+      const new_list = new Array(24).fill(false);
+      this.test_event(column + " clicked");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (column) {
+        case "1":
+          new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
+          break;
+        case "2":
+          new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
+          break;
+        case "3":
+          new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
+          break;
+        case "4":
+          new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
+          break;
+        case "5":
+          new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
+          break;
+        case "6":
+          new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
+          break;
+      }
+      if (this.all_select_or_cancel == false) {
+        this.all_select_or_cancel = true;
+      }
+      this.all_select = new_list;
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
+      }
+      this.on_plate_well_selected();
+    },
+    on_row_ctrl_click_or_shift_click(row) {
+      const new_list = [];
+      let result = false;
+      this.test_event(row + " ctrl or shift clicked");
+      for (let j = 0; j < this.all_select.length; j++)
+        new_list[j] = this.all_select[j];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (row) {
+        case "A":
+          result =
+            new_list[0] &&
+            new_list[4] &&
+            new_list[8] &&
+            new_list[12] &&
+            new_list[16] &&
+            new_list[20];
+          if (result == true) {
+            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = false;
+          } else {
+            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
+          }
+          break;
+        case "B":
+          result =
+            new_list[1] &&
+            new_list[5] &&
+            new_list[9] &&
+            new_list[13] &&
+            new_list[17] &&
+            new_list[21];
+          if (result == true) {
+            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = false;
+          } else {
+            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
+          }
+          break;
+        case "C":
+          result =
+            new_list[2] &&
+            new_list[6] &&
+            new_list[10] &&
+            new_list[14] &&
+            new_list[18] &&
+            new_list[22];
+          if (result == true) {
+            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = false;
+          } else {
+            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
+          }
+          break;
+        case "D":
+          result =
+            new_list[3] &&
+            new_list[7] &&
+            new_list[11] &&
+            new_list[15] &&
+            new_list[19] &&
+            new_list[23];
+          if (result == true) {
+            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = false;
+          } else {
+            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
+          }
+          break;
+      }
+
+      this.all_select = new_list;
+      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
+      }
+      this.on_plate_well_selected();
+    },
+    on_column_ctrl_click_or_shift_click(column) {
+      this.test_event(column + " ctrl or shift clicked");
+      const new_list = [];
+      let result = false;
+      for (let j = 0; j < this.all_select.length; j++)
+        new_list[j] = this.all_select[j];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (column) {
+        case "1":
+          result = new_list[0] && new_list[1] && new_list[2] && new_list[3];
+          if (result == true) {
+            new_list[0] = new_list[1] = new_list[2] = new_list[3] = false;
+          } else {
+            new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
+          }
+          break;
+        case "2":
+          result = new_list[4] && new_list[5] && new_list[6] && new_list[7];
+          if (result == true) {
+            new_list[4] = new_list[5] = new_list[6] = new_list[7] = false;
+          } else {
+            new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
+          }
+          break;
+        case "3":
+          result = new_list[8] && new_list[9] && new_list[10] && new_list[11];
+          if (result == true) {
+            new_list[8] = new_list[9] = new_list[10] = new_list[11] = false;
+          } else {
+            new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
+          }
+          break;
+        case "4":
+          result = new_list[12] && new_list[13] && new_list[14] && new_list[15];
+          if (result == true) {
+            new_list[12] = new_list[13] = new_list[14] = new_list[15] = false;
+          } else {
+            new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
+          }
+          break;
+        case "5":
+          result = new_list[16] && new_list[17] && new_list[18] && new_list[19];
+          if (result == true) {
+            new_list[16] = new_list[17] = new_list[18] = new_list[19] = false;
+          } else {
+            new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
+          }
+          break;
+        case "6":
+          result = new_list[20] && new_list[21] && new_list[22] && new_list[23];
+          if (result == true) {
+            new_list[20] = new_list[21] = new_list[22] = new_list[23] = false;
+          } else {
+            new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
+          }
+          break;
+      }
+
+      this.all_select = new_list;
+      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
+      }
+      this.on_plate_well_selected();
+    },
+    on_column_enter_hover(value) {
+      this.test_event(value + " hover enter");
+      const new_list = [];
+      for (let i = 0; i < this.stroke_width.length; i++)
+        new_list[i] = this.stroke_width[i];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (value) {
+        case "1":
+          new_list[0] =
+            new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
+          new_list[1] =
+            new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
+          new_list[2] =
+            new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
+          new_list[3] =
+            new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
+          break;
+        case "2":
+          new_list[4] =
+            new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
+          new_list[5] =
+            new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
+          new_list[6] =
+            new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
+          new_list[7] =
+            new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
+          break;
+        case "3":
+          new_list[8] =
+            new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
+          new_list[9] =
+            new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
+          new_list[10] =
+            new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
+          new_list[11] =
+            new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
+          break;
+        case "4":
+          new_list[12] =
+            new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
+          new_list[13] =
+            new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
+          new_list[14] =
+            new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
+          new_list[15] =
+            new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
+          break;
+        case "5":
+          new_list[16] =
+            new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
+          new_list[17] =
+            new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
+          new_list[18] =
+            new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
+          new_list[19] =
+            new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
+          break;
+        case "6":
+          new_list[20] =
+            new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
+          new_list[21] =
+            new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
+          new_list[22] =
+            new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
+          new_list[23] =
+            new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
+          break;
+      }
+      for (let j = 0; j < new_list.length; j++)
+        this.stroke_width[j] = new_list[j];
+    },
+    on_column_leave_hover(value) {
+      this.test_event(value + " hover leave");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
+      }
+    },
+    on_row_enter_hover(value) {
+      this.test_event(value + " hover enter");
+      const new_list = [];
+      for (let i = 0; i < this.stroke_width.length; i++)
+        new_list[i] = this.stroke_width[i];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      switch (value) {
+        case "A":
+          new_list[0] =
+            new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
+          new_list[4] =
+            new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
+          new_list[8] =
+            new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
+          new_list[12] =
+            new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
+          new_list[16] =
+            new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
+          new_list[20] =
+            new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
+          break;
+        case "B":
+          new_list[1] =
+            new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
+          new_list[5] =
+            new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
+          new_list[9] =
+            new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
+          new_list[13] =
+            new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
+          new_list[17] =
+            new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
+          new_list[21] =
+            new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
+          break;
+        case "C":
+          new_list[2] =
+            new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
+          new_list[6] =
+            new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
+          new_list[10] =
+            new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
+          new_list[14] =
+            new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
+          new_list[18] =
+            new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
+          new_list[22] =
+            new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
+          break;
+        case "D":
+          new_list[3] =
+            new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
+          new_list[7] =
+            new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
+          new_list[11] =
+            new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
+          new_list[15] =
+            new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
+          new_list[19] =
+            new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
+          new_list[23] =
+            new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
+          break;
+      }
+      for (let j = 0; j < new_list.length; j++)
+        this.stroke_width[j] = new_list[j];
+    },
+    on_row_leave_hover(value) {
+      this.test_event(value + " hover leave");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i]
+          ? no_stroke_width
+          : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i]
+          ? hover_color
+          : selected_color;
+      }
     },
     on_plate_well_selected() {
       this.$emit("platewell-selected", this.all_select);
+    },
+    test_event(evnt) {
+      if (debug_mode != undefined) {
+        this.$emit("test-event", evnt);
+      }
     },
   },
 };
 </script>
 <style>
-.well_not_selected {
-  stroke-width: 0;
-}
-.well_selected {
-  stroke-width: 2;
-}
-
 .div__platemap-editor-backdrop {
   transform: rotate(0deg);
   box-sizing: border-box;
@@ -916,7 +745,6 @@ export default {
   border: 0px none rgb(0, 0, 0);
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
-  z-index: 1;
   pointer-events: all;
 }
 
@@ -931,12 +759,10 @@ export default {
   top: 0px;
   left: 0px;
   visibility: visible;
-  z-index: 50;
   pointer-events: all;
 }
 
-.span__platemap-editor-column-index-one,
-.span__platemap-editor-column-index-one-negate {
+.span__platemap-editor-column-index {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -945,7 +771,6 @@ export default {
   width: 53px;
   height: 27px;
   top: 2px;
-  left: 35.9792px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -956,155 +781,18 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: center;
-  z-index: 57;
 }
 
-.span__platemap-editor-column-index-one:hover,
-.span__platemap-editor-column-index-one-negate:hover,
-.span__platemap-editor-column-index-two:hover,
-.span__platemap-editor-column-index-two-negate:hover,
-.span__platemap-editor-column-index-three:hover,
-.span__platemap-editor-column-index-three-negate:hover,
-.span__platemap-editor-column-index-four:hover,
-.span__platemap-editor-column-index-four-negate:hover,
-.span__platemap-editor-column-index-five:hover,
-.span__platemap-editor-column-index-five-negate:hover,
-.span__platemap-editor-column-index-six:hover,
-.span__platemap-editor-column-index-six-negate:hover,
-.span__platemap-editor-row-index-A:hover,
-.span__platemap-editor-row-index-A-negate:hover,
-.span__platemap-editor-row-index-B:hover,
-.span__platemap-editor-row-index-B-negate:hover,
-.span__platemap-editor-row-index-C:hover,
-.span__platemap-editor-row-index-C-negate:hover,
-.span__platemap-editor-row-index-D:hover,
-.span__platemap-editor-row-index-D-negate:hover {
+.span__platemap-editor-column-index label:hover,
+.span__platemap-editor-row-index label:hover {
   color: #ececed;
 }
 
-.span__platemap-toggle-plus-icon:hover,
-.span__platemap-toggle-minus-icon:hover {
+.span__platemap-toggle-plus-minus-icon:hover {
   color: #ffffff;
 }
 
-.span__platemap-editor-column-index-two,
-.span__platemap-editor-column-index-two-negate {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 97.5836px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 59;
-}
-.span__platemap-editor-column-index-three,
-.span__platemap-editor-column-index-three-negate {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 159.188px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 61;
-}
-.span__platemap-editor-column-index-four,
-.span__platemap-editor-column-index-four-negate {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 220.792px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 63;
-}
-.span__platemap-editor-column-index-five,
-.span__platemap-editor-column-index-five-negate {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 282.397px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 65;
-}
-
-.span__platemap-editor-column-index-six,
-.span__platemap-editor-column-index-six-negate {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  left: 344.001px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-  z-index: 67;
-}
-.span__platemap-editor-row-index-A,
-.span__platemap-editor-row-index-A-negate {
+.span__platemap-editor-row-index {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -1112,7 +800,6 @@ export default {
   position: absolute;
   width: 22px;
   height: 25px;
-  top: 41.928px;
   left: 7px;
   padding: 5px;
   visibility: visible;
@@ -1124,79 +811,8 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   text-align: left;
-  z-index: 51;
 }
-.span__platemap-editor-row-index-B,
-.span__platemap-editor-row-index-B-negate {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 22px;
-  height: 25px;
-  top: 103.621px;
-  left: 7px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: left;
-  z-index: 51;
-}
-.span__platemap-editor-row-index-C,
-.span__platemap-editor-row-index-C-negate {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 22px;
-  height: 25px;
-  top: 165.779px;
-  left: 7px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: left;
-  z-index: 55;
-}
-.span__platemap-editor-row-index-D,
-.span__platemap-editor-row-index-D-negate {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 22px;
-  height: 25px;
-  top: 224.1px;
-  left: 7px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: left;
-  z-index: 53;
-}
-.span__platemap-toggle-plus-icon,
-.span__platemap-toggle-minus-icon {
+.span__platemap-toggle-plus-minus-icon {
   overflow: hidden;
   white-space: nowrap;
   text-align: center;
@@ -1210,271 +826,37 @@ export default {
   left: 5px;
   font-size: 20px;
   color: rgb(183, 183, 183);
-  z-index: 53;
 }
-.well_0 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25px;
-  left: 29.9792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_1 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 29.9792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_2 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 29.9792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_3 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.157px;
-  left: 29.9792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_4 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 91.5836px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_5 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 91.5836px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_6 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 91.5836px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_7 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 91.5836px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_8 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 153.188px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_9 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 153.188px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_10 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 153.188px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_11 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 153.188px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_12 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 214.792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_13 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 214.792px;
-  visibility: visible;
-  z-index: 68;
-}
-
-.well_14 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 214.792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_15 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 214.792px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_16 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 276.397px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_17 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 276.397px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_18 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 276.397px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_19 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 205.203px;
-  left: 276.397px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_20 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 25.427px;
-  left: 338.001px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_21 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 85.3524px;
-  left: 338.001px;
-  visibility: visible;
-  z-index: 68;
-}
-.well_22 {
-  pointer-events: all;
-  transform: rotate(0deg);
-  position: absolute;
-  width: 66px;
-  height: 66px;
-  top: 145.278px;
-  left: 338.001px;
-  visibility: visible;
-  z-index: 68;
-}
+.well_0,
+.well_1,
+.well_2,
+.well_3,
+.well_4,
+.well_5,
+.well_6,
+.well_7,
+.well_8,
+.well_9,
+.well_10,
+.well_11,
+.well_12,
+.well_13,
+.well_14,
+.well_15,
+.well_16,
+.well_17,
+.well_18,
+.well_19,
+.well_20,
+.well_21,
+.well_22,
 .well_23 {
   pointer-events: all;
+  border-radius: 50%;
   transform: rotate(0deg);
   position: absolute;
   width: 66px;
   height: 66px;
-  top: 205.203px;
-  left: 338.001px;
   visibility: visible;
-  z-index: 68;
 }
 </style>
