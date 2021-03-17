@@ -70,3 +70,6 @@ export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidge
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
 export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
 export { default as HeatMapColorBar } from "./components/status/HeatMapColorBar.vue";
+
+// HeatMap Layout
+export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
