@@ -25,170 +25,36 @@
     </div>
     <!-- original mockflow ID: cmpDceaaf3ae28ae1a3394f714f82cb8848d -->
     <div class="div__heatmap-layout-heatmap-settings-panel"></div>
-    <span
-      id="cmpD64bd4f78c20868d7dd5a9b4aa39bf217"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 300px;
-        height: 34px;
-        top: 62px;
-        left: 1621px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 20px;
-        color: rgb(255, 255, 255);
-        text-align: center;
-        z-index: 5;
-      "
-    >
+    <!-- original mockflow ID: cmpD64bd4f78c20868d7dd5a9b4aa39bf217 -->
+    <span class="span__heatmap-layout-heatmap-settings-label">
       Heatmap&nbsp;<wbr />Settings
     </span>
+    <!-- original mockflow ID: cmpD56369ad2e65893ae5ca594f14a64e378 -->
     <canvas
-      id="cmpD56369ad2e65893ae5ca594f14a64e378"
-      class="mfWFCompCls"
+      class="canvas__heatmap-settings-title-seperator"
       width="272"
       height="2"
-      style="
-        transform: rotate(0deg);
-        pointer-events: all;
-        position: absolute;
-        width: 272px;
-        height: 2px;
-        top: 100px;
-        left: 1634px;
-        visibility: visible;
-        z-index: 100;
-        background-color: #3f3f3f;
-        opacity: 0.5;
-      "
     >
     </canvas>
-    <span
-      id="cmpD9c0a6e873d03a7f83e8a68941610e993"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 300px;
-        height: 30px;
-        top: 113.991px;
-        left: 1621.1px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 17px;
-        color: rgb(255, 255, 255);
-        text-align: center;
-        z-index: 3;
-      "
-    >
+    <!-- original mockflow ID: cmpD9c0a6e873d03a7f83e8a68941610e993 -->
+    <span class="span__heatmap-layout-heatmap-scale-label">
       Scale&nbsp;<wbr />Bar</span
     >
-    <div
-      id="cmpD5cceb38a3af00a6bd7589d883fa87688"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 50px;
-        height: 50px;
-        top: 152px;
-        left: 1713px;
-        visibility: visible;
-        z-index: 118;
-      "
-    >
+    <!-- original mockflow ID:  cmpD5cceb38a3af00a6bd7589d883fa87688 -->
+    <div class="div__heatmap-layout-checkbox-container">
       <CheckBoxWidget :checkbox_options="option"></CheckBoxWidget>
     </div>
-    <span
-      id="cmpD8a25d29c92a6f84cc071bcf466ca36ce"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 86px;
-        height: 20px;
-        top: 152.991px;
-        left: 1744.28px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 15px;
-        color: rgb(183, 183, 183);
-        text-align: left;
-        z-index: 80;
-      "
+    <!-- original mockflow ID:  cmpD8a25d29c92a6f84cc071bcf466ca36ce -->
+    <span class="span__heatmap-layout-checkbox-label"
       >Auto&nbsp;<wbr />Scale</span
     >
-    <span
-      id="cmpDda68e4034616b4f5e244dc57e815c027"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 82px;
-        height: 30px;
-        top: 193.217px;
-        left: 1675.86px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 15px;
-        color: rgb(183, 183, 183);
-        text-align: right;
-        z-index: 82;
-      "
-      >Maximum</span
-    >
+    <!-- original mockflow ID:  cmpDda68e4034616b4f5e244dc57e815c027 -->
+    <span class="span__heatmap-layout-maximum-label">Maximum</span>
+    <!-- original mockflow ID:  cmpDb88cb7785bf9ca45549b1866c2c20122 -->
     <div
-      id="cmpDb88cb7785bf9ca45549b1866c2c20122"
-      class="mfWFCompCls"
+      class="div__heatmap-layout-maximum-input-container"
       width="121"
       height="52"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 121px;
-        height: 52px;
-        top: 180.925px;
-        left: 1753.44px;
-        visibility: visible;
-        z-index: 84;
-      "
     >
       <InputWidget
         :placeholder="'100'"
@@ -196,50 +62,13 @@
         :input_width="105"
       ></InputWidget>
     </div>
-    <span
-      id="cmpDc06480c6344db8d23dca86a4c1e88ab4"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 83px;
-        height: 30px;
-        top: 245.217px;
-        left: 1675.86px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 15px;
-        color: rgb(183, 183, 183);
-        text-align: right;
-        z-index: 88;
-      "
-      >Minimum</span
-    >
+    <!-- original mockflow ID:  cmpDc06480c6344db8d23dca86a4c1e88ab4 -->
+    <span class="span__heatmap-layout-minimum-input-container">Minimum</span>
+    <!-- original mockflow ID:  cmpD1fda22cfac2b66c17a7f3def056669a0 -->
     <div
-      id="cmpD1fda22cfac2b66c17a7f3def056669a0"
-      class="mfWFCompCls"
+      class="div__heatmap-layout-minimum-input-container"
       width="121"
       height="52"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 121px;
-        height: 52px;
-        top: 232.925px;
-        left: 1753.44px;
-        visibility: visible;
-        z-index: 86;
-      "
     >
       <InputWidget
         :placeholder="'0'"
@@ -247,71 +76,17 @@
         :input_width="105"
       ></InputWidget>
     </div>
+    <!-- original mockflow ID:  cmpD8d0ef3020c7613af7ae63fa5722de759  -->
     <canvas
-      id="cmpD8d0ef3020c7613af7ae63fa5722de759"
-      class="mfWFCompCls"
+      class="canvas__heatmap-settings-scale-seperator"
       width="212"
       height="2"
-      style="
-        transform: rotate(0deg);
-        pointer-events: all;
-        position: absolute;
-        width: 212px;
-        height: 2px;
-        top: 298px;
-        left: 1664px;
-        visibility: visible;
-        z-index: 102;
-        background-color: #3f3f3f;
-        opacity: 0.5;
-      "
     >
     </canvas>
-    <span
-      id="cmpD4146e3d532d7eb0719ee0d6e06485940"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 301px;
-        height: 30px;
-        top: 312.667px;
-        left: 1621px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 17px;
-        color: rgb(255, 255, 255);
-        text-align: center;
-        z-index: 96;
-      "
-      >Display</span
-    >
-    <div
-      id="cmpDa1c3ce66a0c6d38c39ace76539269b2f"
-      class="mfWFCompCls dropdowncomp"
-      style="
-        pointer-events: all;
-        white-space: nowrap;
-        line-height: 100%;
-        transform: rotate(0deg);
-        position: absolute;
-        width: 210px;
-        height: 50px;
-        top: 347px;
-        left: 1664px;
-        padding: 5px;
-        visibility: visible;
-        z-index: 114;
-      "
-    >
+    <!-- original mockflow ID: cmpD4146e3d532d7eb0719ee0d6e06485940 -->
+    <span class="span__heatmap-layout-display-label">Display</span>
+    <!-- original mockflow ID: cmpDa1c3ce66a0c6d38c39ace76539269b2f  -->
+    <div class="div__heatmap-layout-display-input-dropdown-container">
       <InputDropDown
         :title_label="label"
         :placeholder="keyplaceholder"
@@ -323,83 +98,22 @@
         :message_if_blank="on_empty_flag"
       ></InputDropDown>
     </div>
-
+    <!-- original mockflow ID: cmpDc08190eb24c68e02c278bde19882becb -->
     <canvas
-      id="cmpDc08190eb24c68e02c278bde19882becb"
-      class="mfWFCompCls"
+      class="canvas__heatmap-settings-color-scheme-seperator"
       width="212"
       height="2"
-      style="
-        transform: rotate(0deg);
-        pointer-events: all;
-        position: absolute;
-        width: 212px;
-        height: 2px;
-        top: 417px;
-        left: 1664px;
-        visibility: visible;
-        z-index: 110;
-        background-color: #3f3f3f;
-        opacity: 0.5;
-      "
     >
     </canvas>
-    <span
-      id="cmpD03029ea224291e6817f40d3ac9f24b19"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 301px;
-        height: 30px;
-        top: 426.667px;
-        left: 1621px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 17px;
-        color: rgb(255, 255, 255);
-        text-align: center;
-        z-index: 106;
-      "
-    >
+    <!-- original mockflow ID: cmpD03029ea224291e6817f40d3ac9f24b19 -->
+    <span class="span__heatmap-settings-color-scheme-label">
       Color&nbsp;<wbr />Scheme</span
     >
-    <div style="top: 458px; left: 1697.5px; position: absolute">
+    <div class="div__heatmap-radio-buttons-container">
       <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
     </div>
-    <span
-      id="cmpD5bc3214687200b065320c06b0a15e013"
-      class="mfWFCompCls"
-      style="
-        pointer-events: all;
-        line-height: 100%;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 300px;
-        height: 25px;
-        top: 597.667px;
-        left: 1621.36px;
-        padding: 5px;
-        visibility: visible;
-        user-select: none;
-        font-family: Muli;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none;
-        font-size: 17px;
-        color: rgb(255, 255, 255);
-        text-align: center;
-        z-index: 98;
-      "
+    <!-- orginal mockflow ID: cmpD5bc3214687200b065320c06b0a15e013 -->
+    <span class="span__heatmap-settings-qc-options-label"
       >QC&nbsp;<wbr />Options</span
     >
   </div>
@@ -492,15 +206,14 @@ export default {
   margin: 0px;
   background: rgb(0, 0, 0);
   position: absolute;
-  width: 1920px;
-  height: 930px;
+  width: 1630px;
+  height: 885px;
   top: 0px;
   left: 1px;
   visibility: visible;
   border: 0px none rgb(0, 0, 0);
   border-radius: 0px;
   box-shadow: none;
-  z-index: 1;
   pointer-events: all;
 }
 
@@ -513,8 +226,8 @@ export default {
   color: rgb(255, 255, 255);
   font-family: Muli;
   position: absolute;
-  top: 146px;
-  left: 288.364px;
+  top: 101px;
+  left: 0px;
   width: 1331px;
   height: 35px;
   overflow: hidden;
@@ -526,7 +239,6 @@ export default {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
-  z-index: 112;
   pointer-events: all;
 }
 .div__heatmap-layout-heatmap-editor-widget {
@@ -538,13 +250,12 @@ export default {
   position: absolute;
   width: 715px;
   height: 480px;
-  top: 187px;
-  left: 574.5px;
+  top: 142px;
+  left: 284.5px;
   visibility: visible;
   border: 0px none rgb(0, 0, 0);
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
-  z-index: 9;
   pointer-events: all;
 }
 
@@ -557,8 +268,8 @@ export default {
   color: rgb(183, 183, 183);
   font-family: Muli;
   position: absolute;
-  top: 676px;
-  left: 577.455px;
+  top: 631px;
+  left: 287.455px;
   width: 165px;
   height: 35px;
   overflow: hidden;
@@ -570,7 +281,6 @@ export default {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
-  z-index: 3;
   pointer-events: all;
 }
 
@@ -583,8 +293,8 @@ export default {
   color: rgb(255, 255, 255);
   font-family: Muli;
   position: absolute;
-  top: 676px;
-  left: 740.455px;
+  top: 631px;
+  left: 450.455px;
   width: 127px;
   height: 35px;
   overflow: hidden;
@@ -596,7 +306,6 @@ export default {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
-  z-index: 5;
   pointer-events: all;
 }
 
@@ -609,13 +318,12 @@ export default {
   position: absolute;
   width: 41px;
   height: 481px;
-  top: 185.5px;
-  left: 1301.5px;
+  top: 140.5px;
+  left: 1011.5px;
   visibility: visible;
   border: 1px solid rgb(0, 0, 0);
   border-radius: 0px;
   box-shadow: none;
-  z-index: 90;
   pointer-events: all;
 }
 
@@ -628,18 +336,292 @@ export default {
   position: absolute;
   width: 300px;
   height: 885px;
-  top: 45px;
-  left: 1620px;
+  top: 0px;
+  left: 1330px;
   visibility: visible;
   border: 0px none rgb(0, 0, 0);
   border-radius: 0px;
   box-shadow: none;
-  z-index: 1;
   pointer-events: all;
 }
 
-.div__checkbox-background {
+.span__heatmap-layout-heatmap-settings-label {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 300px;
+  height: 34px;
+  top: 62px;
+  left: 1331px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 20px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+
+.canvas__heatmap-settings-title-seperator {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 272px;
+  height: 2px;
+  top: 100px;
+  left: 1330px;
+  visibility: visible;
+  background-color: #3f3f3f;
+  opacity: 0.5;
+}
+
+.span__heatmap-layout-heatmap-scale-label {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 300px;
+  height: 30px;
+  top: 113.991px;
+  left: 1330px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+
+.div__heatmap-layout-checkbox-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 152px;
+  left: 1423px;
+  visibility: visible;
+}
+
+.span__heatmap-layout-checkbox-label {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 86px;
+  height: 20px;
+  top: 152.991px;
+  left: 1444.28px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 15px;
+  color: rgb(183, 183, 183);
+  text-align: left;
+}
+
+.span__heatmap-layout-maximum-label {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 82px;
+  height: 30px;
+  top: 193.217px;
+  left: 1385.86px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 15px;
+  color: rgb(183, 183, 183);
+  text-align: right;
+}
+
+.div__heatmap-layout-maximum-input-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 121px;
+  height: 52px;
+  top: 180.925px;
+  left: 1473.44px;
+  visibility: visible;
+}
+
+.span__heatmap-layout-minimum-input-container {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 83px;
+  height: 30px;
+  top: 245.217px;
+  left: 1385.86px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 15px;
+  color: rgb(183, 183, 183);
+  text-align: right;
+}
+
+.div__heatmap-layout-minimum-input-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 121px;
+  height: 52px;
+  top: 232.925px;
+  left: 1473.44px;
+  visibility: visible;
+}
+
+.canvas__heatmap-settings-scale-seperator {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 212px;
+  height: 2px;
+  top: 298px;
+  left: 1374px;
+  visibility: visible;
+  background-color: #3f3f3f;
+  opacity: 0.5;
+}
+
+.span__heatmap-layout-display-label {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 301px;
+  height: 30px;
+  top: 312.667px;
+  left: 1331px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+
+.div__heatmap-layout-display-input-dropdown-container {
+  pointer-events: all;
+  white-space: nowrap;
+  line-height: 100%;
+  transform: rotate(0deg);
+  position: absolute;
+  width: 210px;
+  height: 50px;
+  top: 347px;
+  left: 1384px;
+  padding: 5px;
+  visibility: visible;
+}
+
+.canvas__heatmap-settings-color-scheme-seperator {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 212px;
+  height: 2px;
+  top: 417px;
+  left: 1374px;
+  visibility: visible;
+  background-color: #3f3f3f;
+  opacity: 0.5;
+}
+
+.span__heatmap-settings-color-scheme-label {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 301px;
+  height: 30px;
+  top: 426.667px;
+  left: 1331px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+
+.div__heatmap-radio-buttons-container {
+  top: 458px;
+  left: 1407.5px;
+  position: absolute;
+}
+.span__heatmap-settings-qc-options-label {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 300px;
+  height: 25px;
+  top: 597.667px;
+  left: 1331.36px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+
+.div__heatmap-layout-checkbox-container > .div__checkbox-background {
   width: 0px;
   height: 0px;
+}
+
+.div__heatmap-layout-display-input-dropdown-container
+  > .div__input-dropdown-background {
+  background: none;
+  border: none;
 }
 </style>
