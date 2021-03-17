@@ -107,13 +107,13 @@
         position: absolute;
         width: 50px;
         height: 50px;
-        top: 142px;
-        left: 1703px;
+        top: 152px;
+        left: 1713px;
         visibility: visible;
         z-index: 118;
       "
     >
-      <!-- <CheckBoxWidget :checkbox_options="option"></CheckBoxWidget> -->
+      <CheckBoxWidget :checkbox_options="option"></CheckBoxWidget>
     </div>
     <span
       id="cmpD8a25d29c92a6f84cc071bcf466ca36ce"
@@ -169,6 +169,30 @@
       "
       >Maximum</span
     >
+    <div
+      id="cmpDb88cb7785bf9ca45549b1866c2c20122"
+      class="mfWFCompCls"
+      width="121"
+      height="52"
+      style="
+        pointer-events: all;
+        transform: rotate(0deg);
+        overflow: hidden;
+        position: absolute;
+        width: 121px;
+        height: 52px;
+        top: 180.925px;
+        left: 1753.44px;
+        visibility: visible;
+        z-index: 84;
+      "
+    >
+      <InputWidget
+        :placeholder="'100'"
+        :invalid_text="''"
+        :input_width="105"
+      ></InputWidget>
+    </div>
     <span
       id="cmpDc06480c6344db8d23dca86a4c1e88ab4"
       class="mfWFCompCls"
@@ -196,6 +220,50 @@
       "
       >Minimum</span
     >
+    <div
+      id="cmpD1fda22cfac2b66c17a7f3def056669a0"
+      class="mfWFCompCls"
+      width="121"
+      height="52"
+      style="
+        pointer-events: all;
+        transform: rotate(0deg);
+        overflow: hidden;
+        position: absolute;
+        width: 121px;
+        height: 52px;
+        top: 232.925px;
+        left: 1753.44px;
+        visibility: visible;
+        z-index: 86;
+      "
+    >
+      <InputWidget
+        :placeholder="'0'"
+        :invalid_text="''"
+        :input_width="105"
+      ></InputWidget>
+    </div>
+    <canvas
+      id="cmpD8d0ef3020c7613af7ae63fa5722de759"
+      class="mfWFCompCls"
+      width="212"
+      height="2"
+      style="
+        transform: rotate(0deg);
+        pointer-events: all;
+        position: absolute;
+        width: 212px;
+        height: 2px;
+        top: 298px;
+        left: 1664px;
+        visibility: visible;
+        z-index: 102;
+        background-color: #3f3f3f;
+        opacity: 0.5;
+      "
+    >
+    </canvas>
     <span
       id="cmpD4146e3d532d7eb0719ee0d6e06485940"
       class="mfWFCompCls"
@@ -252,6 +320,27 @@
         :message_if_blank="on_empty_flag"
       ></InputDropDown>
     </div>
+
+    <canvas
+      id="cmpDc08190eb24c68e02c278bde19882becb"
+      class="mfWFCompCls"
+      width="212"
+      height="2"
+      style="
+        transform: rotate(0deg);
+        pointer-events: all;
+        position: absolute;
+        width: 212px;
+        height: 2px;
+        top: 417px;
+        left: 1664px;
+        visibility: visible;
+        z-index: 110;
+        background-color: #3f3f3f;
+        opacity: 0.5;
+      "
+    >
+    </canvas>
     <span
       id="cmpD03029ea224291e6817f40d3ac9f24b19"
       class="mfWFCompCls"
@@ -313,16 +402,16 @@
   </div>
 </template>
 <script>
-// import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
-// import InputWidget from "@/components/basic_widgets/InputWidget.vue";
+import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
+import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
 export default {
   name: "HeatMap",
   components: {
-    //    InputWidget,
+    InputWidget,
     InputDropDown,
-    //    CheckBoxWidget,
+    CheckBoxWidget,
     RadioButtonWidget,
   },
   data() {
@@ -349,4 +438,9 @@ export default {
   methods: {},
 };
 </script>
-<style></style>
+<style>
+.div__checkbox-background {
+  width: 0px;
+  height: 0px;
+}
+</style>
