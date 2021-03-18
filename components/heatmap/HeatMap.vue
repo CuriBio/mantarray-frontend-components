@@ -1,6 +1,176 @@
 <template>
   <div>
     <div
+      id="cmpDf4f7dd55b2e166cb0d0e843ee15b7aad"
+      class="mfWFCompCls"
+      style="
+        transform: rotate(0deg);
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+        background: rgb(0, 0, 0);
+        position: absolute;
+        width: 1920px;
+        height: 930px;
+        top: 0px;
+        left: 1px;
+        visibility: visible;
+        border: 0px none rgb(0, 0, 0);
+        border-radius: 0px;
+        box-shadow: none;
+        z-index: 1;
+        pointer-events: all;
+      "
+    ></div>
+    <div
+      id="cmpDc41b1cc426d26a92a64089e70f3d6d88"
+      class="mfWFCompCls mfWFTxtCls"
+      style="
+        line-height: 1;
+        transform: rotate(0deg);
+        padding: 5px;
+        margin: 0px;
+        overflow-wrap: break-word;
+        color: rgb(255, 255, 255);
+        font-family: Muli;
+        position: absolute;
+        top: 146px;
+        left: 288.364px;
+        width: 1331px;
+        height: 35px;
+        overflow: hidden;
+        visibility: visible;
+        user-select: none;
+        text-align: center;
+        font-size: 21px;
+        letter-spacing: normal;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none;
+        z-index: 112;
+        pointer-events: all;
+      "
+    >
+      Twitch Force (μN)
+    </div>
+    <div
+      id="cmpDeb75716be024c38385f1f940d7d0551d"
+      class="mfWFCompCls"
+      style="
+        transform: rotate(0deg);
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+        background: rgb(28, 28, 28);
+        position: absolute;
+        width: 715px;
+        height: 480px;
+        top: 187px;
+        left: 574.5px;
+        visibility: visible;
+        border: 0px none rgb(0, 0, 0);
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
+        z-index: 9;
+        pointer-events: all;
+      "
+    >
+      <PlateHeatMap :platecolor="passing_plate_colors"></PlateHeatMap>
+    </div>
+    <div
+      id="cmpD9bf89cc77f1d867d1b3f93e925ee43ce"
+      class="mfWFCompCls mfWFTxtCls"
+      style="
+        line-height: 1;
+        transform: rotate(0deg);
+        padding: 5px;
+        margin: 0px;
+        overflow-wrap: break-word;
+        color: rgb(183, 183, 183);
+        font-family: Muli;
+        position: absolute;
+        top: 676px;
+        left: 577.455px;
+        width: 165px;
+        height: 35px;
+        overflow: hidden;
+        visibility: visible;
+        user-select: none;
+        text-align: left;
+        font-size: 23px;
+        letter-spacing: normal;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none;
+        z-index: 3;
+        pointer-events: all;
+      "
+    >
+      Well A01 (μN):
+    </div>
+    <div
+      id="cmpDde968837816d0d1051ada7bf835872f8"
+      class="mfWFCompCls mfWFTxtCls"
+      style="
+        line-height: 1;
+        transform: rotate(0deg);
+        padding: 5px;
+        margin: 0px;
+        overflow-wrap: break-word;
+        color: rgb(255, 255, 255);
+        font-family: Muli;
+        position: absolute;
+        top: 676px;
+        left: 740.455px;
+        width: 127px;
+        height: 35px;
+        overflow: hidden;
+        visibility: visible;
+        user-select: none;
+        text-align: left;
+        font-size: 23px;
+        letter-spacing: normal;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none;
+        z-index: 5;
+        pointer-events: all;
+      "
+    >
+      0
+    </div>
+    <div
+      id="cmpDb59694a85eb967571cf98a41b5fa7481"
+      class="mfWFCompCls"
+      style="
+        transform: rotate(0deg);
+        box-sizing: border-box;
+        padding: 0px;
+        margin: 0px;
+        background: linear-gradient(rgb(189, 53, 50), rgb(249, 215, 140));
+        position: absolute;
+        width: 41px;
+        height: 481px;
+        top: 185.5px;
+        left: 1301.5px;
+        visibility: visible;
+        border: 1px solid rgb(0, 0, 0);
+        border-radius: 0px;
+        box-shadow: none;
+        z-index: 90;
+        pointer-events: all;
+      "
+    >
+      <HeatMapColorBar
+        :gradient_uuid="provided_uuid"
+        :lower_range="lower"
+        :upper_range="upper"
+        :heatmap_height="height"
+        :gradient_range="range"
+        :units="unit"
+      ></HeatMapColorBar>
+    </div>
+    <div
       id="cmpDceaaf3ae28ae1a3394f714f82cb8848d"
       class="mfWFCompCls"
       style="
@@ -406,9 +576,14 @@ import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
+import HeatMapColorBar from "@/components/status/HeatMapColorBar.vue";
+import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+
 export default {
   name: "HeatMap",
   components: {
+    PlateHeatMap,
+    HeatMapColorBar,
     InputWidget,
     InputDropDown,
     CheckBoxWidget,
@@ -433,7 +608,45 @@ export default {
         "Relaxation Velocity",
       ],
       on_empty_flag: true,
+      provided_uuid: "0",
+      height: 481,
+      lower: 0,
+      upper: 100,
+      unit: "μN",
+      range: [
+        { color: "#bd3532", offset: "0%" },
+        { color: "#f9d78c", offset: "100%" },
+      ],
     };
+  },
+  created: function () {
+    const plate_colors = [
+      "#F9D78C",
+      "#DF6147",
+      "#DF6147",
+      "#F0A061",
+      "#DF6147",
+      "#BD3532",
+      "#BD3532",
+      "#F0A061",
+      "#F0A061",
+      "#BD3532",
+      "#BD3532",
+      "#F9D78C",
+      "#F0A061",
+      "#F0A061",
+      "#DF6147",
+      "#DF6147",
+      "#F9D78C",
+      "#DF6147",
+      "#F0A061",
+      "#F9D78C",
+      "#F0A061",
+      "#F0A061",
+      "#F9D78C",
+      "#DF6147",
+    ];
+    this.passing_plate_colors = plate_colors;
   },
   methods: {},
 };

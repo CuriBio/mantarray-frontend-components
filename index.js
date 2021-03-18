@@ -73,3 +73,4 @@ export { default as HeatMapColorBar } from "./components/status/HeatMapColorBar.
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
+export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
