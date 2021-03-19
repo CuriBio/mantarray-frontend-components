@@ -354,7 +354,7 @@ export default {
   width: 300px;
   height: 34px;
   top: 62px;
-  left: 1621px;
+  left: 1331px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -390,11 +390,7 @@ export default {
   width: 300px;
   height: 30px;
   top: 113.991px;
-<<<<<<< HEAD
   left: 1330px;
-=======
-  left: 1621.1px;
->>>>>>> Creation of BEM based CSS class title for HeatMap Layout Widget
   padding: 5px;
   visibility: visible;
   user-select: none;
