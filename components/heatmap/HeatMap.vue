@@ -354,7 +354,7 @@ export default {
   width: 300px;
   height: 34px;
   top: 62px;
-  left: 1331px;
+  left: 1621px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -365,6 +365,7 @@ export default {
   font-size: 20px;
   color: rgb(255, 255, 255);
   text-align: center;
+
 }
 
 .canvas__heatmap-settings-title-seperator {
@@ -389,7 +390,11 @@ export default {
   width: 300px;
   height: 30px;
   top: 113.991px;
+<<<<<<< HEAD
   left: 1330px;
+=======
+  left: 1621.1px;
+>>>>>>> Creation of BEM based CSS class title for HeatMap Layout Widget
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -400,6 +405,7 @@ export default {
   font-size: 17px;
   color: rgb(255, 255, 255);
   text-align: center;
+
 }
 
 .div__heatmap-layout-checkbox-container {
@@ -433,6 +439,7 @@ export default {
   font-size: 15px;
   color: rgb(183, 183, 183);
   text-align: left;
+
 }
 
 .span__heatmap-layout-maximum-label {
@@ -455,6 +462,7 @@ export default {
   font-size: 15px;
   color: rgb(183, 183, 183);
   text-align: right;
+
 }
 
 .div__heatmap-layout-maximum-input-container {
@@ -489,6 +497,7 @@ export default {
   font-size: 15px;
   color: rgb(183, 183, 183);
   text-align: right;
+
 }
 
 .div__heatmap-layout-minimum-input-container {
@@ -536,6 +545,7 @@ export default {
   font-size: 17px;
   color: rgb(255, 255, 255);
   text-align: center;
+
 }
 
 .div__heatmap-layout-display-input-dropdown-container {
@@ -585,6 +595,7 @@ export default {
   font-size: 17px;
   color: rgb(255, 255, 255);
   text-align: center;
+
 }
 
 .div__heatmap-radio-buttons-container {
