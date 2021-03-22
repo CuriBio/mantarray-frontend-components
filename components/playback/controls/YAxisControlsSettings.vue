@@ -15,7 +15,6 @@
         left: 0px;
         background-color: rgb(17, 17, 17);
         visibility: visible;
-        z-index: 35;
       "
     >
     </canvas>
@@ -42,7 +41,6 @@
         font-size: 17px;
         color: rgb(255, 255, 255);
         text-align: left;
-        z-index: 37;
       "
       >Y-Axis&nbsp;<wbr />Display&nbsp;<wbr />Mode</span
     >
@@ -62,7 +60,6 @@
         left: 32px;
         padding: 5px;
         visibility: visible;
-        z-index: 39;
       "
     >
       <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
@@ -90,7 +87,6 @@
         font-size: 17px;
         color: rgb(255, 255, 255);
         text-align: left;
-        z-index: 41;
       "
       >Set&nbsp;<wbr />Y-Axis&nbsp;<wbr />Values</span
     >
@@ -117,7 +113,6 @@
         font-size: 15px;
         color: rgb(183, 183, 183);
         text-align: right;
-        z-index: 51;
       "
       >Maximum:</span
     >
@@ -138,7 +133,6 @@
         visibility: visible;
         border-radius: 0px;
         box-shadow: none;
-        z-index: 45;
         pointer-events: all;
       "
     >
@@ -171,7 +165,6 @@
         font-size: 15px;
         color: rgb(183, 183, 183);
         text-align: left;
-        z-index: 43;
       "
       >uV</span
     >
@@ -198,7 +191,6 @@
         font-size: 15px;
         color: rgb(183, 183, 183);
         text-align: right;
-        z-index: 53;
       "
       >Minimum:</span
     >
@@ -219,7 +211,6 @@
         visibility: visible;
         border-radius: 0px;
         box-shadow: none;
-        z-index: 45;
         pointer-events: all;
       "
     >
@@ -252,7 +243,6 @@
         font-size: 15px;
         color: rgb(183, 183, 183);
         text-align: left;
-        z-index: 43;
       "
       >uV</span
     >
@@ -292,9 +282,9 @@ export default {
   created: function () {
     this.btnnames_y_axis_widget = ["Apply", "Cancel"];
     this.enablelist_y_axis_widget = [true, true];
-    this.visiblecolor_y_axis_widget = "#FFFFFF";
+    this.visiblecolor_y_axis_widget = "#B7B7B7";
     this.hidecolor_y_axis_widget = "#3F3F3F";
-    this.hovercolors_y_axis_widget = ["#19ac8a", "#BD4932"];
+    this.hovercolors_y_axis_widget = ["#FFFFFF", "#FFFFFF"];
   },
   methods: {},
 };
