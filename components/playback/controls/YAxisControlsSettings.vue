@@ -121,8 +121,6 @@ export default {
 }
 .div__y-axis-controls-settings-radio-buttons {
   position: absolute;
-  width: 179px;
-  height: 109px;
   top: 45px;
   left: 32px;
 }
