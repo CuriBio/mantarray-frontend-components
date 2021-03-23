@@ -120,18 +120,11 @@ export default {
   text-align: left;
 }
 .div__y-axis-controls-settings-radio-buttons {
-  pointer-events: all;
-  white-space: nowrap;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 179px;
   height: 109px;
   top: 45px;
   left: 32px;
-  padding: 5px;
-  visibility: visible;
 }
 
 .span__y-axis-controls-settings-setup {
@@ -187,7 +180,7 @@ export default {
   width: 106px;
   height: 36px;
   top: 165.5px;
-  left: 118.5px;
+  left: 128.5px;
   visibility: visible;
   border-radius: 0px;
   box-shadow: none;
@@ -202,7 +195,7 @@ export default {
   width: 50px;
   height: 30px;
   top: 175.5px;
-  left: 230px;
+  left: 235px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -246,7 +239,7 @@ export default {
   width: 106px;
   height: 36px;
   top: 236.667px;
-  left: 118.5px;
+  left: 128.5px;
   visibility: visible;
   border-radius: 0px;
   box-shadow: none;
@@ -261,7 +254,7 @@ export default {
   width: 50px;
   height: 30px;
   top: 246.667px;
-  left: 230px;
+  left: 235px;
   padding: 5px;
   visibility: visible;
   user-select: none;
