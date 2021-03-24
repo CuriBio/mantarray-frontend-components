@@ -36,7 +36,6 @@ export { default as ContinuousWaveform } from "./components/playback/waveform/Co
 // Playback Controls and Player
 export { default as XAxisControls } from "./components/playback/controls/XAxisControls.vue";
 export { default as YAxisControls } from "./components/playback/controls/YAxisControls.vue";
-export { default as YAxisControlsSettings } from "./components/playback/controls/YAxisControlsSettings.vue";
 export { default as WebPlayerControls } from "./components/playback/controls/player/WebPlayerControls.vue";
 export { default as DesktopPlayerControls } from "./components/playback/controls/player/DesktopPlayerControls.vue";
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
@@ -75,3 +74,6 @@ export { default as HeatMapColorBar } from "./components/status/HeatMapColorBar.
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
 export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+
+// Y Axis Controls Settings
+export { default as YAxisControlsSettings } from "./components/playback/controls/YAxisControlsSettings.vue";
