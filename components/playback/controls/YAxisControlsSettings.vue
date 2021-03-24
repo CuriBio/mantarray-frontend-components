@@ -49,11 +49,11 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
-        :button_names="btnnames_y_axis_widget"
-        :enabled_color="visiblecolor_y_axis_widget"
-        :disabled_color="hidecolor_y_axis_widget"
-        :hover_color="hovercolors_y_axis_widget"
-        :is_enabled="enablelist_y_axis_widget"
+        :button_names="btn_names_y_axis_widget"
+        :enabled_color="visible_color_y_axis_widget"
+        :disabled_color="hide_color_y_axis_widget"
+        :hover_color="hover_colors_y_axis_widget"
+        :is_enabled="enable_list_y_axis_widget"
       >
       </ButtonWidget>
     </div>
@@ -77,11 +77,11 @@ export default {
     };
   },
   created: function () {
-    this.btnnames_y_axis_widget = ["Apply", "Cancel"];
-    this.enablelist_y_axis_widget = [true, true];
-    this.visiblecolor_y_axis_widget = "#B7B7B7";
-    this.hidecolor_y_axis_widget = "#3F3F3F";
-    this.hovercolors_y_axis_widget = ["#FFFFFF", "#FFFFFF"];
+    this.btn_names_y_axis_widget = ["Apply", "Cancel"];
+    this.enable_list_y_axis_widget = [true, true];
+    this.visible_color_y_axis_widget = "#B7B7B7";
+    this.hide_color_y_axis_widget = "#3F3F3F";
+    this.hover_colors_y_axis_widget = ["#FFFFFF", "#FFFFFF"];
   },
   methods: {},
 };
