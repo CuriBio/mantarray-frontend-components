@@ -40,6 +40,7 @@ test("testing the Radio Button Widget with a preselect value with no focus", asy
     screenshot_path_base,
     "basic-radio-pre-select-no-focus"
   );
+
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
@@ -50,6 +51,7 @@ test("testing the Radio Button Widget with a preselect value and a click on the 
     "basic-radio-pre-select-click-with-focus"
   );
   await t.click(radio_group.nth(2));
+
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
