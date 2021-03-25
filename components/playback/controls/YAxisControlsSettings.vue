@@ -25,8 +25,10 @@
     <div class="div__y-axis-controls-settings-input-container">
       <InputWidget
         :placeholder="'1000'"
-        :invalid_text="'invalid'"
+        :dom_id_suffix="'max'"
+        :invalid_text="max_y_value"
         :input_width="106"
+        @update:value="on_update_max_value($event)"
       ></InputWidget>
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
@@ -37,8 +39,10 @@
     <div class="div__y-axis-controls-settings-input-min-container">
       <InputWidget
         :placeholder="'0'"
-        :invalid_text="'invalid'"
+        :dom_id_suffix="'min'"
+        :invalid_text="min_y_value"
         :input_width="106"
+        @update:value="on_update_min_value($event)"
       ></InputWidget>
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
@@ -74,6 +78,10 @@ export default {
   data() {
     return {
       button_names: ["Absolute", "Baseline Standard", "..."],
+      max_y_value: "invalid",
+      min_y_value: "invalid",
+      maximum: "",
+      minimum: "",
     };
   },
   created: function () {
@@ -83,7 +91,34 @@ export default {
     this.hide_color_y_axis_widget = "#3F3F3F";
     this.hover_colors_y_axis_widget = ["#FFFFFF", "#FFFFFF"];
   },
-  methods: {},
+  methods: {
+    on_update_max_value: function (new_value) {
+      if (new_value < 0) {
+        this.max_y_value = "cannot be negative";
+      } else {
+        if (new_value > 1000000) {
+          this.max_y_value = "maximum above 1000000";
+        } else {
+          this.maximum = new_value;
+          this.max_y_value = "";
+        }
+      }
+    },
+    on_update_min_value: function (new_value) {
+      if (new_value < 0) {
+        this.min_y_value = "cannot be negative";
+      } else {
+        if (new_value >= this.maximum) {
+          this.max_y_value = "min greater than max";
+          this.min_y_value = "min greater than max";
+        } else {
+          this.minimum = new_value;
+          this.min_y_value = "";
+          this.max_y_value = "";
+        }
+      }
+    },
+  },
 };
 </script>
 <style>
