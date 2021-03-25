@@ -53,7 +53,7 @@ describe("YAxisControlsSettings.vue", () => {
     const target_feedback_input = wrapper.find("#input-widget-feedback-max");
     target_max_input.setValue("1000001");
     await Vue.nextTick();
-    expect(target_feedback_input.text()).toStrictEqual("maximum above 1000000");
+    expect(target_feedback_input.text()).toStrictEqual("very large");
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than 'Minimum', Then the invalid text should indicate invalid message 'min greater than max'", async () => {
     wrapper = mount(YAxisControlsSettings, {

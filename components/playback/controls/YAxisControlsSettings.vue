@@ -97,7 +97,7 @@ export default {
         this.max_y_value = "cannot be negative";
       } else {
         if (new_value > 1000000) {
-          this.max_y_value = "maximum above 1000000";
+          this.max_y_value = "very large";
         } else {
           this.maximum = new_value;
           this.max_y_value = "";
