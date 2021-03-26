@@ -86,7 +86,7 @@ export default {
   },
   created: function () {
     this.btn_names_y_axis_widget = ["Apply", "Cancel"];
-    this.enable_list_y_axis_widget = [true, true];
+    this.enable_list_y_axis_widget = [false, true];
     this.visible_color_y_axis_widget = "#B7B7B7";
     this.hide_color_y_axis_widget = "#3F3F3F";
     this.hover_colors_y_axis_widget = ["#FFFFFF", "#FFFFFF"];
@@ -95,27 +95,77 @@ export default {
     on_update_max_value: function (new_value) {
       if (new_value < 0) {
         this.max_y_value = "cannot be negative";
+        this.enable_list_y_axis_widget.splice(
+          0,
+          this.enable_list_y_axis_widget.length
+        );
+        this.enable_list_y_axis_widget = [false, true];
       } else {
         if (new_value > 1000000) {
           this.max_y_value = "very large";
+          this.enable_list_y_axis_widget.splice(
+            0,
+            this.enable_list_y_axis_widget.length
+          );
+          this.enable_list_y_axis_widget = [false, true];
         } else {
           this.maximum = new_value;
           this.max_y_value = "";
+          if (this.minimum != "") {
+            if (this.minimum < this.maximum) {
+              this.enable_list_y_axis_widget.splice(
+                0,
+                this.enable_list_y_axis_widget.length
+              );
+              this.enable_list_y_axis_widget = [true, true];
+            }
+          }
         }
+      }
+      if (new_value == "" || new_value == "-") {
+        this.max_y_value = "invalid";
+        this.enable_list_y_axis_widget.splice(
+          0,
+          this.enable_list_y_axis_widget.length
+        );
+        this.enable_list_y_axis_widget = [false, true];
       }
     },
     on_update_min_value: function (new_value) {
       if (new_value < 0) {
         this.min_y_value = "cannot be negative";
+        this.enable_list_y_axis_widget.splice(
+          0,
+          this.enable_list_y_axis_widget.length
+        );
+        this.enable_list_y_axis_widget = [false, true];
       } else {
         if (new_value >= this.maximum) {
           this.max_y_value = "min greater than max";
           this.min_y_value = "min greater than max";
+          this.enable_list_y_axis_widget.splice(
+            0,
+            this.enable_list_y_axis_widget.length
+          );
+          this.enable_list_y_axis_widget = [false, true];
         } else {
           this.minimum = new_value;
+          this.enable_list_y_axis_widget.splice(
+            0,
+            this.enable_list_y_axis_widget.length
+          );
+          this.enable_list_y_axis_widget = [true, true];
           this.min_y_value = "";
           this.max_y_value = "";
         }
+      }
+      if (new_value == "" || new_value == "-") {
+        this.min_y_value = "invalid";
+        this.enable_list_y_axis_widget.splice(
+          0,
+          this.enable_list_y_axis_widget.length
+        );
+        this.enable_list_y_axis_widget = [false, true];
       }
     },
   },
