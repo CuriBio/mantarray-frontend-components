@@ -35,15 +35,35 @@ describe("YAxisControlsSettings.vue", () => {
     await Vue.nextTick();
     expect(target_feedback_input.text()).toStrictEqual("cannot be negative");
   });
+  test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Minimum' value - (negative), Then the invalid text should indicate  message 'invalid'", async () => {
+    wrapper = mount(YAxisControlsSettings, {
+      localVue,
+    });
+    const target_min_input = wrapper.find("#input-widget-field-min");
+    const target_feedback_input = wrapper.find("#input-widget-feedback-min");
+    target_min_input.setValue("-");
+    await Vue.nextTick();
+    expect(target_feedback_input.text()).toStrictEqual("invalid");
+  });
+  test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Minimum' value  (empty), Then the invalid text should indicate  message 'invalid'", async () => {
+    wrapper = mount(YAxisControlsSettings, {
+      localVue,
+    });
+    const target_min_input = wrapper.find("#input-widget-field-min");
+    const target_feedback_input = wrapper.find("#input-widget-feedback-min");
+    target_min_input.setValue("");
+    await Vue.nextTick();
+    expect(target_feedback_input.text()).toStrictEqual("invalid");
+  });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Minimum' value less than zero ( < 0), Then the invalid text should indicate invalid message 'cannot be negative'", async () => {
     wrapper = mount(YAxisControlsSettings, {
       localVue,
     });
     const target_min_input = wrapper.find("#input-widget-field-min");
     const target_feedback_input = wrapper.find("#input-widget-feedback-min");
-    target_min_input.setValue("-1");
+    target_min_input.setValue("-");
     await Vue.nextTick();
-    expect(target_feedback_input.text()).toStrictEqual("cannot be negative");
+    expect(target_feedback_input.text()).toStrictEqual("invalid");
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than zero ( > 1000000), Then the invalid text should indicate invalid message 'maximum above 1000000'", async () => {
     wrapper = mount(YAxisControlsSettings, {
@@ -54,6 +74,26 @@ describe("YAxisControlsSettings.vue", () => {
     target_max_input.setValue("1000001");
     await Vue.nextTick();
     expect(target_feedback_input.text()).toStrictEqual("very large");
+  });
+  test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value - (negative), Then the invalid text should indicate  message 'invalid'", async () => {
+    wrapper = mount(YAxisControlsSettings, {
+      localVue,
+    });
+    const target_max_input = wrapper.find("#input-widget-field-max");
+    const target_feedback_input = wrapper.find("#input-widget-feedback-max");
+    target_max_input.setValue("-");
+    await Vue.nextTick();
+    expect(target_feedback_input.text()).toStrictEqual("invalid");
+  });
+  test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value  (empty), Then the invalid text should indicate  message 'invalid'", async () => {
+    wrapper = mount(YAxisControlsSettings, {
+      localVue,
+    });
+    const target_max_input = wrapper.find("#input-widget-field-max");
+    const target_feedback_input = wrapper.find("#input-widget-feedback-max");
+    target_max_input.setValue("");
+    await Vue.nextTick();
+    expect(target_feedback_input.text()).toStrictEqual("invalid");
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than 'Minimum', Then the invalid text should indicate invalid message 'min greater than max'", async () => {
     wrapper = mount(YAxisControlsSettings, {
@@ -76,5 +116,47 @@ describe("YAxisControlsSettings.vue", () => {
     expect(target_feedback_min_input.text()).toStrictEqual(
       "min greater than max"
     );
+  });
+  test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than 'Minimum', Then the invalid text should indicate invalid message 'cannot be negative'", async () => {
+    wrapper = mount(YAxisControlsSettings, {
+      localVue,
+    });
+    const target_max_input = wrapper.find("#input-widget-field-max");
+    const target_feedback_max_input = wrapper.find(
+      "#input-widget-feedback-max"
+    );
+    target_max_input.setValue("500");
+    const target_min_input = wrapper.find("#input-widget-field-min");
+    const target_feedback_min_input = wrapper.find(
+      "#input-widget-feedback-min"
+    );
+    target_min_input.setValue("-1");
+    await Vue.nextTick();
+    expect(target_feedback_max_input.text()).toStrictEqual("");
+    expect(target_feedback_min_input.text()).toStrictEqual(
+      "cannot be negative"
+    );
+  });
+  test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than 'Minimum', Then the invalid text should be empty", async () => {
+    wrapper = mount(YAxisControlsSettings, {
+      localVue,
+    });
+    const target_max_input = wrapper.find("#input-widget-field-max");
+    const target_feedback_max_input = wrapper.find(
+      "#input-widget-feedback-max"
+    );
+    target_max_input.setValue("0");
+    const target_min_input = wrapper.find("#input-widget-field-min");
+    const target_feedback_min_input = wrapper.find(
+      "#input-widget-feedback-min"
+    );
+    target_min_input.setValue("1");
+    await Vue.nextTick();
+
+    target_max_input.setValue("2");
+    target_min_input.setValue("1");
+    await Vue.nextTick();
+    expect(target_feedback_max_input.text()).toStrictEqual("");
+    expect(target_feedback_min_input.text()).toStrictEqual("");
   });
 });
