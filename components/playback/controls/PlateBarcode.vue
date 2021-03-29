@@ -62,7 +62,7 @@ import { TextValidation } from "@/js_utils/text_validation.js";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import BarcodeEditDialog from "@/components/playback/controls/player/BarcodeEditDialog.vue";
+import BarcodeEditDialog from "@/components/status/BarcodeEditDialog.vue";
 
 library.add(faPencilAlt);
 const TextValidation_plate_barcode = new TextValidation("plate_barcode");
