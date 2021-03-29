@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.1.13 (2021-03-29)
+------------------
+
+ - Added more detailed logging on axios errors to Flask backend
+
 0.1.12 (2021-01-27)
 ------------------
 

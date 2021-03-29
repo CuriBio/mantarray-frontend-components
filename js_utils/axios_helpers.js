@@ -14,10 +14,23 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
   try {
     result = await Vue.axios.get(whole_url);
   } catch (error) {
+    // adapted from https://stackoverflow.com/questions/49967779/axios-handling-errors
     console.log(
       // allow-log
       "Error in call_axios_get_from_vuex for " + whole_url + ": " + error
     );
+    if (error.response) {
+      // Request made and server responded
+      console.log(error.response.data); // allow-log
+      console.log(error.response.status); // allow-log
+      console.log(error.response.headers); // allow-log
+    } else if (error.request) {
+      // The request was made but no response was received
+      console.log(error.request); // allow-log
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log("Error", error.message); // allow-log
+    }
     // if (error.response) {
     // if (error.response.status === 404) {
     if (
