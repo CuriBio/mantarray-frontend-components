@@ -13,7 +13,7 @@
 
 <script>
 import { RadioButtonWidget } from "@/dist/mantarray.common";
-// import RadioButtonWidget from "@/components/playback/controls/player/RadioButtonWidget.vue";
+// import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
 
 export default {
   components: {
@@ -21,7 +21,12 @@ export default {
   },
   data() {
     return {
-      button_names: ["Daily", "Every 4 hours", "Every 12 hours", "Custom"],
+      button_names: [
+        { text: "Daily", value: "Daily", disabled: false },
+        { text: "Every 4 hours", value: "Every 4 hours", disabled: false },
+        { text: "Every 12 hours", value: "Every 12 hours", disabled: false },
+        { text: "Custom", value: "Custom", disabled: false },
+      ],
       label: "",
       index: null,
     };

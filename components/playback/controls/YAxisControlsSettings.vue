@@ -13,7 +13,15 @@
     >
     <!-- original mockflow ID:  id="cmpD99791429192bc48b7499cdcba2cc72ea" -->
     <div class="div__y-axis-controls-settings-radio-buttons">
-      <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
+      <RadioButtonWidget :radio_buttons="button_names_valid" :pre_selected="0">
+      </RadioButtonWidget>
+      <RadioButtonWidget
+        v-b-popover.hover.right="
+          'Suggestions for different normalization, offset, and other display modes are welcome.'
+        "
+        :radio_buttons="button_names_future"
+        :title="'Feature under development'"
+      ></RadioButtonWidget>
     </div>
     <!-- original mockflow ID: id="cmpD0b403c0dbaf4c4a4549aee8d1fe4810d" -->
     <span class="span__y-axis-controls-settings-setup"
@@ -25,8 +33,10 @@
     <div class="div__y-axis-controls-settings-input-container">
       <InputWidget
         :placeholder="'1000'"
-        :invalid_text="'invalid'"
+        :dom_id_suffix="'max'"
+        :invalid_text="max_y_value"
         :input_width="106"
+        @update:value="on_update_max_value($event)"
       ></InputWidget>
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
@@ -37,8 +47,10 @@
     <div class="div__y-axis-controls-settings-input-min-container">
       <InputWidget
         :placeholder="'0'"
-        :invalid_text="'invalid'"
+        :dom_id_suffix="'min'"
+        :invalid_text="min_y_value"
         :input_width="106"
+        @update:value="on_update_min_value($event)"
       ></InputWidget>
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
@@ -64,6 +76,29 @@ import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue"
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 
+import Vue from "vue";
+import BootstrapVue from "bootstrap-vue";
+import { VBPopover } from "bootstrap-vue";
+// Note: Vue automatically prefixes the directive name with 'v-'
+Vue.directive("b-popover", VBPopover);
+
+const options = {
+  BTooltip: {
+    delay: {
+      show: 400,
+      hide: 100,
+    },
+  },
+  BPopover: {
+    delay: {
+      show: 2000,
+      hide: 50,
+    },
+  },
+};
+
+Vue.use(BootstrapVue, { ...options });
+
 export default {
   name: "YAxisControlsSettings",
   components: {
@@ -73,17 +108,108 @@ export default {
   },
   data() {
     return {
-      button_names: ["Absolute", "Baseline Standard", "..."],
+      button_names_valid: [
+        { text: "Absolute", value: "Absolute", disabled: false },
+      ],
+      button_names_future: [
+        {
+          text: "Baseline Standard",
+          value: "Baseline Standard",
+          disabled: true,
+        },
+        { text: "...", value: "...", disabled: true },
+      ],
+      max_y_value: "invalid",
+      min_y_value: "invalid",
+      maximum: "",
+      minimum: "",
     };
   },
   created: function () {
     this.btn_names_y_axis_widget = ["Apply", "Cancel"];
-    this.enable_list_y_axis_widget = [true, true];
+    this.enable_list_y_axis_widget = [false, true];
     this.visible_color_y_axis_widget = "#B7B7B7";
     this.hide_color_y_axis_widget = "#3F3F3F";
     this.hover_colors_y_axis_widget = ["#FFFFFF", "#FFFFFF"];
   },
-  methods: {},
+  methods: {
+    on_update_max_value: function (new_value) {
+      if (new_value < 0) {
+        this.max_y_value = "cannot be negative";
+        this.enable_list_y_axis_widget.splice(
+          0,
+          this.enable_list_y_axis_widget.length
+        );
+        this.enable_list_y_axis_widget = [false, true];
+      } else {
+        if (new_value > 1000000) {
+          this.max_y_value = "very large";
+          this.enable_list_y_axis_widget.splice(
+            0,
+            this.enable_list_y_axis_widget.length
+          );
+          this.enable_list_y_axis_widget = [false, true];
+        } else {
+          this.maximum = new_value;
+          this.max_y_value = "";
+          if (this.minimum != "") {
+            if (this.minimum < this.maximum) {
+              this.enable_list_y_axis_widget.splice(
+                0,
+                this.enable_list_y_axis_widget.length
+              );
+              this.enable_list_y_axis_widget = [true, true];
+            }
+          }
+        }
+      }
+      if (new_value == "" || new_value == "-") {
+        this.max_y_value = "invalid";
+        this.enable_list_y_axis_widget.splice(
+          0,
+          this.enable_list_y_axis_widget.length
+        );
+        this.enable_list_y_axis_widget = [false, true];
+      }
+    },
+    on_update_min_value: function (new_value) {
+      if (new_value < 0) {
+        this.min_y_value = "cannot be negative";
+        this.enable_list_y_axis_widget.splice(
+          0,
+          this.enable_list_y_axis_widget.length
+        );
+        this.enable_list_y_axis_widget = [false, true];
+      } else {
+        if (new_value >= this.maximum) {
+          this.max_y_value = "min greater than max";
+          this.min_y_value = "min greater than max";
+          this.enable_list_y_axis_widget.splice(
+            0,
+            this.enable_list_y_axis_widget.length
+          );
+          this.enable_list_y_axis_widget = [false, true];
+        } else {
+          this.minimum = new_value;
+          this.enable_list_y_axis_widget.splice(
+            0,
+            this.enable_list_y_axis_widget.length
+          );
+          this.enable_list_y_axis_widget = [true, true];
+          this.min_y_value = "";
+          this.max_y_value = "";
+        }
+      }
+      if (new_value == "" || new_value == "-") {
+        this.min_y_value = "invalid";
+        this.enable_list_y_axis_widget.splice(
+          0,
+          this.enable_list_y_axis_widget.length
+        );
+        this.enable_list_y_axis_widget = [false, true];
+      }
+    },
+  },
 };
 </script>
 <style>

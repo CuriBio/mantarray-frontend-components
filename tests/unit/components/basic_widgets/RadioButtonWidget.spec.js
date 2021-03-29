@@ -78,7 +78,10 @@ describe("RadioButtonWidget.vue", () => {
   });
   test("Given that there is a pre-selected radio button, When the RadioButtonWidget is mounted, Then the state of the pre-selected radio button is `selected`", async () => {
     const propsData = {
-      radio_buttons: ["warm", "cold"],
+      radio_buttons: [
+        { text: "warm", value: "warm", disabled: false },
+        { text: "cold", value: "cold", disabled: false },
+      ],
       pre_selected: 1,
     };
 

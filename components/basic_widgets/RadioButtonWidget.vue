@@ -33,7 +33,7 @@ export default {
   },
   created: function () {
     if (this.pre_selected != undefined) {
-      this.selected = this.radio_buttons[this.pre_selected];
+      this.selected = this.radio_buttons[this.pre_selected].value;
     }
   },
   methods: {
