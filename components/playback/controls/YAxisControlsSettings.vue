@@ -13,7 +13,15 @@
     >
     <!-- original mockflow ID:  id="cmpD99791429192bc48b7499cdcba2cc72ea" -->
     <div class="div__y-axis-controls-settings-radio-buttons">
-      <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
+      <RadioButtonWidget :radio_buttons="button_names_valid" :pre_selected="0">
+      </RadioButtonWidget>
+      <RadioButtonWidget
+        v-b-popover.hover.right="
+          'Suggestions for different normalization, offset, and other display modes are welcome.'
+        "
+        :radio_buttons="button_names_future"
+        :title="'Feature under development'"
+      ></RadioButtonWidget>
     </div>
     <!-- original mockflow ID: id="cmpD0b403c0dbaf4c4a4549aee8d1fe4810d" -->
     <span class="span__y-axis-controls-settings-setup"
@@ -68,6 +76,29 @@ import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue"
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 
+import Vue from "vue";
+import BootstrapVue from "bootstrap-vue";
+import { VBPopover } from "bootstrap-vue";
+// Note: Vue automatically prefixes the directive name with 'v-'
+Vue.directive("b-popover", VBPopover);
+
+const options = {
+  BTooltip: {
+    delay: {
+      show: 400,
+      hide: 100,
+    },
+  },
+  BPopover: {
+    delay: {
+      show: 2000,
+      hide: 50,
+    },
+  },
+};
+
+Vue.use(BootstrapVue, { ...options });
+
 export default {
   name: "YAxisControlsSettings",
   components: {
@@ -77,7 +108,17 @@ export default {
   },
   data() {
     return {
-      button_names: ["Absolute", "Baseline Standard", "..."],
+      button_names_valid: [
+        { text: "Absolute", value: "Absolute", disabled: false },
+      ],
+      button_names_future: [
+        {
+          text: "Baseline Standard",
+          value: "Baseline Standard",
+          disabled: true,
+        },
+        { text: "...", value: "...", disabled: true },
+      ],
       max_y_value: "invalid",
       min_y_value: "invalid",
       maximum: "",
