@@ -3,6 +3,29 @@
     class="div__playback-y-axis-controls"
     :style="div__y_axis_controls__dynamic_style"
   >
+    <!-- original mockflow ID:  id="cmpD2e85c27cb3ef7ba7539b1af8ed70e509"  -->
+    <span class="span__playback-y-axis-controls-zoom-label"> (Absolute)</span>
+    <div class="div__playback-y-axis-controls-zoom-control-icon">
+      <svg
+        id="Layer_1"
+        data-name="Layer 1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 72 72"
+      >
+        <defs>
+          <style>
+            .cls-1 {
+              fill: #b7b7b7;
+            }
+          </style>
+        </defs>
+        <title>mantarray-icons-2</title>
+        <path
+          class="cls-1"
+          d="M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0ZM17.5,43a7,7,0,1,1,7.1-7A7,7,0,0,1,17.5,43ZM36,43a7,7,0,1,1,7-7A7,7,0,0,1,36,43Zm18.5,0a7,7,0,1,1,7-7A7,7,0,0,1,54.5,43Z"
+        />
+      </svg>
+    </div>
     <span
       v-b-popover.hover.right="y_axis_zoom_in"
       class="span__playback-y-axis-controls-zoom-in-button"
@@ -181,6 +204,42 @@ export default {
 };
 </script>
 <style type="text/css">
+.span__playback-y-axis-controls-zoom-label {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(270deg);
+  overflow: hidden;
+  position: absolute;
+  width: 83px;
+  height: 20px;
+  top: 309.041px;
+  left: -24.1984px;
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: italic;
+  text-decoration: none;
+  font-size: 15px;
+  color: rgb(110, 111, 114);
+  text-align: right;
+}
+
+.div__playback-y-axis-controls-zoom-control-icon {
+  pointer-events: all;
+  transform: rotate(0deg);
+  position: absolute;
+  text-align: center;
+  width: 29px;
+  height: 29px;
+  top: 355.404px;
+  left: 7.5px;
+  visibility: visible;
+  opacity: 1;
+  filter: none;
+}
+
 .div__playback-y-axis-controls *,
 .div__playback-y-axis-controls *:before,
 .div__playback-y-axis-controls *:after {
