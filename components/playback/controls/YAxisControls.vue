@@ -6,20 +6,7 @@
     <!-- original mockflow ID:  id="cmpD2e85c27cb3ef7ba7539b1af8ed70e509"  -->
     <span class="span__playback-y-axis-controls-zoom-label"> (Absolute)</span>
     <div class="div__playback-y-axis-controls-zoom-control-icon">
-      <svg
-        id="Layer_1"
-        data-name="Layer 1"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 72 72"
-      >
-        <defs>
-          <style>
-            .cls-1 {
-              fill: #b7b7b7;
-            }
-          </style>
-        </defs>
-        <title>mantarray-icons-2</title>
+      <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
         <path
           class="cls-1"
           d="M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0ZM17.5,43a7,7,0,1,1,7.1-7A7,7,0,0,1,17.5,43ZM36,43a7,7,0,1,1,7-7A7,7,0,0,1,36,43Zm18.5,0a7,7,0,1,1,7-7A7,7,0,0,1,54.5,43Z"
@@ -236,8 +223,12 @@ export default {
   top: 355.404px;
   left: 7.5px;
   visibility: visible;
-  opacity: 1;
   filter: none;
+}
+
+.cls-1 {
+  color: #b7b7b7;
+  fill: #b7b7b7;
 }
 
 .div__playback-y-axis-controls *,
