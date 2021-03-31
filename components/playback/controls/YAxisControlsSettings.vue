@@ -55,9 +55,9 @@
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
     <span class="span__y-axis-controls-settings-input-min-units">uV</span>
-    <div style="top: 310px; left: 0px; position: absolute; z-index: 38">
+    <div style="top: 309px; left: 0px; position: absolute; z-index: 38">
       <ButtonWidget
-        :button_widget_width="300"
+        :button_widget_width="298"
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
@@ -217,8 +217,8 @@ export default {
   pointer-events: all;
   transform: rotate(0deg);
   position: absolute;
-  width: 300px;
-  height: 350px;
+  width: 301px;
+  height: 359px;
   top: 0px;
   left: 0px;
   background-color: rgb(17, 17, 17);
