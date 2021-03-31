@@ -66,6 +66,7 @@
         :disabled_color="hide_color_y_axis_widget"
         :hover_color="hover_colors_y_axis_widget"
         :is_enabled="enable_list_y_axis_widget"
+        @btn-click="user_selection"
       >
       </ButtonWidget>
     </div>
@@ -207,6 +208,19 @@ export default {
           this.enable_list_y_axis_widget.length
         );
         this.enable_list_y_axis_widget = [false, true];
+      }
+    },
+    user_selection: function (btn_id) {
+      const y_zoom = {
+        y_min: this.minimum,
+        y_max: this.maximum,
+      };
+      if (btn_id == 0) {
+        // user has selected Apply
+        this.$emit("y-axis-new-range", y_zoom);
+      } else {
+        // user has selected Cancel
+        this.$emit("y-axis-no-change");
       }
     },
   },
