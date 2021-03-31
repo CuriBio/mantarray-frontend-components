@@ -5,14 +5,45 @@
   >
     <!-- original mockflow ID:  id="cmpD2e85c27cb3ef7ba7539b1af8ed70e509"  -->
     <span class="span__playback-y-axis-controls-zoom-label"> (Absolute)</span>
-    <div class="div__playback-y-axis-controls-zoom-control-icon">
-      <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
+    <div
+      class="div__playback-y-axis-controls-zoom-control-icon"
+      @click="zoom_controls()"
+    >
+      <svg
+        v-show="controls"
+        id="Layer_1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 72 72"
+      >
         <path
           class="cls-1"
           d="M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0ZM17.5,43a7,7,0,1,1,7.1-7A7,7,0,0,1,17.5,43ZM36,43a7,7,0,1,1,7-7A7,7,0,0,1,36,43Zm18.5,0a7,7,0,1,1,7-7A7,7,0,0,1,54.5,43Z"
         />
       </svg>
+      <svg
+        v-show="!controls"
+        id="Layer_2"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 72 72"
+      >
+        <path
+          class="cls-2"
+          d="M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0ZM17.5,43a7,7,0,1,1,7.1-7A7,7,0,0,1,17.5,43ZM36,43a7,7,0,1,1,7-7A7,7,0,0,1,36,43Zm18.5,0a7,7,0,1,1,7-7A7,7,0,0,1,54.5,43Z"
+        />
+      </svg>
     </div>
+    <span>
+      <b-modal
+        id="y-axis-controls-settings"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+      >
+        <YAxisControlsSettings></YAxisControlsSettings>
+      </b-modal>
+    </span>
     <span
       v-b-popover.hover.right="y_axis_zoom_in"
       class="span__playback-y-axis-controls-zoom-in-button"
@@ -47,15 +78,18 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import playback_module from "@/store/modules/playback";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import YAxisControlsSettings from "@/components/playback/controls/YAxisControlsSettings";
 import { mapState } from "vuex";
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
+import { BModal } from "bootstrap-vue";
 Vue.component("BButton", BButton);
 
 import { VBPopover } from "bootstrap-vue";
 // Note: Vue automatically prefixes the directive name with 'v-'
 Vue.directive("b-popover", VBPopover);
+Vue.component("BModal", BModal);
 
 const stateObj = playback_module.state();
 const vuex_delay = stateObj.tooltips_delay;
@@ -99,7 +133,10 @@ library.add(faPlusCircle);
  */
 export default {
   name: "YAxisControls",
-  components: { FontAwesomeIcon },
+  components: {
+    FontAwesomeIcon,
+    YAxisControlsSettings,
+  },
   props: {
     css_top_anchor: { type: String, default: "0px" },
     css_left_anchor: { type: String, default: "0px" },
@@ -117,6 +154,7 @@ export default {
       y_axis_zoom_in: "Zoom-In",
       y_axis_zoom_out: "Zoom-Out",
       delayed: { show: this.tooltips_delay, hide: 0 },
+      controls: true,
     };
   },
   computed: {
@@ -187,6 +225,10 @@ export default {
         this.y_axis_zoom_in = "Zoom-In";
       }
     },
+    zoom_controls: function () {
+      this.$bvModal.show("y-axis-controls-settings");
+      this.controls = !this.controls;
+    },
   },
 };
 </script>
@@ -229,6 +271,11 @@ export default {
 .cls-1 {
   color: #b7b7b7;
   fill: #b7b7b7;
+}
+
+.cls-2 {
+  color: #ececed;
+  fill: #ececed;
 }
 
 .div__playback-y-axis-controls *,
@@ -363,5 +410,13 @@ export default {
   font-size: 14px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
+}
+
+#y-axis-controls-settings {
+  position: fixed;
+  top: 38%;
+  right: 50%;
+  left: -39%;
+  bottom: 50%;
 }
 </style>
