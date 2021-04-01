@@ -232,8 +232,36 @@ export default {
       this.$bvModal.show("y-axis-controls-settings");
       this.controls = !this.controls;
     },
-    y_axis_controls_commit: function () {
+    y_axis_controls_commit: function (new_range) {
+      /* The new Y-Zoom Levels would be as described in the comment below form
+
+             |---------------------------------| Y-max
+             |  | |                       |  | |
+             |  | -------------------------  | |  Y-min (level-2)
+             |  |                            | |
+             |  |____________________________| |  Y-min (level-1)
+             |                                 |
+             |                                 |
+             |                                 |
+             |---------------------------------| Y-min (level-0)      */
+
       this.$bvModal.hide("y-axis-controls-settings");
+      const default_y_axis_zoom_idx = 0;
+      const level_one_y_min = (new_range.y_max - new_range.y_min) / 2;
+      const level_two_y_min =
+        level_one_y_min + (new_range.y_max - new_range.y_min) / 4;
+
+      const new_y_zoom_levels = [
+        { y_min: new_range.y_min, y_max: new_range.y_max },
+        { y_min: level_one_y_min, y_max: new_range.y_max },
+        { y_min: level_two_y_min, y_max: new_range.y_max },
+      ];
+
+      this.$store.commit("waveform/set_y_axis_zoom_levels", new_y_zoom_levels);
+      this.$store.commit(
+        "waveform/set_y_axis_zoom_idx",
+        default_y_axis_zoom_idx
+      );
       this.controls = !this.controls;
     },
     y_axis_controls_cancel: function () {
