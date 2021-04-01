@@ -199,6 +199,7 @@ export default {
       );
 
       context.commit("set_playback_progression_interval_id", new_interval_id);
+      context.commit("mark_timestamp_of_beginning_of_progression");
     }
   },
   async start_live_view(context) {

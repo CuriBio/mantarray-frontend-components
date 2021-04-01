@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.2.0 (2021-04-01)
+------------------
+
+ - Added ability to skip ahead if the live view is lagging while being rendered
+
 0.1.13 (2021-03-29)
 ------------------
 

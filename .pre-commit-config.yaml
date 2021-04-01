@@ -56,7 +56,7 @@ repos:
         exclude: dist
       - id: vuejs-check-no-import-from-vue-file
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v7.22.0
+    rev: v7.23.0
     hooks:
       - id: eslint
         exclude: (dist/)|(tests/unit/components/status/StatusBar.spec.js)|(tests/unit/components/status/SimulationMode.spec.js)|(tests/unit/components/playback/ContinuousWaveform.spec.js)|(tests/unit/components/playback/controls/WebPlayerControls.spec.js)|(tests/unit/components/playback/controls/YAxisControls.spec.js)|(tests/unit/components/playback/controls/PlateBarcode.spec.js)|(tests/unit/components/plate_based_widgets/navigator/PlateNavigator.spec.js)|(tests/unit/components/playback/controls/DesktopPlayerControls.spec.js)|(tests/unit/components/playback/controls/XAxisControls.spec.js)|(tests/e2e/)|(server.js)
