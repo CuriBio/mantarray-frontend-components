@@ -14,7 +14,10 @@ import {
 } from "@/store/modules/flask/url_regex";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
-
+import {
+  advance_playback_progression,
+  centimilliseconds_per_millisecond,
+} from "@/store/modules/playback/actions";
 const sandbox = sinon.createSandbox();
 const base_url = "http://localhost:4567";
 describe("store/playback", () => {
@@ -40,8 +43,10 @@ describe("store/playback", () => {
     store.commit("playback/stop_playback_progression");
     mocked_axios.restore();
     jest.restoreAllMocks();
+    jest.clearAllMocks();
     sandbox.restore();
   });
+
   test("When imported from a pre-built library, Then assert the ENUM values to match the original", () => {
     expect(PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE).toStrictEqual(
       playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
@@ -59,6 +64,89 @@ describe("store/playback", () => {
         store.state.playback.playback_progression_time_interval
       ).toStrictEqual(40);
     });
+    describe("Given the playback context is obtained from Vuex and the timestamp of beginning of playback progession has been set and the current x_time_index has been set to a number substantially larger than the delay theshold", () => {
+      let context;
+      let timestamp_of_beginning_of_progression;
+      let default_playback_progression_time_interval;
+      let bound_advance_playback_progression;
+      let spied_performance_now;
+      const initial_x_time_index = 10000 * centimilliseconds_per_millisecond;
+      beforeEach(async () => {
+        context = await store.dispatch("playback/get_playback_action_context");
+        bound_advance_playback_progression = advance_playback_progression.bind(
+          context
+        );
+        store.commit("playback/mark_timestamp_of_beginning_of_progression");
+        store.commit("playback/set_x_time_index", initial_x_time_index);
+        timestamp_of_beginning_of_progression =
+          store.state.playback.timestamp_of_beginning_of_progression;
+        default_playback_progression_time_interval =
+          store.state.playback.playback_progression_time_interval;
+        spied_performance_now = jest.spyOn(performance, "now");
+      });
+      test("Given performance.now is mocked to return a time interval just below the lag threshold, When advance_playback_progression is invoked, Then the x_time_index is incremented the default amount", () => {
+        spied_performance_now.mockReturnValueOnce(
+          timestamp_of_beginning_of_progression +
+            initial_x_time_index / centimilliseconds_per_millisecond +
+            store.state.playback.num_milliseconds_to_fast_forward_if_delayed -
+            0.1
+        );
+        // confirm pre-condition
+        expect(store.state.playback.x_time_index).toStrictEqual(
+          initial_x_time_index
+        );
+        spied_performance_now.mockReturnValueOnce(
+          timestamp_of_beginning_of_progression + 1
+        );
+        bound_advance_playback_progression();
+        expect(store.state.playback.x_time_index).toStrictEqual(
+          initial_x_time_index +
+            default_playback_progression_time_interval *
+              centimilliseconds_per_millisecond
+        );
+      });
+      test("Given performance.now is mocked to return a time interval of a lag equal to the threshold, When advance_playback_progression is invoked, Then the x_time_index is incremented the designated larger amount to start to catch up", () => {
+        spied_performance_now.mockReturnValueOnce(
+          initial_x_time_index / centimilliseconds_per_millisecond +
+            timestamp_of_beginning_of_progression +
+            store.state.playback.num_milliseconds_to_fast_forward_if_delayed
+        );
+        // confirm pre-condition
+        expect(store.state.playback.x_time_index).toStrictEqual(
+          initial_x_time_index
+        );
+
+        bound_advance_playback_progression();
+        expect(store.state.playback.x_time_index).toStrictEqual(
+          initial_x_time_index +
+            store.state.playback.num_milliseconds_to_fast_forward_if_delayed *
+              centimilliseconds_per_millisecond
+        );
+      });
+      test("Given the delay threshold has been changed lower from the default and performance.now is mocked to return a time interval of a lag just larger than the threshold, When advance_playback_progression is invoked, Then the x_time_index is incremented the new designated larger amount to start to catch up", () => {
+        const new_delay_threshold = 80;
+        store.commit(
+          "playback/set_num_milliseconds_to_fast_forward_if_delayed",
+          new_delay_threshold
+        );
+        spied_performance_now.mockReturnValueOnce(
+          initial_x_time_index / centimilliseconds_per_millisecond +
+            timestamp_of_beginning_of_progression +
+            new_delay_threshold +
+            0.1
+        );
+        // confirm pre-condition
+        expect(store.state.playback.x_time_index).toStrictEqual(
+          initial_x_time_index
+        );
+
+        bound_advance_playback_progression();
+        expect(store.state.playback.x_time_index).toStrictEqual(
+          initial_x_time_index +
+            new_delay_threshold * centimilliseconds_per_millisecond
+        );
+      });
+    });
   });
 
   describe("mutations", () => {
@@ -72,7 +160,28 @@ describe("store/playback", () => {
         store.state.playback.playback_progression_interval_id
       ).toStrictEqual(expected_interval_id);
     });
+    test("When set_num_milliseconds_to_fast_forward_if_delayed is invoked, Then the Vuex state is updated", () => {
+      const expected = 2000;
+      // confirm pre-condition
+      expect(
+        store.state.playback.num_milliseconds_to_fast_forward_if_delayed
+      ).not.toStrictEqual(expected);
 
+      store.commit(
+        "playback/set_num_milliseconds_to_fast_forward_if_delayed",
+        expected
+      );
+      expect(
+        store.state.playback.num_milliseconds_to_fast_forward_if_delayed
+      ).toStrictEqual(expected);
+    });
+    test("When mark_timestamp_of_beginning_of_progression is invoked, Then the Vuex state is updated to the current value of performance.now", () => {
+      const spied_performance_now = jest.spyOn(performance, "now");
+      store.commit("playback/mark_timestamp_of_beginning_of_progression");
+      expect(
+        store.state.playback.timestamp_of_beginning_of_progression
+      ).toStrictEqual(spied_performance_now.mock.results[0].value);
+    });
     test("Given playback_progression_interval is not active, When stop_playback_progression is committed, Then clearInterval is not called", async () => {
       const expected_interval_id =
         store.state.playback.playback_progression_interval_id;
@@ -385,8 +494,7 @@ describe("store/playback", () => {
         store.state.playback.playback_progression_interval_id
       ).not.toBeNull();
     });
-
-    test("Given playback_progression interval is not active, When start_playback_progression is dispatched, Then setInterval is called and the interval ID committed to Vuex", async () => {
+    test("Given playback_progression interval is not active, When start_playback_progression is dispatched, Then setInterval is called and the interval ID and timestamp of when it was started are committed to Vuex", async () => {
       // confirm pre-condition
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
 
@@ -400,6 +508,9 @@ describe("store/playback", () => {
       expect(
         store.state.playback.playback_progression_interval_id
       ).toStrictEqual(expected_interval_id);
+      expect(
+        store.state.playback.timestamp_of_beginning_of_progression
+      ).not.toBeUndefined();
     });
     describe("Given all axios requests are mocked to return status 200", () => {
       beforeEach(() => {

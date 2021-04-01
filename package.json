@@ -1,6 +1,6 @@
 {
   "name": "@curi-bio/mantarray-frontend-components",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "description": "shared components between web and desktop app.",
   "main": "./dist/mantarray.common.js",
   "author": "Curi Bio <contact@curibio.com> (http://www.curibio.com/)",
@@ -58,7 +58,7 @@
     "@vue/test-utils": "^1.1.1",
     "axios-mock-adapter": "^1.18.1",
     "core-js": "~3.9.0",
-    "eslint": "~7.22.0",
+    "eslint": "~7.23.0",
     "eslint-config-google": "~0.14.0",
     "eslint-config-prettier": "~8.1.0",
     "eslint-config-standard": "~16.0.2",
