@@ -30,6 +30,9 @@ export default {
   mark_timestamp_of_beginning_of_progression(state) {
     state.timestamp_of_beginning_of_progression = performance.now();
   },
+  set_num_milliseconds_to_fast_forward_if_delayed(state, new_value) {
+    state.num_milliseconds_to_fast_forward_if_delayed = new_value;
+  },
   set_playback_progression_interval_id(state, new_value) {
     state.playback_progression_interval_id = new_value;
   },
