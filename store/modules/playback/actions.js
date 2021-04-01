@@ -20,17 +20,32 @@ import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 // |        to have config.ini allowing App/UI to discover api's           |
 // =========================================================================
 
-const centimilliseconds_per_millisecond = 100;
+export const centimilliseconds_per_millisecond = 100;
 
 /**
  * Function to progress the time_index
  * @return {void}
  */
-function advance_playback_progression() {
+export function advance_playback_progression() {
+  const delay_threshold_milliseconds = this.rootState.playback
+    .num_milliseconds_to_fast_forward_if_delayed;
+  const starting_timestamp = this.rootState.playback
+    .timestamp_of_beginning_of_progression;
+  const expected_display_time =
+    starting_timestamp +
+    this.rootState.playback.x_time_index / centimilliseconds_per_millisecond;
+  const current_timestamp = performance.now();
+  let milliseconds_to_increment = this.rootState.playback
+    .playback_progression_time_interval;
+  if (
+    current_timestamp - expected_display_time >=
+    delay_threshold_milliseconds
+  ) {
+    milliseconds_to_increment = delay_threshold_milliseconds;
+  }
   this.commit(
     "increment_x_time_index",
-    this.rootState.playback.playback_progression_time_interval *
-      centimilliseconds_per_millisecond
+    milliseconds_to_increment * centimilliseconds_per_millisecond
   );
 }
 
@@ -199,6 +214,7 @@ export default {
       );
 
       context.commit("set_playback_progression_interval_id", new_interval_id);
+      context.commit("mark_timestamp_of_beginning_of_progression");
     }
   },
   async start_live_view(context) {
