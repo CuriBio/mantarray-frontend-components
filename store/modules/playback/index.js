@@ -17,6 +17,7 @@ const default_state = {
   is_valid_barcode: false,
   tooltips_delay: 2000,
   timestamp_of_beginning_of_progression: undefined,
+  num_milliseconds_to_fast_forward_if_delayed: 400,
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2
