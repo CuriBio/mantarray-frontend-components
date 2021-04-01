@@ -27,6 +27,9 @@ export default {
       state.playback_progression_interval_id = null;
     }
   },
+  mark_timestamp_of_beginning_of_progression(state) {
+    state.timestamp_of_beginning_of_progression = performance.now();
+  },
   set_playback_progression_interval_id(state, new_value) {
     state.playback_progression_interval_id = new_value;
   },

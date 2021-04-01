@@ -72,7 +72,13 @@ describe("store/playback", () => {
         store.state.playback.playback_progression_interval_id
       ).toStrictEqual(expected_interval_id);
     });
-
+    test("When mark_timestamp_of_beginning_of_progression is invoked, Then the Vuex state is updated to the current value of performance.now", () => {
+      const spied_performance_now = jest.spyOn(performance, "now");
+      store.commit("playback/mark_timestamp_of_beginning_of_progression");
+      expect(
+        store.state.playback.timestamp_of_beginning_of_progression
+      ).toStrictEqual(spied_performance_now.mock.results[0].value);
+    });
     test("Given playback_progression_interval is not active, When stop_playback_progression is committed, Then clearInterval is not called", async () => {
       const expected_interval_id =
         store.state.playback.playback_progression_interval_id;
@@ -385,8 +391,7 @@ describe("store/playback", () => {
         store.state.playback.playback_progression_interval_id
       ).not.toBeNull();
     });
-
-    test("Given playback_progression interval is not active, When start_playback_progression is dispatched, Then setInterval is called and the interval ID committed to Vuex", async () => {
+    test("Given playback_progression interval is not active, When start_playback_progression is dispatched, Then setInterval is called and the interval ID and timestamp of when it was started are committed to Vuex", async () => {
       // confirm pre-condition
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
 
@@ -400,6 +405,9 @@ describe("store/playback", () => {
       expect(
         store.state.playback.playback_progression_interval_id
       ).toStrictEqual(expected_interval_id);
+      expect(
+        store.state.playback.timestamp_of_beginning_of_progression
+      ).not.toBeUndefined();
     });
     describe("Given all axios requests are mocked to return status 200", () => {
       beforeEach(() => {
