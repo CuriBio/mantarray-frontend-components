@@ -41,7 +41,10 @@
         hide-header-close
         :static="true"
       >
-        <YAxisControlsSettings></YAxisControlsSettings>
+        <YAxisControlsSettings
+          @y-axis-new-range="y_axis_controls_commit"
+          @y-axis-no-change="y_axis_controls_cancel"
+        ></YAxisControlsSettings>
       </b-modal>
     </span>
     <span
@@ -227,6 +230,14 @@ export default {
     },
     zoom_controls: function () {
       this.$bvModal.show("y-axis-controls-settings");
+      this.controls = !this.controls;
+    },
+    y_axis_controls_commit: function () {
+      this.$bvModal.hide("y-axis-controls-settings");
+      this.controls = !this.controls;
+    },
+    y_axis_controls_cancel: function () {
+      this.$bvModal.hide("y-axis-controls-settings");
       this.controls = !this.controls;
     },
   },
