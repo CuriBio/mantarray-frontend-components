@@ -81,7 +81,7 @@
     "jsdoc-vuejs": "^3.0.8",
     "npm-merge-driver": "~2.3.6",
     "nuxt": "^2.14.12",
-    "sinon": "^9.0.2",
+    "sinon": "^10.0.0",
     "testcafe": "^1.13.0",
     "vue-jest": "~4.0.0-rc.1",
     "vue-template-compiler": "^2.6.11",
