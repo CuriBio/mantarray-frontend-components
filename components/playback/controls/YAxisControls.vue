@@ -233,28 +233,27 @@ export default {
       this.controls = !this.controls;
     },
     y_axis_controls_commit: function (new_range) {
-      /* The new Y-Zoom Levels would be as described in the comment below form
-
-             |---------------------------------| Y-max
-             |  | |                       |  | |
-             |  | -------------------------  | |  Y-min (level-2)
-             |  |                            | |
-             |  |____________________________| |  Y-min (level-1)
-             |                                 |
-             |                                 |
-             |                                 |
-             |---------------------------------| Y-min (level-0)      */
-
       this.$bvModal.hide("y-axis-controls-settings");
       const default_y_axis_zoom_idx = 0;
-      const level_one_y_min = (new_range.y_max - new_range.y_min) / 2;
-      const level_two_y_min =
-        level_one_y_min + (new_range.y_max - new_range.y_min) / 4;
-
       const new_y_zoom_levels = [
         { y_min: new_range.y_min, y_max: new_range.y_max },
-        { y_min: level_one_y_min, y_max: new_range.y_max },
-        { y_min: level_two_y_min, y_max: new_range.y_max },
+        { y_min: 0, y_max: 200 },
+        { y_min: 25, y_max: 150 },
+        { y_min: 50, y_max: 150 },
+        { y_min: 50, y_max: 140 },
+        { y_min: 50, y_max: 130 },
+        { y_min: 55, y_max: 120 },
+        { y_min: 60, y_max: 120 },
+        { y_min: 60, y_max: 110 },
+        { y_min: 65, y_max: 110 },
+        { y_min: 70, y_max: 110 },
+        { y_min: 70, y_max: 105 },
+        { y_min: 75, y_max: 105 },
+        { y_min: 80, y_max: 105 },
+        { y_min: 85, y_max: 105 },
+        { y_min: 90, y_max: 105 },
+        { y_min: 94, y_max: 102 },
+        { y_min: 96, y_max: 100 },
       ];
 
       this.$store.commit("waveform/set_y_axis_zoom_levels", new_y_zoom_levels);
