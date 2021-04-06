@@ -404,4 +404,42 @@ export default {
   color: rgb(183, 183, 183);
   text-align: left;
 }
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+.popover {
+  border-color: #ececed;
+  opacity: 0.95;
+}
+
+/* Simple CSS property to make popover title bold */
+.popover-header {
+  font-weight: 700;
+  background-color: #f7f7f7;
+  font-size: 12px;
+  font-family: Muli;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Bootstrap version 4.4.1 the present tip has the .popover property with a property
+   font-size: 0.875rem;
+   insipite overriding the value in .popover-body with a user defined
+   value say font-size: 12px it was observed during testing it was
+   getting resolving to a value of 12 * 0.875 ==> 10.5px
+   To maintain the ambiance of the design we have set the value to
+   componesate this reduction and now .popover-body has the following
+   font-size: 14px;
+   This results in resolving to a value of 14 * 0.875 ==> 12.25px
+   Please note if you intented to change always try to multiple by a
+   factor of 0.875 with which ever value to get the real font-size */
+.popover-body {
+  font-weight: 400;
+  color: #000000;
+  background-color: #ffffff;
+  font-size: 14px;
+  font-family: Muli;
+  -webkit-font-smoothing: antialiased;
+}
 </style>
