@@ -279,7 +279,7 @@ export default {
   position: absolute;
   width: 83px;
   height: 20px;
-  top: 309.041px;
+  top: 299.041px;
   left: -24.1984px;
   padding: 5px;
   visibility: visible;
