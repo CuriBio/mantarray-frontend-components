@@ -176,8 +176,8 @@ describe("YAxisControlsSettings.vue", () => {
     expect(apply_id_btn).toHaveLength(1);
     expect(apply_id_btn[0]).toStrictEqual([
       {
-        y_max: "2",
-        y_min: "1",
+        y_max: 2,
+        y_min: 1,
       },
     ]);
   });

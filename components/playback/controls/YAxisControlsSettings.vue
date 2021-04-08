@@ -135,7 +135,8 @@ export default {
   },
   methods: {
     on_update_max_value: function (new_value) {
-      if (new_value < 0) {
+      const max_value = parseInt(new_value);
+      if (max_value < 0) {
         this.max_y_value = "cannot be negative";
         this.enable_list_y_axis_widget.splice(
           0,
@@ -143,7 +144,7 @@ export default {
         );
         this.enable_list_y_axis_widget = [false, true];
       } else {
-        if (new_value > 1000000) {
+        if (max_value > 1000000) {
           this.max_y_value = "very large";
           this.enable_list_y_axis_widget.splice(
             0,
@@ -151,7 +152,7 @@ export default {
           );
           this.enable_list_y_axis_widget = [false, true];
         } else {
-          this.maximum = new_value;
+          this.maximum = max_value;
           this.max_y_value = "";
           if (this.minimum != "") {
             if (this.minimum < this.maximum) {
@@ -174,7 +175,8 @@ export default {
       }
     },
     on_update_min_value: function (new_value) {
-      if (new_value < 0) {
+      const min_value = parseInt(new_value);
+      if (min_value < 0) {
         this.min_y_value = "cannot be negative";
         this.enable_list_y_axis_widget.splice(
           0,
@@ -182,7 +184,7 @@ export default {
         );
         this.enable_list_y_axis_widget = [false, true];
       } else {
-        if (new_value >= this.maximum) {
+        if (min_value >= this.maximum) {
           this.max_y_value = "min greater than max";
           this.min_y_value = "min greater than max";
           this.enable_list_y_axis_widget.splice(
@@ -191,7 +193,7 @@ export default {
           );
           this.enable_list_y_axis_widget = [false, true];
         } else {
-          this.minimum = new_value;
+          this.minimum = min_value;
           this.enable_list_y_axis_widget.splice(
             0,
             this.enable_list_y_axis_widget.length
