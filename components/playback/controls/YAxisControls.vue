@@ -82,7 +82,7 @@ import playback_module from "@/store/modules/playback";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import YAxisControlsSettings from "@/components/playback/controls/YAxisControlsSettings";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
@@ -170,7 +170,9 @@ export default {
     ...mapState("playback", {
       tooltips_delay: "tooltips_delay",
     }),
-
+    ...mapGetters({
+      y_axis_zoom_levels: "waveform/y_axis_zoom_levels",
+    }),
     max_zoom_index: function () {
       return this.y_zoom_levels.length - 1;
     },
@@ -234,32 +236,36 @@ export default {
     },
     y_axis_controls_commit: function (new_range) {
       this.$bvModal.hide("y-axis-controls-settings");
-      const default_y_axis_zoom_idx = 0;
-      const new_y_zoom_levels = [
-        { y_min: new_range.y_min, y_max: new_range.y_max },
-        { y_min: 0, y_max: 200 },
-        { y_min: 25, y_max: 150 },
-        { y_min: 50, y_max: 150 },
-        { y_min: 50, y_max: 140 },
-        { y_min: 50, y_max: 130 },
-        { y_min: 55, y_max: 120 },
-        { y_min: 60, y_max: 120 },
-        { y_min: 60, y_max: 110 },
-        { y_min: 65, y_max: 110 },
-        { y_min: 70, y_max: 110 },
-        { y_min: 70, y_max: 105 },
-        { y_min: 75, y_max: 105 },
-        { y_min: 80, y_max: 105 },
-        { y_min: 85, y_max: 105 },
-        { y_min: 90, y_max: 105 },
-        { y_min: 94, y_max: 102 },
-        { y_min: 96, y_max: 100 },
-      ];
+      let duplicate_idx = null;
 
-      this.$store.commit("waveform/set_y_axis_zoom_levels", new_y_zoom_levels);
+      const new_element = { y_min: new_range.y_min, y_max: new_range.y_max };
+
+      this.y_axis_zoom_levels.splice(0, 0, new_element); // insert the new element
+
+      this.y_axis_zoom_levels.sort(function (a, b) {
+        return a.y_min - b.y_min;
+      });
+      this.y_axis_zoom_levels.sort(function (a, b) {
+        return b.y_max - a.y_max;
+      });
+      // sort the min max ranges.
+      for (let i = 0; i < this.y_axis_zoom_levels.length - 1; i++) {
+        if (
+          this.y_axis_zoom_levels[i].y_min ==
+            this.y_axis_zoom_levels[i + 1].y_min &&
+          this.y_axis_zoom_levels[i].y_max ==
+            this.y_axis_zoom_levels[i + 1].y_max
+        ) {
+          // check for duplicates.
+          duplicate_idx = i + 1;
+        }
+      }
+      if (duplicate_idx != null) {
+        this.y_axis_zoom_levels.splice(duplicate_idx, 1); // remove if duplicate.
+      }
       this.$store.commit(
-        "waveform/set_y_axis_zoom_idx",
-        default_y_axis_zoom_idx
+        "waveform/set_y_axis_zoom_levels",
+        this.y_axis_zoom_levels
       );
       this.controls = !this.controls;
     },
