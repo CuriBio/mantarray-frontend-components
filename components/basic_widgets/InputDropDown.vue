@@ -88,6 +88,8 @@ export default {
     options_text: { type: Array, required: true },
     options_id: { type: String, default: "" }, // This prop is utilized by the parent component
     message_if_blank: { type: Boolean, default: false }, // when set to true, will display a simple feedback
+    message_when_not_matching_list: { type: String, default: "" },
+    message_when_blank: { type: String, default: "" },
   },
   data() {
     return {
