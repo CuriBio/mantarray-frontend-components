@@ -439,13 +439,19 @@ describe("YAxisControls.vue", () => {
       let new_min_max = { y_min: minimum, y_max: maximum };
       wrapper.vm.y_axis_controls_commit(new_min_max);
 
+      let update_default_zoom_level_idx =
+        store.getters["waveform/y_axis_zoom_idx"];
       let new_range = store.getters["waveform/y_axis_zoom_levels"];
-      expect(new_range[16].y_min).toStrictEqual(minimum);
-      expect(new_range[16].y_max).toStrictEqual(maximum);
+      expect(new_range[update_default_zoom_level_idx].y_min).toStrictEqual(
+        minimum
+      );
+      expect(new_range[update_default_zoom_level_idx].y_max).toStrictEqual(
+        maximum
+      );
     });
-    it("should modify the values of the y_zoom_level_to the new max and min value, as an event 'y-axis-new-range' event was emitted and as the min and max was already present verify that the 'duplicate' was not created", async () => {
+    it("should not modify the values of the y_zoom_level to the new max and min value, as an event 'y-axis-new-range' event was emitted and as the min and max was already present verify that the 'duplicate' was not created", async () => {
       const propsData = {};
-
+      // 17 different zoom levels present
       let y_zoom_levels = [
         { y_min: 0, y_max: 200 },
         { y_min: 25, y_max: 150 },
@@ -477,7 +483,16 @@ describe("YAxisControls.vue", () => {
       let new_min_max = { y_min: minimum, y_max: maximum };
       wrapper.vm.y_axis_controls_commit(new_min_max);
 
+      let update_default_zoom_level_idx =
+        store.getters["waveform/y_axis_zoom_idx"];
       let new_range = store.getters["waveform/y_axis_zoom_levels"];
+
+      expect(new_range[update_default_zoom_level_idx].y_min).toStrictEqual(
+        minimum
+      );
+      expect(new_range[update_default_zoom_level_idx].y_max).toStrictEqual(
+        maximum
+      );
       expect(new_range.length).toStrictEqual(17);
     });
   });

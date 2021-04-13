@@ -237,6 +237,7 @@ export default {
     y_axis_controls_commit: function (new_range) {
       this.$bvModal.hide("y-axis-controls-settings");
       let duplicate_idx = null;
+      let updated_default_idx = 0;
 
       const new_element = { y_min: new_range.y_min, y_max: new_range.y_max };
 
@@ -259,10 +260,23 @@ export default {
           // check for duplicates.
           duplicate_idx = i + 1;
         }
+        if (
+          new_element.y_min == this.y_axis_zoom_levels[i + 1].y_min &&
+          new_element.y_max == this.y_axis_zoom_levels[i + 1].y_max
+        ) {
+          // now check if any duplicate occured ?
+          if (duplicate_idx != null) {
+            // any duplicate then the updated_default_idx is (i)
+            updated_default_idx = i;
+          } else {
+            updated_default_idx = i + 1;
+          }
+        }
       }
       if (duplicate_idx != null) {
         this.y_axis_zoom_levels.splice(duplicate_idx, 1); // remove if duplicate.
       }
+      this.$store.commit("waveform/set_y_axis_zoom_idx", updated_default_idx);
       this.$store.commit(
         "waveform/set_y_axis_zoom_levels",
         this.y_axis_zoom_levels
