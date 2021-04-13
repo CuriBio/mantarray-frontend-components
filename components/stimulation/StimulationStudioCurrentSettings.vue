@@ -19,6 +19,24 @@
       class="span__stimulationstudio-current-settings-label-one"
       >Stimulus&nbsp;<wbr />Duration</span
     >
+    <div
+      id="cmpD830cdea88a8752e1fdd278dd0215b99d"
+      class="div__stimulationstudio-duration-input-container"
+      width="162"
+      height="57"
+    >
+      <span
+        id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt"
+        class="span__stimulationstudio-duration-input"
+      >
+        <InputWidget
+          :placeholder="'1000'"
+          :dom_id_suffix="'duration'"
+          :invalid_text="''"
+          :input_width="142"
+        ></InputWidget
+      ></span>
+    </div>
     <span
       id="cmpDad40b728ec40e75944b1291803f7785b"
       class="span__stimulationstudio-current-settings-label-two"
@@ -29,6 +47,24 @@
       class="span__stimulationstudio-current-settings-label-three"
       >Current&nbsp;<wbr />(μA)</span
     >
+    <div
+      id="cmpDf6ba8560cb2fbd91276a29c46743e99a"
+      class="div__stimulationstudio-current-input-container"
+      width="162"
+      height="57"
+    >
+      <span
+        id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt"
+        class="span__stimulationstudio-current-input"
+      >
+        <InputWidget
+          :placeholder="'500'"
+          :dom_id_suffix="'current'"
+          :invalid_text="'Warning: change not balanced'"
+          :input_width="142"
+        ></InputWidget>
+      </span>
+    </div>
     <span
       id="cmpD7695902a49c6eaeb81d267812f0a90cd"
       class="span__stimulationstudio-current-settings-label-four"
@@ -39,6 +75,24 @@
       class="span__stimulationstudio-current-settings-label-five"
       >Max&nbsp;<wbr />Voltage&nbsp;<wbr />(mV)</span
     >
+    <div
+      id="cmpDf07f8e650ebe6951292aa4edcc603608"
+      class="div__stimulationstudio-voltage-input-container"
+      width="162"
+      height="57"
+    >
+      <span
+        id="cmpDf07f8e650ebe6951292aa4edcc603608_txt"
+        class="span__stimulationstudio-voltage-input"
+      >
+        <InputWidget
+          :placeholder="'250'"
+          :dom_id_suffix="'voltage'"
+          :invalid_text="''"
+          :input_width="142"
+        ></InputWidget>
+      </span>
+    </div>
     <span
       id="cmpD1258ad074a6b3eb7b8a869173413256d"
       class="span__stimulationstudio-current-settings-label-six"
@@ -83,9 +137,14 @@
   </div>
 </template>
 <script>
+import InputWidget from "@/components/basic_widgets/InputWidget.vue";
+// import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 export default {
   name: "StimulationStudioCurrentSettings",
-  components: {},
+  components: {
+    InputWidget,
+    //    ButtonWidget,
+  },
 };
 </script>
 <style>
@@ -175,6 +234,37 @@ export default {
   text-align: right;
   z-index: 27;
 }
+.div__stimulationstudio-duration-input-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 162px;
+  height: 57px;
+  top: 151px;
+  left: calc(1031px - 852px);
+  visibility: visible;
+  z-index: 25;
+}
+.span__stimulationstudio-duration-input {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  line-height: 45px;
+  top: 6px;
+  left: 6px;
+  user-select: none;
+  font-family: Anonymous Pro;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(255, 255, 255);
+}
 .span__stimulationstudio-current-settings-label-two {
   pointer-events: all;
   line-height: 100%;
@@ -219,6 +309,37 @@ export default {
   text-align: right;
   z-index: 42;
 }
+.div__stimulationstudio-current-input-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 162px;
+  height: 90px;
+  top: 221px;
+  left: calc(1031px - 852px);
+  visibility: visible;
+  z-index: 40;
+}
+.span__stimulationstudio-current-input {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 150px;
+  height: 90px;
+  line-height: 45px;
+  top: 6px;
+  left: 6px;
+  user-select: none;
+  font-family: Anonymous Pro;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(255, 255, 255);
+}
 .span__stimulationstudio-current-settings-label-four {
   pointer-events: all;
   line-height: 100%;
@@ -262,6 +383,38 @@ export default {
   color: rgb(183, 183, 183);
   text-align: right;
   z-index: 46;
+}
+.div__stimulationstudio-voltage-input-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 162px;
+  height: 57px;
+  top: 291px;
+  left: calc(1031px - 852px);
+  visibility: visible;
+  z-index: 44;
+}
+
+.span__stimulationstudio-voltage-input {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  line-height: 45px;
+  top: 6px;
+  left: 6px;
+  user-select: none;
+  font-family: Anonymous Pro;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(110, 111, 114);
 }
 .span__stimulationstudio-current-settings-label-six {
   pointer-events: all;
