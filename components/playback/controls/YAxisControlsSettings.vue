@@ -55,9 +55,9 @@
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
     <span class="span__y-axis-controls-settings-input-min-units">uV</span>
-    <div style="top: 310px; left: 0px; position: absolute; z-index: 38">
+    <div style="top: 309px; left: 0px; position: absolute; z-index: 38">
       <ButtonWidget
-        :button_widget_width="295"
+        :button_widget_width="298"
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
@@ -66,6 +66,7 @@
         :disabled_color="hide_color_y_axis_widget"
         :hover_color="hover_colors_y_axis_widget"
         :is_enabled="enable_list_y_axis_widget"
+        @btn-click="user_selection"
       >
       </ButtonWidget>
     </div>
@@ -134,7 +135,8 @@ export default {
   },
   methods: {
     on_update_max_value: function (new_value) {
-      if (new_value < 0) {
+      const max_value = parseInt(new_value);
+      if (max_value < 0) {
         this.max_y_value = "cannot be negative";
         this.enable_list_y_axis_widget.splice(
           0,
@@ -142,7 +144,7 @@ export default {
         );
         this.enable_list_y_axis_widget = [false, true];
       } else {
-        if (new_value > 1000000) {
+        if (max_value > 1000000) {
           this.max_y_value = "very large";
           this.enable_list_y_axis_widget.splice(
             0,
@@ -150,7 +152,7 @@ export default {
           );
           this.enable_list_y_axis_widget = [false, true];
         } else {
-          this.maximum = new_value;
+          this.maximum = max_value;
           this.max_y_value = "";
           if (this.minimum != "") {
             if (this.minimum < this.maximum) {
@@ -173,7 +175,8 @@ export default {
       }
     },
     on_update_min_value: function (new_value) {
-      if (new_value < 0) {
+      const min_value = parseInt(new_value);
+      if (min_value < 0) {
         this.min_y_value = "cannot be negative";
         this.enable_list_y_axis_widget.splice(
           0,
@@ -181,7 +184,7 @@ export default {
         );
         this.enable_list_y_axis_widget = [false, true];
       } else {
-        if (new_value >= this.maximum) {
+        if (min_value >= this.maximum) {
           this.max_y_value = "min greater than max";
           this.min_y_value = "min greater than max";
           this.enable_list_y_axis_widget.splice(
@@ -190,7 +193,7 @@ export default {
           );
           this.enable_list_y_axis_widget = [false, true];
         } else {
-          this.minimum = new_value;
+          this.minimum = min_value;
           this.enable_list_y_axis_widget.splice(
             0,
             this.enable_list_y_axis_widget.length
@@ -209,6 +212,19 @@ export default {
         this.enable_list_y_axis_widget = [false, true];
       }
     },
+    user_selection: function (btn_id) {
+      const y_zoom = {
+        y_min: this.minimum,
+        y_max: this.maximum,
+      };
+      if (btn_id == 0) {
+        // user has selected Apply
+        this.$emit("y-axis-new-range", y_zoom);
+      } else {
+        // user has selected Cancel
+        this.$emit("y-axis-no-change");
+      }
+    },
   },
 };
 </script>
@@ -217,8 +233,8 @@ export default {
   pointer-events: all;
   transform: rotate(0deg);
   position: absolute;
-  width: 295px;
-  height: 350px;
+  width: 301px;
+  height: 359px;
   top: 0px;
   left: 0px;
   background-color: rgb(17, 17, 17);
@@ -389,5 +405,43 @@ export default {
   font-size: 15px;
   color: rgb(183, 183, 183);
   text-align: left;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+.popover {
+  border-color: #ececed;
+  opacity: 0.95;
+}
+
+/* Simple CSS property to make popover title bold */
+.popover-header {
+  font-weight: 700;
+  background-color: #f7f7f7;
+  font-size: 12px;
+  font-family: Muli;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Bootstrap version 4.4.1 the present tip has the .popover property with a property
+   font-size: 0.875rem;
+   insipite overriding the value in .popover-body with a user defined
+   value say font-size: 12px it was observed during testing it was
+   getting resolving to a value of 12 * 0.875 ==> 10.5px
+   To maintain the ambiance of the design we have set the value to
+   componesate this reduction and now .popover-body has the following
+   font-size: 14px;
+   This results in resolving to a value of 14 * 0.875 ==> 12.25px
+   Please note if you intented to change always try to multiple by a
+   factor of 0.875 with which ever value to get the real font-size */
+.popover-body {
+  font-weight: 400;
+  color: #000000;
+  background-color: #ffffff;
+  font-size: 14px;
+  font-family: Muli;
+  -webkit-font-smoothing: antialiased;
 }
 </style>
