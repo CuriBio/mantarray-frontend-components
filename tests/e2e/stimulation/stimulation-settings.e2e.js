@@ -28,3 +28,4 @@ test("testing the stimulation dialog for voltage settings", async (t) => {
   );
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+

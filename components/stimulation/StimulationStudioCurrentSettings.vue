@@ -233,7 +233,7 @@
       id="cmpD478c2ccd7e9ce5794863ee3bd3cacb85"
       class="div__stimulationstudio-balance-scale-icon"
     >
-      <FontAwesomeIcon :icon="['fa', 'balance-scale']" />
+      <FontAwesomeIcon :icon="['fas', 'balance-scale']" />
     </div>
     <span
       id="cmpD0f8c9f516e738d930977090bd4d218a8"
@@ -907,9 +907,8 @@ export default {
   height: 22px;
   top: calc(743px - 55px);
   left: calc(1102px - 852px);
-  color: rgb(255, 255, 255);
+  color: #b7b7b7;
   visibility: visible;
-  opacity: 0.01;
   filter: none;
   z-index: 70;
 }
