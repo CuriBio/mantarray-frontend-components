@@ -9,6 +9,13 @@
       class="span__stimulationstudio-current-settings-title"
       >Biphasic&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
     >
+    <canvas
+      id="cmpD1bd9abe7f57064ecc21010fe87aa8e0a"
+      class="canvas__stimulationstudio-horizontal-line-seperator-one"
+      width="472"
+      height="1"
+    >
+    </canvas>
     <span
       id="cmpD334cd34b00ad111c21b729fee2b1def2"
       class="span__stimulationstudio-current-settings-sub-title-one"
@@ -93,11 +100,43 @@
         ></InputWidget>
       </span>
     </div>
+    <canvas
+      id="cmpDefb479b0caa166978ebed24ab8c44baf"
+      class="canvas__stimulationstudio-horizontal-line-seperator-two"
+      width="472"
+      height="1"
+    >
+    </canvas>
     <span
       id="cmpD1258ad074a6b3eb7b8a869173413256d"
       class="span__stimulationstudio-current-settings-label-six"
       >Interpulse&nbsp;<wbr />Interval</span
     >
+    <div
+      id="cmpD948f417edcd29d68f5801d54232d9431"
+      class="div__stimulationstudio-current-settings-interpulse"
+      width="162"
+      height="57"
+    >
+      <span
+        id="cmpD948f417edcd29d68f5801d54232d9431_txt"
+        class="span__stimulationstudio-current-settings-interpulse-input-container"
+      >
+        <InputWidget
+          :placeholder="'1000'"
+          :dom_id_suffix="'interpulse'"
+          :invalid_text="''"
+          :input_width="142"
+        ></InputWidget>
+      </span>
+    </div>
+    <canvas
+      id="cmpDa2bea934b07f6b108e90d5efecf200a3"
+      class="canvas__stimulationstudio-horizontal-line-seperator-three"
+      width="472"
+      height="1"
+    >
+    </canvas>
     <span
       id="cmpD25434fb95b0bdb4dd6d951c83f90ad78"
       class="span__stimulationstudio-current-settings-sub-title-two"
@@ -109,6 +148,24 @@
       class="span__stimulationstudio-current-settings-label-seven"
       >Stimulus&nbsp;<wbr />Duration</span
     >
+    <div
+      id="cmpD818347e832e1274793ffe2c57a5d0a9c"
+      class="div__stimulationstudio-current-settings-durationtwo-container"
+      width="162"
+      height="57"
+    >
+      <span
+        id="cmpD818347e832e1274793ffe2c57a5d0a9c_txt"
+        class="span__stimulationstudio-current-settings-durationtwo-input"
+      >
+        <InputWidget
+          :placeholder="'1000'"
+          :dom_id_suffix="'durationtwo'"
+          :invalid_text="''"
+          :input_width="142"
+        ></InputWidget>
+      </span>
+    </div>
     <span
       id="cmpD470ae881458be847aa3ef17c347d3973"
       class="span__stimulationstudio-current-settings-label-eight"
@@ -119,6 +176,24 @@
       class="span__stimulationstudio-current-settings-label-nine"
       >Current&nbsp;<wbr />(μA)</span
     >
+    <div
+      id="cmpD8ecdf9c4a418509adff741b988ad0676"
+      class="div__stimulationstudio-current-settings-currenttwo-input-container"
+      width="162"
+      height="57"
+    >
+      <span
+        id="cmpD8ecdf9c4a418509adff741b988ad0676_txt"
+        class="span__stimulationstudio-current-settings-currenttwo-input"
+      >
+        <InputWidget
+          :placeholder="'500'"
+          :dom_id_suffix="'currenttwo'"
+          :invalid_text="''"
+          :input_width="142"
+        ></InputWidget>
+      </span>
+    </div>
     <span
       id="cmpDbc629158eb67226e3134f41509394ec9"
       class="span__stimulationstudio-current-settings-label-ten"
@@ -129,21 +204,76 @@
       class="span__stimulationstudio-current-settings-label-eleven"
       >Max&nbsp;<wbr />Voltage&nbsp;<wbr />(mV)</span
     >
+    <div
+      id="cmpDef68ed4233a43cc387c949c403ef9260"
+      class="div__stimulationstudio-current-settings-voltagetwo-input-container"
+      width="162"
+      height="57"
+    >
+      <span
+        id="cmpDef68ed4233a43cc387c949c403ef9260_txt"
+        class="span__stimulationstudio-current-settings-voltagetwo-input"
+      >
+        <InputWidget
+          :placeholder="'250'"
+          :dom_id_suffix="'voltagetwo'"
+          :invalid_text="''"
+          :input_width="142"
+        ></InputWidget>
+      </span>
+    </div>
+    <canvas
+      id="cmpDce55000ec63e65a2c9161268a4c9977b"
+      class="canvas__stimulationstudio-horizontal-line-seperator-four"
+      width="472"
+      height="2"
+    >
+    </canvas>
+    <div
+      id="cmpD478c2ccd7e9ce5794863ee3bd3cacb85"
+      class="div__stimulationstudio-balance-scale-icon"
+    >
+      <FontAwesomeIcon :icon="['fa', 'balance-scale']" />
+    </div>
     <span
       id="cmpD0f8c9f516e738d930977090bd4d218a8"
       class="span__stimulationstudio-current-settings-label-twelve"
       >Charge&nbsp;<wbr />Info&nbsp;<wbr />Unavailable</span
     >
+    <div style="top: 760px; left: 10px; position: absolute">
+      <ButtonWidget
+        :button_widget_width="500"
+        :button_widget_height="50"
+        :button_widget_top="0"
+        :button_widget_left="0"
+        :button_names="['Save', 'Cancel']"
+        :hover_color="['#bd4932', '#19ac8a']"
+        :is_enabled="enablelist_current_settings"
+      >
+      </ButtonWidget>
+    </div>
   </div>
 </template>
 <script>
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
-// import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
+import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faBalanceScale } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faBalanceScale);
+
 export default {
   name: "StimulationStudioCurrentSettings",
   components: {
     InputWidget,
-    //    ButtonWidget,
+    ButtonWidget,
+    FontAwesomeIcon,
+  },
+  data() {
+    return {
+      enablelist_current_settings: [true, true],
+    };
   },
 };
 </script>
@@ -157,7 +287,7 @@ export default {
   position: absolute;
   width: 522px;
   height: 817px;
-  top: 55px;
+  top: calc(55px - 55px);
   left: calc(852px - 852px);
   visibility: visible;
   border: 2px solid rgb(0, 0, 0);
@@ -174,7 +304,7 @@ export default {
   position: absolute;
   width: 500px;
   height: 30px;
-  top: 72px;
+  top: calc(72px - 55px);
   left: calc(863px - 852px);
   padding: 5px;
   visibility: visible;
@@ -189,6 +319,20 @@ export default {
   z-index: 29;
 }
 
+.canvas__stimulationstudio-horizontal-line-seperator-one {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 472px;
+  height: 2px;
+  top: calc(104px - 45px);
+  left: calc(878px - 852px);
+  visibility: visible;
+  z-index: 62;
+  background-color: #292929;
+  opacity: 0.5;
+}
+
 .span__stimulationstudio-current-settings-sub-title-one {
   pointer-events: all;
   line-height: 100%;
@@ -197,7 +341,7 @@ export default {
   position: absolute;
   width: 499px;
   height: 30px;
-  top: 122.5px;
+  top: calc(122.5px - 55px);
   left: calc(863px - 852px);
   padding: 5px;
   visibility: visible;
@@ -220,7 +364,7 @@ export default {
   position: absolute;
   width: 156px;
   height: 30px;
-  top: 164.5px;
+  top: calc(164.5px - 55px);
   left: calc(873px - 852px);
   padding: 5px;
   visibility: visible;
@@ -241,7 +385,7 @@ export default {
   position: absolute;
   width: 162px;
   height: 57px;
-  top: 151px;
+  top: calc(151px - 55px);
   left: calc(1031px - 852px);
   visibility: visible;
   z-index: 25;
@@ -265,6 +409,19 @@ export default {
   font-size: 17px;
   color: rgb(255, 255, 255);
 }
+.canvas__stimulationstudio-horizontal-line-seperator-two {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 472px;
+  height: 2px;
+  top: calc(358px - 45px);
+  left: calc(878px - 852px);
+  visibility: visible;
+  z-index: 54;
+  background-color: #292929;
+  opacity: 0.5;
+}
 .span__stimulationstudio-current-settings-label-two {
   pointer-events: all;
   line-height: 100%;
@@ -273,7 +430,7 @@ export default {
   position: absolute;
   width: 128px;
   height: 25px;
-  top: 166.991px;
+  top: calc(166.991px - 55px);
   left: calc(1195.28px - 852px);
   padding: 5px;
   visibility: visible;
@@ -295,7 +452,7 @@ export default {
   position: absolute;
   width: 154px;
   height: 30px;
-  top: 234.5px;
+  top: calc(234.5px - 55px);
   left: calc(875px - 852px);
   padding: 5px;
   visibility: visible;
@@ -316,7 +473,7 @@ export default {
   position: absolute;
   width: 162px;
   height: 90px;
-  top: 221px;
+  top: calc(221px - 55px);
   left: calc(1031px - 852px);
   visibility: visible;
   z-index: 40;
@@ -348,7 +505,7 @@ export default {
   position: absolute;
   width: 128px;
   height: 25px;
-  top: 236.991px;
+  top: calc(236.991px - 55px);
   left: calc(1195.28px - 852px);
   padding: 5px;
   visibility: visible;
@@ -370,7 +527,7 @@ export default {
   position: absolute;
   width: 158px;
   height: 30px;
-  top: 304.5px;
+  top: calc(304.5px - 55px);
   left: calc(871px - 852px);
   padding: 5px;
   visibility: visible;
@@ -391,7 +548,7 @@ export default {
   position: absolute;
   width: 162px;
   height: 57px;
-  top: 291px;
+  top: calc(291px - 55px);
   left: calc(1031px - 852px);
   visibility: visible;
   z-index: 44;
@@ -424,7 +581,7 @@ export default {
   position: absolute;
   width: 154px;
   height: 30px;
-  top: 403.5px;
+  top: calc(403.5px - 55px);
   left: calc(875px - 852px);
   padding: 5px;
   visibility: visible;
@@ -438,6 +595,50 @@ export default {
   text-align: right;
   z-index: 60;
 }
+.div__stimulationstudio-current-settings-interpulse {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 162px;
+  height: 57px;
+  top: calc(390px - 55px);
+  left: calc(1031px - 852px);
+  visibility: visible;
+  z-index: 58;
+}
+.span__stimulationstudio-current-settings-interpulse-input-container {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  line-height: 45px;
+  top: 6px;
+  left: 6px;
+  user-select: none;
+  font-family: Anonymous Pro;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(255, 255, 255);
+}
+.canvas__stimulationstudio-horizontal-line-seperator-three {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 472px;
+  height: 2px;
+  top: calc(457px - 45px);
+  left: calc(878px - 852px);
+  visibility: visible;
+  z-index: 56;
+  background-color: #292929;
+  opacity: 0.5;
+}
 .span__stimulationstudio-current-settings-sub-title-two {
   pointer-events: all;
   line-height: 100%;
@@ -446,7 +647,7 @@ export default {
   position: absolute;
   width: 499px;
   height: 30px;
-  top: 475.5px;
+  top: calc(475.5px - 55px);
   left: calc(863px - 852px);
   padding: 5px;
   visibility: visible;
@@ -468,7 +669,7 @@ export default {
   position: absolute;
   width: 156px;
   height: 30px;
-  top: 517.5px;
+  top: calc(517.5px - 55px);
   left: calc(873px - 852px);
   padding: 5px;
   visibility: visible;
@@ -482,6 +683,37 @@ export default {
   text-align: right;
   z-index: 7;
 }
+.div__stimulationstudio-current-settings-durationtwo-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 162px;
+  height: 57px;
+  top: calc(504px - 55px);
+  left: calc(1031px - 852px);
+  visibility: visible;
+  z-index: 5;
+}
+.span__stimulationstudio-current-settings-durationtwo-input {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  line-height: 45px;
+  top: 6px;
+  left: 6px;
+  user-select: none;
+  font-family: Anonymous Pro;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(110, 111, 114);
+}
 .span__stimulationstudio-current-settings-label-eight {
   pointer-events: all;
   line-height: 100%;
@@ -490,7 +722,7 @@ export default {
   position: absolute;
   width: 128px;
   height: 25px;
-  top: 519.991px;
+  top: calc(519.991px - 55px);
   left: calc(1195.28px - 852px);
   padding: 5px;
   visibility: visible;
@@ -512,7 +744,7 @@ export default {
   position: absolute;
   width: 154px;
   height: 30px;
-  top: 587.5px;
+  top: calc(587.5px - 55px);
   left: calc(875px - 852px);
   padding: 5px;
   visibility: visible;
@@ -526,6 +758,37 @@ export default {
   text-align: right;
   z-index: 11;
 }
+.div__stimulationstudio-current-settings-currenttwo-input-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 162px;
+  height: 57px;
+  top: calc(574px - 55px);
+  left: calc(1031px - 852px);
+  visibility: visible;
+  z-index: 9;
+}
+.span__stimulationstudio-current-settings-currenttwo-input {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  line-height: 45px;
+  top: 6px;
+  left: 6px;
+  user-select: none;
+  font-family: Anonymous Pro;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(255, 255, 255);
+}
 .span__stimulationstudio-current-settings-label-ten {
   pointer-events: all;
   line-height: 100%;
@@ -534,7 +797,7 @@ export default {
   position: absolute;
   width: 128px;
   height: 25px;
-  top: 589.991px;
+  top: calc(589.991px - 55px);
   left: calc(1195.28px - 852px);
   padding: 5px;
   visibility: visible;
@@ -556,7 +819,7 @@ export default {
   position: absolute;
   width: 158px;
   height: 30px;
-  top: 657.5px;
+  top: calc(657.5px - 55px);
   left: calc(871px - 852px);
   padding: 5px;
   visibility: visible;
@@ -570,6 +833,50 @@ export default {
   text-align: right;
   z-index: 15;
 }
+.div__stimulationstudio-current-settings-voltagetwo-input-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 162px;
+  height: 57px;
+  top: calc(644px - 55px);
+  left: calc(1031px - 852px);
+  visibility: visible;
+  z-index: 13;
+}
+.span__stimulationstudio-current-settings-voltagetwo-input {
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  line-height: 45px;
+  top: 6px;
+  left: 6px;
+  user-select: none;
+  font-family: Anonymous Pro;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(110, 111, 114);
+}
+.canvas__stimulationstudio-horizontal-line-seperator-four {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 472px;
+  height: 2px;
+  top: calc(708px - 45px);
+  left: calc(878px - 852px);
+  visibility: visible;
+  z-index: 78;
+  background-color: #292929;
+  opacity: 0.5;
+}
 .span__stimulationstudio-current-settings-label-twelve {
   pointer-events: all;
   line-height: 100%;
@@ -578,7 +885,7 @@ export default {
   position: absolute;
   width: 228px;
   height: 30px;
-  top: 766px;
+  top: calc(766px - 55px);
   left: calc(999px - 852px);
   padding: 5px;
   visibility: visible;
@@ -591,5 +898,19 @@ export default {
   color: rgb(183, 183, 183);
   text-align: center;
   z-index: 80;
+}
+.div__stimulationstudio-balance-scale-icon {
+  transform: rotate(0deg);
+  position: absolute;
+  text-align: center;
+  width: 22px;
+  height: 22px;
+  top: calc(743px - 55px);
+  left: calc(1102px - 852px);
+  color: rgb(255, 255, 255);
+  visibility: visible;
+  opacity: 0.01;
+  filter: none;
+  z-index: 70;
 }
 </style>
