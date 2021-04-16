@@ -159,4 +159,39 @@ describe("YAxisControlsSettings.vue", () => {
     expect(target_feedback_max_input.text()).toStrictEqual("");
     expect(target_feedback_min_input.text()).toStrictEqual("");
   });
+  test("Given that the YAxisControlsSettings is mounted successfully, When the user enters valid 'Maximum' and 'Minimum' range and click the button 'Apply', Then an event 'y-axis-new-range' with (y_max,y_min) is sent to parent component", async () => {
+    wrapper = mount(YAxisControlsSettings, {
+      localVue,
+    });
+    const target_max_input = wrapper.find("#input-widget-field-max");
+    const target_min_input = wrapper.find("#input-widget-field-min");
+    target_max_input.setValue("2");
+    target_min_input.setValue("1");
+    await Vue.nextTick();
+    const target_button_label_btn = wrapper.findAll(".span__button_label");
+    const apply_btn = target_button_label_btn.at(0);
+    await apply_btn.trigger("click");
+    await Vue.nextTick();
+    const apply_id_btn = wrapper.emitted("y-axis-new-range");
+    expect(apply_id_btn).toHaveLength(1);
+    expect(apply_id_btn[0]).toStrictEqual([
+      {
+        y_max: 2,
+        y_min: 1,
+      },
+    ]);
+  });
+  test("Given that the YAxisControlsSettings is mounted successfully, When the click the button 'Cancel', Then an event 'y-axis-no-change' with no data is is sent to parent component", async () => {
+    wrapper = mount(YAxisControlsSettings, {
+      localVue,
+    });
+
+    const target_button_label_btn = wrapper.findAll(".span__button_label");
+    const cancel_btn = target_button_label_btn.at(1);
+    await cancel_btn.trigger("click");
+    await Vue.nextTick();
+    const cancel_id_btn = wrapper.emitted("y-axis-no-change");
+    expect(cancel_id_btn).toHaveLength(1);
+    expect(cancel_id_btn[0]).toStrictEqual([]);
+  });
 });
