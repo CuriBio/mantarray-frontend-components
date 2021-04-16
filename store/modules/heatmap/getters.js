@@ -6,4 +6,7 @@ export default {
   heatmap_values(state) {
     return state.heatmap_values;
   },
+  heatmap_on_idx(state) {
+    return state.heatmap_values[state.heatmap_idx];
+  },
 };
