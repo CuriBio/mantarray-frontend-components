@@ -75,3 +75,9 @@ export { default as HeatMapColorBar } from "./components/status/HeatMapColorBar.
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
 export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+
+// Stimulation Studio Voltage Settings
+export { default as StimulationStudioVoltageSettings } from "./components/stimulation/StimulationStudioVoltageSettings.vue";
+
+// Stimulation Studio Current Settings
+export { default as StimulationStudioCurrentSettings } from "./components/stimulation/StimulationStudioCurrentSettings.vue";
