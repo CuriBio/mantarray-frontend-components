@@ -381,5 +381,119 @@ describe("YAxisControls.vue", () => {
         "div__playback-y-axis-controls--disabled"
       );
     });
+    it("should modify the values of the y_zoom_level_to the new max and min value, as an event 'y-axis-new-range' event was emitted and validate as the range was large it was inserted at index '0' ", async () => {
+      const propsData = {};
+
+      let y_zoom_levels = [
+        { y_min: 0, y_max: 500 },
+        { y_min: 100, y_max: 400 },
+        { y_min: 200, y_max: 300 },
+      ];
+      let default_zoom_level_idx = 0;
+
+      wrapper = shallowMount(YAxisControls, { propsData, store, localVue });
+      store.commit("waveform/set_y_axis_zoom_levels", y_zoom_levels);
+      store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
+
+      const maximum = 10000;
+      const minimum = 0;
+
+      let new_min_max = { y_min: minimum, y_max: maximum };
+      wrapper.vm.y_axis_controls_commit(new_min_max);
+
+      let new_range = store.getters["waveform/y_axis_zoom_levels"];
+      expect(new_range[default_zoom_level_idx].y_min).toStrictEqual(minimum);
+      expect(new_range[default_zoom_level_idx].y_max).toStrictEqual(maximum);
+    });
+    it("should modify the values of the y_zoom_level_to the new max and min value, as an event 'y-axis-new-range' event was emitted and validate as the range was intermediate it was inserted in a sorted way", async () => {
+      const propsData = {};
+
+      let y_zoom_levels = [
+        { y_min: 0, y_max: 200 },
+        { y_min: 25, y_max: 150 },
+        { y_min: 50, y_max: 150 },
+        { y_min: 50, y_max: 140 },
+        { y_min: 50, y_max: 130 },
+        { y_min: 55, y_max: 120 },
+        { y_min: 60, y_max: 120 },
+        { y_min: 60, y_max: 110 },
+        { y_min: 65, y_max: 110 },
+        { y_min: 70, y_max: 110 },
+        { y_min: 70, y_max: 105 },
+        { y_min: 75, y_max: 105 },
+        { y_min: 80, y_max: 105 },
+        { y_min: 85, y_max: 105 },
+        { y_min: 90, y_max: 105 },
+        { y_min: 94, y_max: 102 },
+        { y_min: 96, y_max: 100 },
+      ];
+      let default_zoom_level_idx = 0;
+
+      wrapper = shallowMount(YAxisControls, { propsData, store, localVue });
+      store.commit("waveform/set_y_axis_zoom_levels", y_zoom_levels);
+      store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
+
+      const maximum = 102;
+      const minimum = 96;
+
+      let new_min_max = { y_min: minimum, y_max: maximum };
+      wrapper.vm.y_axis_controls_commit(new_min_max);
+
+      let update_default_zoom_level_idx =
+        store.getters["waveform/y_axis_zoom_idx"];
+      let new_range = store.getters["waveform/y_axis_zoom_levels"];
+      expect(new_range[update_default_zoom_level_idx].y_min).toStrictEqual(
+        minimum
+      );
+      expect(new_range[update_default_zoom_level_idx].y_max).toStrictEqual(
+        maximum
+      );
+    });
+    it("should not modify the values of the y_zoom_level to the new max and min value, as an event 'y-axis-new-range' event was emitted and as the min and max was already present verify that the 'duplicate' was not created", async () => {
+      const propsData = {};
+      // 17 different zoom levels present
+      let y_zoom_levels = [
+        { y_min: 0, y_max: 200 },
+        { y_min: 25, y_max: 150 },
+        { y_min: 50, y_max: 150 },
+        { y_min: 50, y_max: 140 },
+        { y_min: 50, y_max: 130 },
+        { y_min: 55, y_max: 120 },
+        { y_min: 60, y_max: 120 },
+        { y_min: 60, y_max: 110 },
+        { y_min: 65, y_max: 110 },
+        { y_min: 70, y_max: 110 },
+        { y_min: 70, y_max: 105 },
+        { y_min: 75, y_max: 105 },
+        { y_min: 80, y_max: 105 },
+        { y_min: 85, y_max: 105 },
+        { y_min: 90, y_max: 105 },
+        { y_min: 94, y_max: 102 },
+        { y_min: 96, y_max: 100 },
+      ];
+      let default_zoom_level_idx = 0;
+
+      wrapper = shallowMount(YAxisControls, { propsData, store, localVue });
+      store.commit("waveform/set_y_axis_zoom_levels", y_zoom_levels);
+      store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
+
+      const maximum = 100;
+      const minimum = 96;
+
+      let new_min_max = { y_min: minimum, y_max: maximum };
+      wrapper.vm.y_axis_controls_commit(new_min_max);
+
+      let update_default_zoom_level_idx =
+        store.getters["waveform/y_axis_zoom_idx"];
+      let new_range = store.getters["waveform/y_axis_zoom_levels"];
+
+      expect(new_range[update_default_zoom_level_idx].y_min).toStrictEqual(
+        minimum
+      );
+      expect(new_range[update_default_zoom_level_idx].y_max).toStrictEqual(
+        maximum
+      );
+      expect(new_range.length).toStrictEqual(17);
+    });
   });
 });
