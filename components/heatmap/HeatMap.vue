@@ -3,7 +3,9 @@
     <!--  original mockflow ID:  cmpDf4f7dd55b2e166cb0d0e843ee15b7aad -->
     <div class="div__heatmap-layout-background"></div>
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
-    <div class="div__heatmap-layout-twitch-force-label">Twitch Force (μN)</div>
+    <div class="div__heatmap-layout-twitch-force-label">
+      {{ heatmap_option }} (μN)
+    </div>
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
       <PlateHeatMap :platecolor="passing_plate_colors"></PlateHeatMap>
@@ -164,7 +166,20 @@ export default {
         { color: "#bd3532", offset: "0%" },
         { color: "#f9d78c", offset: "100%" },
       ],
+      heatmap_option: "",
     };
+  },
+  watch: {
+    entrykey: function () {
+      if (this.entrykey != "") {
+        this.error_text = "";
+        this.on_empty_flag = false;
+      } else {
+        this.on_empty_flag = true;
+        this.error_text = "An ID is required";
+      }
+      this.heatmap_option = this.entrykey;
+    },
   },
   created: function () {
     const plate_colors = [
