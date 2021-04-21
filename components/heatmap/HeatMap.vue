@@ -60,8 +60,9 @@
     >
       <InputWidget
         :placeholder="'100'"
-        :invalid_text="''"
+        :invalid_text="max_heatmap_value"
         :input_width="105"
+        @update:value="on_update_maximum($event)"
       ></InputWidget>
     </div>
     <!-- original mockflow ID:  cmpDc06480c6344db8d23dca86a4c1e88ab4 -->
@@ -74,8 +75,9 @@
     >
       <InputWidget
         :placeholder="'0'"
-        :invalid_text="''"
+        :invalid_text="min_heatmap_value"
         :input_width="105"
+        @update:value="on_update_minimum($event)"
       ></InputWidget>
     </div>
     <!-- original mockflow ID:  cmpD8d0ef3020c7613af7ae63fa5722de759  -->
@@ -160,13 +162,15 @@ export default {
       provided_uuid: "0",
       height: 481,
       lower: 0,
-      upper: 100,
+      upper: 0,
       unit: "μN",
       range: [
         { color: "#bd3532", offset: "0%" },
         { color: "#f9d78c", offset: "100%" },
       ],
       heatmap_option: "",
+      max_heatmap_value: "invalid",
+      min_heatmap_value: "invalid",
     };
   },
   watch: {
@@ -210,7 +214,52 @@ export default {
     ];
     this.passing_plate_colors = plate_colors;
   },
-  methods: {},
+  methods: {
+    on_update_maximum: function (new_value) {
+      const max = parseInt(new_value);
+      if (new_value == "") {
+        this.upper = 0;
+        this.max_heatmap_value = "invalid";
+      } else {
+        if (max < 0 || new_value == "-") {
+          this.max_heatmap_value = "cannot be negative";
+        } else {
+          if (this.lower > max) {
+            this.max_heatmap_value = "min greater than max";
+            this.min_heatmap_value = "min greater than max";
+          } else {
+            if (max > 1000) {
+              this.max_heatmap_value = "larger than 1000";
+            } else {
+              this.upper = max;
+              this.max_heatmap_value = "";
+              this.min_heatmap_value = "";
+            }
+          }
+        }
+      }
+    },
+    on_update_minimum: function (new_value) {
+      const min = parseInt(new_value);
+      if (new_value == "") {
+        this.lower = 0;
+        this.min_heatmap_value = "invalid";
+      } else {
+        if (min < 0 || new_value == "-") {
+          this.min_heatmap_value = "cannot be negative";
+        } else {
+          if (min > this.upper) {
+            this.max_heatmap_value = "min greater than max";
+            this.min_heatmap_value = "min greater than max";
+          } else {
+            this.lower = min;
+            this.min_heatmap_value = "";
+            this.max_heatmap_value = "";
+          }
+        }
+      }
+    },
+  },
 };
 </script>
 <style>
@@ -458,7 +507,7 @@ export default {
   position: absolute;
   width: 82px;
   height: 30px;
-  top: 193.217px;
+  top: 189.217px;
   left: 1385.86px;
   padding: 5px;
   visibility: visible;
@@ -478,8 +527,8 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 121px;
-  height: 52px;
-  top: 180.925px;
+  height: 59px;
+  top: 178.925px;
   left: 1473.44px;
   visibility: visible;
 }
@@ -492,7 +541,7 @@ export default {
   position: absolute;
   width: 83px;
   height: 30px;
-  top: 245.217px;
+  top: 249.217px;
   left: 1385.86px;
   padding: 5px;
   visibility: visible;
@@ -512,8 +561,8 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 121px;
-  height: 52px;
-  top: 232.925px;
+  height: 59px;
+  top: 240.925px;
   left: 1473.44px;
   visibility: visible;
 }
@@ -524,7 +573,7 @@ export default {
   position: absolute;
   width: 212px;
   height: 2px;
-  top: 298px;
+  top: 305px;
   left: 1374px;
   visibility: visible;
   background-color: #3f3f3f;
