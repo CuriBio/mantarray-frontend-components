@@ -16,11 +16,13 @@ describe("HeatMap.vue", () => {
       propsData,
       localVue,
     });
-    wrapper.find(".div__heatmap-layout-background").isVisible(true);
+    wrapper
+      .find(".span__heatmap-layout-heatmap-settings-label")
+      .isVisible(true);
     const twitch_label = wrapper.find(
-      ".div__heatmap-layout-twitch-force-label"
+      ".span__heatmap-layout-heatmap-settings-label"
     );
-    expect(twitch_label.text()).toStrictEqual("Twitch Force (μN)");
+    expect(twitch_label.text()).toStrictEqual("Heatmap Settings");
   });
   test("When mounting from the component, Then it loads successfully and assert all the elements of the HeatMap Layout is rendered", () => {
     const propsData = {};
@@ -28,10 +30,12 @@ describe("HeatMap.vue", () => {
       propsData,
       localVue,
     });
-    wrapper.find(".div__heatmap-layout-background").isVisible(true);
+    wrapper
+      .find(".span__heatmap-layout-heatmap-settings-label")
+      .isVisible(true);
     const twitch_label = wrapper.find(
-      ".div__heatmap-layout-twitch-force-label"
+      ".span__heatmap-layout-heatmap-settings-label"
     );
-    expect(twitch_label.text()).toStrictEqual("Twitch Force (μN)");
+    expect(twitch_label.text()).toStrictEqual("Heatmap Settings");
   });
 });
