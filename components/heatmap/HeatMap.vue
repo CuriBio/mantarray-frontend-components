@@ -231,9 +231,14 @@ export default {
             if (max > 1000) {
               this.max_heatmap_value = "larger than 1000";
             } else {
-              this.upper = max;
-              this.max_heatmap_value = "";
-              this.min_heatmap_value = "";
+              if (this.lower == max) {
+                this.max_heatmap_value = "max is equal to min";
+                this.min_heatmap_value = "min is equal to max";
+              } else {
+                this.upper = max;
+                this.max_heatmap_value = "";
+                this.min_heatmap_value = "";
+              }
             }
           }
         }
@@ -252,9 +257,14 @@ export default {
             this.max_heatmap_value = "min greater than max";
             this.min_heatmap_value = "min greater than max";
           } else {
-            this.lower = min;
-            this.min_heatmap_value = "";
-            this.max_heatmap_value = "";
+            if (this.upper == min) {
+              this.max_heatmap_value = "max is equal to min";
+              this.min_heatmap_value = "min is equal to max";
+            } else {
+              this.lower = min;
+              this.min_heatmap_value = "";
+              this.max_heatmap_value = "";
+            }
           }
         }
       }

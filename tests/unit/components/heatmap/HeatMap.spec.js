@@ -167,6 +167,46 @@ describe("HeatMap.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     expect(upper_value.text()).toStrictEqual("300 μN");
   });
+  test("Given that the minimum/maximum value is invalid, When the value of the minimum is 100, Then HeatmapBar minimum lower range is set to 0", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      localVue,
+    });
+    const maximum = "100";
+    wrapper.vm.on_update_maximum(maximum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const upper_value = wrapper.find(".span__heatmap-scale-higher-value");
+    expect(upper_value.text()).toStrictEqual("100 μN");
+    const minimum = "100";
+    wrapper.vm.on_update_minimum(minimum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const lower_value = wrapper.find(".span__heatmap-scale-lower-value");
+    expect(lower_value.text()).toStrictEqual("0 μN");
+  });
+  test("Given that the maximum/minimum value is invalid, When the value of the maximum is 20, Then HeatmapBar upper range is set to 100", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      localVue,
+    });
+    let maximum = "100";
+    wrapper.vm.on_update_maximum(maximum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const upper_value = wrapper.find(".span__heatmap-scale-higher-value");
+    expect(upper_value.text()).toStrictEqual("100 μN");
+    const minimum = "20";
+    wrapper.vm.on_update_minimum(minimum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const lower_value = wrapper.find(".span__heatmap-scale-lower-value");
+    expect(lower_value.text()).toStrictEqual("20 μN");
+    maximum = "20";
+    wrapper.vm.on_update_maximum(maximum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const upper_new_value = wrapper.find(".span__heatmap-scale-higher-value");
+    expect(upper_new_value.text()).toStrictEqual("100 μN");
+  });
+
   test("Given that a valid option is set for DropDown option, When the user selects the option of 'Twitch Force', Then verify that the Title of Heatmap is updated with 'Twitch Force'", async () => {
     const propsData = {};
     wrapper = mount(ComponentToTest, {
