@@ -62,6 +62,7 @@
         :placeholder="'100'"
         :invalid_text="max_heatmap_value"
         :input_width="105"
+        :dom_id_suffix="'max'"
         @update:value="on_update_maximum($event)"
       ></InputWidget>
     </div>
@@ -77,6 +78,8 @@
         :placeholder="'0'"
         :invalid_text="min_heatmap_value"
         :input_width="105"
+        :dom_id_suffix="'min'"
+        :disabled="on_start"
         @update:value="on_update_minimum($event)"
       ></InputWidget>
     </div>
@@ -171,6 +174,7 @@ export default {
       heatmap_option: "",
       max_heatmap_value: "invalid",
       min_heatmap_value: "invalid",
+      on_start: true,
     };
   },
   watch: {
@@ -220,6 +224,7 @@ export default {
       if (new_value == "") {
         this.upper = 0;
         this.max_heatmap_value = "invalid";
+        this.on_start = true;
       } else {
         if (max < 0 || new_value == "-") {
           this.max_heatmap_value = "cannot be negative";
@@ -237,7 +242,7 @@ export default {
               } else {
                 this.upper = max;
                 this.max_heatmap_value = "";
-                this.min_heatmap_value = "";
+                this.on_start = false;
               }
             }
           }
@@ -246,24 +251,29 @@ export default {
     },
     on_update_minimum: function (new_value) {
       const min = parseInt(new_value);
-      if (new_value == "") {
-        this.lower = 0;
+      if (this.upper == 0) {
+        this.max_heatmap_value = "invalid";
         this.min_heatmap_value = "invalid";
       } else {
-        if (min < 0 || new_value == "-") {
-          this.min_heatmap_value = "cannot be negative";
+        if (new_value == "") {
+          this.lower = 0;
+          this.min_heatmap_value = "invalid";
         } else {
-          if (min > this.upper) {
-            this.max_heatmap_value = "min greater than max";
-            this.min_heatmap_value = "min greater than max";
+          if (min < 0 || new_value == "-") {
+            this.min_heatmap_value = "cannot be negative";
           } else {
-            if (this.upper == min) {
-              this.max_heatmap_value = "max is equal to min";
-              this.min_heatmap_value = "min is equal to max";
+            if (min > this.upper) {
+              this.max_heatmap_value = "min greater than max";
+              this.min_heatmap_value = "min greater than max";
             } else {
-              this.lower = min;
-              this.min_heatmap_value = "";
-              this.max_heatmap_value = "";
+              if (this.upper == min) {
+                this.max_heatmap_value = "max is equal to min";
+                this.min_heatmap_value = "min is equal to max";
+              } else {
+                this.lower = min;
+                this.min_heatmap_value = "";
+                this.max_heatmap_value = "";
+              }
             }
           }
         }

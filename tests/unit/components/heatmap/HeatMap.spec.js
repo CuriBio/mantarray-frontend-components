@@ -85,6 +85,12 @@ describe("HeatMap.vue", () => {
       propsData,
       localVue,
     });
+    const maximum = "10"; // this allows us to create coverage
+    wrapper.vm.on_update_maximum(maximum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const upper_value = wrapper.find(".span__heatmap-scale-higher-value");
+    expect(upper_value.text()).toStrictEqual("10 μN");
+
     const minimum = "-1";
     wrapper.vm.on_update_minimum(minimum);
     await wrapper.vm.$nextTick(); // wait for update
@@ -206,7 +212,23 @@ describe("HeatMap.vue", () => {
     const upper_new_value = wrapper.find(".span__heatmap-scale-higher-value");
     expect(upper_new_value.text()).toStrictEqual("100 μN");
   });
-
+  test("Given that the maximum/minimum value is invalid, When the value of the maximum is 10 and minimum is '', Then HeatmapBar upper range is set to 10 and invalid text is rendered", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      localVue,
+    });
+    const maximum = "10";
+    wrapper.vm.on_update_maximum(maximum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const upper_value = wrapper.find(".span__heatmap-scale-higher-value");
+    expect(upper_value.text()).toStrictEqual("10 μN");
+    const minimum = "";
+    wrapper.vm.on_update_minimum(minimum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const lower_value = wrapper.find(".span__heatmap-scale-lower-value");
+    expect(lower_value.text()).toStrictEqual("0 μN");
+  });
   test("Given that a valid option is set for DropDown option, When the user selects the option of 'Twitch Force', Then verify that the Title of Heatmap is updated with 'Twitch Force'", async () => {
     const propsData = {};
     wrapper = mount(ComponentToTest, {
