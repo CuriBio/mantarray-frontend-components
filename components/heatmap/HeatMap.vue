@@ -4,7 +4,7 @@
     <div class="div__heatmap-layout-background"></div>
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
     <div class="div__heatmap-layout-twitch-force-label">
-      {{ heatmap_option }} (μN)
+      {{ heatmap_option_final }} (μN)
     </div>
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
@@ -18,8 +18,8 @@
     <div class="div__heatmap-layout-heatmap-colorbar-container">
       <HeatMapColorBar
         :gradient_uuid="provided_uuid"
-        :lower_range="lower"
-        :upper_range="upper"
+        :lower_range="lower_final"
+        :upper_range="upper_final"
         :heatmap_height="height"
         :gradient_range="range"
         :units="unit"
@@ -44,7 +44,10 @@
     >
     <!-- original mockflow ID:  cmpD5cceb38a3af00a6bd7589d883fa87688 -->
     <div class="div__heatmap-layout-checkbox-container">
-      <CheckBoxWidget :checkbox_options="option"></CheckBoxWidget>
+      <CheckBoxWidget
+        :checkbox_options="option"
+        @checkbox-selected="auto_scale"
+      ></CheckBoxWidget>
     </div>
     <!-- original mockflow ID:  cmpD8a25d29c92a6f84cc071bcf466ca36ce -->
     <span class="span__heatmap-layout-checkbox-label"
@@ -123,6 +126,126 @@
     <span class="span__heatmap-settings-qc-options-label"
       >QC&nbsp;<wbr />Options</span
     >
+    <div
+      id="cmpD7fbcf0111303239acde2553d25be53f7"
+      class="mfWFCompCls"
+      width="130"
+      height="55"
+      style="
+        pointer-events: all;
+        transform: rotate(0deg);
+        overflow: hidden;
+        position: absolute;
+        width: 130px;
+        height: 55px;
+        top: 806px;
+        left: 1341px;
+        visibility: visible;
+        z-index: 152;
+      "
+    >
+      <canvas
+        id="cmpD7fbcf0111303239acde2553d25be53f7_cvs"
+        width="130"
+        height="55"
+        style="
+          -webkit-transform: translateZ(0);
+          position: absolute;
+          width: 130px;
+          height: 55px;
+          top: 0px;
+          left: 0px;
+          background: #b7b7b7;
+        "
+      >
+      </canvas>
+      <span
+        id="cmpD7fbcf0111303239acde2553d25be53f7_txt"
+        style="
+          padding-left: 5px;
+          padding-right: 5px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-align: center;
+          font-weight: normal;
+          transform: translateZ(0px);
+          position: absolute;
+          width: 120px;
+          height: 45px;
+          line-height: 47px;
+          top: 5px;
+          left: 5px;
+          user-select: none;
+          font-family: Muli;
+          font-style: normal;
+          text-decoration: none;
+          font-size: 16px;
+          color: #6e6f72;
+        "
+      >
+        Apply
+      </span>
+    </div>
+    <div
+      id="cmpD2f909255bf15b8f4daa88ed03c6a8300"
+      class="mfWFCompCls"
+      width="130"
+      height="55"
+      style="
+        pointer-events: all;
+        transform: rotate(0deg);
+        overflow: hidden;
+        position: absolute;
+        width: 130px;
+        height: 55px;
+        top: 806px;
+        left: 1490.08px;
+        visibility: visible;
+        z-index: 154;
+      "
+    >
+      <canvas
+        id="cmpD2f909255bf15b8f4daa88ed03c6a8300_cvs"
+        width="130"
+        height="55"
+        style="
+          -webkit-transform: translateZ(0);
+          position: absolute;
+          width: 130px;
+          height: 55px;
+          top: 0px;
+          left: 0px;
+          background: #b7b7b7;
+        "
+      >
+      </canvas>
+      <span
+        id="cmpD2f909255bf15b8f4daa88ed03c6a8300_txt"
+        style="
+          padding-left: 5px;
+          padding-right: 5px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-align: center;
+          font-weight: normal;
+          transform: translateZ(0px);
+          position: absolute;
+          width: 120px;
+          height: 45px;
+          line-height: 47px;
+          top: 5px;
+          left: 5px;
+          user-select: none;
+          font-family: Muli;
+          font-style: normal;
+          text-decoration: none;
+          font-size: 16px;
+          color: rgb(0, 0, 0);
+        "
+      >
+        Reset
+      </span>
+    </div>
   </div>
 </template>
 <script>
@@ -146,7 +269,7 @@ export default {
   data() {
     return {
       button_names: ["Warm", "Cool", "Blue/Red", "Purple/Green"],
-      option: [{ text: "", value: "Ascorbic Acid" }],
+      option: [{ text: "", value: "Auto-Scale" }],
       label: "",
       entrykey: "",
       keyplaceholder: "Twitch Force",
@@ -165,13 +288,16 @@ export default {
       provided_uuid: "0",
       height: 481,
       lower: 0,
+      lower_final: 0,
       upper: 0,
+      upper_final: 0,
       unit: "μN",
       range: [
         { color: "#bd3532", offset: "0%" },
         { color: "#f9d78c", offset: "100%" },
       ],
       heatmap_option: "",
+      heatmap_option_final: "",
       max_heatmap_value: "invalid",
       min_heatmap_value: "invalid",
       on_start: true,
@@ -219,6 +345,17 @@ export default {
     this.passing_plate_colors = plate_colors;
   },
   methods: {
+    auto_scale: function (new_value) {
+      if (new_value == "Auto-Scale") {
+        this.max_heatmap_value = "";
+        this.min_heatmap_value = "";
+        this.heatmap_option = this.entrykey = this.nicknames_list[0];
+      } else {
+        this.max_heatmap_value = "invalid";
+        this.min_heatmap_value = "invalid";
+        this.heatmap_option = this.entrykey = "";
+      }
+    },
     on_update_maximum: function (new_value) {
       const max = parseInt(new_value);
       if (new_value == "") {
