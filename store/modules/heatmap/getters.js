@@ -9,4 +9,25 @@ export default {
   heatmap_on_idx(state) {
     return state.heatmap_values[state.heatmap_idx];
   },
+  heatmap_display_array(state) {
+    return state.heatmap_display_array;
+  },
+  heatmap_display_idx(state) {
+    return state.heatmap_display_idx;
+  },
+  heatmap_max_min(state) {
+    return state.heatmap_display_min_max;
+  },
+  heatmap_display_min_max(state) {
+    return state.heatmap_display_min_max;
+  },
+  heatmap_autoscale(state) {
+    return state.heatmap_autoscale;
+  },
+  heatmap_options_array(state) {
+    return state.heatmap_options_array;
+  },
+  heatmap_options_idx(state) {
+    return state.heatmap_options_idx;
+  },
 };
