@@ -127,18 +127,9 @@
       >QC&nbsp;<wbr />Options</span
     >
     <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7 -->
-    <div
-      class="div__heatmap-settings-apply-btn-container"
-      width="130"
-      height="55"
-    >
+    <div class="div__heatmap-settings-apply-btn-container">
       <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_cvs -->
-      <canvas
-        class="canvas__heatmap-settings-apply-btn-container"
-        width="130"
-        height="55"
-      >
-      </canvas>
+      <canvas class="canvas__heatmap-settings-apply-btn-container"> </canvas>
       <!-- original mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_txt -->
       <span class="span__heatmap-settings-apply-btn-label"> Apply </span>
     </div>
