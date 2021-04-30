@@ -126,125 +126,28 @@
     <span class="span__heatmap-settings-qc-options-label"
       >QC&nbsp;<wbr />Options</span
     >
+    <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7 -->
     <div
-      id="cmpD7fbcf0111303239acde2553d25be53f7"
-      class="mfWFCompCls"
+      class="div__heatmap-settings-apply-btn-container"
       width="130"
       height="55"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 130px;
-        height: 55px;
-        top: 806px;
-        left: 1341px;
-        visibility: visible;
-        z-index: 152;
-      "
     >
+      <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_cvs -->
       <canvas
-        id="cmpD7fbcf0111303239acde2553d25be53f7_cvs"
+        class="canvas__heatmap-settings-apply-btn-container"
         width="130"
         height="55"
-        style="
-          -webkit-transform: translateZ(0);
-          position: absolute;
-          width: 130px;
-          height: 55px;
-          top: 0px;
-          left: 0px;
-          background: #b7b7b7;
-        "
       >
       </canvas>
-      <span
-        id="cmpD7fbcf0111303239acde2553d25be53f7_txt"
-        style="
-          padding-left: 5px;
-          padding-right: 5px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-align: center;
-          font-weight: normal;
-          transform: translateZ(0px);
-          position: absolute;
-          width: 120px;
-          height: 45px;
-          line-height: 47px;
-          top: 5px;
-          left: 5px;
-          user-select: none;
-          font-family: Muli;
-          font-style: normal;
-          text-decoration: none;
-          font-size: 16px;
-          color: #6e6f72;
-        "
-      >
-        Apply
-      </span>
+      <!-- original mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_txt -->
+      <span class="span__heatmap-settings-apply-btn-label"> Apply </span>
     </div>
-    <div
-      id="cmpD2f909255bf15b8f4daa88ed03c6a8300"
-      class="mfWFCompCls"
-      width="130"
-      height="55"
-      style="
-        pointer-events: all;
-        transform: rotate(0deg);
-        overflow: hidden;
-        position: absolute;
-        width: 130px;
-        height: 55px;
-        top: 806px;
-        left: 1490.08px;
-        visibility: visible;
-        z-index: 154;
-      "
-    >
-      <canvas
-        id="cmpD2f909255bf15b8f4daa88ed03c6a8300_cvs"
-        width="130"
-        height="55"
-        style="
-          -webkit-transform: translateZ(0);
-          position: absolute;
-          width: 130px;
-          height: 55px;
-          top: 0px;
-          left: 0px;
-          background: #b7b7b7;
-        "
-      >
-      </canvas>
-      <span
-        id="cmpD2f909255bf15b8f4daa88ed03c6a8300_txt"
-        style="
-          padding-left: 5px;
-          padding-right: 5px;
-          overflow: hidden;
-          white-space: nowrap;
-          text-align: center;
-          font-weight: normal;
-          transform: translateZ(0px);
-          position: absolute;
-          width: 120px;
-          height: 45px;
-          line-height: 47px;
-          top: 5px;
-          left: 5px;
-          user-select: none;
-          font-family: Muli;
-          font-style: normal;
-          text-decoration: none;
-          font-size: 16px;
-          color: rgb(0, 0, 0);
-        "
-      >
-        Reset
-      </span>
+    <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300 -->
+    <div class="div__heatmap-settings-reset-btn-container">
+      <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300_cvs -->
+      <canvas class="canvas__heatmap-settings-reset-btn-container"> </canvas>
+      <!-- original mockflow ID : cmpD2f909255bf15b8f4daa88ed03c6a8300_txt -->
+      <span class="span__heatmap-settings-reset-btn-label"> Reset </span>
     </div>
   </div>
 </template>
@@ -833,6 +736,96 @@ export default {
   font-size: 17px;
   color: rgb(255, 255, 255);
   text-align: center;
+}
+
+.div__heatmap-settings-apply-btn-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 130px;
+  height: 55px;
+  top: 806px;
+  left: 1341px;
+  visibility: visible;
+  z-index: 152;
+}
+
+.canvas__heatmap-settings-apply-btn-container {
+  -webkit-transform: translateZ(0);
+  position: absolute;
+  width: 130px;
+  height: 55px;
+  top: 0px;
+  left: 0px;
+  background: #b7b7b7;
+}
+
+.span__heatmap-settings-apply-btn-label {
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 120px;
+  height: 45px;
+  line-height: 47px;
+  top: 5px;
+  left: 5px;
+  user-select: none;
+  font-family: Muli;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 16px;
+  color: #6e6f72;
+}
+
+.div__heatmap-settings-reset-btn-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 130px;
+  height: 55px;
+  top: 806px;
+  left: 1490.08px;
+  visibility: visible;
+  z-index: 154;
+}
+
+.canvas__heatmap-settings-reset-btn-container {
+  -webkit-transform: translateZ(0);
+  position: absolute;
+  width: 130px;
+  height: 55px;
+  top: 0px;
+  left: 0px;
+  background: #b7b7b7;
+}
+
+.span__heatmap-settings-reset-btn-label {
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 120px;
+  height: 45px;
+  line-height: 47px;
+  top: 5px;
+  left: 5px;
+  user-select: none;
+  font-family: Muli;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 16px;
+  color: rgb(0, 0, 0);
 }
 
 .div__heatmap-layout-checkbox-container > .div__checkbox-background {
