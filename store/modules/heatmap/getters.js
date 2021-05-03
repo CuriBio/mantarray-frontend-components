@@ -15,11 +15,17 @@ export default {
   heatmap_display_idx(state) {
     return state.heatmap_display_idx;
   },
-  heatmap_max_min(state) {
-    return state.heatmap_display_min_max;
+  heatmap_display_option(state) {
+    return state.heatmap_display_array[state.heatmap_display_idx];
+  },
+  heatmap_display_user_min_max(state) {
+    return state.state.heatmap_display_user_min_max;
   },
   heatmap_display_min_max(state) {
     return state.heatmap_display_min_max;
+  },
+  heatmap_display_min_max_selected(state) {
+    return state.heatmap_display_min_max[state.heatmap_display_idx];
   },
   heatmap_autoscale(state) {
     return state.heatmap_autoscale;
@@ -29,5 +35,8 @@ export default {
   },
   heatmap_options_idx(state) {
     return state.heatmap_options_idx;
+  },
+  heatmap_options_on_idx(state) {
+    return state.heatmap_options_array[state.heatmap_options_idx];
   },
 };

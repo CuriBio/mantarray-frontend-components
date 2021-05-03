@@ -15,11 +15,11 @@ export default {
   set_heatmap_display_idx(state, new_value) {
     state.heatmap_display_idx = new_value;
   },
-  set_heatmap_max_min(state, new_value) {
-    state.heatmap_display_min_max = new_value;
-  },
   set_heatmap_display_min_max(state, new_value) {
     state.heatmap_display_min_max = new_value;
+  },
+  set_heatmap_display_user_min_max(state, new_value) {
+    state.heatmap_display_user_min_max = new_value;
   },
   set_heatmap_autoscale(state, new_value) {
     state.heatmap_autoscale = new_value;
