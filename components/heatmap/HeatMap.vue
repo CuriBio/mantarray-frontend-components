@@ -143,6 +143,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
@@ -162,7 +163,6 @@ export default {
   },
   data() {
     return {
-      button_names: ["Warm", "Cool", "Blue/Red", "Purple/Green"],
       option: [{ text: "", value: "Auto-Scale" }],
       label: "",
       entrykey: "",
@@ -170,14 +170,6 @@ export default {
       error_text: "An ID is required",
       entry_width: 201,
       disallow_entry: false,
-      nicknames_list: [
-        "Twitch Force",
-        "Twitch Period",
-        "Twitch Frequency",
-        "Twitch Width 80",
-        "Contraction Velocity",
-        "Relaxation Velocity",
-      ],
       on_empty_flag: true,
       provided_uuid: "0",
       height: 481,
@@ -197,16 +189,39 @@ export default {
       on_start: true,
     };
   },
+  computed: {
+    ...mapState("heatmap", {
+      button_names: "heatmap_options_array",
+    }),
+    ...mapState("heatmap", {
+      nicknames_list: "heatmap_display_array",
+    }),
+    ...mapState("heatmap", {
+      display_min_max: "heatmap_display_min_max",
+    }),
+  },
   watch: {
     entrykey: function () {
       if (this.entrykey != "") {
-        this.error_text = "";
-        this.on_empty_flag = false;
+        this.error_text = "Choose an option";
       } else {
         this.on_empty_flag = true;
         this.error_text = "An ID is required";
       }
       this.heatmap_option = this.entrykey;
+      const display_idx = this.nicknames_list.indexOf(this.entrykey);
+      if (display_idx == -1) {
+        this.lower = 0;
+        this.upper = 0;
+        this.error_text = "Choose an option";
+        this.on_empty_flag = true;
+        this.$store.commit("heatmap/heatmap_display_idx", null);
+      } else {
+        this.on_empty_flag = false;
+        this.lower = this.display_min_max[display_idx].min;
+        this.upper = this.display_min_max[display_idx].max;
+        this.$store.commit("heatmap/heatmap_display_idx", display_idx);
+      }
     },
   },
   created: function () {
