@@ -120,7 +120,11 @@
       Color&nbsp;<wbr />Scheme</span
     >
     <div class="div__heatmap-radio-buttons-container">
-      <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
+      <RadioButtonWidget
+        :radio_buttons="button_names"
+        :pre_selected="0"
+        @radio-btn-selected="radio_option_selected"
+      ></RadioButtonWidget>
     </div>
     <!-- orginal mockflow ID: cmpD5bc3214687200b065320c06b0a15e013 -->
     <span class="span__heatmap-settings-qc-options-label"
@@ -199,6 +203,9 @@ export default {
     ...mapState("heatmap", {
       display_min_max: "heatmap_display_min_max",
     }),
+    ...mapState("heatmap", {
+      all_gradients: "heatmap_options_gradient",
+    }),
   },
   watch: {
     entrykey: function () {
@@ -259,10 +266,20 @@ export default {
         this.max_heatmap_value = "";
         this.min_heatmap_value = "";
         this.heatmap_option = this.entrykey = this.nicknames_list[0];
+        this.$store.commit("heatmap/heatmap_autoscale", true);
       } else {
         this.max_heatmap_value = "invalid";
         this.min_heatmap_value = "invalid";
         this.heatmap_option = this.entrykey = "";
+        this.$store.commit("heatmap/heatmap_autoscale", false);
+      }
+    },
+    radio_option_selected: function (option_value) {
+      const option_name = option_value.name;
+      const option_idx = option_value.index;
+      if (this.button_names.indexOf(option_name) != -1) {
+        this.$store.commit("heatmap/set_heatmap_options_idx", option_idx);
+        // this.range = this.all_gradients[option_idx]; to be utilized when Apply Button is clicked.
       }
     },
     on_update_maximum: function (new_value) {

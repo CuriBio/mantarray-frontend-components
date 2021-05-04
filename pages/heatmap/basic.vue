@@ -48,9 +48,31 @@ export default {
         max: 1600,
       },
     ];
+    const radio_button_gradient = [
+      [
+        { color: "#bd3532", offset: "0%" },
+        { color: "#f9d78c", offset: "100%" },
+      ],
+      [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#00ccbc", offset: "100%" },
+      ],
+      [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#90eb9d", offset: "100%" },
+      ],
+      [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#ffff8c", offset: "100%" },
+      ],
+    ];
     this.$store.commit("heatmap/set_heatmap_options_array", radio_button_list);
     this.$store.commit("heatmap/set_heatmap_display_array", display_options);
     this.$store.commit("heatmap/set_heatmap_display_min_max", display_min_max);
+    this.$store.commit(
+      "heatmap/set_heatmap_options_gradient",
+      radio_button_gradient
+    );
   },
 };
 </script>
