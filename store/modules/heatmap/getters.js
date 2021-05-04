@@ -19,7 +19,7 @@ export default {
     return state.heatmap_display_array[state.heatmap_display_idx];
   },
   heatmap_display_user_min_max(state) {
-    return state.state.heatmap_display_user_min_max;
+    return state.heatmap_display_user_min_max;
   },
   heatmap_display_min_max(state) {
     return state.heatmap_display_min_max;
@@ -38,5 +38,13 @@ export default {
   },
   heatmap_options_on_idx(state) {
     return state.heatmap_options_array[state.heatmap_options_idx];
+  },
+  heatmap_options_gradient(state) {
+    return state.heatmap_options_gradient;
+  },
+  heatmap_options_on_gradient(state) {
+    return state.heatmap_options_gradient[
+      state.heatmap_options_array[state.heatmap_options_idx]
+    ];
   },
 };

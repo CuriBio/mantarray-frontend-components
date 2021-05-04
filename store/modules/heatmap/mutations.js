@@ -30,4 +30,7 @@ export default {
   set_heatmap_options_idx(state, new_value) {
     state.heatmap_options_idx = new_value;
   },
+  set_heatmap_options_gradient(state, new_value) {
+    state.heatmap_options_gradient = new_value;
+  },
 };

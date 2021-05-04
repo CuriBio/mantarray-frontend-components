@@ -47,6 +47,10 @@ describe("store/heatmap", () => {
     heatmap_options_idx: "heatmap/set_heatmap_options_idx",
   };
 
+  const heatmap_set_heatmap_options_gradient = {
+    heatmap_options_gradient: "heatmap/set_heatmap_options_gradient",
+  };
+
   beforeAll(async () => {
     // note the store will mutate across tests, so make sure to re-create it in beforeEach
     const storePath = `${process.env.buildDir}/store.js`;
@@ -225,5 +229,52 @@ describe("store/heatmap", () => {
     expect(store.getters["heatmap/heatmap_options_on_idx"]).toStrictEqual(
       "Warm"
     );
+  });
+  test("When heatmap store is initialized, Then the radio button options gradient is initialized", () => {
+    const radio_button_list = ["Warm", "Cool", "Blue/Red", "Purple/Green"];
+    const radio_button_idx = 0;
+    const radio_button_gradient = {
+      Warm: [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#00a6ca", offset: "100%" },
+      ],
+      Cool: [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#00ccbc", offset: "100%" },
+      ],
+      "Blue/Red": [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#90eb9d", offset: "100%" },
+      ],
+      "Purple/Green": [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#ffff8c", offset: "100%" },
+      ],
+    };
+    store.commit(
+      heatmap_set_heatmap_options_array.heatmap_options_array,
+      radio_button_list
+    );
+    store.commit(
+      heatmap_set_heatmap_option_idx.heatmap_options_idx,
+      radio_button_idx
+    );
+    store.commit(
+      heatmap_set_heatmap_options_gradient.heatmap_options_gradient,
+      radio_button_gradient
+    );
+
+    expect(store.getters["heatmap/heatmap_options_on_idx"]).toStrictEqual(
+      "Warm"
+    );
+    expect(store.getters["heatmap/heatmap_options_gradient"]).toStrictEqual(
+      radio_button_gradient
+    );
+    const in_focus_gradient =
+      store.getters["heatmap/heatmap_options_on_gradient"];
+    expect(in_focus_gradient[0].color).toStrictEqual("#2c7bb6");
+    expect(in_focus_gradient[0].offset).toStrictEqual("0%");
+    expect(in_focus_gradient[1].color).toStrictEqual("#00a6ca");
+    expect(in_focus_gradient[1].offset).toStrictEqual("100%");
   });
 });
