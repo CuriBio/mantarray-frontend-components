@@ -82,7 +82,6 @@
         :invalid_text="min_heatmap_value"
         :input_width="105"
         :dom_id_suffix="'min'"
-        :disabled="on_start"
         @update:value="on_update_minimum($event)"
       ></InputWidget>
     </div>
@@ -122,7 +121,7 @@
     <div class="div__heatmap-radio-buttons-container">
       <RadioButtonWidget
         :radio_buttons="button_names"
-        :pre_selected="0"
+        :pre_selected="radio_option_idx"
         @radio-btn-selected="radio_option_selected"
       ></RadioButtonWidget>
     </div>
@@ -131,18 +130,40 @@
       >QC&nbsp;<wbr />Options</span
     >
     <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7 -->
-    <div class="div__heatmap-settings-apply-btn-container">
+    <div
+      class="div__heatmap-settings-apply-btn-container"
+      :class="[
+        !is_apply_set
+          ? 'div__heatmap-settings-apply-btn-container-disable'
+          : 'div__heatmap-settings-apply-btn-container-enable',
+      ]"
+    >
       <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_cvs -->
       <canvas class="canvas__heatmap-settings-apply-btn-container"> </canvas>
       <!-- original mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_txt -->
-      <span class="span__heatmap-settings-apply-btn-label"> Apply </span>
+      <span
+        class="span__heatmap-settings-apply-btn-label"
+        :class="[
+          !is_apply_set
+            ? 'span__heatmap-settings-apply-btn-label-disable'
+            : 'span__heatmap-settings-apply-btn-label-enable',
+        ]"
+        @click="apply_heatmap_settings"
+      >
+        Apply
+      </span>
     </div>
     <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300 -->
     <div class="div__heatmap-settings-reset-btn-container">
       <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300_cvs -->
       <canvas class="canvas__heatmap-settings-reset-btn-container"> </canvas>
       <!-- original mockflow ID : cmpD2f909255bf15b8f4daa88ed03c6a8300_txt -->
-      <span class="span__heatmap-settings-reset-btn-label"> Reset </span>
+      <span
+        class="span__heatmap-settings-reset-btn-label"
+        @click="reset_heatmap_settings"
+      >
+        Reset
+      </span>
     </div>
   </div>
 </template>
@@ -181,6 +202,8 @@ export default {
       lower_final: 0,
       upper: 0,
       upper_final: 0,
+      is_apply_set: false,
+      radio_option_idx: 0,
       unit: "μN",
       range: [
         { color: "#bd3532", offset: "0%" },
@@ -190,7 +213,6 @@ export default {
       heatmap_option_final: "",
       max_heatmap_value: "invalid",
       min_heatmap_value: "invalid",
-      on_start: true,
     };
   },
   computed: {
@@ -218,15 +240,17 @@ export default {
       this.heatmap_option = this.entrykey;
       const display_idx = this.nicknames_list.indexOf(this.entrykey);
       if (display_idx == -1) {
-        this.lower = 0;
-        this.upper = 0;
+        this.lower = null;
+        this.upper = null;
         this.error_text = "Choose an option";
         this.on_empty_flag = true;
+        this.is_apply_set = false;
         this.$store.commit("heatmap/heatmap_display_idx", null);
       } else {
         this.on_empty_flag = false;
         this.lower = this.display_min_max[display_idx].min;
         this.upper = this.display_min_max[display_idx].max;
+        this.is_apply_set = true;
         this.$store.commit("heatmap/heatmap_display_idx", display_idx);
       }
     },
@@ -266,11 +290,13 @@ export default {
         this.max_heatmap_value = "";
         this.min_heatmap_value = "";
         this.heatmap_option = this.entrykey = this.nicknames_list[0];
+        this.is_apply_set = true;
         this.$store.commit("heatmap/heatmap_autoscale", true);
       } else {
         this.max_heatmap_value = "invalid";
         this.min_heatmap_value = "invalid";
         this.heatmap_option = this.entrykey = "";
+        this.is_apply_set = false;
         this.$store.commit("heatmap/heatmap_autoscale", false);
       }
     },
@@ -278,69 +304,104 @@ export default {
       const option_name = option_value.name;
       const option_idx = option_value.index;
       if (this.button_names.indexOf(option_name) != -1) {
+        this.radio_option_idx = option_idx;
         this.$store.commit("heatmap/set_heatmap_options_idx", option_idx);
-        // this.range = this.all_gradients[option_idx]; to be utilized when Apply Button is clicked.
       }
     },
     on_update_maximum: function (new_value) {
       const max = parseInt(new_value);
-      if (new_value == "") {
-        this.upper = 0;
-        this.max_heatmap_value = "invalid";
-        this.on_start = true;
-      } else {
+      if (new_value != "") {
         if (max < 0 || new_value == "-") {
           this.max_heatmap_value = "cannot be negative";
+          this.is_apply_set = false;
+        }
+        if (max == this.lower) {
+          this.max_heatmap_value = "max is equal to min";
+          this.is_apply_set = false;
+          this.upper = max;
         } else {
-          if (this.lower > max) {
-            this.max_heatmap_value = "min greater than max";
-            this.min_heatmap_value = "min greater than max";
+          if (max > this.lower) {
+            this.upper = max;
+            this.max_heatmap_value = "";
+            if (
+              this.min_heatmap_value == "" ||
+              this.min_heatmap_value == "min is more than max"
+            ) {
+              this.min_heatmap_value = "";
+              this.is_apply_set = true;
+            }
           } else {
-            if (max > 1000) {
-              this.max_heatmap_value = "larger than 1000";
-            } else {
-              if (this.lower == max) {
-                this.max_heatmap_value = "max is equal to min";
-                this.min_heatmap_value = "min is equal to max";
-              } else {
-                this.upper = max;
-                this.max_heatmap_value = "";
-                this.on_start = false;
-              }
+            this.is_apply_set = false;
+            this.upper = max;
+            if (this.max_heatmap_value != "min is more than max") {
+              this.max_heatmap_value = "min is more than max";
             }
           }
         }
+        if (max > 1000) {
+          this.max_heatmap_value = "larger than 1000";
+          this.is_apply_set = false;
+        }
+      } else {
+        this.max_heatmap_value = "invalid";
+        this.is_apply_set = false;
       }
     },
     on_update_minimum: function (new_value) {
       const min = parseInt(new_value);
-      if (this.upper == 0) {
-        this.max_heatmap_value = "invalid";
-        this.min_heatmap_value = "invalid";
-      } else {
-        if (new_value == "") {
-          this.lower = 0;
-          this.min_heatmap_value = "invalid";
+      if (new_value != "") {
+        if (min < 0 || new_value == "-") {
+          this.min_heatmap_value = "cannot be negative";
+          this.is_apply_set = false;
+        }
+        if (min == this.upper) {
+          this.min_heatmap_value = "min is equal to max";
+          this.is_apply_set = false;
+          this.lower = min;
         } else {
-          if (min < 0 || new_value == "-") {
-            this.min_heatmap_value = "cannot be negative";
+          if (min < this.upper) {
+            this.lower = min;
+            this.min_heatmap_value = "";
+            if (
+              this.max_heatmap_value == "" ||
+              this.max_heatmap_value == "min is more than max"
+            ) {
+              this.max_heatmap_value = "";
+              this.is_apply_set = true;
+            }
           } else {
-            if (min > this.upper) {
-              this.max_heatmap_value = "min greater than max";
-              this.min_heatmap_value = "min greater than max";
-            } else {
-              if (this.upper == min) {
-                this.max_heatmap_value = "max is equal to min";
-                this.min_heatmap_value = "min is equal to max";
-              } else {
-                this.lower = min;
-                this.min_heatmap_value = "";
-                this.max_heatmap_value = "";
-              }
+            this.is_apply_set = false;
+            this.lower = min;
+            if (this.min_heatmap_value != "min is more than max") {
+              this.min_heatmap_value = "min is more than max";
             }
           }
         }
+        if (min > 1000) {
+          this.min_heatmap_value = "larger than 1000";
+          this.is_apply_set = false;
+        }
+      } else {
+        this.min_heatmap_value = "invalid";
+        this.is_apply_set = false;
       }
+    },
+    apply_heatmap_settings: function () {
+      this.heatmap_option_final = this.heatmap_option;
+      this.upper_final = this.upper;
+      this.lower_final = this.lower;
+      this.range = this.all_gradients[this.radio_option_idx];
+    },
+    reset_heatmap_settings: function () {
+      this.heatmap_option_final = "";
+      this.upper_final = 0;
+      this.upper = 0;
+      this.lower_final = 0;
+      this.lower = 0;
+      this.entrykey = "";
+      this.on_update_maximum("");
+      this.on_update_minimum("");
+      this.range = this.all_gradients[0];
     },
   },
 };
@@ -774,6 +835,18 @@ export default {
   z-index: 152;
 }
 
+.div__heatmap-settings-apply-btn-container-disable {
+  background: #b7b7b7;
+}
+
+.div__heatmap-settings-apply-btn-container-enable {
+  background: #b7b7b7;
+}
+
+.div__heatmap-settings-apply-btn-container-enable:hover {
+  background: #19ac8a;
+}
+
 .canvas__heatmap-settings-apply-btn-container {
   -webkit-transform: translateZ(0);
   position: absolute;
@@ -781,7 +854,6 @@ export default {
   height: 55px;
   top: 0px;
   left: 0px;
-  background: #b7b7b7;
 }
 
 .span__heatmap-settings-apply-btn-label {
@@ -803,7 +875,14 @@ export default {
   font-style: normal;
   text-decoration: none;
   font-size: 16px;
+}
+
+.span__heatmap-settings-apply-btn-label-disable {
   color: #6e6f72;
+}
+
+.span__heatmap-settings-apply-btn-label-enable {
+  color: rgb(0, 0, 0);
 }
 
 .div__heatmap-settings-reset-btn-container {
