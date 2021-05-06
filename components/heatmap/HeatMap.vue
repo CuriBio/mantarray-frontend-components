@@ -314,27 +314,28 @@ export default {
         if (max < 0 || new_value == "-") {
           this.max_heatmap_value = "cannot be negative";
           this.is_apply_set = false;
-        }
-        if (max == this.lower) {
-          this.max_heatmap_value = "max is equal to min";
-          this.is_apply_set = false;
-          this.upper = max;
         } else {
-          if (max > this.lower) {
-            this.upper = max;
-            this.max_heatmap_value = "";
-            if (
-              this.min_heatmap_value == "" ||
-              this.min_heatmap_value == "min is more than max"
-            ) {
-              this.min_heatmap_value = "";
-              this.is_apply_set = true;
-            }
-          } else {
+          if (max == this.lower) {
+            this.max_heatmap_value = "max is equal to min";
             this.is_apply_set = false;
             this.upper = max;
-            if (this.max_heatmap_value != "min is more than max") {
-              this.max_heatmap_value = "min is more than max";
+          } else {
+            if (max > this.lower) {
+              this.upper = max;
+              this.max_heatmap_value = "";
+              if (
+                this.min_heatmap_value == "" ||
+                this.min_heatmap_value == "min is more than max"
+              ) {
+                this.min_heatmap_value = "";
+                this.is_apply_set = true;
+              }
+            } else {
+              this.is_apply_set = false;
+              this.upper = max;
+              if (this.max_heatmap_value != "min is more than max") {
+                this.max_heatmap_value = "min is more than max";
+              }
             }
           }
         }
@@ -353,27 +354,28 @@ export default {
         if (min < 0 || new_value == "-") {
           this.min_heatmap_value = "cannot be negative";
           this.is_apply_set = false;
-        }
-        if (min == this.upper) {
-          this.min_heatmap_value = "min is equal to max";
-          this.is_apply_set = false;
-          this.lower = min;
         } else {
-          if (min < this.upper) {
-            this.lower = min;
-            this.min_heatmap_value = "";
-            if (
-              this.max_heatmap_value == "" ||
-              this.max_heatmap_value == "min is more than max"
-            ) {
-              this.max_heatmap_value = "";
-              this.is_apply_set = true;
-            }
-          } else {
+          if (min == this.upper) {
+            this.min_heatmap_value = "min is equal to max";
             this.is_apply_set = false;
             this.lower = min;
-            if (this.min_heatmap_value != "min is more than max") {
-              this.min_heatmap_value = "min is more than max";
+          } else {
+            if (min < this.upper) {
+              this.lower = min;
+              this.min_heatmap_value = "";
+              if (
+                this.max_heatmap_value == "" ||
+                this.max_heatmap_value == "min is more than max"
+              ) {
+                this.max_heatmap_value = "";
+                this.is_apply_set = true;
+              }
+            } else {
+              this.is_apply_set = false;
+              this.lower = min;
+              if (this.min_heatmap_value != "min is more than max") {
+                this.min_heatmap_value = "min is more than max";
+              }
             }
           }
         }
