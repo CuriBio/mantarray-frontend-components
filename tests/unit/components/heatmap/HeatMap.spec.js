@@ -215,6 +215,19 @@ describe("HeatMap.vue", () => {
     const upper_value = wrapper.find("#input-widget-feedback-max");
     expect(upper_value.text()).toStrictEqual("larger than 1000");
   });
+  test("Given that the minimum value is more than 1000, When the value of the minimum is 1001, Then HeatmapBar maximum upper range is set to 0", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const minimum = "1001";
+    wrapper.vm.on_update_minimum(minimum);
+    await wrapper.vm.$nextTick(); // wait for update
+    const upper_value = wrapper.find("#input-widget-feedback-min");
+    expect(upper_value.text()).toStrictEqual("larger than 1000");
+  });
   test("Given that the maximum is less than minimum, When the value of maximum is 100 and minimum is 200, Then HeatmapBar maximum is set to 100 and minimum range is set to 0", async () => {
     const propsData = {};
     wrapper = mount(ComponentToTest, {
@@ -340,5 +353,44 @@ describe("HeatMap.vue", () => {
     wrapper.vm.entrykey = "";
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.vm.is_apply_set).toStrictEqual(false);
+  });
+  test("Given that Auto Scale is set, When the user select the checkbox of Auto Scale, Then verify that the display is set to 'Twitch Force'", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    wrapper.vm.auto_scale("Auto-Scale");
+    await wrapper.vm.$nextTick(); // wait for update
+    expect(wrapper.vm.is_apply_set).toStrictEqual(true);
+    expect(wrapper.vm.entrykey).toStrictEqual("Twitch Force");
+  });
+  test("Given that Auto Scale is unset, When the user un-select the checkbox of Auto Scale, Then verify that the display is set to ''", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    wrapper.vm.auto_scale("");
+    await wrapper.vm.$nextTick(); // wait for update
+    expect(wrapper.vm.is_apply_set).toStrictEqual(false);
+    expect(wrapper.vm.entrykey).toStrictEqual("");
+  });
+  test("Given that Radio Button is set, When the user selects either 'Warm' 'Cold'... etc, Then verify that the gradient value is set", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const radio_option = {
+      name: "Warm",
+      index: 0,
+    };
+    wrapper.vm.radio_option_selected(radio_option);
+    await wrapper.vm.$nextTick(); // wait for update
+    expect(wrapper.vm.radio_option_idx).toStrictEqual(0);
   });
 });
