@@ -8,12 +8,39 @@
     </div>
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
-      <PlateHeatMap :platecolor="passing_plate_colors"></PlateHeatMap>
+      <PlateHeatMap
+        :platecolor="passing_plate_colors"
+        @platewell-selected="compute_mean"
+      ></PlateHeatMap>
     </div>
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
-    <div class="div__heatmap-layout-heatmap-well-label">Well A01 (μN):</div>
+    <div
+      v-show="!is_mean_value_active"
+      class="div__heatmap-layout-heatmap-well-label"
+    >
+      Well A01 (μN):
+    </div>
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
-    <div class="div__heatmap-layout-heatmap-well-value">0</div>
+    <div
+      v-show="!is_mean_value_active"
+      class="div__heatmap-layout-heatmap-well-value"
+    >
+      0
+    </div>
+    <!-- original mockflow ID: cmpD0f9518f2e3b32a8fd2907a6c9167ed79 -->
+    <div
+      v-show="is_mean_value_active"
+      class="div__heatmap-layout-heatmap-mean-well-label"
+    >
+      Mean of {{ well_selected_count }} Wells (μN):
+    </div>
+    <!-- original mockflow ID: cmpDbf7507b833445c460899c3735fd95527 -->
+    <div
+      v-show="is_mean_value_active"
+      class="div__heatmap-layout-heatmap-mean-value-well-label"
+    >
+      {{ mean_value }}
+    </div>
     <!-- original mockflow ID: cmpDb59694a85eb967571cf98a41b5fa7481 -->
     <div class="div__heatmap-layout-heatmap-colorbar-container">
       <HeatMapColorBar
@@ -214,9 +241,15 @@ export default {
       heatmap_option_final: "",
       max_heatmap_value: "invalid",
       min_heatmap_value: "invalid",
+      is_mean_value_active: false,
+      mean_value: 0,
+      well_selected_count: 0,
     };
   },
   computed: {
+    ...mapState("heatmap", {
+      well_values: "heatmap_values",
+    }),
     ...mapState("heatmap", {
       button_names: "heatmap_options_array",
     }),
@@ -389,6 +422,22 @@ export default {
         this.is_apply_set = false;
       }
     },
+    compute_mean: function (all_select) {
+      let total = 0;
+      this.well_selected_count = 0;
+      this.is_mean_value_active = true;
+
+      for (let i = 0; i < all_select.length; i++) {
+        if (all_select[i] == true) {
+          this.well_selected_count = this.well_selected_count + 1;
+          total = total + this.well_values[i];
+        }
+      }
+      if (this.well_selected_count == 0) {
+        this.is_mean_value_active = false;
+      }
+      this.mean_value = (total / this.well_selected_count).toFixed(3);
+    },
     apply_heatmap_settings: function () {
       this.heatmap_option_final = this.heatmap_option;
       this.upper_final = this.upper;
@@ -517,6 +566,58 @@ export default {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
+  pointer-events: all;
+}
+
+.div__heatmap-layout-heatmap-mean-well-label {
+  line-height: 1;
+  transform: rotate(0deg);
+  padding: 5px;
+  margin: 0px;
+  overflow-wrap: break-word;
+  color: rgb(183, 183, 183);
+  font-family: Muli;
+  position: absolute;
+  top: 631px;
+  left: 287.455px;
+  width: 288px;
+  height: 35px;
+  overflow: hidden;
+  visibility: visible;
+  user-select: none;
+  text-align: left;
+  font-size: 23px;
+  letter-spacing: normal;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  z-index: 76;
+  pointer-events: all;
+}
+
+.div__heatmap-layout-heatmap-mean-value-well-label {
+  line-height: 1;
+  transform: rotate(0deg);
+  padding: 5px;
+  margin: 0px;
+  overflow-wrap: break-word;
+  color: rgb(255, 255, 255);
+  font-family: Muli;
+  position: absolute;
+  top: 631px;
+  left: 537.455px;
+  width: 127px;
+  height: 35px;
+  overflow: hidden;
+  visibility: visible;
+  user-select: none;
+  text-align: left;
+  font-size: 23px;
+  letter-spacing: normal;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  z-index: 78;
   pointer-events: all;
 }
 
