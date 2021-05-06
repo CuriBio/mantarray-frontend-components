@@ -574,7 +574,6 @@ export default {
   transform: rotate(0deg);
   padding: 5px;
   margin: 0px;
-  overflow-wrap: break-word;
   color: rgb(183, 183, 183);
   font-family: Muli;
   position: absolute;
