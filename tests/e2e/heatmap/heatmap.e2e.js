@@ -6,6 +6,10 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 const input_max = Selector("#input-widget-field-max");
 const input_min = Selector("#input-widget-field-min");
+const heatmap_apply = Selector(".span__heatmap-settings-apply-btn-label");
+const heatmap_reset = Selector(".span__heatmap-settings-reset-btn-label");
+
+const radio_group = Selector(".custom-control-input");
 
 const input_display = Selector("#input-dropdown-widget-display");
 
@@ -50,5 +54,40 @@ test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force' 
     "basic-heatmap-layout-display-value-selected"
   );
   await t.typeText(input_display, "Twitch Force");
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
+test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force' as dropdown and Apply is clicked", async (t) => {
+  const screenshot_path_base = path.join("heatmap", "heatmap-layout-basic");
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "basic-heatmap-layout-display-value-apply-clicked"
+  );
+  await t.typeText(input_display, "Twitch Force");
+  await t.click(heatmap_apply);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
+test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force' as dropdown and Apply is clicked then RESET", async (t) => {
+  const screenshot_path_base = path.join("heatmap", "heatmap-layout-basic");
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "basic-heatmap-layout-display-value-reset-clicked"
+  );
+  await t.typeText(input_display, "Twitch Force");
+  await t.click(heatmap_apply);
+  await t.click(heatmap_reset);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});
+
+test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force'  as dropdown with Radio option 'Cool' and Apply is clicked", async (t) => {
+  const screenshot_path_base = path.join("heatmap", "heatmap-layout-basic");
+  const screenshot_path = path.join(
+    screenshot_path_base,
+    "basic-heatmap-layout-display-value-with-cool-apply-clicked"
+  );
+  await t.typeText(input_display, "Twitch Force");
+  await t.click(radio_group.nth(2));
+  await t.click(heatmap_apply);
   await testcafe_page_visual_regression(t, screenshot_path);
 });

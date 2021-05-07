@@ -279,13 +279,13 @@ export default {
         this.error_text = "Choose an option";
         this.on_empty_flag = true;
         this.is_apply_set = false;
-        this.$store.commit("heatmap/heatmap_display_idx", null);
+        this.$store.commit("heatmap/set_heatmap_display_idx", null);
       } else {
         this.on_empty_flag = false;
         this.lower = this.display_min_max[display_idx].min;
         this.upper = this.display_min_max[display_idx].max;
         this.is_apply_set = true;
-        this.$store.commit("heatmap/heatmap_display_idx", display_idx);
+        this.$store.commit("heatmap/set_heatmap_display_idx", display_idx);
       }
     },
   },

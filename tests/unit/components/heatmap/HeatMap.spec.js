@@ -75,6 +75,33 @@ describe("HeatMap.vue", () => {
         { color: "#ffff8c", offset: "100%" },
       ],
     ];
+    const heatmap_values = [
+      10,
+      22,
+      45,
+      67,
+      89,
+      90,
+      33,
+      55,
+      77,
+      67,
+      44,
+      56,
+      78,
+      99,
+      34,
+      19,
+      28,
+      65,
+      24,
+      88,
+      14,
+      27,
+      39,
+      50,
+    ];
+    store.commit("heatmap/set_heatmap_values", heatmap_values);
     store.commit("heatmap/set_heatmap_options_array", radio_button_list);
     store.commit("heatmap/set_heatmap_display_array", display_options);
     store.commit("heatmap/set_heatmap_display_min_max", display_min_max);
@@ -392,5 +419,92 @@ describe("HeatMap.vue", () => {
     wrapper.vm.radio_option_selected(radio_option);
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.vm.radio_option_idx).toStrictEqual(0);
+  });
+  // ******************************************************************
+  // ***  NOTE: Currently the vue-test-utils and the JEST framework doesn't execute the
+  // ***        the native javascript apis embedded in the functions as it works on the Virtual DOM
+  // **         So the coverage of this testcase is via the JEST E2E testcases and codeverage for the api
+  // ***        apply_heatmap_settings and  reset_heatmap_settings is not feasible.
+  // ***        E2E testcase which performs are mentioned below:-
+  // ***  (a) testing the HeatMap Layout and the Display Value is set to 'Twitch Force' as dropdown and Apply is clicked
+  // ***  (b) testing the HeatMap Layout and the Display Value is set to 'Twitch Force' as dropdown and Apply is clicked then RESET
+  // ***  (c) testing the HeatMap Layout and the Display Value is set to 'Twitch Force'  as dropdown with Radio option 'Cool' and Apply is clicked
+  // ******************************************************************
+  // test("Given that the User select an Display set, When the user selects 'Apply', Then verify that appropriate Display Option is set and Heatmap Maximum and Minium is set", async() => {
+  //   const propsData = {};
+  //   wrapper = mount(ComponentToTest, {
+  //     propsData,
+  //     store,
+  //     localVue,
+  //   });
+  //   const radio_option = {
+  //     name: "Warm",
+  //     index: 0,
+  //   };
+
+  //   wrapper.vm.entrykey = "Twitch Force";
+  //   await wrapper.vm.$nextTick(); // wait for update
+  //   expect(wrapper.vm.is_apply_set).toStrictEqual(true);
+  //   wrapper.vm.radio_option_selected(radio_option);
+  //   await wrapper.vm.$nextTick(); // wait for update
+  //   wrapper.vm.apply_heatmap_settings();
+  //   await wrapper.vm.$nextTick(); // wait for update
+  //   const heatmap_title = wrapper.find(".div__heatmap-layout-twitch-force-label");
+  //   expect(heatmap_title.text()).toStrictEqual("Twitch Force (μN)");
+
+  // });
+  // test("Given that the User select an Display set, When the user selects 'RESET', Then verify the Heatmap Settings is reset", async() => {
+  //  const propsData = {};
+  //  wrapper = mount(ComponentToTest, {
+  //    propsData,
+  //    store,
+  //    localVue,
+  //  });
+  //  wrapper.vm.reset_heatmap_settings();
+  //  await wrapper.vm.$nextTick(); // wait for update
+  //   const heatmap_title = wrapper.find(".div__heatmap-layout-twitch-force-label");
+  //   expect(heatmap_title.text()).toStrictEqual("");
+  // });
+  test("Given that few of the Wells of HeatMap is selected, When the user selects all the even wells, Then verify that the Mean value is displayed", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const wells = new Array(24).fill(false);
+    for (let i = 0; i < 24; i++) {
+      if (i % 2 == 0) {
+        wells[i] = true;
+      }
+    }
+    wrapper.vm.compute_mean(wells);
+    await wrapper.vm.$nextTick(); // wait for update
+    const mean_display = wrapper.find(
+      ".div__heatmap-layout-heatmap-mean-well-label"
+    );
+    const mean_value = wrapper.find(
+      ".div__heatmap-layout-heatmap-mean-value-well-label"
+    );
+    expect(mean_display.text()).toStrictEqual("Mean of 12 Wells (μN):");
+    expect(mean_value.text()).toStrictEqual("42.917");
+  });
+  test("Given that few of the Wells of HeatMap is un-selected, When the user un-selects all wells, Then verify that Mean value is not displayed", async () => {
+    const propsData = {};
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+    const wells = new Array(24).fill(false);
+
+    wrapper.vm.compute_mean(wells);
+    await wrapper.vm.$nextTick(); // wait for update
+    const mean_display = wrapper.find(
+      ".div__heatmap-layout-heatmap-well-label"
+    );
+    const mean_value = wrapper.find(".div__heatmap-layout-heatmap-well-value");
+    expect(mean_display.text()).toStrictEqual("Well A01 (μN):");
+    expect(mean_value.text()).toStrictEqual("0");
   });
 });
