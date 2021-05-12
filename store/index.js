@@ -8,6 +8,7 @@ import waveform_module from "./modules/waveform";
 import twentyfourcontrols_module from "./modules/twentyfourcontrols";
 import flask_module from "./modules/flask";
 import settings_module from "./modules/settings";
+import heatmap_module from "./modules/heatmap";
 
 const createStore = () => {
   return new Vuex.Store({
@@ -18,6 +19,7 @@ const createStore = () => {
       flask: flask_module,
       twentyfourcontrols: twentyfourcontrols_module,
       settings: settings_module,
+      heatmap: heatmap_module,
     },
   });
 };
