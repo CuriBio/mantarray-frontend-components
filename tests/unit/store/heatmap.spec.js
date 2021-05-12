@@ -19,6 +19,38 @@ describe("store/heatmap", () => {
     heatmap_on_idx: "heatmap/set_heatmap_on_idx",
   };
 
+  const heatmap_set_display_api = {
+    heatmap_display: "heatmap/set_heatmap_display_array",
+  };
+
+  const heatmap_set_display_idx = {
+    heatmap_display_idx: "heatmap/set_heatmap_display_idx",
+  };
+
+  const heatmap_set_heatmap_display_min_max = {
+    heatmap_display_min_max: "heatmap/set_heatmap_display_min_max",
+  };
+
+  const heatmap_set_auto_scale = {
+    heatmap_auto_scale: "heatmap/set_heatmap_autoscale",
+  };
+
+  const heatmap_set_heatmap_display_user_min_max = {
+    heatmap_display_user_min_max: "heatmap/set_heatmap_display_user_min_max",
+  };
+
+  const heatmap_set_heatmap_options_array = {
+    heatmap_options_array: "heatmap/set_heatmap_options_array",
+  };
+
+  const heatmap_set_heatmap_option_idx = {
+    heatmap_options_idx: "heatmap/set_heatmap_options_idx",
+  };
+
+  const heatmap_set_heatmap_options_gradient = {
+    heatmap_options_gradient: "heatmap/set_heatmap_options_gradient",
+  };
+
   beforeAll(async () => {
     // note the store will mutate across tests, so make sure to re-create it in beforeEach
     const storePath = `${process.env.buildDir}/store.js`;
@@ -78,5 +110,171 @@ describe("store/heatmap", () => {
     expect(
       store.state.heatmap.heatmap_values[store.state.heatmap.heatmap_idx]
     ).toStrictEqual(new_value);
+  });
+  test("When heatmap store is initialized, Then update display array with values and set the value heatmap_display_idx", () => {
+    const display_names = [
+      "Twitch Force",
+      "Twitch Period",
+      "Twitch Frequency",
+      "Twitch Width 80",
+      "Contraction Velocity",
+      "Relaxation Velocity",
+    ];
+    const display_idx = 0;
+    store.commit(heatmap_set_display_api.heatmap_display, display_names);
+    store.commit(heatmap_set_display_idx.heatmap_display_idx, display_idx);
+
+    expect(store.getters["heatmap/heatmap_display_array"]).toStrictEqual(
+      display_names
+    );
+    expect(store.getters["heatmap/heatmap_display_idx"]).toStrictEqual(
+      display_idx
+    );
+    expect(store.getters["heatmap/heatmap_display_option"]).toStrictEqual(
+      "Twitch Force"
+    );
+  });
+  test("When heatmap store is initialized, Then update display array(min/max) and  display", () => {
+    const display_names = [
+      "Twitch Force",
+      "Twitch Period",
+      "Twitch Frequency",
+      "Twitch Width 80",
+      "Contraction Velocity",
+      "Relaxation Velocity",
+    ];
+    const display_idx = 2;
+    const display_min_max = [
+      {
+        min: 0,
+        max: 50,
+      },
+      {
+        min: 0,
+        max: 100,
+      },
+      {
+        min: 0,
+        max: 200,
+      },
+      {
+        min: 0,
+        max: 400,
+      },
+      {
+        min: 0,
+        max: 800,
+      },
+      {
+        min: 0,
+        max: 1600,
+      },
+    ];
+    store.commit(heatmap_set_display_api.heatmap_display, display_names);
+    store.commit(heatmap_set_display_idx.heatmap_display_idx, display_idx);
+    store.commit(
+      heatmap_set_heatmap_display_min_max.heatmap_display_min_max,
+      display_min_max
+    );
+
+    expect(store.getters["heatmap/heatmap_display_min_max"]).toStrictEqual(
+      display_min_max
+    );
+    const display_in_focus =
+      store.getters["heatmap/heatmap_display_min_max_selected"];
+    expect(display_in_focus.min).toStrictEqual(0);
+    expect(display_in_focus.max).toStrictEqual(200);
+  });
+  test("When heatmap store is initialize, Then user enters min and max values validate if set", () => {
+    const user_min_max = {
+      min: 0,
+      max: 999,
+    };
+    store.commit(
+      heatmap_set_heatmap_display_user_min_max.heatmap_display_user_min_max,
+      user_min_max
+    );
+    expect(store.getters["heatmap/heatmap_display_user_min_max"]).toStrictEqual(
+      user_min_max
+    );
+    expect(store.state.heatmap.heatmap_display_user_min_max.min).toStrictEqual(
+      0
+    );
+    expect(store.state.heatmap.heatmap_display_user_min_max.max).toStrictEqual(
+      999
+    );
+  });
+  test("When heatmap store is initialized, Then autoscale is set to true and assert", () => {
+    const autoscale = true;
+    store.commit(heatmap_set_auto_scale.heatmap_auto_scale, autoscale);
+    expect(store.getters["heatmap/heatmap_autoscale"]).toStrictEqual(true);
+  });
+  test("When heatmap store is initialized, Then the radio button options array is initialized", () => {
+    const radio_button_list = ["Warm", "Cool", "Blue/Red", "Purple/Green"];
+    const radio_button_idx = 0;
+    store.commit(
+      heatmap_set_heatmap_options_array.heatmap_options_array,
+      radio_button_list
+    );
+    store.commit(
+      heatmap_set_heatmap_option_idx.heatmap_options_idx,
+      radio_button_idx
+    );
+    expect(store.getters["heatmap/heatmap_options_array"]).toStrictEqual(
+      radio_button_list
+    );
+    expect(store.getters["heatmap/heatmap_options_idx"]).toStrictEqual(
+      radio_button_idx
+    );
+    expect(store.getters["heatmap/heatmap_options_on_idx"]).toStrictEqual(
+      "Warm"
+    );
+  });
+  test("When heatmap store is initialized, Then the radio button options gradient is initialized", () => {
+    const radio_button_list = ["Warm", "Cool", "Blue/Red", "Purple/Green"];
+    const radio_button_idx = 0;
+    const radio_button_gradient = {
+      Warm: [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#00a6ca", offset: "100%" },
+      ],
+      Cool: [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#00ccbc", offset: "100%" },
+      ],
+      "Blue/Red": [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#90eb9d", offset: "100%" },
+      ],
+      "Purple/Green": [
+        { color: "#2c7bb6", offset: "0%" },
+        { color: "#ffff8c", offset: "100%" },
+      ],
+    };
+    store.commit(
+      heatmap_set_heatmap_options_array.heatmap_options_array,
+      radio_button_list
+    );
+    store.commit(
+      heatmap_set_heatmap_option_idx.heatmap_options_idx,
+      radio_button_idx
+    );
+    store.commit(
+      heatmap_set_heatmap_options_gradient.heatmap_options_gradient,
+      radio_button_gradient
+    );
+
+    expect(store.getters["heatmap/heatmap_options_on_idx"]).toStrictEqual(
+      "Warm"
+    );
+    expect(store.getters["heatmap/heatmap_options_gradient"]).toStrictEqual(
+      radio_button_gradient
+    );
+    const in_focus_gradient =
+      store.getters["heatmap/heatmap_options_on_gradient"];
+    expect(in_focus_gradient[0].color).toStrictEqual("#2c7bb6");
+    expect(in_focus_gradient[0].offset).toStrictEqual("0%");
+    expect(in_focus_gradient[1].color).toStrictEqual("#00a6ca");
+    expect(in_focus_gradient[1].offset).toStrictEqual("100%");
   });
 });

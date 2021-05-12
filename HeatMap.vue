@@ -4,49 +4,22 @@
     <div class="div__heatmap-layout-background"></div>
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
     <div class="div__heatmap-layout-twitch-force-label">
-      {{ heatmap_option_final }} (μN)
+      {{ heatmap_option }} (μN)
     </div>
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
-      <PlateHeatMap
-        :platecolor="passing_plate_colors"
-        @platewell-selected="compute_mean"
-      ></PlateHeatMap>
+      <PlateHeatMap :platecolor="passing_plate_colors"></PlateHeatMap>
     </div>
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
-    <div
-      v-show="!is_mean_value_active"
-      class="div__heatmap-layout-heatmap-well-label"
-    >
-      Well A01 (μN):
-    </div>
+    <div class="div__heatmap-layout-heatmap-well-label">Well A01 (μN):</div>
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
-    <div
-      v-show="!is_mean_value_active"
-      class="div__heatmap-layout-heatmap-well-value"
-    >
-      0
-    </div>
-    <!-- original mockflow ID: cmpD0f9518f2e3b32a8fd2907a6c9167ed79 -->
-    <div
-      v-show="is_mean_value_active"
-      class="div__heatmap-layout-heatmap-mean-well-label"
-    >
-      Mean of {{ well_selected_count }} Wells (μN):
-    </div>
-    <!-- original mockflow ID: cmpDbf7507b833445c460899c3735fd95527 -->
-    <div
-      v-show="is_mean_value_active"
-      class="div__heatmap-layout-heatmap-mean-value-well-label"
-    >
-      {{ mean_value }}
-    </div>
+    <div class="div__heatmap-layout-heatmap-well-value">0</div>
     <!-- original mockflow ID: cmpDb59694a85eb967571cf98a41b5fa7481 -->
     <div class="div__heatmap-layout-heatmap-colorbar-container">
       <HeatMapColorBar
         :gradient_uuid="provided_uuid"
-        :lower_range="lower_final"
-        :upper_range="upper_final"
+        :lower_range="lower"
+        :upper_range="upper"
         :heatmap_height="height"
         :gradient_range="range"
         :units="unit"
@@ -71,10 +44,7 @@
     >
     <!-- original mockflow ID:  cmpD5cceb38a3af00a6bd7589d883fa87688 -->
     <div class="div__heatmap-layout-checkbox-container">
-      <CheckBoxWidget
-        :checkbox_options="option"
-        @checkbox-selected="auto_scale"
-      ></CheckBoxWidget>
+      <CheckBoxWidget :checkbox_options="option"></CheckBoxWidget>
     </div>
     <!-- original mockflow ID:  cmpD8a25d29c92a6f84cc071bcf466ca36ce -->
     <span class="span__heatmap-layout-checkbox-label"
@@ -109,6 +79,7 @@
         :invalid_text="min_heatmap_value"
         :input_width="105"
         :dom_id_suffix="'min'"
+        :disabled="on_start"
         @update:value="on_update_minimum($event)"
       ></InputWidget>
     </div>
@@ -130,7 +101,6 @@
         :value.sync="entrykey"
         :input_width="entry_width"
         :disabled="disallow_entry"
-        :options_id="'display'"
         :options_text="nicknames_list"
         :message_if_blank="on_empty_flag"
       ></InputDropDown>
@@ -147,56 +117,15 @@
       Color&nbsp;<wbr />Scheme</span
     >
     <div class="div__heatmap-radio-buttons-container">
-      <RadioButtonWidget
-        :radio_buttons="button_names"
-        :pre_selected="radio_option_idx"
-        @radio-btn-selected="radio_option_selected"
-      ></RadioButtonWidget>
+      <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
     </div>
     <!-- orginal mockflow ID: cmpD5bc3214687200b065320c06b0a15e013 -->
     <span class="span__heatmap-settings-qc-options-label"
       >QC&nbsp;<wbr />Options</span
     >
-    <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7 -->
-    <div
-      class="div__heatmap-settings-apply-btn-container"
-      :class="[
-        !is_apply_set
-          ? 'div__heatmap-settings-apply-btn-container-disable'
-          : 'div__heatmap-settings-apply-btn-container-enable',
-      ]"
-    >
-      <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_cvs -->
-      <canvas class="canvas__heatmap-settings-apply-btn-container"> </canvas>
-      <!-- original mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_txt -->
-      <span
-        class="span__heatmap-settings-apply-btn-label"
-        :class="[
-          !is_apply_set
-            ? 'span__heatmap-settings-apply-btn-label-disable'
-            : 'span__heatmap-settings-apply-btn-label-enable',
-        ]"
-        @click="apply_heatmap_settings"
-      >
-        Apply
-      </span>
-    </div>
-    <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300 -->
-    <div class="div__heatmap-settings-reset-btn-container">
-      <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300_cvs -->
-      <canvas class="canvas__heatmap-settings-reset-btn-container"> </canvas>
-      <!-- original mockflow ID : cmpD2f909255bf15b8f4daa88ed03c6a8300_txt -->
-      <span
-        class="span__heatmap-settings-reset-btn-label"
-        @click="reset_heatmap_settings"
-      >
-        Reset
-      </span>
-    </div>
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
 import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
@@ -216,76 +145,112 @@ export default {
   },
   data() {
     return {
-      option: [{ text: "", value: "Auto-Scale" }],
+      button_names: ["Warm", "Cool", "Blue/Red", "Purple/Green"],
+      option: [{ text: "", value: "Ascorbic Acid" }],
       label: "",
       entrykey: "",
       keyplaceholder: "Twitch Force",
       error_text: "An ID is required",
       entry_width: 201,
       disallow_entry: false,
+      nicknames_list: [
+        "Twitch Force",
+        "Twitch Period",
+        "Twitch Frequency",
+        "Twitch Width 80",
+        "Contraction Velocity",
+        "Relaxation Velocity",
+      ],
       on_empty_flag: true,
       provided_uuid: "0",
       height: 481,
       lower: 0,
-      lower_final: 0,
       upper: 0,
-      upper_final: 0,
-      is_apply_set: false,
-      radio_option_idx: 0,
       unit: "μN",
       range: [
         { color: "#bd3532", offset: "0%" },
         { color: "#f9d78c", offset: "100%" },
       ],
       heatmap_option: "",
-      heatmap_option_final: "",
       max_heatmap_value: "invalid",
       min_heatmap_value: "invalid",
-      is_mean_value_active: false,
-      mean_value: 0,
-      well_selected_count: 0,
+      on_start: true,
     };
-  },
-  computed: {
-    ...mapState("heatmap", {
-      well_values: "heatmap_values",
-    }),
-    ...mapState("heatmap", {
-      button_names: "heatmap_options_array",
-    }),
-    ...mapState("heatmap", {
-      nicknames_list: "heatmap_display_array",
-    }),
-    ...mapState("heatmap", {
-      display_min_max: "heatmap_display_min_max",
-    }),
-    ...mapState("heatmap", {
-      all_gradients: "heatmap_options_gradient",
-    }),
   },
   watch: {
     entrykey: function () {
       if (this.entrykey != "") {
-        this.error_text = "Choose an option";
+        this.error_text = "";
+        this.on_empty_flag = false;
       } else {
         this.on_empty_flag = true;
         this.error_text = "An ID is required";
       }
       this.heatmap_option = this.entrykey;
-      const display_idx = this.nicknames_list.indexOf(this.entrykey);
-      if (display_idx == -1) {
-        this.lower = null;
-        this.upper = null;
-        this.error_text = "Choose an option";
-        this.on_empty_flag = true;
-        this.is_apply_set = false;
-        this.$store.commit("heatmap/set_heatmap_display_idx", null);
-      } else {
-        this.on_empty_flag = false;
-        this.lower = this.display_min_max[display_idx].min;
-        this.upper = this.display_min_max[display_idx].max;
-        this.is_apply_set = true;
-        this.$store.commit("heatmap/set_heatmap_display_idx", display_idx);
+      switch (this.heatmap_option) {
+        case "Twitch Force": {
+          this.upper = 50;
+          this.lower = 0;
+          this.range = [
+            { color: "#2c7bb6", offset: "0%" },
+            { color: "#00a6ca", offset: "100%" },
+          ];
+          break;
+        }
+        case "Twitch Period": {
+          this.upper = 100;
+          this.lower = 0;
+          this.range = [
+            { color: "#2c7bb6", offset: "0%" },
+            { color: "#00ccbc", offset: "100%" },
+          ];
+          break;
+        }
+        case "Twitch Frequency": {
+          this.upper = 150;
+          this.lower = 0;
+          this.range = [
+            { color: "#2c7bb6", offset: "0%" },
+            { color: "#90eb9d", offset: "100%" },
+          ];
+          break;
+        }
+        case "Twitch Width 80": {
+          this.upper = 200;
+          this.lower = 0;
+          this.range = [
+            { color: "#2c7bb6", offset: "0%" },
+            { color: "#ffff8c", offset: "100%" },
+          ];
+          break;
+        }
+        case "Contraction Velocity": {
+          this.upper = 250;
+          this.lower = 0;
+          this.range = [
+            { color: "#2c7bb6", offset: "0%" },
+            { color: "#F0A061", offset: "100%" },
+          ];
+          break;
+        }
+        case "Relaxation Velocity": {
+          this.upper = 300;
+          this.lower = 0;
+          this.range = [
+            { color: "#2c7bb6", offset: "0%" },
+            { color: "#DF6147", offset: "100%" },
+          ];
+          break;
+        }
+        default: {
+          this.upper = 0;
+          this.lower = 0;
+          this.range = [
+            { color: "#bd3532", offset: "0%" },
+            { color: "#f9d78c", offset: "100%" },
+          ];
+          break;
+        }
       }
     },
   },
@@ -319,141 +284,65 @@ export default {
     this.passing_plate_colors = plate_colors;
   },
   methods: {
-    auto_scale: function (new_value) {
-      if (new_value == "Auto-Scale") {
-        this.max_heatmap_value = "";
-        this.min_heatmap_value = "";
-        this.heatmap_option = this.entrykey = this.nicknames_list[0];
-        this.is_apply_set = true;
-        this.$store.commit("heatmap/heatmap_autoscale", true);
-      } else {
-        this.max_heatmap_value = "invalid";
-        this.min_heatmap_value = "invalid";
-        this.heatmap_option = this.entrykey = "";
-        this.is_apply_set = false;
-        this.$store.commit("heatmap/heatmap_autoscale", false);
-      }
-    },
-    radio_option_selected: function (option_value) {
-      const option_name = option_value.name;
-      const option_idx = option_value.index;
-      if (this.button_names.indexOf(option_name) != -1) {
-        this.radio_option_idx = option_idx;
-        this.$store.commit("heatmap/set_heatmap_options_idx", option_idx);
-      }
-    },
     on_update_maximum: function (new_value) {
       const max = parseInt(new_value);
-      if (new_value != "") {
+      if (new_value == "") {
+        this.upper = 0;
+        this.max_heatmap_value = "invalid";
+        this.on_start = true;
+      } else {
         if (max < 0 || new_value == "-") {
           this.max_heatmap_value = "cannot be negative";
-          this.is_apply_set = false;
         } else {
-          if (max == this.lower) {
-            this.max_heatmap_value = "max is equal to min";
-            this.is_apply_set = false;
-            this.upper = max;
+          if (this.lower > max) {
+            this.max_heatmap_value = "min greater than max";
+            this.min_heatmap_value = "min greater than max";
           } else {
-            if (max > this.lower) {
-              this.upper = max;
-              this.max_heatmap_value = "";
-              if (
-                this.min_heatmap_value == "" ||
-                this.min_heatmap_value == "min is more than max"
-              ) {
-                this.min_heatmap_value = "";
-                this.is_apply_set = true;
-              }
+            if (max > 1000) {
+              this.max_heatmap_value = "larger than 1000";
             } else {
-              this.is_apply_set = false;
-              this.upper = max;
-              if (this.max_heatmap_value != "min is more than max") {
-                this.max_heatmap_value = "min is more than max";
+              if (this.lower == max) {
+                this.max_heatmap_value = "max is equal to min";
+                this.min_heatmap_value = "min is equal to max";
+              } else {
+                this.upper = max;
+                this.max_heatmap_value = "";
+                this.on_start = false;
               }
             }
           }
         }
-        if (max > 1000) {
-          this.max_heatmap_value = "larger than 1000";
-          this.is_apply_set = false;
-        }
-      } else {
-        this.max_heatmap_value = "invalid";
-        this.is_apply_set = false;
       }
     },
     on_update_minimum: function (new_value) {
       const min = parseInt(new_value);
-      if (new_value != "") {
-        if (min < 0 || new_value == "-") {
-          this.min_heatmap_value = "cannot be negative";
-          this.is_apply_set = false;
+      if (this.upper == 0) {
+        this.max_heatmap_value = "invalid";
+        this.min_heatmap_value = "invalid";
+      } else {
+        if (new_value == "") {
+          this.lower = 0;
+          this.min_heatmap_value = "invalid";
         } else {
-          if (min == this.upper) {
-            this.min_heatmap_value = "min is equal to max";
-            this.is_apply_set = false;
-            this.lower = min;
+          if (min < 0 || new_value == "-") {
+            this.min_heatmap_value = "cannot be negative";
           } else {
-            if (min < this.upper) {
-              this.lower = min;
-              this.min_heatmap_value = "";
-              if (
-                this.max_heatmap_value == "" ||
-                this.max_heatmap_value == "min is more than max"
-              ) {
-                this.max_heatmap_value = "";
-                this.is_apply_set = true;
-              }
+            if (min > this.upper) {
+              this.max_heatmap_value = "min greater than max";
+              this.min_heatmap_value = "min greater than max";
             } else {
-              this.is_apply_set = false;
-              this.lower = min;
-              if (this.min_heatmap_value != "min is more than max") {
-                this.min_heatmap_value = "min is more than max";
+              if (this.upper == min) {
+                this.max_heatmap_value = "max is equal to min";
+                this.min_heatmap_value = "min is equal to max";
+              } else {
+                this.lower = min;
+                this.min_heatmap_value = "";
+                this.max_heatmap_value = "";
               }
             }
           }
         }
-        if (min > 1000) {
-          this.min_heatmap_value = "larger than 1000";
-          this.is_apply_set = false;
-        }
-      } else {
-        this.min_heatmap_value = "invalid";
-        this.is_apply_set = false;
       }
-    },
-    compute_mean: function (all_select) {
-      let total = 0;
-      this.well_selected_count = 0;
-      this.is_mean_value_active = true;
-
-      for (let i = 0; i < all_select.length; i++) {
-        if (all_select[i] == true) {
-          this.well_selected_count = this.well_selected_count + 1;
-          total = total + this.well_values[i];
-        }
-      }
-      if (this.well_selected_count == 0) {
-        this.is_mean_value_active = false;
-      }
-      this.mean_value = (total / this.well_selected_count).toFixed(3);
-    },
-    apply_heatmap_settings: function () {
-      this.heatmap_option_final = this.heatmap_option;
-      this.upper_final = this.upper;
-      this.lower_final = this.lower;
-      this.range = this.all_gradients[this.radio_option_idx];
-    },
-    reset_heatmap_settings: function () {
-      this.heatmap_option_final = "";
-      this.upper_final = 0;
-      this.upper = 0;
-      this.lower_final = 0;
-      this.lower = 0;
-      this.entrykey = "";
-      this.on_update_maximum("");
-      this.on_update_minimum("");
-      this.range = this.all_gradients[0];
     },
   },
 };
@@ -566,57 +455,6 @@ export default {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
-  pointer-events: all;
-}
-
-.div__heatmap-layout-heatmap-mean-well-label {
-  line-height: 1;
-  transform: rotate(0deg);
-  padding: 5px;
-  margin: 0px;
-  color: rgb(183, 183, 183);
-  font-family: Muli;
-  position: absolute;
-  top: 631px;
-  left: 287.455px;
-  width: 288px;
-  height: 35px;
-  overflow: hidden;
-  visibility: visible;
-  user-select: none;
-  text-align: left;
-  font-size: 23px;
-  letter-spacing: normal;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  z-index: 76;
-  pointer-events: all;
-}
-
-.div__heatmap-layout-heatmap-mean-value-well-label {
-  line-height: 1;
-  transform: rotate(0deg);
-  padding: 5px;
-  margin: 0px;
-  overflow-wrap: break-word;
-  color: rgb(255, 255, 255);
-  font-family: Muli;
-  position: absolute;
-  top: 631px;
-  left: 537.455px;
-  width: 127px;
-  height: 35px;
-  overflow: hidden;
-  visibility: visible;
-  user-select: none;
-  text-align: left;
-  font-size: 23px;
-  letter-spacing: normal;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  z-index: 78;
   pointer-events: all;
 }
 
@@ -923,114 +761,6 @@ export default {
   font-size: 17px;
   color: rgb(255, 255, 255);
   text-align: center;
-}
-
-.div__heatmap-settings-apply-btn-container {
-  pointer-events: all;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 130px;
-  height: 55px;
-  top: 806px;
-  left: 1341px;
-  visibility: visible;
-  z-index: 152;
-}
-
-.div__heatmap-settings-apply-btn-container-disable {
-  background: #b7b7b7;
-}
-
-.div__heatmap-settings-apply-btn-container-enable {
-  background: #b7b7b7;
-}
-
-.div__heatmap-settings-apply-btn-container-enable:hover {
-  background: #19ac8a;
-}
-
-.canvas__heatmap-settings-apply-btn-container {
-  -webkit-transform: translateZ(0);
-  position: absolute;
-  width: 130px;
-  height: 55px;
-  top: 0px;
-  left: 0px;
-}
-
-.span__heatmap-settings-apply-btn-label {
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: center;
-  font-weight: normal;
-  transform: translateZ(0px);
-  position: absolute;
-  width: 120px;
-  height: 45px;
-  line-height: 47px;
-  top: 5px;
-  left: 5px;
-  user-select: none;
-  font-family: Muli;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 16px;
-}
-
-.span__heatmap-settings-apply-btn-label-disable {
-  color: #6e6f72;
-}
-
-.span__heatmap-settings-apply-btn-label-enable {
-  color: rgb(0, 0, 0);
-}
-
-.div__heatmap-settings-reset-btn-container {
-  pointer-events: all;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 130px;
-  height: 55px;
-  top: 806px;
-  left: 1490.08px;
-  visibility: visible;
-  z-index: 154;
-}
-
-.canvas__heatmap-settings-reset-btn-container {
-  -webkit-transform: translateZ(0);
-  position: absolute;
-  width: 130px;
-  height: 55px;
-  top: 0px;
-  left: 0px;
-  background: #b7b7b7;
-}
-
-.span__heatmap-settings-reset-btn-label {
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: center;
-  font-weight: normal;
-  transform: translateZ(0px);
-  position: absolute;
-  width: 120px;
-  height: 45px;
-  line-height: 47px;
-  top: 5px;
-  left: 5px;
-  user-select: none;
-  font-family: Muli;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 16px;
-  color: rgb(0, 0, 0);
 }
 
 .div__heatmap-layout-checkbox-container > .div__checkbox-background {
