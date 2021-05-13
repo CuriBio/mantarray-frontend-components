@@ -1,6 +1,14 @@
 <template>
   <div>
     <HeatMap></HeatMap>
+    <div>
+      <button class="start-button" @click="start_well_data">
+        Start Stub Data
+      </button>
+      <button class="stop-button" @click="stop_well_data">
+        Stop Stub Data
+      </button>
+    </div>
   </div>
 </template>
 
@@ -100,6 +108,61 @@ export default {
       "heatmap/set_heatmap_options_gradient",
       radio_button_gradient
     );
+    this.well_data = 0;
+  },
+  methods: {
+    start_well_data() {
+      this.well_data = setInterval(this.generate_well_data, 500);
+    },
+    generate_well_data() {
+      const min = 0;
+      const max = 99;
+      const new_heatmap_values = [];
+      for (let i = 0; i < 24; i++) {
+        new_heatmap_values[i] = Math.floor(
+          Math.random() * (max - min + 1) + min
+        );
+      }
+      this.$store.commit("heatmap/set_heatmap_values", new_heatmap_values);
+    },
+    stop_well_data() {
+      clearInterval(this.well_data);
+    },
   },
 };
 </script>
+<style>
+.start-button {
+  position: absolute;
+  top: 100px;
+  left: 1640px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: #4caf50;
+  z-index: 999;
+}
+
+.stop-button {
+  position: absolute;
+  top: 200px;
+  left: 1640px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: #008cba;
+  z-index: 999;
+}
+</style>
