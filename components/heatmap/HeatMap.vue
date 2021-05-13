@@ -193,6 +193,20 @@
         Reset
       </span>
     </div>
+    <div class="div__heatmap-well-value">
+      A1 : {{ well_values[0] }} B1 : {{ well_values[1] }} C1 :
+      {{ well_values[2] }} D1 : {{ well_values[3] }} <br />
+      A2 : {{ well_values[4] }} B2 : {{ well_values[5] }} C2 :
+      {{ well_values[6] }} D2 : {{ well_values[7] }} <br />
+      A3 : {{ well_values[8] }} B3 : {{ well_values[9] }} C3 :
+      {{ well_values[10] }} D3 : {{ well_values[11] }} <br />
+      A4 : {{ well_values[12] }} B4 : {{ well_values[13] }} C4 :
+      {{ well_values[14] }} D4 : {{ well_values[15] }} <br />
+      A5 : {{ well_values[16] }} B5 : {{ well_values[17] }} C5 :
+      {{ well_values[18] }} D5 : {{ well_values[19] }} <br />
+      A6 : {{ well_values[20] }} B6 : {{ well_values[21] }} C6 :
+      {{ well_values[22] }} D6 : {{ well_values[23] }} <br />
+    </div>
   </div>
 </template>
 <script>
@@ -288,6 +302,72 @@ export default {
         this.$store.commit("heatmap/set_heatmap_display_idx", display_idx);
       }
     },
+    // well_values: function() {
+    //   this.passing_plate_colors.splice(0,this.passing_plate_colors.length);
+    //   for(let i=0; i < this.well_values.length; i++)
+    //   {
+    //     if( this.well_values[i] > 0 &&  this.well_values[i]  < 5) {
+    //               this.passing_plate_colors[i] = "#999999";
+    //     }
+    //     if( this.well_values[i] > 4 &&  this.well_values[i]  < 10) {
+    //               this.passing_plate_colors[i] = "#993333";
+    //     }
+    //     if( this.well_values[i] > 9 &&  this.well_values[i]  < 15) {
+    //               this.passing_plate_colors[i] = "#FF3333";
+    //     }
+    //     if( this.well_values[i] > 14 &&  this.well_values[i]  < 20) {
+    //               this.passing_plate_colors[i] = "#FF6633";
+    //     }
+    //     if( this.well_values[i] > 19 &&  this.well_values[i]  < 25) {
+    //               this.passing_plate_colors[i] = "#663300";
+    //     }
+    //     if( this.well_values[i] > 24 && this.well_values[i] < 30) {
+    //               this.passing_plate_colors[i] = "#FFCC66";
+    //     }
+    //     if( this.well_values[i] > 29  && this.well_values[i] < 35) {
+    //               this.passing_plate_colors[i] = "#999933";
+    //     }
+    //     if( this.well_values[i] > 34 &&  this.well_values[i] < 40) {
+    //               this.passing_plate_colors[i] = "#FFFF00";
+    //     }
+    //     if( this.well_values[i] > 39 &&  this.well_values[i] < 45) {
+    //               this.passing_plate_colors[i] = "#CCFF00";
+    //     }
+    //     if( (this.well_values[i] >= 45) && (this.well_values[i] <= 49)) {
+    //               this.passing_plate_colors[i] = "#669900";
+    //     }
+    //     if( (this.well_values[i] >= 50) && (this.well_values[i] <= 54)) {
+    //               this.passing_plate_colors[i] = "#CCFF99";
+    //     }
+    //     if( (this.well_values[i] >= 55) && (this.well_values[i] <= 59)) {
+    //               this.passing_plate_colors[i] = "#669966";
+    //     }
+    //     if( (this.well_values[i] >= 60) && (this.well_values[i] <= 64)) {
+    //               this.passing_plate_colors[i] = "#33CCCC";
+    //     }
+    //     if( (this.well_values[i] >= 65) && (this.well_values[i] <= 69)) {
+    //               this.passing_plate_colors[i] = "#00CCFF";
+    //     }
+    //     if( (this.well_values[i] >= 70) && (this.well_values[i] <= 74)) {
+    //               this.passing_plate_colors[i] = "#006699";
+    //     }
+    //     if( (this.well_values[i] >= 75) && (this.well_values[i] <= 79)) {
+    //               this.passing_plate_colors[i] = "#003366";
+    //     }
+    //     if( (this.well_values[i] >= 80) && (this.well_values[i] <= 84)) {
+    //               this.passing_plate_colors[i] = "#99CCFF";
+    //     }
+    //     if( (this.well_values[i] >= 85) && (this.well_values[i] <= 89)) {
+    //               this.passing_plate_colors[i] = "#CC33FF";
+    //     }
+    //     if( (this.well_values[i] >= 90) && (this.well_values[i] <= 94)) {
+    //               this.passing_plate_colors[i] = "#FF0066";
+    //     }
+    //     if( (this.well_values[i] >= 95) && (this.well_values[i] <= 99)) {
+    //               this.passing_plate_colors[i] = "#FF0033";
+    //     }
+    //   }
+    // },
   },
   created: function () {
     const plate_colors = [
@@ -1031,6 +1111,31 @@ export default {
   text-decoration: none;
   font-size: 16px;
   color: rgb(0, 0, 0);
+}
+
+.div__heatmap-well-value {
+  line-height: 1;
+  transform: rotate(0deg);
+  padding: 5px;
+  margin: 0px;
+  overflow-wrap: break-word;
+  color: rgb(255, 255, 255);
+  font-family: Muli;
+  position: absolute;
+  top: 2px;
+  left: 0px;
+  width: 1331px;
+  height: 75px;
+  overflow: hidden;
+  visibility: visible;
+  user-select: none;
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: normal;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  pointer-events: all;
 }
 
 .div__heatmap-layout-checkbox-container > .div__checkbox-background {
