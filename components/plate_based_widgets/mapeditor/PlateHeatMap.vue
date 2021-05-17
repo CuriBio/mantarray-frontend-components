@@ -95,6 +95,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
 library.add(faMinusCircle);
 library.add(faPlusCircle);
@@ -727,6 +728,17 @@ export default {
       }
     },
   },
+  // watch: {
+  // platecolor() {
+  //   for(let i = 0; i < this.platecolor.length; i++)
+  //   {
+  //     d3.select('plate_'+i)
+  //       .transition()
+  //       .duration(10)
+  //       .attr('fill',this.platecolor[i]);
+  //   }
+  // }
+  // },
 };
 </script>
 <style>

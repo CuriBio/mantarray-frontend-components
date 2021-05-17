@@ -1,6 +1,12 @@
 <template>
-  <svg :height="svg_height" :width="svg_width" :index="index">
+  <svg
+    :id="'svg_' + index"
+    :height="svg_height"
+    :width="svg_width"
+    :index="index"
+  >
     <circle
+      :id="'circle_' + index"
       :class="classname"
       :cx="circle_x"
       :cy="circle_y"

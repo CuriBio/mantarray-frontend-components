@@ -258,6 +258,7 @@ export default {
       is_mean_value_active: false,
       mean_value: 0,
       well_selected_count: 0,
+      initial_value: new Array(24).fill(false),
     };
   },
   computed: {
@@ -301,6 +302,77 @@ export default {
         this.is_apply_set = true;
         this.$store.commit("heatmap/set_heatmap_display_idx", display_idx);
       }
+    },
+    well_values: function () {
+      this.passing_plate_colors.splice(0, this.passing_plate_colors.length);
+      for (let i = 0; i < this.well_values.length; i++) {
+        if (this.well_values[i] > 0 && this.well_values[i] < 5) {
+          this.passing_plate_colors[i] = "#999999";
+        }
+        if (this.well_values[i] > 4 && this.well_values[i] < 10) {
+          this.passing_plate_colors[i] = "#993333";
+        }
+        if (this.well_values[i] > 9 && this.well_values[i] < 15) {
+          this.passing_plate_colors[i] = "#FF3333";
+        }
+        if (this.well_values[i] > 14 && this.well_values[i] < 20) {
+          this.passing_plate_colors[i] = "#FF6633";
+        }
+        if (this.well_values[i] > 19 && this.well_values[i] < 25) {
+          this.passing_plate_colors[i] = "#663300";
+        }
+        if (this.well_values[i] > 24 && this.well_values[i] < 30) {
+          this.passing_plate_colors[i] = "#FFCC66";
+        }
+        if (this.well_values[i] > 29 && this.well_values[i] < 35) {
+          this.passing_plate_colors[i] = "#999933";
+        }
+        if (this.well_values[i] > 34 && this.well_values[i] < 40) {
+          this.passing_plate_colors[i] = "#FFFF00";
+        }
+        if (this.well_values[i] > 39 && this.well_values[i] < 45) {
+          this.passing_plate_colors[i] = "#CCFF00";
+        }
+        if (this.well_values[i] >= 45 && this.well_values[i] <= 49) {
+          this.passing_plate_colors[i] = "#669900";
+        }
+        if (this.well_values[i] >= 50 && this.well_values[i] <= 54) {
+          this.passing_plate_colors[i] = "#CCFF99";
+        }
+        if (this.well_values[i] >= 55 && this.well_values[i] <= 59) {
+          this.passing_plate_colors[i] = "#669966";
+        }
+        if (this.well_values[i] >= 60 && this.well_values[i] <= 64) {
+          this.passing_plate_colors[i] = "#33CCCC";
+        }
+        if (this.well_values[i] >= 65 && this.well_values[i] <= 69) {
+          this.passing_plate_colors[i] = "#00CCFF";
+        }
+        if (this.well_values[i] >= 70 && this.well_values[i] <= 74) {
+          this.passing_plate_colors[i] = "#006699";
+        }
+        if (this.well_values[i] >= 75 && this.well_values[i] <= 79) {
+          this.passing_plate_colors[i] = "#003366";
+        }
+        if (this.well_values[i] >= 80 && this.well_values[i] <= 84) {
+          this.passing_plate_colors[i] = "#99CCFF";
+        }
+        if (this.well_values[i] >= 85 && this.well_values[i] <= 89) {
+          this.passing_plate_colors[i] = "#CC33FF";
+        }
+        if (this.well_values[i] >= 90 && this.well_values[i] <= 94) {
+          this.passing_plate_colors[i] = "#FF0066";
+        }
+        if (this.well_values[i] >= 95 && this.well_values[i] <= 99) {
+          this.passing_plate_colors[i] = "#FF0033";
+        }
+      }
+      for (let j = 0; j < this.passing_plate_colors.length; j++) {
+        const obj = document.getElementById("svg_" + j);
+        const inner_obj = obj.firstElementChild;
+        inner_obj.setAttribute("fill", this.passing_plate_colors[j]);
+      }
+      this.compute_mean(this.initial_value);
     },
   },
   created: function () {
@@ -449,6 +521,12 @@ export default {
       }
       if (this.well_selected_count == 0) {
         this.is_mean_value_active = false;
+        this.initial_value.splice(0, this.initial_value.length);
+        this.initial_value = new Array(24).fill(false);
+      } else {
+        // this.initial_value.splice(0, this.initial_value.length);
+        // this.initial_value.push(all_select);
+        this.initial_value = all_select;
       }
       this.mean_value = (total / this.well_selected_count).toFixed(3);
     },

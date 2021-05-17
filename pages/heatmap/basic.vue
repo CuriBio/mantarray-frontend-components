@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     start_well_data() {
-      this.well_data = setInterval(this.generate_well_data, 500);
+      this.well_data = setInterval(this.generate_well_data, 1000);
     },
     generate_well_data() {
       const min = 0;
