@@ -7,6 +7,14 @@ const default_state = {
   // heatmap_values: 24 element array. each element corresponds to a well in the plate
   heatmap_values: [],
   heatmap_idx: null,
+  heatmap_display_array: [],
+  heatmap_display_idx: null,
+  heatmap_display_min_max: [],
+  heatmap_display_user_min_max: {},
+  heatmap_autoscale: false,
+  heatmap_options_array: [],
+  heatmap_options_idx: null,
+  heatmap_options_gradient: [],
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2
