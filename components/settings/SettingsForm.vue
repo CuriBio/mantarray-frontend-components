@@ -7,9 +7,7 @@
       <!-- original mockflow ID : cmpD698ee7f9b579fcf64ee501697ea75af9 -->
 
       <!-- original mockflow ID : cmpDd8b22bfae4d2a9945a94972384dacecd -->
-      <span class="span__settingsform-customer-sub-title"
-        >Select&nbsp;<wbr />Customer&nbsp;<wbr />ID</span
-      >
+      <span class="span__settingsform-customer-sub-title">Select&nbsp;<wbr />Customer&nbsp;<wbr />ID</span>
 
       <!-- original mockflow ID : cmpD5a52d34b430ce573300ed527a7b6a37d -->
 
@@ -27,9 +25,7 @@
         ></InputDropDown>
       </div>
       <div class="div__settingsform-customer-edit-btn" width="88" height="45">
-        <span
-          v-show="!disable_edit_customer"
-          class="span__settingsform-customer-edit-btn-txt"
+        <span v-show="!disable_edit_customer" class="span__settingsform-customer-edit-btn-txt"
           ><b-button
             id="edit-a-customer"
             v-b-modal.edit-customer
@@ -38,13 +34,7 @@
             style="background-color: #3f3f3f; border: 0px; color: #ececed"
             >Edit&nbsp;<wbr />ID</b-button
           >
-          <b-modal
-            id="edit-customer"
-            size="sm"
-            hide-footer
-            hide-header
-            hide-header-close
-          >
+          <b-modal id="edit-customer" size="sm" hide-footer hide-header hide-header-close>
             <EditCustomer
               :dialogdata="customer_account_ids[customer_focus_id]"
               :dataindex="customer_focus_id"
@@ -54,9 +44,7 @@
             ></EditCustomer>
           </b-modal>
         </span>
-        <span
-          v-show="disable_edit_customer"
-          class="span__settingsform-customer-edit-btn-txt-disable"
+        <span v-show="disable_edit_customer" class="span__settingsform-customer-edit-btn-txt-disable"
           >Edit&nbsp;<wbr />ID</span
         >
       </div>
@@ -73,13 +61,7 @@
         >
           Add&nbsp;<wbr />New&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID</b-button
         >
-        <b-modal
-          id="add-customer"
-          size="sm"
-          hide-footer
-          hide-header
-          hide-header-close
-        >
+        <b-modal id="add-customer" size="sm" hide-footer hide-header hide-header-close>
           <AddCustomer
             :dataindex="addcustomerid"
             @cancel-id="onCancelAddCustomerId"
@@ -88,17 +70,12 @@
         </b-modal>
       </span>
     </div>
-    <canvas class="canvas__settings-title-seperator" width="510" height="20">
-    </canvas>
-    <canvas class="canvas__settings-customer-seperator" width="510" height="20">
-    </canvas>
-    <canvas class="canvas__settings-user-seperator" width="510" height="20">
-    </canvas>
+    <canvas class="canvas__settings-title-seperator" width="510" height="20"> </canvas>
+    <canvas class="canvas__settings-customer-seperator" width="510" height="20"> </canvas>
+    <canvas class="canvas__settings-user-seperator" width="510" height="20"> </canvas>
     <!-- original Mockflow ID : cmpD36f04653a57e9f5f716e9c5a7405b38e -->
     <!--  original Mockflow ID : cmpDa220fe036f45bb8db289301ce0d9f6cc -->
-    <span class="span__settingsform-user-account-sub-title"
-      >Select&nbsp;<wbr />User&nbsp;<wbr />ID</span
-    >
+    <span class="span__settingsform-user-account-sub-title">Select&nbsp;<wbr />User&nbsp;<wbr />ID</span>
 
     <!-- original MockFlow ID : cmpD289dc218dd29cfe1f9a4330b16e40c6f -->
     <div class="div__settingsform-user-input">
@@ -117,9 +94,7 @@
     <!-- original Mockflow ID : cmpD4c6b34524a3a014988f42e90a7cc071c -->
     <div class="div__settingsform-user-input-edit-btn" width="98" height="45">
       <!-- original Mockflow ID : cmpD4c6b34524a3a014988f42e90a7cc071c_txt -->
-      <span
-        v-show="!disable_edit_user"
-        class="span__settingsform-user-input-edit-btn-txt"
+      <span v-show="!disable_edit_user" class="span__settingsform-user-input-edit-btn-txt"
         ><b-button
           id="edit-a-user"
           v-b-modal.edit-user
@@ -128,13 +103,7 @@
           style="background-color: #3f3f3f; border: 0px; color: #ececed"
           >Edit&nbsp;<wbr />ID</b-button
         >
-        <b-modal
-          id="edit-user"
-          size="sm"
-          hide-footer
-          hide-header
-          hide-header-close
-        >
+        <b-modal id="edit-user" size="sm" hide-footer hide-header hide-header-close>
           <EditUser
             :dialogdata="transient_user_ids"
             :dataindex="user_focus_id"
@@ -144,18 +113,14 @@
           ></EditUser>
         </b-modal>
       </span>
-      <span
-        v-show="disable_edit_user"
-        class="span__settingsform-user-input-edit-btn-txt-disable"
+      <span v-show="disable_edit_user" class="span__settingsform-user-input-edit-btn-txt-disable"
         >Edit&nbsp;<wbr />ID</span
       >
     </div>
     <!-- original MockFlow ID : cmpDbf04a9fad9240b4d1ad4fe7252e91af6 -->
     <div class="div__settingsform-user-input-btn-pos" width="285" height="45">
       <!-- original MockFlow ID : cmpDbf04a9fad9240b4d1ad4fe7252e91af6_txt -->
-      <span
-        v-show="!disable_add_user"
-        class="span__settingsform_user-input-editor"
+      <span v-show="!disable_add_user" class="span__settingsform_user-input-editor"
         ><b-button
           id="add-a-user"
           v-b-modal.add-user
@@ -164,23 +129,11 @@
           style="background-color: #3f3f3f; border: 0px; color: #ececed"
           >Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />Account&nbsp;<wbr />ID</b-button
         >
-        <b-modal
-          id="add-user"
-          size="sm"
-          hide-footer
-          hide-header
-          hide-header-close
-        >
-          <AddUser
-            :dataindex="add_user_id"
-            @cancel-id="onCancelAddUserId"
-            @save-id="onSaveUserId"
-          ></AddUser>
+        <b-modal id="add-user" size="sm" hide-footer hide-header hide-header-close>
+          <AddUser :dataindex="add_user_id" @cancel-id="onCancelAddUserId" @save-id="onSaveUserId"></AddUser>
         </b-modal>
       </span>
-      <span
-        v-show="disable_add_user"
-        class="span__settingsform_user-input-editor-disable"
+      <span v-show="disable_add_user" class="span__settingsform_user-input-editor-disable"
         >Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />Account&nbsp;<wbr />ID
       </span>
     </div>
@@ -206,24 +159,16 @@
     <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1 -->
     <div class="div__settingsform-toggle-icon-2" width="62" height="34">
       <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_cvs -->
-      <canvas class="canvas__settingsform-toggle-icon-2" width="62" height="34">
-      </canvas>
+      <canvas class="canvas__settingsform-toggle-icon-2" width="62" height="34"> </canvas>
       <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_txt -->
       <span class="span__settingsform-toggle-icon-2-txt"
         ><FontAwesomeIcon :icon="['fa', 'toggle-off']"
       /></span>
     </div>
     <!-- origonal MockFlow ID : cmpD4873e2fa8d693fa244b11bc36eaee8e1 -->
-    <canvas
-      class="canvas__settings-file-upload-seperator"
-      width="512"
-      height="22"
-    >
-    </canvas>
+    <canvas class="canvas__settings-file-upload-seperator" width="512" height="22"> </canvas>
     <!-- original Mockflow ID : cmpD1df116abcab5b13231c5616233d6cc30 -->
-    <span class="span__settings-tool-tip-settings-title"
-      >Tool&nbsp;<wbr />Tip&nbsp;<wbr />Settings</span
-    >
+    <span class="span__settings-tool-tip-settings-title">Tool&nbsp;<wbr />Tip&nbsp;<wbr />Settings</span>
     <!-- original MockFlow ID : cmpD5e5aa2f092b95fd325e1f97764dc25ca -->
     <span class="span__settings-tool-tip-sub-title"
       >Delay&nbsp;<wbr />Hover&nbsp;<wbr />Description&nbsp;<wbr />Pop-ups</span
@@ -239,18 +184,9 @@
     <!-- original Mockflow ID : cmpD54df1dd00a203636810d5c55417e6e97 -->
     <span class="span__settings_tool-tip_input-editor-unit">seconds</span>
     <!-- original Mockflow ID : cmpD535921733258bc16fd22894de418d29c -->
-    <div
-      class="span__settings_tool-tip_input-editor-toogle-icon"
-      width="62"
-      height="34"
-    >
+    <div class="span__settings_tool-tip_input-editor-toogle-icon" width="62" height="34">
       <!-- original Mockflow ID : cmpD535921733258bc16fd22894de418d29c_cvs -->
-      <canvas
-        class="canvas__settings-tool-tip-input-editor-toogle-icon"
-        width="62"
-        height="34"
-      >
-      </canvas>
+      <canvas class="canvas__settings-tool-tip-input-editor-toogle-icon" width="62" height="34"> </canvas>
       <!-- original MockFlow ID : cmpD535921733258bc16fd22894de418d29c_txt -->
       <span class="span__settings-tool-tip-input-editor-toogle-icon-txt"
         ><FontAwesomeIcon :icon="['fa', 'toggle-off']"
@@ -261,8 +197,7 @@
       >Never&nbsp;<wbr />Show&nbsp;<wbr />Description&nbsp;<wbr />Pop-ups</span
     >
     <!-- original MockFlow ID : cmpDf8b694341fb875af1a45ed417cde193b -->
-    <canvas class="canvas__settings-tool-tip-seperator" width="512" height="22">
-    </canvas>
+    <canvas class="canvas__settings-tool-tip-seperator" width="512" height="22"> </canvas>
     <!-- original MockFlow ID : cmpD98658345877fb84ac42a8c93722c3fe9 -->
     <div class="div__settings-tool-tip-cancel-btn" width="180" height="55">
       <!-- original MockFlow ID : cmpD98658345877fb84ac42a8c93722c3fe9_txt -->
@@ -293,12 +228,7 @@
       height="55"
     >
       <!-- original Mockflow ID : cmpD9ff91bc518ff5a785be6857efab128a0_cvs -->
-      <canvas
-        class="canvas__settings-tool-tip-save-btn"
-        width="180"
-        height="55"
-      >
-      </canvas>
+      <canvas class="canvas__settings-tool-tip-save-btn" width="180" height="55"> </canvas>
       <!-- original Mockflow ID : cmpD9ff91bc518ff5a785be6857efab128a0_txt -->
       <span
         class="span__settings-tool-tip-save-btn-txt"
@@ -404,28 +334,13 @@ export default {
     users_options: function () {
       if (this.entrykey_customer != "") {
         if (this.customer_account_ids.length != 0) {
-          if (
-            this.customer_account_ids[this.customer_focus_id].user_ids !==
-            undefined
-          ) {
-            if (
-              this.customer_account_ids[this.customer_focus_id].user_ids
-                .length == 0
-            ) {
+          if (this.customer_account_ids[this.customer_focus_id].user_ids !== undefined) {
+            if (this.customer_account_ids[this.customer_focus_id].user_ids.length == 0) {
               return [];
             } else {
               const user_list = [];
-              for (
-                let i = 0;
-                i <
-                this.customer_account_ids[this.customer_focus_id].user_ids
-                  .length;
-                i++
-              ) {
-                user_list.push(
-                  this.customer_account_ids[this.customer_focus_id].user_ids[i]
-                    .nickname
-                );
+              for (let i = 0; i < this.customer_account_ids[this.customer_focus_id].user_ids.length; i++) {
+                user_list.push(this.customer_account_ids[this.customer_focus_id].user_ids[i].nickname);
               }
               return user_list;
             }
@@ -445,12 +360,8 @@ export default {
       if (this.customer_account_ids.length == 0) {
         return 0;
       } else {
-        if (
-          this.customer_account_ids[this.customer_focus_id].user_ids !=
-          undefined
-        ) {
-          return this.customer_account_ids[this.customer_focus_id].user_ids
-            .length;
+        if (this.customer_account_ids[this.customer_focus_id].user_ids != undefined) {
+          return this.customer_account_ids[this.customer_focus_id].user_ids.length;
         } else {
           return 0;
         }
@@ -462,9 +373,7 @@ export default {
       if (this.entrykey_customer == "") {
         this.on_empty_flag_customer = true;
       } else {
-        const nickname_focus = this.nicknames_list_customer.indexOf(
-          this.entrykey_customer
-        );
+        const nickname_focus = this.nicknames_list_customer.indexOf(this.entrykey_customer);
         if (nickname_focus == -1) {
           // logic of "Add New Customer ID" in Settings
           this.on_empty_flag_customer = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
@@ -481,10 +390,7 @@ export default {
             this.customer_focus_id = customer_focus.cust_id;
             this.valid_customer_focus = true;
             if (this.nicknames_list_user !== undefined) {
-              this.nicknames_list_user.splice(
-                0,
-                this.nicknames_list_user.length
-              );
+              this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
               this.nicknames_list_user = this.users_options;
             }
             this.entrykey_user = "";
@@ -493,9 +399,9 @@ export default {
           this.entrykey_user = "";
           if (this.created_flag == true) {
             this.created_flag = false;
-            this.entrykey_user = this.customer_account_ids[
-              this.customer_index
-            ].user_ids[this.user_index].nickname;
+            this.entrykey_user = this.customer_account_ids[this.customer_index].user_ids[
+              this.user_index
+            ].nickname;
           }
           this.modify_btn_states();
         }
@@ -506,9 +412,7 @@ export default {
       if (this.entrykey_customer == "") {
         this.on_empty_flag_user = true;
       } else {
-        const nickname_focus = this.nicknames_list_customer.indexOf(
-          this.entrykey_customer
-        );
+        const nickname_focus = this.nicknames_list_customer.indexOf(this.entrykey_customer);
         if (nickname_focus == -1) {
           // logic of "Add New Customer ID" in Settings
           this.on_empty_flag_user = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
@@ -521,9 +425,7 @@ export default {
           const customer_focus = this.customer_account_ids.find(
             (customer) => customer.nickname === this.entrykey_customer
           );
-          const user_focus = customer_focus.user_ids.find(
-            (user) => user.nickname === this.entrykey_user
-          );
+          const user_focus = customer_focus.user_ids.find((user) => user.nickname === this.entrykey_user);
           this.valid_user_focus = false;
           if (user_focus != null) {
             if (this.entrykey_user != "") {
@@ -546,17 +448,15 @@ export default {
     this.nicknames_list_customer = this.customers_options;
     this.nicknames_list_user = this.users_options;
     if (this.customer_index != null) {
-      this.entrykey_customer = this.customer_account_ids[
-        this.customer_index
-      ].nickname;
+      this.entrykey_customer = this.customer_account_ids[this.customer_index].nickname;
       this.valid_customer_focus = true;
       this.customer_focus_id = this.customer_index;
       this.disable_edit_customer = false;
       this.disable_add_user = false;
       if (this.user_index != null) {
-        this.entrykey_user = this.customer_account_ids[
-          this.customer_index
-        ].user_ids[this.user_index].nickname;
+        this.entrykey_user = this.customer_account_ids[this.customer_index].user_ids[
+          this.user_index
+        ].nickname;
         this.valid_user_focus = true;
         this.user_focus_id = this.user_index;
         this.disable_edit_user = false;
@@ -574,10 +474,7 @@ export default {
     //   return textArea.value;
     // },
     save_changes() {
-      this.$store.commit(
-        "settings/set_customer_details",
-        this.current_customerids
-      );
+      this.$store.commit("settings/set_customer_details", this.current_customerids);
       this.$store.commit("settings/set_customer_index", this.customer_focus_id);
       this.$store.commit("settings/set_user_index", this.user_focus_id);
     },
@@ -587,10 +484,7 @@ export default {
     onSaveCustomerId(add_customer) {
       this.$bvModal.hide("add-customer");
       this.customer_account_ids.push(add_customer);
-      this.nicknames_list_customer.splice(
-        0,
-        this.nicknames_list_customer.length
-      );
+      this.nicknames_list_customer.splice(0, this.nicknames_list_customer.length);
       this.nicknames_list_customer = this.customers_options;
       this.entrykey_customer = add_customer.nickname;
     },
@@ -599,20 +493,12 @@ export default {
     },
     onUpdateCustomerId(edit_customer) {
       this.$bvModal.hide("edit-customer");
-      this.customer_account_ids[edit_customer.cust_id].cust_id =
-        edit_customer.cust_id;
-      this.customer_account_ids[edit_customer.cust_id].uuid =
-        edit_customer.uuid;
-      this.customer_account_ids[edit_customer.cust_id].api_key =
-        edit_customer.api_key;
-      this.customer_account_ids[edit_customer.cust_id].nickname =
-        edit_customer.nickname;
-      this.customer_account_ids[edit_customer.cust_id].user_ids =
-        edit_customer.user_ids;
-      this.nicknames_list_customer.splice(
-        0,
-        this.nicknames_list_customer.length
-      );
+      this.customer_account_ids[edit_customer.cust_id].cust_id = edit_customer.cust_id;
+      this.customer_account_ids[edit_customer.cust_id].uuid = edit_customer.uuid;
+      this.customer_account_ids[edit_customer.cust_id].api_key = edit_customer.api_key;
+      this.customer_account_ids[edit_customer.cust_id].nickname = edit_customer.nickname;
+      this.customer_account_ids[edit_customer.cust_id].user_ids = edit_customer.user_ids;
+      this.nicknames_list_customer.splice(0, this.nicknames_list_customer.length);
       this.nicknames_list_customer = this.customers_options;
       this.entrykey_customer = edit_customer.nickname;
     },
@@ -627,10 +513,7 @@ export default {
       for (let i = 0; i < this.customer_account_ids.length; i++) {
         this.customer_account_ids[i].cust_id = i;
       }
-      this.nicknames_list_customer.splice(
-        0,
-        this.nicknames_list_customer.length
-      );
+      this.nicknames_list_customer.splice(0, this.nicknames_list_customer.length);
       this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
       this.nicknames_list_customer = this.customers_options;
       this.nicknames_list_user = this.users_options;
@@ -652,33 +535,20 @@ export default {
     onUpdateUserId(edit_user) {
       this.$bvModal.hide("edit-user");
       this.entrykey_user = edit_user.nickname;
-      this.customer_account_ids[this.customer_focus_id].user_ids[
-        edit_user.user_id
-      ].user_id = edit_user.user_id;
-      this.customer_account_ids[this.customer_focus_id].user_ids[
-        edit_user.user_id
-      ].uuid = edit_user.uuid;
-      this.customer_account_ids[this.customer_focus_id].user_ids[
-        edit_user.user_id
-      ].nickname = edit_user.nickname;
+      this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].user_id =
+        edit_user.user_id;
+      this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].uuid = edit_user.uuid;
+      this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].nickname =
+        edit_user.nickname;
       this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
       this.nicknames_list_user = this.users_options;
     },
     onDeleteUserId(delete_user) {
       this.$bvModal.hide("edit-user");
-      this.customer_account_ids[this.customer_focus_id].user_ids.splice(
-        delete_user.user_id,
-        1
-      );
+      this.customer_account_ids[this.customer_focus_id].user_ids.splice(delete_user.user_id, 1);
       /* Now that user_id element is deleted we need to update all the user ids without holes or starting index 0 */
-      for (
-        let i = 0;
-        i < this.customer_account_ids[this.customer_focus_id].user_ids.length;
-        i++
-      ) {
-        this.customer_account_ids[this.customer_focus_id].user_ids[
-          i
-        ].user_id = i;
+      for (let i = 0; i < this.customer_account_ids[this.customer_focus_id].user_ids.length; i++) {
+        this.customer_account_ids[this.customer_focus_id].user_ids[i].user_id = i;
       }
       this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
       this.nicknames_list_user = this.users_options;
@@ -690,8 +560,7 @@ export default {
       const num_of_customers = this.customer_account_ids.length;
       let num_of_userids = null;
       if (num_of_customers > 0) {
-        num_of_userids = this.customer_account_ids[this.customer_focus_id]
-          .user_ids.length;
+        num_of_userids = this.customer_account_ids[this.customer_focus_id].user_ids.length;
         if (num_of_userids > 0) {
           const customer_focus = this.customer_account_ids.find(
             (customer) => customer.nickname === this.entrykey_customer
@@ -702,9 +571,7 @@ export default {
             this.disable_add_user = false;
             this.disable_edit_user = true;
             if (new_user_ids != undefined) {
-              const user_focus = customer_focus.user_ids.find(
-                (user) => user.nickname === this.entrykey_user
-              );
+              const user_focus = customer_focus.user_ids.find((user) => user.nickname === this.entrykey_user);
               if (user_focus != null) {
                 this.disable_edit_customer = false;
                 this.disable_add_user = false;

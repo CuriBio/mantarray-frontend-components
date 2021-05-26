@@ -3,9 +3,7 @@
 // dependencies
 const uuidBase62 = require("@tofandel/uuid-base62"); // External library depenency of @tofandel/uuid-base62
 /* eslint-disable new-cap */
-uuidBase62.customBase = new uuidBase62.baseX(
-  "23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-); // Custom Base 57 defined as per requirement.
+uuidBase62.customBase = new uuidBase62.baseX("23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"); // Custom Base 57 defined as per requirement.
 /* eslint-enable */
 /** Allows text validation for the pre-defined criteria rules applied on the text by definitions */
 export class TextValidation {
@@ -140,31 +138,15 @@ export class TextValidation {
         decode_uuid = uuidBase62.decode(uuidtext);
         encode_uuid = uuidBase62.encode(decode_uuid);
         if (encode_uuid === uuidtext) {
-          invalid_text = this.uuid_errorfinder(
-            len_uuidBase57encode,
-            "valid",
-            uuidtext
-          );
+          invalid_text = this.uuid_errorfinder(len_uuidBase57encode, "valid", uuidtext);
         } else {
-          invalid_text = this.uuid_errorfinder(
-            len_uuidBase57encode,
-            "encoderror",
-            uuidtext
-          );
+          invalid_text = this.uuid_errorfinder(len_uuidBase57encode, "encoderror", uuidtext);
         }
       } catch (err) {
-        invalid_text = this.uuid_errorfinder(
-          len_uuidBase57encode,
-          "error",
-          uuidtext
-        );
+        invalid_text = this.uuid_errorfinder(len_uuidBase57encode, "error", uuidtext);
       }
     } else {
-      invalid_text = this.uuid_errorfinder(
-        len_uuidBase57encode,
-        "size",
-        uuidtext
-      );
+      invalid_text = this.uuid_errorfinder(len_uuidBase57encode, "size", uuidtext);
     }
     return invalid_text;
   }
@@ -212,22 +194,17 @@ export class TextValidation {
       if (len == 0) {
         feedback_text = "This field is required";
       } else {
-        feedback_text =
-          "The entered ID is " +
-          len +
-          " characters. All valid IDs are exactly 22 characters.";
+        feedback_text = "The entered ID is " + len + " characters. All valid IDs are exactly 22 characters.";
       }
     } else {
       if (invalid_builder != "") {
-        feedback_text =
-          "The entered ID has an invalid character " + invalid_builder;
+        feedback_text = "The entered ID has an invalid character " + invalid_builder;
       } else {
         if (source == "error") {
           feedback_text = "Entry permitted for Alphanumeric only";
         } else {
           if (source == "encoderror") {
-            feedback_text =
-              "This combination of 22 characters is invalid encoded id";
+            feedback_text = "This combination of 22 characters is invalid encoded id";
           } else {
             feedback_text = "";
           }
@@ -235,10 +212,7 @@ export class TextValidation {
       }
     }
     if (len > 22) {
-      feedback_text =
-        "The entered ID is " +
-        len +
-        " characters. All valid IDs are exactly 22 characters.";
+      feedback_text = "The entered ID is " + len + " characters. All valid IDs are exactly 22 characters.";
     }
     return feedback_text;
   }
@@ -335,8 +309,7 @@ export class TextValidation {
         if (len == 0) {
           invalid_text = "This field is required";
         } else {
-          invalid_text =
-            "The valid nickname is min 1 charcter and max 20 charcters";
+          invalid_text = "The valid nickname is min 1 charcter and max 20 charcters";
         }
         if (len > 20) {
           invalid_text = "Invalid as its more than 20 charcters";
@@ -373,10 +346,8 @@ export class TextValidation {
         case scan_ascii == 46: /*  period     .   */
         case scan_ascii == 47: /*  forward slash / */
         case scan_ascii >= 48 &&
-          scan_ascii <=
-            57: /* 0, 1, 2, 3, 4, 5, 6, 7, 8, 9  ascii of '0' is 48 and '9' is 57*/
-        case scan_ascii >= 65 &&
-          scan_ascii <= 90: /* A ascii of 'A' is 65  Z ascii of 'Z' is 90 */
+          scan_ascii <= 57: /* 0, 1, 2, 3, 4, 5, 6, 7, 8, 9  ascii of '0' is 48 and '9' is 57*/
+        case scan_ascii >= 65 && scan_ascii <= 90: /* A ascii of 'A' is 65  Z ascii of 'Z' is 90 */
         case scan_ascii == 95: /* underscore _   */
         case scan_ascii >= 97 && scan_ascii <= 122:
           parse_error = "";
@@ -392,8 +363,7 @@ export class TextValidation {
         case scan_ascii >= 91 && scan_ascii <= 94:
         case scan_ascii == 96:
         case scan_ascii >= 123:
-          parse_error =
-            "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /";
+          parse_error = "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /";
           i = len + 1;
           break;
       }

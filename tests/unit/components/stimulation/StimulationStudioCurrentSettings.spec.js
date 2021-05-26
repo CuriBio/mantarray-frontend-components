@@ -15,18 +15,14 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     wrapper = mount(dist_StimulationStudioCurrentSettings, {
       localVue,
     });
-    const target_span = wrapper.find(
-      ".span__stimulationstudio-current-settings-title"
-    );
+    const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
     expect(target_span.text()).toStrictEqual("Biphasic Pulse Details");
   });
   test("When mounting StimulationStudioCurrentSettings from the component file, Then it loads successfully  `Biphasic Pulse Details` as defined title text is rendered", () => {
     wrapper = shallowMount(StimulationStudioCurrentSettings, {
       localVue,
     });
-    const target_span = wrapper.find(
-      ".span__stimulationstudio-current-settings-title"
-    );
+    const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
     expect(target_span.text()).toStrictEqual("Biphasic Pulse Details");
   });
 });

@@ -26,9 +26,7 @@
             stroke-width="0"
             fill="#b7b7b7"
             :class="{
-              'circle__plate-navigator-well--selected': selected_quadrant_well_indices.includes(
-                well_index
-              ),
+              'circle__plate-navigator-well--selected': selected_quadrant_well_indices.includes(well_index),
               'circle__plate-navigator-well--unselected-hover':
                 !selected_quadrant_well_indices.includes(well_index) &&
                 hovered_quadrant_wells.includes(well_index),
@@ -120,21 +118,14 @@ export default {
     },
 
     on_enter_well: function (well_index) {
-      this.hovered_quadrant_wells = this.get_quadrant_from_well_index(
-        well_index
-      );
+      this.hovered_quadrant_wells = this.get_quadrant_from_well_index(well_index);
     },
     on_leave_well: function (well_index) {
       this.hovered_quadrant_wells = [];
     },
     on_click_well: function (well_index) {
-      const quadrant_containing_this_well = this.get_quadrant_from_well_index(
-        well_index
-      );
-      this.$store.commit(
-        this.quadrant_options_api_set.QUADRANT,
-        quadrant_containing_this_well
-      );
+      const quadrant_containing_this_well = this.get_quadrant_from_well_index(well_index);
+      this.$store.commit(this.quadrant_options_api_set.QUADRANT, quadrant_containing_this_well);
     },
   },
 };

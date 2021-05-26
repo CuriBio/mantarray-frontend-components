@@ -8,9 +8,7 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 fixture`settings/basic`.page // declare the fixture
 `http://localhost:8080/settings/basic`; // specify the start page
 
-const settings_button = Selector(
-  ".span__playback-player-controls-settings-button"
-);
+const settings_button = Selector(".span__playback-player-controls-settings-button");
 
 test("player controls settings button should look as expected", async (t) => {
   const screenshot_path_base = path.join("settings", "settings-button");
@@ -26,10 +24,6 @@ fixture`settings/x-y-offset`.page // declare the fixture
 `http://localhost:8080/settings/x-y-offset`; // specify the start page
 
 test("player controls settings button renders in offset position when parent div is moved", async (t) => {
-  const screenshot_path = path.join(
-    "settings",
-    "settings-button",
-    "x-y-offset"
-  );
+  const screenshot_path = path.join("settings", "settings-button", "x-y-offset");
   await testcafe_page_visual_regression(t, screenshot_path);
 });

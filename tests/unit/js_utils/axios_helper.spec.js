@@ -5,10 +5,7 @@ const sinon = require("sinon");
 import { createLocalVue } from "@vue/test-utils";
 import { STATUS } from "@/store/modules/flask/enums";
 
-import {
-  all_mantarray_commands_regexp,
-  system_status_regexp,
-} from "@/store/modules/flask/url_regex";
+import { all_mantarray_commands_regexp, system_status_regexp } from "@/store/modules/flask/url_regex";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import { new_arry as waveform_data_response } from "../js_utils/waveform_data_provider.js";
 import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
@@ -40,38 +37,23 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
     jest.restoreAllMocks();
     sandbox.restore();
   });
-  test.each([
-    ["flask/get_flask_action_context"],
-    ["playback/get_playback_action_context"],
-  ])(
+  test.each([["flask/get_flask_action_context"], ["playback/get_playback_action_context"]])(
     "Given that the context variable is obtained from %s and /system_status is mocked to return 404 and the SystemState is SERVER_STILL_INITIALIZING and a interval ID is committed to the store for status pinging, When the function is called with the URL /system_status, Then System State remains in SERVER_STILL_INITIALIZING (does not change to Error) and the status pinging interval does not get cleared",
     async (context_str) => {
       context = await store.dispatch(context_str);
 
       mocked_axios.onGet(system_status_regexp).reply(404);
       const expected_interval_id = 5;
-      store.commit(
-        "flask/set_status_uuid",
-        STATUS.MESSAGE.SERVER_STILL_INITIALIZING
-      );
+      store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_STILL_INITIALIZING);
       store.commit("flask/set_status_ping_interval_id", expected_interval_id);
 
       // confirm pre-conditions
-      expect(store.state.flask.status_uuid).toStrictEqual(
-        STATUS.MESSAGE.SERVER_STILL_INITIALIZING
-      );
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.SERVER_STILL_INITIALIZING);
 
-      await call_axios_get_from_vuex(
-        "http://localhost:4567/system_status",
-        context
-      );
+      await call_axios_get_from_vuex("http://localhost:4567/system_status", context);
 
-      expect(store.state.flask.status_ping_interval_id).toStrictEqual(
-        expected_interval_id
-      );
-      expect(store.state.flask.status_uuid).toStrictEqual(
-        STATUS.MESSAGE.SERVER_STILL_INITIALIZING
-      );
+      expect(store.state.flask.status_ping_interval_id).toStrictEqual(expected_interval_id);
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.SERVER_STILL_INITIALIZING);
       // expect(result.status).toStrictEqual(404);
     }
   );
@@ -123,17 +105,12 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
         });
       });
 
-      test.each([
-        ["flask/get_flask_action_context"],
-        ["playback/get_playback_action_context"],
-      ])(
+      test.each([["flask/get_flask_action_context"], ["playback/get_playback_action_context"]])(
         "Given that the context variable is obtained from %s and /get_available_data is mocked to return some valid values and data pinging is active, and status pinging is active and live_view is started and /start_recording is mocked to return an HTTP error, When the function is called with the URL /start_recording, Then all 3 intervals are cleared in Vuex (status pinging, data pinging, and playback progression)",
         async (context_str) => {
           context = await store.dispatch(context_str);
 
-          mocked_axios
-            .onGet(get_available_data_regex)
-            .reply(200, waveform_data_response);
+          mocked_axios.onGet(get_available_data_regex).reply(200, waveform_data_response);
 
           await store.dispatch("waveform/start_get_waveform_pinging");
 
@@ -145,29 +122,17 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
           // confirm pre-conditions
           expect(store.state.waveform.waveform_ping_interval_id).not.toBeNull();
           expect(store.state.flask.status_ping_interval_id).not.toBeNull();
-          expect(
-            store.state.playback.playback_progression_interval_id
-          ).not.toBeNull();
+          expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
 
-          await call_axios_get_from_vuex(
-            "http://localhost:4567/start_recording",
-            context
-          );
+          await call_axios_get_from_vuex("http://localhost:4567/start_recording", context);
 
-          expect(store.state.flask.status_uuid).toStrictEqual(
-            STATUS.MESSAGE.ERROR
-          );
+          expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
           expect(store.state.flask.status_ping_interval_id).toBeNull();
-          expect(
-            store.state.playback.playback_progression_interval_id
-          ).toBeNull();
+          expect(store.state.playback.playback_progression_interval_id).toBeNull();
           expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
         }
       );
-      test.each([
-        ["flask/get_flask_action_context"],
-        ["playback/get_playback_action_context"],
-      ])(
+      test.each([["flask/get_flask_action_context"], ["playback/get_playback_action_context"]])(
         "Given that the context variable is obtained from %s and status pinging is active and /start_calibration is mocked to return an HTTP error, When the function is called for the /start_calibration URL, Then the status pinging interval is cleared in Vuex",
         async (context_str) => {
           context = await store.dispatch(context_str);
@@ -177,24 +142,14 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
           await store.dispatch("playback/start_playback_progression");
 
           // confirm pre-condition
-          expect(
-            store.state.playback.playback_progression_interval_id
-          ).not.toBeNull();
+          expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
 
-          await call_axios_get_from_vuex(
-            "http://localhost:4567/start_calibration",
-            context
-          );
+          await call_axios_get_from_vuex("http://localhost:4567/start_calibration", context);
 
-          expect(
-            store.state.playback.playback_progression_interval_id
-          ).toBeNull();
+          expect(store.state.playback.playback_progression_interval_id).toBeNull();
         }
       );
-      test.each([
-        ["flask/get_flask_action_context"],
-        ["playback/get_playback_action_context"],
-      ])(
+      test.each([["flask/get_flask_action_context"], ["playback/get_playback_action_context"]])(
         "Given that the context variable is obtained from %s and playback progression is active and /start_recording is mocked to return an HTTP error, When the function is called for the /start_recording URL, Then the playback progression interval is cleared in Vuex",
         async (context_str) => {
           context = await store.dispatch(context_str);
@@ -206,18 +161,12 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
           // confirm pre-condition
           expect(store.state.flask.status_ping_interval_id).not.toBeNull();
 
-          await call_axios_get_from_vuex(
-            "http://localhost:4567/start_recording",
-            context
-          );
+          await call_axios_get_from_vuex("http://localhost:4567/start_recording", context);
 
           expect(store.state.flask.status_ping_interval_id).toBeNull();
         }
       );
-      test.each([
-        ["flask/get_flask_action_context"],
-        ["playback/get_playback_action_context"],
-      ])(
+      test.each([["flask/get_flask_action_context"], ["playback/get_playback_action_context"]])(
         "Given that the context variable is obtained from %s and /get_available_data is mocked to return some dummy data, and data pinging is active, When the function is called for the  /start_live_view URL, Then the data pinging interval is cleared in Vuex",
         async (context_str) => {
           context = await store.dispatch(context_str);
@@ -233,10 +182,7 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
           // confirm pre-condition
           expect(store.state.waveform.waveform_ping_interval_id).not.toBeNull();
 
-          await call_axios_get_from_vuex(
-            "http://localhost:4567/start_live_view",
-            context
-          );
+          await call_axios_get_from_vuex("http://localhost:4567/start_live_view", context);
 
           expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
         }
@@ -283,9 +229,7 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
           mocked_axios.onGet(whole_url).reply(error_code);
           await call_axios_get_from_vuex(whole_url, context);
 
-          expect(store.state.flask.status_uuid).toStrictEqual(
-            STATUS.MESSAGE.ERROR
-          );
+          expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
         }
       );
     });
@@ -305,9 +249,7 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
           mocked_axios.onGet(whole_url).reply(error_code);
           await call_axios_get_from_vuex(whole_url, context);
 
-          expect(store.state.flask.status_uuid).toStrictEqual(
-            STATUS.MESSAGE.ERROR
-          );
+          expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
         }
       );
     });

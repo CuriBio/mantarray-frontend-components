@@ -90,9 +90,7 @@ describe("YAxisControls.vue", () => {
       // confirm expected pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(1);
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-in-button");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
@@ -117,9 +115,7 @@ describe("YAxisControls.vue", () => {
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(expected_zoom_idx);
@@ -147,16 +143,12 @@ describe("YAxisControls.vue", () => {
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(expected_zoom_idx);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-y-axis-controls--disabled");
     });
     it("should add the disabled CSS class to the button after clicking to move into the max zoom level", async () => {
       const propsData = {};
@@ -174,25 +166,19 @@ describe("YAxisControls.vue", () => {
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(3);
 
-      expect(target_button.classes()).not.toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).not.toContain("div__playback-y-axis-controls--disabled");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.waveform.y_zoom_level_idx).toEqual(4);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-y-axis-controls--disabled");
     });
     it("should add the disabled CSS class to the button after clicking to move into the max zoom level with 3 total zoom levels", async () => {
       const propsData = {};
@@ -209,34 +195,26 @@ describe("YAxisControls.vue", () => {
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(0);
 
-      expect(target_button.classes()).not.toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).not.toContain("div__playback-y-axis-controls--disabled");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.waveform.y_zoom_level_idx).toEqual(1);
 
-      expect(target_button.classes()).not.toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).not.toContain("div__playback-y-axis-controls--disabled");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.waveform.y_zoom_level_idx).toEqual(2);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-y-axis-controls--disabled");
     });
   });
   describe("y-zoom-out", () => {
@@ -259,9 +237,7 @@ describe("YAxisControls.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(1);
@@ -291,9 +267,7 @@ describe("YAxisControls.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(expected_zoom_idx);
@@ -322,16 +296,12 @@ describe("YAxisControls.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(0);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-y-axis-controls--disabled");
     });
 
     it("should add the disabled CSS class to the button after clicking to move into the min zoom level", async () => {
@@ -352,34 +322,26 @@ describe("YAxisControls.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-y-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-y-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.y_zoom_level_idx).toEqual(2);
 
-      expect(target_button.classes()).not.toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).not.toContain("div__playback-y-axis-controls--disabled");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.waveform.y_zoom_level_idx).toEqual(1);
 
-      expect(target_button.classes()).not.toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).not.toContain("div__playback-y-axis-controls--disabled");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.waveform.y_zoom_level_idx).toEqual(0);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-y-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-y-axis-controls--disabled");
     });
     it("should modify the values of the y_zoom_level_to the new max and min value, as an event 'y-axis-new-range' event was emitted and validate as the range was large it was inserted at index '0' ", async () => {
       const propsData = {};
@@ -439,15 +401,10 @@ describe("YAxisControls.vue", () => {
       let new_min_max = { y_min: minimum, y_max: maximum };
       wrapper.vm.y_axis_controls_commit(new_min_max);
 
-      let update_default_zoom_level_idx =
-        store.getters["waveform/y_axis_zoom_idx"];
+      let update_default_zoom_level_idx = store.getters["waveform/y_axis_zoom_idx"];
       let new_range = store.getters["waveform/y_axis_zoom_levels"];
-      expect(new_range[update_default_zoom_level_idx].y_min).toStrictEqual(
-        minimum
-      );
-      expect(new_range[update_default_zoom_level_idx].y_max).toStrictEqual(
-        maximum
-      );
+      expect(new_range[update_default_zoom_level_idx].y_min).toStrictEqual(minimum);
+      expect(new_range[update_default_zoom_level_idx].y_max).toStrictEqual(maximum);
     });
     it("should not modify the values of the y_zoom_level to the new max and min value, as an event 'y-axis-new-range' event was emitted and as the min and max was already present verify that the 'duplicate' was not created", async () => {
       const propsData = {};
@@ -483,16 +440,11 @@ describe("YAxisControls.vue", () => {
       let new_min_max = { y_min: minimum, y_max: maximum };
       wrapper.vm.y_axis_controls_commit(new_min_max);
 
-      let update_default_zoom_level_idx =
-        store.getters["waveform/y_axis_zoom_idx"];
+      let update_default_zoom_level_idx = store.getters["waveform/y_axis_zoom_idx"];
       let new_range = store.getters["waveform/y_axis_zoom_levels"];
 
-      expect(new_range[update_default_zoom_level_idx].y_min).toStrictEqual(
-        minimum
-      );
-      expect(new_range[update_default_zoom_level_idx].y_max).toStrictEqual(
-        maximum
-      );
+      expect(new_range[update_default_zoom_level_idx].y_min).toStrictEqual(minimum);
+      expect(new_range[update_default_zoom_level_idx].y_max).toStrictEqual(maximum);
       expect(new_range.length).toStrictEqual(17);
     });
   });

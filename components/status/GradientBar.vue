@@ -53,8 +53,7 @@ export default {
       return {
         height: this.gradient_height + "px",
         width: this.gradient_width + "px",
-        background:
-          "linear-gradient(to top, " + this.gradient.steps.join(", ") + ")",
+        background: "linear-gradient(to top, " + this.gradient.steps.join(", ") + ")",
       };
     },
   },

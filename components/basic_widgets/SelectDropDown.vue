@@ -1,14 +1,7 @@
 <template>
   <div
     class="div__input-dropdown-background"
-    :style="
-      'width: ' +
-      input_width_background +
-      'px;' +
-      'height: ' +
-      input_height_background +
-      'px;'
-    "
+    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
   >
     <span
       v-if="title_label !== ''"
@@ -21,9 +14,7 @@
 
     <div
       class="div__input-dropdown-controls-content-widget"
-      :style="
-        'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'
-      "
+      :style="'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'"
     >
       <span
         class="span__input-dropdown-controls-content-input-txt-widget"
@@ -31,12 +22,7 @@
       >
         <select
           class="w-100 h-100 edit-id"
-          style="
-            border-radius: 0;
-            background-color: #1c1c1c;
-            border: 0px;
-            color: #ffffff;
-          "
+          style="border-radius: 0; background-color: #1c1c1c; border: 0px; color: #ffffff"
           @change="changeSelection($event)"
         >
           <option v-for="(item, idx) in options_text" :key="idx" :value="item">

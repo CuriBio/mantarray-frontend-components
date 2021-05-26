@@ -38,9 +38,7 @@ describe("EditCustomer.vue", () => {
       propsData,
       localVue,
     });
-    const target_span = wrapper.find(
-      ".span__editcustomer-form-controls-content-title"
-    );
+    const target_span = wrapper.find(".span__editcustomer-form-controls-content-title");
     expect(target_span.text()).toStrictEqual("Edit Customer Account ID");
   });
 });
@@ -56,60 +54,25 @@ describe("EditCustomer.enter_uuidbase57", () => {
     jest.restoreAllMocks();
   });
   test.each([
-    [
-      "2VSckkBYr2An3dqHEyfRRE",
-      "valid input",
-      "alphanumeric-id",
-      "validate_uuidBase_fiftyseven_encode",
-    ],
-    [
-      "0VSckkBYH2An3dqHEyfRRE",
-      "contains zero (0)",
-      "alphanumeric-id",
-      "validate_uuidBase_fiftyseven_encode",
-    ],
+    ["2VSckkBYr2An3dqHEyfRRE", "valid input", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
+    ["0VSckkBYH2An3dqHEyfRRE", "contains zero (0)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
     [
       "2VSckkBY2An3dqHEyfRRE",
       "is less than 22 characters",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
     ],
-    [
-      "2VSckkBY2An3dqHEyfRREab",
-      "23 characters",
-      "alphanumeric-id",
-      "validate_uuidBase_fiftyseven_encode",
-    ],
-    [
-      "2VSckkBY12An3dqHEyfRRE",
-      "contains  (1)",
-      "alphanumeric-id",
-      "validate_uuidBase_fiftyseven_encode",
-    ],
+    ["2VSckkBY2An3dqHEyfRREab", "23 characters", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
+    ["2VSckkBY12An3dqHEyfRRE", "contains  (1)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
     [
       "2VSIkkBYH2An3dqHEyfRRE",
       "contains capital (I)",
       "alphanumeric-id",
       "validate_uuidBase_fiftyseven_encode",
     ],
-    [
-      "2VSskkBYH2An3dqHElfRRE",
-      "contains  (l)",
-      "alphanumeric-id",
-      "validate_uuidBase_fiftyseven_encode",
-    ],
-    [
-      "2VSskkBYH2An3dqHEyfRRO",
-      "contains  (O)",
-      "alphanumeric-id",
-      "validate_uuidBase_fiftyseven_encode",
-    ],
-    [
-      "4vqyd62oARXqj9nRUNhtLQ",
-      "error in encoding",
-      "alphanumeric-id",
-      "validate_uuidBase_fiftyseven_encode",
-    ],
+    ["2VSskkBYH2An3dqHElfRRE", "contains  (l)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
+    ["2VSskkBYH2An3dqHEyfRRO", "contains  (O)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
+    ["4vqyd62oARXqj9nRUNhtLQ", "error in encoding", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
     [
       "2VSckkBY-2An3dqHEyfRRE",
       "contains hypen (-)",
@@ -123,51 +86,21 @@ describe("EditCustomer.enter_uuidbase57", () => {
       "validate_uuidBase_fiftyseven_encode",
     ],
     ["", "<empty>", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-    [
-      "06ad547f-fe02-477b-9473-f7977e4d5e17",
-      "valid input",
-      "apikey-id",
-      "validate_alphanumeric",
-    ],
-    [
-      "06ad547f fe02-477b-9473-f7977e4d5e17",
-      "missing hypen",
-      "apikey-id",
-      "validate_alphanumeric",
-    ],
-    [
-      "06ad547f-fe02-477b-9473-f7977e4d5e1",
-      "less than 36",
-      "apikey-id",
-      "validate_alphanumeric",
-    ],
-    [
-      "06ad547f-fe02-477b-9473-f7977e4d5e14k",
-      "more than 36",
-      "apikey-id",
-      "validate_alphanumeric",
-    ],
+    ["06ad547f-fe02-477b-9473-f7977e4d5e17", "valid input", "apikey-id", "validate_alphanumeric"],
+    ["06ad547f fe02-477b-9473-f7977e4d5e17", "missing hypen", "apikey-id", "validate_alphanumeric"],
+    ["06ad547f-fe02-477b-9473-f7977e4d5e1", "less than 36", "apikey-id", "validate_alphanumeric"],
+    ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "more than 36", "apikey-id", "validate_alphanumeric"],
     ["", "<empty>", "apikey-id", "validate_alphanumeric"],
     ["Experiment anemia -1", "valid input", "nickname-id", "validate_nickname"],
     ["Cat * lab", "contains asterisk *", "nickname-id", "validate_nickname"],
     ["Cat lab`", "contains left quote `", "nickname-id", "validate_nickname"],
     ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_nickname"],
-    [
-      "Experiment anemia alpha cells -1",
-      "more than 20 characters",
-      "nickname-id",
-      "validate_nickname",
-    ],
+    ["Experiment anemia alpha cells -1", "more than 20 characters", "nickname-id", "validate_nickname"],
     ["C", "minimum one character C", "nickname-id", "validate_nickname", ""],
     ["", "<empty>", "nickname-id", "validate_nickname"],
   ])(
     "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
-    async (
-      entry,
-      test_description,
-      selector_id_suffix,
-      text_validation_type
-    ) => {
+    async (entry, test_description, selector_id_suffix, text_validation_type) => {
       if (text_validation_type === "validate_uuidBase_fiftyseven_encode") {
         editcustomer.uuid = entry;
       }
@@ -187,27 +120,18 @@ describe("EditCustomer.enter_uuidbase57", () => {
         localVue,
       });
 
-      const spied_text_validator = jest.spyOn(
-        TextValidation.prototype,
-        text_validation_type
-      );
+      const spied_text_validator = jest.spyOn(TextValidation.prototype, text_validation_type);
 
-      const target_input_field = wrapper.find(
-        "#input-widget-field-" + selector_id_suffix
-      );
+      const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
 
-      const target_error_message = wrapper.find(
-        "#input-widget-feedback-" + selector_id_suffix
-      );
+      const target_error_message = wrapper.find("#input-widget-feedback-" + selector_id_suffix);
 
       target_input_field.setValue(entry);
 
       await Vue.nextTick();
       expect(spied_text_validator).toHaveBeenCalledWith(entry);
 
-      expect(target_error_message.text()).toStrictEqual(
-        spied_text_validator.mock.results[0].value
-      );
+      expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
     }
   );
   test.each([
@@ -226,12 +150,8 @@ describe("EditCustomer.enter_uuidbase57", () => {
         localVue,
       });
 
-      const target_input_field = wrapper.find(
-        "#input-widget-field-" + selector_id_suffix
-      );
-      const target_error_message = wrapper.find(
-        "#input-widget-feedback-" + selector_id_suffix
-      );
+      const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
+      const target_error_message = wrapper.find("#input-widget-feedback-" + selector_id_suffix);
       target_input_field.setValue("blah");
       await Vue.nextTick();
       // confirm that the pre-condition is different
@@ -276,12 +196,7 @@ describe("EditCustomer.enable_save_button", () => {
       "Experiment anemia -1",
       "color: rgb(255, 255, 255);",
     ],
-    [
-      "5FY8KwTsQaUJ2KzHJGetfE",
-      "",
-      "Experiment anemia -1",
-      "color: rgb(255, 255, 255);",
-    ],
+    ["5FY8KwTsQaUJ2KzHJGetfE", "", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
   ])(
     "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
     async (uuid, apikey, nickname, save_btn_css) => {
@@ -307,9 +222,7 @@ describe("EditCustomer.enable_save_button", () => {
       );
       target_input_field_uuid.setValue(uuid);
       await Vue.nextTick();
-      const target_input_field_apikey = wrapper.find(
-        "#input-widget-field-" + selector_id_suffix_apikey_id
-      );
+      const target_input_field_apikey = wrapper.find("#input-widget-field-" + selector_id_suffix_apikey_id);
       target_input_field_apikey.setValue(apikey);
       await Vue.nextTick();
 
@@ -321,13 +234,9 @@ describe("EditCustomer.enable_save_button", () => {
 
       const target_button_label_btn = wrapper.findAll(".span__button_label");
       const cancel_btn = target_button_label_btn.at(0);
-      expect(cancel_btn.attributes().style).toContain(
-        "color: rgb(255, 255, 255);"
-      );
+      expect(cancel_btn.attributes().style).toContain("color: rgb(255, 255, 255);");
       const delete_btn = target_button_label_btn.at(1);
-      expect(delete_btn.attributes().style).toContain(
-        "color: rgb(255, 255, 255);"
-      );
+      expect(delete_btn.attributes().style).toContain("color: rgb(255, 255, 255);");
       const save_btn = target_button_label_btn.at(2);
       expect(save_btn.attributes().style).toContain(save_btn_css);
     }
@@ -391,9 +300,7 @@ describe("EditCustomer.clicked_button", () => {
 
       expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
 
-      const target_input_field_apikey = wrapper.find(
-        "#input-widget-field-" + selector_id_suffix_apikey_id
-      );
+      const target_input_field_apikey = wrapper.find("#input-widget-field-" + selector_id_suffix_apikey_id);
       const target_error_message_apikey = wrapper.find(
         "#input-widget-feedback-" + selector_id_suffix_apikey_id
       );
@@ -411,19 +318,13 @@ describe("EditCustomer.clicked_button", () => {
       target_input_field_nickname.setValue(nickname_test);
       await Vue.nextTick();
 
-      expect(target_error_message_nickname.text()).toStrictEqual(
-        invalid_nickname
-      );
+      expect(target_error_message_nickname.text()).toStrictEqual(invalid_nickname);
 
       const target_button_label_btn = wrapper.findAll(".span__button_label");
       const cancel_btn = target_button_label_btn.at(0);
-      expect(cancel_btn.attributes().style).toContain(
-        "color: rgb(255, 255, 255);"
-      );
+      expect(cancel_btn.attributes().style).toContain("color: rgb(255, 255, 255);");
       const delete_btn = target_button_label_btn.at(1);
-      expect(delete_btn.attributes().style).toContain(
-        "color: rgb(255, 255, 255);"
-      );
+      expect(delete_btn.attributes().style).toContain("color: rgb(255, 255, 255);");
       const save_btn = target_button_label_btn.at(2);
       expect(save_btn.attributes().style).toContain(save_btn_css);
 

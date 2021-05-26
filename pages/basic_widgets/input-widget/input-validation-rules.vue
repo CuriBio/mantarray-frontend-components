@@ -30,9 +30,7 @@ export default {
       let validation = false;
       if (new_value.length < 2 && new_value.length != 0) {
         this.error_text =
-          "The entered text is " +
-          new_value.length +
-          " character. All valid entries are 2 characters.";
+          "The entered text is " + new_value.length + " character. All valid entries are 2 characters.";
         validation = false;
       }
       if (new_value.length == 2) {
@@ -41,9 +39,7 @@ export default {
       }
       if (new_value.length > 2) {
         this.error_text =
-          "The entered text is " +
-          new_value.length +
-          " character. All valid entries are 2 characters.";
+          "The entered text is " + new_value.length + " character. All valid entries are 2 characters.";
         validation = false;
       }
       return validation;

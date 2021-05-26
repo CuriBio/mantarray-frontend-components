@@ -8,11 +8,7 @@ import * as d3 from "d3";
 import { shallowMount } from "@vue/test-utils";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
-import {
-  arry,
-  new_arry,
-  con_arry,
-} from "../../js_utils/waveform_data_provider.js";
+import { arry, new_arry, con_arry } from "../../js_utils/waveform_data_provider.js";
 
 const ar = arry;
 const nr = new_arry;
@@ -111,10 +107,7 @@ describe("ContinuousWaveform.vue", () => {
       expect(waveform_wrapper.props("x_axis_min")).toEqual(expected_value);
 
       const new_expected_value = 2500;
-      store.commit(
-        "playback/set_x_time_index",
-        new_expected_value + x_axis_sample_length
-      );
+      store.commit("playback/set_x_time_index", new_expected_value + x_axis_sample_length);
       await wrapper.vm.$nextTick(); // wait for update
       expect(waveform_wrapper.props("x_axis_min")).toEqual(new_expected_value);
     });
@@ -166,16 +159,12 @@ describe("ContinuousWaveform.vue", () => {
         [1250, 92],
         [1500, 84],
       ]);
-      expect(
-        store.state.waveform.plate_waveforms[0].x_data_points.length
-      ).toEqual(6);
+      expect(store.state.waveform.plate_waveforms[0].x_data_points.length).toEqual(6);
 
       store.commit("waveform/append_plate_waveforms", cr);
       await wrapper.vm.$nextTick(); // wait for update
       // confirm the values updated in Vuex
-      expect(
-        store.state.waveform.plate_waveforms[0].x_data_points.length
-      ).toEqual(10);
+      expect(store.state.waveform.plate_waveforms[0].x_data_points.length).toEqual(10);
 
       const waveform_data_points = waveform_wrapper.props("data_points");
 
@@ -221,9 +210,7 @@ describe("ContinuousWaveform.vue", () => {
     wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(wrapper.find(".div__waveform-well-title").text()).toEqual(
-      expected_value
-    );
+    expect(wrapper.find(".div__waveform-well-title").text()).toEqual(expected_value);
   });
 
   test("When the display_waveform_idx prop is updated and change in the quadrant, Then the child Waveform prop is updated", async () => {
@@ -242,14 +229,7 @@ describe("ContinuousWaveform.vue", () => {
     expect(waveform_wrapper.props("title")).toEqual(expected_value);
 
     const new_expected_value = "C04";
-    quadrant = [
-      14,
-      15,
-      18,
-      19,
-      22,
-      23,
-    ]; /* the value of C04 is in the quadrant 4  [14, 15, 18, 19, 22, 23] */
+    quadrant = [14, 15, 18, 19, 22, 23]; /* the value of C04 is in the quadrant 4  [14, 15, 18, 19, 22, 23] */
     store.commit("twentyfourcontrols/set_is_quadrant", quadrant);
     wrapper.setProps({ display_waveform_idx: 0 });
 
@@ -281,16 +261,12 @@ describe("ContinuousWaveform.vue", () => {
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
-      expect(waveform_wrapper.props("plot_area_pixel_height")).toEqual(
-        expected_value
-      );
+      expect(waveform_wrapper.props("plot_area_pixel_height")).toEqual(expected_value);
 
       const new_expected_value = 357;
       wrapper.setProps({ plot_area_pixel_height: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
-      expect(waveform_wrapper.props("plot_area_pixel_height")).toEqual(
-        new_expected_value
-      );
+      expect(waveform_wrapper.props("plot_area_pixel_height")).toEqual(new_expected_value);
     });
     test("When initially mounted, Then the plot_area_pixel_width is passed as a prop to the child Waveform, Then When prop is updated Then the child prop also updates", async () => {
       const expected_value = 401;
@@ -299,16 +275,12 @@ describe("ContinuousWaveform.vue", () => {
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
-      expect(waveform_wrapper.props("plot_area_pixel_width")).toEqual(
-        expected_value
-      );
+      expect(waveform_wrapper.props("plot_area_pixel_width")).toEqual(expected_value);
 
       const new_expected_value = 399;
       wrapper.setProps({ plot_area_pixel_width: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
-      expect(waveform_wrapper.props("plot_area_pixel_width")).toEqual(
-        new_expected_value
-      );
+      expect(waveform_wrapper.props("plot_area_pixel_width")).toEqual(new_expected_value);
     });
     test("When initially mounted, Then the samples_per_second is passed as a prop to the child Waveform, Then When prop is updated Then the child prop also updates", async () => {
       const expected_value = 100001;
@@ -317,16 +289,12 @@ describe("ContinuousWaveform.vue", () => {
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
-      expect(waveform_wrapper.props("samples_per_second")).toEqual(
-        expected_value
-      );
+      expect(waveform_wrapper.props("samples_per_second")).toEqual(expected_value);
 
       const new_expected_value = 999999;
       wrapper.setProps({ samples_per_second: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
-      expect(waveform_wrapper.props("samples_per_second")).toEqual(
-        new_expected_value
-      );
+      expect(waveform_wrapper.props("samples_per_second")).toEqual(new_expected_value);
     });
     test("When initially mounted, Then the margin is passed as a prop to the child Waveform, Then When prop is updated Then the child prop also updates", async () => {
       const expected_value = { top: 11, right: 19, bottom: 29, left: 61 };
@@ -396,9 +364,7 @@ describe("ContinuousWaveform.vue", () => {
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
-      expect(waveform_wrapper.props("x_axis_sample_length")).toEqual(
-        expected_value
-      );
+      expect(waveform_wrapper.props("x_axis_sample_length")).toEqual(expected_value);
     });
 
     test("When the x_axis_sample_length from Vuex is updated, Then the x_axis_sample_length prop of the child Waveform is updated", async () => {
@@ -413,17 +379,13 @@ describe("ContinuousWaveform.vue", () => {
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
       // confirm initial state
-      expect(waveform_wrapper.props("x_axis_sample_length")).toEqual(
-        expected_value
-      );
+      expect(waveform_wrapper.props("x_axis_sample_length")).toEqual(expected_value);
       const new_expected_value = 2 * 100000;
       /*wrapper.setProps({ x_axis_sample_length: new_expected_value }); */
       default_x_zoom_level_idx = 3;
       store.commit("waveform/set_x_axis_zoom_idx", default_x_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
-      expect(waveform_wrapper.props("x_axis_sample_length")).toEqual(
-        new_expected_value
-      );
+      expect(waveform_wrapper.props("x_axis_sample_length")).toEqual(new_expected_value);
     });
 
     test("When initially mounted, Then the x_label prop is passed to the x_axis_label prop of the child Waveform", () => {
@@ -456,9 +418,7 @@ describe("ContinuousWaveform.vue", () => {
       const new_expected_value = "My X Axis";
       wrapper.setProps({ x_label: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
-      expect(waveform_wrapper.props("x_axis_label")).toEqual(
-        new_expected_value
-      );
+      expect(waveform_wrapper.props("x_axis_label")).toEqual(new_expected_value);
     });
   });
 
@@ -593,9 +553,7 @@ describe("ContinuousWaveform.vue", () => {
       const new_expected_value = "My Y Axis";
       wrapper.setProps({ y_label: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
-      expect(waveform_wrapper.props("y_axis_label")).toEqual(
-        new_expected_value
-      );
+      expect(waveform_wrapper.props("y_axis_label")).toEqual(new_expected_value);
     });
   });
 

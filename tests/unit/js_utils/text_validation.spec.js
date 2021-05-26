@@ -20,9 +20,7 @@ describe("TextValidation", () => {
   });
   test("Given a text validation is for uuidBase57encode, When called toString(), Then return would match the text rule of 'uuidBase57encode' applied", () => {
     const validation = TextValidation_UUIDBase57;
-    expect(validation.toString()).toStrictEqual(
-      "TextValidation.uuidBase57encode"
-    );
+    expect(validation.toString()).toStrictEqual("TextValidation.uuidBase57encode");
   });
   test("Given a text validation is for alphanumeric, When called toString(), Then return would match the text rule of  'alphanumeric' applied", () => {
     const validation = TextValidation_Alphanumeric;
@@ -142,47 +140,23 @@ describe("TextValidation.validate_plate_barcode", () => {
 
 describe("TextValidation.validate_uuidBase_fiftyseven_encode", () => {
   test.each([
-    [
-      "0VSckkBYH2An3dqHEyfRRE",
-      "0",
-      "The entered ID has an invalid character 0,",
-    ],
+    ["0VSckkBYH2An3dqHEyfRRE", "0", "The entered ID has an invalid character 0,"],
     [
       "2VSckkBY2An3dqHEyfRRE",
       "one less",
       "The entered ID is 21 characters. All valid IDs are exactly 22 characters.",
     ],
-    [
-      "2VSckkBY12An3dqHEyfRRE",
-      "1",
-      "The entered ID has an invalid character 1,",
-    ],
-    [
-      "2VSIkkBYH2An3dqHEyfRRE",
-      "I",
-      "The entered ID has an invalid character I,",
-    ],
-    [
-      "2VSskkBYH2An3dqHElfRRE",
-      "l",
-      "The entered ID has an invalid character l,",
-    ],
-    [
-      "2VSskkBYH2An3dqHEyfRRO",
-      "O",
-      "The entered ID has an invalid character O,",
-    ],
+    ["2VSckkBY12An3dqHEyfRRE", "1", "The entered ID has an invalid character 1,"],
+    ["2VSIkkBYH2An3dqHEyfRRE", "I", "The entered ID has an invalid character I,"],
+    ["2VSskkBYH2An3dqHElfRRE", "l", "The entered ID has an invalid character l,"],
+    ["2VSskkBYH2An3dqHEyfRRO", "O", "The entered ID has an invalid character O,"],
     ["5FY8KwTsQaUJ2KzHJGetfE", "", ""],
     [
       "2VSckkBY2An3dqHEyfRREab",
       "more than 21",
       "The entered ID is 23 characters. All valid IDs are exactly 22 characters.",
     ],
-    [
-      "4vqyd62oARXqj9nRUNhtLQ",
-      "",
-      "This combination of 22 characters is invalid encoded id",
-    ],
+    ["4vqyd62oARXqj9nRUNhtLQ", "", "This combination of 22 characters is invalid encoded id"],
   ])(
     "Given the encoded-uuid %s is the invalid and fails the matching criteria, When the text contains (%s) charcter, Then validation fails and appropriate invalid text is returned",
     (uuid_text, error, message) => {
@@ -212,22 +186,10 @@ describe("TextValidation.validate_nickname", () => {
     ["C", ""],
     ["Experiment anemia -1", ""],
     [null, "This field is required"],
-    [
-      "Experiment anemia alpha cells -1",
-      "Invalid as its more than 20 charcters",
-    ],
-    [
-      "Cat * lab",
-      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
-    ],
-    [
-      "Cat lab` ",
-      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
-    ],
-    [
-      "Cat lab;",
-      "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /",
-    ],
+    ["Experiment anemia alpha cells -1", "Invalid as its more than 20 charcters"],
+    ["Cat * lab", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
+    ["Cat lab` ", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
+    ["Cat lab;", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
   ])(
     "Given the Nickname %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
     (nickname_id, message) => {

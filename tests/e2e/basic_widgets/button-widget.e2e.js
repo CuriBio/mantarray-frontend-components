@@ -13,10 +13,7 @@ fixture`basic_widgets/button-widget/basic-button`
 
 test("testing the button Widget basic display", async (t) => {
   const screenshot_path_base = path.join("basic_widgets", "button-widget");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "basic-button-widget"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "basic-button-widget");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
@@ -27,10 +24,7 @@ test("testing the ButtonWidget and hover on the buttons", async (t) => {
   var count = await span__button_label.count;
 
   for (var i = 0; i < count; i++) {
-    let screenshot_path = path.join(
-      screenshot_path_base,
-      "button-widget-hover-" + buttons[i]
-    );
+    let screenshot_path = path.join(screenshot_path_base, "button-widget-hover-" + buttons[i]);
     await t.hover(span__button_label.nth(i));
     await testcafe_page_visual_regression(t, screenshot_path);
   }
@@ -42,10 +36,7 @@ fixture`basic_widgets/button-widget/button-grey`
 
 test("testing the button Widget basic display with Greyed button", async (t) => {
   const screenshot_path_base = path.join("basic_widgets", "button-widget");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "button-grey-display"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "button-grey-display");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 

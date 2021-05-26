@@ -19,20 +19,14 @@ test("testing the ErrorCatchWidget with a error log file path", async (t) => {
 
 test("testing the ErrorCatchWidget with a error log file path and hover on the okay button", async (t) => {
   const screenshot_path_base = path.join("status", "errorcatch");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "error-catch-hover-okay-button"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "error-catch-hover-okay-button");
   await t.hover(okay_btn_label);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("testing the ErrorCatchWidget with a error log file path and hover on the contact e-mail", async (t) => {
   const screenshot_path_base = path.join("status", "errorcatch");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "error-catch-hover-contact-email"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "error-catch-hover-contact-email");
   await t.hover(error_catch_contact);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
@@ -43,10 +37,7 @@ fixture`status/error-catch/error-catch-x-y-offset`
 
 test("testing the ErrorCatchWidget with an offset of X and Y position", async (t) => {
   const screenshot_path_base = path.join("status", "errorcatch");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "error-catch-x-y-offset"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "error-catch-x-y-offset");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
@@ -56,9 +47,6 @@ fixture`status/error-catch/error-catch-small-path`
 
 test("testing the ErrorCatchWidget with a error log file with just small size file path and height adjusted based on length error log file", async (t) => {
   const screenshot_path_base = path.join("status", "errorcatch");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "error-catch-small-path"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "error-catch-small-path");
   await testcafe_page_visual_regression(t, screenshot_path);
 });

@@ -2,14 +2,7 @@
   <div>
     <div
       class="div__input-background"
-      :style="
-        'width: ' +
-        input_width_background +
-        'px;' +
-        'height: ' +
-        input_height_background +
-        'px;'
-      "
+      :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
     >
       <span
         v-if="title_label !== ''"
@@ -27,14 +20,9 @@
             ? 'div__input-controls-content-widget--invalid'
             : 'div__input-controls-content-widget--valid',
         ]"
-        :style="
-          'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'
-        "
+        :style="'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'"
       >
-        <span
-          class="span__input-controls-content-input-txt-widget"
-          :style="'width: ' + input_width + 'px;'"
-        >
+        <span class="span__input-controls-content-input-txt-widget" :style="'width: ' + input_width + 'px;'">
           <b-form-input
             :id="'input-widget-field-' + dom_id_suffix"
             v-model="input_value"
@@ -45,12 +33,7 @@
             :disabled="disabled"
             :onpaste="input_cut_paste"
             class="w-100 h-100 edit-id"
-            style="
-              border-radius: 0;
-              color: rgb(255, 255, 255);
-              background-color: #3f3f3f;
-              border: 0px;
-            "
+            style="border-radius: 0; color: rgb(255, 255, 255); background-color: #3f3f3f; border: 0px"
             @input="on_b_form_input"
           ></b-form-input>
         </span>
@@ -59,9 +42,7 @@
         v-show="display_text_message"
         :id="'input-widget-feedback-' + dom_id_suffix"
         class="div__input-controls-content-feedback"
-        :style="
-          'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'
-        "
+        :style="'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'"
       >
         {{ invalid_text }}
       </div>

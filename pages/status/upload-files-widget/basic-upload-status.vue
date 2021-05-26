@@ -1,16 +1,10 @@
 <template>
   <div>
     <ComponentToTest></ComponentToTest>
-    <span
-      id="test-1"
-      style="top: 0px; position: absolute; left: 500px"
-      @click="midpointincrement"
+    <span id="test-1" style="top: 0px; position: absolute; left: 500px" @click="midpointincrement"
       >mid point</span
     >
-    <span
-      id="test-2"
-      style="top: 0px; position: absolute; left: 700px"
-      @click="lastpointincrement"
+    <span id="test-2" style="top: 0px; position: absolute; left: 700px" @click="lastpointincrement"
       >last point</span
     >
   </div>

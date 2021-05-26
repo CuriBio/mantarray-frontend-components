@@ -65,9 +65,7 @@ describe("ButtonWidget.vue", () => {
       localVue,
     });
     const target_background_div = wrapper.find(".div__button-background");
-    expect(target_background_div.attributes().style).toBe(
-      "width: 500px; height: 50px; top: 0px; left: 0px;"
-    );
+    expect(target_background_div.attributes().style).toBe("width: 500px; height: 50px; top: 0px; left: 0px;");
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color and greyed color the values provided from the props as visible is true so focus color text is rendred", () => {
     const propsData = {
@@ -294,9 +292,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_canvas_common_line = wrapper.find(
-      ".canvas__common-horizontal-line"
-    );
+    const target_canvas_common_line = wrapper.find(".canvas__common-horizontal-line");
     expect(target_canvas_common_line.attributes().style).toBe("width: 490px;"); // validated if dynamically the value is modified to n-10 px in width as 5px padding is as per mockflow
   });
   test("When the ButtonWidget is mounted, Then it loads the widget as there is only one single btn label Save ID, verify that vertical line is not present", async () => {
@@ -339,13 +335,9 @@ describe("ButtonWidget.vue", () => {
     const target_vertical_line = wrapper.findAll(".canvas__vertical-line");
 
     const first_vertical_line = target_vertical_line.at(0);
-    expect(first_vertical_line.attributes().style).toBe(
-      "left: 166.66666666666666px;"
-    );
+    expect(first_vertical_line.attributes().style).toBe("left: 166.66666666666666px;");
     const second_vertical_line = target_vertical_line.at(1);
-    expect(second_vertical_line.attributes().style).toBe(
-      "left: 333.3333333333333px;"
-    );
+    expect(second_vertical_line.attributes().style).toBe("left: 333.3333333333333px;");
   });
   test("Given the ButtonWidget is mounted with Cancel / Save ID buttons and Save is disabled, When User clicks on Cancel, Then an event is emmitted with the Button Index as the contents of the event", async () => {
     const propsData = {

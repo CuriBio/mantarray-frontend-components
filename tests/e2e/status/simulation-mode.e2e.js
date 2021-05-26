@@ -14,11 +14,7 @@ fixture`status/simulation-mode/simulation-basic`
 `http://localhost:8080/status/simulation-mode/simulation-basic`; // specify the start page
 
 test("Simulation mode widget looks as expected with default values", async (t) => {
-  const screenshot_path = path.join(
-    "status",
-    "simulation-mode",
-    "simulation-basic"
-  );
+  const screenshot_path = path.join("status", "simulation-mode", "simulation-basic");
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
@@ -28,11 +24,7 @@ fixture`status/simulation-mode/simulation-x-y-offset`
 `http://localhost:8080/status/simulation-mode/simulation-x-y-offset`; // specify the start page
 
 test("Simulation Mode widget looks as expected when anchored at an offset from top left", async (t) => {
-  const screenshot_path = path.join(
-    "status",
-    "simulation-mode",
-    "simulation-x-y-offset"
-  );
+  const screenshot_path = path.join("status", "simulation-mode", "simulation-x-y-offset");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
@@ -41,10 +33,6 @@ fixture`status/simulation-mode/simulation-with-copyright`
 `http://localhost:8080/status/simulation-mode/simulation-with-copyright`; // specify the start page
 
 test("Simulation Mode widget looks as expected when copyright text is externally added on top of it", async (t) => {
-  const screenshot_path = path.join(
-    "status",
-    "simulation-mode",
-    "simulation-with-copyright"
-  );
+  const screenshot_path = path.join("status", "simulation-mode", "simulation-with-copyright");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
