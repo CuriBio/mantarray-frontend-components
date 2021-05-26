@@ -30,9 +30,6 @@ export default {
   heatmap_autoscale(state) {
     return state.heatmap_autoscale;
   },
-  heatmap_options_array(state) {
-    return state.heatmap_options_array;
-  },
   heatmap_options_idx(state) {
     return state.heatmap_options_idx;
   },
@@ -43,8 +40,6 @@ export default {
     return state.heatmap_options_gradient;
   },
   heatmap_options_on_gradient(state) {
-    return state.heatmap_options_gradient[
-      state.heatmap_options_array[state.heatmap_options_idx]
-    ];
+    return state.heatmap_options_gradient[state.heatmap_options_array[state.heatmap_options_idx]];
   },
 };
