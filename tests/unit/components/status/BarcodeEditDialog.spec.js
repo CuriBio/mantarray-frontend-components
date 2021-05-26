@@ -36,9 +36,8 @@ describe("BarcodeEditDialog.vue", () => {
     expect(target_message_span_p.at(0).text()).toStrictEqual("Do you want to enable manual barcode editing?");
     expect(target_message_span_p.at(1)).toMatchInlineSnapshot(`
       <p>
-        Once enabled, all barcodes must be entered manually. This should only
-        be done if the barcode scanner is malfunctioning. Scanning cannot be
-        re-enabled until software is restarted.
+        Once enabled, all barcodes must be entered manually. This should only be done if the barcode scanner
+        is malfunctioning. Scanning cannot be re-enabled until software is restarted.
       </p>
     `);
   });
