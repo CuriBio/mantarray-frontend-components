@@ -48,9 +48,7 @@ describe("StimulationStudioPlateWell.vue", () => {
       propsData,
       localVue,
     });
-    const protocol_name = wrapper.find(
-      ".span__simulationstudio-plate-well-protocol-location"
-    );
+    const protocol_name = wrapper.find(".span__simulationstudio-plate-well-protocol-location");
     const well_circle = wrapper.find("circle");
 
     expect(protocol_name.text()).toStrictEqual("'A'");

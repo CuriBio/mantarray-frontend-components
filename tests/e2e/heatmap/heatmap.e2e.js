@@ -18,19 +18,13 @@ fixture`heatmap/basic`.page // declare the fixture
 
 test("testing the HeatMap Layout NO option selected", async (t) => {
   const screenshot_path_base = path.join("heatmap", "heatmap-layout-basic");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "basic-heatmap-layout-no-selection"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "basic-heatmap-layout-no-selection");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("testing the HeatMap Layout and the max and min value are valid", async (t) => {
   const screenshot_path_base = path.join("heatmap", "heatmap-layout-basic");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "basic-heatmap-layout-min-max-selection"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "basic-heatmap-layout-min-max-selection");
   await t.typeText(input_max, "100");
   await t.typeText(input_min, "10");
   await testcafe_page_visual_regression(t, screenshot_path);
@@ -49,20 +43,14 @@ test("testing the HeatMap Layout and the max and min when max and min value are 
 
 test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force' as dropdown", async (t) => {
   const screenshot_path_base = path.join("heatmap", "heatmap-layout-basic");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "basic-heatmap-layout-display-value-selected"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "basic-heatmap-layout-display-value-selected");
   await t.typeText(input_display, "Twitch Force");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force' as dropdown and Apply is clicked", async (t) => {
   const screenshot_path_base = path.join("heatmap", "heatmap-layout-basic");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "basic-heatmap-layout-display-value-apply-clicked"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "basic-heatmap-layout-display-value-apply-clicked");
   await t.typeText(input_display, "Twitch Force");
   await t.click(heatmap_apply);
   await testcafe_page_visual_regression(t, screenshot_path);
@@ -70,10 +58,7 @@ test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force' 
 
 test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force' as dropdown and Apply is clicked then RESET", async (t) => {
   const screenshot_path_base = path.join("heatmap", "heatmap-layout-basic");
-  const screenshot_path = path.join(
-    screenshot_path_base,
-    "basic-heatmap-layout-display-value-reset-clicked"
-  );
+  const screenshot_path = path.join(screenshot_path_base, "basic-heatmap-layout-display-value-reset-clicked");
   await t.typeText(input_display, "Twitch Force");
   await t.click(heatmap_apply);
   await t.click(heatmap_reset);

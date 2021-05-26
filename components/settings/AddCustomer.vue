@@ -4,10 +4,7 @@
     <span class="span__addcustomer-form-controls-content-title">
       Add&nbsp;<wbr />New&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
     </span>
-    <div
-      id="uuid"
-      style="top: 50px; left: 50px; position: absolute; z-index: 24"
-    >
+    <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
         :title_label="'Enter Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
@@ -19,10 +16,7 @@
       ></InputWidget>
     </div>
 
-    <div
-      id="apikey"
-      style="top: 145px; left: 50px; position: absolute; z-index: 23"
-    >
+    <div id="apikey" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
         :title_label="'Enter API Key (Optional)'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
@@ -33,10 +27,7 @@
         @update:value="on_update_api($event)"
       ></InputWidget>
     </div>
-    <div
-      id="nickname"
-      style="top: 241px; left: 50px; position: absolute; z-index: 22"
-    >
+    <div id="nickname" style="top: 241px; left: 50px; position: absolute; z-index: 22">
       <InputWidget
         :title_label="'Enter ID Nickname'"
         :placeholder="'Curi Bio Main Account'"
@@ -192,8 +183,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget
-  > #input-widget-field-nickname-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-nickname-id {
   font-family: Muli;
 }
 </style>

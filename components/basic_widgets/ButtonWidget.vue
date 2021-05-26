@@ -22,10 +22,7 @@
       >
       </canvas>
     </div>
-    <canvas
-      class="canvas__common-horizontal-line"
-      :style="'width: ' + (button_widget_width - 10) + 'px;'"
-    >
+    <canvas class="canvas__common-horizontal-line" :style="'width: ' + (button_widget_width - 10) + 'px;'">
     </canvas>
   </div>
 </template>

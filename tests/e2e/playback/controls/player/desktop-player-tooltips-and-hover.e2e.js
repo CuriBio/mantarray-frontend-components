@@ -7,31 +7,16 @@ import {
   testcafe_element_visual_regression,
 } from "@curi-bio/frontend-test-utils";
 
-const base_screenshot_path = path.join(
-  "playback",
-  "controls",
-  "player",
-  "desktop-player"
-);
+const base_screenshot_path = path.join("playback", "controls", "player", "desktop-player");
 
 const settings_button = Selector("#settings");
 
-const schedule_button = Selector(
-  ".svg__playback-desktop-player-controls-schedule-button"
-);
+const schedule_button = Selector(".svg__playback-desktop-player-controls-schedule-button");
 
-const calibrate_button = Selector(
-  ".svg__playback-desktop-player-controls-calibrate-button"
-);
-const live_view_button = Selector(
-  ".svg__playback-desktop-player-controls-live-view-button"
-);
-const record_button = Selector(
-  ".svg__playback-desktop-player-controls-record-button"
-);
-const active_record_button = Selector(
-  ".svg__playback-desktop-player-controls-record-button--active"
-);
+const calibrate_button = Selector(".svg__playback-desktop-player-controls-calibrate-button");
+const live_view_button = Selector(".svg__playback-desktop-player-controls-live-view-button");
+const record_button = Selector(".svg__playback-desktop-player-controls-record-button");
+const active_record_button = Selector(".svg__playback-desktop-player-controls-record-button--active");
 const whole_component = Selector(".div__play-desktop-player-controls");
 const title_text = Selector(".span__playback-desktop-player-controls-text");
 
@@ -44,15 +29,9 @@ fixture`playback/controls/player/desktop-player/initial-tooltips`.page(
 ); // specify the start page
 
 test("Given Vuex is in the default player state and a valid Barcode has been committed, When hovering on the elements, Then the hover behavior occurs followed by the correct tooltip", async (t) => {
-  const this_base_screenshot_path = path.join(
-    base_screenshot_path,
-    "initial-tooltips"
-  );
+  const this_base_screenshot_path = path.join(base_screenshot_path, "initial-tooltips");
 
-  let screenshot_path = path.join(
-    this_base_screenshot_path,
-    "settings-tooltip"
-  );
+  let screenshot_path = path.join(this_base_screenshot_path, "settings-tooltip");
   // await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.hover(settings_button);
@@ -66,10 +45,7 @@ test("Given Vuex is in the default player state and a valid Barcode has been com
   await t.wait(2000);
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "still-initializing--hover-on-calibrate"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "still-initializing--hover-on-calibrate");
   await t.hover(calibrate_button);
   await testcafe_page_visual_regression(t, screenshot_path);
 
@@ -78,10 +54,7 @@ test("Given Vuex is in the default player state and a valid Barcode has been com
   screenshot_path = path.join(this_base_screenshot_path, "calibrate-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "still-initializing--hover-on-live-view"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "still-initializing--hover-on-live-view");
   await t.hover(live_view_button);
   await testcafe_page_visual_regression(t, screenshot_path);
 
@@ -90,10 +63,7 @@ test("Given Vuex is in the default player state and a valid Barcode has been com
   screenshot_path = path.join(this_base_screenshot_path, "live-view-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "still-initializing--hover-on-record"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "still-initializing--hover-on-record");
   await t.hover(record_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -109,15 +79,9 @@ fixture`playback/controls/player/desktop-player/needs-calibration-tooltips`.page
 ); // specify the start page
 
 test("Given that Vuex is in the CALIBRATION_NEEDED state and a valid barcode is committed to the store, When hovering on the elements, Then the hover behavior occurs followed by the correct tooltip", async (t) => {
-  const this_base_screenshot_path = path.join(
-    base_screenshot_path,
-    "needs-calibration-tooltips"
-  );
+  const this_base_screenshot_path = path.join(base_screenshot_path, "needs-calibration-tooltips");
 
-  let screenshot_path = path.join(
-    this_base_screenshot_path,
-    "settings-tooltip"
-  );
+  let screenshot_path = path.join(this_base_screenshot_path, "settings-tooltip");
   // await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.hover(settings_button);
@@ -131,10 +95,7 @@ test("Given that Vuex is in the CALIBRATION_NEEDED state and a valid barcode is 
   await t.wait(2000);
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "needs-calibration--hover-on-calibrate"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "needs-calibration--hover-on-calibrate");
   await t.hover(calibrate_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -142,10 +103,7 @@ test("Given that Vuex is in the CALIBRATION_NEEDED state and a valid barcode is 
   screenshot_path = path.join(this_base_screenshot_path, "calibrate-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "needs-calibration--hover-on-live-view"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "needs-calibration--hover-on-live-view");
   await t.hover(live_view_button);
   await testcafe_page_visual_regression(t, screenshot_path);
 
@@ -154,10 +112,7 @@ test("Given that Vuex is in the CALIBRATION_NEEDED state and a valid barcode is 
   screenshot_path = path.join(this_base_screenshot_path, "live-view-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "needs-calibration--hover-on-record"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "needs-calibration--hover-on-record");
   await t.hover(record_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -173,15 +128,9 @@ fixture`playback/controls/player/desktop-player/calibrated-tooltips`.page(
 ); // specify the start page
 
 test("Given that Vuex is in the CALIBRATED state and a valid barcode is committed to the store, When hovering on the elements, Then the hover behavior occurs followed by the correct tooltip", async (t) => {
-  const this_base_screenshot_path = path.join(
-    base_screenshot_path,
-    "calibrated-tooltips"
-  );
+  const this_base_screenshot_path = path.join(base_screenshot_path, "calibrated-tooltips");
 
-  let screenshot_path = path.join(
-    this_base_screenshot_path,
-    "settings-tooltip"
-  );
+  let screenshot_path = path.join(this_base_screenshot_path, "settings-tooltip");
   // await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.hover(settings_button);
@@ -195,10 +144,7 @@ test("Given that Vuex is in the CALIBRATED state and a valid barcode is committe
   await t.wait(2000);
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "calibrated--hover-on-calibrate"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "calibrated--hover-on-calibrate");
   await t.hover(calibrate_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -206,10 +152,7 @@ test("Given that Vuex is in the CALIBRATED state and a valid barcode is committe
   screenshot_path = path.join(this_base_screenshot_path, "calibrate-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "calibrated--hover-on-live-view"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "calibrated--hover-on-live-view");
   await t.hover(live_view_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -217,10 +160,7 @@ test("Given that Vuex is in the CALIBRATED state and a valid barcode is committe
   screenshot_path = path.join(this_base_screenshot_path, "live-view-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "calibrated--hover-on-record"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "calibrated--hover-on-record");
   await t.hover(record_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -236,15 +176,9 @@ fixture`playback/controls/player/desktop-player/live-view-tooltips`.page(
 ); // specify the start page
 
 test("Given that Vuex is in the LIVE_VIEW_ACTIVE state and a valid barcode is committed to the store, When hovering on the elements, Then the hover behavior occurs followed by the correct tooltip", async (t) => {
-  const this_base_screenshot_path = path.join(
-    base_screenshot_path,
-    "live-view-tooltips"
-  );
+  const this_base_screenshot_path = path.join(base_screenshot_path, "live-view-tooltips");
 
-  let screenshot_path = path.join(
-    this_base_screenshot_path,
-    "settings-tooltip"
-  );
+  let screenshot_path = path.join(this_base_screenshot_path, "settings-tooltip");
   // await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.hover(settings_button);
@@ -258,10 +192,7 @@ test("Given that Vuex is in the LIVE_VIEW_ACTIVE state and a valid barcode is co
   await t.wait(2000);
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "live-view-active--hover-on-calibrate"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "live-view-active--hover-on-calibrate");
   await t.hover(calibrate_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -269,10 +200,7 @@ test("Given that Vuex is in the LIVE_VIEW_ACTIVE state and a valid barcode is co
   screenshot_path = path.join(this_base_screenshot_path, "calibrate-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "live-view-active--hover-on-live-view"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "live-view-active--hover-on-live-view");
   await t.hover(live_view_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -281,10 +209,7 @@ test("Given that Vuex is in the LIVE_VIEW_ACTIVE state and a valid barcode is co
   await testcafe_page_visual_regression(t, screenshot_path);
 
   // await t.wait(1000); // Eli (7/1/20): odd issue where there was a tiny 1 pixel difference in CodeBuild but not locally...hopefully this wait solves it...
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "live-view-active--hover-on-record"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "live-view-active--hover-on-record");
 
   await t.hover(record_button);
   await testcafe_page_visual_regression(t, screenshot_path);
@@ -301,15 +226,9 @@ fixture`playback/controls/player/desktop-player/recording-tooltips`.page(
 ); // specify the start page
 
 test("Given that Vuex is in the RECORDING state and a valid barcode is committed to the store, When hovering on the elements, Then the hover behavior occurs followed by the correct tooltip", async (t) => {
-  const this_base_screenshot_path = path.join(
-    base_screenshot_path,
-    "recording-tooltips"
-  );
+  const this_base_screenshot_path = path.join(base_screenshot_path, "recording-tooltips");
 
-  let screenshot_path = path.join(
-    this_base_screenshot_path,
-    "settings-tooltip"
-  );
+  let screenshot_path = path.join(this_base_screenshot_path, "settings-tooltip");
   // await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.hover(settings_button);
@@ -323,10 +242,7 @@ test("Given that Vuex is in the RECORDING state and a valid barcode is committed
   await t.wait(2000);
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "recording--hover-on-calibrate"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "recording--hover-on-calibrate");
   await t.hover(calibrate_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -334,10 +250,7 @@ test("Given that Vuex is in the RECORDING state and a valid barcode is committed
   screenshot_path = path.join(this_base_screenshot_path, "calibrate-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "recording--hover-on-live-view"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "recording--hover-on-live-view");
   await t.hover(live_view_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete
@@ -345,10 +258,7 @@ test("Given that Vuex is in the RECORDING state and a valid barcode is committed
   screenshot_path = path.join(this_base_screenshot_path, "live-view-tooltip");
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "recording--hover-on-record"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "recording--hover-on-record");
   await t.hover(active_record_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // wait for tooltips to visually display state to complete

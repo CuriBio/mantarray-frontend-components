@@ -3,39 +3,19 @@
     <!-- prettier-ignore -->
     <ComponentToTest :gradient_uuid="provided_uuid" :lower_range="lower" :upper_range="upper" :heatmap_height="height" :gradient_range="range" :units="unit"></ComponentToTest>
 
-    <div
-      class="test1"
-      style="top: 111px; left: 300px; position: absolute"
-      @click="change_gradient"
-    >
+    <div class="test1" style="top: 111px; left: 300px; position: absolute" @click="change_gradient">
       change gradient
     </div>
-    <div
-      class="test2"
-      style="top: 222px; left: 300px; position: absolute"
-      @click="change_uuid"
-    >
+    <div class="test2" style="top: 222px; left: 300px; position: absolute" @click="change_uuid">
       default UUID
     </div>
-    <div
-      class="test3"
-      style="top: 333px; left: 300px; position: absolute"
-      @click="change_height"
-    >
+    <div class="test3" style="top: 333px; left: 300px; position: absolute" @click="change_height">
       change height
     </div>
-    <div
-      class="test4"
-      style="top: 444px; left: 300px; position: absolute"
-      @click="change_range"
-    >
+    <div class="test4" style="top: 444px; left: 300px; position: absolute" @click="change_range">
       change range
     </div>
-    <div
-      class="test5"
-      style="top: 555px; left: 300px; position: absolute"
-      @click="change_units"
-    >
+    <div class="test5" style="top: 555px; left: 300px; position: absolute" @click="change_units">
       change units
     </div>
   </div>

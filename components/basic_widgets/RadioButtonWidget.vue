@@ -78,12 +78,8 @@ export default {
 }
 
 /* This is the checked state */
-.custom-radio
-  .custom-control-input:checked:hover
-  ~ .custom-control-label::before,
-.custom-radio
-  .custom-control-input:checked:hover
-  ~ .custom-control-label::after {
+.custom-radio .custom-control-input:checked:hover ~ .custom-control-label::before,
+.custom-radio .custom-control-input:checked:hover ~ .custom-control-label::after {
   background-color: #000; /* black */
   /* this bg image SVG is just a white circle, you can replace it with any valid SVG code */
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3E%3Ccircle r='4' fill='%2319ac8a'/%3E%3C/svg%3E");

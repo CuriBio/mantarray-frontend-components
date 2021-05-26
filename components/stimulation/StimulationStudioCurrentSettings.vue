@@ -4,9 +4,7 @@
       id="cmpD2f15f130a7c848b6dfa50e77a7bd35ad"
       class="div__stimulationstudio-current-settings-background"
     ></div>
-    <span
-      id="cmpD5b2290fff52de686574ddc4481707a03"
-      class="span__stimulationstudio-current-settings-title"
+    <span id="cmpD5b2290fff52de686574ddc4481707a03" class="span__stimulationstudio-current-settings-title"
       >Biphasic&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
     >
     <canvas
@@ -21,9 +19,7 @@
       class="span__stimulationstudio-current-settings-sub-title-one"
       >Phase&nbsp;<wbr />1</span
     >
-    <span
-      id="cmpD31286f8dd12f44eb6bfea7751c014f90"
-      class="span__stimulationstudio-current-settings-label-one"
+    <span id="cmpD31286f8dd12f44eb6bfea7751c014f90" class="span__stimulationstudio-current-settings-label-one"
       >Stimulus&nbsp;<wbr />Duration</span
     >
     <div
@@ -32,10 +28,7 @@
       width="162"
       height="57"
     >
-      <span
-        id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt"
-        class="span__stimulationstudio-duration-input"
-      >
+      <span id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt" class="span__stimulationstudio-duration-input">
         <InputWidget
           :placeholder="'1000'"
           :dom_id_suffix="'duration'"
@@ -44,9 +37,7 @@
         ></InputWidget
       ></span>
     </div>
-    <span
-      id="cmpDad40b728ec40e75944b1291803f7785b"
-      class="span__stimulationstudio-current-settings-label-two"
+    <span id="cmpDad40b728ec40e75944b1291803f7785b" class="span__stimulationstudio-current-settings-label-two"
       >Balance&nbsp;<wbr />Charge</span
     >
     <span
@@ -60,10 +51,7 @@
       width="162"
       height="57"
     >
-      <span
-        id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt"
-        class="span__stimulationstudio-current-input"
-      >
+      <span id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt" class="span__stimulationstudio-current-input">
         <InputWidget
           :placeholder="'500'"
           :dom_id_suffix="'current'"
@@ -88,10 +76,7 @@
       width="162"
       height="57"
     >
-      <span
-        id="cmpDf07f8e650ebe6951292aa4edcc603608_txt"
-        class="span__stimulationstudio-voltage-input"
-      >
+      <span id="cmpDf07f8e650ebe6951292aa4edcc603608_txt" class="span__stimulationstudio-voltage-input">
         <InputWidget
           :placeholder="'250'"
           :dom_id_suffix="'voltage'"
@@ -107,9 +92,7 @@
       height="1"
     >
     </canvas>
-    <span
-      id="cmpD1258ad074a6b3eb7b8a869173413256d"
-      class="span__stimulationstudio-current-settings-label-six"
+    <span id="cmpD1258ad074a6b3eb7b8a869173413256d" class="span__stimulationstudio-current-settings-label-six"
       >Interpulse&nbsp;<wbr />Interval</span
     >
     <div
@@ -194,9 +177,7 @@
         ></InputWidget>
       </span>
     </div>
-    <span
-      id="cmpDbc629158eb67226e3134f41509394ec9"
-      class="span__stimulationstudio-current-settings-label-ten"
+    <span id="cmpDbc629158eb67226e3134f41509394ec9" class="span__stimulationstudio-current-settings-label-ten"
       >Balance&nbsp;<wbr />Charge</span
     >
     <span
@@ -229,10 +210,7 @@
       height="2"
     >
     </canvas>
-    <div
-      id="cmpD478c2ccd7e9ce5794863ee3bd3cacb85"
-      class="div__stimulationstudio-balance-scale-icon"
-    >
+    <div id="cmpD478c2ccd7e9ce5794863ee3bd3cacb85" class="div__stimulationstudio-balance-scale-icon">
       <FontAwesomeIcon :icon="['fas', 'balance-scale']" />
     </div>
     <span

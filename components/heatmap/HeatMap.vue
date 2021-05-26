@@ -4,99 +4,58 @@
     <div class="div__heatmap-layout-background"></div>
 
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
-    <div class="div__heatmap-layout-twitch-force-label">
-      {{ entrykey }} (μN)
-    </div>
+    <div class="div__heatmap-layout-twitch-force-label">{{ entrykey }} (μN)</div>
 
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
-      <PlateHeatMap
-        :platecolor="passing_plate_colors"
-        @platewell-selected="compute_mean"
-      ></PlateHeatMap>
+      <PlateHeatMap :platecolor="passing_plate_colors" @platewell-selected="compute_mean"></PlateHeatMap>
     </div>
 
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
-    <div
-      v-show="!is_mean_value_active"
-      class="div__heatmap-layout-heatmap-well-label"
-    >
-      Well A01 (μN):
-    </div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">Well A01 (μN):</div>
 
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
-    <div
-      v-show="!is_mean_value_active"
-      class="div__heatmap-layout-heatmap-well-value"
-    >
-      0
-    </div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value">0</div>
 
     <!-- original mockflow ID: cmpD0f9518f2e3b32a8fd2907a6c9167ed79 -->
-    <div
-      v-show="is_mean_value_active"
-      class="div__heatmap-layout-heatmap-mean-well-label"
-    >
+    <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-well-label">
       Mean of {{ well_selected_count }} Wells (μN):
     </div>
 
     <!-- original mockflow ID: cmpDbf7507b833445c460899c3735fd95527 -->
-    <div
-      v-show="is_mean_value_active"
-      class="div__heatmap-layout-heatmap-mean-value-well-label"
-    >
+    <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-value-well-label">
       {{ mean_value }}
     </div>
 
     <!-- original mockflow ID: cmpDb59694a85eb967571cf98a41b5fa7481 -->
     <div class="div__heatmap-layout-heatmap-colorbar-container">
-      <GradientBar
-        :gradient_height="481"
-        :gradient_width="40"
-        :units="unit"
-      ></GradientBar>
+      <GradientBar :gradient_height="481" :gradient_width="40" :units="unit"></GradientBar>
     </div>
 
     <!-- original mockflow ID: cmpDceaaf3ae28ae1a3394f714f82cb8848d -->
     <div class="div__heatmap-layout-heatmap-settings-panel"></div>
 
     <!-- original mockflow ID: cmpD64bd4f78c20868d7dd5a9b4aa39bf217 -->
-    <span class="span__heatmap-layout-heatmap-settings-label"
-      >Heatmap Settings</span
-    >
+    <span class="span__heatmap-layout-heatmap-settings-label">Heatmap Settings</span>
 
     <!-- original mockflow ID: cmpD56369ad2e65893ae5ca594f14a64e378 -->
-    <canvas
-      class="canvas__heatmap-settings-title-seperator"
-      width="272"
-      height="2"
-    >
-    </canvas>
+    <canvas class="canvas__heatmap-settings-title-seperator" width="272" height="2"> </canvas>
 
     <!-- original mockflow ID: cmpD9c0a6e873d03a7f83e8a68941610e993 -->
     <span class="span__heatmap-layout-heatmap-scale-label">Scale Bar</span>
 
     <!-- original mockflow ID:  cmpD5cceb38a3af00a6bd7589d883fa87688 -->
     <div class="div__heatmap-layout-checkbox-container">
-      <CheckBoxWidget
-        :checkbox_options="option"
-        @checkbox-selected="auto_scale"
-      ></CheckBoxWidget>
+      <CheckBoxWidget :checkbox_options="option" @checkbox-selected="auto_scale"></CheckBoxWidget>
     </div>
 
     <!-- original mockflow ID:  cmpD8a25d29c92a6f84cc071bcf466ca36ce -->
-    <span class="span__heatmap-layout-checkbox-label"
-      >Auto&nbsp;<wbr />Scale</span
-    >
+    <span class="span__heatmap-layout-checkbox-label">Auto&nbsp;<wbr />Scale</span>
     <!-- original mockflow ID:  cmpDda68e4034616b4f5e244dc57e815c027 -->
     <span class="span__heatmap-layout-maximum-label">Maximum</span>
 
     <!-- original mockflow ID:  cmpDb88cb7785bf9ca45549b1866c2c20122 -->
-    <div
-      class="div__heatmap-layout-maximum-input-container"
-      width="121"
-      height="52"
-    >
+    <div class="div__heatmap-layout-maximum-input-container" width="121" height="52">
       <InputWidget
         :placeholder="'100'"
         :invalid_text="max_heatmap_value"
@@ -110,11 +69,7 @@
     <span class="span__heatmap-layout-minimum-input-container">Minimum</span>
 
     <!-- original mockflow ID:  cmpD1fda22cfac2b66c17a7f3def056669a0 -->
-    <div
-      class="div__heatmap-layout-minimum-input-container"
-      width="121"
-      height="52"
-    >
+    <div class="div__heatmap-layout-minimum-input-container" width="121" height="52">
       <InputWidget
         :placeholder="'0'"
         :invalid_text="min_heatmap_value"
@@ -125,12 +80,7 @@
     </div>
 
     <!-- original mockflow ID:  cmpD8d0ef3020c7613af7ae63fa5722de759  -->
-    <canvas
-      class="canvas__heatmap-settings-scale-seperator"
-      width="212"
-      height="2"
-    >
-    </canvas>
+    <canvas class="canvas__heatmap-settings-scale-seperator" width="212" height="2"> </canvas>
 
     <!-- original mockflow ID: cmpD4146e3d532d7eb0719ee0d6e06485940 -->
     <span class="span__heatmap-layout-display-label">Display</span>
@@ -148,12 +98,7 @@
     </div>
 
     <!-- original mockflow ID: cmpDc08190eb24c68e02c278bde19882becb -->
-    <canvas
-      class="canvas__heatmap-settings-color-scheme-seperator"
-      width="212"
-      height="2"
-    >
-    </canvas>
+    <canvas class="canvas__heatmap-settings-color-scheme-seperator" width="212" height="2"> </canvas>
 
     <!-- original mockflow ID: cmpD03029ea224291e6817f40d3ac9f24b19 -->
     <span class="span__heatmap-settings-color-scheme-label"> Color Scheme</span>
@@ -200,12 +145,7 @@
       <canvas class="canvas__heatmap-settings-reset-btn-container"></canvas>
 
       <!-- original mockflow ID : cmpD2f909255bf15b8f4daa88ed03c6a8300_txt -->
-      <span
-        class="span__heatmap-settings-reset-btn-label"
-        @click="reset_heatmap_settings"
-      >
-        Reset
-      </span>
+      <span class="span__heatmap-settings-reset-btn-label" @click="reset_heatmap_settings"> Reset </span>
     </div>
   </div>
 </template>
@@ -356,10 +296,7 @@ export default {
             if (max > this.lower) {
               this.upper = max;
               this.max_heatmap_value = "";
-              if (
-                this.min_heatmap_value == "" ||
-                this.min_heatmap_value == "min is more than max"
-              ) {
+              if (this.min_heatmap_value == "" || this.min_heatmap_value == "min is more than max") {
                 this.min_heatmap_value = "";
                 this.is_apply_set = true;
               }
@@ -397,10 +334,7 @@ export default {
             if (min < this.upper) {
               this.lower = min;
               this.min_heatmap_value = "";
-              if (
-                this.max_heatmap_value == "" ||
-                this.max_heatmap_value == "min is more than max"
-              ) {
+              if (this.max_heatmap_value == "" || this.max_heatmap_value == "min is more than max") {
                 this.max_heatmap_value = "";
                 this.is_apply_set = true;
               }
@@ -1044,8 +978,7 @@ export default {
   height: 0px;
 }
 
-.div__heatmap-layout-display-input-dropdown-container
-  > .div__input-dropdown-background {
+.div__heatmap-layout-display-input-dropdown-container > .div__input-dropdown-background {
   background: none;
   border: none;
 }

@@ -56,57 +56,32 @@ describe("waveform_data_formatter.js", () => {
 
   describe("get_array_slice_to_display", () => {
     test("When called with starting and ending values exactly matching values in the array, Then it returns a slice inclusive of those indices", () => {
-      const arr = get_array_slice_to_display(
-        converted_array_x,
-        converted_array_y,
-        0,
-        70000
-      );
+      const arr = get_array_slice_to_display(converted_array_x, converted_array_y, 0, 70000);
       expect(arr).toHaveLength(13);
       expect(arr[0][0]).toStrictEqual(0);
       expect(arr[arr.length - 1][0]).toStrictEqual(70000);
     });
     test("When called with an end value higher than the highest value in the array, Then it returns a slice ending at the last index in the array", () => {
-      const arr = get_array_slice_to_display(
-        converted_array_x,
-        converted_array_y,
-        3981000,
-        3995000
-      );
+      const arr = get_array_slice_to_display(converted_array_x, converted_array_y, 3981000, 3995000);
       expect(arr).toHaveLength(4);
       expect(arr[0][0]).toStrictEqual(3981000);
       expect(arr[arr.length - 1][0]).toStrictEqual(3994000);
     });
     test("When called with a starting value in between two elements in the array, Then it returns a slice beginning with the index of the value lower than the starting value", () => {
-      const arr = get_array_slice_to_display(
-        converted_array_x,
-        converted_array_y,
-        1,
-        69999
-      );
+      const arr = get_array_slice_to_display(converted_array_x, converted_array_y, 1, 69999);
       expect(arr).toHaveLength(13);
       expect(arr[0][0]).toStrictEqual(0);
       expect(arr[arr.length - 1][0]).toStrictEqual(70000);
     });
 
     test("When called with starting and ending values in between elements in the array, Then it returns extra elements on both sides of the slice", () => {
-      const arr = get_array_slice_to_display(
-        converted_array_x,
-        converted_array_y,
-        1,
-        69998
-      );
+      const arr = get_array_slice_to_display(converted_array_x, converted_array_y, 1, 69998);
       expect(arr).toHaveLength(13);
       expect(arr[0][0]).toStrictEqual(0);
       expect(arr[arr.length - 1][0]).toStrictEqual(70000);
     });
     test("When the starting search space is negative but reaches zero, Then it still returns the first element", () => {
-      const arr = get_array_slice_to_display(
-        [0, 50],
-        [200, 300],
-        -70000,
-        70000
-      );
+      const arr = get_array_slice_to_display([0, 50], [200, 300], -70000, 70000);
       expect(arr).toHaveLength(1);
       expect(arr[0][0]).toStrictEqual(0);
       expect(arr[0][1]).toStrictEqual(200);

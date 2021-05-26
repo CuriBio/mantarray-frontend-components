@@ -55,9 +55,7 @@ describe("UploadFilesWidget.vue", () => {
       localVue,
     });
 
-    const target_upload_file_count_container = wrapper.find(
-      ".span__upload-file-count-container"
-    );
+    const target_upload_file_count_container = wrapper.find(".span__upload-file-count-container");
     expect(target_upload_file_count_container.text()).toStrictEqual("500/900");
   });
   test("When uploaded_files is set to equal the max_file_count (all files are uploaded successfully), Then the 'check mark' is visible indicating the completion of file upload activity", async () => {
@@ -74,16 +72,10 @@ describe("UploadFilesWidget.vue", () => {
     store.commit("settings/set_max_file_count", total_files_to_upload);
 
     await wrapper.vm.$nextTick();
-    const target_upload_custom_check_mark = wrapper.find(
-      ".div__upload-custom-check-mark"
-    );
+    const target_upload_custom_check_mark = wrapper.find(".div__upload-custom-check-mark");
     expect(target_upload_custom_check_mark.isVisible()).toBe(true);
-    const target_upload_custom_check_mark_color = wrapper.find(
-      ".svg-inline-fa-check-path"
-    );
-    expect(
-      target_upload_custom_check_mark_color.attributes("fill")
-    ).toStrictEqual("#00c46f");
+    const target_upload_custom_check_mark_color = wrapper.find(".svg-inline-fa-check-path");
+    expect(target_upload_custom_check_mark_color.attributes("fill")).toStrictEqual("#00c46f");
   });
   test("When Vuex is updated so that the upload of files is about 88%, Then the 'progress bar' is visible indicating and its less than the max 110px max length of progress bar attribute", async () => {
     const propsData = {};
@@ -100,9 +92,7 @@ describe("UploadFilesWidget.vue", () => {
     await wrapper.vm.$nextTick();
 
     const target_upload_progress_bar = wrapper.find(".progress-bar");
-    expect(target_upload_progress_bar.attributes("style")).toBe(
-      "width: 88.88888888888889%;"
-    );
+    expect(target_upload_progress_bar.attributes("style")).toBe("width: 88.88888888888889%;");
   });
   test("When Vuex is updated so that the uploaded file count equals the total file count (all files are uploaded successfully), Then the 'check mark' is visible indicating the completion of file upload activity for only 1500 milli second and then the checkmark disappears", async () => {
     const propsData = {};
@@ -118,9 +108,7 @@ describe("UploadFilesWidget.vue", () => {
     store.commit("settings/set_max_file_count", total_files_to_upload);
 
     await wrapper.vm.$nextTick();
-    const target_upload_custom_check_mark = wrapper.find(
-      ".div__upload-custom-check-mark"
-    );
+    const target_upload_custom_check_mark = wrapper.find(".div__upload-custom-check-mark");
     sandbox.clock.tick(1499);
     await wrapper.vm.$nextTick();
     expect(target_upload_custom_check_mark.isVisible()).toBe(true);

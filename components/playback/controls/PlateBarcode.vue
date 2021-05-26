@@ -11,11 +11,7 @@
       type="text"
       spellcheck="false"
       class="input__plate-barcode-entry"
-      :class="[
-        is_valid_barcode
-          ? `input__plate-barcode-entry-valid`
-          : `input__plate-barcode-entry-invalid`,
-      ]"
+      :class="[is_valid_barcode ? `input__plate-barcode-entry-valid` : `input__plate-barcode-entry-invalid`]"
       :value="barcode"
     />
     <input
@@ -41,13 +37,7 @@
       </span>
     </div>
     <!--</div>-->
-    <b-modal
-      id="edit-platebarcode-modal"
-      size="sm"
-      hide-footer
-      hide-header
-      hide-header-close
-    >
+    <b-modal id="edit-platebarcode-modal" size="sm" hide-footer hide-header hide-header-close>
       <BarcodeEditDialog
         @cancel-platebarcode="manual_mode_off"
         @yes-platebarcode="manual_mode_on"

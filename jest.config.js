@@ -36,10 +36,7 @@ module.exports = {
     //   "jest-transform-stub",
   },
   transformIgnorePatterns: ["/node_modules/(?!colorjs.io)/.*"],
-  testPathIgnorePatterns: [
-    "<rootDir>/node_modules/",
-    "<rootDir>/.ubuntu_codebuild_cache/",
-  ],
+  testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.ubuntu_codebuild_cache/"],
   // we will use this to create snapshot tests
   snapshotSerializers: ["jest-serializer-vue"],
   // used for jsdom to mimic a real browser with a real url
@@ -53,11 +50,5 @@ module.exports = {
   testResultsProcessor: "./node_modules/jest-html-reporter",
 
   // set patterns to ignore for coverage
-  coveragePathIgnorePatterns: [
-    "/node_modules",
-    "test_utils",
-    "/.nuxt",
-    "/dist",
-    "/.ubuntu_codebuild_cache",
-  ],
+  coveragePathIgnorePatterns: ["/node_modules", "test_utils", "/.nuxt", "/dist", "/.ubuntu_codebuild_cache"],
 };

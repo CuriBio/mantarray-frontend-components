@@ -29,11 +29,7 @@ describe("InputDropDown.vue", () => {
   });
 
   afterEach(() => wrapper.destroy());
-  const nicknames = [
-    "Customer Account 1",
-    "Customer Account 2",
-    "Customer Account 3",
-  ];
+  const nicknames = ["Customer Account 1", "Customer Account 2", "Customer Account 3"];
   test("When mounting InputDropDown from the build dist file, Then it loads successfully and the props defined title is rendered", () => {
     const propsData = {
       title_label: "Customer ID",
@@ -60,9 +56,7 @@ describe("InputDropDown.vue", () => {
       localVue,
     });
     const target_input = wrapper.find("#input-dropdown-widget-");
-    expect(target_input.attributes().placeholder).toStrictEqual(
-      "Select Customer ID"
-    );
+    expect(target_input.attributes().placeholder).toStrictEqual("Select Customer ID");
   });
   test("When the user types a valid option from the list, Then an event 'update' is emitted with the entered text", async () => {
     const propsData = {
@@ -98,9 +92,7 @@ describe("InputDropDown.vue", () => {
       store,
       localVue,
     });
-    const target_div = wrapper.find(
-      ".div__input-dropdown-controls-content-feedback"
-    );
+    const target_div = wrapper.find(".div__input-dropdown-controls-content-feedback");
     const target_dropdown_surronded_box = wrapper.find(
       ".div__input-dropdown-controls-content-widget--invalid"
     );
@@ -147,33 +139,15 @@ describe("InputDropDown.vue", () => {
       localVue,
     });
     const background = wrapper.find(".div__input-dropdown-background");
-    expect(background.attributes("style")).toStrictEqual(
-      "width: 394px; height: 100px;"
-    );
-    const input_title_label = wrapper.find(
-      ".span__input-dropdown-content-label"
-    );
-    expect(input_title_label.attributes("style")).toStrictEqual(
-      "width: 390px;"
-    );
-    const input_bounded_div = wrapper.find(
-      ".div__input-dropdown-controls-content-widget"
-    );
-    expect(input_bounded_div.attributes("style")).toStrictEqual(
-      "width: 390px; top: 40px;"
-    );
-    const input_text_entry_span = wrapper.find(
-      ".span__input-dropdown-controls-content-input-txt-widget"
-    );
-    expect(input_text_entry_span.attributes("style")).toStrictEqual(
-      "width: 390px;"
-    );
-    const input_text_entry_feedback = wrapper.find(
-      ".div__input-dropdown-controls-content-feedback"
-    );
-    expect(input_text_entry_feedback.attributes("style")).toStrictEqual(
-      "width: 390px; top: 88px;"
-    );
+    expect(background.attributes("style")).toStrictEqual("width: 394px; height: 100px;");
+    const input_title_label = wrapper.find(".span__input-dropdown-content-label");
+    expect(input_title_label.attributes("style")).toStrictEqual("width: 390px;");
+    const input_bounded_div = wrapper.find(".div__input-dropdown-controls-content-widget");
+    expect(input_bounded_div.attributes("style")).toStrictEqual("width: 390px; top: 40px;");
+    const input_text_entry_span = wrapper.find(".span__input-dropdown-controls-content-input-txt-widget");
+    expect(input_text_entry_span.attributes("style")).toStrictEqual("width: 390px;");
+    const input_text_entry_feedback = wrapper.find(".div__input-dropdown-controls-content-feedback");
+    expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 88px;");
   });
   test("When the InputDropDown is mounted with the title prop empty/blank, Then height of the widget is modified  in the event of title being empty without a hole", async () => {
     const propsData = {
@@ -192,31 +166,15 @@ describe("InputDropDown.vue", () => {
       localVue,
     });
     const background = wrapper.find(".div__input-dropdown-background");
-    expect(background.attributes("style")).toStrictEqual(
-      "width: 394px; height: 60px;"
-    );
-    const input_title_label = wrapper.find(
-      ".span__input-dropdown-content-label"
-    );
+    expect(background.attributes("style")).toStrictEqual("width: 394px; height: 60px;");
+    const input_title_label = wrapper.find(".span__input-dropdown-content-label");
     expect(input_title_label.exists()).toBe(false);
 
-    const input_bounded_div = wrapper.find(
-      ".div__input-dropdown-controls-content-widget"
-    );
-    expect(input_bounded_div.attributes("style")).toStrictEqual(
-      "width: 390px; top: 0px;"
-    );
-    const input_text_entry_span = wrapper.find(
-      ".span__input-dropdown-controls-content-input-txt-widget"
-    );
-    expect(input_text_entry_span.attributes("style")).toStrictEqual(
-      "width: 390px;"
-    );
-    const input_text_entry_feedback = wrapper.find(
-      ".div__input-dropdown-controls-content-feedback"
-    );
-    expect(input_text_entry_feedback.attributes("style")).toStrictEqual(
-      "width: 390px; top: 48px;"
-    );
+    const input_bounded_div = wrapper.find(".div__input-dropdown-controls-content-widget");
+    expect(input_bounded_div.attributes("style")).toStrictEqual("width: 390px; top: 0px;");
+    const input_text_entry_span = wrapper.find(".span__input-dropdown-controls-content-input-txt-widget");
+    expect(input_text_entry_span.attributes("style")).toStrictEqual("width: 390px;");
+    const input_text_entry_feedback = wrapper.find(".div__input-dropdown-controls-content-feedback");
+    expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 48px;");
   });
 });

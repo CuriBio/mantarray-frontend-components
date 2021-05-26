@@ -15,50 +15,30 @@ fixture`plate_based_widgets/stimulation-studio/basic`
 `http://localhost:8080/plate_based_widgets/stimulation-studio/basic`; // specify the start page
 
 test("StimulationStudioWidget when the no protocol is applied to any StimulationStudioPlateWell", async (t) => {
-  const screenshot_path = path.join(
-    "plate_based_widgets",
-    "simulation-studio",
-    "basic-simulation"
-  );
+  const screenshot_path = path.join("plate_based_widgets", "simulation-studio", "basic-simulation");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("StimulationStudioWidget when the Teal color is applied to any StimulationStudioPlateWell", async (t) => {
-  const screenshot_path = path.join(
-    "plate_based_widgets",
-    "simulation-studio",
-    "basic-teal-color"
-  );
+  const screenshot_path = path.join("plate_based_widgets", "simulation-studio", "basic-teal-color");
   await t.click(teal);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("StimulationStudioWidget when the Blue color is applied to any StimulationStudioPlateWell", async (t) => {
-  const screenshot_path = path.join(
-    "plate_based_widgets",
-    "simulation-studio",
-    "basic-blue-color"
-  );
+  const screenshot_path = path.join("plate_based_widgets", "simulation-studio", "basic-blue-color");
   await t.click(blue);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("StimulationStudioWidget when the Yellow color is applied to any StimulationStudioPlateWell", async (t) => {
-  const screenshot_path = path.join(
-    "plate_based_widgets",
-    "simulation-studio",
-    "basic-yellow-color"
-  );
+  const screenshot_path = path.join("plate_based_widgets", "simulation-studio", "basic-yellow-color");
   await t.click(yellow);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("StimulationStudioWidget when the Yellow color is applied to any StimulationStudioPlateWell", async (t) => {
-  const screenshot_path = path.join(
-    "plate_based_widgets",
-    "simulation-studio",
-    "basic-orange-color"
-  );
+  const screenshot_path = path.join("plate_based_widgets", "simulation-studio", "basic-orange-color");
   await t.click(orange);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
@@ -68,10 +48,6 @@ fixture`plate_based_widgets/stimulation-studio/x-y-offset`
 `http://localhost:8080/plate_based_widgets/stimulation-studio/x-y-offset`; // specify the start page
 
 test("StimulationStudioWidget when the no protocol is applied to any StimulationStudioPlateWell with x-y offset", async (t) => {
-  const screenshot_path = path.join(
-    "plate_based_widgets",
-    "simulation-studio",
-    "x-y-offset-simulation"
-  );
+  const screenshot_path = path.join("plate_based_widgets", "simulation-studio", "x-y-offset-simulation");
   await testcafe_page_visual_regression(t, screenshot_path);
 });

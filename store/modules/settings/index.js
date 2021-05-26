@@ -29,8 +29,7 @@ const default_state = {
   customer_account_ids: [],
   customer_index: null,
   user_index: null,
-  log_path:
-    "C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask", // Fix of escape issue by additional slash
+  log_path: "C:\\Users\\Mantarray\\AppData\\Roaming\\MantarrayController\\logs_flask", // Fix of escape issue by additional slash
   file_count: 0,
   max_file_count: 0,
 };

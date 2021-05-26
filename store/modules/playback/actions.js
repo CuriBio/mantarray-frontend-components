@@ -27,26 +27,16 @@ export const centimilliseconds_per_millisecond = 100;
  * @return {void}
  */
 export function advance_playback_progression() {
-  const delay_threshold_milliseconds = this.rootState.playback
-    .num_milliseconds_to_fast_forward_if_delayed;
-  const starting_timestamp = this.rootState.playback
-    .timestamp_of_beginning_of_progression;
+  const delay_threshold_milliseconds = this.rootState.playback.num_milliseconds_to_fast_forward_if_delayed;
+  const starting_timestamp = this.rootState.playback.timestamp_of_beginning_of_progression;
   const expected_display_time =
-    starting_timestamp +
-    this.rootState.playback.x_time_index / centimilliseconds_per_millisecond;
+    starting_timestamp + this.rootState.playback.x_time_index / centimilliseconds_per_millisecond;
   const current_timestamp = performance.now();
-  let milliseconds_to_increment = this.rootState.playback
-    .playback_progression_time_interval;
-  if (
-    current_timestamp - expected_display_time >=
-    delay_threshold_milliseconds
-  ) {
+  let milliseconds_to_increment = this.rootState.playback.playback_progression_time_interval;
+  if (current_timestamp - expected_display_time >= delay_threshold_milliseconds) {
     milliseconds_to_increment = delay_threshold_milliseconds;
   }
-  this.commit(
-    "increment_x_time_index",
-    milliseconds_to_increment * centimilliseconds_per_millisecond
-  );
+  this.commit("increment_x_time_index", milliseconds_to_increment * centimilliseconds_per_millisecond);
 }
 
 export default {
@@ -66,19 +56,11 @@ export default {
       is_hardware_test_recording: false,
     };
     context.commit("set_recording_start_time", time_index);
-    await this.dispatch(
-      "playback/start_stop_axios_request_with_time_index",
-      payload
-    );
-    context.dispatch(
-      "transition_playback_state",
-      ENUMS.PLAYBACK_STATES.RECORDING
-    );
-    context.commit(
-      "flask/ignore_next_system_status_if_matching_status",
-      STATUS.MESSAGE.LIVE_VIEW_ACTIVE,
-      { root: true }
-    );
+    await this.dispatch("playback/start_stop_axios_request_with_time_index", payload);
+    context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.RECORDING);
+    context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
+      root: true,
+    });
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING, {
       root: true,
     });
@@ -97,20 +79,12 @@ export default {
       time_index: time_index,
     };
     context.commit("set_recording_start_time", 0);
-    await this.dispatch(
-      "playback/start_stop_axios_request_with_time_index",
-      payload
-    );
-    context.commit(
-      "set_playback_state",
-      ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
-    );
+    await this.dispatch("playback/start_stop_axios_request_with_time_index", payload);
+    context.commit("set_playback_state", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
     context.commit("stop_recording");
-    context.commit(
-      "flask/ignore_next_system_status_if_matching_status",
-      STATUS.MESSAGE.RECORDING,
-      { root: true }
-    );
+    context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.RECORDING, {
+      root: true,
+    });
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
       root: true,
     });
@@ -131,16 +105,11 @@ export default {
     await this.dispatch("playback/start_stop_axios_request", payload);
     context.commit("waveform/stop_waveform_pinging", null, { root: true });
     context.commit("waveform/clear_plate_waveforms", null, { root: true });
-    context.dispatch(
-      "transition_playback_state",
-      ENUMS.PLAYBACK_STATES.CALIBRATED
-    );
+    context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
     context.commit("set_x_time_index", 0);
-    context.commit(
-      "flask/ignore_next_system_status_if_matching_status",
-      STATUS.MESSAGE.LIVE_VIEW_ACTIVE,
-      { root: true }
-    );
+    context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
+      root: true,
+    });
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.STOPPED, {
       root: true,
     });
@@ -152,20 +121,15 @@ export default {
     // }
   },
   async start_calibration(context) {
-    context.dispatch(
-      "transition_playback_state",
-      ENUMS.PLAYBACK_STATES.CALIBRATING
-    );
+    context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATING);
     const payload = {
       baseurl: "http://localhost:4567",
       endpoint: "start_calibration",
     };
     await this.dispatch("playback/start_stop_axios_request", payload);
-    context.commit(
-      "flask/ignore_next_system_status_if_matching_status",
-      this.state.flask.status_uuid,
-      { root: true }
-    );
+    context.commit("flask/ignore_next_system_status_if_matching_status", this.state.flask.status_uuid, {
+      root: true,
+    });
 
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING, {
       root: true,
@@ -179,10 +143,7 @@ export default {
   },
   async stop_playback(context) {
     context.commit("set_x_time_index", 0);
-    await this.dispatch(
-      "playback/transition_playback_state",
-      ENUMS.PLAYBACK_STATES.STOPPED
-    );
+    await this.dispatch("playback/transition_playback_state", ENUMS.PLAYBACK_STATES.STOPPED);
   },
   async transition_playback_state(context, new_state) {
     const current_playback_state = this.state.playback.playback_state;
@@ -204,9 +165,7 @@ export default {
   },
   async start_playback_progression(context) {
     if (context.state.playback_progression_interval_id === null) {
-      const bound_advance_playback_progression = advance_playback_progression.bind(
-        context
-      );
+      const bound_advance_playback_progression = advance_playback_progression.bind(context);
 
       const new_interval_id = setInterval(
         bound_advance_playback_progression,
@@ -223,15 +182,10 @@ export default {
       endpoint: "start_managed_acquisition",
     };
     await this.dispatch("playback/start_stop_axios_request", payload);
-    context.dispatch(
-      "transition_playback_state",
-      ENUMS.PLAYBACK_STATES.BUFFERING
-    );
-    context.commit(
-      "flask/ignore_next_system_status_if_matching_status",
-      STATUS.MESSAGE.CALIBRATED,
-      { root: true }
-    );
+    context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.BUFFERING);
+    context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.CALIBRATED, {
+      root: true,
+    });
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.BUFFERING, {
       root: true,
     });

@@ -80,10 +80,7 @@ function get_array_slice_to_display(
   sample_duration_to_display
 ) {
   // TODO (Eli 2/4/20): update the binary search to allow a manual setting of the start idx of the search, and update this to set that start when searching for the end idx (which should always be after the located start idx)
-  let starting_arr_idx = find_closest_array_idx(
-    sample_indices,
-    starting_sample_idx
-  );
+  let starting_arr_idx = find_closest_array_idx(sample_indices, starting_sample_idx);
   if (sample_indices[starting_arr_idx] > starting_sample_idx) {
     if (starting_arr_idx > 0) {
       // It is non-sensical to return a value below zero for the beginning of the slice
@@ -95,18 +92,9 @@ function get_array_slice_to_display(
     starting_sample_idx + sample_duration_to_display
   );
 
-  const sliced_x_data_points = sample_indices.slice(
-    starting_arr_idx,
-    ending_arr_idx + 1
-  );
-  const sliced_y_data_points = measured_values.slice(
-    starting_arr_idx,
-    ending_arr_idx + 1
-  );
-  return convert_x_y_arrays_to_d3_array(
-    sliced_x_data_points,
-    sliced_y_data_points
-  );
+  const sliced_x_data_points = sample_indices.slice(starting_arr_idx, ending_arr_idx + 1);
+  const sliced_y_data_points = measured_values.slice(starting_arr_idx, ending_arr_idx + 1);
+  return convert_x_y_arrays_to_d3_array(sliced_x_data_points, sliced_y_data_points);
 }
 
 /**
@@ -115,12 +103,8 @@ function get_array_slice_to_display(
  * @param   {int}   well_num number
  * @return  {array} converted  array
  */
-function convert_from_json_of_well_indices_and_x_y_arrays(
-  the_well_json,
-  well_num
-) {
-  const first_simple_json_waveform =
-    the_well_json["waveform_data_points"][well_num];
+function convert_from_json_of_well_indices_and_x_y_arrays(the_well_json, well_num) {
+  const first_simple_json_waveform = the_well_json["waveform_data_points"][well_num];
 
   const well_idx_arr = first_simple_json_waveform["x_data_points"];
   const well_value_arr = first_simple_json_waveform["y_data_points"];
@@ -134,12 +118,8 @@ function convert_from_json_of_well_indices_and_x_y_arrays(
  * @param   {int}   well_num number
  * @return  {array} converted  array
  */
-function convert_from_json_of_well_indices_to_sparse_arrays(
-  the_well_json,
-  well_num
-) {
-  const first_simple_json_waveform =
-    the_well_json["waveform_data_points"][well_num];
+function convert_from_json_of_well_indices_to_sparse_arrays(the_well_json, well_num) {
+  const first_simple_json_waveform = the_well_json["waveform_data_points"][well_num];
 
   const temp_well_idx_arr = first_simple_json_waveform["x_data_points"];
   const temp_well_value_arr = first_simple_json_waveform["y_data_points"];
@@ -208,8 +188,7 @@ function get_well_slice_to_display(
 function append_get_available_well_data(arr, new_arr) {
   const inner_object_waveform_data = new_arr.waveform_data;
   const inner_object_basic_data = inner_object_waveform_data.basic_data;
-  const inner_object_waveform_data_points =
-    inner_object_basic_data.waveform_data_points;
+  const inner_object_waveform_data_points = inner_object_basic_data.waveform_data_points;
 
   /* lint identifyies this as potential crash point as we not verifying if the
      inner_object_waveform_data_points is not null

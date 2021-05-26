@@ -12,8 +12,7 @@ export async function ping_get_available_data() {
   const current_time_index = this.rootState.playback.x_time_index;
   const payload = {
     baseurl: "http://localhost:4567",
-    endpoint:
-      "get_available_data?currently_displayed_time_index=" + current_time_index,
+    endpoint: "get_available_data?currently_displayed_time_index=" + current_time_index,
   };
   let result = 0;
   const whole_url = `${payload.baseurl}/${payload.endpoint}`;
@@ -33,10 +32,7 @@ export default {
       const json_data = http_response.data;
 
       for (let i = 0; i < num_waveforms_to_display; i++) {
-        const this_well_data = convert_from_json_of_well_indices_and_x_y_arrays(
-          json_data,
-          i
-        );
+        const this_well_data = convert_from_json_of_well_indices_and_x_y_arrays(json_data, i);
         parsed_data.push({
           x_data_points: this_well_data.sample_indices,
           y_data_points: this_well_data.values,
@@ -56,9 +52,7 @@ export default {
 
   async start_get_waveform_pinging(context) {
     if (context.state.waveform_ping_interval_id === null) {
-      const bound_ping_get_waveform_data = ping_get_available_data.bind(
-        context
-      );
+      const bound_ping_get_waveform_data = ping_get_available_data.bind(context);
       await bound_ping_get_waveform_data(); // call the function immediately, instead of waiting for the first interval to elapse
       const new_interval_id = setInterval(bound_ping_get_waveform_data, 7000);
       context.commit("set_waveform_ping_interval_id", new_interval_id);

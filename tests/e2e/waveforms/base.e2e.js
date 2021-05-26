@@ -18,8 +18,7 @@ test("waveform looks as expected with default values", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`waveforms/base/x-y-offset`
-  .page // declare the fixture
+fixture`waveforms/base/x-y-offset`.page // declare the fixture
 `http://localhost:8080/waveforms/base/x-y-offset`; // specify the start page
 
 test("waveform looks as expected when anchored at an offset from top left", async (t) => {
@@ -32,17 +31,12 @@ fixture`waveforms/base/extending-into-margins`
 `http://localhost:8080/waveforms/base/extending-into-margins`; // specify the start page
 
 test("margin blockers effectively cover datapoints that would jump out of the graph", async (t) => {
-  const screenshot_path = path.join(
-    "waveforms",
-    "base",
-    "extending-into-margins"
-  );
+  const screenshot_path = path.join("waveforms", "base", "extending-into-margins");
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`waveforms/base/shorter-graph-width`
-  .page // declare the fixture
+fixture`waveforms/base/shorter-graph-width`.page // declare the fixture
 `http://localhost:8080/waveforms/base/shorter-graph-width`; // specify the start page
 
 test("Given a shorter graph width supplied as a prop, Then it renders a shorter graph", async (t) => {

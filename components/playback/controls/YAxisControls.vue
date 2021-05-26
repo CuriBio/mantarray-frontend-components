@@ -1,31 +1,15 @@
 <template>
-  <div
-    class="div__playback-y-axis-controls"
-    :style="div__y_axis_controls__dynamic_style"
-  >
+  <div class="div__playback-y-axis-controls" :style="div__y_axis_controls__dynamic_style">
     <!-- original mockflow ID:  id="cmpD2e85c27cb3ef7ba7539b1af8ed70e509"  -->
     <span class="span__playback-y-axis-controls-zoom-label"> (Absolute)</span>
-    <div
-      class="div__playback-y-axis-controls-zoom-control-icon"
-      @click="zoom_controls()"
-    >
-      <svg
-        v-show="controls"
-        id="Layer_1"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 72 72"
-      >
+    <div class="div__playback-y-axis-controls-zoom-control-icon" @click="zoom_controls()">
+      <svg v-show="controls" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
         <path
           class="cls-1"
           d="M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0ZM17.5,43a7,7,0,1,1,7.1-7A7,7,0,0,1,17.5,43ZM36,43a7,7,0,1,1,7-7A7,7,0,0,1,36,43Zm18.5,0a7,7,0,1,1,7-7A7,7,0,0,1,54.5,43Z"
         />
       </svg>
-      <svg
-        v-show="!controls"
-        id="Layer_2"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 72 72"
-      >
+      <svg v-show="!controls" id="Layer_2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
         <path
           class="cls-2"
           d="M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0ZM17.5,43a7,7,0,1,1,7.1-7A7,7,0,0,1,17.5,43ZM36,43a7,7,0,1,1,7-7A7,7,0,0,1,36,43Zm18.5,0a7,7,0,1,1,7-7A7,7,0,0,1,54.5,43Z"
@@ -187,10 +171,8 @@ export default {
     span__y_axis_controls_zoom_in_button__dynamic_class: function () {
       this.tooltip_y_in();
       return {
-        "div__playback-y-axis-controls--disabled":
-          this.zoom_level_idx == this.max_zoom_index,
-        "div__playback-y-axis-controls--enabled":
-          this.zoom_level_idx < this.max_zoom_index,
+        "div__playback-y-axis-controls--disabled": this.zoom_level_idx == this.max_zoom_index,
+        "div__playback-y-axis-controls--enabled": this.zoom_level_idx < this.max_zoom_index,
       };
     },
   },
@@ -198,18 +180,12 @@ export default {
   methods: {
     zoom_y_in: function () {
       if (this.zoom_level_idx < this.y_zoom_levels.length - 1) {
-        this.$store.commit(
-          "waveform/set_y_axis_zoom_idx",
-          this.zoom_level_idx + 1
-        );
+        this.$store.commit("waveform/set_y_axis_zoom_idx", this.zoom_level_idx + 1);
       }
     },
     zoom_y_out: function () {
       if (this.zoom_level_idx > 0) {
-        this.$store.commit(
-          "waveform/set_y_axis_zoom_idx",
-          this.zoom_level_idx - 1
-        );
+        this.$store.commit("waveform/set_y_axis_zoom_idx", this.zoom_level_idx - 1);
       }
     },
     tooltip_y_out: function () {
@@ -252,10 +228,8 @@ export default {
       // sort the min max ranges.
       for (let i = 0; i < this.y_axis_zoom_levels.length - 1; i++) {
         if (
-          this.y_axis_zoom_levels[i].y_min ==
-            this.y_axis_zoom_levels[i + 1].y_min &&
-          this.y_axis_zoom_levels[i].y_max ==
-            this.y_axis_zoom_levels[i + 1].y_max
+          this.y_axis_zoom_levels[i].y_min == this.y_axis_zoom_levels[i + 1].y_min &&
+          this.y_axis_zoom_levels[i].y_max == this.y_axis_zoom_levels[i + 1].y_max
         ) {
           // check for duplicates.
           duplicate_idx = i + 1;
@@ -277,10 +251,7 @@ export default {
         this.y_axis_zoom_levels.splice(duplicate_idx, 1); // remove if duplicate.
       }
       this.$store.commit("waveform/set_y_axis_zoom_idx", updated_default_idx);
-      this.$store.commit(
-        "waveform/set_y_axis_zoom_levels",
-        this.y_axis_zoom_levels
-      );
+      this.$store.commit("waveform/set_y_axis_zoom_levels", this.y_axis_zoom_levels);
       this.controls = !this.controls;
     },
     y_axis_controls_cancel: function () {

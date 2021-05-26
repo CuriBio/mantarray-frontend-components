@@ -15,16 +15,10 @@ test("testing the UploadFilesWidget with start, midpoint and lastpoint", async (
   const screenshot_path_base = path.join("status", "uploadfiles");
   const screenshot_path = path.join(screenshot_path_base, "basic-upload-init");
   await testcafe_page_visual_regression(t, screenshot_path);
-  const screenshot_path_midpoint = path.join(
-    screenshot_path_base,
-    "basic-upload-midpoint"
-  );
+  const screenshot_path_midpoint = path.join(screenshot_path_base, "basic-upload-midpoint");
   await t.click(mid_point);
   await testcafe_page_visual_regression(t, screenshot_path_midpoint);
-  const screenshot_path_lastpoint = path.join(
-    screenshot_path_base,
-    "basic-upload-lastpoint"
-  );
+  const screenshot_path_lastpoint = path.join(screenshot_path_base, "basic-upload-lastpoint");
   await t.click(last_point);
   await testcafe_page_visual_regression(t, screenshot_path_lastpoint);
 });

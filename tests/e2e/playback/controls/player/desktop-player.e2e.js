@@ -23,12 +23,7 @@ import { STATUS } from "../../../../../store/modules/flask/enums";
 
 const msec_to_wait_for_calibration_to_complete = 3500;
 
-const base_screenshot_path = path.join(
-  "playback",
-  "controls",
-  "player",
-  "desktop-player"
-);
+const base_screenshot_path = path.join("playback", "controls", "player", "desktop-player");
 
 const mocked_all_mantarray_commands = RequestMock()
   .onRequestTo(all_mantarray_commands_regexp)
@@ -114,18 +109,10 @@ const mocked_get_available_data_handler = RequestMock()
     await t.addRequestHooks(mock2);
 */
 
-const calibrate_button = Selector(
-  ".svg__playback-desktop-player-controls-calibrate-button"
-);
-const live_view_button = Selector(
-  ".svg__playback-desktop-player-controls-live-view-button"
-);
-const inactive_record_button = Selector(
-  ".svg__playback-desktop-player-controls-record-button--inactive"
-);
-const active_record_button = Selector(
-  ".svg__playback-desktop-player-controls-record-button--active"
-);
+const calibrate_button = Selector(".svg__playback-desktop-player-controls-calibrate-button");
+const live_view_button = Selector(".svg__playback-desktop-player-controls-live-view-button");
+const inactive_record_button = Selector(".svg__playback-desktop-player-controls-record-button--inactive");
+const active_record_button = Selector(".svg__playback-desktop-player-controls-record-button--active");
 const whole_component = Selector(".div__play-desktop-player-controls");
 const title_text = Selector(".span__playback-desktop-player-controls-text");
 
@@ -159,10 +146,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   // since the buttons have different hover behavior, making sure to move the mouse back off of the button (onto the generic text span) to deactivate the hover state of a button after clicking it
   const this_base_screenshot_path = path.join(base_screenshot_path, "basic");
 
-  let screenshot_path = path.join(
-    this_base_screenshot_path,
-    "calibration-needed"
-  );
+  let screenshot_path = path.join(this_base_screenshot_path, "calibration-needed");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(calibrate_button);
@@ -198,10 +182,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await t.pressKey("a"); // Press a key to stop the status pinging
   await t.wait(3000); // wait for status pinging to fully stop
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "live-view-after-recording"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "live-view-after-recording");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(inactive_record_button);
@@ -209,10 +190,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await t.pressKey("a"); // Press a key to stop the status pinging
   await t.wait(3000); // wait for status pinging to fully stop
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "recording-second-time"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "recording-second-time");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(active_record_button);
@@ -220,10 +198,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await t.pressKey("a"); // Press a key to stop the status pinging
   await t.wait(3000); // wait for status pinging to fully stop
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "live-view-after-second-recording"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "live-view-after-second-recording");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(live_view_button);
@@ -231,10 +206,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await t.pressKey("a"); // Press a key to stop the status pinging
   await t.wait(3000); // wait for status pinging to fully stop
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "calibrated-after-playing"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "calibrated-after-playing");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(live_view_button);
@@ -243,19 +215,13 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   // wait for 'buffering' state to complete
   await t.wait(3000);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "live-view-second-time-after-calibrated"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "live-view-second-time-after-calibrated");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(live_view_button);
   await t.hover(title_text);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "calibrated-after-second-initiation-of-live-view"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "calibrated-after-second-initiation-of-live-view");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(calibrate_button);
@@ -264,10 +230,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   // wait for 'calibrating' state to complete
   await t.wait(msec_to_wait_for_calibration_to_complete);
 
-  screenshot_path = path.join(
-    this_base_screenshot_path,
-    "calibrated-after-second-live-view"
-  );
+  screenshot_path = path.join(this_base_screenshot_path, "calibrated-after-second-live-view");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
@@ -286,10 +249,7 @@ fixture`playback/controls/player/desktop-player/x-y-offset`
   );
 
 test("Given x/y offset of div containing DesktopPlayerControls, Then the component renders in offset position", async (t) => {
-  const this_base_screenshot_path = path.join(
-    base_screenshot_path,
-    "x-y-offset"
-  );
+  const this_base_screenshot_path = path.join(base_screenshot_path, "x-y-offset");
 
   let screenshot_path = path.join(this_base_screenshot_path, "init");
   await testcafe_page_visual_regression(t, screenshot_path);

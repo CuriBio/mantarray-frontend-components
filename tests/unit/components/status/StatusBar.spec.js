@@ -76,9 +76,7 @@ describe("StatusWidget.vue", () => {
       localVue,
     });
 
-    expect(wrapper.find(text_selector).text()).toEqual(
-      "Status: Calibrating..."
-    );
+    expect(wrapper.find(text_selector).text()).toEqual("Status: Calibrating...");
   });
 
   test("When Vuex is mutated to an unknown UUID, Then the status text should update to include that UUID", async () => {
@@ -89,14 +87,9 @@ describe("StatusWidget.vue", () => {
       localVue,
     });
 
-    store.commit(
-      "flask/set_status_uuid",
-      "3dbb8814-09f1-44db-b7d5-7a9f702beac4"
-    );
+    store.commit("flask/set_status_uuid", "3dbb8814-09f1-44db-b7d5-7a9f702beac4");
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toEqual(
-      "Status:3dbb8814-09f1-44db-b7d5-7a9f702beac4"
-    );
+    expect(wrapper.find(text_selector).text()).toEqual("Status:3dbb8814-09f1-44db-b7d5-7a9f702beac4");
   });
   test("Given that the http response is 404 for api request /shutdown, When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' and the the dialog of ErrorCatchWidget is visible ", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
@@ -115,9 +108,7 @@ describe("StatusWidget.vue", () => {
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
     await wrapper.vm.$nextTick(); // wait for update
     expect(mocked_axios.history.get[0].url).toStrictEqual(shutdown_url);
-    expect(wrapper.find(text_selector).text()).toEqual(
-      "Status: Error Occurred"
-    );
+    expect(wrapper.find(text_selector).text()).toEqual("Status: Error Occurred");
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(true);
       done();
@@ -152,9 +143,7 @@ describe("StatusWidget.vue", () => {
 
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toEqual(
-      "Status: Error Occurred"
-    );
+    expect(wrapper.find(text_selector).text()).toEqual("Status: Error Occurred");
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(true);
       done();

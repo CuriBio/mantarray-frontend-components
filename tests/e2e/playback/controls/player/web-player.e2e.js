@@ -3,18 +3,11 @@ import { Selector } from "testcafe";
 const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
-const base_screenshot_path = path.join(
-  "playback",
-  "controls",
-  "player",
-  "web-player"
-);
+const base_screenshot_path = path.join("playback", "controls", "player", "web-player");
 
 const loop_button = Selector(".svg__playback-web-player-controls-loop-button");
 const stop_button = Selector(".svg__playback-web-player-controls-stop-button");
-const pause_button = Selector(
-  ".svg__playback-web-player-controls-pause-button"
-);
+const pause_button = Selector(".svg__playback-web-player-controls-pause-button");
 const play_button = Selector(".span__playback-web-player-controls-play-button");
 
 // the fixture declares what we are testing
@@ -72,10 +65,7 @@ test("Web Player Controls moves through expected play/pause/stop states", async 
   await t.click(play_button);
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  screenshot_path = path.join(
-    base_screenshot_path,
-    "paused-after-playing-after-paused"
-  );
+  screenshot_path = path.join(base_screenshot_path, "paused-after-playing-after-paused");
   await t.click(pause_button);
   await testcafe_page_visual_regression(t, screenshot_path);
 
