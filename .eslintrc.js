@@ -17,8 +17,18 @@ module.exports = {
     // "snakecasejs"
   ],
   settings: {
-    "snakecasejs/filter": ["ClassDeclaration", "NewExpression", "ImportSpecifier"],
-    "snakecasejs/whitelist": ["FontAwesomeIcon", "afterEach", "afterAll", "beforeEach", "beforeAll"],
+    "snakecasejs/filter": [
+      "ClassDeclaration",
+      "NewExpression",
+      "ImportSpecifier",
+    ],
+    "snakecasejs/whitelist": [
+      "FontAwesomeIcon",
+      "afterEach",
+      "afterAll",
+      "beforeEach",
+      "beforeAll",
+    ],
   },
   rules: {
     "no-console": 0,
@@ -51,7 +61,10 @@ module.exports = {
     // Jest Rules
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
-    "jest/consistent-test-it": ["error", { fn: "test", withinDescribe: "test" }],
+    "jest/consistent-test-it": [
+      "error",
+      { fn: "test", withinDescribe: "test" },
+    ],
     "jest/expect-expect": [
       "error",
       {

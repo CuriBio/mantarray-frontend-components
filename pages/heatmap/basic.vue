@@ -20,12 +20,162 @@ export default {
   },
   created: function () {
     const data = [
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
+      [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
     ];
 
     const heatmap_values = {
@@ -44,13 +194,17 @@ export default {
       this.interval = setInterval(this.deltaT, 100);
     },
     deltaT() {
-      let values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
+      let values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 100)
+      );
       this.$store.commit("heatmap/set_metric_data", {
         name: "Twitch Force",
         data: values,
       });
 
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 200));
+      values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 200)
+      );
       this.$store.commit("heatmap/set_metric_data", {
         name: "Twitch Period",
         data: values,
@@ -62,19 +216,25 @@ export default {
         data: values,
       });
 
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
+      values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 100)
+      );
       this.$store.commit("heatmap/set_metric_data", {
         name: "Twitch Width 80",
         data: values,
       });
 
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
+      values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 100)
+      );
       this.$store.commit("heatmap/set_metric_data", {
         name: "Contraction Velocity",
         data: values,
       });
 
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
+      values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 100)
+      );
       this.$store.commit("heatmap/set_metric_data", {
         name: "Relaxation Velocity",
         data: values,
