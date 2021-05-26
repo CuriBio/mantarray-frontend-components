@@ -54,6 +54,7 @@ export { default as PlateWell } from "./components/basic_widgets/PlateWell.vue";
 export { default as InputWidget } from "./components/basic_widgets/InputWidget.vue";
 export { default as ButtonWidget } from "./components/basic_widgets/ButtonWidget.vue";
 export { default as InputDropDown } from "./components/basic_widgets/InputDropDown.vue";
+export { default as SelectDropDown } from "./components/basic_widgets/SelectDropDown.vue";
 export { default as CheckBoxWidget } from "./components/basic_widgets/CheckBoxWidget.vue";
 export { default as RadioButtonWidget } from "./components/basic_widgets/RadioButtonWidget.vue";
 export { default as StimulationStudioPlateWell } from "./components/basic_widgets/StimulationStudioPlateWell.vue";
@@ -70,7 +71,6 @@ export { default as SimulationMode } from "./components/status/SimulationMode.vu
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
 export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
-export { default as HeatMapColorBar } from "./components/status/HeatMapColorBar.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";

@@ -30,9 +30,6 @@ export default {
   heatmap_autoscale(state) {
     return state.heatmap_autoscale;
   },
-  heatmap_options_array(state) {
-    return state.heatmap_options_array;
-  },
   heatmap_options_idx(state) {
     return state.heatmap_options_idx;
   },

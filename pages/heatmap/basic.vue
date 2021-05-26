@@ -1,105 +1,282 @@
 <template>
   <div>
-    <HeatMap></HeatMap>
+    <div>
+      <HeatMap></HeatMap>
+    </div>
+    <div>
+      <button class="start-button" @click="start_well_data">Start Data</button>
+      <button class="stop-button" @click="stop_well_data">Stop Data</button>
+    </div>
   </div>
 </template>
 
 <script>
 import { HeatMap } from "@/dist/mantarray.common";
-// import HeatMap from "@/components/heatmap/HeatMap.vue";
+// import HeatMap from "@/components/heatmap2/HeatMap.vue";
 
 export default {
   components: {
     HeatMap,
   },
   created: function () {
-    const heatmap_values = [
-      10,
-      22,
-      45,
-      67,
-      89,
-      90,
-      33,
-      55,
-      77,
-      67,
-      44,
-      56,
-      78,
-      99,
-      34,
-      19,
-      28,
-      65,
-      24,
-      88,
-      14,
-      27,
-      39,
-      50,
-    ];
-    const radio_button_list = ["Warm", "Cool", "Blue/Red", "Purple/Green"];
-    const display_options = [
-      "Twitch Force",
-      "Twitch Period",
-      "Twitch Frequency",
-      "Twitch Width 80",
-      "Contraction Velocity",
-      "Relaxation Velocity",
-    ];
-    const display_min_max = [
-      {
-        min: 0,
-        max: 50,
-      },
-      {
-        min: 0,
-        max: 100,
-      },
-      {
-        min: 0,
-        max: 200,
-      },
-      {
-        min: 0,
-        max: 400,
-      },
-      {
-        min: 0,
-        max: 800,
-      },
-      {
-        min: 0,
-        max: 1600,
-      },
-    ];
-    const radio_button_gradient = [
+    const data = [
       [
-        { color: "#bd3532", offset: "0%" },
-        { color: "#f9d78c", offset: "100%" },
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
       ],
       [
-        { color: "#2c7bb6", offset: "0%" },
-        { color: "#00ccbc", offset: "100%" },
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
       ],
       [
-        { color: "#2c7bb6", offset: "0%" },
-        { color: "#90eb9d", offset: "100%" },
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
       ],
       [
-        { color: "#2c7bb6", offset: "0%" },
-        { color: "#ffff8c", offset: "100%" },
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
       ],
     ];
+
+    const heatmap_values = {
+      "Twitch Force": { data: data[0] },
+      "Twitch Period": { data: data[1] },
+      "Twitch Frequency": { data: data[2] },
+      "Twitch Width 80": { data: data[3] },
+      "Contraction Velocity": { data: data[4] },
+      "Relaxation Velocity": { data: data[5] },
+    };
     this.$store.commit("heatmap/set_heatmap_values", heatmap_values);
-    this.$store.commit("heatmap/set_heatmap_options_array", radio_button_list);
-    this.$store.commit("heatmap/set_heatmap_display_array", display_options);
-    this.$store.commit("heatmap/set_heatmap_display_min_max", display_min_max);
-    this.$store.commit(
-      "heatmap/set_heatmap_options_gradient",
-      radio_button_gradient
-    );
+  },
+
+  methods: {
+    start_well_data() {
+      this.interval = setInterval(this.deltaT, 100);
+    },
+    deltaT() {
+      let values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 100)
+      );
+      this.$store.commit("heatmap/set_metric_data", {
+        name: "Twitch Force",
+        data: values,
+      });
+
+      values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 200)
+      );
+      this.$store.commit("heatmap/set_metric_data", {
+        name: "Twitch Period",
+        data: values,
+      });
+
+      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 50));
+      this.$store.commit("heatmap/set_metric_data", {
+        name: "Twitch Frequency",
+        data: values,
+      });
+
+      values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 100)
+      );
+      this.$store.commit("heatmap/set_metric_data", {
+        name: "Twitch Width 80",
+        data: values,
+      });
+
+      values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 100)
+      );
+      this.$store.commit("heatmap/set_metric_data", {
+        name: "Contraction Velocity",
+        data: values,
+      });
+
+      values = Array.from({ length: 24 }, () =>
+        Math.floor(Math.random() * 100)
+      );
+      this.$store.commit("heatmap/set_metric_data", {
+        name: "Relaxation Velocity",
+        data: values,
+      });
+    },
+    stop_well_data() {
+      clearInterval(this.interval);
+    },
   },
 };
 </script>
+<style>
+.start-button {
+  position: absolute;
+  top: 100px;
+  left: 1640px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: #4caf50;
+  z-index: 999;
+}
+.stop-button {
+  position: absolute;
+  top: 200px;
+  left: 1640px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: #008cba;
+  z-index: 999;
+}
+</style>

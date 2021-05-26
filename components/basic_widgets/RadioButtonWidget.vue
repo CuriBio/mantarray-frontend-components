@@ -9,6 +9,7 @@
     ></b-form-radio-group>
   </div>
 </template>
+
 <script>
 import Vue from "vue";
 import { BFormRadioGroup } from "bootstrap-vue";
@@ -26,16 +27,19 @@ export default {
       default: undefined,
     },
   },
+
   data: function () {
     return {
-      selected: false,
+      selected: this.pre_selected != undefined,
     };
   },
+
   created: function () {
     if (this.pre_selected != undefined) {
       this.selected = this.radio_buttons[this.pre_selected].value;
     }
   },
+
   methods: {
     radio_toggle: function (ev) {
       const btn_info = {

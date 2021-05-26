@@ -1,6 +1,6 @@
 {
   "name": "@curi-bio/mantarray-frontend-components",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "shared components between web and desktop app.",
   "main": "./dist/mantarray.common.js",
   "author": "Curi Bio <contact@curibio.com> (http://www.curibio.com/)",
@@ -38,6 +38,7 @@
     "@tofandel/uuid-base62": "^1.0.3",
     "axios": "^0.21.1",
     "bootstrap-vue": "^2.21.1",
+    "colorjs.io": "^0.0.3",
     "d3": "^6.2.0",
     "jquery": "^3.5.1",
     "typeface-anonymous-pro": "^1.1.13",
