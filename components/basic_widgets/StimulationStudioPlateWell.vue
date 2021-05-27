@@ -21,14 +21,7 @@
     </div>
     <span
       class="span__simulationstudio-plate-well-protocol-location"
-      :style="
-        'top:' +
-        computed_protocol_top +
-        'px;' +
-        'left:' +
-        computed_protocol_left +
-        'px;'
-      "
+      :style="'top:' + computed_protocol_top + 'px;' + 'left:' + computed_protocol_left + 'px;'"
     >
       {{ protocol_type }}
     </span>

@@ -18,10 +18,7 @@ module.exports = {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
-  css: [
-    "~/node_modules/typeface-muli/index.css",
-    "~/node_modules/typeface-anonymous-pro/index.css",
-  ],
+  css: ["~/node_modules/typeface-muli/index.css", "~/node_modules/typeface-anonymous-pro/index.css"],
   /*
    ** Customize the progress bar color
    */

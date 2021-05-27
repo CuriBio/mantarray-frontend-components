@@ -10,6 +10,7 @@ import flask_module from "./modules/flask";
 import settings_module from "./modules/settings";
 import heatmap_module from "./modules/heatmap";
 import stimulation_module from "./modules/stimulation";
+import gradient_module from "./modules/gradient";
 
 const createStore = () => {
   return new Vuex.Store({
@@ -22,6 +23,7 @@ const createStore = () => {
       settings: settings_module,
       heatmap: heatmap_module,
       stimulation: stimulation_module,
+      gradient: gradient_module,
     },
   });
 };

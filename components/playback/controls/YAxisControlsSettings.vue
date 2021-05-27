@@ -1,20 +1,12 @@
 <template>
   <div>
     <!-- original mockflow ID:  id="cmpD0bdbd5699263f6535bd7dffbc49c09fb" -->
-    <canvas
-      class="canvas__y-axis-control-settings-background"
-      width="295"
-      height="350"
-    >
-    </canvas>
+    <canvas class="canvas__y-axis-control-settings-background" width="295" height="350"> </canvas>
     <!-- original mockflow ID:  id="cmpDd424de000684523a198de85a85b9fba1" -->
-    <span class="span__y-axis-control-settings-label"
-      >Y-Axis&nbsp;<wbr />Display&nbsp;<wbr />Mode</span
-    >
+    <span class="span__y-axis-control-settings-label">Y-Axis&nbsp;<wbr />Display&nbsp;<wbr />Mode</span>
     <!-- original mockflow ID:  id="cmpD99791429192bc48b7499cdcba2cc72ea" -->
     <div class="div__y-axis-controls-settings-radio-buttons">
-      <RadioButtonWidget :radio_buttons="button_names_valid" :pre_selected="0">
-      </RadioButtonWidget>
+      <RadioButtonWidget :radio_buttons="button_names_valid" :pre_selected="0"> </RadioButtonWidget>
       <RadioButtonWidget
         v-b-popover.hover.right="
           'Suggestions for different normalization, offset, and other display modes are welcome.'
@@ -24,9 +16,7 @@
       ></RadioButtonWidget>
     </div>
     <!-- original mockflow ID: id="cmpD0b403c0dbaf4c4a4549aee8d1fe4810d" -->
-    <span class="span__y-axis-controls-settings-setup"
-      >Set&nbsp;<wbr />Y-Axis&nbsp;<wbr />Values</span
-    >
+    <span class="span__y-axis-controls-settings-setup">Set&nbsp;<wbr />Y-Axis&nbsp;<wbr />Values</span>
     <!-- original mockflow ID:  id="cmpDdb444fd5c7d0c3187e97bca0d24de0ee" -->
     <span class="span__y-axis-controls-settings-max-value">Maximum:</span>
     <!-- original mockflow ID:  id="cmpD6a9398a35a4e46ab44ef8d7d37256767" -->
@@ -109,9 +99,7 @@ export default {
   },
   data() {
     return {
-      button_names_valid: [
-        { text: "Absolute", value: "Absolute", disabled: false },
-      ],
+      button_names_valid: [{ text: "Absolute", value: "Absolute", disabled: false }],
       button_names_future: [
         {
           text: "Baseline Standard",
@@ -138,28 +126,19 @@ export default {
       const max_value = parseInt(new_value);
       if (max_value < 0) {
         this.max_y_value = "cannot be negative";
-        this.enable_list_y_axis_widget.splice(
-          0,
-          this.enable_list_y_axis_widget.length
-        );
+        this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
         this.enable_list_y_axis_widget = [false, true];
       } else {
         if (max_value > 1000000) {
           this.max_y_value = "very large";
-          this.enable_list_y_axis_widget.splice(
-            0,
-            this.enable_list_y_axis_widget.length
-          );
+          this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
           this.enable_list_y_axis_widget = [false, true];
         } else {
           this.maximum = max_value;
           this.max_y_value = "";
           if (this.minimum != "") {
             if (this.minimum < this.maximum) {
-              this.enable_list_y_axis_widget.splice(
-                0,
-                this.enable_list_y_axis_widget.length
-              );
+              this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
               this.enable_list_y_axis_widget = [true, true];
             }
           }
@@ -167,10 +146,7 @@ export default {
       }
       if (new_value == "" || new_value == "-") {
         this.max_y_value = "invalid";
-        this.enable_list_y_axis_widget.splice(
-          0,
-          this.enable_list_y_axis_widget.length
-        );
+        this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
         this.enable_list_y_axis_widget = [false, true];
       }
     },
@@ -178,26 +154,17 @@ export default {
       const min_value = parseInt(new_value);
       if (min_value < 0) {
         this.min_y_value = "cannot be negative";
-        this.enable_list_y_axis_widget.splice(
-          0,
-          this.enable_list_y_axis_widget.length
-        );
+        this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
         this.enable_list_y_axis_widget = [false, true];
       } else {
         if (min_value >= this.maximum) {
           this.max_y_value = "min greater than max";
           this.min_y_value = "min greater than max";
-          this.enable_list_y_axis_widget.splice(
-            0,
-            this.enable_list_y_axis_widget.length
-          );
+          this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
           this.enable_list_y_axis_widget = [false, true];
         } else {
           this.minimum = min_value;
-          this.enable_list_y_axis_widget.splice(
-            0,
-            this.enable_list_y_axis_widget.length
-          );
+          this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
           this.enable_list_y_axis_widget = [true, true];
           this.min_y_value = "";
           this.max_y_value = "";
@@ -205,10 +172,7 @@ export default {
       }
       if (new_value == "" || new_value == "-") {
         this.min_y_value = "invalid";
-        this.enable_list_y_axis_widget.splice(
-          0,
-          this.enable_list_y_axis_widget.length
-        );
+        this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
         this.enable_list_y_axis_widget = [false, true];
       }
     },

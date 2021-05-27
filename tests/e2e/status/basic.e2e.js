@@ -19,8 +19,7 @@ const mocked_shutdown_commands = RequestMock()
 import VueSelector from "testcafe-vue-selectors";
 
 // the fixture declares what we are testing
-fixture`status/status-bar/basic`
-  .page // declare the fixture
+fixture`status/status-bar/basic`.page // declare the fixture
 `http://localhost:8080/status/status-bar/basic`; // specify the start page
 
 test("status widget looks as expected with default values", async (t) => {
@@ -35,27 +34,18 @@ fixture`status/status-bar/basic-error-catch`
   .requestHooks(mocked_shutdown_commands); // specify the start page
 
 test("status widget captures an ERROR Catch Widget and ShutDown", async (t) => {
-  const screenshot_path = path.join(
-    "status",
-    "status-bar",
-    "basic-status-error-catch"
-  );
+  const screenshot_path = path.join("status", "status-bar", "basic-status-error-catch");
 
   await t.click(error_active_btn);
   await testcafe_page_visual_regression(t, screenshot_path);
 
-  const screenshot_path_shutdown = path.join(
-    "status",
-    "status-bar",
-    "basic-status-shutdown"
-  );
+  const screenshot_path_shutdown = path.join("status", "status-bar", "basic-status-shutdown");
 
   await t.click(okay_btn_label);
   await testcafe_page_visual_regression(t, screenshot_path_shutdown);
 });
 
-fixture`status/status-bar/x-y-offset`
-  .page // declare the fixture
+fixture`status/status-bar/x-y-offset`.page // declare the fixture
 `http://localhost:8080/status/status-bar/x-y-offset`; // specify the start page
 
 test("status widget looks as expected when anchored at an offset from top left", async (t) => {

@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="div__playback-x-axis-controls"
-    :style="div__x_axis_controls__dynamic_style"
-  >
+  <div class="div__playback-x-axis-controls" :style="div__x_axis_controls__dynamic_style">
     <div class="div__playback-x-axis-controls-elements">
       <span class="span__playback-x-axis-controls-text">
         <!-- original mockflow ID: id="cmpDa8f4d0a246cfe9857aa113effcef236e" -->
@@ -137,28 +134,20 @@ export default {
     span__x_axis_controls_zoom_in_button__dynamic_class: function () {
       this.tooltip_x_in();
       return {
-        "div__playback-x-axis-controls--disabled":
-          this.zoom_level_idx == this.max_zoom_index,
-        "div__playback-x-axis-controls--enabled":
-          this.zoom_level_idx < this.max_zoom_index,
+        "div__playback-x-axis-controls--disabled": this.zoom_level_idx == this.max_zoom_index,
+        "div__playback-x-axis-controls--enabled": this.zoom_level_idx < this.max_zoom_index,
       };
     },
   },
   methods: {
     zoom_x_in() {
       if (this.zoom_level_idx < this.x_zoom_levels.length - 1) {
-        this.$store.commit(
-          "waveform/set_x_axis_zoom_idx",
-          this.zoom_level_idx + 1
-        );
+        this.$store.commit("waveform/set_x_axis_zoom_idx", this.zoom_level_idx + 1);
       }
     },
     zoom_x_out() {
       if (this.zoom_level_idx > 0) {
-        this.$store.commit(
-          "waveform/set_x_axis_zoom_idx",
-          this.zoom_level_idx - 1
-        );
+        this.$store.commit("waveform/set_x_axis_zoom_idx", this.zoom_level_idx - 1);
       }
     },
     tooltip_x_in() {

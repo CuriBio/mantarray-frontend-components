@@ -199,24 +199,16 @@ describe("PlateMapEditor.vue", () => {
       await wrapper.vm.$nextTick();
       for (let i = 0; i < array_of_well_indices.length; i++) {
         const iter_well_idx = array_of_well_indices[i];
-        expect(
-          wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
-        ).toBe("2");
-        expect(
-          wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
-        ).toBe("#ececed");
+        expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")).toBe("2");
+        expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke")).toBe("#ececed");
       }
 
       await icon_one_btn.trigger("mouseleave");
       await wrapper.vm.$nextTick();
       for (let i = 0; i < array_of_well_indices.length; i++) {
         const iter_well_idx = array_of_well_indices[i];
-        expect(
-          wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
-        ).toBe("0");
-        expect(
-          wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
-        ).toBe("#ececed");
+        expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")).toBe("0");
+        expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke")).toBe("#ececed");
       }
     }
   );
@@ -254,44 +246,24 @@ describe("PlateMapEditor.vue", () => {
       await wrapper.vm.$nextTick();
       for (let i = 0; i < array_of_well_indices.length; i++) {
         const iter_well_idx = array_of_well_indices[i];
-        if (
-          string_name_of_button == "Row A" ||
-          string_name_of_button == "Row C"
-        ) {
-          expect(
-            wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
-          ).toBe("4");
+        if (string_name_of_button == "Row A" || string_name_of_button == "Row C") {
+          expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")).toBe("4");
         } else {
-          expect(
-            wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
-          ).toBe("2");
+          expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")).toBe("2");
         }
-        expect(
-          wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
-        ).toBe("#ececed");
+        expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke")).toBe("#ececed");
       }
 
       await icon_one_btn.trigger("mouseleave");
       await wrapper.vm.$nextTick();
       for (let i = 0; i < array_of_well_indices.length; i++) {
         const iter_well_idx = array_of_well_indices[i];
-        if (
-          string_name_of_button == "Row A" ||
-          string_name_of_button == "Row C"
-        ) {
-          expect(
-            wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
-          ).toBe("4");
-          expect(
-            wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
-          ).toBe("#FFFFFF");
+        if (string_name_of_button == "Row A" || string_name_of_button == "Row C") {
+          expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")).toBe("4");
+          expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke")).toBe("#FFFFFF");
         } else {
-          expect(
-            wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")
-          ).toBe("0");
-          expect(
-            wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
-          ).toBe("#ececed");
+          expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke-width")).toBe("0");
+          expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke")).toBe("#ececed");
         }
       }
     }
@@ -330,9 +302,7 @@ describe("PlateMapEditor.vue", () => {
       await wrapper.vm.$nextTick();
       for (let i = 0; i < array_of_well_indices.length; i++) {
         const iter_well_idx = array_of_well_indices[i];
-        expect(
-          wrapper.find(".plate_" + iter_well_idx).attributes("stroke")
-        ).toBe("#ececed");
+        expect(wrapper.find(".plate_" + iter_well_idx).attributes("stroke")).toBe("#ececed");
       }
 
       await icon_one_btn.trigger("mouseleave");

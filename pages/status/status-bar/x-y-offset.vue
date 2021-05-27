@@ -13,10 +13,7 @@ export default {
     ComponentToTest,
   },
   created: function () {
-    this.$store.commit(
-      "flask/set_status_uuid",
-      STATUS.MESSAGE.CALIBRATION_NEEDED
-    );
+    this.$store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATION_NEEDED);
   },
 };
 </script>

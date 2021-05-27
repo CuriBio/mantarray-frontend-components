@@ -83,9 +83,7 @@ describe("SettingsForm.vue", () => {
    * @return {Object} invalid_boxes - An Object
    */
   function get_invalid_boxes(wrap) {
-    const boxes = wrap.findAll(
-      ".div__input-dropdown-controls-content-widget--invalid"
-    );
+    const boxes = wrap.findAll(".div__input-dropdown-controls-content-widget--invalid");
     const invalid_boxes = {
       customer: boxes.at(0),
       user: boxes.at(1),
@@ -98,9 +96,7 @@ describe("SettingsForm.vue", () => {
    * @return {Object} valid_boxes - An Object
    */
   function get_valid_boxes(wrap) {
-    const boxes = wrapper.findAll(
-      ".div__input-dropdown-controls-content-widget--valid"
-    );
+    const boxes = wrapper.findAll(".div__input-dropdown-controls-content-widget--valid");
     const valid_boxes = {
       customer: boxes.at(0),
       user: boxes.at(1),
@@ -123,10 +119,7 @@ describe("SettingsForm.vue", () => {
   describe("Given Vuex has a valid customer account called as 'Customer account -1' with a user account of 'User account -1' but no customer index or user index selected", () => {
     beforeEach(() => {
       // commit a deep copy of the template object to the Vuex store using JSON stringify/parse, as it may be modified during tests. https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
-      store.commit(
-        "settings/set_customer_account_ids",
-        JSON.parse(JSON.stringify(array_of_customer_ids))
-      );
+      store.commit("settings/set_customer_account_ids", JSON.parse(JSON.stringify(array_of_customer_ids)));
     });
     describe("Given the component is mounted", () => {
       beforeEach(() => {
@@ -136,9 +129,7 @@ describe("SettingsForm.vue", () => {
         });
       });
       test("When the value of Customer ID is set to 'Customer account -1' by an entry into the input, Then 'Add New Customer ID' 'Edit ID'(of customer) and 'Add New User ID' are enabled and 'Edit ID'(of user) is disabled", async () => {
-        wrapper
-          .find("#input-dropdown-widget-cust-")
-          .setValue("Customer account -1");
+        wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
         const all_buttons = get_buttons(wrapper);
         await wrapper.vm.$nextTick(); // wait for update
         expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
@@ -147,13 +138,9 @@ describe("SettingsForm.vue", () => {
         expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
       });
       test("When the value of Customer ID is set to 'Customer account -1' and User ID is set to 'User account -1', Then all buttons['Add New Customer ID' 'Edit ID'(of customer) 'Add New User ID' and 'Edit ID'(of user)] are enabled", async () => {
-        await wrapper
-          .find("#input-dropdown-widget-cust-")
-          .setValue("Customer account -1");
+        await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
         await wrapper.vm.$nextTick(); // wait for update
-        await wrapper
-          .find("#input-dropdown-widget-user-")
-          .setValue("User account -1");
+        await wrapper.find("#input-dropdown-widget-user-").setValue("User account -1");
         await wrapper.vm.$nextTick(); // wait for update
         const all_buttons = get_buttons(wrapper);
         await wrapper.vm.$nextTick(); // wait for update
@@ -163,13 +150,9 @@ describe("SettingsForm.vue", () => {
         expect(all_buttons.edit_user_btn.isVisible()).toBe(true);
       });
       test("When the value is set as focus User ID('User account -1') is deleted, Then 'Add New Customer' 'Edit ID'(of customer), 'Add New User ID' are enabled and 'Edit ID'(of user) is disabled", async () => {
-        await wrapper
-          .find("#input-dropdown-widget-cust-")
-          .setValue("Customer account -1");
+        await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
         await wrapper.vm.$nextTick(); // wait for update
-        await wrapper
-          .find("#input-dropdown-widget-user-")
-          .setValue("User account -1");
+        await wrapper.find("#input-dropdown-widget-user-").setValue("User account -1");
         await wrapper.vm.$nextTick(); // wait for update
         const all_buttons = get_buttons(wrapper);
         await wrapper.vm.$nextTick(); // wait for update
@@ -190,14 +173,10 @@ describe("SettingsForm.vue", () => {
         expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
       });
       test("When the value set as focus User ID 'User account -1' is deleted and followed by 'Customer account -1 deleted, Then 'Add New Customer ID' is enabled 'Edit ID'(of customer), 'Add New User ID' and 'Edit ID'(of user) are disabled", async () => {
-        await wrapper
-          .find("#input-dropdown-widget-cust-")
-          .setValue("Customer account -1");
+        await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
         await wrapper.vm.$nextTick(); // wait for update
 
-        await wrapper
-          .find("#input-dropdown-widget-user-")
-          .setValue("User account -1");
+        await wrapper.find("#input-dropdown-widget-user-").setValue("User account -1");
         await wrapper.vm.$nextTick(); // wait for update
         const all_buttons = get_buttons(wrapper);
         await wrapper.vm.$nextTick(); // wait for update
@@ -259,10 +238,7 @@ describe("SettingsForm.vue", () => {
     });
     test("Given the SettingsForm has Vuex data is an empty array, When the value Customer ID/User ID is <empty>, Then visually the RED Box is enabled around the Customer ID and User ID", async () => {
       const array_of_empty_customer_ids = [];
-      store.commit(
-        "settings/set_customer_account_ids",
-        array_of_empty_customer_ids
-      );
+      store.commit("settings/set_customer_account_ids", array_of_empty_customer_ids);
       wrapper = mount(ComponentToTest, {
         store,
         localVue,
@@ -296,9 +272,7 @@ describe("SettingsForm.vue", () => {
       expect(valid_boxes.customer.isVisible()).toBe(true);
       expect(valid_boxes.user.isVisible()).toBe(true);
 
-      await wrapper
-        .find("#input-dropdown-widget-cust-")
-        .setValue("Customer account -"); // customer with this doesn't exist.
+      await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -"); // customer with this doesn't exist.
 
       await wrapper.vm.$nextTick(); // wait for update
 
@@ -321,23 +295,17 @@ describe("SettingsForm.vue", () => {
         localVue,
       });
 
-      const valid_box = wrapper.findAll(
-        ".div__input-dropdown-controls-content-widget--valid"
-      );
+      const valid_box = wrapper.findAll(".div__input-dropdown-controls-content-widget--valid");
       const Customer_ID_Input_Editor_Green_Box = valid_box.at(0);
       const valid_boxes = get_valid_boxes(wrapper);
       expect(valid_boxes.customer.isVisible()).toBe(true);
       expect(valid_boxes.user.isVisible()).toBe(true);
 
-      await wrapper
-        .find("#input-dropdown-widget-user-")
-        .setValue("User account -"); // user  doesn't exist.
+      await wrapper.find("#input-dropdown-widget-user-").setValue("User account -"); // user  doesn't exist.
 
       await wrapper.vm.$nextTick(); // wait for update
 
-      const invalid_box = wrapper.findAll(
-        ".div__input-dropdown-controls-content-widget--invalid"
-      );
+      const invalid_box = wrapper.findAll(".div__input-dropdown-controls-content-widget--invalid");
       const User_ID_Input_Editor_Red_Box = invalid_box.at(0);
 
       expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true); // customer box is green
@@ -371,13 +339,9 @@ describe("SettingsForm.vue", () => {
 
       await wrapper.vm.$nextTick(); // wait for update
 
-      await wrapper
-        .find("#input-dropdown-widget-cust-")
-        .setValue("Customer account -1");
+      await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
       await wrapper.vm.$nextTick(); // wait for update
-      await wrapper
-        .find("#input-dropdown-widget-user-")
-        .setValue("User account -1");
+      await wrapper.find("#input-dropdown-widget-user-").setValue("User account -1");
       await wrapper.vm.$nextTick(); // wait for update
 
       const valid_boxes = get_valid_boxes(wrapper);
@@ -392,10 +356,7 @@ describe("SettingsForm.vue", () => {
     });
   });
   test("Given the SettingsForm has partial Vuex data on only 'Customer ID' and user_ids is empty , When the value Customer ID/User ID is <empty>, Then 'Add New Customer ID' is enabled 'Edit ID'(of customer), 'Add New User ID' and 'Edit ID'(of user) are disabled", async () => {
-    store.commit(
-      "settings/set_customer_account_ids",
-      array_of_customer_ids_no_user_ids
-    );
+    store.commit("settings/set_customer_account_ids", array_of_customer_ids_no_user_ids);
     wrapper = mount(ComponentToTest, {
       store,
       localVue,

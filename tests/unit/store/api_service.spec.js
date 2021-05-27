@@ -25,8 +25,6 @@ describe("APIService", () => {
       const result = await get_recording("sandbox_eli_waveform");
       const first_simple_json_waveform = result.data["waveform_data_points"][0];
       expect(first_simple_json_waveform["x_data_points"][0]).toStrictEqual(0);
-      expect(first_simple_json_waveform["y_data_points"][0]).toStrictEqual(
-        230.417297
-      );
+      expect(first_simple_json_waveform["y_data_points"][0]).toStrictEqual(230.417297);
     });
 });

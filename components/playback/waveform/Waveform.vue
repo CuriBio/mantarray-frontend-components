@@ -3,10 +3,7 @@
     <div class="div__waveform-well-title">
       <span>{{ title }}</span>
     </div>
-    <div
-      class="div__waveform-graph"
-      :style="div__waveform_graph__dynamic_style"
-    ></div>
+    <div class="div__waveform-graph" :style="div__waveform_graph__dynamic_style"></div>
     <div class="div__waveform-y-axis-title">
       <span> {{ y_axis_label }}</span>
     </div>
@@ -17,13 +14,7 @@
   </div>
 </template>
 <script>
-import {
-  axisBottom,
-  axisLeft,
-  line as d3_line,
-  select as d3_select,
-  scaleLinear,
-} from "d3";
+import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear } from "d3";
 /**
  * @vue-prop {String} title - Current title of the waveform
  * @vue-prop {Int} samples_per_second - Current samples per second
@@ -95,11 +86,7 @@ export default {
       y_axis_scale: null,
       waveform_line_node: null,
       div__waveform_graph__dynamic_style: {
-        width:
-          this.plot_area_pixel_width +
-          this.margin.left +
-          this.margin.right +
-          "px",
+        width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
       },
     };
   },
@@ -126,20 +113,11 @@ export default {
     the_svg = d3_select(this.$el)
       .select(".div__waveform-graph")
       .append("svg")
-      .attr(
-        "width",
-        this.plot_area_pixel_width + this.margin.left + this.margin.right
-      )
-      .attr(
-        "height",
-        this.plot_area_pixel_height + this.margin.top + this.margin.bottom
-      )
+      .attr("width", this.plot_area_pixel_width + this.margin.left + this.margin.right)
+      .attr("height", this.plot_area_pixel_height + this.margin.top + this.margin.bottom)
       .attr("style", "background-color: black;")
       .append("g")
-      .attr(
-        "transform",
-        "translate(" + this.margin.left + "," + this.margin.top + ")"
-      )
+      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
       .attr("id", "svg_of_waveform")
       .attr("font-family", "Muli");
 
@@ -151,9 +129,7 @@ export default {
     // Draw black rectangles over the margins so that any excess waveform line is not visible to user
 
     const blocker_color = "#000000";
-    const margin_blockers_node = the_svg
-      .append("g")
-      .attr("id", "margin_blockers_node");
+    const margin_blockers_node = the_svg.append("g").attr("id", "margin_blockers_node");
 
     const margin = this.margin;
 
@@ -224,8 +200,7 @@ export default {
       this.x_axis_scale = scaleLinear()
         .domain([
           this.x_axis_min / this.samples_per_second,
-          (this.x_axis_min + this.x_axis_sample_length) /
-            this.samples_per_second,
+          (this.x_axis_min + this.x_axis_sample_length) / this.samples_per_second,
         ])
         .range([0, this.plot_area_pixel_width]);
     },

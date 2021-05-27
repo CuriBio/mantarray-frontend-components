@@ -15,18 +15,14 @@ describe("StimulationStudioVoltageSettings.vue", () => {
     wrapper = mount(dist_StimulationStudioVoltageSettings, {
       localVue,
     });
-    const target_span = wrapper.find(
-      ".span__stimulationstudio-voltage-settings-title"
-    );
+    const target_span = wrapper.find(".span__stimulationstudio-voltage-settings-title");
     expect(target_span.text()).toStrictEqual("Biphasic Pulse Details");
   });
   test("When mounting StimulationStudioVoltageSettings from the component file, Then it loads successfully  `Biphasic Pulse Details` as defined title text is rendered", () => {
     wrapper = shallowMount(StimulationStudioVoltageSettings, {
       localVue,
     });
-    const target_span = wrapper.find(
-      ".span__stimulationstudio-voltage-settings-title"
-    );
+    const target_span = wrapper.find(".span__stimulationstudio-voltage-settings-title");
     expect(target_span.text()).toStrictEqual("Biphasic Pulse Details");
   });
 });

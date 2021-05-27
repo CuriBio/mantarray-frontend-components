@@ -33,11 +33,7 @@ fixture`status/recording-time/recording-basic`
 `http://localhost:8080/status/recording-time/recording-basic`; // specify the start page
 
 test("recording time looks as expected when not recording", async (t) => {
-  const screenshot_path = path.join(
-    base_screenshot_path,
-    "recording-time",
-    "basic-init"
-  );
+  const screenshot_path = path.join(base_screenshot_path, "recording-time", "basic-init");
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
@@ -47,11 +43,7 @@ fixture`status/recording-time/recording-x-y-offset`
 `http://localhost:8080/status/recording-time/recording-x-y-offset`; // specify the start page
 
 test("recording looks as expected when anchored at an offset from top left", async (t) => {
-  const screenshot_path = path.join(
-    base_screenshot_path,
-    "recording-time",
-    "x-y-offset"
-  );
+  const screenshot_path = path.join(base_screenshot_path, "recording-time", "x-y-offset");
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
@@ -61,17 +53,10 @@ fixture`status/recording-time/on-recording-init`
     // declare the fixture
     `http://localhost:8080/status/recording-time/on-recording-init`
   )
-  .requestHooks(
-    mocked_all_mantarray_commands,
-    mocked_static_system_status_states
-  );
+  .requestHooks(mocked_all_mantarray_commands, mocked_static_system_status_states);
 
 test.requestHooks()("recording time text displays as 0", async (t) => {
-  const screenshot_path = path.join(
-    base_screenshot_path,
-    "recording-time",
-    "on-recording-init"
-  );
+  const screenshot_path = path.join(base_screenshot_path, "recording-time", "on-recording-init");
 
   await t.wait(2000);
   await testcafe_page_visual_regression(t, screenshot_path);
@@ -82,21 +67,15 @@ fixture`status/recording-time/on-recording-after-time-elapsed`
     // declare the fixture
     `http://localhost:8080/status/recording-time/on-recording-after-time-elapsed`
   )
-  .requestHooks(
-    mocked_all_mantarray_commands,
-    mocked_static_system_status_states
+  .requestHooks(mocked_all_mantarray_commands, mocked_static_system_status_states);
+
+test.requestHooks()("recording time text contains numbers greater than 0", async (t) => {
+  const screenshot_path = path.join(
+    base_screenshot_path,
+    "recording-time",
+    "on-recording-after-time-elapsed"
   );
 
-test.requestHooks()(
-  "recording time text contains numbers greater than 0",
-  async (t) => {
-    const screenshot_path = path.join(
-      base_screenshot_path,
-      "recording-time",
-      "on-recording-after-time-elapsed"
-    );
-
-    await t.wait(2000);
-    await testcafe_page_visual_regression(t, screenshot_path);
-  }
-);
+  await t.wait(2000);
+  await testcafe_page_visual_regression(t, screenshot_path);
+});

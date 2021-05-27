@@ -33,10 +33,7 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     }
     // if (error.response) {
     // if (error.response.status === 404) {
-    if (
-      action_context.rootState.flask.status_uuid ===
-      STATUS.MESSAGE.SERVER_STILL_INITIALIZING
-    ) {
+    if (action_context.rootState.flask.status_uuid === STATUS.MESSAGE.SERVER_STILL_INITIALIZING) {
       return error;
       // return error.response;
     }

@@ -158,31 +158,15 @@ describe("InputWidget.vue", () => {
       localVue,
     });
     const background = wrapper.find(".div__input-background");
-    expect(background.attributes("style")).toStrictEqual(
-      "width: 394px; height: 100px;"
-    );
+    expect(background.attributes("style")).toStrictEqual("width: 394px; height: 100px;");
     const input_title_label = wrapper.find(".span__input-content-label");
-    expect(input_title_label.attributes("style")).toStrictEqual(
-      "width: 390px;"
-    );
-    const input_bounded_div = wrapper.find(
-      ".div__input-controls-content-widget"
-    );
-    expect(input_bounded_div.attributes("style")).toStrictEqual(
-      "width: 390px; top: 40px;"
-    );
-    const input_text_entry_span = wrapper.find(
-      ".span__input-controls-content-input-txt-widget"
-    );
-    expect(input_text_entry_span.attributes("style")).toStrictEqual(
-      "width: 390px;"
-    );
-    const input_text_entry_feedback = wrapper.find(
-      ".div__input-controls-content-feedback"
-    );
-    expect(input_text_entry_feedback.attributes("style")).toStrictEqual(
-      "width: 390px; top: 88px;"
-    );
+    expect(input_title_label.attributes("style")).toStrictEqual("width: 390px;");
+    const input_bounded_div = wrapper.find(".div__input-controls-content-widget");
+    expect(input_bounded_div.attributes("style")).toStrictEqual("width: 390px; top: 40px;");
+    const input_text_entry_span = wrapper.find(".span__input-controls-content-input-txt-widget");
+    expect(input_text_entry_span.attributes("style")).toStrictEqual("width: 390px;");
+    const input_text_entry_feedback = wrapper.find(".div__input-controls-content-feedback");
+    expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 88px;");
   });
   test("When the component is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width' in the event of title being empty the height is modified without a hole", async () => {
     const propsData = {
@@ -200,30 +184,16 @@ describe("InputWidget.vue", () => {
       localVue,
     });
     const background = wrapper.find(".div__input-background");
-    expect(background.attributes("style")).toStrictEqual(
-      "width: 394px; height: 60px;"
-    );
+    expect(background.attributes("style")).toStrictEqual("width: 394px; height: 60px;");
     const input_title_label = wrapper.find(".span__input-content-label");
     expect(input_title_label.exists()).toBe(false);
 
-    const input_bounded_div = wrapper.find(
-      ".div__input-controls-content-widget"
-    );
-    expect(input_bounded_div.attributes("style")).toStrictEqual(
-      "width: 390px; top: 0px;"
-    );
-    const input_text_entry_span = wrapper.find(
-      ".span__input-controls-content-input-txt-widget"
-    );
-    expect(input_text_entry_span.attributes("style")).toStrictEqual(
-      "width: 390px;"
-    );
-    const input_text_entry_feedback = wrapper.find(
-      ".div__input-controls-content-feedback"
-    );
-    expect(input_text_entry_feedback.attributes("style")).toStrictEqual(
-      "width: 390px; top: 48px;"
-    );
+    const input_bounded_div = wrapper.find(".div__input-controls-content-widget");
+    expect(input_bounded_div.attributes("style")).toStrictEqual("width: 390px; top: 0px;");
+    const input_text_entry_span = wrapper.find(".span__input-controls-content-input-txt-widget");
+    expect(input_text_entry_span.attributes("style")).toStrictEqual("width: 390px;");
+    const input_text_entry_feedback = wrapper.find(".div__input-controls-content-feedback");
+    expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 48px;");
   });
   test("When the component is mounted with the display_text_message prop set to false, Then the invalid_text is not rendered", async () => {
     const propsData = {
@@ -241,9 +211,7 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
-    const input_text_entry_feedback = wrapper.find(
-      ".div__input-controls-content-feedback"
-    );
+    const input_text_entry_feedback = wrapper.find(".div__input-controls-content-feedback");
     expect(input_text_entry_feedback.isVisible()).toBe(false);
   });
   test("Given the component was mounted with the display_text_message prop set to false, When the display_text_message prop is updated to True, Then the invalid_text is rendered", async () => {
@@ -262,9 +230,7 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
-    const input_text_entry_feedback = wrapper.find(
-      ".div__input-controls-content-feedback"
-    );
+    const input_text_entry_feedback = wrapper.find(".div__input-controls-content-feedback");
     expect(input_text_entry_feedback.isVisible()).toBe(false);
     await wrapper.setProps({ display_text_message: true });
     expect(input_text_entry_feedback.isVisible()).toBe(true);
@@ -292,8 +258,6 @@ describe("InputWidget.vue", () => {
     wrapper.find("#input-widget-field-").trigger("paste", mEvent);
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find("#input-widget-field-").value).toBeUndefined();
-    expect(wrapper.find("#input-widget-field-").html()).toContain(
-      'onpaste="return false;"'
-    );
+    expect(wrapper.find("#input-widget-field-").html()).toContain('onpaste="return false;"');
   });
 });

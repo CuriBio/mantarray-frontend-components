@@ -235,9 +235,7 @@ describe("PlateMapEditor.vue", () => {
       });
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(
-        wrapper.find(".plate_" + well_indices).attributes("stroke-width")
-      ).toBe("4");
+      expect(wrapper.find(".plate_" + well_indices).attributes("stroke-width")).toBe("4");
     }
   );
   test.each([
@@ -294,9 +292,7 @@ describe("PlateMapEditor.vue", () => {
       });
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(
-        wrapper.find(".plate_" + well_indices).attributes("stroke-width")
-      ).toBe("4");
+      expect(wrapper.find(".plate_" + well_indices).attributes("stroke-width")).toBe("4");
     }
   );
 

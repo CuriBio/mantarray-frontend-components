@@ -5,9 +5,8 @@
       <div class="span__barcode-edit-dialog-message">
         <p>Do you want to enable manual barcode editing?</p>
         <p>
-          Once enabled, all barcodes must be entered manually. This should only
-          be done if the barcode scanner is malfunctioning. Scanning cannot be
-          re-enabled until software is restarted.
+          Once enabled, all barcodes must be entered manually. This should only be done if the barcode scanner
+          is malfunctioning. Scanning cannot be re-enabled until software is restarted.
         </p>
       </div>
       <div class="div__barcode-edit-dialog-button">

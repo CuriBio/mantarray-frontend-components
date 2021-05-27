@@ -81,9 +81,7 @@ describe("PlateNavigator.vue", () => {
       const well_to_enter = wrapper.find("#well_" + well_index);
       well_to_enter.trigger("mouseenter");
       await wrapper.vm.$nextTick(); // wait for update
-      expect(wrapper.vm.hovered_quadrant_wells).toEqual(
-        quadrants[expected_quadrant_name]
-      );
+      expect(wrapper.vm.hovered_quadrant_wells).toEqual(quadrants[expected_quadrant_name]);
       well_to_enter.trigger("mouseleave");
       await wrapper.vm.$nextTick(); // wait for update
       expect(wrapper.vm.hovered_quadrant_wells).toEqual([]);
@@ -118,10 +116,7 @@ describe("PlateNavigator.vue", () => {
   ])(
     "Given the Vuex state is set to quadrant %s, When clicking on well index %i, Then the Vuex store mutates to contain the indices in the %s quadrant",
     async (starting_quadrant_name, well_index, expected_quadrant_name) => {
-      store.commit(
-        "twentyfourcontrols/set_is_quadrant",
-        quadrants[starting_quadrant_name]
-      );
+      store.commit("twentyfourcontrols/set_is_quadrant", quadrants[starting_quadrant_name]);
       const propsData = {};
       wrapper = shallowMount(ComponentToTest, {
         propsData,
@@ -131,9 +126,7 @@ describe("PlateNavigator.vue", () => {
       const well_to_click = wrapper.find("#well_" + well_index);
       well_to_click.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
-      expect(store.state.twentyfourcontrols.is_quadrant).toEqual(
-        quadrants[expected_quadrant_name]
-      );
+      expect(store.state.twentyfourcontrols.is_quadrant).toEqual(quadrants[expected_quadrant_name]);
     }
   );
 
@@ -144,16 +137,8 @@ describe("PlateNavigator.vue", () => {
     ["BOTTOM_LEFT", 23, true, "BOTTOM_RIGHT"],
   ])(
     "Given the Vuex state is set to quadrant %s, When mouseenter on well index %i, Then '%s' that all the wells in the %s quadrant should update contain the CSS class for hovering",
-    async (
-      starting_quadrant_name,
-      well_index,
-      expected_to_have_hover_attributes,
-      hovering_quadrant_name
-    ) => {
-      store.commit(
-        "twentyfourcontrols/set_is_quadrant",
-        quadrants[starting_quadrant_name]
-      );
+    async (starting_quadrant_name, well_index, expected_to_have_hover_attributes, hovering_quadrant_name) => {
+      store.commit("twentyfourcontrols/set_is_quadrant", quadrants[starting_quadrant_name]);
       const propsData = {};
       wrapper = shallowMount(ComponentToTest, {
         propsData,
@@ -164,27 +149,19 @@ describe("PlateNavigator.vue", () => {
       const well_to_enter = wrapper.find("#well_" + well_index);
       well_to_enter.trigger("mouseenter");
       await wrapper.vm.$nextTick(); // wait for update
-      const expected_selected_class_name =
-        "circle__plate-navigator-well--selected";
-      const expected_hover_class_name =
-        "circle__plate-navigator-well--unselected-hover";
+      const expected_selected_class_name = "circle__plate-navigator-well--selected";
+      const expected_hover_class_name = "circle__plate-navigator-well--unselected-hover";
       if (expected_to_have_hover_attributes) {
         for (let i = 0; i < hovering_quadrant.length; i++) {
           const well_to_check = wrapper.find("#well_" + hovering_quadrant[i]);
           expect(well_to_check.classes()).toContain(expected_hover_class_name);
-          expect(well_to_check.classes()).not.toContain(
-            expected_selected_class_name
-          );
+          expect(well_to_check.classes()).not.toContain(expected_selected_class_name);
         }
       } else {
         for (let i = 0; i < hovering_quadrant.length; i++) {
           const well_to_check = wrapper.find("#well_" + hovering_quadrant[i]);
-          expect(well_to_check.classes()).not.toContain(
-            expected_hover_class_name
-          );
-          expect(well_to_check.classes()).toContain(
-            expected_selected_class_name
-          );
+          expect(well_to_check.classes()).not.toContain(expected_hover_class_name);
+          expect(well_to_check.classes()).toContain(expected_selected_class_name);
         }
       }
     }

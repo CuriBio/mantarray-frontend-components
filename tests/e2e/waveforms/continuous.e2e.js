@@ -9,8 +9,7 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 import VueSelector from "testcafe-vue-selectors";
 
 // the fixture declares what we are testing
-fixture`waveforms/continuous/basic`
-  .page // declare the fixture
+fixture`waveforms/continuous/basic`.page // declare the fixture
 `http://localhost:8080/waveforms/continuous/basic`; // specify the start page
 
 test("waveform looks as expected with default position", async (t) => {
@@ -19,8 +18,7 @@ test("waveform looks as expected with default position", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`waveforms/continuous/x-y-offset`
-  .page // declare the fixture
+fixture`waveforms/continuous/x-y-offset`.page // declare the fixture
 `http://localhost:8080/waveforms/continuous/x-y-offset`; // specify the start page
 
 test("waveform looks as expected when anchored at an offset from top left", async (t) => {

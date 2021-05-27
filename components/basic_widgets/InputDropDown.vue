@@ -1,14 +1,7 @@
 <template>
   <div
     class="div__input-dropdown-background"
-    :style="
-      'width: ' +
-      input_width_background +
-      'px;' +
-      'height: ' +
-      input_height_background +
-      'px;'
-    "
+    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
   >
     <span
       v-if="title_label !== ''"
@@ -26,9 +19,7 @@
           ? 'div__input-dropdown-controls-content-widget--invalid'
           : 'div__input-dropdown-controls-content-widget--valid',
       ]"
-      :style="
-        'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'
-      "
+      :style="'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'"
     >
       <span
         class="span__input-dropdown-controls-content-input-txt-widget"
@@ -41,17 +32,9 @@
           :placeholder="placeholder"
           :disabled="disabled"
           class="w-100 h-100 edit-id"
-          style="
-            border-radius: 0;
-            background-color: #1c1c1c;
-            border: 0px;
-            color: #ffffff;
-          "
+          style="border-radius: 0; background-color: #1c1c1c; border: 0px; color: #ffffff"
         ></b-form-input>
-        <datalist
-          v-if="dropdown_options.length"
-          :id="'option_list' + options_id"
-        >
+        <datalist v-if="dropdown_options.length" :id="'option_list' + options_id">
           <option v-for="item in dropdown_options" :id="item.id" :key="item.id">
             {{ item.name }}
           </option>
@@ -61,9 +44,7 @@
     <div
       v-show="message_if_blank"
       class="div__input-dropdown-controls-content-feedback"
-      :style="
-        'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'
-      "
+      :style="'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'"
     >
       {{ invalid_text }}
     </div>

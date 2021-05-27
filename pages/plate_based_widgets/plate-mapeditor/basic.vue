@@ -1,9 +1,6 @@
 <template>
   <div>
-    <ComponentToTest
-      :platecolor="passing_plate_colors"
-      @test-event="display_event"
-    ></ComponentToTest>
+    <ComponentToTest :platecolor="passing_plate_colors" @test-event="display_event"></ComponentToTest>
     <div style="top: 155px; left: 500px; position: absolute">
       {{ userevent }}
     </div>

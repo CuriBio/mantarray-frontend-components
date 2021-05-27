@@ -31,18 +31,13 @@ describe("BarcodeEditDialog.vue", () => {
     wrapper = mount(ComponentToTest, {
       localVue,
     });
-    const target_message_span = wrapper.find(
-      ".span__barcode-edit-dialog-message"
-    );
+    const target_message_span = wrapper.find(".span__barcode-edit-dialog-message");
     const target_message_span_p = target_message_span.findAll("p");
-    expect(target_message_span_p.at(0).text()).toStrictEqual(
-      "Do you want to enable manual barcode editing?"
-    );
+    expect(target_message_span_p.at(0).text()).toStrictEqual("Do you want to enable manual barcode editing?");
     expect(target_message_span_p.at(1)).toMatchInlineSnapshot(`
       <p>
-        Once enabled, all barcodes must be entered manually. This should only
-        be done if the barcode scanner is malfunctioning. Scanning cannot be
-        re-enabled until software is restarted.
+        Once enabled, all barcodes must be entered manually. This should only be done if the barcode scanner
+        is malfunctioning. Scanning cannot be re-enabled until software is restarted.
       </p>
     `);
   });

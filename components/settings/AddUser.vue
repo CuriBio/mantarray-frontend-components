@@ -4,10 +4,7 @@
     <span class="span__adduser-form-controls-content-title">
       Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />ID
     </span>
-    <div
-      id="uuid"
-      style="top: 50px; left: 50px; position: absolute; z-index: 24"
-    >
+    <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
         :title_label="'Enter Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
@@ -19,10 +16,7 @@
       ></InputWidget>
     </div>
 
-    <div
-      id="nickname"
-      style="top: 145px; left: 50px; position: absolute; z-index: 23"
-    >
+    <div id="nickname" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
         :title_label="'Enter ID Nickname'"
         :placeholder="'Marie Curie'"
@@ -168,8 +162,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget
-  > #input-widget-field-nickname-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-nickname-id {
   font-family: Muli;
 }
 </style>

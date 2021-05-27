@@ -30,18 +30,11 @@ describe("store/twentyfourcontrols", () => {
   // UT is bounded to the possible icon's different visibility.
 
   test("When twentyfourcontrols store is initialized, Then by default it should be QUADRANT_ONE", () => {
-    expect(store.state.twentyfourcontrols.is_quadrant).toStrictEqual(
-      quadrant_options.QUADRANT_ONE
-    );
+    expect(store.state.twentyfourcontrols.is_quadrant).toStrictEqual(quadrant_options.QUADRANT_ONE);
   });
 
   test("When twentyfourcontrols store is mutated with QUADRANT_TWO, Then assert the QUADRANT_TWO is updated", () => {
-    store.commit(
-      quadrant_options_api_set.QUADRANT,
-      quadrant_options.QUADRANT_TWO
-    );
-    expect(store.state.twentyfourcontrols.is_quadrant).toBe(
-      quadrant_options.QUADRANT_TWO
-    );
+    store.commit(quadrant_options_api_set.QUADRANT, quadrant_options.QUADRANT_TWO);
+    expect(store.state.twentyfourcontrols.is_quadrant).toBe(quadrant_options.QUADRANT_TWO);
   });
 });

@@ -21,8 +21,7 @@ describe("store/settings", () => {
     expect(array_of_customerids).toHaveLength(0);
   });
   test("When initialized, Then the customer_account_ids when accessed via settings_store_module is an empty with no value assigned", () => {
-    const array_of_customerids = settings_store_module.state()
-      .customer_account_ids;
+    const array_of_customerids = settings_store_module.state().customer_account_ids;
     expect(array_of_customerids).toHaveLength(0);
   });
   test("When initialized, Then the file_count and max_file_count is zero 0 as with no value assigned", () => {
@@ -43,12 +42,8 @@ describe("store/settings", () => {
     expect(store.state.settings.user_details.nickname).toBeNull();
     store.commit("settings/set_user_details", array_of_userid);
     expect(store.state.settings.user_details[0].user_id).toStrictEqual(0);
-    expect(store.state.settings.user_details[0].uuid).toStrictEqual(
-      "2VSckkBYr2An3dqHEyfRRE"
-    );
-    expect(store.state.settings.user_details[0].nickname).toStrictEqual(
-      "User account -1"
-    );
+    expect(store.state.settings.user_details[0].uuid).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
+    expect(store.state.settings.user_details[0].nickname).toStrictEqual("User account -1");
   });
   test("When initialized customer_details UUID, API-key, customer name and user_details UUID, nickname is empty, Then commit customer_details with valid cust_id, UUID, API-key, customer name and user_details of user_id, UUID, nickname to the Vuex and assert the same", () => {
     const array_of_userid = [
@@ -74,25 +69,15 @@ describe("store/settings", () => {
     expect(store.state.settings.customer_details.user_ids).toHaveLength(0);
     store.commit("settings/set_customer_details", array_of_customerids);
     expect(store.state.settings.customer_details[0].cust_id).toStrictEqual(0);
-    expect(store.state.settings.customer_details[0].uuid).toStrictEqual(
-      "4vqyd62oARXqj9nRUNhtLQ"
-    );
+    expect(store.state.settings.customer_details[0].uuid).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
     expect(store.state.settings.customer_details[0].api_key).toStrictEqual(
       "941532a0-6be1-443a-a9d5-d57bdf180a52"
     );
-    expect(store.state.settings.customer_details[0].nickname).toStrictEqual(
-      "Customer account -1"
-    );
+    expect(store.state.settings.customer_details[0].nickname).toStrictEqual("Customer account -1");
     expect(store.state.settings.customer_details[0].user_ids).toHaveLength(1);
-    expect(
-      store.state.settings.customer_details[0].user_ids[0].user_id
-    ).toStrictEqual(0);
-    expect(
-      store.state.settings.customer_details[0].user_ids[0].uuid
-    ).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
-    expect(
-      store.state.settings.customer_details[0].user_ids[0].nickname
-    ).toStrictEqual("User account -1");
+    expect(store.state.settings.customer_details[0].user_ids[0].user_id).toStrictEqual(0);
+    expect(store.state.settings.customer_details[0].user_ids[0].uuid).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
+    expect(store.state.settings.customer_details[0].user_ids[0].nickname).toStrictEqual("User account -1");
   });
   test("When initialized the array of customer_account_ids is empty and size 0, Then commit a single valid record of customer_details as the first record in customer_account_ids, customer_index/user_index and assert the same", () => {
     const array_of_userid = [
@@ -115,35 +100,27 @@ describe("store/settings", () => {
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
+    expect(store.state.settings.customer_account_ids[store.state.settings.customer_index].uuid).toStrictEqual(
+      "4vqyd62oARXqj9nRUNhtLQ"
+    );
     expect(
-      store.state.settings.customer_account_ids[
-        store.state.settings.customer_index
-      ].uuid
-    ).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
-    expect(
-      store.state.settings.customer_account_ids[
-        store.state.settings.customer_index
-      ].api_key
+      store.state.settings.customer_account_ids[store.state.settings.customer_index].api_key
     ).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
     expect(
-      store.state.settings.customer_account_ids[
-        store.state.settings.customer_index
-      ].nickname
+      store.state.settings.customer_account_ids[store.state.settings.customer_index].nickname
     ).toStrictEqual("Customer account -1");
     expect(
-      store.state.settings.customer_account_ids[
-        store.state.settings.customer_index
-      ].user_ids
+      store.state.settings.customer_account_ids[store.state.settings.customer_index].user_ids
     ).toHaveLength(1);
     expect(
-      store.state.settings.customer_account_ids[
-        store.state.settings.customer_index
-      ].user_ids[store.state.settings.user_index].uuid
+      store.state.settings.customer_account_ids[store.state.settings.customer_index].user_ids[
+        store.state.settings.user_index
+      ].uuid
     ).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
     expect(
-      store.state.settings.customer_account_ids[
-        store.state.settings.customer_index
-      ].user_ids[store.state.settings.user_index].nickname
+      store.state.settings.customer_account_ids[store.state.settings.customer_index].user_ids[
+        store.state.settings.user_index
+      ].nickname
     ).toStrictEqual("User account -1");
   });
   test("When initialized the array of customer_account_ids is empty and size 0, Then commit customer_details with multiple user_ids in customer_account_ids and assert the number of user_ids to match the number of user_ids", () => {
@@ -176,9 +153,7 @@ describe("store/settings", () => {
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     store.commit("settings/set_customer_index", 0);
     store.commit("settings/set_user_index", 0);
-    expect(store.state.settings.customer_account_ids[0].user_ids).toHaveLength(
-      3
-    );
+    expect(store.state.settings.customer_account_ids[0].user_ids).toHaveLength(3);
   });
   test("When initialized the array of customer_account_ids is empty and size 0, Then commit an array of customer details in customer_account_ids and assert the number of customer records", () => {
     const array_of_userid_1 = [
@@ -296,16 +271,10 @@ describe("store/settings", () => {
         user_ids: [],
       },
     ];
-    store.commit(
-      "settings/set_customer_details",
-      add_customer
-    ); /*  (Save ID) selected */
+    store.commit("settings/set_customer_details", add_customer); /*  (Save ID) selected */
     const current_customerids = store.state.settings.customer_account_ids;
     current_customerids.push(store.getters["settings/customer_details"]);
-    store.commit(
-      "settings/set_customer_details",
-      current_customerids
-    ); /*  (SaveChanges) selected */
+    store.commit("settings/set_customer_details", current_customerids); /*  (SaveChanges) selected */
     expect(store.state.settings.customer_account_ids).toHaveLength(
       3
     ); /*  assert the number of customer_account_ids to three */
@@ -363,48 +332,31 @@ describe("store/settings", () => {
 
     /* User now does Edit Customer Click on the "Customer account - 2*/
     store.commit("settings/set_customer_index", 1);
-    const current_focus_customerid =
-      store.state.settings.customer_account_ids[1];
-    expect(current_focus_customerid.nickname).toStrictEqual(
-      "Customer account -2"
-    );
-    current_focus_customerid.uuid =
-      "7N42dgm5tFLK9N8MT7fHC7"; /* UUID modified */
-    current_focus_customerid.nickname =
-      "Updated account -2"; /* Nickname modified */
-    store.commit(
-      "settings/set_customer_details",
-      current_focus_customerid
-    ); /*  (Save ID) selected */
+    const current_focus_customerid = store.state.settings.customer_account_ids[1];
+    expect(current_focus_customerid.nickname).toStrictEqual("Customer account -2");
+    current_focus_customerid.uuid = "7N42dgm5tFLK9N8MT7fHC7"; /* UUID modified */
+    current_focus_customerid.nickname = "Updated account -2"; /* Nickname modified */
+    store.commit("settings/set_customer_details", current_focus_customerid); /*  (Save ID) selected */
 
     const current_customerids = store.state.settings.customer_account_ids;
     const modified_customerids = store.state.settings.customer_account_ids[1];
 
     /* Javascript array provides an internal api array.find(v => v.id === match.id).data = new.data  so we update object in array and store in Vuex*/
-    current_customerids.find(
-      (customer) => customer.cust_id === current_focus_customerid.cust_id
-    ).uuid = modified_customerids.uuid;
-    current_customerids.find(
-      (customer) => customer.cust_id === current_focus_customerid.cust_id
-    ).nickname = modified_customerids.nickname;
-    current_customerids.find(
-      (customer) => customer.cust_id === current_focus_customerid.cust_id
-    ).api_key = modified_customerids.api_key;
-    current_customerids.find(
-      (customer) => customer.cust_id === current_focus_customerid.cust_id
-    ).user_ids = modified_customerids.user_ids;
+    current_customerids.find((customer) => customer.cust_id === current_focus_customerid.cust_id).uuid =
+      modified_customerids.uuid;
+    current_customerids.find((customer) => customer.cust_id === current_focus_customerid.cust_id).nickname =
+      modified_customerids.nickname;
+    current_customerids.find((customer) => customer.cust_id === current_focus_customerid.cust_id).api_key =
+      modified_customerids.api_key;
+    current_customerids.find((customer) => customer.cust_id === current_focus_customerid.cust_id).user_ids =
+      modified_customerids.user_ids;
     /*  (SaveChanges) selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
 
     /*  assert the uuid and nickname from settings store is updated */
-    const updated_focus_customerid =
-      store.state.settings.customer_account_ids[1];
-    expect(updated_focus_customerid.uuid).toStrictEqual(
-      "7N42dgm5tFLK9N8MT7fHC7"
-    );
-    expect(updated_focus_customerid.nickname).toStrictEqual(
-      "Updated account -2"
-    );
+    const updated_focus_customerid = store.state.settings.customer_account_ids[1];
+    expect(updated_focus_customerid.uuid).toStrictEqual("7N42dgm5tFLK9N8MT7fHC7");
+    expect(updated_focus_customerid.nickname).toStrictEqual("Updated account -2");
   });
   test("Given the store has multiple customer details, When the mutation deletes one Customer details, Then validate the number of the customer decrements by one", () => {
     /* ========================== */
@@ -459,17 +411,10 @@ describe("store/settings", () => {
 
     /* User now does Edit Customer Click on the "Customer account - 1*/
     store.commit("settings/set_customer_index", 0);
-    const current_focus_customerid =
-      store.state.settings.customer_account_ids[0];
-    expect(current_focus_customerid.nickname).toStrictEqual(
-      "Customer account -1"
-    );
-    expect(current_focus_customerid.uuid).toStrictEqual(
-      "4vqyd62oARXqj9nRUNhtLQ"
-    );
-    expect(current_focus_customerid.api_key).toStrictEqual(
-      "941532a0-6be1-443a-a9d5-d57bdf180a52"
-    );
+    const current_focus_customerid = store.state.settings.customer_account_ids[0];
+    expect(current_focus_customerid.nickname).toStrictEqual("Customer account -1");
+    expect(current_focus_customerid.uuid).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
+    expect(current_focus_customerid.api_key).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
     /*  (Delete ID) selected */
     const current_customerids = store.state.settings.customer_account_ids;
     const focus_customer_index = store.state.settings.customer_index;
@@ -477,17 +422,10 @@ describe("store/settings", () => {
     current_customerids.splice(focus_customer_index, 1);
     /*  (SaveChanges) selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
-    const updated_focus_customerid =
-      store.state.settings.customer_account_ids[0];
-    expect(updated_focus_customerid.uuid).toStrictEqual(
-      "6cBaidlJ84Ggc5JA7IYCgv"
-    );
-    expect(updated_focus_customerid.api_key).toStrictEqual(
-      "941532a0-6be1-443a-cdee-d57bdf180a52"
-    );
-    expect(updated_focus_customerid.nickname).toStrictEqual(
-      "Customer account -2"
-    );
+    const updated_focus_customerid = store.state.settings.customer_account_ids[0];
+    expect(updated_focus_customerid.uuid).toStrictEqual("6cBaidlJ84Ggc5JA7IYCgv");
+    expect(updated_focus_customerid.api_key).toStrictEqual("941532a0-6be1-443a-cdee-d57bdf180a52");
+    expect(updated_focus_customerid.nickname).toStrictEqual("Customer account -2");
     expect(store.state.settings.customer_account_ids).toHaveLength(1);
   });
   test("Given the Vuex has customer details with single user id, When mutation adds user details, Then the number of user details increments by one", () => {
@@ -520,8 +458,7 @@ describe("store/settings", () => {
     store.commit("settings/set_user_index", 0);
 
     const current_customerids = store.state.settings.customer_account_ids;
-    const current_list_of_user_ids =
-      store.state.settings.customer_account_ids[0].user_ids;
+    const current_list_of_user_ids = store.state.settings.customer_account_ids[0].user_ids;
     expect(current_list_of_user_ids).toHaveLength(1);
     const add_new_user = {
       user_id: 1,
@@ -531,14 +468,11 @@ describe("store/settings", () => {
     /*  (Save ID) user selected */
     current_list_of_user_ids.push(add_new_user);
     const current_customer_index = store.state.settings.customer_index;
-    current_customerids[
-      current_customer_index
-    ].user_ids = current_list_of_user_ids;
+    current_customerids[current_customer_index].user_ids = current_list_of_user_ids;
     /* SaveChanges selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
     const updated_list_of_user_ids =
-      store.state.settings.customer_account_ids[current_customer_index]
-        .user_ids;
+      store.state.settings.customer_account_ids[current_customer_index].user_ids;
     expect(updated_list_of_user_ids).toHaveLength(2);
   });
   test("Given the Vuex has customer details with multiple user id, When the mutation updates one of the User ID details, Then validate only modified user ID details are stored in Vuex", () => {
@@ -576,30 +510,24 @@ describe("store/settings", () => {
     store.commit("settings/set_user_index", 1);
 
     const current_customerids = store.state.settings.customer_account_ids;
-    const current_list_of_user_ids =
-      store.state.settings.customer_account_ids[0].user_ids;
+    const current_list_of_user_ids = store.state.settings.customer_account_ids[0].user_ids;
     expect(current_list_of_user_ids).toHaveLength(2);
 
-    const focused_user_details =
-      store.state.settings.customer_account_ids[0].user_ids;
+    const focused_user_details = store.state.settings.customer_account_ids[0].user_ids;
     const focused_user_id = store.state.settings.user_index;
 
     focused_user_details.uuid = "6cBaidlJ84Ggc5JA7IYCgv";
     focused_user_details.nickname = "Updated Account -1";
     /*  (Save ID) user selected */
-    current_list_of_user_ids.find(
-      (user) => user.user_id === focused_user_id
-    ).uuid = focused_user_details.uuid;
-    current_list_of_user_ids.find(
-      (user) => user.user_id === focused_user_id
-    ).nickname = focused_user_details.nickname;
+    current_list_of_user_ids.find((user) => user.user_id === focused_user_id).uuid =
+      focused_user_details.uuid;
+    current_list_of_user_ids.find((user) => user.user_id === focused_user_id).nickname =
+      focused_user_details.nickname;
     current_customerids.user_ids = current_list_of_user_ids;
     /* SaveChanges selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
-    const updated_list_of_user_ids =
-      store.state.settings.customer_account_ids[0].user_ids;
-    const modified_userids =
-      store.state.settings.customer_account_ids[0].user_ids[1];
+    const updated_list_of_user_ids = store.state.settings.customer_account_ids[0].user_ids;
+    const modified_userids = store.state.settings.customer_account_ids[0].user_ids[1];
     expect(modified_userids.uuid).toStrictEqual("6cBaidlJ84Ggc5JA7IYCgv");
     expect(modified_userids.nickname).toStrictEqual("Updated Account -1");
     expect(updated_list_of_user_ids).toHaveLength(2);
@@ -639,12 +567,10 @@ describe("store/settings", () => {
     store.commit("settings/set_user_index", 0);
 
     const current_customerids = store.state.settings.customer_account_ids;
-    const current_list_of_user_ids =
-      store.state.settings.customer_account_ids[0].user_ids;
+    const current_list_of_user_ids = store.state.settings.customer_account_ids[0].user_ids;
     expect(current_list_of_user_ids).toHaveLength(2);
 
-    const focused_user_details =
-      store.state.settings.customer_account_ids[0].user_ids[0];
+    const focused_user_details = store.state.settings.customer_account_ids[0].user_ids[0];
     expect(focused_user_details.uuid).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
     expect(focused_user_details.nickname).toStrictEqual("User account -1");
 
@@ -655,8 +581,7 @@ describe("store/settings", () => {
     current_customerids.user_ids = current_list_of_user_ids;
     /* SaveChanges selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
-    const modified_userids =
-      store.state.settings.customer_account_ids[0].user_ids;
+    const modified_userids = store.state.settings.customer_account_ids[0].user_ids;
     expect(modified_userids).toHaveLength(1);
   });
 });

@@ -1,8 +1,6 @@
 <template>
   <div>
-    <ComponentToTest
-      log_filepath="C:\log__2020_10_21_185640.txt"
-    ></ComponentToTest>
+    <ComponentToTest log_filepath="C:\log__2020_10_21_185640.txt"></ComponentToTest>
   </div>
 </template>
 

@@ -57,16 +57,12 @@ describe("store/flask", () => {
     expect(FLASK_STATUS_ENUMS.MESSAGE.CALIBRATION_NEEDED_uuid).toStrictEqual(
       STATUS.MESSAGE.CALIBRATION_NEEDED_uuid
     );
-    expect(dist_all_mantarray_commands_regexp).toStrictEqual(
-      all_mantarray_commands_regexp
-    );
+    expect(dist_all_mantarray_commands_regexp).toStrictEqual(all_mantarray_commands_regexp);
     expect(dist_system_status_regexp).toStrictEqual(system_status_regexp);
-    expect(dist_system_status_when_server_ready_regexp).toStrictEqual(
-      system_status_when_server_ready_regexp
+    expect(dist_system_status_when_server_ready_regexp).toStrictEqual(system_status_when_server_ready_regexp);
+    expect(dist_system_status_when_initializing_instrument_regexp).toStrictEqual(
+      system_status_when_initializing_instrument_regexp
     );
-    expect(
-      dist_system_status_when_initializing_instrument_regexp
-    ).toStrictEqual(system_status_when_initializing_instrument_regexp);
     expect(dist_system_status_when_server_initializing_regexp).toStrictEqual(
       system_status_when_server_initializing_regexp
     );
@@ -100,9 +96,7 @@ describe("store/flask", () => {
 
       await bound_ping_system_status();
 
-      expect(store.state.flask.status_uuid).toStrictEqual(
-        STATUS.MESSAGE.CALIBRATION_NEEDED
-      );
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATION_NEEDED);
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
       );
@@ -113,24 +107,16 @@ describe("store/flask", () => {
         "playback/set_playback_state",
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
-      store.commit(
-        "flask/set_status_uuid",
-        STATUS.MESSAGE.SERVER_STILL_INITIALIZING
-      );
+      store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_STILL_INITIALIZING);
       await bound_ping_system_status();
 
-      expect(store.state.flask.status_uuid).not.toBe(
-        STATUS.MESSAGE.CALIBRATION_NEEDED
-      );
+      expect(store.state.flask.status_uuid).not.toBe(STATUS.MESSAGE.CALIBRATION_NEEDED);
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
     });
     test("Given playback state is BUFFERING and /system_status returns LIVE_VIEW_ACTIVE and /get_available_data returns code 204, When ping_system_status in called, Then start_waveform_pinging is invoked", async () => {
-      store.commit(
-        "playback/set_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
-      );
+      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.BUFFERING);
       mocked_axios
         .onGet(system_status_regexp)
         .reply(200, {
@@ -147,10 +133,7 @@ describe("store/flask", () => {
       });
     });
     test("Given playback state is RECORDING and /system_status returns LIVE_VIEW_ACTIVE and /get_available_data returns code 204, When ping_system_status in called, Then start_waveform_pinging is not invoked", async () => {
-      store.commit(
-        "playback/set_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.RECORDING
-      );
+      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.RECORDING);
       mocked_axios
         .onGet(system_status_regexp)
         .reply(200, {
@@ -167,9 +150,7 @@ describe("store/flask", () => {
 
       await store.dispatch("waveform/start_get_waveform_pinging");
       expect(spied_set_interval.mock.calls).toHaveLength(1);
-      expect(store.state.waveform.waveform_ping_interval_id).toStrictEqual(
-        expected_interval_id
-      );
+      expect(store.state.waveform.waveform_ping_interval_id).toStrictEqual(expected_interval_id);
     });
     test("Given /system_status is mocked to return CALIBRATED as the status and the current status is CALIBRATING, When ping_system_status is called, Then the URL should include the current state UUID and the vuex status should update to CALIBRATED and the Vuex Playback State should update to CALIBRATED", async () => {
       mocked_axios.onGet(system_status_regexp).reply(200, {
@@ -182,13 +163,9 @@ describe("store/flask", () => {
       await bound_ping_system_status();
 
       expect(mocked_axios.history.get).toHaveLength(1);
-      expect(mocked_axios.history.get[0].url).toMatch(
-        system_status_when_calibrating_regexp
-      );
+      expect(mocked_axios.history.get[0].url).toMatch(system_status_when_calibrating_regexp);
 
-      expect(store.state.flask.status_uuid).toStrictEqual(
-        STATUS.MESSAGE.STOPPED
-      );
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.STOPPED);
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
@@ -204,33 +181,21 @@ describe("store/flask", () => {
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
       });
       test("Given the ignore_next_system_status_if_matching_this_status state is not null, When ping_system_status is called, Then the ignore_next_system_status_if_matching_this_status state becomes null", async () => {
-        store.commit(
-          "flask/ignore_next_system_status_if_matching_status",
-          STATUS.MESSAGE.RECORDING
-        );
+        store.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.RECORDING);
 
         // confirm pre-condition
-        expect(
-          store.state.flask.ignore_next_system_status_if_matching_this_status
-        ).not.toBeNull();
+        expect(store.state.flask.ignore_next_system_status_if_matching_this_status).not.toBeNull();
 
         await bound_ping_system_status();
 
-        expect(
-          store.state.flask.ignore_next_system_status_if_matching_this_status
-        ).toBeNull();
+        expect(store.state.flask.ignore_next_system_status_if_matching_this_status).toBeNull();
       });
       test("Given the ignore_next_system_status_if_matching_this_status state is set to CALIBRATED, When ping_system_status is called, Then the state stays as LIVE_VIEW_ACTIVE (no change) but the barcode does update in Vuex", async () => {
-        store.commit(
-          "flask/ignore_next_system_status_if_matching_status",
-          STATUS.MESSAGE.CALIBRATED
-        );
+        store.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.CALIBRATED);
 
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.LIVE_VIEW_ACTIVE
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
         expect(store.state.playback.barcode).toStrictEqual(valid_plate_barcode);
       });
     });
@@ -247,13 +212,9 @@ describe("store/flask", () => {
 
       await bound_ping_system_status();
       expect(mocked_axios.history.get).toHaveLength(1);
-      expect(mocked_axios.history.get[0].url).toMatch(
-        system_status_when_buffering_regexp
-      );
+      expect(mocked_axios.history.get[0].url).toMatch(system_status_when_buffering_regexp);
 
-      expect(store.state.flask.status_uuid).toStrictEqual(
-        STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid
-      );
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid);
       expect(store.state.flask.simulation_mode).toStrictEqual(true);
 
       expect(store.state.playback.playback_state).toStrictEqual(
@@ -283,12 +244,8 @@ describe("store/flask", () => {
 
         await store.dispatch("flask/start_status_pinging");
         expect(spied_set_interval.mock.calls).toHaveLength(1);
-        expect(store.state.flask.status_ping_interval_id).toStrictEqual(
-          expected_interval_id
-        );
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid
-        );
+        expect(store.state.flask.status_ping_interval_id).toStrictEqual(expected_interval_id);
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid);
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
         );
@@ -309,9 +266,7 @@ describe("store/flask", () => {
         const initial_interval_id = store.state.flask.status_ping_interval_id;
         await store.dispatch("flask/start_status_pinging");
         expect(spied_set_interval).not.toHaveBeenCalled();
-        expect(store.state.flask.status_ping_interval_id).toStrictEqual(
-          initial_interval_id
-        );
+        expect(store.state.flask.status_ping_interval_id).toStrictEqual(initial_interval_id);
       });
     });
   });
@@ -320,46 +275,30 @@ describe("store/flask", () => {
     describe("Given the store in its default state", () => {
       test("When ignore_next_system_status_if_matching_status is committed, Then the state updates", () => {
         // confirm pre-condition
-        expect(
-          store.state.flask.ignore_next_system_status_if_matching_this_status
-        ).toBeNull();
+        expect(store.state.flask.ignore_next_system_status_if_matching_this_status).toBeNull();
 
         const expected = STATUS.MESSAGE.CALIBRATION_NEEDED;
 
-        store.commit(
-          "flask/ignore_next_system_status_if_matching_status",
-          expected
-        );
-        expect(
-          store.state.flask.ignore_next_system_status_if_matching_this_status
-        ).toStrictEqual(expected);
+        store.commit("flask/ignore_next_system_status_if_matching_status", expected);
+        expect(store.state.flask.ignore_next_system_status_if_matching_this_status).toStrictEqual(expected);
       });
 
       test("Given the status is set to ERROR, When attempting to commit a different system status, Then it remains in ERROR mode", () => {
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
 
-        store.commit(
-          "flask/set_status_uuid",
-          STATUS.MESSAGE.CALIBRATION_NEEDED
-        );
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.ERROR
-        );
+        store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATION_NEEDED);
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
       });
       test("Given the status is set to ERROR, When attempting to commit SHUTDOWN, Then updates to SHUTDOWN mode", () => {
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
 
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.SHUTDOWN
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.SHUTDOWN);
       });
       test("When set_status_ping_interval_id is committed, Then ID mutates", async () => {
         const expected_id = 2993;
         store.commit("flask/set_status_ping_interval_id", expected_id);
-        expect(store.state.flask.status_ping_interval_id).toStrictEqual(
-          expected_id
-        );
+        expect(store.state.flask.status_ping_interval_id).toStrictEqual(expected_id);
       });
 
       test("When stop_status_pinging is committed, Then clearInterval is not called unnecessarily", async () => {
@@ -373,18 +312,14 @@ describe("store/flask", () => {
         const need_calibration_uuid = "009301eb-625c-4dc4-9e92-1a4d0762465f";
 
         store.commit("flask/set_status_uuid", need_calibration_uuid);
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          need_calibration_uuid
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(need_calibration_uuid);
       });
 
       test("When Vuex is initialized to its default state, Then assert if the value in store is matching for 'true'", async () => {
         const need_simulation = true;
 
         store.commit("flask/set_simulation_status", need_simulation);
-        expect(store.state.flask.simulation_mode).toStrictEqual(
-          need_simulation
-        );
+        expect(store.state.flask.simulation_mode).toStrictEqual(need_simulation);
       });
 
       test("When simulation_mode is not set, Then assert simulation_mode default settings is false", async () => {
@@ -435,9 +370,7 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.CALIBRATION_NEEDED
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATION_NEEDED);
 
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
@@ -460,9 +393,7 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.CALIBRATION_NEEDED
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATION_NEEDED);
 
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
@@ -484,16 +415,12 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.CALIBRATION_NEEDED
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATION_NEEDED);
 
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
         );
-        expect(store.state.playback.barcode).toStrictEqual(
-          invalid_plate_barcode
-        );
+        expect(store.state.playback.barcode).toStrictEqual(invalid_plate_barcode);
       });
       test("Given that /system_status is mocked to include a invalid plate barcode and the manual mode is true, When the ping_system_status is active, Then the barcode value in not set in  Vuex from the JSON object in /system_status", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
@@ -511,9 +438,7 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.CALIBRATION_NEEDED
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATION_NEEDED);
 
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
@@ -535,9 +460,7 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.CALIBRATION_NEEDED
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATION_NEEDED);
 
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
@@ -560,9 +483,7 @@ describe("store/flask", () => {
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
 
-        expect(store.state.flask.status_uuid).toStrictEqual(
-          STATUS.MESSAGE.CALIBRATION_NEEDED
-        );
+        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATION_NEEDED);
 
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
