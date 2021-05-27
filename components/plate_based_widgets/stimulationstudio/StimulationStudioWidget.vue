@@ -36,16 +36,8 @@
       @mouseenter="on_plus_minus_enter_hover(all_select_or_cancel)"
       @mouseleave="on_plus_minus_leave_hover(all_select_or_cancel)"
     >
-      <FontAwesomeIcon
-        v-show="all_select_or_cancel"
-        id="plus"
-        :icon="['fa', 'plus-circle']"
-      />
-      <FontAwesomeIcon
-        v-show="!all_select_or_cancel"
-        id="minus"
-        :icon="['fa', 'minus-circle']"
-      />
+      <FontAwesomeIcon v-show="all_select_or_cancel" id="plus" :icon="['fa', 'plus-circle']" />
+      <FontAwesomeIcon v-show="!all_select_or_cancel" id="minus" :icon="['fa', 'minus-circle']" />
     </span>
     <div v-for="well_index in Array(24).keys()" :key="well_index">
       <StimulationStudioPlateWell
@@ -63,74 +55,46 @@
 </template>
 
 <script>
-import StimulationStudioPlateWell from '@/components/basic_widgets/StimulationStudioPlateWell.vue';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { mapState } from "vuex";
+import StimulationStudioPlateWell from "@/components/basic_widgets/StimulationStudioPlateWell.vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faMinusCircle);
 library.add(faPlusCircle);
+
 // todo: handle these
-const no_stroke_width = 0;
 const hover_stroke_width = 2;
 const selected_stroke_width = 4;
-const hover_color = '#ececed';
-const selected_color = '#FFFFFF';
-// const default_color = '#b7b7b7';
+const hover_color = "#ececed";
+const selected_color = "#FFFFFF";
 const debug_mode = undefined;
 
 export default {
-  name: 'StimulationStudioWidget',
+  name: "StimulationStudioWidget",
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
   props: {
     protocol_codes: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     selected: {
       type: Array,
       default: function() {
         return new Array(24).fill(false);
-      },
-    },
+      }
+    }
   },
   data() {
     return {
-      // alphabet: [
-      //   'A',
-      //   'B',
-      //   'C',
-      //   'D',
-      //   'E',
-      //   'F',
-      //   'G',
-      //   'H',
-      //   'I',
-      //   'J',
-      //   'K',
-      //   'L',
-      //   'M',
-      //   'N',
-      //   'O',
-      //   'P',
-      //   'Q',
-      //   'R',
-      //   'S',
-      //   'T',
-      //   'U',
-      //   'V',
-      //   'W',
-      //   'X',
-      //   'Y',
-      //   'Z',
-      // ],
       row_values: {
         A: [0, 4, 8, 12, 16, 20],
         B: [1, 5, 9, 13, 17, 21],
         C: [2, 6, 10, 14, 18, 22],
-        D: [3, 7, 11, 15, 19, 23],
+        D: [3, 7, 11, 15, 19, 23]
       },
       column_values: {
         1: [0, 1, 2, 3],
@@ -138,37 +102,62 @@ export default {
         3: [8, 9, 10, 11],
         4: [12, 13, 14, 15],
         5: [16, 17, 18, 19],
-        6: [20, 21, 22, 23],
+        6: [20, 21, 22, 23]
       },
       all_select: this.selected,
       all_select_or_cancel: true,
       hover: new Array(24).fill(false),
-      hover_color: new Array(24).fill('#ececed'),
+      hover_color: new Array(24).fill("#ececed"),
       stroke_width: new Array(24).fill(0),
-      // testerf: false,
+      no_stroke_width: 0
     };
+  },
+  computed: {
+    ...mapState("stimulation", ["selected_wells"])
+  },
+  watch: {
+    // all_select: function(oldVal, newVal) {
+    //   // console.log("old ", oldVal, "new: ", newVal);
+    //   const selected = oldVal.filter((well, idx) => {
+    //     console.log(idx);
+    //     if (well === true) return idx;
+    //   });
+    //   console.log(selected);
+    //   this.$store.commit("stimulation/add_selected_wells", selected);
+    // }
+    // all_select_or_cancel: function(oldVal, newVal) {
+    //   const all_wells = [];
+    //   let i = 0;
+    //   while (i < 24) {
+    //     all_wells.push(i);
+    //     i++;
+    //   }
+    //   newVal
+    //     ? this.$store.commit("stimulation/add_selected_wells", all_wells)
+    //     : this.$store.commit("stimulation/remove_selected_wells", all_wells);
+    // }
   },
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);
     this.check_stroke_width();
-    const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+    const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
   },
   methods: {
     getProtocolColor(index) {
       if (index >= 0 && index <= 25) {
-        return '#19AC8A';
+        return "#19AC8A";
       }
       if (index >= 26 && index <= 51) {
-        return '#005470';
+        return "#005470";
       }
       if (index >= 52 && index <= 77) {
-        return '#f9d78c';
+        return "#f9d78c";
       }
       if (index >= 78 && index <= 95) {
-        return '#df6147';
+        return "#df6147";
       }
-      return '#B7B7B7';
+      return "#B7B7B7";
     },
 
     getProtocolAlphabet(value) {
@@ -184,43 +173,41 @@ export default {
       if (value >= 78 && value <= 95) {
         return this.alphabet[value - 78];
       }
-      return '';
+      return "";
     },
 
     column_left_offset(column) {
       switch (column) {
         case 1:
-          return '35.9792';
+          return "35.9792";
         case 2:
-          return '97.5836';
+          return "97.5836";
         case 3:
-          return '159.188';
+          return "159.188";
         case 4:
-          return '220.792';
+          return "220.792";
         case 5:
-          return '282.397';
+          return "282.397";
         case 6:
-          return '344.001';
+          return "344.001";
       }
     },
 
     row_top_offset(row) {
       switch (row) {
-        case 'A':
-          return '41.928';
-        case 'B':
-          return '103.621';
-        case 'C':
-          return '165.779';
-        case 'D':
-          return '224.1';
+        case "A":
+          return "41.928";
+        case "B":
+          return "103.621";
+        case "C":
+          return "165.779";
+        case "D":
+          return "224.1";
       }
     },
 
     on_select_cancel_all(state) {
-      this.all_select_or_cancel
-        ? this.test_event('+ icon clicked')
-        : this.test_event('- icon clicked');
+      this.all_select_or_cancel ? this.test_event("+ icon clicked") : this.test_event("- icon clicked");
       this.all_select_or_cancel = !state;
       for (let count = 0; count < 24; count++) {
         this.all_select[count] = state;
@@ -230,31 +217,23 @@ export default {
     },
 
     on_plus_minus_enter_hover(state) {
-      state
-        ? this.test_event('+ icon leave => Hover')
-        : this.test_event('- icon leave => Hover');
+      state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j]
-          ? hover_stroke_width
-          : selected_stroke_width;
+        this.stroke_width[j] = !this.all_select[j] ? hover_stroke_width : selected_stroke_width;
       }
     },
 
     on_plus_minus_leave_hover(state) {
-      state
-        ? this.test_event('+ icon leave => Hover')
-        : this.test_event('- icon leave => Hover');
+      state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
       this.stroke_width.splice(0, this.stroke_width.length);
       this.check_stroke_width();
     },
 
     basic_select(value) {
-      const new_list = new Array(24).fill(false);
-      new_list[value] = true;
-      this.test_event('Well clicked');
+      this.test_event("Well clicked");
       this.stroke_width[value] = selected_stroke_width;
-      this.all_select = new_list;
+      this.all_select[value] ? (this.all_select[value] = false) : (this.all_select[value] = true);
       if (!this.all_select_or_cancel) {
         this.all_select_or_cancel = true;
       }
@@ -265,7 +244,7 @@ export default {
       this.hover[value] = true;
       this.hover_color[value] = hover_color;
       this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event('well enter =>' + value + ' Hover');
+      this.test_event("well enter =>" + value + " Hover");
       this.check_stroke_width();
       this.all_select[value]
         ? (this.stroke_width[value] = selected_stroke_width)
@@ -276,69 +255,56 @@ export default {
       this.hover[value] = false;
       this.hover_color[value] = selected_color;
       this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event('well leave =>' + value + ' Hover');
+      this.test_event("well leave =>" + value + " Hover");
       this.check_stroke_width();
     },
 
     on_select(val, type) {
-      const new_list = new Array(24).fill(false);
-      this.test_event(val + ' clicked');
+      this.test_event(val + " clicked");
       this.stroke_width.splice(0, this.stroke_width.length);
       let toChange = null;
-      type == 'column'
-        ? (toChange = this.column_values)
-        : (toChange = this.row_values);
-      toChange[val].map((well) => (new_list[well] = true));
-      if (this.all_select_or_cancel == false) {
+      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
+      toChange[val].map(well => {
+        this.all_select[well] ? (this.all_select[well] = false) : (this.all_select[well] = true);
+      });
+      if (!this.all_select_or_cancel) {
         this.all_select_or_cancel = true;
       }
-      this.all_select = new_list;
       this.check_stroke_width();
     },
 
     on_enter_hover(val, type) {
-      this.test_event(val + ' hover enter');
+      this.test_event(val + " hover enter");
       const new_list = [];
-      for (let i = 0; i < this.stroke_width.length; i++)
-        new_list[i] = this.stroke_width[i];
+      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
       this.stroke_width.splice(0, this.stroke_width.length);
       let toChange = null;
-      type == 'column'
-        ? (toChange = this.column_values)
-        : (toChange = this.row_values);
+      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
       toChange[val].map(
-        (well) =>
-          (new_list[well] =
-            new_list[well] == no_stroke_width
-              ? hover_stroke_width
-              : new_list[well])
+        well =>
+          (new_list[well] = new_list[well] == this.no_stroke_width ? hover_stroke_width : new_list[well])
       );
-      for (let j = 0; j < new_list.length; j++)
-        this.stroke_width[j] = new_list[j];
+      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
     },
 
     on_leave_hover(val) {
-      this.test_event(val + ' hover leave');
+      this.test_event(val + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
       this.check_stroke_width();
     },
 
     test_event(evnt) {
       if (debug_mode != undefined) {
-        this.$emit('test-event', evnt);
+        this.$emit("test-event", evnt);
       }
     },
     check_stroke_width() {
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i]
-          ? no_stroke_width
-          : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i]
-          ? hover_color
-          : selected_color;
+        this.stroke_width[i] = !this.all_select[i] ? this.no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
@@ -430,7 +396,7 @@ export default {
   font-size: 20px;
   color: rgb(183, 183, 183);
 }
-.span__platemap-toggle-plus-minus-icon:hover {
+.span__stimulationstudio-toggle-plus-minus-icon:hover {
   color: #ffffff;
 }
 </style>
