@@ -5,16 +5,18 @@
       :style="'top:' + computed_top + 'px;' + 'left:' + computed_left + 'px;'"
     >
       <PlateWell
-        :classname="classname"
-        :svg_height="svg_height"
-        :svg_width="svg_width"
-        :circle_x="circle_x"
-        :circle_y="circle_y"
-        :radius="radius"
+        :svg_height="70"
+        :svg_width="70"
+        :circle_x="38"
+        :circle_y="35"
+        :radius="26"
         :strk="stroke"
         :plate_fill="protocol_fill"
-        :stroke_wdth="stroke_width"
+        :stroke_wdth="stroke_wdth"
         :index="index"
+        @enter-well="on_enter_well(index)"
+        @leave-well="on_leave_well(index)"
+        @click-exact="on_click_exact(index)"
       ></PlateWell>
     </div>
     <span
@@ -34,22 +36,15 @@
 </template>
 <script>
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
-
 export default {
   name: "StimulationStudioPlateWell",
   components: {
     PlateWell,
   },
   props: {
-    classname: { type: String, default: "" },
-    svg_height: { type: Number, default: 0 },
-    svg_width: { type: Number, default: 0 },
-    circle_x: { type: Number, default: 0 },
-    circle_y: { type: Number, default: 0 },
-    radius: { type: Number, default: 0 },
     stroke: { type: String, default: "" },
     protocol_fill: { type: String, default: "" },
-    stroke_width: { type: Number, default: 0 },
+    stroke_wdth: { type: Number, default: 0 },
     index: {
       type: Number,
       default: 0,
@@ -84,28 +79,28 @@ export default {
         case 12:
         case 16:
         case 20:
-          return 25.427;
+          return 26;
         case 1:
         case 5:
         case 9:
         case 13:
         case 17:
         case 21:
-          return 85.352;
+          return 86;
         case 2:
         case 6:
         case 10:
         case 14:
         case 18:
         case 22:
-          return 145.278;
+          return 146;
         case 3:
         case 7:
         case 11:
         case 15:
         case 19:
         case 23:
-          return 205.157;
+          return 206;
       }
     },
     // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
@@ -116,27 +111,27 @@ export default {
         case 1:
         case 2:
         case 3:
-          return 29.979;
+          return 30;
         case 4:
         case 5:
         case 6:
         case 7:
-          return 91.584;
+          return 91;
         case 8:
         case 9:
         case 10:
         case 11:
-          return 153.188;
+          return 153;
         case 12:
         case 13:
         case 14:
         case 15:
-          return 214.792;
+          return 215;
         case 16:
         case 17:
         case 18:
         case 19:
-          return 276.4;
+          return 277;
         case 20:
         case 21:
         case 22:
@@ -215,6 +210,17 @@ export default {
       }
     },
   },
+  methods: {
+    on_enter_well(index) {
+      this.$emit("enter-well", index);
+    },
+    on_leave_well(index) {
+      this.$emit("leave-well", index);
+    },
+    on_click_exact(index) {
+      this.$emit("click-exact", index);
+    },
+  },
 };
 </script>
 <style>
@@ -225,10 +231,9 @@ export default {
   width: 66px;
   height: 66px;
   visibility: visible;
-  z-index: 9;
+  /* z-index: 9; */
 }
-
-.span__simulationstudio-plate-well-protocol-location {
+/* .span__simulationstudio-plate-well-protocol-location {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -246,6 +251,5 @@ export default {
   font-size: 20px;
   color: rgb(255, 255, 255);
   text-align: center;
-  z-index: 101;
-}
+} */
 </style>

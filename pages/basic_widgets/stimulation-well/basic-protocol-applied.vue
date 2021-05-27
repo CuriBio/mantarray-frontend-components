@@ -2,7 +2,7 @@
   <div>
     <ComponentToTest
       :classname="'plate_0'"
-      :protocol_type="'A'"
+      :protocol_type="'B'"
       :svg_height="72"
       :svg_width="72"
       :circle_x="36"

@@ -1,7 +1,6 @@
 <template>
   <svg :height="svg_height" :width="svg_width" :index="index">
     <circle
-      :class="classname"
       :cx="circle_x"
       :cy="circle_y"
       :r="radius"
@@ -27,7 +26,7 @@ export default {
     circle_y: { type: Number, default: 0 },
     radius: { type: Number, default: 0 },
     strk: { type: String, default: "" },
-    stroke_wdth: { type: Number, default: 0 },
+    stroke_wdth: { type: Number, default: 4 },
     plate_fill: { type: String, default: "'#B7B7B7'" },
     index: { type: Number, default: 0 },
   },

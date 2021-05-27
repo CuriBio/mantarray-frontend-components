@@ -9,6 +9,7 @@ import twentyfourcontrols_module from "./modules/twentyfourcontrols";
 import flask_module from "./modules/flask";
 import settings_module from "./modules/settings";
 import heatmap_module from "./modules/heatmap";
+import stimulation_module from "./modules/stimulation";
 
 const createStore = () => {
   return new Vuex.Store({
@@ -20,6 +21,7 @@ const createStore = () => {
       twentyfourcontrols: twentyfourcontrols_module,
       settings: settings_module,
       heatmap: heatmap_module,
+      stimulation: stimulation_module,
     },
   });
 };
