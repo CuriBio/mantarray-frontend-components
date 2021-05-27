@@ -64,11 +64,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faMinusCircle);
 library.add(faPlusCircle);
 
-// todo: handle these
-const hover_stroke_width = 2;
-const selected_stroke_width = 4;
-const hover_color = "#ececed";
-const selected_color = "#FFFFFF";
 const debug_mode = undefined;
 
 export default {
@@ -105,37 +100,19 @@ export default {
         6: [20, 21, 22, 23]
       },
       all_select: this.selected,
-      all_select_or_cancel: true,
+      all_select_or_cancel: false,
       hover: new Array(24).fill(false),
       hover_color: new Array(24).fill("#ececed"),
       stroke_width: new Array(24).fill(0),
-      no_stroke_width: 0
+      no_stroke_width: 0,
+      check_selected_status: [],
+      hover_stroke_width: 2,
+      selected_stroke_width: 4,
+      selected_color: "#FFFFFF"
     };
   },
   computed: {
     ...mapState("stimulation", ["selected_wells"])
-  },
-  watch: {
-    // all_select: function(oldVal, newVal) {
-    //   // console.log("old ", oldVal, "new: ", newVal);
-    //   const selected = oldVal.filter((well, idx) => {
-    //     console.log(idx);
-    //     if (well === true) return idx;
-    //   });
-    //   console.log(selected);
-    //   this.$store.commit("stimulation/add_selected_wells", selected);
-    // }
-    // all_select_or_cancel: function(oldVal, newVal) {
-    //   const all_wells = [];
-    //   let i = 0;
-    //   while (i < 24) {
-    //     all_wells.push(i);
-    //     i++;
-    //   }
-    //   newVal
-    //     ? this.$store.commit("stimulation/add_selected_wells", all_wells)
-    //     : this.$store.commit("stimulation/remove_selected_wells", all_wells);
-    // }
   },
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);
@@ -176,6 +153,110 @@ export default {
       return "";
     },
 
+    on_select_cancel_all(state) {
+      this.all_select_or_cancel ? this.test_event("+ icon clicked") : this.test_event("- icon clicked");
+      this.all_select_or_cancel = !state;
+      for (let count = 0; count < 24; count++) this.all_select[count] = state;
+      state ? this.all_select.map(well => (well = true)) : this.all_select.map(well => (well = false));
+      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.check_stroke_width();
+    },
+
+    on_plus_minus_enter_hover(state) {
+      state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      for (let j = 0; j < this.all_select.length; j++) {
+        this.stroke_width[j] = !this.all_select[j] ? this.hover_stroke_width : this.selected_stroke_width;
+      }
+    },
+
+    on_plus_minus_leave_hover(state) {
+      state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.check_stroke_width();
+    },
+
+    basic_select(value) {
+      this.test_event("Well clicked");
+      this.stroke_width[value] = this.selected_stroke_width;
+      this.all_select[value] ? (this.all_select[value] = false) : (this.all_select[value] = true);
+      if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
+      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+      this.on_wellenter(value);
+    },
+
+    on_wellenter(value) {
+      this.hover[value] = true;
+      this.hover_color[value] = "#ececed";
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.test_event("well enter =>" + value + " Hover");
+      this.check_stroke_width();
+      this.all_select[value]
+        ? (this.stroke_width[value] = this.selected_stroke_width)
+        : (this.stroke_width[value] = this.hover_stroke_width);
+    },
+
+    on_wellleave(value) {
+      this.hover[value] = false;
+      this.hover_color[value] = this.selected_color;
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.test_event("well leave =>" + value + " Hover");
+      this.check_stroke_width();
+    },
+
+    on_select(val, type) {
+      let toChange = null;
+      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
+      if (this.check_selected_status.includes(val)) {
+        this.check_selected_status.splice(this.check_selected_status.indexOf(val), 1);
+        toChange[val].map(well => {
+          this.all_select[well] = false;
+        });
+      } else {
+        this.check_selected_status.push(val);
+        toChange[val].map(well => {
+          this.all_select[well] = true;
+        });
+      }
+      if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
+      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.check_stroke_width();
+      this.test_event(val + " clicked");
+    },
+
+    on_enter_hover(val, type) {
+      this.test_event(val + " hover enter");
+      const new_list = [];
+      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
+      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      let toChange = null;
+      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
+      toChange[val].map(
+        well =>
+          (new_list[well] = new_list[well] == this.no_stroke_width ? this.hover_stroke_width : new_list[well])
+      );
+      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
+    },
+
+    on_leave_hover(val) {
+      this.test_event(val + " hover leave");
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.check_stroke_width();
+    },
+
+    test_event(evnt) {
+      if (debug_mode != undefined) this.$emit("test-event", evnt);
+    },
+    check_stroke_width() {
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? this.no_stroke_width : this.selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i] ? "#ececed" : this.selected_color;
+      }
+    },
+
     column_left_offset(column) {
       switch (column) {
         case 1:
@@ -203,105 +284,6 @@ export default {
           return "165.779";
         case "D":
           return "224.1";
-      }
-    },
-
-    on_select_cancel_all(state) {
-      this.all_select_or_cancel ? this.test_event("+ icon clicked") : this.test_event("- icon clicked");
-      this.all_select_or_cancel = !state;
-      for (let count = 0; count < 24; count++) {
-        this.all_select[count] = state;
-      }
-      this.stroke_width.splice(0, this.stroke_width.length);
-      this.check_stroke_width();
-    },
-
-    on_plus_minus_enter_hover(state) {
-      state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? hover_stroke_width : selected_stroke_width;
-      }
-    },
-
-    on_plus_minus_leave_hover(state) {
-      state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      this.check_stroke_width();
-    },
-
-    basic_select(value) {
-      this.test_event("Well clicked");
-      this.stroke_width[value] = selected_stroke_width;
-      this.all_select[value] ? (this.all_select[value] = false) : (this.all_select[value] = true);
-      if (!this.all_select_or_cancel) {
-        this.all_select_or_cancel = true;
-      }
-      this.on_wellenter(value);
-    },
-
-    on_wellenter(value) {
-      this.hover[value] = true;
-      this.hover_color[value] = hover_color;
-      this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event("well enter =>" + value + " Hover");
-      this.check_stroke_width();
-      this.all_select[value]
-        ? (this.stroke_width[value] = selected_stroke_width)
-        : (this.stroke_width[value] = hover_stroke_width);
-    },
-
-    on_wellleave(value) {
-      this.hover[value] = false;
-      this.hover_color[value] = selected_color;
-      this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event("well leave =>" + value + " Hover");
-      this.check_stroke_width();
-    },
-
-    on_select(val, type) {
-      this.test_event(val + " clicked");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      let toChange = null;
-      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
-      toChange[val].map(well => {
-        this.all_select[well] ? (this.all_select[well] = false) : (this.all_select[well] = true);
-      });
-      if (!this.all_select_or_cancel) {
-        this.all_select_or_cancel = true;
-      }
-      this.check_stroke_width();
-    },
-
-    on_enter_hover(val, type) {
-      this.test_event(val + " hover enter");
-      const new_list = [];
-      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
-      this.stroke_width.splice(0, this.stroke_width.length);
-      let toChange = null;
-      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
-      toChange[val].map(
-        well =>
-          (new_list[well] = new_list[well] == this.no_stroke_width ? hover_stroke_width : new_list[well])
-      );
-      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
-    },
-
-    on_leave_hover(val) {
-      this.test_event(val + " hover leave");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      this.check_stroke_width();
-    },
-
-    test_event(evnt) {
-      if (debug_mode != undefined) {
-        this.$emit("test-event", evnt);
-      }
-    },
-    check_stroke_width() {
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? this.no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
       }
     }
   }

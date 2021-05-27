@@ -1,14 +1,10 @@
 export default {
-  add_selected_wells(state, well_values) {
-    state.selected_wells = [...state.selected_wells, ...well_values];
-  },
-  remove_selected_wells(state, well_values) {
-    const filtered_wells = well_values.map(well => {
-      return state.selected_wells.filter(state_well => {
-        return state_well !== well;
-      });
+  handle_selected_wells(state, wells) {
+    const well_values = [];
+    wells.filter((well, idx) => {
+      if (well === true) well_values.push(idx);
     });
-    // console.log(filtered_wells);
-    state.selected_wells = filtered_wells;
-  }
+    state.selected_wells = well_values;
+    console.log(state.selected_wells);
+  },
 };
