@@ -67,6 +67,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faMinusCircle);
 library.add(faPlusCircle);
 
+const no_stroke_width = 0;
+const hover_stroke_width = 2;
+const selected_stroke_width = 4;
+const hover_color = "#ececed";
+const selected_color = "#FFFFFF";
 const debug_mode = undefined;
 
 export default {
@@ -74,17 +79,11 @@ export default {
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
   props: {
     protocol_codes: {
-      type: Array,
+      type: Object,
       default() {
-        return [];
-      }
+        return {};
+      },
     },
-    selected: {
-      type: Array,
-      default: function() {
-        return new Array(24).fill(false);
-      }
-    }
   },
   data() {
     return {
@@ -92,7 +91,7 @@ export default {
         A: [0, 4, 8, 12, 16, 20],
         B: [1, 5, 9, 13, 17, 21],
         C: [2, 6, 10, 14, 18, 22],
-        D: [3, 7, 11, 15, 19, 23]
+        D: [3, 7, 11, 15, 19, 23],
       },
       column_values: {
         1: [0, 1, 2, 3],
@@ -100,27 +99,27 @@ export default {
         3: [8, 9, 10, 11],
         4: [12, 13, 14, 15],
         5: [16, 17, 18, 19],
-        6: [20, 21, 22, 23]
+        6: [20, 21, 22, 23],
       },
-      all_select: this.selected,
+      all_select: new Array(24).fill(false),
       all_select_or_cancel: false,
       hover: new Array(24).fill(false),
-      hover_color: new Array(24).fill("#ececed"),
-      stroke_width: new Array(24).fill(0),
-      no_stroke_width: 0,
-      check_selected_status: [],
-      hover_stroke_width: 2,
-      selected_stroke_width: 4,
-      selected_color: "#FFFFFF"
+      hover_color: new Array(24).fill(hover_color),
+      stroke_width: new Array(24).fill(no_stroke_width),
     };
   },
   computed: {
-    ...mapState("stimulation", ["selected_wells"])
+    ...mapState("stimulation", ["selected_wells"]),
+  },
+  watch: {
+    all_select: function (oldVal, newVal) {
+      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+    },
   },
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);
     this.check_stroke_width();
-    const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
+    const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
   },
   methods: {
@@ -160,7 +159,7 @@ export default {
       this.all_select_or_cancel ? this.test_event("+ icon clicked") : this.test_event("- icon clicked");
       this.all_select_or_cancel = !state;
       for (let count = 0; count < 24; count++) this.all_select[count] = state;
-      state ? this.all_select.map(well => (well = true)) : this.all_select.map(well => (well = false));
+      state ? this.all_select.map((well) => (well = true)) : this.all_select.map((well) => (well = false));
       this.$store.commit("stimulation/handle_selected_wells", this.all_select);
       this.stroke_width.splice(0, this.stroke_width.length);
       this.check_stroke_width();
@@ -170,7 +169,7 @@ export default {
       state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? this.hover_stroke_width : this.selected_stroke_width;
+        this.stroke_width[j] = !this.all_select[j] ? hover_stroke_width : selected_stroke_width;
       }
     },
 
@@ -185,18 +184,17 @@ export default {
       const new_list = new Array(24).fill(false);
       new_list[value] = true;
       this.all_select = new_list;
-      this.stroke_width[value] = this.selected_stroke_width;
+      this.stroke_width[value] = selected_stroke_width;
       if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
-      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
       this.on_wellenter(value);
     },
 
     basic_shift_select(value) {
       this.test_event("Well Shift or Ctrl clicked");
       this.testerf = !this.testerf;
-      const allEqual = arr => arr.every(v => v === true);
+      const allEqual = (arr) => arr.every((v) => v === true);
       this.all_select[value] = !this.all_select[value];
-      this.stroke_width[value] = this.selected_stroke_width;
+      this.stroke_width[value] = selected_stroke_width;
       if (allEqual(this.all_select)) this.all_select_or_cancel = false;
       else this.all_select_or_cancel = true;
       this.$store.commit("stimulation/handle_selected_wells", this.all_select);
@@ -210,13 +208,13 @@ export default {
       this.test_event("well enter =>" + value + " Hover");
       this.check_stroke_width();
       this.all_select[value]
-        ? (this.stroke_width[value] = this.selected_stroke_width)
-        : (this.stroke_width[value] = this.hover_stroke_width);
+        ? (this.stroke_width[value] = selected_stroke_width)
+        : (this.stroke_width[value] = hover_stroke_width);
     },
 
     on_wellleave(value) {
       this.hover[value] = false;
-      this.hover_color[value] = this.selected_color;
+      this.hover_color[value] = selected_color;
       this.stroke_width.splice(0, this.stroke_width.length);
       this.test_event("well leave =>" + value + " Hover");
       this.check_stroke_width();
@@ -227,11 +225,10 @@ export default {
       const new_list = new Array(24).fill(false);
       this.stroke_width.splice(0, this.stroke_width.length);
       type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
-      toChange[val].map(well => (new_list[well] = true));
+      toChange[val].map((well) => (new_list[well] = true));
       if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
       this.all_select = new_list;
       this.check_stroke_width();
-      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
       this.test_event(val + " clicked");
     },
 
@@ -243,8 +240,7 @@ export default {
       this.stroke_width.splice(0, this.stroke_width.length);
       type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
       toChange[val].map(
-        well =>
-          (new_list[well] = new_list[well] == this.no_stroke_width ? this.hover_stroke_width : new_list[well])
+        (well) => (new_list[well] = new_list[well] == no_stroke_width ? hover_stroke_width : new_list[well])
       );
       for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
     },
@@ -269,7 +265,7 @@ export default {
           new_list[toChange[val][1]] &&
           new_list[toChange[val][2]] &&
           new_list[toChange[val][3]];
-        toChange[val].map(well => {
+        toChange[val].map((well) => {
           new_list[well] = !result;
         });
       } else {
@@ -279,15 +275,14 @@ export default {
           new_list[toChange[val][1]] &&
           new_list[toChange[val][2]] &&
           new_list[toChange[val][3]];
-        toChange[val].map(well => {
+        toChange[val].map((well) => {
           new_list[well] = !result;
         });
       }
       this.all_select = new_list;
-      const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
+      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
       this.check_stroke_width();
-      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
     },
 
     test_event(evnt) {
@@ -296,8 +291,8 @@ export default {
 
     check_stroke_width(ar) {
       for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? this.no_stroke_width : this.selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? "#ececed" : this.selected_color;
+        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
       }
     },
 
@@ -329,8 +324,8 @@ export default {
         case "D":
           return "224.1";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

@@ -90,16 +90,16 @@ export default {
   props: {
     selected: {
       type: Array,
-      default: function() {
+      default: function () {
         return new Array(24).fill(false);
-      }
+      },
     },
     platecolor: {
       type: Array,
-      default: function() {
+      default: function () {
         return new Array(24).fill(default_color);
-      }
-    }
+      },
+    },
   },
   data() {
     return {
@@ -115,7 +115,7 @@ export default {
       temp_stroke_width: [],
       row_values: ["A", "B", "C", "D"],
       column_values: ["1", "2", "3", "4", "5", "6"],
-      testerf: false
+      testerf: false,
     };
   },
   created() {
@@ -123,7 +123,7 @@ export default {
     for (let j = 0; j < this.all_select.length; j++) {
       this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
     }
-    const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
+    const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
   },
   methods: {
@@ -264,7 +264,7 @@ export default {
     basic_shift_or_ctrl_select(value) {
       this.test_event("Well Shift or Ctrl clicked");
       this.testerf = !this.testerf;
-      const allEqual = arr => arr.every(v => v === true);
+      const allEqual = (arr) => arr.every((v) => v === true);
       this.all_select[value] = !this.all_select[value];
       this.stroke_width[value] = selected_stroke_width;
       if (allEqual(this.all_select)) {
@@ -402,7 +402,7 @@ export default {
       }
 
       this.all_select = new_list;
-      const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
+      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
 
       for (let i = 0; i < this.all_select.length; i++) {
@@ -469,7 +469,7 @@ export default {
       }
 
       this.all_select = new_list;
-      const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
+      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
 
       for (let i = 0; i < this.all_select.length; i++) {
@@ -588,8 +588,8 @@ export default {
       if (debug_mode != undefined) {
         this.$emit("test-event", evnt);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

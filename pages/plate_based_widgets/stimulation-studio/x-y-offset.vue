@@ -1,8 +1,6 @@
 <template>
   <div style="top: 111px; left: 88px; position: absolute">
-    <StimulationStudioWidget
-      :protocol_codes="protocol_list"
-    ></StimulationStudioWidget>
+    <StimulationStudioWidget :protocol_codes="protocol_list"></StimulationStudioWidget>
   </div>
 </template>
 
@@ -16,7 +14,7 @@ export default {
   },
   data() {
     return {
-      protocol_list: ["B", "C"],
+      protocol_list: {},
     };
   },
 };
