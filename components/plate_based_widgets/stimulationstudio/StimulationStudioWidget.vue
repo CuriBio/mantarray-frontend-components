@@ -43,6 +43,8 @@
     </span>
     <div v-for="well_index in Array(24).keys()" :key="well_index">
       <StimulationStudioPlateWell
+        :id="'plate_' + well_index"
+        :class="hover_color[well_index]"
         :protocol_type="getProtocolAlphabet(protocol_codes[well_index])"
         :stroke="hover_color[well_index]"
         :stroke_wdth="stroke_width[well_index]"
@@ -79,9 +81,9 @@ export default {
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
   props: {
     protocol_codes: {
-      type: Object,
+      type: Array,
       default() {
-        return {};
+        return [];
       },
     },
   },
@@ -114,6 +116,9 @@ export default {
   watch: {
     all_select: function (oldVal, newVal) {
       this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+    },
+    selected_wells: function (oldVal, newVal) {
+      console.log(oldVal);
     },
   },
   created() {
@@ -289,7 +294,7 @@ export default {
       if (debug_mode != undefined) this.$emit("test-event", evnt);
     },
 
-    check_stroke_width(ar) {
+    check_stroke_width() {
       for (let i = 0; i < this.all_select.length; i++) {
         this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
         this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
