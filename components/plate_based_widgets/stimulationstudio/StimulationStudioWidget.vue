@@ -10,6 +10,7 @@
       <label
         :id="'column_' + column_index"
         @click.exact="on_select(column_index, 'column')"
+        @click.shift.exact="on_shift_click(column_index, 'column')"
         @mouseenter="on_enter_hover(column_index, 'column')"
         @mouseleave="on_leave_hover(column_index, 'column')"
         >0{{ column_index }}</label
@@ -24,6 +25,7 @@
       <label
         :id="'row_' + key"
         @click.exact="on_select(key, 'row')"
+        @click.shift.exact="on_shift_click(key, 'row')"
         @mouseenter="on_enter_hover(key, 'row')"
         @mouseleave="on_leave_hover(key, 'row')"
       >
@@ -49,6 +51,7 @@
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
+        @click-shift-exact="basic_shift_select(well_index)"
       ></StimulationStudioPlateWell>
     </div>
   </div>
@@ -179,9 +182,23 @@ export default {
 
     basic_select(value) {
       this.test_event("Well clicked");
+      const new_list = new Array(24).fill(false);
+      new_list[value] = true;
+      this.all_select = new_list;
       this.stroke_width[value] = this.selected_stroke_width;
-      this.all_select[value] ? (this.all_select[value] = false) : (this.all_select[value] = true);
       if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
+      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+      this.on_wellenter(value);
+    },
+
+    basic_shift_select(value) {
+      this.test_event("Well Shift or Ctrl clicked");
+      this.testerf = !this.testerf;
+      const allEqual = arr => arr.every(v => v === true);
+      this.all_select[value] = !this.all_select[value];
+      this.stroke_width[value] = this.selected_stroke_width;
+      if (allEqual(this.all_select)) this.all_select_or_cancel = false;
+      else this.all_select_or_cancel = true;
       this.$store.commit("stimulation/handle_selected_wells", this.all_select);
       this.on_wellenter(value);
     },
@@ -207,32 +224,23 @@ export default {
 
     on_select(val, type) {
       let toChange = null;
-      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
-      if (this.check_selected_status.includes(val)) {
-        this.check_selected_status.splice(this.check_selected_status.indexOf(val), 1);
-        toChange[val].map(well => {
-          this.all_select[well] = false;
-        });
-      } else {
-        this.check_selected_status.push(val);
-        toChange[val].map(well => {
-          this.all_select[well] = true;
-        });
-      }
-      if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
-      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+      const new_list = new Array(24).fill(false);
       this.stroke_width.splice(0, this.stroke_width.length);
+      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
+      toChange[val].map(well => (new_list[well] = true));
+      if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
+      this.all_select = new_list;
       this.check_stroke_width();
+      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
       this.test_event(val + " clicked");
     },
 
     on_enter_hover(val, type) {
-      this.test_event(val + " hover enter");
       const new_list = [];
-      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
-      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
-      this.stroke_width.splice(0, this.stroke_width.length);
       let toChange = null;
+      this.test_event(val + " hover enter");
+      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
+      this.stroke_width.splice(0, this.stroke_width.length);
       type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
       toChange[val].map(
         well =>
@@ -247,10 +255,46 @@ export default {
       this.check_stroke_width();
     },
 
+    on_shift_click(val, type) {
+      const new_list = [];
+      let toChange = null;
+      let result = false;
+      this.test_event(val + " ctrl or shift clicked");
+      for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
+      this.stroke_width.splice(0, this.stroke_width.length);
+      if (type === "column") {
+        toChange = this.column_values;
+        result =
+          new_list[toChange[val][0]] &&
+          new_list[toChange[val][1]] &&
+          new_list[toChange[val][2]] &&
+          new_list[toChange[val][3]];
+        toChange[val].map(well => {
+          new_list[well] = !result;
+        });
+      } else {
+        toChange = this.row_values;
+        result =
+          new_list[toChange[val][0]] &&
+          new_list[toChange[val][1]] &&
+          new_list[toChange[val][2]] &&
+          new_list[toChange[val][3]];
+        toChange[val].map(well => {
+          new_list[well] = !result;
+        });
+      }
+      this.all_select = new_list;
+      const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
+      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+      this.check_stroke_width();
+      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+    },
+
     test_event(evnt) {
       if (debug_mode != undefined) this.$emit("test-event", evnt);
     },
-    check_stroke_width() {
+
+    check_stroke_width(ar) {
       for (let i = 0; i < this.all_select.length; i++) {
         this.stroke_width[i] = !this.all_select[i] ? this.no_stroke_width : this.selected_stroke_width;
         this.hover_color[i] = !this.all_select[i] ? "#ececed" : this.selected_color;

@@ -17,6 +17,7 @@
         @enter-well="on_enter_well(index)"
         @leave-well="on_leave_well(index)"
         @click-exact="on_click_exact(index)"
+        @click-shift-exact="on_click_shift_exact(index)"
       ></PlateWell>
     </div>
     <span
@@ -32,7 +33,7 @@ import PlateWell from "@/components/basic_widgets/PlateWell.vue";
 export default {
   name: "StimulationStudioPlateWell",
   components: {
-    PlateWell,
+    PlateWell
   },
   props: {
     stroke: { type: String, default: "" },
@@ -41,12 +42,12 @@ export default {
     index: {
       type: Number,
       default: 0,
-      validator: (value) => {
+      validator: value => {
         // Eli (2/5/21) The way this component currently computes the top/left positions requires that the index be within the valid range for a 24-well plate.
         return value >= 0 && value < 24;
-      },
+      }
     },
-    protocol_type: { type: String, default: "" },
+    protocol_type: { type: String, default: "" }
   },
   computed: {
     /*   0 4  8 12 16 20     In order to speed the rendering its better to pre-compute
@@ -64,7 +65,7 @@ export default {
       */
     // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
     // eslint-disable-next-line vue/return-in-computed-property
-    computed_top: function () {
+    computed_top: function() {
       switch (this.index) {
         case 0:
         case 4:
@@ -98,7 +99,7 @@ export default {
     },
     // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
     // eslint-disable-next-line vue/return-in-computed-property
-    computed_left: function () {
+    computed_left: function() {
       switch (this.index) {
         case 0:
         case 1:
@@ -134,7 +135,7 @@ export default {
     },
     // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
     // eslint-disable-next-line vue/return-in-computed-property
-    computed_protocol_top: function () {
+    computed_protocol_top: function() {
       switch (this.index) {
         case 0:
         case 4:
@@ -168,7 +169,7 @@ export default {
     },
     // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
     // eslint-disable-next-line vue/return-in-computed-property
-    computed_protocol_left: function () {
+    computed_protocol_left: function() {
       switch (this.index) {
         case 0:
         case 1:
@@ -201,7 +202,7 @@ export default {
         case 23:
           return 361.521;
       }
-    },
+    }
   },
   methods: {
     on_enter_well(index) {
@@ -213,7 +214,10 @@ export default {
     on_click_exact(index) {
       this.$emit("click-exact", index);
     },
-  },
+    on_click_shift_exact(index) {
+      this.$emit("click-shift-exact", index);
+    }
+  }
 };
 </script>
 <style>

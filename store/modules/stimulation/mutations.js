@@ -5,6 +5,5 @@ export default {
       if (well === true) well_values.push(idx);
     });
     state.selected_wells = well_values;
-    console.log(state.selected_wells);
   },
 };

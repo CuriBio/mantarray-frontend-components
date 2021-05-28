@@ -11,7 +11,6 @@
         :id="'column_' + column_index"
         @click.exact="on_column_select(column_values[column_index - 1])"
         @click.shift.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
         @mouseenter="on_column_enter_hover(column_values[column_index - 1])"
         @mouseleave="on_column_leave_hover(column_values[column_index - 1])"
         >0{{ column_values[column_index - 1] }}</label
@@ -28,7 +27,6 @@
         :id="'row_' + row_index"
         @click.exact="on_row_select(row_values[row_index - 1])"
         @click.shift.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
-        @click.ctrl.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
         @mouseenter="on_row_enter_hover(row_values[row_index - 1])"
         @mouseleave="on_row_leave_hover(row_values[row_index - 1])"
       >
@@ -67,7 +65,6 @@
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
-        @click-ctrl-exact="basic_shift_or_ctrl_select(well_index)"
         @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
       ></PlateWell>
     </span>
@@ -93,16 +90,16 @@ export default {
   props: {
     selected: {
       type: Array,
-      default: function () {
+      default: function() {
         return new Array(24).fill(false);
-      },
+      }
     },
     platecolor: {
       type: Array,
-      default: function () {
+      default: function() {
         return new Array(24).fill(default_color);
-      },
-    },
+      }
+    }
   },
   data() {
     return {
@@ -118,7 +115,7 @@ export default {
       temp_stroke_width: [],
       row_values: ["A", "B", "C", "D"],
       column_values: ["1", "2", "3", "4", "5", "6"],
-      testerf: false,
+      testerf: false
     };
   },
   created() {
@@ -126,7 +123,7 @@ export default {
     for (let j = 0; j < this.all_select.length; j++) {
       this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
     }
-    const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+    const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
   },
   methods: {
@@ -254,7 +251,6 @@ export default {
     },
     basic_select(value) {
       const new_list = new Array(24).fill(false);
-
       new_list[value] = true;
       this.test_event("Well clicked");
       this.stroke_width[value] = selected_stroke_width;
@@ -268,7 +264,7 @@ export default {
     basic_shift_or_ctrl_select(value) {
       this.test_event("Well Shift or Ctrl clicked");
       this.testerf = !this.testerf;
-      const allEqual = (arr) => arr.every((v) => v === true);
+      const allEqual = arr => arr.every(v => v === true);
       this.all_select[value] = !this.all_select[value];
       this.stroke_width[value] = selected_stroke_width;
       if (allEqual(this.all_select)) {
@@ -406,7 +402,7 @@ export default {
       }
 
       this.all_select = new_list;
-      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+      const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
 
       for (let i = 0; i < this.all_select.length; i++) {
@@ -473,7 +469,7 @@ export default {
       }
 
       this.all_select = new_list;
-      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+      const allEqual = arr => arr.every(v => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
 
       for (let i = 0; i < this.all_select.length; i++) {
@@ -527,6 +523,7 @@ export default {
       }
       for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
     },
+
     on_column_leave_hover(value) {
       this.test_event(value + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
@@ -591,8 +588,8 @@ export default {
       if (debug_mode != undefined) {
         this.$emit("test-event", evnt);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

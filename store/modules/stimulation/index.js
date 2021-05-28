@@ -3,11 +3,8 @@ import mutations from "./mutations";
 import actions from "./actions";
 
 const state = () => ({
-  // is_active: false,
-  // list_of_available_protocols: [],
-  // active_stimulation_settings: {},
-  // new_protocol: {},
-  selected_wells: []
+  selected_wells: [],
+  protocols: hardcoded_protocols
 });
 
 export default {
@@ -18,32 +15,14 @@ export default {
   actions
 };
 
-
-// const protocol_options: {
-//         'A',
-//         'B',
-//         'C',
-//         'D',
-//         'E',
-//         'F',
-//         'G',
-//         'H',
-//         'I',
-//         'J',
-//         'K',
-//         'L',
-//         'M',
-//         'N',
-//         'O',
-//         'P',
-//         'Q',
-//         'R',
-//         'S',
-//         'T',
-//         'U',
-//         'V',
-//         'W',
-//         'X',
-//         'Y',
-//         'Z',
-// },
+const hardcoded_protocols = {
+  A: "#871d28",
+  B: "#bd3532",
+  C: "#df6147",
+  D: "#f0a061",
+  E: "#24524b",
+  F: "#133836",
+  G: "#f9d78c",
+  H: "#45847b",
+  I: "#83c0b3"
+};
