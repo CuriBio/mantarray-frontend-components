@@ -10,8 +10,6 @@ localVue.use(Vuex);
 let NuxtStore;
 let store;
 
-// const color_series_hex_codes = ["#19AC8A", "#005470", "#f9d78c", "#df6147"];
-
 describe("StimulationStudioWidget.vue", () => {
   beforeAll(async () => {
     const storePath = `${process.env.buildDir}/store.js`;
@@ -21,8 +19,6 @@ describe("StimulationStudioWidget.vue", () => {
   beforeEach(async () => {
     store = await NuxtStore.createStore();
   });
-
-  // afterEach(() => wrapper.destroy());
 
   test("When mounting StimulationStudioWidget from the built dist file, Then it loads successfully", async () => {
     const propsData = {
@@ -34,9 +30,6 @@ describe("StimulationStudioWidget.vue", () => {
       localVue,
     });
     expect(wrapper.exists()).toBe(true);
-
-    // const well = wrapper.findAll("circle");
-    // expect(well).toHaveLength(24);
   });
 
   test("When mounted without an explicitly supplied protocol_code prop, Then representative wells are all colored grey and without any displayed letter", async () => {
@@ -132,12 +125,10 @@ describe("StimulationStudioWidget.vue", () => {
       store,
       localVue,
     });
-
     Object.keys(wrapper.vm.column_values).map(async (column) => {
       await wrapper.find("#column_" + column).trigger("mouseenter");
       wrapper.vm.column_values[column].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(2));
     });
-
     Object.keys(wrapper.vm.row_values).map(async (row) => {
       await wrapper.find("#row_" + row).trigger("mouseenter");
       wrapper.vm.row_values[row].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(2));
@@ -153,12 +144,10 @@ describe("StimulationStudioWidget.vue", () => {
       store,
       localVue,
     });
-
     Object.keys(wrapper.vm.column_values).map(async (column) => {
       await wrapper.find("#column_" + column).trigger("mouseleave");
       wrapper.vm.column_values[column].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(0));
     });
-
     Object.keys(wrapper.vm.row_values).map(async (row) => {
       await wrapper.find("#row_" + row).trigger("mouseleave");
       wrapper.vm.row_values[row].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(0));
@@ -183,11 +172,9 @@ describe("StimulationStudioWidget.vue", () => {
         store,
         localVue,
       });
-
       await wrapper.find(selector_str).trigger("click", {
-        shiftKey: true, // For testing @click.shift handlers
+        shiftKey: true,
       });
-
       array_of_well_indices.map((well) => expect(wrapper.vm.stroke_width[well]).toBe(4));
     }
   );
@@ -199,19 +186,63 @@ describe("StimulationStudioWidget.vue", () => {
     });
     new Array(24).map(async (well) => {
       await wrapper.find().trigger("click", {
-        shiftKey: true, // For testing @click.shift handlers
+        shiftKey: true,
       });
       expect(wrapper.vm.sroke_width[well]).toBe(4);
     });
   });
 
-  test("When there is a change to all_selected wells, Then commit the change in state to the store", async () => {
+  test("When there is a change to all_selected wells, Then commit the mutation to state to the store", async () => {
     const wrapper = mount(StimulationStudioWidget, {
       store,
       localVue,
     });
-    wrapper.vm.all_select[3] = true;
+    await wrapper.vm.basic_select(3);
     expect(store.state.stimulation.selected_wells).toStrictEqual([3]);
+  });
+
+  test("When an unselected is hovered over and left, Then it should toggle a stroke with of 2px and 0px", async () => {
+    const wrapper = mount(StimulationStudioWidget, {
+      store,
+      localVue,
+    });
+    const test_wells = new Array(24);
+    test_wells.map(async (well) => {
+      await wrapper.find("#plate_" + well).trigger("enter-well");
+      expect(wrapper.vm.stroke_width[well]).toBe(2);
+      await wrapper.find("#plate_" + well).trigger("leave-well");
+      expect(wrapper.vm.stroke_width[well]).toBe(0);
+    });
+  });
+
+  test("Given that no wells are selected, When user Shift+Click on %s, Then then well %s visually become selected due to %s (have the stroke outline and be mutated to state", async () => {
+    const wrapper = mount(StimulationStudioWidget, {
+      store,
+      localVue,
+    });
+    const check_store = store.state.stimulation.selected_wells.length;
+    new Array(24).map(async (well) => {
+      await wrapper.find("#plate_" + well).trigger("click", {
+        shiftKey: true,
+      });
+      expect(wrapper.vm.sroke_width[well]).toBe(4);
+      expect(check_store).toBe(well);
+    });
+  });
+
+  test("Given any number of wells, but all are selected, When plus-minus icon is hovered over and left, Then all unselected wells should have a stroke width of 2", async () => {
+    const wrapper = mount(StimulationStudioWidget, {
+      store,
+      localVue,
+    });
+    await wrapper.find(".span__stimulationstudio-toggle-plus-minus-icon").trigger("mouseenter");
+    wrapper.vm.stroke_width.map((well) => {
+      expect(well).toBe(2);
+    });
+    await wrapper.find(".span__stimulationstudio-toggle-plus-minus-icon").trigger("mouseleave");
+    wrapper.vm.stroke_width.map((well) => {
+      expect(well).toBe(0);
+    });
   });
   // test("Given no wells are selected in a row/column, When user clicks and unclicks a row/column label, Then corresponding unselected wells will toggle a stroke-width of 4px and 0px", async () => {
   //   const propsData = {

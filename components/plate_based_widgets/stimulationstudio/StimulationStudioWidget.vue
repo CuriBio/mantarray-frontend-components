@@ -103,9 +103,9 @@ export default {
         5: [16, 17, 18, 19],
         6: [20, 21, 22, 23],
       },
-      all_select: new Array(24).fill(false),
       all_select_or_cancel: false,
       hover: new Array(24).fill(false),
+      all_select: new Array(24).fill(false),
       hover_color: new Array(24).fill(hover_color),
       stroke_width: new Array(24).fill(no_stroke_width),
     };
@@ -128,38 +128,6 @@ export default {
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
   },
   methods: {
-    getProtocolColor(index) {
-      if (index >= 0 && index <= 25) {
-        return "#19AC8A";
-      }
-      if (index >= 26 && index <= 51) {
-        return "#005470";
-      }
-      if (index >= 52 && index <= 77) {
-        return "#f9d78c";
-      }
-      if (index >= 78 && index <= 95) {
-        return "#df6147";
-      }
-      return "#B7B7B7";
-    },
-
-    getProtocolAlphabet(value) {
-      if (value >= 0 && value <= 25) {
-        return this.alphabet[value];
-      }
-      if (value >= 26 && value <= 51) {
-        return this.alphabet[value - 26];
-      }
-      if (value >= 52 && value <= 77) {
-        return this.alphabet[value - 52];
-      }
-      if (value >= 78 && value <= 95) {
-        return this.alphabet[value - 78];
-      }
-      return "";
-    },
-
     on_select_cancel_all(state) {
       this.all_select_or_cancel ? this.test_event("+ icon clicked") : this.test_event("- icon clicked");
       this.all_select_or_cancel = !state;
@@ -195,7 +163,7 @@ export default {
     },
 
     basic_shift_select(value) {
-      this.test_event("Well Shift or Ctrl clicked");
+      this.test_event("Well Shift clicked");
       this.testerf = !this.testerf;
       const allEqual = (arr) => arr.every((v) => v === true);
       this.all_select[value] = !this.all_select[value];
@@ -329,6 +297,38 @@ export default {
         case "D":
           return "224.1";
       }
+    },
+
+    getProtocolColor(index) {
+      // if (index >= 0 && index <= 25) {
+      //   return "#19AC8A";
+      // }
+      // if (index >= 26 && index <= 51) {
+      //   return "#005470";
+      // }
+      // if (index >= 52 && index <= 77) {
+      //   return "#f9d78c";
+      // }
+      // if (index >= 78 && index <= 95) {
+      //   return "#df6147";
+      // }
+      return "#B7B7B7";
+    },
+
+    getProtocolAlphabet(value) {
+      // if (value >= 0 && value <= 25) {
+      //   return this.alphabet[value];
+      // }
+      // if (value >= 26 && value <= 51) {
+      //   return this.alphabet[value - 26];
+      // }
+      // if (value >= 52 && value <= 77) {
+      //   return this.alphabet[value - 52];
+      // }
+      // if (value >= 78 && value <= 95) {
+      //   return this.alphabet[value - 78];
+      // }
+      return "";
     },
   },
 };
