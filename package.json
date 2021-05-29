@@ -21,7 +21,7 @@
     "test:e2e-no-prebuild-windows-github": "npm run _test:e2e",
     "_test:e2e": "testcafe \"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;\" ./tests/e2e --screenshots path=./tests/e2e/screenshots",
     "_test:e2e-parallel": "testcafe -c 2 \"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;\" ./tests/e2e --screenshots path=./tests/e2e/screenshots",
-    "prepare": "pip3 install -r requirements-dev.txt && pre-commit install && npx npm-merge-driver install",
+    "prepare": "pip install -r requirements-dev.txt && pre-commit install && npx npm-merge-driver install",
     "nuxt-start": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && nuxt start",
     "lint": "eslint .",
     "docs": "jsdoc -c jsdoc.json"
