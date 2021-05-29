@@ -26,7 +26,7 @@ export default {
     circle_y: { type: Number, default: 0 },
     radius: { type: Number, default: 0 },
     strk: { type: String, default: "" },
-    stroke_wdth: { type: Number, default: 4 },
+    stroke_wdth: { type: Number, default: 0 },
     plate_fill: { type: String, default: "'#B7B7B7'" },
     index: { type: Number, default: 0 },
   },
