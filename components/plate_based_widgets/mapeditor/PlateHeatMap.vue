@@ -52,7 +52,6 @@
       height="103"
     >
       <PlateWell
-        :classname="'plate_' + well_index"
         :svg_height="103"
         :svg_width="103"
         :circle_x="52"
