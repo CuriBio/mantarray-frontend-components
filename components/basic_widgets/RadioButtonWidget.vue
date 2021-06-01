@@ -24,7 +24,7 @@ export default {
     },
     pre_selected: {
       type: Number,
-      default: undefined,
+      default: 0,
     },
   },
 
@@ -35,8 +35,8 @@ export default {
   },
 
   created: function () {
-    if (this.pre_selected != undefined) {
-      this.selected = this.radio_buttons[this.pre_selected].value;
+    if (this.pre_selected !== undefined) {
+      this.selected = this.radio_buttons[this.pre_selected];
     }
   },
 
