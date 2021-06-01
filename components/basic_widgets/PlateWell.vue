@@ -1,7 +1,7 @@
 <template>
   <svg :height="svg_height" :width="svg_width" :index="index">
     <circle
-      :class="classname"
+      class="plate"
       :cx="circle_x"
       :cy="circle_y"
       :r="radius"

@@ -11,7 +11,6 @@
         :id="'column_' + column_index"
         @click.exact="on_column_select(column_values[column_index - 1])"
         @click.shift.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
         @mouseenter="on_column_enter_hover(column_values[column_index - 1])"
         @mouseleave="on_column_leave_hover(column_values[column_index - 1])"
         >0{{ column_values[column_index - 1] }}</label
@@ -28,7 +27,6 @@
         :id="'row_' + row_index"
         @click.exact="on_row_select(row_values[row_index - 1])"
         @click.shift.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
-        @click.ctrl.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
         @mouseenter="on_row_enter_hover(row_values[row_index - 1])"
         @mouseleave="on_row_leave_hover(row_values[row_index - 1])"
       >
@@ -54,7 +52,6 @@
       height="103"
     >
       <PlateWell
-        :classname="'plate_' + well_index"
         :svg_height="103"
         :svg_width="103"
         :circle_x="52"
@@ -67,7 +64,6 @@
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
-        @click-ctrl-exact="basic_shift_or_ctrl_select(well_index)"
         @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
       ></PlateWell>
     </span>
@@ -254,7 +250,6 @@ export default {
     },
     basic_select(value) {
       const new_list = new Array(24).fill(false);
-
       new_list[value] = true;
       this.test_event("Well clicked");
       this.stroke_width[value] = selected_stroke_width;
@@ -527,6 +522,7 @@ export default {
       }
       for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
     },
+
     on_column_leave_hover(value) {
       this.test_event(value + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);

@@ -20,7 +20,7 @@ repos:
       - id: trailing-whitespace
       - id: pretty-format-json
         args: [--autofix, --no-sort-keys]
-        exclude: sample_waveform_data/|jsdoc.json|.babelrc
+        exclude: sample_waveform_data/|jsdoc.json|.babelrc | (tests/e2e/)
 
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v2.2.1
@@ -49,17 +49,17 @@ repos:
       - id: check-merge-conflict
       - id: check-case-conflict
   # Linting
-  - repo: https://github.com/NanoSurface-Biomedical/pre-commit-pylint
-    rev: "c0d03fa500201c43aebf0640253b89c89cec9937" # pick a git hash / tag to point to
-    hooks:
-      - id: vuejs-check-no-console-log-statments
-        exclude: dist
-      - id: vuejs-check-no-import-from-vue-file
+  # - repo: https://github.com/NanoSurface-Biomedical/pre-commit-pylint
+  #   rev: "c0d03fa500201c43aebf0640253b89c89cec9937" # pick a git hash / tag to point to
+  #   hooks:
+  #     - id: vuejs-check-no-console-log-statments
+  #       exclude: dist
+  #     - id: vuejs-check-no-import-from-vue-file
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v7.23.0
     hooks:
       - id: eslint
-        exclude: (dist/)|(tests/unit/components/status/StatusBar.spec.js)|(tests/unit/components/status/SimulationMode.spec.js)|(tests/unit/components/playback/ContinuousWaveform.spec.js)|(tests/unit/components/playback/controls/WebPlayerControls.spec.js)|(tests/unit/components/playback/controls/YAxisControls.spec.js)|(tests/unit/components/playback/controls/PlateBarcode.spec.js)|(tests/unit/components/plate_based_widgets/navigator/PlateNavigator.spec.js)|(tests/unit/components/playback/controls/DesktopPlayerControls.spec.js)|(tests/unit/components/playback/controls/XAxisControls.spec.js)|(tests/e2e/)|(server.js)
+        exclude: (dist/)|(tests/)|(server.js)
         files: \.(vue)|(js)$
         types: [file]
         args: [--fix]

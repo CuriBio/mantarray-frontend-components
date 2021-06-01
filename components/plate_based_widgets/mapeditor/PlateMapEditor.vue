@@ -11,7 +11,6 @@
         :id="'column_' + column_index"
         @click.exact="on_column_select(column_values[column_index - 1])"
         @click.shift.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
-        @click.ctrl.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
         @mouseenter="on_column_enter_hover(column_values[column_index - 1])"
         @mouseleave="on_column_leave_hover(column_values[column_index - 1])"
         >0{{ column_values[column_index - 1] }}</label
@@ -28,7 +27,6 @@
         :id="'row_' + row_index"
         @click.exact="on_row_select(row_values[row_index - 1])"
         @click.shift.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
-        @click.ctrl.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
         @mouseenter="on_row_enter_hover(row_values[row_index - 1])"
         @mouseleave="on_row_leave_hover(row_values[row_index - 1])"
       >
@@ -67,7 +65,6 @@
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
-        @click-ctrl-exact="basic_shift_or_ctrl_select(well_index)"
         @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
       ></PlateWell>
     </span>

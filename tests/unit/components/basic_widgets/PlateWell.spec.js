@@ -6,8 +6,6 @@ import { PlateWell as DistComponentToTest } from "@/dist/mantarray.common";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 
-let wrapper = null;
-
 const localVue = createLocalVue();
 localVue.use(Vuex);
 let NuxtStore;
@@ -24,7 +22,6 @@ describe("PlateWell.vue", () => {
     store = await NuxtStore.createStore();
   });
 
-  afterEach(() => wrapper.destroy());
   test("When mounting PlateWell from the build dist file, Then it loads successfully", async () => {
     const propsData = {
       classname: "plate",
@@ -38,7 +35,7 @@ describe("PlateWell.vue", () => {
       plate_fill: "#b7b7b7",
       index: 0,
     };
-    wrapper = mount(DistComponentToTest, {
+    const wrapper = mount(DistComponentToTest, {
       propsData,
       store,
       localVue,
@@ -48,7 +45,6 @@ describe("PlateWell.vue", () => {
   });
   test("When the PlateWell is mouted, Then mouseenter event on the circle would emit and event 'enter-well' with plate index range [0..23]", async () => {
     const propsData = {
-      classname: "plate",
       svg_height: 100,
       svg_width: 100,
       circle_x: 50,
@@ -59,7 +55,7 @@ describe("PlateWell.vue", () => {
       plate_fill: "#b7b7b7",
       index: 0,
     };
-    wrapper = mount(ComponentToTest, {
+    const wrapper = mount(ComponentToTest, {
       propsData,
       store,
       localVue,
@@ -84,7 +80,7 @@ describe("PlateWell.vue", () => {
       plate_fill: "#b7b7b7",
       index: 1,
     };
-    wrapper = mount(ComponentToTest, {
+    const wrapper = mount(ComponentToTest, {
       propsData,
       store,
       localVue,
@@ -110,7 +106,7 @@ describe("PlateWell.vue", () => {
       plate_fill: "#b7b7b7",
       index: 1,
     };
-    wrapper = mount(ComponentToTest, {
+    const wrapper = mount(ComponentToTest, {
       propsData,
       store,
       localVue,
@@ -136,7 +132,7 @@ describe("PlateWell.vue", () => {
       plate_fill: "#b7b7b7",
       index: 5,
     };
-    wrapper = mount(ComponentToTest, {
+    const wrapper = mount(ComponentToTest, {
       propsData,
       store,
       localVue,
@@ -165,7 +161,7 @@ describe("PlateWell.vue", () => {
       plate_fill: "#b7b7b7",
       index: 10,
     };
-    wrapper = mount(ComponentToTest, {
+    const wrapper = mount(ComponentToTest, {
       propsData,
       store,
       localVue,
