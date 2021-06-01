@@ -117,9 +117,6 @@ export default {
     all_select: function (oldVal, newVal) {
       this.$store.commit("stimulation/handle_selected_wells", this.all_select);
     },
-    selected_wells: function (oldVal, newVal) {
-      console.log(oldVal);
-    },
   },
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);
