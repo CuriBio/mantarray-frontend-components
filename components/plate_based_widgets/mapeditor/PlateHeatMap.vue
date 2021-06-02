@@ -52,6 +52,7 @@
       height="103"
     >
       <PlateWell
+        :id="'well_' + well_index"
         :svg_height="103"
         :svg_width="103"
         :circle_x="52"
@@ -399,11 +400,9 @@ export default {
           }
           break;
       }
-
       this.all_select = new_list;
       const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-
       for (let i = 0; i < this.all_select.length; i++) {
         this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
         this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
@@ -466,11 +465,9 @@ export default {
           }
           break;
       }
-
       this.all_select = new_list;
       const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-
       for (let i = 0; i < this.all_select.length; i++) {
         this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
         this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
@@ -522,7 +519,6 @@ export default {
       }
       for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
     },
-
     on_column_leave_hover(value) {
       this.test_event(value + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
@@ -609,7 +605,6 @@ export default {
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
   pointer-events: all;
 }
-
 .div__heatmap-drag-drop-selector {
   transform: rotate(0deg);
   box-sizing: border-box;
@@ -623,7 +618,6 @@ export default {
   visibility: visible;
   pointer-events: all;
 }
-
 .span__heatmap-editor-column-index {
   pointer-events: all;
   line-height: 100%;
@@ -644,16 +638,13 @@ export default {
   color: rgb(183, 183, 183);
   text-align: center;
 }
-
 .span__heatmap-editor-column-index label:hover,
 .span__heatmap-editor-row-index label:hover {
   color: #ececed;
 }
-
 .span__heatmap-toggle-plus-minus-icon:hover {
   color: #ffffff;
 }
-
 .span__heatmap-editor-row-index {
   pointer-events: all;
   line-height: 100%;

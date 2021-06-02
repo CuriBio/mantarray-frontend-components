@@ -217,6 +217,7 @@ export default {
       return this.well_values[this.entrykey].data.map((well) => {
         if (well.length > 0) {
           const average = (a) => a.reduce((x, y) => x + y) / a.length;
+          console.log(this.gradient_map(average(well.slice(-5))));
           return this.gradient_map(average(well.slice(-5)));
         } else {
           return "#B7B7B7";

@@ -13,11 +13,6 @@ describe("StimulationStudioPlateWell.vue", () => {
     const propsData = {
       classname: "'plate_0'",
       protocol_type: "''",
-      svg_height: 72,
-      svg_width: 72,
-      circle_x: 36,
-      circle_y: 36,
-      radius: 28,
       stroke: "'#1C1C1C'",
       protocol_fill: "'#B7B7B7'",
       stroke_width: 0,
@@ -34,11 +29,6 @@ describe("StimulationStudioPlateWell.vue", () => {
     const propsData = {
       classname: "'plate_0'",
       protocol_type: "'A'",
-      svg_height: 72,
-      svg_width: 72,
-      circle_x: 36,
-      circle_y: 36,
-      radius: 28,
       stroke: "'#FFFFFF'",
       protocol_fill: "'#19AC8A'",
       stroke_width: 4,
@@ -66,4 +56,40 @@ describe("StimulationStudioPlateWell.vue", () => {
       expect(validator(test_index)).toBe(false);
     }
   );
+
+  test("Given the current well is not selected, When hovering over and leaving the well, Then events will be emitted to parent component", async () => {
+    const propsData = {
+      protocol_type: "''",
+      stroke: "'#1C1C1C'",
+      protocol_fill: "'#B7B7B7'",
+      stroke_width: 0,
+      index: 0,
+    };
+    wrapper = mount(StimulationStudioPlateWell, {
+      propsData,
+      localVue,
+    });
+    await wrapper.vm.on_enter_well(0);
+    expect(wrapper.emitted("enter-well")).toBeTruthy();
+    await wrapper.vm.on_leave_well(0);
+    expect(wrapper.emitted("leave-well")).toBeTruthy();
+  });
+
+  test("Given the current well is not selected, When clicking or shift+clicking the well, Then events will be emitted to parent component", async () => {
+    const propsData = {
+      protocol_type: "''",
+      stroke: "'#1C1C1C'",
+      protocol_fill: "'#B7B7B7'",
+      stroke_width: 0,
+      index: 0,
+    };
+    wrapper = mount(StimulationStudioPlateWell, {
+      propsData,
+      localVue,
+    });
+    await wrapper.vm.on_click_exact(0);
+    expect(wrapper.emitted("click-exact")).toBeTruthy();
+    await wrapper.vm.on_click_shift_exact(0);
+    expect(wrapper.emitted("click-shift-exact")).toBeTruthy();
+  });
 });
