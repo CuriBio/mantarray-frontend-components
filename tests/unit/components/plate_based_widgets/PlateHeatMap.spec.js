@@ -114,7 +114,7 @@ describe("PlateHeatMap.vue", () => {
     });
   });
 
-  test("Given all wells are selected, When well, column, or row is unselected, Then minus icon should toggle to plus", async () => {
+  test("Given all wells are selected, When a well, column, or row is unselected, Then minus icon should toggle to plus", async () => {
     const select = new Array(24).fill(false);
     const color = new Array(24).fill("#b7b7b7");
 
@@ -132,10 +132,10 @@ describe("PlateHeatMap.vue", () => {
     await wrapper.vm.basic_select(4);
     expect(wrapper.find("#plus").isVisible()).toBe(true);
     await wrapper.find(".span__heatmap-toggle-plus-minus-icon").trigger("click");
-    await wrapper.vm.on_column_select(3);
+    await wrapper.vm.on_column_select(2);
     expect(wrapper.find("#plus").isVisible()).toBe(true);
     await wrapper.find(".span__heatmap-toggle-plus-minus-icon").trigger("click");
-    await wrapper.vm.on_row_select("D");
+    await wrapper.vm.on_row_select(3);
     expect(wrapper.find("#plus").isVisible()).toBe(true);
   });
 
