@@ -24,7 +24,7 @@ export default {
     },
     pre_selected: {
       type: Number,
-      default: 0,
+      default: undefined,
     },
   },
 
