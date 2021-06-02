@@ -152,6 +152,12 @@ describe("PlateHeatMap.vue", () => {
     wrapper.vm.stroke_width.map((well) => {
       expect(well).toBe(0);
     });
+    await wrapper.find(".span__heatmap-toggle-plus-minus-icon").trigger("click");
+    await wrapper.find(".span__heatmap-toggle-plus-minus-icon").trigger("mouseenter");
+    wrapper.vm.stroke_width.map((well) => {
+      expect(well).toBe(4);
+    });
+    await wrapper.find(".span__heatmap-toggle-plus-minus-icon").trigger("mouseleave");
   });
 
   test("When an unselected well is hovered over and left, Then it should toggle a stroke with of 2px and 0px", async () => {
@@ -251,6 +257,8 @@ describe("PlateHeatMap.vue", () => {
     test.map(async (column) => {
       await wrapper.find(column[0]).trigger("click", { shiftKey: true });
       column[1].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(4));
+      await wrapper.find(column[0]).trigger("click", { shiftKey: true });
+      column[1].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(0));
     });
   });
 
@@ -273,6 +281,8 @@ describe("PlateHeatMap.vue", () => {
     test.map(async (row) => {
       await wrapper.find(row[0]).trigger("click", { shiftKey: true });
       row[1].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(4));
+      await wrapper.find(row[0]).trigger("click", { shiftKey: true });
+      row[1].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(0));
     });
   });
 });
