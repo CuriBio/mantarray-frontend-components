@@ -199,7 +199,7 @@ describe("StimulationStudioWidget.vue", () => {
     expect(store.state.stimulation.selected_wells).toStrictEqual([3]);
   });
 
-  test("When an unselected wellis hovered over and left, Then it should toggle a stroke with of 2px and 0px", async () => {
+  test("When an unselected well is hovered over and left, Then it should toggle a stroke with of 2px and 0px", async () => {
     const wrapper = mount(StimulationStudioWidget, {
       store,
       localVue,
