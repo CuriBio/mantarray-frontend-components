@@ -9,10 +9,10 @@
     >
       <label
         :id="'column_' + column_index"
-        @click.exact="on_column_select(column_values[column_index - 1])"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
-        @mouseenter="on_column_enter_hover(column_values[column_index - 1])"
-        @mouseleave="on_column_leave_hover(column_values[column_index - 1])"
+        @click.exact="on_column_select(column_index - 1)"
+        @click.shift.exact="on_column_ctrl_click_or_shift_click(column_index - 1)"
+        @mouseenter="on_column_enter_hover(column_index - 1)"
+        @mouseleave="on_column_leave_hover(column_index - 1)"
         >0{{ column_values[column_index - 1] }}</label
       >
     </span>
@@ -25,10 +25,10 @@
     >
       <label
         :id="'row_' + row_index"
-        @click.exact="on_row_select(row_values[row_index - 1])"
-        @click.shift.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
-        @mouseenter="on_row_enter_hover(row_values[row_index - 1])"
-        @mouseleave="on_row_leave_hover(row_values[row_index - 1])"
+        @click.exact="on_row_select(row_index - 1)"
+        @click.shift.exact="on_row_ctrl_click_or_shift_click(row_index - 1)"
+        @mouseenter="on_row_enter_hover(row_index - 1)"
+        @mouseleave="on_row_leave_hover(row_index - 1)"
       >
         {{ row_values[row_index - 1] }}</label
       >
@@ -115,6 +115,20 @@ export default {
       temp_stroke_width: [],
       row_values: ["A", "B", "C", "D"],
       column_values: ["1", "2", "3", "4", "5", "6"],
+      column_wells: [
+        [0, 1, 2, 3],
+        [4, 5, 6, 7],
+        [8, 9, 10, 11],
+        [12, 13, 14, 15],
+        [16, 17, 18, 19],
+        [20, 21, 22, 23],
+      ],
+      row_wells: [
+        [0, 4, 8, 12, 16, 20],
+        [1, 5, 9, 13, 17, 21],
+        [2, 6, 10, 14, 18, 22],
+        [3, 7, 11, 15, 19, 23],
+      ],
       testerf: false,
     };
   },
@@ -302,20 +316,7 @@ export default {
       const new_list = new Array(24).fill(false);
       this.test_event(row + " clicked");
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (row) {
-        case "A":
-          new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
-          break;
-        case "B":
-          new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
-          break;
-        case "C":
-          new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
-          break;
-        case "D":
-          new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
-          break;
-      }
+      this.row_wells[row].map((well) => (new_list[well] = true));
       if (this.all_select_or_cancel == false) {
         this.all_select_or_cancel = true;
       }
@@ -330,26 +331,7 @@ export default {
       const new_list = new Array(24).fill(false);
       this.test_event(column + " clicked");
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (column) {
-        case "1":
-          new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
-          break;
-        case "2":
-          new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
-          break;
-        case "3":
-          new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
-          break;
-        case "4":
-          new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
-          break;
-        case "5":
-          new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
-          break;
-        case "6":
-          new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
-          break;
-      }
+      this.column_wells[column].map((well) => (new_list[well] = true));
       if (this.all_select_or_cancel == false) {
         this.all_select_or_cancel = true;
       }
@@ -366,40 +348,14 @@ export default {
       this.test_event(row + " ctrl or shift clicked");
       for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (row) {
-        case "A":
-          result = new_list[0] && new_list[4] && new_list[8] && new_list[12] && new_list[16] && new_list[20];
-          if (result == true) {
-            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = false;
-          } else {
-            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
-          }
-          break;
-        case "B":
-          result = new_list[1] && new_list[5] && new_list[9] && new_list[13] && new_list[17] && new_list[21];
-          if (result == true) {
-            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = false;
-          } else {
-            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
-          }
-          break;
-        case "C":
-          result = new_list[2] && new_list[6] && new_list[10] && new_list[14] && new_list[18] && new_list[22];
-          if (result == true) {
-            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = false;
-          } else {
-            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
-          }
-          break;
-        case "D":
-          result = new_list[3] && new_list[7] && new_list[11] && new_list[15] && new_list[19] && new_list[23];
-          if (result == true) {
-            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = false;
-          } else {
-            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
-          }
-          break;
-      }
+      result =
+        new_list[this.row_wells[row][0]] &&
+        new_list[this.row_wells[row][1]] &&
+        new_list[this.row_wells[row][2]] &&
+        new_list[this.row_wells[row][3]];
+      this.row_wells[row].map((well) => {
+        new_list[well] = !result;
+      });
       this.all_select = new_list;
       const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
@@ -415,56 +371,14 @@ export default {
       let result = false;
       for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (column) {
-        case "1":
-          result = new_list[0] && new_list[1] && new_list[2] && new_list[3];
-          if (result == true) {
-            new_list[0] = new_list[1] = new_list[2] = new_list[3] = false;
-          } else {
-            new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
-          }
-          break;
-        case "2":
-          result = new_list[4] && new_list[5] && new_list[6] && new_list[7];
-          if (result == true) {
-            new_list[4] = new_list[5] = new_list[6] = new_list[7] = false;
-          } else {
-            new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
-          }
-          break;
-        case "3":
-          result = new_list[8] && new_list[9] && new_list[10] && new_list[11];
-          if (result == true) {
-            new_list[8] = new_list[9] = new_list[10] = new_list[11] = false;
-          } else {
-            new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
-          }
-          break;
-        case "4":
-          result = new_list[12] && new_list[13] && new_list[14] && new_list[15];
-          if (result == true) {
-            new_list[12] = new_list[13] = new_list[14] = new_list[15] = false;
-          } else {
-            new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
-          }
-          break;
-        case "5":
-          result = new_list[16] && new_list[17] && new_list[18] && new_list[19];
-          if (result == true) {
-            new_list[16] = new_list[17] = new_list[18] = new_list[19] = false;
-          } else {
-            new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
-          }
-          break;
-        case "6":
-          result = new_list[20] && new_list[21] && new_list[22] && new_list[23];
-          if (result == true) {
-            new_list[20] = new_list[21] = new_list[22] = new_list[23] = false;
-          } else {
-            new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
-          }
-          break;
-      }
+      result =
+        new_list[this.column_wells[column][0]] &&
+        new_list[this.column_wells[column][1]] &&
+        new_list[this.column_wells[column][2]] &&
+        new_list[this.column_wells[column][3]];
+      this.column_wells[column].map((well) => {
+        new_list[well] = !result;
+      });
       this.all_select = new_list;
       const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
@@ -474,102 +388,36 @@ export default {
       }
       this.on_plate_well_selected();
     },
-    on_column_enter_hover(value) {
-      this.test_event(value + " hover enter");
+    on_column_enter_hover(column) {
+      this.test_event(column + " hover enter");
       const new_list = [];
       for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (value) {
-        case "1":
-          new_list[0] = new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
-          new_list[1] = new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
-          new_list[2] = new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
-          new_list[3] = new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
-          break;
-        case "2":
-          new_list[4] = new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
-          new_list[5] = new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
-          new_list[6] = new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
-          new_list[7] = new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
-          break;
-        case "3":
-          new_list[8] = new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
-          new_list[9] = new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
-          new_list[10] = new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
-          new_list[11] = new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
-          break;
-        case "4":
-          new_list[12] = new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
-          new_list[13] = new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
-          new_list[14] = new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
-          new_list[15] = new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
-          break;
-        case "5":
-          new_list[16] = new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
-          new_list[17] = new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
-          new_list[18] = new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
-          new_list[19] = new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
-          break;
-        case "6":
-          new_list[20] = new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
-          new_list[21] = new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
-          new_list[22] = new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
-          new_list[23] = new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
-          break;
-      }
+      this.column_wells[column].map(
+        (well) => (new_list[well] = new_list[well] == no_stroke_width ? hover_stroke_width : new_list[well])
+      );
       for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
     },
-    on_column_leave_hover(value) {
-      this.test_event(value + " hover leave");
+    on_column_leave_hover(column) {
+      this.test_event(column + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let i = 0; i < this.all_select.length; i++) {
         this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
         this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
       }
     },
-    on_row_enter_hover(value) {
-      this.test_event(value + " hover enter");
+    on_row_enter_hover(row) {
+      this.test_event(row + " hover enter");
       const new_list = [];
       for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (value) {
-        case "A":
-          new_list[0] = new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
-          new_list[4] = new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
-          new_list[8] = new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
-          new_list[12] = new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
-          new_list[16] = new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
-          new_list[20] = new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
-          break;
-        case "B":
-          new_list[1] = new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
-          new_list[5] = new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
-          new_list[9] = new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
-          new_list[13] = new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
-          new_list[17] = new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
-          new_list[21] = new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
-          break;
-        case "C":
-          new_list[2] = new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
-          new_list[6] = new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
-          new_list[10] = new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
-          new_list[14] = new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
-          new_list[18] = new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
-          new_list[22] = new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
-          break;
-        case "D":
-          new_list[3] = new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
-          new_list[7] = new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
-          new_list[11] = new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
-          new_list[15] = new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
-          new_list[19] = new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
-          new_list[23] = new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
-          break;
-      }
+      this.row_wells[row].map(
+        (well) => (new_list[well] = new_list[well] == no_stroke_width ? hover_stroke_width : new_list[well])
+      );
       for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
     },
-    on_row_leave_hover(value) {
-      this.test_event(value + " hover leave");
+    on_row_leave_hover(row) {
+      this.test_event(row + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let i = 0; i < this.all_select.length; i++) {
         this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
