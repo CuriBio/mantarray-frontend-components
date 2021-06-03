@@ -1,16 +1,21 @@
 <template>
-  <div style="top: 111px; left: 88px; position: absolute">
+  <div>
+    <StimulationStudioWidget />
     <StimulationStudioCreateAndEdit />
   </div>
 </template>
 
 <script>
-// import { StimulationStudioCreateAndEdit } from "@/dist/mantarray.common";
 import StimulationStudioCreateAndEdit from "@/components/stimulation/StimulationStudioCreateAndEdit.vue";
+import StimulationStudioWidget from "@/components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 
 export default {
+  name: "StimulationStudio",
   components: {
+    StimulationStudioWidget,
     StimulationStudioCreateAndEdit,
   },
 };
 </script>
+
+<style></style>

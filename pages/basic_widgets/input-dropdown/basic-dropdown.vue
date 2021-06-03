@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import { InputDropDown } from "@/dist/mantarray.common";
-// import InputDropDown from "@/components/playback/controls/player/InputDropDown.vue";
+// import { InputDropDown } from "@/dist/mantarray.common";
+import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 export default {
   components: {
     InputDropDown,

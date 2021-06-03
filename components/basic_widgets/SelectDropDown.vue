@@ -174,6 +174,7 @@ export default {
   visibility: visible;
   z-index: 7;
   background-color: #1c1c1c;
+  padding: 5px;
 }
 
 .div__input-dropdown-controls-content-widget--invalid {

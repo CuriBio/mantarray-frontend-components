@@ -1,16 +1,15 @@
 <template>
   <div>
-    <StimulationStudioCurrentSettings></StimulationStudioCurrentSettings>
+    <StimulationStudio />
   </div>
 </template>
 
 <script>
-import { StimulationStudioCurrentSettings } from "@/dist/mantarray.common";
-// import StimulationStudioCurrentSettings from "@/components/stimulation/StimulationStudioCurrentSettings.vue";
-
+// import { StimulationStudio } from "@/dist/mantarray.common";
+import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
 export default {
   components: {
-    StimulationStudioCurrentSettings,
+    StimulationStudio,
   },
 };
 </script>

@@ -28,6 +28,7 @@ export {
   system_status_when_server_initializing_regexp,
   all_mantarray_commands_regexp,
 } from "./store/modules/flask/url_regex";
+export { default as stimulation_store_module } from "./store/modules/stimulation";
 
 // Waveform Components
 export { default as Waveform } from "./components/playback/waveform/Waveform.vue";
@@ -76,8 +77,8 @@ export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDia
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
 export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
 
-// Stimulation Studio Voltage Settings
+// Stimulation Studio
 export { default as StimulationStudioVoltageSettings } from "./components/stimulation/StimulationStudioVoltageSettings.vue";
-
-// Stimulation Studio Current Settings
 export { default as StimulationStudioCurrentSettings } from "./components/stimulation/StimulationStudioCurrentSettings.vue";
+export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";
+export { default as StimulationStudio } from "./components/stimulation/StimulationStudio.vue";
