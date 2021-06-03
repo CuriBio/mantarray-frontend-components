@@ -53,7 +53,7 @@
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
         @click-shift-exact="basic_shift_select(well_index)"
-      ></StimulationStudioPlateWell>
+      />
     </div>
   </div>
 </template>

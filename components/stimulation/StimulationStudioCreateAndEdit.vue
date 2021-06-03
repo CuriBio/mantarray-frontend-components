@@ -7,6 +7,7 @@
     <div class="div__stimulationstudio-select-dropdown-container">
       <SelectDropDown :options_text="['Create New']" :input_width="550" />
     </div>
+    <canvas class="canvas__stimulationstudio-button-seperator" />
     <div v-for="(key, value) in btn_labels" :key="value">
       <div class="div__stimulationstudio-btn-container" :style="key">
         <span class="span__stimulationstudio-btn-label">{{ value }}</span>
@@ -25,8 +26,8 @@ export default {
   data() {
     return {
       btn_labels: {
-        "Apply to Selection": " left: 19%; top: 52% ",
-        "Clear Selection": " left: 51%; top: 52% ",
+        "Apply to Selection": " left: 19%; top: 49% ",
+        "Clear Selection": " left: 51%; top: 49% ",
         "Use Active Stimulation Settings": " left: 3%; top: 75%; width: 40% ",
         "Import Protocol(s)": " left: 45%; top: 75%; width: 25% ",
         "Export Protocol(s)": " left: 72%; top: 75%; width: 25% ",
@@ -90,7 +91,7 @@ export default {
   position: absolute;
   width: 210px;
   height: 50px;
-  top: 80px;
+  top: 75px;
   right: 380px;
   padding: 5px;
   visibility: visible;
@@ -117,5 +118,17 @@ export default {
   font-family: Muli;
   font-size: 16px;
   color: rgb(0, 0, 0);
+}
+
+.canvas__stimulationstudio-button-seperator {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 90%;
+  height: 2px;
+  top: 70%;
+  visibility: visible;
+  background-color: #3f3f3f;
+  opacity: 0.5;
 }
 </style>
