@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div class="div__simulationstudio-backdrop"></div>
+  <div class="div__simulationstudio-backdrop">
     <span
       v-for="column_index in 6"
       :key="'column_' + column_index"
@@ -330,7 +329,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .div__simulationstudio-backdrop {
   box-sizing: border-box;
   padding: 0px;
@@ -339,6 +338,8 @@ export default {
   position: absolute;
   width: 415px;
   height: 280px;
+  top: 11%;
+  left: 20%;
   visibility: visible;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;

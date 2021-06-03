@@ -24,13 +24,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .div__simulationstudio-backdrop {
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-  padding: 0px;
-  margin: 0px;
+  top: 11%;
+  left: 45%;
   background: rgb(17, 17, 17);
   position: absolute;
   width: 630px;
