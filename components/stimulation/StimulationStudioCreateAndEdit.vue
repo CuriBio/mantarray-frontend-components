@@ -7,9 +7,10 @@
     <div class="div__stimulationstudio-select-dropdown-container">
       <SelectDropDown :options_text="['Create New']" :input_width="550" />
     </div>
-    <div class="div__stimulationstudio-btn-container">
-      <canvas class="canvas__heatmap-settings-reset-btn-container"></canvas>
-      <span class="span__stimulationstudio-btn-label"> Apply </span>
+    <div v-for="(key, value) in btn_labels" :key="value">
+      <div class="div__stimulationstudio-btn-container" :style="key">
+        <span class="span__stimulationstudio-btn-label">{{ value }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -20,6 +21,17 @@ export default {
   name: "StimulationStudioCreateAndEdit",
   components: {
     SelectDropDown,
+  },
+  data() {
+    return {
+      btn_labels: {
+        "Apply to Selection": " left: 19%; top: 52% ",
+        "Clear Selection": " left: 51%; top: 52% ",
+        "Use Active Stimulation Settings": " left: 3%; top: 75%; width: 40% ",
+        "Import Protocol(s)": " left: 45%; top: 75%; width: 25% ",
+        "Export Protocol(s)": " left: 72%; top: 75%; width: 25% ",
+      },
+    };
   },
 };
 </script>
@@ -87,45 +99,22 @@ export default {
   background: none;
   border: none;
 }
-.canvas__stimulationstudio-btn-container {
-  transform: translateZ(0);
-  position: absolute;
-  width: 130px;
-  height: 55px;
-  /* top: 0px;
-  left: 0px; */
-  background: #b7b7b7;
-}
+
 .div__stimulationstudio-btn-container {
   pointer-events: all;
-  /* transform: rotate(0deg); */
-  /* overflow: hidden; */
-  /* position: absolute; */
-  width: 130px;
-  height: 55px;
-  /* top: 806px;
-  left: 1490.08px; */
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: absolute;
+  width: 30%;
+  height: 50px;
   visibility: visible;
-  /* z-index: 154; */
+  background: #b7b7b7;
 }
 .span__stimulationstudio-btn-label {
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: center;
-  font-weight: normal;
   transform: translateZ(0px);
-  position: absolute;
-  width: 120px;
-  height: 45px;
-  line-height: 47px;
-  top: 5px;
-  left: 5px;
-  user-select: none;
+  line-height: 50px;
   font-family: Muli;
-  font-style: normal;
-  text-decoration: none;
   font-size: 16px;
   color: rgb(0, 0, 0);
 }
