@@ -5,6 +5,7 @@
       :style="'top:' + computed_top + 'px;' + 'left:' + computed_left + 'px;'"
     >
       <PlateWell
+        class="well"
         :svg_height="70"
         :svg_width="70"
         :circle_x="38"

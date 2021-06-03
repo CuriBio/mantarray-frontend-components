@@ -2,7 +2,7 @@
   <div class="div__radio-button-group-background">
     <RadioButtonWidget
       :radio_buttons="button_names"
-      :pre_selected="1"
+      :pre_selected="0"
       @radio-btn-selected="handle_radio_click"
     ></RadioButtonWidget>
     <div style="top: 100px; left: 108px; position: absolute">Label : {{ label }} Index : {{ index }}</div>

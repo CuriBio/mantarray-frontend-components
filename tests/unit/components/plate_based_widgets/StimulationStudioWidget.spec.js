@@ -154,41 +154,39 @@ describe("StimulationStudioWidget.vue", () => {
     });
   });
 
-  test.each([
-    [[0, 4, 8, 12, 16, 20], "#row_A"],
-    [[1, 5, 9, 13, 17, 21], "#row_B"],
-    [[2, 6, 10, 14, 18, 22], "#row_C"],
-    [[3, 7, 11, 15, 19, 23], "#row_D"],
-    [[0, 1, 2, 3], "#column_1"],
-    [[4, 5, 6, 7], "#column_2"],
-    [[8, 9, 10, 11], "#column_3"],
-    [[12, 13, 14, 15], "#column_4"],
-    [[16, 17, 18, 19], "#column_5"],
-    [[20, 21, 22, 23], "#column_6"],
-  ])(
-    "Given that any wells are selected, When user Shift+clicks the Row/Column button or any individual well, Then wells corresponding are seleced with outline of 4px;",
-    async (array_of_well_indices, selector_str) => {
-      const wrapper = mount(StimulationStudioWidget, {
-        store,
-        localVue,
-      });
-      await wrapper.find(selector_str).trigger("click", {
-        shiftKey: true,
-      });
-      array_of_well_indices.map((well) => expect(wrapper.vm.stroke_width[well]).toBe(4));
-    }
-  );
-
-  test("Given that any wells are selected, When user Shift+clicks the Row/Column button or any individual well, Then wells corresponding are seleced with outline of 4px", async () => {
+  test("Given no wells are selected, When user shift+clicks a row label, Then corresponding unselected wells will toggle stroke-width of 4px and 0px", async () => {
     const wrapper = mount(StimulationStudioWidget, {
       store,
       localVue,
     });
-    new Array(24).map(async (well) => {
-      await wrapper.find().trigger("click", {
-        shiftKey: true,
-      });
-      expect(wrapper.vm.sroke_width[well]).toBe(4);
+    const test = [
+      ["#row_A", [0, 4, 8, 12, 16, 20]],
+      ["#row_B", [1, 5, 9, 13, 17, 21]],
+      ["#row_C", [2, 6, 10, 14, 18, 22]],
+      ["#row_D", [3, 7, 11, 15, 19, 23]],
+    ];
+    test.map(async (row) => {
+      await wrapper.find(row[0]).trigger("click", { shiftKey: true });
+      row[1].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(4));
+    });
+  });
+
+  test("Given no wells are selected, When user shift+clicks a column label, Then corresponding unselected wells will toggle stroke-width of 4px and 0px", async () => {
+    const wrapper = mount(StimulationStudioWidget, {
+      store,
+      localVue,
+    });
+    const test = [
+      ["#column_1", [0, 1, 2, 3]],
+      ["#column_2", [4, 5, 6, 7]],
+      ["#column_3", [8, 9, 10, 11]],
+      ["#column_4", [12, 13, 14, 15]],
+      ["#column_5", [16, 17, 18, 19]],
+      ["#column_6", [20, 21, 22, 23]],
+    ];
+    test.map(async (column) => {
+      await wrapper.find(column[0]).trigger("click", { shiftKey: true });
+      column[1].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(4));
     });
   });
 
@@ -201,33 +199,29 @@ describe("StimulationStudioWidget.vue", () => {
     expect(store.state.stimulation.selected_wells).toStrictEqual([3]);
   });
 
-  test("When an unselected is hovered over and left, Then it should toggle a stroke with of 2px and 0px", async () => {
+  test("When an unselected well is hovered over and left, Then the events should emit functions to parent components", async () => {
     const wrapper = mount(StimulationStudioWidget, {
       store,
       localVue,
     });
-    const test_wells = new Array(24);
-    test_wells.map(async (well) => {
-      await wrapper.find("#plate_" + well).trigger("enter-well");
-      expect(wrapper.vm.stroke_width[well]).toBe(2);
-      await wrapper.find("#plate_" + well).trigger("leave-well");
-      expect(wrapper.vm.stroke_width[well]).toBe(0);
-    });
+    const test = wrapper.findAll("circle");
+    for (let i = 0; i < 24; i++) {
+      expect(test.at(i).trigger("mouseenter")).toBeTruthy();
+      expect(test.at(i).trigger("mouseleave")).toBeTruthy();
+    }
   });
 
-  test("Given that no wells are selected, When user Shift+Click on %s, Then then well %s visually become selected due to %s (have the stroke outline and be mutated to state", async () => {
+  test("Given that no wells are selected, When user Shift+Click on the well, Then then events should emit functions to parent components", async () => {
     const wrapper = mount(StimulationStudioWidget, {
       store,
       localVue,
     });
-    const check_store = store.state.stimulation.selected_wells.length;
-    new Array(24).map(async (well) => {
-      await wrapper.find("#plate_" + well).trigger("click", {
-        shiftKey: true,
-      });
-      expect(wrapper.vm.sroke_width[well]).toBe(4);
-      expect(check_store).toBe(well);
-    });
+    const test = wrapper.findAll("circle");
+
+    for (let i = 0; i < 24; i++) {
+      expect(test.at(i).trigger("click", { shiftKey: true })).toBeTruthy();
+      expect(test.at(i).trigger("click", { shiftKey: true })).toBeTruthy();
+    }
   });
 
   test("Given any number of wells, but all are selected, When plus-minus icon is hovered over and left, Then all unselected wells should have a stroke width of 2", async () => {

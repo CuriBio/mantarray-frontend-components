@@ -60,7 +60,7 @@ describe("PlateWell.vue", () => {
       store,
       localVue,
     });
-    const plate = wrapper.find(".plate");
+    const plate = wrapper.find(".well");
 
     await plate.trigger("mouseenter");
     const enter_well_events = wrapper.emitted("enter-well");
@@ -85,7 +85,7 @@ describe("PlateWell.vue", () => {
       store,
       localVue,
     });
-    const plate = wrapper.find(".plate");
+    const plate = wrapper.find(".well");
 
     await plate.trigger("mouseleave");
     const leave_well_events = wrapper.emitted("leave-well");
@@ -111,7 +111,7 @@ describe("PlateWell.vue", () => {
       store,
       localVue,
     });
-    const plate = wrapper.find(".plate");
+    const plate = wrapper.find(".well");
 
     await plate.trigger("click");
     const click_well_events = wrapper.emitted("click-exact");
@@ -137,7 +137,7 @@ describe("PlateWell.vue", () => {
       store,
       localVue,
     });
-    const plate = wrapper.find(".plate");
+    const plate = wrapper.find(".well");
 
     await plate.trigger("click", {
       shiftKey: true, // For testing @click.shift handlers
@@ -166,7 +166,7 @@ describe("PlateWell.vue", () => {
       store,
       localVue,
     });
-    const plate = wrapper.find(".plate");
+    const plate = wrapper.find(".well");
 
     await plate.trigger("click", {
       ctrlKey: true, // For testing @click.ctrl handlers
