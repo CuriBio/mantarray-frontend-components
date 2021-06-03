@@ -199,33 +199,29 @@ describe("StimulationStudioWidget.vue", () => {
     expect(store.state.stimulation.selected_wells).toStrictEqual([3]);
   });
 
-  test("When an unselected well is hovered over and left, Then it should toggle a stroke with of 2px and 0px", async () => {
+  test("When an unselected well is hovered over and left, Then the events should emit functions to parent components", async () => {
     const wrapper = mount(StimulationStudioWidget, {
       store,
       localVue,
     });
-    const test_wells = new Array(24);
-    test_wells.map(async (well) => {
-      await wrapper.find("#plate_" + well).trigger("enter-well");
-      expect(wrapper.vm.stroke_width[well]).toBe(2);
-      await wrapper.find("#plate_" + well).trigger("leave-well");
-      expect(wrapper.vm.stroke_width[well]).toBe(0);
-    });
+    const test = wrapper.findAll("circle");
+    for (let i = 0; i < 24; i++) {
+      expect(test.at(i).trigger("mouseenter")).toBeTruthy();
+      expect(test.at(i).trigger("mouseleave")).toBeTruthy();
+    }
   });
 
-  test("Given that no wells are selected, When user Shift+Click on %s, Then then well %s visually become selected due to %s (have the stroke outline)", async () => {
+  test("Given that no wells are selected, When user Shift+Click on the well, Then then events should emit functions to parent components", async () => {
     const wrapper = mount(StimulationStudioWidget, {
       store,
       localVue,
     });
-    const check_store = store.state.stimulation.selected_wells.length;
-    new Array(24).map(async (well) => {
-      await wrapper.find("#plate_" + well).trigger("click", {
-        shiftKey: true,
-      });
-      expect(wrapper.vm.sroke_width[well]).toBe(4);
-      expect(check_store).toBe(well);
-    });
+    const test = wrapper.findAll("circle");
+
+    for (let i = 0; i < 24; i++) {
+      expect(test.at(i).trigger("click", { shiftKey: true })).toBeTruthy();
+      expect(test.at(i).trigger("click", { shiftKey: true })).toBeTruthy();
+    }
   });
 
   test("Given any number of wells, but all are selected, When plus-minus icon is hovered over and left, Then all unselected wells should have a stroke width of 2", async () => {

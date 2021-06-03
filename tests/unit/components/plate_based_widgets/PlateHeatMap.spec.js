@@ -160,20 +160,29 @@ describe("PlateHeatMap.vue", () => {
     await wrapper.find(".span__heatmap-toggle-plus-minus-icon").trigger("mouseleave");
   });
 
-  test("When an unselected well is hovered over and left, Then it should toggle a stroke with of 2px and 0px", async () => {
+  test("When an unselected well is hovered over and left, Then the events should emit functions to parent components", async () => {
     const wrapper = mount(PlateHeatMap, {
       store,
       localVue,
     });
+    const test = wrapper.findAll("circle");
+    for (let i = 0; i < 24; i++) {
+      expect(test.at(i).trigger("mouseenter")).toBeTruthy();
+      expect(test.at(i).trigger("mouseleave")).toBeTruthy();
+    }
+  });
 
-    new Array(24).map(async (well) => {
-      await wrapper.find("#well_" + well).trigger("enter-well");
-      expect(wrapper.vm.stroke_width[well]).toBe(2);
-      expect(wrapper.vm.hover_color[well]).toBe("#ececed");
-      await wrapper.find("#well_" + well).trigger("leave-well");
-      expect(wrapper.vm.stroke_width[well]).toBe(0);
-      expect(wrapper.vm.hover_color[well]).toBe("#b7b7b7");
+  test("Given that no wells are selected, When user Shift+Click on the well, Then then events should emit functions to parent components", async () => {
+    const wrapper = mount(PlateHeatMap, {
+      store,
+      localVue,
     });
+    const test = wrapper.findAll("circle");
+
+    for (let i = 0; i < 24; i++) {
+      expect(test.at(i).trigger("click", { shiftKey: true })).toBeTruthy();
+      expect(test.at(i).trigger("click", { shiftKey: true })).toBeTruthy();
+    }
   });
 
   test.each([
