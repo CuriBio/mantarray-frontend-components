@@ -22,11 +22,11 @@
       >
         <select
           class="w-100 h-100 edit-id"
-          style="border-radius: 0; background-color: #1c1c1c; border: 0px; color: #ffffff"
+          style="border-radius: 0; background-color: #1c1c1c; border: 0px; color: #ffffff; cursor: pointer"
           @change="changeSelection($event)"
         >
-          <option v-for="(item, idx) in options_text" :key="idx" :value="item">
-            {{ item }}
+          <option v-for="(item, idx) in dropdown_options" :key="idx" :value="item">
+            {{ item.name }}
           </option>
         </select>
       </span>
@@ -65,10 +65,16 @@ export default {
       for (let i = 0; i < this.options_text.length; i++) {
         // the options_text is required true so a minimal of one element is needed
         // if suppose options_text.length is zero(0) then return doesn't change its []
-        const name = {
-          id: this.options_id + i,
-          name: this.options_text[i],
-        };
+        let name;
+        typeof this.options_text[i] === "string"
+          ? (name = {
+              id: this.options_id + i,
+              name: this.options_text[i],
+            })
+          : (name = {
+              id: this.options_id + i,
+              name: this.options_text[i].letter + " " + this.options_text[i].label,
+            });
         list.push(name);
       }
       return list;
@@ -116,12 +122,10 @@ export default {
   border-radius: 0px;
   box-shadow: none;
   z-index: 3;
-  pointer-events: all;
 }
 
 .span__input-dropdown-content-label {
   pointer-events: all;
-  align: center;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
@@ -140,6 +144,7 @@ export default {
   color: rgb(255, 255, 255);
   text-align: center;
   z-index: 25;
+  cursor: pointer;
 }
 
 .span__input-controls-content-input-txt-widget {
@@ -174,7 +179,7 @@ export default {
   visibility: visible;
   z-index: 7;
   background-color: #1c1c1c;
-  padding: 5px;
+  padding: 10px;
 }
 
 .div__input-dropdown-controls-content-widget--invalid {
@@ -210,6 +215,5 @@ export default {
   font-style: normal;
   text-decoration: none;
   z-index: 17;
-  pointer-events: all;
 }
 </style>

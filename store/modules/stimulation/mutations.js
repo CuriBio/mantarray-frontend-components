@@ -6,4 +6,10 @@ export default {
     });
     state.selected_wells = well_values;
   },
+  apply_selected_protocol(state, idx) {
+    state.selected_wells.map((well) => (state.protocol_assignments[well] = state.protocol_list[idx]));
+  },
+  clear_selected_protocol(state) {
+    state.selected_wells.map((well) => delete state.protocol_assignments[well]);
+  },
 };

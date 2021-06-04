@@ -5,12 +5,16 @@
     >
     <span class="span__stimulationstudio-layout-subheader-label">Select/Create Protocol</span>
     <div class="div__stimulationstudio-select-dropdown-container">
-      <SelectDropDown :options_text="['Create New']" :input_width="550" />
+      <SelectDropDown
+        :options_text="protocol_list"
+        :input_width="550"
+        @selection-changed="selected_protocol_change"
+      />
     </div>
-    <canvas class="canvas__stimulationstudio-button-seperator" />
-    <div v-for="(key, value) in btn_labels" :key="value">
-      <div class="div__stimulationstudio-btn-container" :style="key">
-        <span class="span__stimulationstudio-btn-label">{{ value }}</span>
+    <canvas class="canvas__stimulationstudio-button-separator" />
+    <div v-for="(key, value, idx) in btn_labels" :key="value" @click.exact="handle_click(idx)">
+      <div :class="getClass(idx)" :style="key">
+        <span :class="getLabelClass(idx)">{{ value }}</span>
       </div>
     </div>
   </div>
@@ -18,6 +22,8 @@
 
 <script>
 import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
+import { mapGetters } from "vuex";
+
 export default {
   name: "StimulationStudioCreateAndEdit",
   components: {
@@ -32,7 +38,31 @@ export default {
         "Import Protocol(s)": " left: 45%; top: 75%; width: 25% ",
         "Export Protocol(s)": " left: 72%; top: 75%; width: 25% ",
       },
+      selected_protocol_idx: 0,
     };
+  },
+  computed: {
+    ...mapGetters("stimulation", {
+      protocol_list: "get_protocols",
+    }),
+  },
+  methods: {
+    selected_protocol_change(idx) {
+      this.selected_protocol_idx = idx;
+    },
+    handle_click(idx) {
+      if (idx === 0) this.$store.commit("stimulation/apply_selected_protocol", this.selected_protocol_idx);
+      else if (idx === 1) this.$store.commit("stimulation/clear_selected_protocol");
+    },
+    getClass(idx) {
+      if (this.selected_protocol_idx === 0 && idx === 0)
+        return "div__stimulationstudio-btn-container-disable";
+      else return "div__stimulationstudio-btn-container";
+    },
+    getLabelClass(idx) {
+      if (this.selected_protocol_idx === 0 && idx === 0) return "span__stimulationstudio-btn-label-disable";
+      else return "span__stimulationstudio-btn-label";
+    },
   },
 };
 </script>
@@ -102,7 +132,6 @@ export default {
 }
 
 .div__stimulationstudio-btn-container {
-  pointer-events: all;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -112,6 +141,23 @@ export default {
   visibility: visible;
   background: #b7b7b7;
 }
+
+.div__stimulationstudio-btn-container-disable {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: absolute;
+  width: 30%;
+  height: 50px;
+  visibility: visible;
+  background: #b7b7b7c9;
+}
+
+.div__stimulationstudio-btn-container:hover {
+  background: #b7b7b7c9;
+  cursor: pointer;
+}
+
 .span__stimulationstudio-btn-label {
   transform: translateZ(0px);
   line-height: 50px;
@@ -120,7 +166,15 @@ export default {
   color: rgb(0, 0, 0);
 }
 
-.canvas__stimulationstudio-button-seperator {
+.span__stimulationstudio-btn-label-disable {
+  transform: translateZ(0px);
+  line-height: 50px;
+  font-family: Muli;
+  font-size: 16px;
+  color: #6e6f72;
+}
+
+.canvas__stimulationstudio-button-separator {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;

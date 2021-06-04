@@ -3,6 +3,10 @@
     <div
       class="div__simulationstudio-plate-well-location"
       :style="'top:' + computed_top + 'px;' + 'left:' + computed_left + 'px;'"
+      @mouseenter="on_enter_well(index)"
+      @mouseleave="on_leave_well(index)"
+      @click.exact="on_click_exact(index)"
+      @click.shift.exact="on_click_shift_exact(index)"
     >
       <PlateWell
         class="well"
@@ -15,18 +19,11 @@
         :plate_fill="protocol_fill"
         :stroke_wdth="stroke_wdth"
         :index="index"
-        @enter-well="on_enter_well(index)"
-        @leave-well="on_leave_well(index)"
-        @click-exact="on_click_exact(index)"
-        @click-shift-exact="on_click_shift_exact(index)"
       ></PlateWell>
+      <span :class="'span__simulationstudio-plate-well-protocol-location'">
+        {{ protocol_type }}
+      </span>
     </div>
-    <span
-      class="span__simulationstudio-plate-well-protocol-location"
-      :style="'top:' + computed_protocol_top + 'px;' + 'left:' + computed_protocol_left + 'px;'"
-    >
-      {{ protocol_type }}
-    </span>
   </div>
 </template>
 <script>
@@ -229,25 +226,18 @@ export default {
   width: 66px;
   height: 66px;
   visibility: visible;
-  /* z-index: 9; */
+  /* z-index: 8; */
 }
-/* .span__simulationstudio-plate-well-protocol-location {
-  pointer-events: all;
+.span__simulationstudio-plate-well-protocol-location {
   line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  padding: 5px;
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  left: 32.5px;
+  bottom: 20px;
   visibility: visible;
-  user-select: none;
   font-family: Muli;
-  font-weight: bold;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 20px;
   color: rgb(255, 255, 255);
-  text-align: center;
-} */
+  cursor: pointer;
+}
 </style>

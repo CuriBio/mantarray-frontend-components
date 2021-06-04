@@ -1,23 +1,28 @@
 import mutations from "./mutations";
+import getters from "./getters";
 
 const state = () => ({
   selected_wells: [],
+  protocol_list: hardcoded_protocols,
+  protocol_assignments: {},
 });
 
 export default {
   namespaced: true,
   state,
   mutations,
+  getters,
 };
 
-// const hardcoded_protocols = {
-//   A: "#871d28",
-//   B: "#bd3532",
-//   C: "#df6147",
-//   D: "#f0a061",
-//   E: "#24524b",
-//   F: "#133836",
-//   G: "#f9d78c",
-//   H: "#45847b",
-//   I: "#83c0b3"
-// };
+const hardcoded_protocols = [
+  { letter: "", color: "", label: "Create New" },
+  { letter: "A", color: "#83c0b3", label: "test_A" },
+  { letter: "B", color: "#45847b", label: "test_B" },
+  { letter: "C", color: "#df6147", label: "test_C" },
+  { letter: "D", color: "#f0a061", label: "" },
+  { letter: "E", color: "#24524b", label: "" },
+  { letter: "F", color: "#133836", label: "" },
+  { letter: "G", color: "#f9d78c", label: "" },
+  { letter: "H", color: "#bd3532", label: "" },
+  { letter: "I", color: "#871d28", label: "" },
+];

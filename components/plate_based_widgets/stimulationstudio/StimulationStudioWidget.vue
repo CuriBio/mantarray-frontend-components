@@ -44,10 +44,10 @@
       <StimulationStudioPlateWell
         :id="'plate_' + well_index"
         :class="hover_color[well_index]"
-        :protocol_type="getProtocolAlphabet(protocol_codes[well_index])"
+        :protocol_type="getProtocolAlphabet(well_index)"
         :stroke="hover_color[well_index]"
         :stroke_wdth="stroke_width[well_index]"
-        :protocol_fill="getProtocolColor(protocol_codes[well_index])"
+        :protocol_fill="getProtocolColor(well_index)"
         :index="well_index"
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import StimulationStudioPlateWell from "@/components/basic_widgets/StimulationStudioPlateWell.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -78,14 +77,6 @@ const debug_mode = undefined;
 export default {
   name: "StimulationStudioWidget",
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
-  props: {
-    protocol_codes: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-  },
   data() {
     return {
       row_values: {
@@ -107,11 +98,12 @@ export default {
       all_select: new Array(24).fill(false),
       hover_color: new Array(24).fill(hover_color),
       stroke_width: new Array(24).fill(no_stroke_width),
+      protocol_assignments: {},
     };
   },
-  computed: {
-    ...mapState("stimulation", ["selected_wells"]),
-  },
+  // computed: {
+  //   ...mapState("stimulation", ["protocol_assignments"])
+  // },
   watch: {
     all_select: function (oldVal, newVal) {
       this.$store.commit("stimulation/handle_selected_wells", this.all_select);
@@ -122,6 +114,11 @@ export default {
     this.check_stroke_width();
     const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+    this.$store.subscribe((mutation) => {
+      if (mutation.type === "stimulation/apply_selected_protocol") {
+        this.protocol_assignments = this.$store.state.stimulation.protocol_assignments;
+      }
+    });
   },
   methods: {
     on_select_cancel_all(state) {
@@ -268,17 +265,17 @@ export default {
     column_left_offset(column) {
       switch (column) {
         case 1:
-          return "35.9792";
+          return "40";
         case 2:
-          return "97.5836";
+          return "103";
         case 3:
-          return "159.188";
+          return "164";
         case 4:
-          return "220.792";
+          return "225";
         case 5:
-          return "282.397";
+          return "285";
         case 6:
-          return "344.001";
+          return "348";
       }
     },
 
@@ -296,35 +293,13 @@ export default {
     },
 
     getProtocolColor(index) {
-      // if (index >= 0 && index <= 25) {
-      //   return "#19AC8A";
-      // }
-      // if (index >= 26 && index <= 51) {
-      //   return "#005470";
-      // }
-      // if (index >= 52 && index <= 77) {
-      //   return "#f9d78c";
-      // }
-      // if (index >= 78 && index <= 95) {
-      //   return "#df6147";
-      // }
-      return "#B7B7B7";
+      if (this.protocol_assignments[index] !== undefined) return this.protocol_assignments[index].color;
+      else return "#B7B7B7";
     },
 
-    getProtocolAlphabet(value) {
-      // if (value >= 0 && value <= 25) {
-      //   return this.alphabet[value];
-      // }
-      // if (value >= 26 && value <= 51) {
-      //   return this.alphabet[value - 26];
-      // }
-      // if (value >= 52 && value <= 77) {
-      //   return this.alphabet[value - 52];
-      // }
-      // if (value >= 78 && value <= 95) {
-      //   return this.alphabet[value - 78];
-      // }
-      return "";
+    getProtocolAlphabet(index) {
+      if (this.protocol_assignments[index] !== undefined) return this.protocol_assignments[index].letter;
+      else return "";
     },
   },
 };
@@ -404,6 +379,7 @@ export default {
 .span__stimulationstudio-column-index label:hover,
 .span__stimulationstudio-row-index label:hover {
   color: #ececed;
+  cursor: pointer;
 }
 .span__stimulationstudio-toggle-plus-minus-icon {
   overflow: hidden;
@@ -422,5 +398,6 @@ export default {
 }
 .span__stimulationstudio-toggle-plus-minus-icon:hover {
   color: #ffffff;
+  cursor: pointer;
 }
 </style>
