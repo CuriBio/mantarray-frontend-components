@@ -4,8 +4,8 @@ const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-fixture`stimulation/basic`.page // declare the fixture
-`http://localhost:8080/stimulation/basic`; // specify the start page
+fixture`stimulation/basic-current`.page // declare the fixture
+`http://localhost:8080/stimulation/basic-current`; // specify the start page
 
 test("testing the stimulation dialog for current settings", async (t) => {
   const screenshot_path_base = path.join("stimulation", "stimulation-dialog");
