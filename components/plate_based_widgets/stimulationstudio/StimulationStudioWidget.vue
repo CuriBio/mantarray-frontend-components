@@ -101,9 +101,6 @@ export default {
       protocol_assignments: {},
     };
   },
-  // computed: {
-  //   ...mapState("stimulation", ["protocol_assignments"])
-  // },
   watch: {
     all_select: function (oldVal, newVal) {
       this.$store.commit("stimulation/handle_selected_wells", this.all_select);
@@ -115,7 +112,11 @@ export default {
     const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
     this.$store.subscribe((mutation) => {
-      if (mutation.type === "stimulation/apply_selected_protocol") {
+      if (
+        mutation.type === "stimulation/apply_selected_protocol" ||
+        mutation.type === "stimulation/clear_selected_protocol"
+      ) {
+        this.protocol_assignments = {};
         this.protocol_assignments = this.$store.state.stimulation.protocol_assignments;
       }
     });

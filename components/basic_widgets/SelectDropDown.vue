@@ -22,11 +22,11 @@
       >
         <select
           class="w-100 h-100 edit-id"
-          style="border-radius: 0; background-color: #1c1c1c; border: 0px; cursor: pointer"
+          style="background-color: #1c1c1c; border: 0px; cursor: pointer; color: #b7b7b7"
           @change="changeSelection($event)"
         >
           <option v-for="(item, idx) in dropdown_options" :key="idx" :value="item">
-            <span style="'color: blue;'">test</span> <span style="'color: #b7b7b7;'">{{ item.name }}</span>
+            {{ item.name }}
           </option>
         </select>
       </span>
