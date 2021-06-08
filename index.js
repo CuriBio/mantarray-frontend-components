@@ -55,7 +55,7 @@ export { default as PlateWell } from "./components/basic_widgets/PlateWell.vue";
 export { default as InputWidget } from "./components/basic_widgets/InputWidget.vue";
 export { default as ButtonWidget } from "./components/basic_widgets/ButtonWidget.vue";
 export { default as InputDropDown } from "./components/basic_widgets/InputDropDown.vue";
-export { default as SelectDropDown } from "./components/basic_widgets/SelectDropDown.vue";
+export { default as NewSelectDropDown } from "./components/basic_widgets/NewSelectDropDown.vue";
 export { default as CheckBoxWidget } from "./components/basic_widgets/CheckBoxWidget.vue";
 export { default as RadioButtonWidget } from "./components/basic_widgets/RadioButtonWidget.vue";
 export { default as StimulationStudioPlateWell } from "./components/basic_widgets/StimulationStudioPlateWell.vue";
@@ -81,5 +81,4 @@ export { default as PlateHeatMap } from "./components/plate_based_widgets/mapedi
 export { default as StimulationStudioVoltageSettings } from "./components/stimulation/StimulationStudioVoltageSettings.vue";
 export { default as StimulationStudioCurrentSettings } from "./components/stimulation/StimulationStudioCurrentSettings.vue";
 export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";
-export { default as StimulationStudio } from "./components/stimulation/StimulationStudio.vue";
 export { default as DragAndDropPanel } from "./components/stimulation/DragAndDropPanel.vue";

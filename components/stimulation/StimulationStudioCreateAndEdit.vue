@@ -5,14 +5,15 @@
     >
     <span class="span__stimulationstudio-layout-subheader-label">Select/Create Protocol</span>
     <div class="div__stimulationstudio-select-dropdown-container">
-      <SelectDropDown
+      <NewSelectDropDown
         :options_text="protocol_list"
-        :input_width="550"
+        :input_width="input_width"
+        :input_height="input_height"
         @selection-changed="selected_protocol_change"
       />
     </div>
     <canvas class="canvas__stimulationstudio-button-separator" />
-    <div v-for="(key, value, idx) in btn_labels" :key="value" @click.exact="handle_click(idx)">
+    <div v-for="(key, value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
       <div :class="getClass(idx)" :style="key">
         <span :class="getLabelClass(idx)">{{ value }}</span>
       </div>
@@ -21,13 +22,14 @@
 </template>
 
 <script>
-import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
+// import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 import { mapGetters } from "vuex";
+import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
 
 export default {
   name: "StimulationStudioCreateAndEdit",
   components: {
-    SelectDropDown,
+    NewSelectDropDown,
   },
   data() {
     return {
@@ -39,12 +41,17 @@ export default {
         "Export Protocol(s)": " left: 72%; top: 75%; width: 25% ",
       },
       selected_protocol_idx: 0,
+      input_height: 26,
+      input_width: 550,
     };
   },
   computed: {
     ...mapGetters("stimulation", {
       protocol_list: "get_protocols",
     }),
+  },
+  watch: {
+    selected_protocol_idx: function () {},
   },
   methods: {
     selected_protocol_change(idx) {
@@ -115,7 +122,6 @@ export default {
 }
 .div__stimulationstudio-select-dropdown-container {
   pointer-events: all;
-  white-space: nowrap;
   line-height: 100%;
   transform: rotate(0deg);
   position: absolute;
@@ -124,7 +130,7 @@ export default {
   top: 75px;
   right: 380px;
   padding: 5px;
-  visibility: visible;
+  z-index: 1;
 }
 .div__stimulationstudio-select-dropdown-container > .div__input-dropdown-background {
   background: none;
@@ -138,7 +144,6 @@ export default {
   position: absolute;
   width: 30%;
   height: 50px;
-  visibility: visible;
   background: #b7b7b7;
 }
 
@@ -149,7 +154,6 @@ export default {
   position: absolute;
   width: 30%;
   height: 50px;
-  visibility: visible;
   background: #b7b7b7c9;
 }
 

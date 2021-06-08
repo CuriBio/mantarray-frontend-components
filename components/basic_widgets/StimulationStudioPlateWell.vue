@@ -131,76 +131,6 @@ export default {
           return 339;
       }
     },
-    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
-    // eslint-disable-next-line vue/return-in-computed-property
-    computed_protocol_top: function () {
-      switch (this.index) {
-        case 0:
-        case 4:
-        case 8:
-        case 12:
-        case 16:
-        case 20:
-          return 43;
-        case 1:
-        case 5:
-        case 9:
-        case 13:
-        case 17:
-        case 21:
-          return 102.925;
-        case 2:
-        case 6:
-        case 10:
-        case 14:
-        case 18:
-        case 22:
-          return 162.851;
-        case 3:
-        case 7:
-        case 11:
-        case 15:
-        case 19:
-        case 23:
-          return 222.73;
-      }
-    },
-    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
-    // eslint-disable-next-line vue/return-in-computed-property
-    computed_protocol_left: function () {
-      switch (this.index) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-          return 52.5;
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-          return 114.105;
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-          return 175.709;
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-          return 237.313;
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-          return 298.921;
-        case 20:
-        case 21:
-        case 22:
-        case 23:
-          return 361.521;
-      }
-    },
   },
   methods: {
     on_enter_well(index) {
@@ -235,6 +165,7 @@ export default {
   position: fixed;
   left: 32.5px;
   bottom: 20px;
+  font-weight: bold;
   visibility: visible;
   font-family: Muli;
   color: rgb(255, 255, 255);
