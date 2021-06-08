@@ -50,9 +50,6 @@ export default {
       protocol_list: "get_protocols",
     }),
   },
-  watch: {
-    selected_protocol_idx: function () {},
-  },
   methods: {
     selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
