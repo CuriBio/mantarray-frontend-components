@@ -1,5 +1,5 @@
 <template>
-  <svg :height="svg_height" :width="svg_width" :index="index">
+  <svg :height="svg_height" :width="svg_width" :index="index" style="cursor: pointer">
     <circle
       class="well"
       :cx="circle_x"

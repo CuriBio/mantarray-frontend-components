@@ -3,6 +3,10 @@
     <div
       class="div__simulationstudio-plate-well-location"
       :style="'top:' + computed_top + 'px;' + 'left:' + computed_left + 'px;'"
+      @mouseenter="on_enter_well(index)"
+      @mouseleave="on_leave_well(index)"
+      @click.exact="on_click_exact(index)"
+      @click.shift.exact="on_click_shift_exact(index)"
     >
       <PlateWell
         class="well"
@@ -15,18 +19,11 @@
         :plate_fill="protocol_fill"
         :stroke_wdth="stroke_wdth"
         :index="index"
-        @enter-well="on_enter_well(index)"
-        @leave-well="on_leave_well(index)"
-        @click-exact="on_click_exact(index)"
-        @click-shift-exact="on_click_shift_exact(index)"
       ></PlateWell>
+      <span :class="'span__simulationstudio-plate-well-protocol-location'">
+        {{ protocol_type }}
+      </span>
     </div>
-    <span
-      class="span__simulationstudio-plate-well-protocol-location"
-      :style="'top:' + computed_protocol_top + 'px;' + 'left:' + computed_protocol_left + 'px;'"
-    >
-      {{ protocol_type }}
-    </span>
   </div>
 </template>
 <script>
@@ -134,76 +131,6 @@ export default {
           return 339;
       }
     },
-    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
-    // eslint-disable-next-line vue/return-in-computed-property
-    computed_protocol_top: function () {
-      switch (this.index) {
-        case 0:
-        case 4:
-        case 8:
-        case 12:
-        case 16:
-        case 20:
-          return 43;
-        case 1:
-        case 5:
-        case 9:
-        case 13:
-        case 17:
-        case 21:
-          return 102.925;
-        case 2:
-        case 6:
-        case 10:
-        case 14:
-        case 18:
-        case 22:
-          return 162.851;
-        case 3:
-        case 7:
-        case 11:
-        case 15:
-        case 19:
-        case 23:
-          return 222.73;
-      }
-    },
-    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
-    // eslint-disable-next-line vue/return-in-computed-property
-    computed_protocol_left: function () {
-      switch (this.index) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-          return 52.5;
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-          return 114.105;
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-          return 175.709;
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-          return 237.313;
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-          return 298.921;
-        case 20:
-        case 21:
-        case 22:
-        case 23:
-          return 361.521;
-      }
-    },
   },
   methods: {
     on_enter_well(index) {
@@ -229,25 +156,19 @@ export default {
   width: 66px;
   height: 66px;
   visibility: visible;
-  /* z-index: 9; */
+  /* z-index: 8; */
 }
-/* .span__simulationstudio-plate-well-protocol-location {
-  pointer-events: all;
+.span__simulationstudio-plate-well-protocol-location {
   line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  left: 32.5px;
+  bottom: 20px;
   font-weight: bold;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 20px;
+  visibility: visible;
+  font-family: Muli;
   color: rgb(255, 255, 255);
-  text-align: center;
-} */
+  cursor: pointer;
+}
 </style>

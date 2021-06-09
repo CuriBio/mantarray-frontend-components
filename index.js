@@ -28,6 +28,7 @@ export {
   system_status_when_server_initializing_regexp,
   all_mantarray_commands_regexp,
 } from "./store/modules/flask/url_regex";
+export { default as stimulation_store_module } from "./store/modules/stimulation";
 
 // Waveform Components
 export { default as Waveform } from "./components/playback/waveform/Waveform.vue";
@@ -54,7 +55,7 @@ export { default as PlateWell } from "./components/basic_widgets/PlateWell.vue";
 export { default as InputWidget } from "./components/basic_widgets/InputWidget.vue";
 export { default as ButtonWidget } from "./components/basic_widgets/ButtonWidget.vue";
 export { default as InputDropDown } from "./components/basic_widgets/InputDropDown.vue";
-export { default as SelectDropDown } from "./components/basic_widgets/SelectDropDown.vue";
+export { default as NewSelectDropDown } from "./components/basic_widgets/NewSelectDropDown.vue";
 export { default as CheckBoxWidget } from "./components/basic_widgets/CheckBoxWidget.vue";
 export { default as RadioButtonWidget } from "./components/basic_widgets/RadioButtonWidget.vue";
 export { default as StimulationStudioPlateWell } from "./components/basic_widgets/StimulationStudioPlateWell.vue";
@@ -76,8 +77,8 @@ export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDia
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
 export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
 
-// Stimulation Studio Voltage Settings
+// Stimulation Studio
 export { default as StimulationStudioVoltageSettings } from "./components/stimulation/StimulationStudioVoltageSettings.vue";
-
-// Stimulation Studio Current Settings
 export { default as StimulationStudioCurrentSettings } from "./components/stimulation/StimulationStudioCurrentSettings.vue";
+export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";
+export { default as DragAndDropPanel } from "./components/stimulation/DragAndDropPanel.vue";

@@ -87,14 +87,15 @@
 
     <!-- original mockflow ID: cmpDa1c3ce66a0c6d38c39ace76539269b2f  -->
     <div class="div__heatmap-layout-display-input-dropdown-container">
-      <SelectDropDown
+      <NewSelectDropDown
         :title_label="label"
         :value.sync="entrykey"
         :options_text="metric_names"
         :options_id="'display'"
         :input_width="entry_width"
+        :input_height="input_height"
         @selection-changed="metric_selection_changed"
-      ></SelectDropDown>
+      />
     </div>
 
     <!-- original mockflow ID: cmpDc08190eb24c68e02c278bde19882becb -->
@@ -154,7 +155,7 @@
 import { mapState, mapGetters } from "vuex";
 import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
-import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
+import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
 import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
 import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
@@ -165,7 +166,7 @@ export default {
     PlateHeatMap,
     GradientBar,
     InputWidget,
-    SelectDropDown,
+    NewSelectDropDown,
     CheckBoxWidget,
     RadioButtonWidget,
   },
@@ -184,6 +185,7 @@ export default {
       height: 481,
       is_apply_set: false,
       radio_option_idx: 0,
+      input_height: 45,
       unit: "μN",
       heatmap_option: "",
       max_heatmap_value: "invalid",
@@ -796,11 +798,11 @@ export default {
   transform: rotate(0deg);
   position: absolute;
   width: 210px;
-  height: 50px;
   top: 347px;
   left: 1384px;
   padding: 5px;
   visibility: visible;
+  z-index: 10;
 }
 
 .canvas__heatmap-settings-color-scheme-seperator {

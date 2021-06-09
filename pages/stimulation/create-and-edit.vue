@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <StimulationStudioCreateAndEdit></StimulationStudioCreateAndEdit>
+  <div style="top: 111px; left: 88px; position: absolute">
+    <StimulationStudioCreateAndEdit />
   </div>
 </template>
 

@@ -92,4 +92,46 @@ describe("StimulationStudioPlateWell.vue", () => {
     await wrapper.vm.on_click_shift_exact(0);
     expect(wrapper.emitted("click-shift-exact")).toBeTruthy();
   });
+
+  test.each([
+    [26, [0, 4, 8, 12, 16, 20]],
+    [86, [1, 5, 9, 13, 17, 21]],
+    [146, [2, 6, 10, 14, 18, 22]],
+    [206, [3, 7, 11, 15, 19, 23]],
+  ])(
+    "When StimulationStudioPlateWell is mounted, Then the correct computed top placement should be assigned to each well",
+    async (placement, wells) => {
+      wells.map(async (well) => {
+        const wrapper = mount(StimulationStudioPlateWell, {
+          propsData: {
+            index: well,
+          },
+          localVue,
+        });
+        expect(wrapper.vm.computed_top).toBe(placement);
+      });
+    }
+  );
+
+  test.each([
+    [30, [0, 1, 2, 3]],
+    [91, [4, 5, 6, 7]],
+    [153, [8, 9, 10, 11]],
+    [215, [12, 13, 14, 15]],
+    [277, [16, 17, 18, 19]],
+    [339, [20, 21, 22, 23]],
+  ])(
+    "When StimulationStudioPlateWell is mounted, Then the correct computed left placement should be assigned to each well",
+    async (placement, wells) => {
+      wells.map(async (well) => {
+        const wrapper = mount(StimulationStudioPlateWell, {
+          propsData: {
+            index: well,
+          },
+          localVue,
+        });
+        expect(wrapper.vm.computed_left).toBe(placement);
+      });
+    }
+  );
 });
