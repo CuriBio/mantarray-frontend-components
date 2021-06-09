@@ -2,6 +2,10 @@
   <div class="div__DragAndDdrop-background">
     <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
     <canvas class="canvas__stimulationstudio-header-seperator" width="272" height="2"> </canvas>
+    <div>
+      <img class="img__monophsic-tile" src="~/assets/Monophasic-tile.png" />
+      <img class="img__monophsic-tile" src="~/assets/Biphasic-tile.png" />
+    </div>
   </div>
 </template>
 <script>
@@ -26,6 +30,14 @@ export default {
   display: flex;
   justify-content: center;
 }
+
+img {
+  height: 12%;
+  position: relative;
+  padding: 7px;
+  top: 9%;
+}
+
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;
   line-height: 100%;
