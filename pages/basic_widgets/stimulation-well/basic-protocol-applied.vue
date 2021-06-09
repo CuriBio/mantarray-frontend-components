@@ -1,14 +1,8 @@
 <template>
   <div>
     <ComponentToTest
-      :classname="'plate_0'"
       :protocol_type="'A'"
-      :svg_height="72"
-      :svg_width="72"
-      :circle_x="36"
-      :circle_y="36"
-      :radius="28"
-      :stroke="'#000000'"
+      :stroke="'#FFFFFF'"
       :protocol_fill="'#19AC8A'"
       :stroke_width="4"
       :index="0"
