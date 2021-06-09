@@ -51,7 +51,6 @@ export default {
   },
   data() {
     return {
-      input_dropdown_value_key: this.value,
       input_width_background: this.input_width + 4,
       visible: false,
       chosen_option: null,
@@ -60,11 +59,8 @@ export default {
   },
   computed: {
     dropdown_options: function () {
-      const list = []; // list is empty to start
-
+      const list = [];
       for (let i = 0; i < this.options_text.length; i++) {
-        // the options_text is required true so a minimal of one element is needed
-        // if suppose options_text.length is zero(0) then return doesn't change its []
         let name;
         typeof this.options_text[i] === "string"
           ? (name = {
@@ -77,8 +73,6 @@ export default {
               letter: this.options_text[i].letter + " ",
               color: this.options_text[i].color,
             });
-        // if (this.options_text[i].name == this.chosen_option) return;
-        // else
         list.push(name);
       }
       return list;
@@ -89,20 +83,8 @@ export default {
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
     },
-    input_feedback_top: function () {
-      return this.title_label !== "" ? 88 : 48;
-    },
   },
   watch: {
-    input_dropdown_value_key: function () {
-      // This is a very sensitive computed function as its invoked on every key entry by user action
-      // the function would never have any processing its only responsible to pass the value of string to the parent component
-      // any modification to add logic might impact depedent functionalities, request to consult Eli or Raghu
-      this.$emit("update:value", this.input_dropdown_value_key);
-    },
-    value: function () {
-      this.input_dropdown_value_key = this.value;
-    },
     chosen_option: function () {
       this.options_list = this.dropdown_options.filter((option) => {
         if (option !== this.chosen_option) return option;

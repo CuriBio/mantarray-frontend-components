@@ -238,4 +238,14 @@ describe("StimulationStudioWidget.vue", () => {
       expect(well).toBe(0);
     });
   });
+
+  test("When mutation occurs to clear or apply protocols, Then the assignments in StimulationStudioWidget will change and rerender immediately", async () => {
+    const wrapper = mount(StimulationStudioWidget, {
+      store,
+      localVue,
+    });
+    await store.commit("stimulation/handle_selected_wells", [false, true, false, false]);
+    await store.commit("stimulation/apply_selected_protocol", 2);
+    expect(wrapper.vm.protocol_assignments).toBe(store.state.stimulation.protocol_assignments);
+  });
 });
