@@ -6,6 +6,7 @@
     <StimulationStudioWidget />
     <StimulationStudioCreateAndEdit />
     <DragAndDropPanel />
+    <ProtocolBlockViewEditor />
   </div>
 </template>
 
@@ -13,6 +14,7 @@
 import StimulationStudioCreateAndEdit from "@/components/stimulation/StimulationStudioCreateAndEdit.vue";
 import StimulationStudioWidget from "@/components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 import DragAndDropPanel from "@/components/stimulation/DragAndDropPanel.vue";
+import ProtocolBlockViewEditor from "@/components/stimulation/ProtocolBlockViewEditor.vue";
 
 export default {
   name: "StimulationStudio",
@@ -20,6 +22,7 @@ export default {
     StimulationStudioWidget,
     StimulationStudioCreateAndEdit,
     DragAndDropPanel,
+    ProtocolBlockViewEditor,
   },
 };
 </script>
@@ -76,13 +79,11 @@ export default {
 }
 .div__stimulationstudio-header-container {
   transform: rotate(0deg);
-  /* box-sizing: border-box; */
   background: rgb(17, 17, 17);
   position: absolute;
   width: 82%;
   left: 18%;
   height: 6%;
-  /* visibility: visible; */
   border-bottom: 2px solid black;
   pointer-events: all;
 }

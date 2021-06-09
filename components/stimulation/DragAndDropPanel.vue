@@ -1,5 +1,5 @@
 <template>
-  <div class="div__heatmap-layout-heatmap-settings-panel">
+  <div class="div__DragAndDdrop-background">
     <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
     <canvas class="canvas__stimulationstudio-header-seperator" width="272" height="2"> </canvas>
   </div>
@@ -10,7 +10,7 @@ export default {
 };
 </script>
 <style scoped>
-.div__heatmap-layout-heatmap-settings-panel {
+.div__DragAndDdrop-background {
   transform: rotate(0deg);
   box-sizing: border-box;
   background: rgb(17, 17, 17);

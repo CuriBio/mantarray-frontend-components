@@ -82,3 +82,4 @@ export { default as StimulationStudioVoltageSettings } from "./components/stimul
 export { default as StimulationStudioCurrentSettings } from "./components/stimulation/StimulationStudioCurrentSettings.vue";
 export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";
 export { default as DragAndDropPanel } from "./components/stimulation/DragAndDropPanel.vue";
+export { default as ProtocolBlockViewEditor } from "./components/stimulation/ProtocolBlockViewEditor.vue";
