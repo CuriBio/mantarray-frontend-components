@@ -4,10 +4,10 @@
       <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
       <canvas class="canvas__stimulationstudio-header-separator" width="272" height="2" />
       <draggable
-        :list="icon_types"
         tag="div"
-        :group="{ name: 'order', pull: 'clone', put: false }"
         style="display: flex; width: 100%; justify-content: space-evenly; margin-top: 80px"
+        :list="icon_types"
+        :group="{ name: 'order', pull: 'clone', put: false }"
       >
         <div v-for="(types, idx) in icon_types" :key="idx">
           <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
@@ -16,10 +16,10 @@
     </div>
     <div class="div__scroll-container">
       <draggable
-        :list="protocol_order"
         group="order"
         class="dropzone"
         style="width: 100%; overflow: hidden; height: 118px; display: flex"
+        :list="protocol_order"
       >
         <div v-for="(types, idx) in protocol_order" :key="idx">
           <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
