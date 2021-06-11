@@ -1,41 +1,98 @@
 <template>
-  <div class="div__DragAndDdrop-background">
-    <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
-    <canvas class="canvas__stimulationstudio-header-seperator" width="272" height="2"> </canvas>
-    <div>
-      <img class="img__monophsic-tile" src="~/assets/Monophasic-tile.png" />
-      <img class="img__monophsic-tile" src="~/assets/Biphasic-tile.png" />
+  <div class="div__background-container">
+    <div class="div__DragAndDdrop-panel">
+      <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
+      <canvas class="canvas__stimulationstudio-header-separator" width="272" height="2" />
+      <draggable
+        :list="icon_types"
+        tag="div"
+        :group="{ name: 'order', pull: 'clone', put: false }"
+        style="display: flex; width: 100%; justify-content: space-evenly; margin-top: 80px"
+      >
+        <div v-for="(types, idx) in icon_types" :key="idx">
+          <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+        </div>
+      </draggable>
+    </div>
+    <div class="div__scroll-container">
+      <draggable
+        :list="protocol_order"
+        group="order"
+        class="dropzone"
+        style="width: 100%; overflow: hidden; height: 118px; display: flex"
+      >
+        <div v-for="(types, idx) in protocol_order" :key="idx">
+          <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+        </div>
+      </draggable>
     </div>
   </div>
 </template>
 <script>
+import draggable from "vuedraggable";
 export default {
   name: "DragAndDropPanel",
+  components: {
+    draggable,
+  },
+  data() {
+    return {
+      icon_types: [
+        { type: "Monophasic", src: require("@/assets/Monophasic-tile.png") },
+        { type: "Biphasic", src: require("@/assets/Biphasic-tile.png") },
+      ],
+      protocol_order: [],
+    };
+  },
+  method: {
+    log(e) {
+      console.log(e);
+    },
+  },
 };
 </script>
 <style scoped>
-.div__DragAndDdrop-background {
-  transform: rotate(0deg);
-  box-sizing: border-box;
+.div__DragAndDdrop-panel {
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 18%;
-  height: 94%;
+  width: 23%;
+  height: 100%;
   bottom: 0;
-  left: 82%;
   visibility: visible;
   box-shadow: none;
-  pointer-events: all;
-  border: 2px solid rgb(17, 17, 17);
+  border: 2px solid rgb(0, 0, 0);
   display: flex;
   justify-content: center;
 }
 
-img {
-  height: 12%;
+.div__icon-container {
+  margin-top: 80px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  border: 2px solid white;
+}
+
+.div__background-container {
+  position: absolute;
+  width: 80%;
+  left: 20%;
+  height: 93.5%;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.div__scroll-container {
   position: relative;
-  padding: 7px;
-  top: 9%;
+  top: 46%;
+  width: 73%;
+  right: 26%;
+  height: 13%;
+  overflow-x: scroll;
+  background: rgb(27, 27, 27);
+  z-index: 3;
+  white-space: nowrap;
 }
 
 .span__stimulationstudio-drag-drop-header-label {
@@ -51,7 +108,7 @@ img {
   color: rgb(255, 255, 255);
   text-align: center;
 }
-.canvas__stimulationstudio-header-seperator {
+.canvas__stimulationstudio-header-separator {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;
