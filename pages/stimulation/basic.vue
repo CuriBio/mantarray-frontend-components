@@ -29,7 +29,6 @@ export default {
 
 <style>
 .div__stimulationstudio-layout-background {
-  transform: rotate(0deg);
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
@@ -37,14 +36,10 @@ export default {
   position: absolute;
   width: 1800px;
   height: 1000px;
-  top: 0px;
   left: 1px;
-  visibility: visible;
   border: 0px none rgb(0, 0, 0);
-  border-radius: 0px;
-  box-shadow: none;
-  pointer-events: all;
 }
+
 .span__stimulationstudio-header-label {
   pointer-events: all;
   line-height: 100%;

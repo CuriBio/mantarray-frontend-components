@@ -12,4 +12,19 @@ export default {
   clear_selected_protocol(state) {
     state.selected_wells.map((well) => delete state.protocol_assignments[well]);
   },
+  handle_stimulation_type(state, type) {
+    state.new_protocol.stimulation_type = type;
+  },
+  handle_stop_requirement(state, input) {
+    state.new_protocol.stop_requirement = input;
+  },
+  handle_time_input(state, input) {
+    state.new_protocol.frequency = input;
+  },
+  handle_time_unit(state, unit) {
+    state.new_protocol.time_unit = unit;
+  },
+  handle_protocol_name(state, name) {
+    state.new_protocol.name = name;
+  },
 };

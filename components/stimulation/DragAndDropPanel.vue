@@ -1,39 +1,56 @@
 <template>
-  <div class="div__background-container">
-    <div class="div__DragAndDdrop-panel">
-      <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
-      <canvas class="canvas__stimulationstudio-header-separator" width="272" height="2" />
-      <draggable
-        tag="div"
-        style="display: flex; width: 100%; justify-content: space-evenly; margin-top: 80px"
-        :list="icon_types"
-        :group="{ name: 'order', pull: 'clone', put: false }"
-      >
-        <div v-for="(types, idx) in icon_types" :key="idx">
-          <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+  <div>
+    <div :class="modal_type !== null ? 'modal_overlay' : null">
+      <div class="div__background-container">
+        <div class="div__DragAndDdrop-panel">
+          <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
+          <canvas class="canvas__stimulationstudio-header-separator" width="272" height="2" />
+          <draggable
+            tag="div"
+            style="display: flex; width: 100%; justify-content: space-evenly; margin-top: 80px"
+            :list="icon_types"
+            :group="{ name: 'order', pull: 'clone', put: false }"
+          >
+            <div v-for="(types, idx) in icon_types" :key="idx">
+              <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+            </div>
+          </draggable>
         </div>
-      </draggable>
+        <div class="div__scroll-container">
+          <draggable
+            group="order"
+            class="dropzone"
+            style="width: 100%; height: 118px; display: flex"
+            :list="protocol_order"
+            :ghost-class="'ghost'"
+            @change="check_type($event)"
+          >
+            <div v-for="(types, idx) in protocol_order" :key="idx">
+              <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+            </div>
+          </draggable>
+        </div>
+      </div>
     </div>
-    <div class="div__scroll-container">
-      <draggable
-        group="order"
-        class="dropzone"
-        style="width: 100%; overflow: hidden; height: 118px; display: flex"
-        :list="protocol_order"
-      >
-        <div v-for="(types, idx) in protocol_order" :key="idx">
-          <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
-        </div>
-      </draggable>
+    <div v-if="modal_type !== null" class="modal-container">
+      <WaveformSettingModal
+        :stimulation_type="stimulation_type"
+        :waveform_type="modal_type"
+        @close="on_modal_close"
+      />
     </div>
   </div>
 </template>
 <script>
 import draggable from "vuedraggable";
+import WaveformSettingModal from "@/components/stimulation/WaveformSettingModal.vue";
+import { mapGetters } from "vuex";
+
 export default {
   name: "DragAndDropPanel",
   components: {
     draggable,
+    WaveformSettingModal,
   },
   data() {
     return {
@@ -42,11 +59,25 @@ export default {
         { type: "Biphasic", src: require("@/assets/Biphasic-tile.png") },
       ],
       protocol_order: [],
+      modal_type: null,
+      setting_type: "Current",
     };
   },
-  method: {
-    log(e) {
-      console.log(e);
+  computed: {
+    ...mapGetters("stimulation", {
+      stimulation_type: "get_stimulation_type",
+    }),
+  },
+  methods: {
+    check_type(e) {
+      if (e.added) {
+        const { element } = e.added;
+        if (element.type === "Monophasic") this.modal_type = "Monophasic";
+        else if (element.type === "Biphasic") this.modal_type = "Biphasic";
+      }
+    },
+    on_modal_close() {
+      this.modal_type = null;
     },
   },
 };
@@ -58,9 +89,6 @@ export default {
   width: 23%;
   height: 100%;
   bottom: 0;
-  visibility: visible;
-  box-shadow: none;
-  border: 2px solid rgb(0, 0, 0);
   display: flex;
   justify-content: center;
 }
@@ -73,25 +101,45 @@ export default {
   border: 2px solid white;
 }
 
+.ghost {
+  border: 1px solid #b7b7b7;
+  padding: 0 8px 0 8px;
+}
+
+.modal-container {
+  left: 36%;
+  position: absolute;
+  top: 10%;
+}
+
 .div__background-container {
   position: absolute;
   width: 80%;
   left: 20%;
-  height: 93.5%;
+  height: 94%;
   bottom: 0;
   display: flex;
   justify-content: flex-end;
 }
 
+.modal_overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgb(0, 0, 0);
+  z-index: 5;
+  opacity: 0.5;
+}
+
 .div__scroll-container {
-  position: relative;
-  top: 46%;
+  position: absolute;
+  top: 47%;
   width: 73%;
   right: 26%;
   height: 13%;
   overflow-x: scroll;
   background: rgb(27, 27, 27);
-  z-index: 3;
+  z-index: 1;
   white-space: nowrap;
 }
 

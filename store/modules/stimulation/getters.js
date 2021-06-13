@@ -8,4 +8,8 @@ export default {
       if (state.protocol_list[i].label === "") return state.protocol_list[i];
     }
   },
+  get_stimulation_type(state) {
+    if (state.new_protocol.stimulation_type.includes("Current")) return "Current";
+    if (state.new_protocol.stimulation_type.includes("Voltage")) return "Voltage";
+  },
 };

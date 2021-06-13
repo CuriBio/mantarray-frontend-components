@@ -105,7 +105,7 @@ export default {
   white-space: nowrap;
   transform: translateZ(0px);
   position: absolute;
-  height: 20px;
+  height: 25px;
   line-height: 27px;
   top: 0px;
   left: 0px;
@@ -126,8 +126,6 @@ export default {
   position: absolute;
   right: 10px;
   top: 43%;
-  width: 0;
-  height: 0;
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 6px solid #888;
@@ -149,6 +147,7 @@ ul {
   color: #b7b7b7;
   border-top: 1px solid rgb(17, 17, 17);
 }
+
 li {
   padding: 4px 10px 4px 10px;
   color: #b7b7b7;

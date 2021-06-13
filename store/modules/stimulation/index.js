@@ -5,6 +5,14 @@ const state = () => ({
   selected_wells: [],
   protocol_list: hardcoded_protocols,
   protocol_assignments: {},
+  new_protocol: {
+    name: "",
+    stimulation_type: "Voltage Controlled Stimulation",
+    stop_requirement: "",
+    frequency: "",
+    time_unit: "",
+    waveform_list: [],
+  },
 });
 
 export default {

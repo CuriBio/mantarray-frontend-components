@@ -22,7 +22,6 @@
 </template>
 
 <script>
-// import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 import { mapGetters } from "vuex";
 import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
 
@@ -41,7 +40,7 @@ export default {
         "Export Protocol(s)": " left: 72%; top: 75%; width: 25% ",
       },
       selected_protocol_idx: 0,
-      input_height: 26,
+      input_height: 45,
       input_width: 550,
     };
   },

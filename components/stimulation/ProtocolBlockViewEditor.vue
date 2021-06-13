@@ -17,30 +17,38 @@
     <div class="div__Editor-background">
       <div class="div__setting-panel-container">
         <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
-        <input class="protocol_input" placeholder="Protocol Name" :disabled="disabled == 1" />
+        <input
+          class="protocol_input"
+          placeholder="Protocol Name"
+          :disabled="disabled == 1"
+          @change="handle_protocol_name($event)"
+        />
         <img class="img__pencil-icon" src="~/assets/pencil-icon.png" @click="handleInput()" />
         <div class="div__right-settings-panel">
           <SmallDropDown
-            :input_height="11"
-            :input_width="180"
+            :input_height="25"
+            :input_width="190"
             :options_text="stimulation_types"
             :style="'margin-right: 2%; z-index: 2;'"
+            @selection-changed="handle_stimulation_type"
           />
           <!-- <canvas class="canvas__separator" /> -->
           <span class="span__settings-label">Stimulate</span>
           <SmallDropDown
-            :input_height="11"
-            :input_width="100"
+            :input_height="25"
+            :input_width="105"
             :options_text="until_options"
             :style="' z-index: 2;'"
+            @selection-changed="handle_stop_requirement"
           />
           <span class="span__settings-label">every</span>
-          <input class="number_input" placeholder=" " />
+          <input class="number_input" placeholder="" @change="handle_time_input($event)" />
           <SmallDropDown
-            :input_height="11"
-            :input_width="80"
-            :options_text="time_options"
+            :input_height="25"
+            :input_width="95"
+            :options_text="time_units"
             :style="' z-index: 2;'"
+            @selection-changed="handle_time_unit"
           />
           <!-- <canvas class="canvas__separator" /> -->
           <img class="img__trash-icon" src="~/assets/trash-icon.png" @click="handleTrash()" />
@@ -66,7 +74,7 @@ export default {
       current_color: "",
       stimulation_types: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
       until_options: ["Until Stopped", "Until ... "],
-      time_options: ["seconds", "milliseconds"],
+      time_units: ["seconds", "milliseconds"],
     };
   },
   computed: {
@@ -88,6 +96,27 @@ export default {
     handleTrash() {
       console.log("trashed");
     },
+    handle_protocol_name(e) {
+      const { target } = e;
+      this.$store.commit("stimulation/handle_protocol_name", target.value);
+    },
+    handle_stimulation_type(idx) {
+      const type = this.stimulation_types[idx];
+      this.$store.commit("stimulation/handle_stimulation_type", type);
+    },
+    handle_stop_requirement(idx) {
+      const requirement = this.until_options[idx];
+      this.$store.commit("stimulation/handle_stop_requirement", requirement);
+    },
+    handle_time_input(e) {
+      const { target } = e;
+      this.$store.commit("stimulation/handle_time_input", target.value);
+    },
+    handle_time_unit(idx) {
+      const unit = this.time_units[idx];
+      this.$store.commit("stimulation/handle_time_unit", unit);
+      console.log(this.$store.state.stimulation);
+    },
   },
 };
 </script>
@@ -107,7 +136,7 @@ export default {
   height: 8px;
   padding: 10px;
   font-size: 12px;
-  margin-bottom: 1%;
+  margin-bottom: 2%;
   margin-left: 2%;
 }
 .div__setting-panel-container {
@@ -151,12 +180,13 @@ img:hover {
 }
 .number_input {
   background: #1c1c1c;
-  height: 25px;
+  height: 26px;
   width: 40px;
   border: none;
   color: #b7b7b7;
-  font-size: 11px;
+  font-size: 12px;
   margin-right: 1%;
+  text-align: center;
 }
 .protocol_input {
   background: rgb(0, 0, 0);
