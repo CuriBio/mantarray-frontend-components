@@ -68,6 +68,17 @@ export default {
       stimulation_type: "get_stimulation_type",
     }),
   },
+  created() {
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (mutation.type === "stimulation/handle_delete_protocol") {
+        this.protocol_order = [];
+        this.$store.state.stimulation.delete_protocol = false;
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+  },
   methods: {
     check_type(e) {
       if (e.added) {
@@ -132,7 +143,7 @@ export default {
 }
 
 .div__scroll-container {
-  position: absolute;
+  position: relative;
   top: 47%;
   width: 73%;
   right: 26%;

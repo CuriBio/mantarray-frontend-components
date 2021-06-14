@@ -8,11 +8,12 @@ const state = () => ({
   new_protocol: {
     name: "",
     stimulation_type: "Voltage Controlled Stimulation",
-    stop_requirement: "",
+    stop_requirement: "Until Stopped",
     frequency: "",
-    time_unit: "",
+    time_unit: "seconds",
     waveform_list: [],
   },
+  delete_protocol: false,
 });
 
 export default {

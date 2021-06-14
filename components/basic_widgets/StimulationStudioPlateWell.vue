@@ -163,8 +163,8 @@ export default {
   width: 20px;
   height: 20px;
   position: fixed;
-  left: 32.5px;
-  bottom: 20px;
+  left: 33px;
+  bottom: 19px;
   font-weight: bold;
   visibility: visible;
   font-family: Muli;

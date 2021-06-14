@@ -1,65 +1,90 @@
 <template>
-  <div class="div__BlockViewEditor-background">
-    <div class="div__Tabs-panel">
-      <span
-        :id="'Basic'"
-        :class="activeTab === 'Advanced' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
-        @click="toggleTab($event.target.id)"
-        >Basic</span
-      >
-      <span
-        :id="'Advanced'"
-        :class="activeTab === 'Basic' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
-        @click="toggleTab($event.target.id)"
-        >Advanced</span
-      >
-    </div>
-    <div class="div__Editor-background">
-      <div class="div__setting-panel-container">
-        <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
-        <input
-          class="protocol_input"
-          placeholder="Protocol Name"
-          :disabled="disabled == 1"
-          @change="handle_protocol_name($event)"
-        />
-        <img class="img__pencil-icon" src="~/assets/pencil-icon.png" @click="handleInput()" />
-        <div class="div__right-settings-panel">
-          <SmallDropDown
-            :input_height="25"
-            :input_width="190"
-            :options_text="stimulation_types"
-            :style="'margin-right: 2%; z-index: 2;'"
-            @selection-changed="handle_stimulation_type"
+  <div :class="show_confirmation ? 'modal_overlay' : null">
+    <div class="div__BlockViewEditor-background">
+      <div class="div__Tabs-panel">
+        <span
+          :id="'Basic'"
+          :class="activeTab === 'Advanced' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
+          @click="toggleTab($event.target.id)"
+          >Basic</span
+        >
+        <span
+          :id="'Advanced'"
+          :class="activeTab === 'Basic' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
+          @click="toggleTab($event.target.id)"
+          >Advanced</span
+        >
+      </div>
+      <div class="div__Editor-background">
+        <div class="div__setting-panel-container">
+          <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
+          <input
+            v-model="protocol_name"
+            class="protocol_input"
+            placeholder="Protocol Name"
+            :disabled="disabled === true"
+            @change="protocol_name = $event.target.value"
           />
-          <!-- <canvas class="canvas__separator" /> -->
-          <span class="span__settings-label">Stimulate</span>
-          <SmallDropDown
-            :input_height="25"
-            :input_width="105"
-            :options_text="until_options"
-            :style="' z-index: 2;'"
-            @selection-changed="handle_stop_requirement"
-          />
-          <span class="span__settings-label">every</span>
-          <input class="number_input" placeholder="" @change="handle_time_input($event)" />
-          <SmallDropDown
-            :input_height="25"
-            :input_width="95"
-            :options_text="time_units"
-            :style="' z-index: 2;'"
-            @selection-changed="handle_time_unit"
-          />
-          <!-- <canvas class="canvas__separator" /> -->
-          <img class="img__trash-icon" src="~/assets/trash-icon.png" @click="handleTrash()" />
+          <img class="img__pencil-icon" src="~/assets/pencil-icon.png" @click="disabled = !disabled" />
+          <div class="div__right-settings-panel">
+            <SmallDropDown
+              :input_height="25"
+              :input_width="190"
+              :options_text="stimulation_types_array"
+              @selection-changed="handle_stimulation_type"
+            />
+            <!-- REMEMBER ask about invoking function to change state or  if this is okay-->
+            <span class="span__settings-label">Stimulate</span>
+            <SmallDropDown
+              :input_height="25"
+              :input_width="105"
+              :options_text="until_options_array"
+              @selection-changed="handle_stop_requirement"
+            />
+            <span class="span__settings-label">every</span>
+            <input
+              v-model="frequency"
+              class="number_input"
+              placeholder=""
+              @change="frequency = $event.target.value"
+            />
+            <SmallDropDown
+              :input_height="25"
+              :input_width="95"
+              :options_text="time_units_array"
+              @selection-changed="handle_time_unit"
+            />
+            <!-- <canvas class="canvas__separator" /> -->
+            <img
+              id="trash_icon"
+              class="img__trash-icon"
+              src="~/assets/trash-icon.png"
+              @click="handleTrash()"
+            />
+            <b-popover
+              target="trash_icon"
+              trigger="click"
+              :show.sync="show_confirmation"
+              custom-class="popover_class"
+            >
+              <div class="popover_label">Are you sure?</div>
+              <div class="popover_button_container">
+                <button class="delete_button_container" @click="handleDelete()">Delete</button>
+                <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
+              </div>
+            </b-popover>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters } from "Vuex";
+import { mapGetters } from "vuex";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+import Vue from "vue";
+import { BPopover } from "bootstrap-vue";
+Vue.directive("b-popover", BPopover);
 
 export default {
   name: "ProtocolBlockViewEditor",
@@ -69,12 +94,18 @@ export default {
   data() {
     return {
       activeTab: "Basic",
-      disabled: 1,
+      disabled: true,
+      show_confirmation: false,
       current_letter: "",
       current_color: "",
-      stimulation_types: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
-      until_options: ["Until Stopped", "Until ... "],
-      time_units: ["seconds", "milliseconds"],
+      stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
+      until_options_array: ["Until Stopped", "Until ... "],
+      time_units_array: ["seconds", "milliseconds"],
+      protocol_name: "",
+      stimulation_type: "Voltage Controlled Stimulation",
+      stop_requirement: "Until Stopped",
+      frequency: "",
+      time_unit: "seconds",
     };
   },
   computed: {
@@ -90,32 +121,26 @@ export default {
     toggleTab(tab) {
       tab === "Basic" ? (this.activeTab = "Basic") : (this.activeTab = "Advanced");
     },
-    handleInput() {
-      this.disabled = 0;
-    },
     handleTrash() {
-      console.log("trashed");
+      this.show_confirmation = !this.show_confirmation;
     },
-    handle_protocol_name(e) {
-      const { target } = e;
-      this.$store.commit("stimulation/handle_protocol_name", target.value);
+    handleDelete() {
+      this.$store.commit("stimulation/handle_delete_protocol");
+      this.show_confirmation = false;
+      this.protocol_name = "";
+      this.frequency = "";
     },
     handle_stimulation_type(idx) {
-      const type = this.stimulation_types[idx];
-      this.$store.commit("stimulation/handle_stimulation_type", type);
+      const type = this.stimulation_types_array[idx];
+      this.stimulation_type = type;
     },
     handle_stop_requirement(idx) {
-      const requirement = this.until_options[idx];
-      this.$store.commit("stimulation/handle_stop_requirement", requirement);
-    },
-    handle_time_input(e) {
-      const { target } = e;
-      this.$store.commit("stimulation/handle_time_input", target.value);
+      const requirement = this.until_options_array[idx];
+      this.stop_requirement = requirement;
     },
     handle_time_unit(idx) {
-      const unit = this.time_units[idx];
-      this.$store.commit("stimulation/handle_time_unit", unit);
-      console.log(this.$store.state.stimulation);
+      const unit = this.time_units_array[idx];
+      this.time_unit = unit;
     },
   },
 };
@@ -131,6 +156,61 @@ export default {
   left: 20%;
   font-family: muli;
 }
+
+.modal_overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgb(0, 0, 0);
+  z-index: 5;
+  opacity: 0.5;
+}
+
+.popover_class {
+  height: 85px;
+  width: 170px;
+  font-family: Muli;
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  background: rgb(17, 17, 17);
+  border: 1px solid #b7b7b7;
+}
+
+.popover_label {
+  font-weight: bold;
+  padding: 2px 0 10px 37px;
+  color: #b7b7b7;
+}
+
+.popover_button_container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.delete_button_container {
+  border-bottom-left-radius: 4px;
+}
+
+.cancel_button_container {
+  border-bottom-right-radius: 4px;
+}
+
+button {
+  width: 84px;
+  height: 35px;
+  background: rgb(17, 17, 17);
+  border-color: #3f3f3f;
+  color: #b7b7b7;
+  padding-top: 4px;
+}
+
+button:hover {
+  cursor: pointer;
+  color: #fffefe;
+  background: rgba(0, 0, 0, 0.849);
+}
+
 .span__settings-label {
   color: rgb(255, 255, 255);
   height: 8px;
@@ -147,11 +227,7 @@ export default {
   top: 2%;
   align-items: center;
 }
-.div__delete-confirmation-modal {
-  border: 1px solid white;
-  height: 50%;
-  position: relative;
-}
+
 .span__protocol-letter {
   position: relative;
   left: 2%;
@@ -164,9 +240,10 @@ export default {
 }
 img:hover {
   cursor: pointer;
+  opacity: 0.6;
 }
 .img__trash-icon {
-  margin-left: 5%;
+  margin-left: 1%;
   padding-top: 4px;
 }
 .div__right-settings-panel {
@@ -234,12 +311,12 @@ img:hover {
   font-size: 12px;
   cursor: pointer;
 }
-/* .canvas__separator {
-  transform: rotate(90deg);
-  width: 30px;
-  height: 2px;
-  margin-left: 2%;
-  background-color: #3f3f3f;
-  left: 10%;
-} */
+.trash_confirmation_modal {
+  position: absolute;
+  background: #b7b7b7;
+  opacity: 0.5;
+  height: 100px;
+  width: 250px;
+  right: -26%;
+}
 </style>

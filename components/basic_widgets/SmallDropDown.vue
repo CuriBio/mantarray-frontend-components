@@ -106,7 +106,7 @@ export default {
   transform: translateZ(0px);
   position: absolute;
   height: 25px;
-  line-height: 27px;
+  line-height: 25px;
   top: 0px;
   left: 0px;
   user-select: none;
