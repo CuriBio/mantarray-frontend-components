@@ -25,7 +25,7 @@
             :disabled="disabled === true"
             @change="protocol_name = $event.target.value"
           />
-          <img class="img__pencil-icon" src="~/assets/pencil-icon.png" @click="disabled = !disabled" />
+          <img class="img__pencil-icon" src="/pencil-icon.png" @click="disabled = !disabled" />
           <div class="div__right-settings-panel">
             <SmallDropDown
               :input_height="25"
@@ -55,12 +55,7 @@
               @selection-changed="handle_time_unit"
             />
             <!-- <canvas class="canvas__separator" /> -->
-            <img
-              id="trash_icon"
-              class="img__trash-icon"
-              src="~/assets/trash-icon.png"
-              @click="handleTrash()"
-            />
+            <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handleTrash()" />
             <b-popover
               target="trash_icon"
               trigger="click"

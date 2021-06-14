@@ -55,8 +55,8 @@ export default {
   data() {
     return {
       icon_types: [
-        { type: "Monophasic", src: require("@/assets/Monophasic-tile.png") },
-        { type: "Biphasic", src: require("@/assets/Biphasic-tile.png") },
+        { type: "Monophasic", src: "/Monophasic-tile.png" },
+        { type: "Biphasic", src: "/Biphasic-tile.png" },
       ],
       protocol_order: [],
       modal_type: null,
