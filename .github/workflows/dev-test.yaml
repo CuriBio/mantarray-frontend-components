@@ -23,7 +23,12 @@ jobs:
         node-version:
           - 14
         e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
+          - "tests/e2e/playback"
+          - "tests/e2e/status"
+          - "tests/e2e/waveforms"
+          - "tests/e2e/settings"
           - "tests/e2e/basic_widgets"
+          - "tests/e2e/plate_based_widgets"
         include:
           # only enable coverage on the fastest job
           - os: "ubuntu-20.04"
