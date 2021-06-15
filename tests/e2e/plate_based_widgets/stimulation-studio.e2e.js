@@ -42,12 +42,3 @@ test("StimulationStudioWidget when the no protocol is applied to any Stimulation
 //   await t.click(orange);
 //   await testcafe_page_visual_regression(t, screenshot_path);
 // });
-
-fixture`plate_based_widgets/stimulation-studio/x-y-offset`
-  .page // declare the fixture
-`http://localhost:8080/plate_based_widgets/stimulation-studio/x-y-offset`; // specify the start page
-
-test("StimulationStudioWidget when the no protocol is applied to any StimulationStudioPlateWell with x-y offset", async (t) => {
-  const screenshot_path = path.join("plate_based_widgets", "stimulation-studio", "x-y-offset-simulation");
-  await testcafe_page_visual_regression(t, screenshot_path);
-});
