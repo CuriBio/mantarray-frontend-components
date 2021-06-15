@@ -64,18 +64,6 @@ test("testing the Input Widget for width of 300px", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`basic_widgets/input-dropdown/input-dropdown-disallow`
-  .page // declare the fixture
-`http://localhost:8080/basic_widgets/input-dropdown/input-dropdown-disallow`; // specify the start page
-
-test("testing the Input Widget when the input is disabled or not allowed then entering text doesn't update visually", async (t) => {
-  const screenshot_path_base = path.join("basic_widgets", "input-dropdown");
-  const screenshot_path = path.join(screenshot_path_base, "input-dropdown-disallow");
-  await t.typeText(input_field, "sample text");
-  await t.click(input_label);
-  await testcafe_page_visual_regression(t, screenshot_path);
-});
-
 fixture`basic_widgets/input-dropdown/input-no-title-dropdown`
   .page // declare the fixture
 `http://localhost:8080/basic_widgets/input-dropdown/input-no-title-dropdown`; // specify the start page
