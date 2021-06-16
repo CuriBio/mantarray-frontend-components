@@ -46,7 +46,7 @@ Vue.component("BButton", BButton);
 
 import { VBPopover } from "bootstrap-vue";
 // Note: Vue automatically prefixes the directive name with 'v-'
-Vue.directive("b-popover", VBPopover);
+// Vue.directive("b-popover", VBPopover);
 
 const stateObj = playback_module.state();
 const vuex_delay = stateObj.tooltips_delay;
@@ -91,6 +91,9 @@ library.add(faPlusCircle);
 export default {
   name: "XAxisControls",
   components: { FontAwesomeIcon },
+  directives: {
+    "b-popover": VBPopover,
+  },
   props: {
     css_top_anchor: { type: String, default: "0px" },
     css_left_anchor: { type: String, default: "0px" },
@@ -241,15 +244,14 @@ export default {
   -webkit-font-smoothing: antialiased;
 }
 
-.popover {
+/* .popover {
   border-color: #ececed;
   opacity: 0.95;
-}
+} */
 
 /* Simple CSS property to make popover title bold */
 .popover-header {
   font-weight: 700;
-  background-color: #f7f7f7;
   font-size: 12px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
@@ -268,8 +270,6 @@ export default {
    factor of 0.875 with which ever value to get the real font-size */
 .popover-body {
   font-weight: 400;
-  color: #000000;
-  background-color: #ffffff;
   font-size: 14px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
