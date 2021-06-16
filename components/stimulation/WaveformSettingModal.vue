@@ -258,9 +258,9 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
-        :button_names="['Save', 'Cancel']"
-        :hover_color="['#19ac8a', '#bd4932']"
-        :is_enabled="enablelist_current_settings"
+        :button_names="button_names"
+        :hover_color="['#19ac8a', '#bd4932', '#bd4932']"
+        :is_enabled="is_enabled_array"
       />
     </div>
   </div>
@@ -290,10 +290,21 @@ export default {
   props: {
     stimulation_type: { type: String, default: "Current" },
     waveform_type: { type: String, default: "Monophasic" },
+    button_names: {
+      type: Array,
+      default() {
+        return ["Save", "Cancel"];
+      },
+    },
+    is_enabled_array: {
+      type: Array,
+      default() {
+        return [true, true];
+      },
+    },
   },
   data() {
     return {
-      enablelist_current_settings: [true, true],
       popover_message: "Not Editable: This data is displayed for informational purposes only.",
     };
   },

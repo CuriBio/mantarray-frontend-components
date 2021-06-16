@@ -25,7 +25,11 @@
             :ghost-class="'ghost'"
             @change="check_type($event)"
           >
-            <div v-for="(types, idx) in protocol_order" :key="idx">
+            <div
+              v-for="(types, idx) in protocol_order"
+              :key="idx"
+              @click.shift.exact="open_modal_for_edit(types.type)"
+            >
               <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
             </div>
           </draggable>
@@ -36,6 +40,15 @@
       <WaveformSettingModal
         :stimulation_type="stimulation_type"
         :waveform_type="modal_type"
+        @close="on_modal_close"
+      />
+    </div>
+    <div v-if="reopen_modal !== null" class="modal-container">
+      <WaveformSettingModal
+        :stimulation_type="stimulation_type"
+        :waveform_type="reopen_modal"
+        :button_names="['Save', 'Delete', 'Cancel']"
+        :is_enabled_array="[true, true, true]"
         @close="on_modal_close"
       />
     </div>
@@ -61,6 +74,7 @@ export default {
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
+      reopen_modal: null,
     };
   },
   computed: {
@@ -89,6 +103,11 @@ export default {
     },
     on_modal_close() {
       this.modal_type = null;
+      this.reopen_modal = null;
+    },
+    open_modal_for_edit(type) {
+      if (type === "Monophasic") this.reopen_modal = "Monophasic";
+      else if (type === "Biphasic") this.reopen_modal = "Biphasic";
     },
   },
 };

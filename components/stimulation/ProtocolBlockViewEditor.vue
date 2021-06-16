@@ -23,8 +23,10 @@
             class="protocol_input"
             placeholder="Protocol Name"
             :disabled="disabled === true"
-            @change="protocol_name = $event.target.value"
+            :style="name_validity"
+            @change="check_name_validity($event.target.value)"
           />
+          <span class="error-message">{{ error_message }}</span>
           <img class="img__pencil-icon" src="/pencil-icon.png" @click="disabled = !disabled" />
           <div class="div__right-settings-panel">
             <SmallDropDown
@@ -101,11 +103,16 @@ export default {
       stop_requirement: "Until Stopped",
       frequency: "",
       time_unit: "seconds",
+      name_validity: "null",
+      error_message: "",
     };
   },
   computed: {
     ...mapGetters("stimulation", {
       current_protocol: "get_next_protocol",
+    }),
+    ...mapGetters("stimulation", {
+      protocol_list: "get_protocols",
     }),
   },
   created() {
@@ -137,6 +144,19 @@ export default {
       const unit = this.time_units_array[idx];
       this.time_unit = unit;
     },
+    check_name_validity(input) {
+      const matched_names = this.protocol_list.filter((protocol) => {
+        return protocol.label === input;
+      });
+      if (matched_names.length === 0) {
+        this.name_validity = "border: 1px solid #19ac8a";
+        this.error_message = "";
+      }
+      if (matched_names.length > 0) {
+        this.name_validity = "border: 1px solid #bd3532";
+        this.error_message = "*Protocol name already exists";
+      }
+    },
   },
 };
 </script>
@@ -159,6 +179,14 @@ export default {
   background: rgb(0, 0, 0);
   z-index: 5;
   opacity: 0.5;
+}
+.error-message {
+  color: #bd3532;
+  position: absolute;
+  left: 53px;
+  top: 36px;
+  font-size: 13px;
+  font-style: italic;
 }
 
 .popover_class {
