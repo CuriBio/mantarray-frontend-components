@@ -273,7 +273,7 @@ img:hover {
 .span__Inactive-Tab-labels {
   background: rgb(8, 8, 8);
   border: 2px solid rgb(17, 17, 17);
-  width: 48%;
+  width: 50%;
   height: 90%;
   display: flex;
   justify-content: center;
