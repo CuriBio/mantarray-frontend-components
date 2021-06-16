@@ -12,6 +12,7 @@
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
+        :default_state="false"
         @update:value="on_update_uuid($event)"
       ></InputWidget>
     </div>
@@ -24,6 +25,7 @@
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'apikey-id'"
+        :default_state="false"
         @update:value="on_update_api($event)"
       ></InputWidget>
     </div>
@@ -34,6 +36,7 @@
         :invalid_text="error_text_nickname"
         :input_width="400"
         :dom_id_suffix="'nickname-id'"
+        :default_state="false"
         @update:value="on_update_nickname($event)"
       ></InputWidget>
     </div>
@@ -46,6 +49,7 @@
         :button_names="['Cancel', 'Save ID']"
         :hover_color="['#bd4932', '#19ac8a']"
         :is_enabled="enablelist_add_customer"
+        :default_state="false"
         @btn-click="clicked_button"
       >
       </ButtonWidget>
