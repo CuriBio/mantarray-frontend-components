@@ -15,11 +15,7 @@
 
       <div
         class="div__input-controls-content-widget"
-        :class="[
-          !input_is_valid
-            ? 'div__input-controls-content-widget--invalid'
-            : 'div__input-controls-content-widget--valid',
-        ]"
+        :class="getValidityClass()"
         :style="'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'"
       >
         <span class="span__input-controls-content-input-txt-widget" :style="'width: ' + input_width + 'px;'">
@@ -77,6 +73,7 @@ export default {
     dom_id_suffix: { type: String, default: "" }, // TODO (Eli 11/3/20): consider defaulting this to a random UUID if no value supplied
     display_text_message: { type: Boolean, default: true }, // display_text_message (boolean) if set to false would not render invalid_text
     disable_paste: { type: Boolean, default: false }, // disable_paste (boolean) if set to true would prevent cut and paste of text into input
+    default_state: { type: Boolean, default: true },
   },
   data() {
     return {
@@ -88,7 +85,8 @@ export default {
 
   computed: {
     input_is_valid: function () {
-      return this.invalid_text === "";
+      if (this.default_state) return null;
+      else return this.invalid_text === "";
     },
     input_height_background: function () {
       return this.title_label !== "" ? 100 : 60;
@@ -106,6 +104,11 @@ export default {
   methods: {
     on_b_form_input: function () {
       this.$emit("update:value", this.input_value);
+    },
+    getValidityClass: function () {
+      if (this.default_state) return null;
+      if (this.input_is_valid) return "div__input-controls-content-widget--valid";
+      if (!this.input_is_valid) return "div__input-controls-content-widget--invalid";
     },
   },
 };
@@ -130,7 +133,6 @@ export default {
 
 .span__input-content-label {
   pointer-events: all;
-  align: center;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;

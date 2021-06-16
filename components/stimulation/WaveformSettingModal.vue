@@ -58,7 +58,7 @@
         <InputWidget
           :placeholder="'500'"
           :dom_id_suffix="'current'"
-          :invalid_text="'Warning: change not balanced'"
+          :invalid_text="''"
           :input_width="142"
         ></InputWidget>
       </span>
@@ -85,7 +85,12 @@
           :dom_id_suffix="'voltage'"
           :invalid_text="''"
           :input_width="142"
+          :disabled="true"
+          :default_state="true"
         ></InputWidget>
+      </span>
+      <span v-b-popover.hover="popover_message" class="disabled_popover_container">
+        <img src="/question-icon.png" />
       </span>
     </div>
     <canvas
@@ -206,7 +211,11 @@
             :dom_id_suffix="'voltagetwo'"
             :invalid_text="''"
             :input_width="142"
+            :disabled="true"
           ></InputWidget>
+        </span>
+        <span v-b-popover.hover="popover_message" class="disabled_popover_container">
+          <img src="/question-icon.png" />
         </span>
       </div>
     </div>
@@ -257,11 +266,14 @@
   </div>
 </template>
 <script>
+// import Vue from "vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { VBPopover } from "bootstrap-vue";
+// Vue.directive("b-popover", VBPopover);
 
 library.add(faBalanceScale);
 
@@ -272,6 +284,9 @@ export default {
     ButtonWidget,
     FontAwesomeIcon,
   },
+  directives: {
+    "b-popover": VBPopover,
+  },
   props: {
     stimulation_type: { type: String, default: "Current" },
     waveform_type: { type: String, default: "Monophasic" },
@@ -279,6 +294,7 @@ export default {
   data() {
     return {
       enablelist_current_settings: [true, true],
+      popover_message: "Not Editable: This data is displayed for informational purposes only.",
     };
   },
   computed: {
@@ -359,6 +375,14 @@ export default {
   text-align: center;
 }
 
+.disabled_popover_container {
+  position: absolute;
+  font-family: Muli;
+  font-size: 10px;
+  left: 115px;
+  top: 16px;
+}
+
 .canvas__stimulationstudio-horizontal-line-seperator-one {
   transform: rotate(0deg);
   pointer-events: all;
@@ -399,11 +423,13 @@ export default {
   top: 762px;
   left: 0;
   position: absolute;
+  cursor: pointer;
 }
 
 .button-container-mono {
   top: 540px;
   position: absolute;
+  cursor: pointer;
 }
 
 .span__stimulationstudio-current-settings-label-one {

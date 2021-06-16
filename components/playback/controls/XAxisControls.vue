@@ -95,6 +95,7 @@ export default {
     css_top_anchor: { type: String, default: "0px" },
     css_left_anchor: { type: String, default: "0px" },
   },
+
   data: function () {
     return {
       // zoom_level_idx: 1,
