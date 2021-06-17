@@ -249,11 +249,9 @@
       "
       >Charge&nbsp;<wbr />Info&nbsp;<wbr />Unavailable</span
     >
-    <div
-      :class="waveform_type === 'Monophasic' ? 'button-container-mono' : 'button-container'"
-      @click="close"
-    >
+    <div :class="waveform_type === 'Monophasic' ? 'button-container-mono' : 'button-container'">
       <ButtonWidget
+        :id="'button-widget-id'"
         :button_widget_width="520"
         :button_widget_height="50"
         :button_widget_top="0"
@@ -261,19 +259,20 @@
         :button_names="button_names"
         :hover_color="['#19ac8a', '#bd4932', '#bd4932']"
         :is_enabled="is_enabled_array"
+        @btn-click="close"
       />
     </div>
   </div>
 </template>
 <script>
-// import Vue from "vue";
+import Vue from "vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { VBPopover } from "bootstrap-vue";
-// Vue.directive("b-popover", VBPopover);
+Vue.directive("b-popover", VBPopover);
 
 library.add(faBalanceScale);
 
@@ -283,9 +282,6 @@ export default {
     InputWidget,
     ButtonWidget,
     FontAwesomeIcon,
-  },
-  directives: {
-    "b-popover": VBPopover,
   },
   props: {
     stimulation_type: { type: String, default: "Current" },
@@ -319,8 +315,9 @@ export default {
     },
   },
   methods: {
-    close() {
-      this.$emit("close");
+    close(idx) {
+      const button_label = this.button_names[idx];
+      this.$emit("close", button_label);
     },
   },
 };

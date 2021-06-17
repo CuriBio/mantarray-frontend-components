@@ -27,11 +27,11 @@ describe("StimulationStudioCurrentSettings.vue", () => {
   });
   test("When clicking on either button, Then the modal successfully closes by emitting the close() function to parent component", async () => {
     // const mockMethod = jest.fn();
-    const wrapper = shallowMount(WaveformSettingModal, {
+    const wrapper = mount(WaveformSettingModal, {
       localVue,
     });
-    await wrapper.find(".button-container-mono").trigger("click");
-    expect(wrapper.emitted("close")).toBeTruthy();
+    await wrapper.vm.close(0);
+    expect(wrapper.emitted("close", "Save")).toBeTruthy();
   });
   test("When Voltage and Biphasic props is passed down, Then the correct labels should be present in modal and not default", async () => {
     // const mockMethod = jest.fn();

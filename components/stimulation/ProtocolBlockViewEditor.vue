@@ -58,7 +58,7 @@
             />
             <!-- <canvas class="canvas__separator" /> -->
             <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handleTrash()" />
-            <b-popover
+            <BPopover
               target="trash_icon"
               trigger="click"
               :show.sync="show_confirmation"
@@ -69,7 +69,7 @@
                 <button class="delete_button_container" @click="handleDelete()">Delete</button>
                 <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
               </div>
-            </b-popover>
+            </BPopover>
           </div>
         </div>
       </div>
@@ -81,12 +81,14 @@ import { mapGetters } from "vuex";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vue from "vue";
 import { BPopover } from "bootstrap-vue";
-Vue.directive("b-popover", BPopover);
+// Vue.directive("b-popover", BPopover);
+Vue.component("BPopover", BPopover);
 
 export default {
   name: "ProtocolBlockViewEditor",
   components: {
     SmallDropDown,
+    BPopover,
   },
   data() {
     return {
@@ -131,6 +133,7 @@ export default {
       this.show_confirmation = false;
       this.protocol_name = "";
       this.frequency = "";
+      this.name_validity = "";
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];

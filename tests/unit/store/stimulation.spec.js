@@ -59,4 +59,26 @@ describe("store/stimulation", () => {
     ).length;
     expect(protocols).toHaveLength(labeled_protocols);
   });
+
+  test("When requesting the next available protocol assignment(color, letter), Then only the protocol recieved should be unused and unique", async () => {
+    const next_available_protocol = store.getters["stimulation/get_next_protocol"];
+    const checked_available_protocol = store.state.stimulation.protocol_list.filter(
+      (protocol) => protocol.label.length === 0
+    );
+    expect(next_available_protocol).toBe(checked_available_protocol[0]);
+  });
+
+  test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
+    const default_type = store.getters["stimulation/get_stimulation_type"];
+    expect(default_type).toBe("Voltage");
+    store.state.stimulation.new_protocol.stimulation_type = "Current Controlled Stimulation";
+    const current_type = store.getters["stimulation/get_stimulation_type"];
+    expect(current_type).toBe("Current");
+  });
+
+  test("When a user requests to delete the current stimulation by using the trash icon, Then it should mutate state to true", async () => {
+    expect(store.state.stimulation.delete_protocol).toBe(false);
+    await store.commit("stimulation/handle_delete_protocol");
+    expect(store.state.stimulation.delete_protocol).toBe(true);
+  });
 });

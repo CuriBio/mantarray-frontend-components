@@ -5,8 +5,8 @@
 </template>
 
 <script>
-// import { XAxisControls } from "../../../../dist/mantarray.common";
-import XAxisControls from "@/components/playback/controls/XAxisControls.vue";
+import { XAxisControls } from "@/dist/mantarray.common";
+// import XAxisControls from "@/components/playback/controls/XAxisControls.vue";
 
 export default {
   components: {

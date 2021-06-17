@@ -7,7 +7,7 @@
       >
 
       <span
-        v-b-popover.hover.top="x_axis_zoom_out"
+        v-b-popover.hover.bottom="x_axis_zoom_out"
         class="span__playback-x-axis-controls-zoom-out-button"
         :class="span__x_axis_controls_zoom_out_button__dynamic_class"
         :title="x_title_out"
@@ -19,7 +19,7 @@
       </span>
 
       <span
-        v-b-popover.hover.top="x_axis_zoom_in"
+        v-b-popover.hover.bottom="x_axis_zoom_in"
         class="span__playback-x-axis-controls-zoom-in-button"
         :class="span__x_axis_controls_zoom_in_button__dynamic_class"
         :title="x_title_in"
@@ -42,11 +42,11 @@ import { mapState } from "vuex";
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
-Vue.component("BButton", BButton);
-
 import { VBPopover } from "bootstrap-vue";
 // Note: Vue automatically prefixes the directive name with 'v-'
 // Vue.directive("b-popover", VBPopover);
+Vue.component("BButton", BButton);
+Vue.directive("b-popover", VBPopover);
 
 const stateObj = playback_module.state();
 const vuex_delay = stateObj.tooltips_delay;
@@ -91,9 +91,6 @@ library.add(faPlusCircle);
 export default {
   name: "XAxisControls",
   components: { FontAwesomeIcon },
-  directives: {
-    "b-popover": VBPopover,
-  },
   props: {
     css_top_anchor: { type: String, default: "0px" },
     css_left_anchor: { type: String, default: "0px" },
@@ -175,13 +172,14 @@ export default {
   },
 };
 </script>
-<style type="text/css">
+<style>
 .div__playback-x-axis-controls {
   height: 45px;
   width: calc(100vw - 353px);
   background-color: #1c1c1c;
-  position: absolute;
-  text-align: center;
+  position: relative;
+  /* text-align: center; */
+  /* --span__playback-x-axis-controls-zoom-in-button--Top: 40%; */
 }
 .div__playback-x-axis-controls-elements {
   height: 45px;
@@ -212,12 +210,21 @@ export default {
   color: rgb(255, 255, 255);
   text-align: right;
 }
+/* .div__playback-y-axis-controls--enabled *,
+.div__playback-y-axis-controls--enabled *:before,
+.div__playback-y-axis-controls--enabled *:after,
+.div__playback-x-axis-controls--disabled *,
+.div__playback-x-axis-controls--disabled *:before,
+.div__playback-x-axis-controls--disabled *:after {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+} */
 
 .span__playback-x-axis-controls-zoom-out-button {
-  overflow: hidden;
-  text-align: center;
+  /* text-align: center; */
   font-weight: normal;
-  position: relative;
+  position: absolute;
   width: 35px;
   height: 35px;
   line-height: 45px;
@@ -226,14 +233,14 @@ export default {
 }
 
 .span__playback-x-axis-controls-zoom-in-button {
-  overflow: hidden;
-  text-align: center;
+  /* text-align: center; */
   font-weight: normal;
   position: relative;
   width: 35px;
   height: 35px;
   line-height: 45px;
   font-size: 30px;
+  left: 45px;
 }
 
 .div__playback-x-axis-controls--enabled:hover {
@@ -255,7 +262,6 @@ export default {
   background-color: #f7f7f7;
   font-size: 12px;
   font-family: Muli;
-  -webkit-font-smoothing: antialiased;
 }
 
 /* Bootstrap version 4.4.1 the present tip has the .popover property with a property
@@ -275,6 +281,5 @@ export default {
   background-color: #ffffff;
   font-size: 14px;
   font-family: Muli;
-  -webkit-font-smoothing: antialiased;
 }
 </style>

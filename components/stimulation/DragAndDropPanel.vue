@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="modal_type !== null ? 'modal_overlay' : null">
+    <div :class="modal_type !== null || reopen_modal !== null ? 'modal_overlay' : null">
       <div class="div__background-container">
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
@@ -28,7 +28,7 @@
             <div
               v-for="(types, idx) in protocol_order"
               :key="idx"
-              @click.shift.exact="open_modal_for_edit(types.type)"
+              @click.shift.exact="open_modal_for_edit(types.type, idx)"
             >
               <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
             </div>
@@ -75,6 +75,7 @@ export default {
       modal_type: null,
       setting_type: "Current",
       reopen_modal: null,
+      shift_click_img_idx: null,
     };
   },
   computed: {
@@ -101,13 +102,16 @@ export default {
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
       }
     },
-    on_modal_close() {
+    on_modal_close(button) {
       this.modal_type = null;
       this.reopen_modal = null;
+      if (button === "Delete") this.protocol_order.splice(this.shift_click_img_idx, 1);
+      this.shift_click_img_idx = null;
     },
-    open_modal_for_edit(type) {
+    open_modal_for_edit(type, idx) {
       if (type === "Monophasic") this.reopen_modal = "Monophasic";
       else if (type === "Biphasic") this.reopen_modal = "Biphasic";
+      this.shift_click_img_idx = idx;
     },
   },
 };
@@ -139,7 +143,7 @@ export default {
 .modal-container {
   left: 36%;
   position: absolute;
-  top: 10%;
+  top: 8%;
 }
 
 .div__background-container {
