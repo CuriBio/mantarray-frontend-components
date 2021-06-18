@@ -4,14 +4,14 @@
       <div class="div__Tabs-panel">
         <span
           :id="'Basic'"
-          :class="activeTab === 'Advanced' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
-          @click="toggleTab($event.target.id)"
+          :class="active_tab === 'Advanced' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
+          @click="toggle_tab($event.target.id)"
           >Basic</span
         >
         <span
           :id="'Advanced'"
-          :class="activeTab === 'Basic' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
-          @click="toggleTab($event.target.id)"
+          :class="active_tab === 'Basic' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
+          @click="toggle_tab($event.target.id)"
           >Advanced</span
         >
       </div>
@@ -57,7 +57,7 @@
               @selection-changed="handle_time_unit"
             />
             <!-- <canvas class="canvas__separator" /> -->
-            <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handleTrash()" />
+            <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash()" />
             <BPopover
               target="trash_icon"
               trigger="click"
@@ -66,7 +66,7 @@
             >
               <div class="popover_label">Are you sure?</div>
               <div class="popover_button_container">
-                <button class="delete_button_container" @click="handleDelete()">Delete</button>
+                <button class="delete_button_container" @click="handle_delete()">Delete</button>
                 <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
               </div>
             </BPopover>
@@ -92,13 +92,13 @@ export default {
   },
   data() {
     return {
-      activeTab: "Basic",
+      active_tab: "Basic",
       disabled: true,
       show_confirmation: false,
       current_letter: "",
       current_color: "",
       stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
-      until_options_array: ["Until Stopped", "Until ... "],
+      until_options_array: ["Until Stopped", "Until ..."],
       time_units_array: ["seconds", "milliseconds"],
       protocol_name: "",
       stimulation_type: "Voltage Controlled Stimulation",
@@ -122,13 +122,13 @@ export default {
     this.current_color = this.current_protocol.color;
   },
   methods: {
-    toggleTab(tab) {
-      tab === "Basic" ? (this.activeTab = "Basic") : (this.activeTab = "Advanced");
+    toggle_tab(tab) {
+      tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");
     },
-    handleTrash() {
+    handle_trash() {
       this.show_confirmation = !this.show_confirmation;
     },
-    handleDelete() {
+    handle_delete() {
       this.$store.commit("stimulation/handle_delete_protocol");
       this.show_confirmation = false;
       this.protocol_name = "";

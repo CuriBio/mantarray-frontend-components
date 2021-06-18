@@ -45,6 +45,9 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.check_type({ added: { element: { type: "Monophasic" } } });
     expect(wrapper.vm.modal_type).toBe("Monophasic");
     expect(modal_container).toBeTruthy();
+    await wrapper.vm.check_type({ added: { element: { type: "Biphasic" } } });
+    expect(wrapper.vm.modal_type).toBe("Biphasic");
+    expect(modal_container).toBeTruthy();
   });
 
   test("When a user opens a modal to delete waveform, Then when delete is clicked, it will delete", async () => {
@@ -59,12 +62,33 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.open_modal_for_edit("Monophasic", 1);
     expect(wrapper.vm.reopen_modal).toBe("Monophasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(1);
+    expect(wrapper.find(".modal_overlay")).toBeTruthy();
 
     await wrapper.vm.on_modal_close("Delete");
     expect(wrapper.vm.protocol_order).toHaveLength(1);
     expect(wrapper.vm.reopen_modal).toBeNull();
 
-    // expect(modal_container).toBeTruthy();
+    await wrapper.vm.open_modal_for_edit("Biphasic", 0);
+    expect(wrapper.vm.reopen_modal).toBe("Biphasic");
+    expect(wrapper.vm.shift_click_img_idx).toBe(0);
+
+    await wrapper.vm.on_modal_close("Cancel");
+    expect(wrapper.vm.protocol_order).toHaveLength(1);
+    expect(wrapper.vm.reopen_modal).toBeNull();
+  });
+
+  test("When user wants to delete entire waveform protocol by using trash icon to mutate state, Then the protocol container will become empty", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    wrapper.vm.protocol_order = [
+      { type: "Biphasic", src: "placeholder" },
+      { type: "Monophasic", src: "placeholder" },
+    ];
+    await store.commit("stimulation/handle_delete_protocol");
+    expect(wrapper.vm.protocol_order).toHaveLength(0);
+    expect(store.state.stimulation.delete_protocol).toBe(false);
   });
 
   test("When exiting instance, Then instance is effectively destroyed", async () => {

@@ -22,7 +22,13 @@
       <div class="arrow" :class="{ expanded: visible }" />
       <div :class="{ hidden: !visible, visible }">
         <ul>
-          <li v-for="item in options_list" :key="item.id" :value="item" @click="changeSelection(item.id)">
+          <li
+            v-for="item in options_list"
+            :id="item.name"
+            :key="item.id"
+            :value="item"
+            @click="changeSelection(item.id)"
+          >
             {{ item.name }}
           </li>
         </ul>
