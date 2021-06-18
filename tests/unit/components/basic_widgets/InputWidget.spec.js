@@ -260,4 +260,48 @@ describe("InputWidget.vue", () => {
     expect(wrapper.find("#input-widget-field-").value).toBeUndefined();
     expect(wrapper.find("#input-widget-field-").html()).toContain('onpaste="return false;"');
   });
+  test("When an the props change to render validate class, Then the corresponding validation class should be returned", async () => {
+    const propsData = {
+      title_label: "",
+      placeholder: "place holder",
+      initial_value: "",
+      invalid_text: "",
+      spellcheck: false,
+      disabled: false,
+      input_width: 390,
+      display_text_message: false,
+      disable_paste: true,
+      default_state: false,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+
+    expect(wrapper.vm.input_is_valid).toBe(true);
+    expect(wrapper.find(".div__input-controls-content-widget--valid")).toBeTruthy();
+  });
+  test("When an the props change to render invalid class, Then the corresponding validation class should be returned", async () => {
+    const propsData = {
+      title_label: "",
+      placeholder: "place holder",
+      initial_value: "",
+      invalid_text: "invalid text",
+      spellcheck: false,
+      disabled: false,
+      input_width: 390,
+      display_text_message: false,
+      disable_paste: true,
+      default_state: false,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+
+    expect(wrapper.vm.input_is_valid).toBe(false);
+    expect(wrapper.find(".div__input-controls-content-widget--invalid")).toBeTruthy();
+  });
 });
