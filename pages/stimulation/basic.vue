@@ -5,24 +5,24 @@
     <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
     <StimulationStudioWidget />
     <StimulationStudioCreateAndEdit />
-    <DragAndDropPanel />
-    <ProtocolBlockViewEditor />
+    <StimulationStudioDragAndDropPanel />
+    <StimulationStudioProtocolBlockViewEditor />
   </div>
 </template>
 
 <script>
 import StimulationStudioCreateAndEdit from "@/components/stimulation/StimulationStudioCreateAndEdit.vue";
 import StimulationStudioWidget from "@/components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
-import DragAndDropPanel from "@/components/stimulation/DragAndDropPanel.vue";
-import ProtocolBlockViewEditor from "@/components/stimulation/ProtocolBlockViewEditor.vue";
+import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
+import StimulationStudioProtocolBlockViewEditor from "@/components/stimulation/StimulationStudioProtocolBlockViewEditor.vue";
 
 export default {
   name: "StimulationStudio",
   components: {
     StimulationStudioWidget,
     StimulationStudioCreateAndEdit,
-    DragAndDropPanel,
-    ProtocolBlockViewEditor,
+    StimulationStudioDragAndDropPanel,
+    StimulationStudioProtocolBlockViewEditor,
   },
 };
 </script>

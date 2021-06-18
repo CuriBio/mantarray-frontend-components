@@ -37,14 +37,14 @@
       </div>
     </div>
     <div v-if="modal_type !== null" class="modal-container">
-      <WaveformSettingModal
+      <StimulationStudioWaveformSettingModal
         :stimulation_type="stimulation_type"
         :waveform_type="modal_type"
         @close="on_modal_close"
       />
     </div>
     <div v-if="reopen_modal !== null" class="modal-container">
-      <WaveformSettingModal
+      <StimulationStudioWaveformSettingModal
         :stimulation_type="stimulation_type"
         :waveform_type="reopen_modal"
         :button_names="['Save', 'Delete', 'Cancel']"
@@ -56,14 +56,14 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import WaveformSettingModal from "@/components/stimulation/WaveformSettingModal.vue";
+import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import { mapGetters } from "vuex";
 
 export default {
   name: "DragAndDropPanel",
   components: {
     draggable,
-    WaveformSettingModal,
+    StimulationStudioWaveformSettingModal,
   },
   data() {
     return {
@@ -101,6 +101,7 @@ export default {
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
       }
+      console.log(this.protocol_order);
     },
     on_modal_close(button) {
       this.modal_type = null;

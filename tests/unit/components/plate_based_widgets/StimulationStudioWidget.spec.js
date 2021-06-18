@@ -248,4 +248,14 @@ describe("StimulationStudioWidget.vue", () => {
     await store.commit("stimulation/apply_selected_protocol", 2);
     expect(wrapper.vm.protocol_assignments).toBe(store.state.stimulation.protocol_assignments);
   });
+
+  test("When exiting instance, Then instance is effectively destroyed", async () => {
+    const destroyed_spy = jest.spyOn(StimulationStudioWidget, "beforeDestroy");
+    const wrapper = mount(StimulationStudioWidget, {
+      store,
+      localVue,
+    });
+    wrapper.destroy();
+    expect(destroyed_spy).toHaveBeenCalled();
+  });
 });

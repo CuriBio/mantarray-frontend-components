@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
-import WaveformSettingModal from "@/components/stimulation/WaveformSettingModal.vue";
+import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import { shallowMount } from "@vue/test-utils";
-import { WaveformSettingModal as dist_StimulationStudioCurrentSettings } from "@/dist/mantarray.common";
+import { StimulationStudioWaveformSettingModal as dist_StimulationStudioCurrentSettings } from "@/dist/mantarray.common";
 // import Vue from "vue";
 
 import { createLocalVue } from "@vue/test-utils";
@@ -19,7 +19,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     expect(target_span).toBeTruthy();
   });
   test("When mounting StimulationStudioCurrentSettings from the component file, Then it loads successfully  `Biphasic Pulse Details` as defined title text is rendered", () => {
-    wrapper = shallowMount(WaveformSettingModal, {
+    wrapper = shallowMount(StimulationStudioWaveformSettingModal, {
       localVue,
     });
     const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
@@ -27,7 +27,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
   });
   test("When clicking on either button, Then the modal successfully closes by emitting the close() function to parent component", async () => {
     // const mockMethod = jest.fn();
-    const wrapper = mount(WaveformSettingModal, {
+    const wrapper = mount(StimulationStudioWaveformSettingModal, {
       localVue,
     });
     await wrapper.vm.close(0);
@@ -35,7 +35,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
   });
   test("When Voltage and Biphasic props is passed down, Then the correct labels should be present in modal and not default", async () => {
     // const mockMethod = jest.fn();
-    const wrapper = shallowMount(WaveformSettingModal, {
+    const wrapper = shallowMount(StimulationStudioWaveformSettingModal, {
       localVue,
       props: {
         stimulation_type: "Voltage",

@@ -1,16 +1,16 @@
 <template>
   <div>
-    <WaveformSettingModal></WaveformSettingModal>
+    <StimulationStudioWaveformSettingModal />
   </div>
 </template>
 
 <script>
 // import { StimulationStudioCurrentSettings } from "@/dist/mantarray.common";
-import WaveformSettingModal from "@/components/stimulation/WaveformSettingModal.vue";
+import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 
 export default {
   components: {
-    WaveformSettingModal,
+    StimulationStudioWaveformSettingModal,
   },
 };
 </script>

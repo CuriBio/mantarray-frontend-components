@@ -79,6 +79,6 @@ export { default as PlateHeatMap } from "./components/plate_based_widgets/mapedi
 
 // Stimulation Studio
 export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";
-export { default as DragAndDropPanel } from "./components/stimulation/DragAndDropPanel.vue";
-export { default as ProtocolBlockViewEditor } from "./components/stimulation/ProtocolBlockViewEditor.vue";
-export { default as WaveformSettingModal } from "./components/stimulation/WaveformSettingModal.vue";
+export { default as StimulationStudioDragAndDropPanel } from "./components/stimulation/StimulationStudioDragAndDropPanel.vue";
+export { default as StimulationStudioProtocolBlockViewEditor } from "./components/stimulation/StimulationStudioProtocolBlockViewEditor.vue";
+export { default as StimulationStudioWaveformSettingModal } from "./components/stimulation/StimulationStudioWaveformSettingModal.vue";
