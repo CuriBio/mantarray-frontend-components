@@ -15,7 +15,7 @@
 
       <div
         class="div__input-controls-content-widget"
-        :class="getValidityClass()"
+        :class="get_validity_class()"
         :style="'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'"
       >
         <span class="span__input-controls-content-input-txt-widget" :style="'width: ' + input_width + 'px;'">
@@ -105,7 +105,7 @@ export default {
     on_b_form_input: function () {
       this.$emit("update:value", this.input_value);
     },
-    getValidityClass: function () {
+    get_validity_class: function () {
       if (this.default_state) return null;
       if (this.input_is_valid) return "div__input-controls-content-widget--valid";
       if (!this.input_is_valid) return "div__input-controls-content-widget--invalid";

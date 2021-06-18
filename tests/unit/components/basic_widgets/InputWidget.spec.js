@@ -304,4 +304,27 @@ describe("InputWidget.vue", () => {
     expect(wrapper.vm.input_is_valid).toBe(false);
     expect(wrapper.find(".div__input-controls-content-widget--invalid")).toBeTruthy();
   });
+
+  test("When default state is set to true, Then the corresponding validation class should be returned", async () => {
+    const propsData = {
+      title_label: "",
+      placeholder: "place holder",
+      initial_value: "",
+      invalid_text: "invalid text",
+      spellcheck: false,
+      disabled: false,
+      input_width: 390,
+      display_text_message: false,
+      disable_paste: true,
+      default_state: true,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+
+    expect(wrapper.vm.input_is_valid).toBeNull();
+    expect(wrapper.vm.get_validity_class()).toBeNull();
+  });
 });

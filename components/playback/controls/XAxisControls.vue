@@ -7,7 +7,7 @@
       >
 
       <span
-        v-b-popover.hover.bottom="x_axis_zoom_out"
+        v-b-popover.hover.top="x_axis_zoom_out"
         class="span__playback-x-axis-controls-zoom-out-button"
         :class="span__x_axis_controls_zoom_out_button__dynamic_class"
         :title="x_title_out"
@@ -19,7 +19,7 @@
       </span>
 
       <span
-        v-b-popover.hover.bottom="x_axis_zoom_in"
+        v-b-popover.hover.top="x_axis_zoom_in"
         class="span__playback-x-axis-controls-zoom-in-button"
         :class="span__x_axis_controls_zoom_in_button__dynamic_class"
         :title="x_title_in"
@@ -38,19 +38,15 @@ import playback_module from "@/store/modules/playback";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { mapState } from "vuex";
-
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
+Vue.component("BButton", BButton);
 import { VBPopover } from "bootstrap-vue";
 // Note: Vue automatically prefixes the directive name with 'v-'
-// Vue.directive("b-popover", VBPopover);
-Vue.component("BButton", BButton);
 Vue.directive("b-popover", VBPopover);
-
 const stateObj = playback_module.state();
 const vuex_delay = stateObj.tooltips_delay;
-
 const options = {
   BTooltip: {
     delay: {
@@ -65,12 +61,9 @@ const options = {
     },
   },
 };
-
 Vue.use(BootstrapVue, { ...options });
-
 library.add(faMinusCircle);
 library.add(faPlusCircle);
-
 /**
  * @vue-prop {String} css_top_anchor - Current top anchor value in CSS
  * @vue-prop {String} css_left_anchor - Current left anchor value in CSS
@@ -95,7 +88,6 @@ export default {
     css_top_anchor: { type: String, default: "0px" },
     css_left_anchor: { type: String, default: "0px" },
   },
-
   data: function () {
     return {
       // zoom_level_idx: 1,
@@ -120,11 +112,9 @@ export default {
     ...mapState("playback", {
       tooltips_delay: "tooltips_delay",
     }),
-
     max_zoom_index: function () {
       return this.x_zoom_levels.length - 1;
     },
-
     span__x_axis_controls_zoom_out_button__dynamic_class: function () {
       this.tooltip_x_out();
       return {
@@ -172,14 +162,13 @@ export default {
   },
 };
 </script>
-<style>
+<style type="text/css">
 .div__playback-x-axis-controls {
   height: 45px;
   width: calc(100vw - 353px);
   background-color: #1c1c1c;
-  position: relative;
-  /* text-align: center; */
-  /* --span__playback-x-axis-controls-zoom-in-button--Top: 40%; */
+  position: absolute;
+  text-align: center;
 }
 .div__playback-x-axis-controls-elements {
   height: 45px;
@@ -210,60 +199,45 @@ export default {
   color: rgb(255, 255, 255);
   text-align: right;
 }
-/* .div__playback-y-axis-controls--enabled *,
-.div__playback-y-axis-controls--enabled *:before,
-.div__playback-y-axis-controls--enabled *:after,
-.div__playback-x-axis-controls--disabled *,
-.div__playback-x-axis-controls--disabled *:before,
-.div__playback-x-axis-controls--disabled *:after {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-} */
-
 .span__playback-x-axis-controls-zoom-out-button {
-  /* text-align: center; */
+  overflow: hidden;
+  text-align: center;
   font-weight: normal;
-  position: absolute;
+  position: relative;
   width: 35px;
   height: 35px;
   line-height: 45px;
   padding-right: 11px;
   font-size: 30px;
 }
-
 .span__playback-x-axis-controls-zoom-in-button {
-  /* text-align: center; */
+  overflow: hidden;
+  text-align: center;
   font-weight: normal;
   position: relative;
   width: 35px;
   height: 35px;
   line-height: 45px;
   font-size: 30px;
-  left: 45px;
 }
-
 .div__playback-x-axis-controls--enabled:hover {
   color: #ececed;
 }
-
 * {
   -webkit-font-smoothing: antialiased;
 }
-
 .popover {
   border-color: #ececed;
   opacity: 0.95;
 }
-
 /* Simple CSS property to make popover title bold */
 .popover-header {
   font-weight: 700;
   background-color: #f7f7f7;
   font-size: 12px;
   font-family: Muli;
+  -webkit-font-smoothing: antialiased;
 }
-
 /* Bootstrap version 4.4.1 the present tip has the .popover property with a property
    font-size: 0.875rem;
    insipite overriding the value in .popover-body with a user defined
@@ -281,5 +255,6 @@ export default {
   background-color: #ffffff;
   font-size: 14px;
   font-family: Muli;
+  -webkit-font-smoothing: antialiased;
 }
 </style>
