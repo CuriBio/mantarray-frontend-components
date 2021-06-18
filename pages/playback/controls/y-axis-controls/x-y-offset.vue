@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import YAxisControls from "@/components/playback/controls/YAxisControls.vue";
+import { YAxisControls } from "@/dist/mantarray.common";
 
 export default {
   components: {
