@@ -6,10 +6,11 @@
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
           <canvas class="canvas__stimulationstudio-header-separator" width="272" height="2" />
           <draggable
+            v-model="icon_types"
             tag="div"
             style="display: flex; width: 100%; justify-content: space-evenly; margin-top: 80px"
-            :list="icon_types"
             :group="{ name: 'order', pull: 'clone', put: false }"
+            :clone="clone"
           >
             <div v-for="(types, idx) in icon_types" :key="idx">
               <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
@@ -18,19 +19,37 @@
         </div>
         <div class="div__scroll-container">
           <draggable
-            group="order"
-            class="dropzone"
-            style="width: 100%; height: 118px; display: flex"
-            :list="protocol_order"
+            v-model="protocol_order"
+            class="dragArea"
+            style="height: 118px; display: flex; border: 1px dashed green"
+            :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
           >
             <div
               v-for="(types, idx) in protocol_order"
               :key="idx"
+              :style="'border: 1px solid blue; display: flex;'"
               @click.shift.exact="open_modal_for_edit(types.type, idx)"
             >
               <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+              <draggable
+                v-model="types.nested_protocols"
+                class="dropzone"
+                style="height: 118px; display: flex"
+                :group="{ name: 'order' }"
+                :ghost-class="'ghost'"
+                :emptyInsertThreshold="40"
+              >
+                <div
+                  v-for="(types, idx) in types.nested_protocols"
+                  :key="idx"
+                  :style="'position: relative;'"
+                  @click.shift.exact="open_modal_for_edit(types.type, idx)"
+                >
+                  <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+                </div>
+              </draggable>
             </div>
           </draggable>
         </div>
@@ -68,8 +87,8 @@ export default {
   data() {
     return {
       icon_types: [
-        { type: "Monophasic", src: "/Monophasic-tile.png" },
-        { type: "Biphasic", src: "/Biphasic-tile.png" },
+        { type: "Monophasic", src: "/Monophasic-tile.png", nested_protocols: [] },
+        { type: "Biphasic", src: "/Biphasic-tile.png", nested_protocols: [] },
       ],
       protocol_order: [],
       modal_type: null,
@@ -113,6 +132,9 @@ export default {
       if (type === "Monophasic") this.reopen_modal = "Monophasic";
       else if (type === "Biphasic") this.reopen_modal = "Biphasic";
       this.shift_click_img_idx = idx;
+    },
+    clone(type) {
+      return { type: type.type, src: type.src, nested_protocols: [] };
     },
   },
 };
