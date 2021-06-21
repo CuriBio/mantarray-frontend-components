@@ -12,4 +12,7 @@ export default {
   clear_selected_protocol(state) {
     state.selected_wells.map((well) => delete state.protocol_assignments[well]);
   },
+  handle_delete_protocol(state) {
+    state.delete_protocol = true;
+  },
 };

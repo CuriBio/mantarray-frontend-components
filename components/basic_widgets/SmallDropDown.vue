@@ -3,13 +3,6 @@
     class="div__input-dropdown-background"
     :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
   >
-    <span
-      v-if="title_label !== ''"
-      class="span__input-dropdown-content-label"
-      :style="'width: ' + input_width + 'px;'"
-    >
-      {{ title_label }}
-    </span>
     <div
       class="div__input-dropdown-controls-content-widget"
       :style="
@@ -26,12 +19,17 @@
           {{ chosen_option.name }}</span
         >
       </div>
-      <div class="arrow" :class="{ expanded: visible }"></div>
+      <div class="arrow" :class="{ expanded: visible }" />
       <div :class="{ hidden: !visible, visible }">
         <ul>
-          <li v-for="item in options_list" :key="item.id" :value="item" @click="changeSelection(item.id)">
-            <span :style="'color:' + item.color">{{ item.letter }}</span
-            >{{ item.name }}
+          <li
+            v-for="item in options_list"
+            :id="item.name"
+            :key="item.id"
+            :value="item"
+            @click="changeSelection(item.id)"
+          >
+            {{ item.name }}
           </li>
         </ul>
       </div>
@@ -42,11 +40,8 @@
 export default {
   name: "NewSelectDropDown",
   props: {
-    title_label: { type: String, default: "" }, // title_text (str) (optional, defaults to empty string "")
-    value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")
     options_text: { type: Array, required: true },
     input_width: { type: Number, default: 210 },
-    options_id: { type: String, default: "" },
     input_height: { type: Number, default: 0 }, // This prop is utilized by the parent component
   },
   data() {
@@ -61,18 +56,10 @@ export default {
     dropdown_options: function () {
       const list = [];
       for (let i = 0; i < this.options_text.length; i++) {
-        let name;
-        typeof this.options_text[i] === "string"
-          ? (name = {
-              id: i,
-              name: this.options_text[i],
-            })
-          : (name = {
-              id: i,
-              name: this.options_text[i].label,
-              letter: this.options_text[i].letter + " ",
-              color: this.options_text[i].color,
-            });
+        const name = {
+          id: i,
+          name: this.options_text[i],
+        };
         list.push(name);
       }
       return list;
@@ -109,29 +96,13 @@ export default {
 <style scoped>
 .div__input-dropdown-background {
   transform: rotate(0deg);
-  padding: 0px;
   margin: 0px;
-  position: absolute;
+  position: relative;
   top: 0px;
   left: 0px;
+  margin-bottom: 7px;
   border-radius: 0px;
   box-shadow: none;
-  cursor: pointer;
-}
-.span__input-dropdown-content-label {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  position: absolute;
-  height: 30px;
-  top: 0px;
-  left: 0px;
-  padding: 5px;
-  user-select: none;
-  font-family: Muli;
-  font-size: 19px;
-  color: rgb(255, 255, 255);
-  text-align: center;
   cursor: pointer;
 }
 .span__input-controls-content-input-txt-widget {
@@ -140,58 +111,51 @@ export default {
   white-space: nowrap;
   transform: translateZ(0px);
   position: absolute;
-  height: 45px;
-  line-height: 45px;
+  height: 25px;
+  line-height: 25px;
   top: 0px;
   left: 0px;
   user-select: none;
   font-family: Muli;
-  font-size: 15px;
+  font-size: 11px;
   color: #b7b7b7;
   background-color: #1c1c1c;
 }
 .div__input-dropdown-controls-content-widget {
-  pointer-events: all;
   transform: rotate(0deg);
   position: absolute;
-  left: 0px;
   background-color: #1c1c1c;
   font-family: Muli;
-  padding: 10px;
+  padding: 8px;
 }
 .arrow {
   position: absolute;
   right: 10px;
-  top: 40%;
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 7px solid #888;
+  top: 43%;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid #888;
   transform: rotateZ(0deg) translateY(0px);
   transition-duration: 0.3s;
   transition-timing-function: cubic-bezier(0.59, 1.39, 0.37, 1.01);
 }
 .expanded {
   transform: rotateZ(180deg) translateY(2px);
-  overflow: hidden;
-  overflow: hidden;
-  visibility: visible;
-  z-index: 100;
 }
 ul {
   width: 100%;
   list-style-type: none;
   padding: 0;
-  margin-top: 32px;
+  margin-top: 16px;
   left: 0;
-  font-size: 16px;
+  font-size: 11px;
   position: absolute;
   color: #b7b7b7;
   border-top: 1px solid rgb(17, 17, 17);
 }
+
 li {
-  padding: 12px;
+  padding: 4px 10px 4px 10px;
   color: #b7b7b7;
   background-color: #292929;
 }

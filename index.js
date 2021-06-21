@@ -78,7 +78,7 @@ export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
 export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
 
 // Stimulation Studio
-export { default as StimulationStudioVoltageSettings } from "./components/stimulation/StimulationStudioVoltageSettings.vue";
-export { default as StimulationStudioCurrentSettings } from "./components/stimulation/StimulationStudioCurrentSettings.vue";
 export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";
-export { default as DragAndDropPanel } from "./components/stimulation/DragAndDropPanel.vue";
+export { default as StimulationStudioDragAndDropPanel } from "./components/stimulation/StimulationStudioDragAndDropPanel.vue";
+export { default as StimulationStudioBlockViewEditor } from "./components/stimulation/StimulationStudioBlockViewEditor.vue";
+export { default as StimulationStudioWaveformSettingModal } from "./components/stimulation/StimulationStudioWaveformSettingModal.vue";

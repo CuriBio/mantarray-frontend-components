@@ -26,6 +26,7 @@
         :dom_id_suffix="'max'"
         :invalid_text="max_y_value"
         :input_width="106"
+        :default_state="false"
         @update:value="on_update_max_value($event)"
       ></InputWidget>
     </div>
@@ -40,6 +41,7 @@
         :dom_id_suffix="'min'"
         :invalid_text="min_y_value"
         :input_width="106"
+        :default_state="false"
         @update:value="on_update_min_value($event)"
       ></InputWidget>
     </div>

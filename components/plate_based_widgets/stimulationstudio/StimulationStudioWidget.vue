@@ -111,7 +111,7 @@ export default {
     this.check_stroke_width();
     const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
     this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-    this.$store.subscribe((mutation) => {
+    this.unsubscribe = this.$store.subscribe((mutation) => {
       if (
         mutation.type === "stimulation/apply_selected_protocol" ||
         mutation.type === "stimulation/clear_selected_protocol"
@@ -120,6 +120,9 @@ export default {
         this.protocol_assignments = this.$store.state.stimulation.protocol_assignments;
       }
     });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
     on_select_cancel_all(state) {
@@ -320,6 +323,7 @@ export default {
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
   pointer-events: all;
+  z-index: 2;
 }
 .span__simulationstudio-plus-icon {
   overflow: hidden;

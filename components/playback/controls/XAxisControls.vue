@@ -38,19 +38,15 @@ import playback_module from "@/store/modules/playback";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { mapState } from "vuex";
-
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 Vue.component("BButton", BButton);
-
 import { VBPopover } from "bootstrap-vue";
 // Note: Vue automatically prefixes the directive name with 'v-'
 Vue.directive("b-popover", VBPopover);
-
 const stateObj = playback_module.state();
 const vuex_delay = stateObj.tooltips_delay;
-
 const options = {
   BTooltip: {
     delay: {
@@ -65,12 +61,9 @@ const options = {
     },
   },
 };
-
 Vue.use(BootstrapVue, { ...options });
-
 library.add(faMinusCircle);
 library.add(faPlusCircle);
-
 /**
  * @vue-prop {String} css_top_anchor - Current top anchor value in CSS
  * @vue-prop {String} css_left_anchor - Current left anchor value in CSS
@@ -119,11 +112,9 @@ export default {
     ...mapState("playback", {
       tooltips_delay: "tooltips_delay",
     }),
-
     max_zoom_index: function () {
       return this.x_zoom_levels.length - 1;
     },
-
     span__x_axis_controls_zoom_out_button__dynamic_class: function () {
       this.tooltip_x_out();
       return {
@@ -208,7 +199,6 @@ export default {
   color: rgb(255, 255, 255);
   text-align: right;
 }
-
 .span__playback-x-axis-controls-zoom-out-button {
   overflow: hidden;
   text-align: center;
@@ -220,7 +210,6 @@ export default {
   padding-right: 11px;
   font-size: 30px;
 }
-
 .span__playback-x-axis-controls-zoom-in-button {
   overflow: hidden;
   text-align: center;
@@ -231,20 +220,16 @@ export default {
   line-height: 45px;
   font-size: 30px;
 }
-
 .div__playback-x-axis-controls--enabled:hover {
   color: #ececed;
 }
-
 * {
   -webkit-font-smoothing: antialiased;
 }
-
 .popover {
   border-color: #ececed;
   opacity: 0.95;
 }
-
 /* Simple CSS property to make popover title bold */
 .popover-header {
   font-weight: 700;
@@ -253,7 +238,6 @@ export default {
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
 }
-
 /* Bootstrap version 4.4.1 the present tip has the .popover property with a property
    font-size: 0.875rem;
    insipite overriding the value in .popover-body with a user defined
