@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div :class="modal_type !== null || reopen_modal !== null ? 'modal_overlay' : null">
+    <div
+      :class="modal_type !== null || reopen_modal !== null || repeat_modal !== null ? 'modal_overlay' : null"
+    >
       <div class="div__background-container">
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
@@ -21,7 +23,7 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
-            style="height: 118px; display: flex; border: 1px dashed green"
+            style="height: 118px; display: flex"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
@@ -29,17 +31,19 @@
             <div
               v-for="(types, idx) in protocol_order"
               :key="idx"
-              :style="'border: 1px solid blue; display: flex;'"
-              @click.shift.exact="open_modal_for_edit(types.type, idx)"
+              :class="'repeat_container'"
+              :style="get_style(types)"
+              @click.shift.exact="open_modal_for_edit(types.type, types.id)"
             >
-              <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+              <img :src="types.src" :style="' cursor: pointer;'" />
               <draggable
                 v-model="types.nested_protocols"
                 class="dropzone"
-                style="height: 118px; display: flex"
+                style="height: 120px; display: flex"
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
+                @change="[types.nested_protocols.length === 1 ? handle_repeat($event, idx) : null]"
               >
                 <div
                   v-for="(types, idx) in types.nested_protocols"
@@ -71,11 +75,19 @@
         @close="on_modal_close"
       />
     </div>
+    <div v-if="repeat_modal !== null" class="modal-container">
+      <StimulationStudioRepeatModal
+        :repeat_idx="repeat_idx"
+        :is_enabled_array="[true, true]"
+        @close="on_repeat_modal_close"
+      />
+    </div>
   </div>
 </template>
 <script>
 import draggable from "vuedraggable";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
+import StimulationStudioRepeatModal from "@/components/stimulation/StimulationStudioRepeatModal.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -83,6 +95,7 @@ export default {
   components: {
     draggable,
     StimulationStudioWaveformSettingModal,
+    StimulationStudioRepeatModal,
   },
   data() {
     return {
@@ -95,6 +108,8 @@ export default {
       setting_type: "Current",
       reopen_modal: null,
       shift_click_img_idx: null,
+      repeat_modal: null,
+      repeat_idx: null,
     };
   },
   computed: {
@@ -120,7 +135,6 @@ export default {
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
       }
-      console.log(this.protocol_order);
     },
     on_modal_close(button) {
       this.modal_type = null;
@@ -134,7 +148,28 @@ export default {
       this.shift_click_img_idx = idx;
     },
     clone(type) {
-      return { type: type.type, src: type.src, nested_protocols: [] };
+      const random_color = Math.floor(Math.random() * 16777215).toString(16);
+      return {
+        type: type.type,
+        src: type.src,
+        nested_protocols: [],
+        repeat: { color: random_color, number_of_repeats: 0 },
+      };
+    },
+    handle_repeat(e, idx) {
+      if (e.added) {
+        this.repeat_modal = true;
+        this.repeat_idx = idx;
+      }
+    },
+    get_style(type) {
+      if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
+    },
+    on_repeat_modal_close(res) {
+      this.repeat_modal = null;
+      if (res.button_label === "Save")
+        this.protocol_order[this.repeat_idx].repeat.number_of_repeats = res.number_of_repeats;
+      this.repeat_idx = null;
     },
   },
 };
@@ -150,6 +185,12 @@ export default {
   justify-content: center;
 }
 
+.repeat_container {
+  display: flex;
+  align-items: center;
+  padding: 6px;
+}
+
 .div__icon-container {
   margin-top: 80px;
   display: flex;
@@ -159,7 +200,6 @@ export default {
 }
 
 .ghost {
-  border: 1px solid #b7b7b7;
   padding: 0 8px 0 8px;
 }
 
