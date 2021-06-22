@@ -127,6 +127,8 @@ export default {
       repeat_modal: null,
       repeat_idx: null,
       current_number_of_repeats: null,
+      cloned: false,
+      new_cloned_idx: null,
     };
   },
   computed: {
@@ -147,30 +149,34 @@ export default {
   },
   methods: {
     check_type(e) {
-      if (e.added) {
-        const { element } = e.added;
+      if (e.added && this.cloned) {
+        const { element, newIndex } = e.added;
+        this.new_cloned_idx = newIndex;
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
       }
+      this.cloned = false;
     },
     on_modal_close(button) {
       this.modal_type = null;
       this.reopen_modal = null;
       if (button === "Delete") {
-        console.log(this.shift_click_nested_img_idx);
         if (this.shift_click_nested_img_idx !== null) {
-          console.log("reached when  !== null");
           this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
             this.shift_click_nested_img_idx,
             1
           );
         } else if (this.shift_click_nested_img_idx === null) {
-          console.log("reached while === null");
           this.protocol_order.splice(this.shift_click_img_idx, 1);
         }
       }
+      if (button === "Cancel" && this.new_cloned_idx !== null) {
+        this.protocol_order.splice(this.new_cloned_idx, 1);
+        this.new_cloned_idx = null;
+      }
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
+      // this.new_cloned_idx = null;
     },
     open_modal_for_edit(type, idx, nested_idx) {
       if (nested_idx !== undefined) {
@@ -186,6 +192,7 @@ export default {
       }
     },
     clone(type) {
+      this.cloned = true;
       const random_color = Math.floor(Math.random() * 16777215).toString(16);
       return {
         type: type.type,
@@ -212,6 +219,7 @@ export default {
       this.repeat_modal = null;
       if (res.button_label === "Save")
         this.protocol_order[this.repeat_idx].repeat.number_of_repeats = res.number_of_repeats;
+      if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
       this.repeat_idx = null;
       this.current_number_of_repeats = null;
     },
