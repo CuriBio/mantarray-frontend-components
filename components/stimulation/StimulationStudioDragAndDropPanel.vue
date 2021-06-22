@@ -33,9 +33,23 @@
               :key="idx"
               :class="'repeat_container'"
               :style="get_style(types)"
-              @click.shift.exact="open_modal_for_edit(types.type, types.id)"
             >
-              <img :src="types.src" :style="' cursor: pointer;'" />
+              <div v-if="types.nested_protocols.length > 0" :class="'repeat_label_container'">
+                <div
+                  class="circle"
+                  @click.shift.exact="open_repeat_modal_for_edit(types.repeat.number_of_repeats, idx)"
+                >
+                  <span :class="'repeat_label'">
+                    {{ types.repeat.number_of_repeats }}
+                  </span>
+                </div>
+              </div>
+              <img
+                :src="types.src"
+                :style="'cursor: pointer;'"
+                @click.shift.exact="open_modal_for_edit(types.type, idx)"
+              />
+
               <draggable
                 v-model="types.nested_protocols"
                 class="dropzone"
@@ -46,12 +60,12 @@
                 @change="[types.nested_protocols.length === 1 ? handle_repeat($event, idx) : null]"
               >
                 <div
-                  v-for="(types, idx) in types.nested_protocols"
-                  :key="idx"
+                  v-for="(nested_types, nested_idx) in types.nested_protocols"
+                  :key="nested_idx"
                   :style="'position: relative;'"
-                  @click.shift.exact="open_modal_for_edit(types.type, idx)"
+                  @click.shift.exact="open_modal_for_edit(types.type, idx, nested_idx)"
                 >
-                  <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+                  <img :src="nested_types.src" :style="'margin-top: 8px; cursor: pointer;'" />
                 </div>
               </draggable>
             </div>
@@ -78,6 +92,7 @@
     <div v-if="repeat_modal !== null" class="modal-container">
       <StimulationStudioRepeatModal
         :repeat_idx="repeat_idx"
+        :current_number_of_repeats="current_number_of_repeats"
         :is_enabled_array="[true, true]"
         @close="on_repeat_modal_close"
       />
@@ -100,16 +115,18 @@ export default {
   data() {
     return {
       icon_types: [
-        { type: "Monophasic", src: "/Monophasic-tile.png", nested_protocols: [] },
-        { type: "Biphasic", src: "/Biphasic-tile.png", nested_protocols: [] },
+        { type: "Monophasic", src: "/Monophasic-tile.png" },
+        { type: "Biphasic", src: "/Biphasic-tile.png" },
       ],
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
       reopen_modal: null,
       shift_click_img_idx: null,
+      shift_click_nested_img_idx: null,
       repeat_modal: null,
       repeat_idx: null,
+      current_number_of_repeats: null,
     };
   },
   computed: {
@@ -139,13 +156,34 @@ export default {
     on_modal_close(button) {
       this.modal_type = null;
       this.reopen_modal = null;
-      if (button === "Delete") this.protocol_order.splice(this.shift_click_img_idx, 1);
+      if (button === "Delete") {
+        console.log(this.shift_click_nested_img_idx);
+        if (this.shift_click_nested_img_idx !== null) {
+          console.log("reached when  !== null");
+          this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
+            this.shift_click_nested_img_idx,
+            1
+          );
+        } else if (this.shift_click_nested_img_idx === null) {
+          console.log("reached while === null");
+          this.protocol_order.splice(this.shift_click_img_idx, 1);
+        }
+      }
       this.shift_click_img_idx = null;
+      this.shift_click_nested_img_idx = null;
     },
-    open_modal_for_edit(type, idx) {
-      if (type === "Monophasic") this.reopen_modal = "Monophasic";
-      else if (type === "Biphasic") this.reopen_modal = "Biphasic";
-      this.shift_click_img_idx = idx;
+    open_modal_for_edit(type, idx, nested_idx) {
+      if (nested_idx !== undefined) {
+        if (type === "Monophasic") this.reopen_modal = "Monophasic";
+        else if (type === "Biphasic") this.reopen_modal = "Biphasic";
+        this.shift_click_img_idx = idx;
+        this.shift_click_nested_img_idx = idx;
+      }
+      if (nested_idx === undefined) {
+        if (type === "Monophasic") this.reopen_modal = "Monophasic";
+        else if (type === "Biphasic") this.reopen_modal = "Biphasic";
+        this.shift_click_img_idx = idx;
+      }
     },
     clone(type) {
       const random_color = Math.floor(Math.random() * 16777215).toString(16);
@@ -162,6 +200,11 @@ export default {
         this.repeat_idx = idx;
       }
     },
+    open_repeat_modal_for_edit(number, idx) {
+      this.current_number_of_repeats = number;
+      this.repeat_modal = true;
+      this.repeat_idx = idx;
+    },
     get_style(type) {
       if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
     },
@@ -170,6 +213,7 @@ export default {
       if (res.button_label === "Save")
         this.protocol_order[this.repeat_idx].repeat.number_of_repeats = res.number_of_repeats;
       this.repeat_idx = null;
+      this.current_number_of_repeats = null;
     },
   },
 };
@@ -207,6 +251,31 @@ export default {
   left: 36%;
   position: absolute;
   top: 8%;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #222;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #b7b7b7;
+  cursor: pointer;
+}
+.repeat_label_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+}
+.repeat_label {
+  font-size: 12px;
+  font-weight: bold;
+  position: relative;
+  font-family: Muli;
+  color: rgb(17, 17, 17);
 }
 
 .div__background-container {

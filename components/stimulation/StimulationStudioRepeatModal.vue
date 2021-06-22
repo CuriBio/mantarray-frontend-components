@@ -8,8 +8,9 @@
         <InputWidget
           :placeholder="'5'"
           :dom_id_suffix="'duration'"
-          :invalid_text="''"
+          :invalid_text="invalid_text"
           :input_width="100"
+          :initial_value="current_number_of_repeats !== null ? current_number_of_repeats : ''"
           @update:value="number_of_repeats = $event"
         ></InputWidget
       ></span>
@@ -52,10 +53,17 @@ export default {
         return [true, true];
       },
     },
+    current_number_of_repeats: {
+      type: Number,
+      default() {
+        return null;
+      },
+    },
   },
   data() {
     return {
       number_of_repeats: null,
+      invalid_text: "",
     };
   },
   methods: {
