@@ -176,7 +176,6 @@ export default {
       }
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
-      // this.new_cloned_idx = null;
     },
     open_modal_for_edit(type, idx, nested_idx) {
       if (nested_idx !== undefined) {
