@@ -7,6 +7,13 @@
     <StimulationStudioCreateAndEdit />
     <StimulationStudioDragAndDropPanel />
     <StimulationStudioBlockViewEditor />
+    <div class="button-background">
+      <div v-for="(key, value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
+        <div :class="'btn-container'" :style="key">
+          <span :class="'btn-label'">{{ value }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,10 +31,24 @@ export default {
     StimulationStudioDragAndDropPanel,
     StimulationStudioBlockViewEditor,
   },
+  data() {
+    return {
+      btn_labels: {
+        "Save Changes": "",
+        "Clear/Reset All": "",
+        "Discard Changes": "",
+      },
+    };
+  },
+  methods: {
+    handle_click(idx) {
+      console.log("clicked");
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
 .div__stimulationstudio-layout-background {
   box-sizing: border-box;
   padding: 0px;
@@ -55,7 +76,36 @@ export default {
   color: rgb(255, 255, 255);
   text-align: center;
 }
-
+.btn-container:hover {
+  background: #b7b7b7c9;
+  cursor: pointer;
+}
+.button-background {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  left: 20%;
+  top: 93%;
+  height: 60px;
+  position: absolute;
+}
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: relative;
+  width: 90%;
+  height: 50px;
+  margin: 0 40px 0 40px;
+  background: #b7b7b7;
+}
+.btn-label {
+  transform: translateZ(0px);
+  line-height: 50px;
+  font-family: Muli;
+  font-size: 16px;
+  color: rgb(0, 0, 0);
+}
 .div__stimulationstudio-left-column-container {
   transform: rotate(0deg);
   box-sizing: border-box;
