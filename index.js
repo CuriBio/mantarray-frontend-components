@@ -83,3 +83,4 @@ export { default as StimulationStudioDragAndDropPanel } from "./components/stimu
 export { default as StimulationStudioBlockViewEditor } from "./components/stimulation/StimulationStudioBlockViewEditor.vue";
 export { default as StimulationStudioWaveformSettingModal } from "./components/stimulation/StimulationStudioWaveformSettingModal.vue";
 export { default as StimulationStudioRepeatModal } from "./components/stimulation/StimulationStudioRepeatModal.vue";
+export { default as StimulationStudioProtocolViewer } from "./components/stimulation/StimulationStudioProtocolViewer.vue";

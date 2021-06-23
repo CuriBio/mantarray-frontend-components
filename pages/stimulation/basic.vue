@@ -1,15 +1,23 @@
 <template>
   <div class="div__stimulationstudio-layout-background">
-    <div class="div__stimulationstudio-header-container" />
+    <div class="div__stimulationstudio-header-container">
+      <div class="upload-files-widget-container">
+        <UploadFilesWidget />
+      </div>
+      <div class="recording-time-container">
+        <RecordingTime />
+      </div>
+    </div>
     <div class="div__stimulationstudio-left-column-container" />
     <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
     <StimulationStudioWidget />
     <StimulationStudioCreateAndEdit />
     <StimulationStudioDragAndDropPanel />
     <StimulationStudioBlockViewEditor />
+    <StimulationStudioProtocolViewer />
     <div class="button-background">
-      <div v-for="(key, value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
-        <div :class="'btn-container'" :style="key">
+      <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
+        <div :class="'btn-container'">
           <span :class="'btn-label'">{{ value }}</span>
         </div>
       </div>
@@ -22,6 +30,9 @@ import StimulationStudioCreateAndEdit from "@/components/stimulation/Stimulation
 import StimulationStudioWidget from "@/components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
 import StimulationStudioBlockViewEditor from "@/components/stimulation/StimulationStudioBlockViewEditor.vue";
+import StimulationStudioProtocolViewer from "@/components/stimulation/StimulationStudioProtocolViewer.vue";
+import RecordingTime from "@/components/status/RecordingTime.vue";
+import UploadFilesWidget from "@/components/status/UploadFilesWidget.vue";
 
 export default {
   name: "StimulationStudio",
@@ -30,14 +41,13 @@ export default {
     StimulationStudioCreateAndEdit,
     StimulationStudioDragAndDropPanel,
     StimulationStudioBlockViewEditor,
+    StimulationStudioProtocolViewer,
+    UploadFilesWidget,
+    RecordingTime,
   },
   data() {
     return {
-      btn_labels: {
-        "Save Changes": "",
-        "Clear/Reset All": "",
-        "Discard Changes": "",
-      },
+      btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
     };
   },
   methods: {
@@ -130,6 +140,17 @@ export default {
   left: 18%;
   height: 6%;
   border-bottom: 2px solid black;
-  pointer-events: all;
+  display: flex;
+  justify-content: center;
+}
+.upload-files-widget-container {
+  position: relative;
+  top: 15%;
+  left: 8%;
+}
+.recording-time-container {
+  position: relative;
+  left: 37%;
+  top: 15%;
 }
 </style>
