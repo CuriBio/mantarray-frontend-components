@@ -171,10 +171,20 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.handle_repeat({ added: "test" }, 1);
     expect(wrapper.vm.repeat_modal).toBe(true);
     expect(wrapper.vm.repeat_idx).toBe(1);
-    await wrapper.vm.on_repeat_modal_close({ button_label: "Save", number_of_repeats: 3 });
-    expect(wrapper.find(".circle")).toBeTruthy();
 
+    await wrapper.vm.on_repeat_modal_close({ button_label: "Save", number_of_repeats: 3 });
     await wrapper.vm.open_repeat_modal_for_edit(3, 1);
     expect(wrapper.vm.current_number_of_repeats).toBe(3);
+
+    await wrapper.vm.handle_repeat({ added: "test" }, 1);
+    expect(wrapper.vm.repeat_modal).toBe(true);
+    expect(wrapper.vm.repeat_idx).toBe(1);
+
+    await wrapper.vm.on_repeat_modal_close({ button_label: "Cancel", number_of_repeats: 3 });
+    expect(wrapper.vm.protocol_order[1].nested_protocols).toStrictEqual([]);
+
+    wrapper.vm.repeat_modal = false;
+    await wrapper.vm.handle_repeat({ moved: "test" }, 1);
+    expect(wrapper.vm.repeat_modal).toBe(false);
   });
 });

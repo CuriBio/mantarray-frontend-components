@@ -178,17 +178,10 @@ export default {
       this.shift_click_nested_img_idx = null;
     },
     open_modal_for_edit(type, idx, nested_idx) {
-      if (nested_idx !== undefined) {
-        if (type === "Monophasic") this.reopen_modal = "Monophasic";
-        else if (type === "Biphasic") this.reopen_modal = "Biphasic";
-        this.shift_click_img_idx = idx;
-        this.shift_click_nested_img_idx = idx;
-      }
-      if (nested_idx === undefined) {
-        if (type === "Monophasic") this.reopen_modal = "Monophasic";
-        else if (type === "Biphasic") this.reopen_modal = "Biphasic";
-        this.shift_click_img_idx = idx;
-      }
+      if (type === "Monophasic") this.reopen_modal = "Monophasic";
+      else if (type === "Biphasic") this.reopen_modal = "Biphasic";
+      if (nested_idx !== undefined) this.shift_click_nested_img_idx = idx;
+      this.shift_click_img_idx = idx;
     },
     clone(type) {
       this.cloned = true;
