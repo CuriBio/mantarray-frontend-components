@@ -169,7 +169,6 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     ];
 
     await wrapper.vm.handle_repeat({ added: "test" }, 1);
-    console.log(wrapper.vm.protocol_order);
     expect(wrapper.vm.repeat_modal).toBe(true);
     expect(wrapper.vm.repeat_idx).toBe(1);
     await wrapper.vm.on_repeat_modal_close({ button_label: "Save", number_of_repeats: 3 });
