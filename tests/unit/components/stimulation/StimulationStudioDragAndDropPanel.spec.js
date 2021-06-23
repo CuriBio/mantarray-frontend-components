@@ -149,7 +149,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.modal_type).toBeNull();
   });
 
-  test("When a user creates a repeat block, Then the repeat modal should appear", async () => {
+  test("When a user creates a repeat block, Then the repeat modal should appear and save number of repeats to state", async () => {
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
       store,
       localVue,

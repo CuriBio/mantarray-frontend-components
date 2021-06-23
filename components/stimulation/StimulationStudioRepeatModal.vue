@@ -7,7 +7,7 @@
       <span class="span__stimulationstudio-duration-input">
         <InputWidget
           :placeholder="'5'"
-          :dom_id_suffix="'duration'"
+          :dom_id_suffix="'repeats'"
           :invalid_text="invalid_text"
           :input_width="100"
           :initial_value="current_number_of_repeats !== null ? current_number_of_repeats : ''"
