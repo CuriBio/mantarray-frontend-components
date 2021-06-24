@@ -2,7 +2,7 @@
   <div class="div__stimulationstudio-current-settings-background">
     <span class="span__stimulationstudio-current-settings-title">Repeat Protocol</span>
     <canvas class="canvas__stimulationstudio-horizontal-line-seperator-one" width="472" height="1"> </canvas>
-    <span class="span__stimulationstudio-current-settings-label-one">Number of repeats</span>
+    <span class="span__stimulationstudio-current-settings-label-one">Frequency</span>
     <div class="div__stimulationstudio-duration-input-container" width="162" height="57">
       <span class="span__stimulationstudio-duration-input">
         <InputWidget
@@ -15,6 +15,12 @@
         ></InputWidget
       ></span>
     </div>
+    <span
+      class="span__stimulationstudio-current-settings-label-one"
+      :style="'left: 70%; top: 46%; position: relative;'"
+    >
+      Hz
+    </span>
     <div :class="'button-container'">
       <ButtonWidget
         :id="'button-widget-id'"
@@ -192,7 +198,7 @@ export default {
   width: 206px;
   height: 30px;
   top: calc(164.5px - 55px);
-  left: 45px;
+  left: 4px;
   padding: 5px;
   visibility: visible;
   user-select: none;

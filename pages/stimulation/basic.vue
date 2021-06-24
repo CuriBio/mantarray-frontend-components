@@ -12,9 +12,9 @@
     <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
     <StimulationStudioWidget />
     <StimulationStudioCreateAndEdit />
-    <StimulationStudioDragAndDropPanel />
+    <StimulationStudioDragAndDropPanel :stimulation_type="stimulation_type" :time_unit="time_unit" />
     <StimulationStudioBlockViewEditor />
-    <StimulationStudioProtocolViewer />
+    <StimulationStudioProtocolViewer :stimulation_type="stimulation_type" :time_unit="time_unit" />
     <div class="button-background">
       <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
         <div :class="'btn-container'">
@@ -48,7 +48,22 @@ export default {
   data() {
     return {
       btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
+      stimulation_type: "Voltage (mV)",
+      time_unit: "Time (s)",
     };
+  },
+  created: function () {
+    this.unsubscribe = this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type === "stimulation/handle_stimulation_type") {
+        this.stimulation_type = this.$store.getters["stimulation/get_stimulation_type"];
+      }
+      if (mutation.type === "stimulation/handle_time_unit") {
+        this.time_unit = this.$store.getters["stimulation/get_time_unit"];
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
     handle_click(idx) {
@@ -146,11 +161,11 @@ export default {
 .upload-files-widget-container {
   position: relative;
   top: 15%;
-  left: 8%;
+  left: 5%;
 }
 .recording-time-container {
   position: relative;
-  left: 37%;
+  left: 34%;
   top: 15%;
 }
 </style>

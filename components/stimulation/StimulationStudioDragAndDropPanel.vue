@@ -103,7 +103,6 @@
 import draggable from "vuedraggable";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import StimulationStudioRepeatModal from "@/components/stimulation/StimulationStudioRepeatModal.vue";
-import { mapGetters } from "vuex";
 
 export default {
   name: "DragAndDropPanel",
@@ -111,6 +110,9 @@ export default {
     draggable,
     StimulationStudioWaveformSettingModal,
     StimulationStudioRepeatModal,
+  },
+  props: {
+    stimulation_type: { type: String, default: "Voltage (mV)" },
   },
   data() {
     return {
@@ -130,11 +132,6 @@ export default {
       cloned: false,
       new_cloned_idx: null,
     };
-  },
-  computed: {
-    ...mapGetters("stimulation", {
-      stimulation_type: "get_stimulation_type",
-    }),
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {

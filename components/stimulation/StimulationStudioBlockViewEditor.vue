@@ -138,6 +138,7 @@ export default {
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];
       this.stimulation_type = type;
+      this.$store.commit("stimulation/handle_stimulation_type", type);
     },
     handle_stop_requirement(idx) {
       const requirement = this.until_options_array[idx];
@@ -146,6 +147,7 @@ export default {
     handle_time_unit(idx) {
       const unit = this.time_units_array[idx];
       this.time_unit = unit;
+      this.$store.commit("stimulation/handle_time_unit", unit);
     },
     check_name_validity(input) {
       const matched_names = this.protocol_list.filter((protocol) => {

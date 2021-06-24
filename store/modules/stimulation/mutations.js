@@ -15,4 +15,10 @@ export default {
   handle_delete_protocol(state) {
     state.delete_protocol = true;
   },
+  handle_stimulation_type(state, type) {
+    state.new_protocol.stimulation_type = type;
+  },
+  handle_time_unit(state, unit) {
+    state.new_protocol.time_unit = unit;
+  },
 };
