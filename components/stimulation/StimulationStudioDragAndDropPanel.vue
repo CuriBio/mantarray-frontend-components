@@ -154,9 +154,14 @@ export default {
       }
       this.cloned = false;
     },
-    on_modal_close(button) {
+    on_modal_close(button, settings) {
       this.modal_type = null;
       this.reopen_modal = null;
+      if (button === "Save" && this.new_cloned_idx !== null) {
+        this.protocol_order[this.new_cloned_idx].settings = settings;
+      } else if (button === "Save" && this.shift_click_img_idx !== null) {
+        this.protocol_order[this.shift_click_img_idx].settings = settings;
+      }
       if (button === "Delete") {
         if (this.shift_click_nested_img_idx !== null) {
           this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
@@ -173,6 +178,7 @@ export default {
       }
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
+      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_modal_for_edit(type, idx, nested_idx) {
       if (type === "Monophasic") this.reopen_modal = "Monophasic";
@@ -225,13 +231,11 @@ export default {
   display: flex;
   justify-content: center;
 }
-
 .repeat_container {
   display: flex;
   align-items: center;
   padding: 6px;
 }
-
 .div__icon-container {
   margin-top: 80px;
   display: flex;
@@ -239,17 +243,14 @@ export default {
   width: 100%;
   border: 2px solid white;
 }
-
 .ghost {
   padding: 0 8px 0 8px;
 }
-
 .modal-container {
   left: 36%;
   position: absolute;
   top: 8%;
 }
-
 .circle {
   width: 30px;
   height: 30px;
@@ -274,7 +275,6 @@ export default {
   font-family: Muli;
   color: rgb(17, 17, 17);
 }
-
 .div__background-container {
   position: absolute;
   width: 80%;
@@ -284,7 +284,6 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
-
 .modal_overlay {
   width: 100%;
   height: 100%;
@@ -293,7 +292,6 @@ export default {
   z-index: 5;
   opacity: 0.5;
 }
-
 .div__scroll-container {
   position: relative;
   top: 47%;
@@ -305,7 +303,6 @@ export default {
   z-index: 1;
   white-space: nowrap;
 }
-
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;
   line-height: 100%;

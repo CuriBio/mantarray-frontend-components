@@ -14,6 +14,8 @@ const state = () => ({
     waveform_list: [],
   },
   delete_protocol: false,
+  x_axis_points: [],
+  y_axis_points: [],
 });
 
 export default {

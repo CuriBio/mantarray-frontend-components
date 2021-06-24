@@ -37,6 +37,7 @@
           :dom_id_suffix="'duration'"
           :invalid_text="''"
           :input_width="142"
+          @update:value="waveform_settings.phase_one_duration = Number($event)"
         ></InputWidget
       ></span>
     </div>
@@ -60,6 +61,7 @@
           :dom_id_suffix="'current'"
           :invalid_text="''"
           :input_width="142"
+          @update:value="waveform_settings.phase_one_charge = Number($event)"
         ></InputWidget>
       </span>
     </div>
@@ -121,6 +123,7 @@
             :dom_id_suffix="'interpulse'"
             :invalid_text="''"
             :input_width="142"
+            @update:value="waveform_settings.interpulse_duration = Number($event)"
           ></InputWidget>
         </span>
       </div>
@@ -158,6 +161,7 @@
             :dom_id_suffix="'durationtwo'"
             :invalid_text="''"
             :input_width="142"
+            @update:value="waveform_settings.phase_two_duration = Number($event)"
           ></InputWidget>
         </span>
       </div>
@@ -186,6 +190,7 @@
             :dom_id_suffix="'currenttwo'"
             :invalid_text="''"
             :input_width="142"
+            @update:value="waveform_settings.phase_two_charge = Number($event)"
           ></InputWidget>
         </span>
       </div>
@@ -305,6 +310,7 @@ export default {
   data() {
     return {
       popover_message: "Not Editable: This data is displayed for informational purposes only.",
+      waveform_settings: {},
     };
   },
   computed: {
@@ -313,13 +319,10 @@ export default {
       else return "Current (μA)";
     },
   },
-  created() {
-    console.log(this.stimulation_type);
-  },
   methods: {
     close(idx) {
       const button_label = this.button_names[idx];
-      this.$emit("close", button_label);
+      this.$emit("close", button_label, this.waveform_settings);
     },
   },
 };

@@ -7,7 +7,7 @@
       :y_max="y_min_max"
       :plot_area_pixel_height="160"
       :plot_area_pixel_width="1000"
-      :data_points="temp_datapoints"
+      :data_points="datapoints"
       :y_axis_label="stimulation_type"
       :x_axis_label="time_unit"
     />
@@ -28,14 +28,21 @@ export default {
   },
   data() {
     return {
-      y_min_max: 7,
+      y_min_max: 8,
+      datapoints: [],
     };
   },
   created: function () {
-    const x_values = [0, 1000, 1000, 3000, 3000, 6000, 6000, 11000, 11000, 12000, 12000, 16000, 16000, 20000];
-    const y_values = [0, 0, 3, 3, 2, 2, 0, 0, -5, -5, 1, 1, 0, 0];
-
-    this.temp_datapoints = convert_x_y_arrays_to_d3_array(x_values, y_values);
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (mutation.type === "stimulation/handle_protocol_order") {
+        const x_values = this.$store.state.stimulation.x_axis_points;
+        const y_values = this.$store.state.stimulation.y_axis_points;
+        this.datapoints = await convert_x_y_arrays_to_d3_array(x_values, y_values);
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
 };
 </script>
