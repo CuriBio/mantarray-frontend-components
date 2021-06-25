@@ -11,6 +11,9 @@ import { STATUS } from "@/store/modules/flask/enums";
 const ar = arry;
 const nr = new_arry;
 
+const http = require("http");
+const io_server = require("socket.io");
+
 describe("store/waveform", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -105,6 +108,65 @@ describe("store/waveform", () => {
 
     expect(store.getters["waveform/y_axis_zoom_idx"]).toStrictEqual(default_y_axis_zoom_idx);
     expect(store.getters["waveform/y_axis_zoom_levels"]).toStrictEqual(y_zoom_levels);
+  });
+
+  describe("websocket", () => {
+    let http_server;
+    let ws_server;
+    let socket_client;
+
+    beforeAll((done) => {
+      http_server = http.createServer().listen(4567); // TODO use constant here
+      ws_server = io_server(http_server);
+      done();
+    });
+
+    beforeEach(function (done) {
+      ws_server.on("connect", (socket) => {
+        console.log("$$$ connected");
+        socket_client = socket;
+        done();
+      });
+    });
+
+    afterAll(function (done) {
+      ws_server.close();
+      http_server.close();
+      done();
+    });
+
+    afterEach(function (done) {
+      if (socket_client.connected) {
+        socket_client.disconnect();
+        console.log("$$$ disconnected");
+      } else {
+        console.log("$$$ ERROR no connection ever made");
+      }
+      done();
+    });
+    test.only("When backend sends data, Then ws client appends to plate_waveforms", async () => {
+      console.log("$$$ TEST STARTING");
+
+      store.commit("waveform/set_plate_waveforms", ar);
+
+      const stored_waveform = store.getters["waveform/plate_waveforms"];
+      expect(stored_waveform).toHaveLength(24);
+      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+
+      let nr_json = JSON.stringify(nr);
+
+      await new Promise((resolve) =>
+        socket_client.send(nr_json, (ack) => {
+          console.log("ACK: " + ack);
+          resolve(ack);
+        })
+      );
+      console.log("$$$ after send");
+
+      expect(stored_waveform).toHaveLength(24);
+      expect(stored_waveform[0].x_data_points).toHaveLength(8);
+      console.log("$$$ TEST DONE");
+    });
   });
 
   describe("get_available_data", () => {

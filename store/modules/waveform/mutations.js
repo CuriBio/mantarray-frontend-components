@@ -13,6 +13,7 @@ export default {
   },
 
   append_plate_waveforms(state, new_value) {
+    console.log("$$$ in append_plate_waveforms");
     const new_waveforms = append_get_available_well_data(state.plate_waveforms, new_value);
     // Eli (6/25/20): Vuex needs special things to take place in order to react to changes in complex objects, such as using this spread operator. It does not be default react to some attribute of an object being updated https://stackoverflow.com/questions/59039029/vuex-doesnt-react-with-complex-object
     state.plate_waveforms = { ...new_waveforms };

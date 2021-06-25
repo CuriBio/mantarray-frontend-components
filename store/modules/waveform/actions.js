@@ -12,7 +12,7 @@ export async function ping_get_available_data() {
   const current_time_index = this.rootState.playback.x_time_index;
   const payload = {
     baseurl: "http://localhost:4567",
-    endpoint: "get_available_data?currently_displayed_time_index=" + current_time_index,
+    endpoint: "get_available_data?currently_displayed_time_index=" + current_time_index, // TODO (Tanner 6/27/21): should add `currently_displayed_time_index=` to another route call after `get_available_data` is removed, maybe add it to `system_status`
   };
   let result = 0;
   const whole_url = `${payload.baseurl}/${payload.endpoint}`;
