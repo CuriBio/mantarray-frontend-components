@@ -10,6 +10,7 @@
       :data_points="datapoints"
       :y_axis_label="stimulation_type"
       :x_axis_label="time_unit"
+      :repeat_colors="repeat_colors"
     />
   </div>
 </template>
@@ -30,6 +31,7 @@ export default {
     return {
       y_min_max: 8,
       datapoints: [],
+      repeat_colors: {},
     };
   },
   created: function () {
@@ -38,6 +40,7 @@ export default {
         const x_values = this.$store.state.stimulation.x_axis_points;
         const y_values = this.$store.state.stimulation.y_axis_points;
         this.datapoints = await convert_x_y_arrays_to_d3_array(x_values, y_values);
+        this.repeat_colors = this.$store.state.stimulation.repeat_colors;
       }
     });
   },

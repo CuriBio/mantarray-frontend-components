@@ -76,6 +76,10 @@ export default {
       type: Number,
       default: 406,
     },
+    repeat_colors: {
+      type: Object,
+      default: function () {},
+    },
   },
   data: function () {
     return {
@@ -218,6 +222,7 @@ export default {
     },
     plot_data: function () {
       const data_to_plot = this.data_points;
+
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
@@ -238,6 +243,30 @@ export default {
               return y_axis_scale(d[1]);
             })
         );
+      for (const color in this.repeat_colors) {
+        if (this.repeat_colors !== {}) {
+          const starting_idx = this.repeat_colors[color][0];
+          const ending_idx = this.repeat_colors[color][1];
+          const sliced_data_array = data_to_plot.slice(starting_idx, ending_idx);
+
+          this.waveform_line_node
+            .append("path")
+            .datum(sliced_data_array)
+            .attr("fill", "none")
+            .attr("stroke", "#" + color)
+            .attr("stroke-width", 1.5)
+            .attr(
+              "d",
+              d3_line()
+                .x(function (d) {
+                  return x_axis_scale(d[0] / 100000);
+                })
+                .y(function (d) {
+                  return y_axis_scale(d[1]);
+                })
+            );
+        }
+      }
     },
   },
 };

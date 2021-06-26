@@ -154,6 +154,8 @@ export default {
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
       }
+      if ((e.added && !this.cloned) || e.moved || e.removed)
+        this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
       this.cloned = false;
     },
     on_modal_close(button, settings) {
@@ -164,16 +166,15 @@ export default {
       } else if (button === "Save" && this.shift_click_img_idx !== null) {
         this.protocol_order[this.shift_click_img_idx].settings = settings;
       }
-      if (button === "Delete") {
-        if (this.shift_click_nested_img_idx !== null) {
-          this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
-            this.shift_click_nested_img_idx,
-            1
-          );
-        } else if (this.shift_click_nested_img_idx === null) {
-          this.protocol_order.splice(this.shift_click_img_idx, 1);
-        }
+      if (button === "Delete" && this.shift_click_nested_img_idx !== null) {
+        this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
+          this.shift_click_nested_img_idx,
+          1
+        );
+      } else if (button === "Delete" && this.shift_click_nested_img_idx === null) {
+        this.protocol_order.splice(this.shift_click_img_idx, 1);
       }
+
       if (button === "Cancel" && this.new_cloned_idx !== null) {
         this.protocol_order.splice(this.new_cloned_idx, 1);
       }
@@ -210,9 +211,6 @@ export default {
       this.repeat_modal = true;
       this.repeat_idx = idx;
     },
-    get_style(type) {
-      if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
-    },
     on_repeat_modal_close(res) {
       this.repeat_modal = null;
       if (res.button_label === "Save")
@@ -221,6 +219,9 @@ export default {
       this.repeat_idx = null;
       this.current_number_of_repeats = null;
       this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
+    },
+    get_style(type) {
+      if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
     },
   },
 };

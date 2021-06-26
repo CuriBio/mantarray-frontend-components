@@ -25,30 +25,65 @@ export default {
     state.new_protocol.waveform_list = array;
     const x_values = [0, 1000]; // one second delay to start
     const y_values = [0, 0];
+    const color_assignments = {};
 
     for (let i = 0; i < array.length; i++) {
+      const number_of_repeats = array[i].repeat.number_of_repeats;
+      const repeat_color = array[i].repeat.color;
+      const starting_repeat_idx = x_values.length - 1;
       const setting = array[i].settings;
-      x_values.push(
-        x_values[x_values.length - 1],
-        setting.phase_one_duration + x_values[x_values.length - 1]
-      );
-      y_values.push(setting.phase_one_charge, setting.phase_one_charge);
-      if (setting.interpulse_duration) {
+      for (let k = 0; k <= number_of_repeats; k++) {
+        const nested_protocols = array[i].nested_protocols;
         x_values.push(
           x_values[x_values.length - 1],
-          setting.interpulse_duration + x_values[x_values.length - 1]
+          setting.phase_one_duration + x_values[x_values.length - 1]
         );
-        y_values.push(0, 0);
-      }
-      if (setting.phase_two_duration) {
-        x_values.push(
-          x_values[x_values.length - 1],
-          setting.phase_two_duration + x_values[x_values.length - 1]
-        );
-        y_values.push(setting.phase_two_charge, setting.phase_two_charge);
+        y_values.push(setting.phase_one_charge, setting.phase_one_charge);
+        if (setting.interpulse_duration) {
+          x_values.push(
+            x_values[x_values.length - 1],
+            setting.interpulse_duration + x_values[x_values.length - 1]
+          );
+          y_values.push(0, 0);
+        }
+        if (setting.phase_two_duration) {
+          x_values.push(
+            x_values[x_values.length - 1],
+            setting.phase_two_duration + x_values[x_values.length - 1]
+          );
+          y_values.push(setting.phase_two_charge, setting.phase_two_charge);
+        }
+        if (nested_protocols.length > 0) {
+          for (let j = 0; j < nested_protocols.length; j++) {
+            const nested_setting = nested_protocols[j].settings;
+            x_values.push(
+              x_values[x_values.length - 1],
+              nested_setting.phase_one_duration + x_values[x_values.length - 1]
+            );
+            y_values.push(nested_setting.phase_one_charge, nested_setting.phase_one_charge);
+            if (nested_setting.interpulse_duration) {
+              x_values.push(
+                x_values[x_values.length - 1],
+                nested_setting.interpulse_duration + x_values[x_values.length - 1]
+              );
+              y_values.push(0, 0);
+            }
+            if (nested_setting.phase_two_duration) {
+              x_values.push(
+                x_values[x_values.length - 1],
+                nested_setting.phase_two_duration + x_values[x_values.length - 1]
+              );
+              y_values.push(nested_setting.phase_two_charge, nested_setting.phase_two_charge);
+            }
+          }
+        }
+        const ending_repeat_idx = x_values.length;
+        if (nested_protocols.length > 0)
+          color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
       }
     }
     state.x_axis_points = x_values;
     state.y_axis_points = y_values;
+    state.repeat_colors = color_assignments;
   },
 };

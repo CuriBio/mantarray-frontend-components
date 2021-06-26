@@ -60,7 +60,7 @@ export default {
       },
     },
     current_number_of_repeats: {
-      type: Number,
+      type: String,
       default() {
         return null;
       },
@@ -71,6 +71,9 @@ export default {
       number_of_repeats: null,
       invalid_text: "",
     };
+  },
+  created() {
+    this.number_of_repeats = this.current_number_of_repeats;
   },
   methods: {
     close(idx) {
