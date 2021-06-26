@@ -37,6 +37,7 @@
           :dom_id_suffix="'duration'"
           :invalid_text="''"
           :input_width="142"
+          :initial_value="selected_waveform_settings.phase_one_duration.toString()"
           @update:value="waveform_settings.phase_one_duration = Number($event)"
         ></InputWidget
       ></span>
@@ -61,6 +62,7 @@
           :dom_id_suffix="'current'"
           :invalid_text="''"
           :input_width="142"
+          :initial_value="selected_waveform_settings.phase_one_charge.toString()"
           @update:value="waveform_settings.phase_one_charge = Number($event)"
         ></InputWidget>
       </span>
@@ -123,6 +125,7 @@
             :dom_id_suffix="'interpulse'"
             :invalid_text="''"
             :input_width="142"
+            :initial_value="selected_waveform_settings.interpulse_duration.toString()"
             @update:value="waveform_settings.interpulse_duration = Number($event)"
           ></InputWidget>
         </span>
@@ -161,6 +164,7 @@
             :dom_id_suffix="'durationtwo'"
             :invalid_text="''"
             :input_width="142"
+            :initial_value="selected_waveform_settings.phase_two_duration.toString()"
             @update:value="waveform_settings.phase_two_duration = Number($event)"
           ></InputWidget>
         </span>
@@ -190,6 +194,7 @@
             :dom_id_suffix="'currenttwo'"
             :invalid_text="''"
             :input_width="142"
+            :initial_value="selected_waveform_settings.phase_two_charge.toString()"
             @update:value="waveform_settings.phase_two_charge = Number($event)"
           ></InputWidget>
         </span>
@@ -306,6 +311,18 @@ export default {
         return [true, true];
       },
     },
+    selected_waveform_settings: {
+      type: Object,
+      default() {
+        return {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        };
+      },
+    },
   },
   data() {
     return {
@@ -318,6 +335,9 @@ export default {
       if (this.stimulation_type === "Current (μA)") return "Voltage (mV)";
       else return "Current (μA)";
     },
+  },
+  created() {
+    this.waveform_settings = this.selected_waveform_settings;
   },
   methods: {
     close(idx) {

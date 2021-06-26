@@ -86,6 +86,7 @@
         :waveform_type="reopen_modal"
         :button_names="['Save', 'Delete', 'Cancel']"
         :is_enabled_array="[true, true, true]"
+        :selected_waveform_settings="selected_waveform_settings"
         @close="on_modal_close"
       />
     </div>
@@ -120,6 +121,7 @@ export default {
         { type: "Monophasic", src: "/Monophasic-tile.png" },
         { type: "Biphasic", src: "/Biphasic-tile.png" },
       ],
+      selected_waveform_settings: null,
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
@@ -174,13 +176,14 @@ export default {
       }
       if (button === "Cancel" && this.new_cloned_idx !== null) {
         this.protocol_order.splice(this.new_cloned_idx, 1);
-        this.new_cloned_idx = null;
       }
+      this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
       this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_modal_for_edit(type, idx, nested_idx) {
+      this.selected_waveform_settings = this.protocol_order[idx].settings;
       if (type === "Monophasic") this.reopen_modal = "Monophasic";
       else if (type === "Biphasic") this.reopen_modal = "Biphasic";
       if (nested_idx !== undefined) this.shift_click_nested_img_idx = idx;
@@ -217,6 +220,7 @@ export default {
       if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
       this.repeat_idx = null;
       this.current_number_of_repeats = null;
+      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
   },
 };
