@@ -48,7 +48,7 @@ export default {
   components: { StimulationStudioZoomControls },
   props: {
     title: { type: String, default: "" },
-    x_axis_sample_length: { type: Number, default: 100000 },
+    x_axis_sample_length: { type: Number, default: 100 },
     x_axis_min: { type: Number, default: 0 },
     y_min: { type: Number, default: 0 },
     y_max: { type: Number, default: 400 },

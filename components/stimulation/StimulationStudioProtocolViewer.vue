@@ -47,6 +47,7 @@ export default {
       if (mutation.type === "stimulation/handle_time_unit") {
         if (state.new_protocol.time_unit === "milliseconds") this.x_axis_sample_length *= 1000;
         if (state.new_protocol.time_unit === "seconds") this.x_axis_sample_length /= 1000;
+        state.x_axis_scale = this.x_axis_sample_length;
       }
       if (mutation.type === "stimulation/handle_zoom_out" || mutation.type === "stimulation/handle_zoom_in") {
         this.x_axis_sample_length = state.x_axis_scale;
@@ -67,5 +68,6 @@ export default {
   width: 60%;
   left: 20%;
   top: 66%;
+  overflow: hidden;
 }
 </style>
