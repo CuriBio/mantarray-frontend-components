@@ -57,7 +57,7 @@
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
-                @change="[types.nested_protocols.length === 1 ? handle_repeat($event, idx) : null]"
+                @change="[types.nested_protocols.length <= 1 ? handle_repeat($event, idx) : null]"
               >
                 <div
                   v-for="(nested_types, nested_idx) in types.nested_protocols"
@@ -161,22 +161,21 @@ export default {
     on_modal_close(button, settings) {
       this.modal_type = null;
       this.reopen_modal = null;
-      if (button === "Save" && this.new_cloned_idx !== null) {
-        this.protocol_order[this.new_cloned_idx].settings = settings;
-      } else if (button === "Save" && this.shift_click_img_idx !== null) {
-        this.protocol_order[this.shift_click_img_idx].settings = settings;
+      if (button === "Save") {
+        if (this.new_cloned_idx !== null) this.protocol_order[this.new_cloned_idx].settings = settings;
+        if (this.shift_click_img_idx !== null)
+          this.protocol_order[this.shift_click_img_idx].settings = settings;
       }
-      if (button === "Delete" && this.shift_click_nested_img_idx !== null) {
-        this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
-          this.shift_click_nested_img_idx,
-          1
-        );
-      } else if (button === "Delete" && this.shift_click_nested_img_idx === null) {
-        this.protocol_order.splice(this.shift_click_img_idx, 1);
+      if (button === "Delete") {
+        if (this.shift_click_nested_img_idx !== null)
+          this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
+            this.shift_click_nested_img_idx,
+            1
+          );
+        if (this.shift_click_nested_img_idx === null) this.protocol_order.splice(this.shift_click_img_idx, 1);
       }
-
-      if (button === "Cancel" && this.new_cloned_idx !== null) {
-        this.protocol_order.splice(this.new_cloned_idx, 1);
+      if (button === "Cancel") {
+        if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
       }
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
@@ -204,6 +203,10 @@ export default {
       if (e.added) {
         this.repeat_modal = true;
         this.repeat_idx = idx;
+      }
+      if (e.removed) {
+        this.protocol_order[idx].repeat.number_of_repeats = 0;
+        this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
       }
     },
     open_repeat_modal_for_edit(number, idx) {
