@@ -22,9 +22,10 @@ export default {
     state.new_protocol.time_unit = unit;
   },
   handle_protocol_order(state, array) {
+    // TODO: clean up function, must be a more concise way of performing
     state.new_protocol.waveform_list = array;
-    const x_values = [0, 1000]; // one second delay to start
-    const y_values = [0, 0];
+    const x_values = [0]; // one second delay to start
+    const y_values = [0];
     const color_assignments = {};
     const helper = (setting) => {
       x_values.push(
@@ -46,20 +47,23 @@ export default {
       }
     };
     for (let i = 0; i < array.length; i++) {
+      // loop through current array of data inputs
       const number_of_repeats = array[i].repeat.number_of_repeats;
       const repeat_color = array[i].repeat.color;
-      const starting_repeat_idx = x_values.length - 1;
+      const starting_repeat_idx = x_values.length - 1; // keep track of color assignments
       const setting = array[i].settings;
       for (let k = 0; k <= number_of_repeats; k++) {
+        // perform loop number of times requested in repeat block
         const nested_protocols = array[i].nested_protocols;
         helper(setting);
         if (nested_protocols.length > 0) {
           for (let j = 0; j < nested_protocols.length; j++) {
+            // include all nested_protocols in repeat block
             const nested_setting = nested_protocols[j].settings;
             helper(nested_setting);
           }
         }
-        const ending_repeat_idx = x_values.length;
+        const ending_repeat_idx = x_values.length; // keep track of color assignments
         if (nested_protocols.length > 0)
           color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
       }
@@ -67,5 +71,13 @@ export default {
     state.x_axis_points = x_values;
     state.y_axis_points = y_values;
     state.repeat_colors = color_assignments;
+  },
+  handle_zoom_in(state, axis) {
+    if (axis === "x-axis") state.x_axis_scale /= 10;
+    if (axis === "y-axis") state.y_axis_scale /= 10;
+  },
+  handle_zoom_out(state, axis) {
+    if (axis === "x-axis") state.x_axis_scale *= 10;
+    if (axis === "y-axis") state.y_axis_scale *= 10;
   },
 };

@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
-      stimulation_type: "Voltage (mV)",
+      stimulation_type: "Voltage (V)",
       time_unit: "Time (s)",
     };
   },

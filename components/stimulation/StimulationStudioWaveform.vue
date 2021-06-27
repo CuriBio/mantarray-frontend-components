@@ -1,20 +1,20 @@
 <template>
   <div class="div__waveform">
-    <div class="div__waveform-well-title">
-      <span>{{ title }}</span>
-    </div>
     <div class="div__waveform-graph" :style="div__waveform_graph__dynamic_style"></div>
     <div class="div__waveform-y-axis-title">
+      <StimulationStudioZoomControls :axis="'y-axis'" />
       <span> {{ y_axis_label }}</span>
     </div>
 
     <div class="div__waveform-x-axis-title">
-      <span> {{ x_axis_label }}</span>
+      <span :style="'padding-right: 29px;'"> {{ x_axis_label }}</span>
+      <StimulationStudioZoomControls :axis="'x-axis'" />
     </div>
   </div>
 </template>
 <script>
 import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear } from "d3";
+import StimulationStudioZoomControls from "@/components/stimulation/StimulationStudioZoomControls.vue";
 /**
  * @vue-prop {String} title - Current title of the waveform
  * @vue-prop {Int} samples_per_second - Current samples per second
@@ -45,16 +45,15 @@ import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear
  */
 export default {
   name: "StimulationStudioWaveform",
-  components: {},
+  components: { StimulationStudioZoomControls },
   props: {
     title: { type: String, default: "" },
-    samples_per_second: { type: Number, default: 600000 },
     x_axis_sample_length: { type: Number, default: 100000 },
     x_axis_min: { type: Number, default: 0 },
     y_min: { type: Number, default: 0 },
     y_max: { type: Number, default: 400 },
-    y_axis_label: { type: String, default: "Voltage (mV)" },
-    x_axis_label: { type: String, default: "Time (seconds)" },
+    y_axis_label: { type: String, default: "Voltage (V)" },
+    x_axis_label: { type: String, default: "Time (s)" },
     data_points: {
       type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]
       default: function () {
@@ -65,7 +64,7 @@ export default {
     margin: {
       type: Object,
       default: function () {
-        return { top: 10, right: 20, bottom: 20, left: 70 };
+        return { top: 10, right: 20, bottom: 20, left: 60 };
       },
     },
     plot_area_pixel_height: {
@@ -203,10 +202,7 @@ export default {
 
     create_x_axis_scale: function () {
       this.x_axis_scale = scaleLinear()
-        .domain([
-          this.x_axis_min / this.samples_per_second,
-          (this.x_axis_min + this.x_axis_sample_length) / this.samples_per_second,
-        ])
+        .domain([this.x_axis_min, this.x_axis_min + this.x_axis_sample_length])
         .range([0, this.plot_area_pixel_width]);
     },
     create_y_axis_scale: function () {
@@ -221,6 +217,8 @@ export default {
       this.y_axis_node.call(axisLeft(this.y_axis_scale).ticks(this.frequency_of_ticks));
     },
     plot_data: function () {
+      console.log(this.repeat_colors);
+
       const data_to_plot = this.data_points;
 
       const x_axis_scale = this.x_axis_scale;
@@ -237,7 +235,7 @@ export default {
           "d",
           d3_line()
             .x(function (d) {
-              return x_axis_scale(d[0] / 100000);
+              return x_axis_scale(d[0]);
             })
             .y(function (d) {
               return y_axis_scale(d[1]);
@@ -259,7 +257,7 @@ export default {
               "d",
               d3_line()
                 .x(function (d) {
-                  return x_axis_scale(d[0] / 100000);
+                  return x_axis_scale(d[0]);
                 })
                 .y(function (d) {
                   return y_axis_scale(d[1]);
@@ -295,35 +293,6 @@ export default {
   overflow-x: scroll;
 }
 
-.div__waveform-well-title *,
-.div__waveform-well-title *:before,
-.div__waveform-well-title *:after {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-}
-
-.div__waveform-well-title {
-  white-space: nowrap;
-  word-wrap: break-word;
-  font-weight: bold;
-  font-family: Muli;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 18px;
-  color: rgb(255, 255, 255);
-  text-align: left;
-  user-select: none;
-  position: absolute;
-  width: 51px;
-  height: 32px;
-  top: 0px;
-  left: 5px;
-  z-index: 99;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-}
-
 .div__waveform-y-axis-title *,
 .div__waveform-y-axis-title *:before,
 .div__waveform-y-axis-title *:after {
@@ -342,7 +311,7 @@ export default {
   font-family: Muli;
   font-weight: bold;
   position: absolute;
-  top: 100px;
+  top: 110px;
   left: -170px;
   width: 379px;
   height: 28px;
@@ -374,8 +343,8 @@ export default {
   font-family: Muli;
   font-weight: bold;
   position: sticky;
-  top: 210px;
-  left: 328px;
+  top: 220px;
+  left: 325px;
   width: 430px;
   height: 29px;
   overflow: hidden;

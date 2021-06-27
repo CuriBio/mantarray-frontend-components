@@ -57,7 +57,13 @@
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
-                @change="[types.nested_protocols.length <= 1 ? handle_repeat($event, idx) : null]"
+                @change="
+                  [
+                    types.nested_protocols.length <= 1
+                      ? handle_repeat($event, idx)
+                      : handle_internal_repeat($event),
+                  ]
+                "
               >
                 <div
                   v-for="(nested_types, nested_idx) in types.nested_protocols"
@@ -208,6 +214,9 @@ export default {
         this.protocol_order[idx].repeat.number_of_repeats = 0;
         this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
       }
+    },
+    handle_internal_repeat(e) {
+      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_repeat_modal_for_edit(number, idx) {
       this.current_number_of_repeats = number;

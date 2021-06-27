@@ -40,7 +40,7 @@
       <FontAwesomeIcon v-show="all_select_or_cancel" id="plus" :icon="['fa', 'plus-circle']" />
       <FontAwesomeIcon v-show="!all_select_or_cancel" id="minus" :icon="['fa', 'minus-circle']" />
     </span>
-    <div v-for="well_index in Array(24).keys()" :key="well_index">
+    <div v-for="well_index in Array(number_of_wells).keys()" :key="well_index">
       <StimulationStudioPlateWell
         :id="'plate_' + well_index"
         :class="hover_color[well_index]"
@@ -77,6 +77,9 @@ const debug_mode = undefined;
 export default {
   name: "StimulationStudioWidget",
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
+  props: {
+    number_of_wells: { type: Number, default: 24 },
+  },
   data() {
     return {
       row_values: {
