@@ -123,7 +123,6 @@ describe("store/waveform", () => {
 
     beforeEach(function (done) {
       ws_server.on("connect", (socket) => {
-        console.log("$$$ connected");
         socket_client = socket;
         done();
       });
@@ -138,15 +137,10 @@ describe("store/waveform", () => {
     afterEach(function (done) {
       if (socket_client.connected) {
         socket_client.disconnect();
-        console.log("$$$ disconnected");
-      } else {
-        console.log("$$$ ERROR no connection ever made");
       }
       done();
     });
     test.only("When backend sends data, Then ws client appends to plate_waveforms", async () => {
-      console.log("$$$ TEST STARTING");
-
       store.commit("waveform/set_plate_waveforms", ar);
 
       const stored_waveform = store.getters["waveform/plate_waveforms"];
@@ -157,15 +151,12 @@ describe("store/waveform", () => {
 
       await new Promise((resolve) =>
         socket_client.send(nr_json, (ack) => {
-          console.log("ACK: " + ack);
           resolve(ack);
         })
       );
-      console.log("$$$ after send");
 
       expect(stored_waveform).toHaveLength(24);
       expect(stored_waveform[0].x_data_points).toHaveLength(8);
-      console.log("$$$ TEST DONE");
     });
   });
 
