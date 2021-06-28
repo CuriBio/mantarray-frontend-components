@@ -217,8 +217,6 @@ export default {
       this.y_axis_node.call(axisLeft(this.y_axis_scale).ticks(this.frequency_of_ticks));
     },
     plot_data: function () {
-      console.log(this.repeat_colors);
-
       const data_to_plot = this.data_points;
 
       const x_axis_scale = this.x_axis_scale;

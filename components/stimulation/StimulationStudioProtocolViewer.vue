@@ -5,7 +5,7 @@
       :y_min="-y_min_max"
       :y_max="y_min_max"
       :plot_area_pixel_height="160"
-      :plot_area_pixel_width="970"
+      :plot_area_pixel_width="960"
       :data_points="datapoints"
       :y_axis_label="stimulation_type"
       :x_axis_label="time_unit"
@@ -45,13 +45,14 @@ export default {
         this.datapoints = [];
       }
       if (mutation.type === "stimulation/handle_time_unit") {
-        if (state.new_protocol.time_unit === "milliseconds") this.x_axis_sample_length *= 1000;
-        if (state.new_protocol.time_unit === "seconds") this.x_axis_sample_length /= 1000;
-        state.x_axis_scale = this.x_axis_sample_length;
+        if (state.new_protocol.time_unit === "milliseconds") state.x_axis_scale *= 1000;
+        if (state.new_protocol.time_unit === "seconds") state.x_axis_scale /= 1000;
+        this.x_axis_sample_length = state.x_axis_scale;
       }
       if (mutation.type === "stimulation/handle_zoom_out" || mutation.type === "stimulation/handle_zoom_in") {
         this.x_axis_sample_length = state.x_axis_scale;
         this.y_min_max = state.y_axis_scale;
+        state.x_axis_scale = this.x_axis_sample_length;
       }
     });
   },
@@ -68,6 +69,5 @@ export default {
   width: 60%;
   left: 20%;
   top: 66%;
-  overflow: hidden;
 }
 </style>
