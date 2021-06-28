@@ -4,6 +4,7 @@ Changelog for Mantarray Frontend Components
 0.3.0 (unreleased)
 ------------------
 
+- Added y-axis-zoom for waveform display
 - Added heatmap
 - Added websocket to receive waveform data asynchronously and in real time
 
