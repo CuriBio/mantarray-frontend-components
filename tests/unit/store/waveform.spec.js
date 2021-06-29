@@ -7,9 +7,7 @@ import { arry, new_arry } from "./../js_utils/waveform_data_provider.js";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
-
-const ar = arry;
-const nr = new_arry;
+import { socket as client } from "@/store/plugins/websocket";
 
 const http = require("http");
 const io_server = require("socket.io");
@@ -19,6 +17,8 @@ describe("store/waveform", () => {
   localVue.use(Vuex);
   let NuxtStore;
   let store;
+  let ar;
+  let nr;
 
   beforeAll(async () => {
     // note the store will mutate across tests, so make sure to re-create it in beforeEach
@@ -28,7 +28,16 @@ describe("store/waveform", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    // some tests modify these two values, so make a deep copy before each test
+    ar = JSON.parse(JSON.stringify(arry));
+    nr = JSON.parse(JSON.stringify(new_arry));
   });
+
+  afterEach(() => {
+    // event handlers persist through tests, so clear them all after each test
+    client.off();
+  });
+
   test("When initialized, Then the plate_waveforms is an empty representation of a 96-well plate", () => {
     const array_of_waveforms = store.state.waveform.plate_waveforms;
     expect(array_of_waveforms).toHaveLength(96);
@@ -140,20 +149,19 @@ describe("store/waveform", () => {
       }
       done();
     });
-    test("When backend emits waveform_data message, Then ws client appends to plate_waveforms", async () => {
+    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
+      expect(store.getters["waveform/plate_waveforms"][0].x_data_points).toHaveLength(0);
       store.commit("waveform/set_plate_waveforms", ar);
 
       const stored_waveform = store.getters["waveform/plate_waveforms"];
       expect(stored_waveform).toHaveLength(24);
       expect(stored_waveform[0].x_data_points).toHaveLength(4);
 
-      let nr_json = JSON.stringify(nr);
-
-      await new Promise((resolve) =>
-        socket_client.emit("waveform_data", nr_json, (ack) => {
+      await new Promise((resolve) => {
+        socket_client.emit("waveform_data", JSON.stringify(nr), (ack) => {
           resolve(ack);
-        })
-      );
+        });
+      });
 
       expect(stored_waveform).toHaveLength(24);
       expect(stored_waveform[0].x_data_points).toHaveLength(8);
