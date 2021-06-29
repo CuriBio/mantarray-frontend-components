@@ -7,7 +7,7 @@ import { arry, new_arry } from "./../js_utils/waveform_data_provider.js";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
-import { socket as client } from "@/store/plugins/websocket";
+import { socket as socket_client_side } from "@/store/plugins/websocket";
 
 const http = require("http");
 const io_server = require("socket.io");
@@ -35,7 +35,7 @@ describe("store/waveform", () => {
 
   afterEach(() => {
     // event handlers persist through tests, so clear them all after each test
-    client.off();
+    socket_client_side.off();
   });
 
   test("When initialized, Then the plate_waveforms is an empty representation of a 96-well plate", () => {
@@ -122,32 +122,29 @@ describe("store/waveform", () => {
   describe("websocket", () => {
     let http_server;
     let ws_server;
-    let socket_client;
+    let socket_server_side;
 
-    beforeAll((done) => {
+    beforeAll(() => {
       http_server = http.createServer().listen(4567); // TODO use constant here
       ws_server = io_server(http_server);
-      done();
     });
 
-    beforeEach(function (done) {
+    beforeEach((done) => {
       ws_server.on("connect", (socket) => {
-        socket_client = socket;
+        socket_server_side = socket;
         done();
       });
     });
 
-    afterAll(function (done) {
+    afterAll(() => {
       ws_server.close();
       http_server.close();
-      done();
     });
 
-    afterEach(function (done) {
-      if (socket_client.connected) {
-        socket_client.disconnect();
+    afterEach(() => {
+      if (socket_server_side.connected) {
+        socket_server_side.disconnect();
       }
-      done();
     });
     test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
       expect(store.getters["waveform/plate_waveforms"][0].x_data_points).toHaveLength(0);
@@ -158,7 +155,7 @@ describe("store/waveform", () => {
       expect(stored_waveform[0].x_data_points).toHaveLength(4);
 
       await new Promise((resolve) => {
-        socket_client.emit("waveform_data", JSON.stringify(nr), (ack) => {
+        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
           resolve(ack);
         });
       });
