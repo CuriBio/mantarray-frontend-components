@@ -140,7 +140,7 @@ describe("store/waveform", () => {
       }
       done();
     });
-    test.only("When backend sends data, Then ws client appends to plate_waveforms", async () => {
+    test("When backend emits waveform_data message, Then ws client appends to plate_waveforms", async () => {
       store.commit("waveform/set_plate_waveforms", ar);
 
       const stored_waveform = store.getters["waveform/plate_waveforms"];
@@ -150,7 +150,7 @@ describe("store/waveform", () => {
       let nr_json = JSON.stringify(nr);
 
       await new Promise((resolve) =>
-        socket_client.send(nr_json, (ack) => {
+        socket_client.emit("waveform_data", nr_json, (ack) => {
           resolve(ack);
         })
       );
