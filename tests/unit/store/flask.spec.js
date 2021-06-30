@@ -129,7 +129,7 @@ describe("store/flask", () => {
       await bound_ping_system_status();
 
       await wait_for_expect(() => {
-        expect(store.state.waveform.waveform_ping_interval_id).not.toBeNull();
+        expect(store.state.data.waveform_ping_interval_id).not.toBeNull();
       });
     });
     test("Given playback state is RECORDING and /system_status returns LIVE_VIEW_ACTIVE and /get_available_data returns code 204, When ping_system_status in called, Then start_waveform_pinging is not invoked", async () => {
@@ -148,9 +148,9 @@ describe("store/flask", () => {
       const spied_set_interval = jest.spyOn(window, "setInterval");
       spied_set_interval.mockReturnValueOnce(expected_interval_id);
 
-      await store.dispatch("waveform/start_get_waveform_pinging");
+      await store.dispatch("data/start_get_waveform_pinging");
       expect(spied_set_interval.mock.calls).toHaveLength(1);
-      expect(store.state.waveform.waveform_ping_interval_id).toStrictEqual(expected_interval_id);
+      expect(store.state.data.waveform_ping_interval_id).toStrictEqual(expected_interval_id);
     });
     test("Given /system_status is mocked to return CALIBRATED as the status and the current status is CALIBRATING, When ping_system_status is called, Then the URL should include the current state UUID and the vuex status should update to CALIBRATED and the Vuex Playback State should update to CALIBRATED", async () => {
       mocked_axios.onGet(system_status_regexp).reply(200, {

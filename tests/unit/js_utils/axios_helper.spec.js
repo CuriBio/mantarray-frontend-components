@@ -35,7 +35,7 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
     // clean up any pinging that was started
     store.commit("flask/stop_status_pinging");
     store.commit("playback/stop_playback_progression");
-    store.commit("waveform/stop_waveform_pinging");
+    store.commit("data/stop_waveform_pinging");
     mocked_axios.restore();
     jest.restoreAllMocks();
     sandbox.restore();
@@ -115,7 +115,7 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
 
           mocked_axios.onGet(get_available_data_regex).reply(200, waveform_data_response);
 
-          await store.dispatch("waveform/start_get_waveform_pinging");
+          await store.dispatch("data/start_get_waveform_pinging");
 
           mocked_axios.onGet("/start_recording").reply(405);
 
@@ -123,7 +123,7 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
           await store.dispatch("playback/start_playback_progression");
 
           // confirm pre-conditions
-          expect(store.state.waveform.waveform_ping_interval_id).not.toBeNull();
+          expect(store.state.data.waveform_ping_interval_id).not.toBeNull();
           expect(store.state.flask.status_ping_interval_id).not.toBeNull();
           expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
 
@@ -132,7 +132,7 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
           expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
           expect(store.state.flask.status_ping_interval_id).toBeNull();
           expect(store.state.playback.playback_progression_interval_id).toBeNull();
-          expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
+          expect(store.state.data.waveform_ping_interval_id).toBeNull();
         }
       );
       test.each([["flask/get_flask_action_context"], ["playback/get_playback_action_context"]])(
@@ -180,14 +180,14 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
             .onGet("/start_live_view")
             .reply(401);
 
-          await store.dispatch("waveform/start_get_waveform_pinging");
+          await store.dispatch("data/start_get_waveform_pinging");
 
           // confirm pre-condition
-          expect(store.state.waveform.waveform_ping_interval_id).not.toBeNull();
+          expect(store.state.data.waveform_ping_interval_id).not.toBeNull();
 
           await call_axios_get_from_vuex("http://localhost:4567/start_live_view", context);
 
-          expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
+          expect(store.state.data.waveform_ping_interval_id).toBeNull();
         }
       );
     });
