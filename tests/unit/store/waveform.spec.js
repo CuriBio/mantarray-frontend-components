@@ -69,14 +69,7 @@ describe("store/waveform", () => {
     expect(store.state.waveform.plate_waveforms[1].y_data_points).toHaveLength(0);
   });
 
-  test("When initialized, Then active_plate_waveforms is having hardcoded value initially", () => {
-    const dictionary_of_waveforms = store.getters["waveform/active_plate_waveforms"];
-    const well_0_waveform = dictionary_of_waveforms[0];
-    expect(well_0_waveform.x_data_points[0]).toStrictEqual(0);
-    expect(well_0_waveform.y_data_points[0]).toStrictEqual(290.429978);
-  });
-
-  test("When waveforms is initially mutated with few data points, Then subsequent mutations appends data points to the exisitng plate_waveforms", async () => {
+  test("When waveforms is initially mutated with few data points, Then subsequent mutations append data points to the existing plate_waveforms", async () => {
     store.commit("waveform/set_plate_waveforms", ar);
 
     const stored_waveform = store.getters["waveform/plate_waveforms"];
