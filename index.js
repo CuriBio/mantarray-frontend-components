@@ -85,3 +85,4 @@ export { default as StimulationStudioWaveformSettingModal } from "./components/s
 export { default as StimulationStudioRepeatModal } from "./components/stimulation/StimulationStudioRepeatModal.vue";
 export { default as StimulationStudioProtocolViewer } from "./components/stimulation/StimulationStudioProtocolViewer.vue";
 export { default as StimulationStudioWaveform } from "./components/stimulation/StimulationStudioWaveform.vue";
+export { default as StimulationStudioZoomControls } from "./components/stimulation/StimulationStudioZoomControls.vue";

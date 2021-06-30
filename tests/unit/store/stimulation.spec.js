@@ -53,6 +53,7 @@ describe("store/stimulation", () => {
   beforeEach(async () => {
     store = await NuxtStore.createStore();
   });
+
   describe("stimulation/getters", () => {
     test("When the protocol dropdown displays available protocols, Then only only protocols with defined label should return", async () => {
       const protocols = store.getters["stimulation/get_protocols"];
@@ -77,6 +78,7 @@ describe("store/stimulation", () => {
       const current_type = store.getters["stimulation/get_stimulation_type"];
       expect(current_type).toBe("Current (A)");
     });
+
     test("When requesting the time unit, Then it should return what user has selected in dropdown", async () => {
       const default_unit = store.getters["stimulation/get_time_unit"];
       expect(default_unit).toBe("Time (s)");

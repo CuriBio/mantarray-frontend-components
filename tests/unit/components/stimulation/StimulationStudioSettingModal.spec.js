@@ -1,10 +1,6 @@
-import { mount } from "@vue/test-utils";
+import { mount, shallowMount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
-import { shallowMount } from "@vue/test-utils";
 import { StimulationStudioWaveformSettingModal as dist_StimulationStudioCurrentSettings } from "@/dist/mantarray.common";
-// import Vue from "vue";
-
-import { createLocalVue } from "@vue/test-utils";
 
 let wrapper = null;
 
