@@ -268,15 +268,7 @@ export default {
 };
 </script>
 
-<style type="text/css">
-.div__waveform *,
-.div__waveform *:before,
-.div__waveform *:after {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-}
-
+<style scoped>
 .div__waveform {
   width: 100%;
   height: 244px;
@@ -285,18 +277,9 @@ export default {
   top: 0px;
   left: 0px;
   z-index: 0;
-  -webkit-box-sizing: content-box;
   box-sizing: content-box;
   overflow: hidden;
   overflow-x: scroll;
-}
-
-.div__waveform-y-axis-title *,
-.div__waveform-y-axis-title *:before,
-.div__waveform-y-axis-title *:after {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
 }
 
 .div__waveform-y-axis-title {
@@ -320,15 +303,6 @@ export default {
   letter-spacing: normal;
   z-index: 99;
   pointer-events: all;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-}
-
-.div__waveform-x-axis-title *,
-.div__waveform-x-axis-title *:before,
-.div__waveform-x-axis-title *:after {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 
@@ -352,15 +326,6 @@ export default {
   letter-spacing: normal;
   z-index: 99;
   pointer-events: all;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-}
-
-.div__waveform-graph *,
-.div__waveform-graph *:before,
-.div__waveform-graph *:after {
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 
@@ -371,35 +336,34 @@ export default {
   height: 200px;
   top: 15px;
   left: 14px;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
   z-index: 1;
+  font-family: Muli;
 }
 
 .g__waveform-x-axis {
-  stroke: rgb(85, 85, 85);
+  stroke: #b7b7b7;
   font-family: Muli;
   font-size: 13px;
 }
 
 .g__waveform-x-axis path {
-  stroke: rgb(85, 85, 85);
+  stroke: #b7b7b7;
 }
 
 .g__waveform-x-axis .tick line {
-  stroke: rgb(85, 85, 85);
+  stroke: #b7b7b7;
 }
 
 .g__waveform-y-axis {
-  stroke: rgb(85, 85, 85);
+  stroke: #b7b7b7;
   font-family: Muli;
   font-size: 13px;
 }
 
 .g__waveform-y-axis path {
-  stroke: rgb(85, 85, 85);
+  stroke: #b7b7b7;
 }
 .g__waveform-y-axis .tick line {
-  stroke: rgb(85, 85, 85);
+  stroke: #b7b7b7;
 }
 </style>
