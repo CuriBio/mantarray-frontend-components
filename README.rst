@@ -1,5 +1,14 @@
 Frontend components for use in the desktop and cloud Mantarray Applications.
 
+Install steps:
+ - ``npm install``
+ - ``npm run build``
+
+Good to confirm that Unit Tests are all passing after install:
+ - ``npm run test:unit``
+
+Load and view a page after running command ``npm run dev``
+
 
 .. image:: https://github.com/CuriBio/mantarray-frontend-components/workflows/Dev/badge.svg?branch=development
    :alt: Development Branch Build

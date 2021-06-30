@@ -7,15 +7,18 @@ import { arry, new_arry } from "./../js_utils/waveform_data_provider.js";
 import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
+import { socket as socket_client_side } from "@/store/plugins/websocket";
 
-const ar = arry;
-const nr = new_arry;
+const http = require("http");
+const io_server = require("socket.io");
 
 describe("store/waveform", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
   let NuxtStore;
   let store;
+  let ar;
+  let nr;
 
   beforeAll(async () => {
     // note the store will mutate across tests, so make sure to re-create it in beforeEach
@@ -25,7 +28,16 @@ describe("store/waveform", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    // some tests modify these two values, so make a deep copy before each test
+    ar = JSON.parse(JSON.stringify(arry));
+    nr = JSON.parse(JSON.stringify(new_arry));
   });
+
+  afterEach(() => {
+    // event handlers persist through tests, so clear them all after each test
+    socket_client_side.off();
+  });
+
   test("When initialized, Then the plate_waveforms is an empty representation of a 96-well plate", () => {
     const array_of_waveforms = store.state.waveform.plate_waveforms;
     expect(array_of_waveforms).toHaveLength(96);
@@ -105,6 +117,52 @@ describe("store/waveform", () => {
 
     expect(store.getters["waveform/y_axis_zoom_idx"]).toStrictEqual(default_y_axis_zoom_idx);
     expect(store.getters["waveform/y_axis_zoom_levels"]).toStrictEqual(y_zoom_levels);
+  });
+
+  describe("websocket", () => {
+    let http_server;
+    let ws_server;
+    let socket_server_side;
+
+    beforeAll(() => {
+      http_server = http.createServer().listen(4567); // TODO use constant here
+      ws_server = io_server(http_server);
+    });
+
+    beforeEach((done) => {
+      ws_server.on("connect", (socket) => {
+        socket_server_side = socket;
+        done();
+      });
+    });
+
+    afterAll(() => {
+      ws_server.close();
+      http_server.close();
+    });
+
+    afterEach(() => {
+      if (socket_server_side.connected) {
+        socket_server_side.disconnect();
+      }
+    });
+    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
+      expect(store.getters["waveform/plate_waveforms"][0].x_data_points).toHaveLength(0);
+      store.commit("waveform/set_plate_waveforms", ar);
+
+      const stored_waveform = store.getters["waveform/plate_waveforms"];
+      expect(stored_waveform).toHaveLength(24);
+      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      expect(stored_waveform).toHaveLength(24);
+      expect(stored_waveform[0].x_data_points).toHaveLength(8);
+    });
   });
 
   describe("get_available_data", () => {
