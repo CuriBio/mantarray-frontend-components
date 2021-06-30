@@ -22,7 +22,7 @@ describe("StimulationStudioRepeatModal.vue", () => {
       store,
       localVue,
     });
-    await wrapper.find("#input-widget-field-repeats").setValue("4");
+    await wrapper.find("#input-widget-field-hertz").setValue("4");
     expect(wrapper.vm.number_of_repeats).toBe("4");
   });
 
@@ -31,7 +31,7 @@ describe("StimulationStudioRepeatModal.vue", () => {
       store,
       localVue,
     });
-    await wrapper.find("#input-widget-field-repeats").setValue("3");
+    await wrapper.find("#input-widget-field-hertz").setValue("3");
     await wrapper.findAll(".span__button_label").at(0).trigger("click");
     expect(wrapper.emitted("close")).toBeTruthy();
   });
