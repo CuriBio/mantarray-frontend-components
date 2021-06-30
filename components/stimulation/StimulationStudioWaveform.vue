@@ -3,11 +3,11 @@
     <div class="div__waveform-graph" :style="div__waveform_graph__dynamic_style"></div>
     <div class="div__waveform-y-axis-title">
       <StimulationStudioZoomControls :axis="'y-axis'" />
-      <span> {{ y_axis_label }}</span>
+      <span>{{ y_axis_label }}</span>
     </div>
 
     <div class="div__waveform-x-axis-title">
-      <span :style="'padding-right: 29px;'"> {{ x_axis_label }}</span>
+      <span :style="'padding-right: 29px;'">{{ x_axis_label }}</span>
       <StimulationStudioZoomControls :axis="'x-axis'" />
     </div>
   </div>

@@ -2,7 +2,7 @@
   <div class="div__playback-x-axis-controls">
     <div class="div__playback-x-axis-controls-elements">
       <span
-        v-b-popover.hover.top="x_axis_zoom_out"
+        v-b-popover.hover.bottom="x_axis_zoom_out"
         class="span__playback-x-axis-controls-zoom-out-button"
         @click="zoom_x_out()"
       >
@@ -10,7 +10,7 @@
       </span>
 
       <span
-        v-b-popover.hover.top="x_axis_zoom_in"
+        v-b-popover.hover.bottom="x_axis_zoom_in"
         class="span__playback-x-axis-controls-zoom-in-button"
         @click="zoom_x_in()"
       >

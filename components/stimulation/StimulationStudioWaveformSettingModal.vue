@@ -297,7 +297,7 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    stimulation_type: { type: String, default: "Current (μA)" },
+    stimulation_type: { type: String, default: "Voltage (V)" },
     waveform_type: { type: String, default: "Monophasic" },
     button_names: {
       type: Array,

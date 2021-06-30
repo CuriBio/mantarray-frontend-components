@@ -24,7 +24,7 @@ export default {
   handle_protocol_order(state, array) {
     // TODO: clean up function, must be a more concise way of performing
     state.new_protocol.waveform_list = array;
-    const x_values = [0]; // one second delay to start
+    const x_values = [0];
     const y_values = [0];
     const color_assignments = {};
     const helper = (setting) => {
@@ -71,6 +71,7 @@ export default {
     state.x_axis_points = x_values;
     state.y_axis_points = y_values;
     state.repeat_colors = color_assignments;
+    console.log(color_assignments);
   },
   handle_zoom_in(state, axis) {
     if (axis === "x-axis") state.x_axis_scale /= 10;

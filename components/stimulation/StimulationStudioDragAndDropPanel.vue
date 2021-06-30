@@ -58,11 +58,7 @@
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
                 @change="
-                  [
-                    types.nested_protocols.length <= 1
-                      ? handle_repeat($event, idx)
-                      : handle_internal_repeat($event),
-                  ]
+                  [types.nested_protocols.length <= 1 ? handle_repeat($event, idx) : handle_internal_repeat()]
                 "
               >
                 <div
@@ -215,7 +211,7 @@ export default {
         this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
       }
     },
-    handle_internal_repeat(e) {
+    handle_internal_repeat() {
       this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_repeat_modal_for_edit(number, idx) {
