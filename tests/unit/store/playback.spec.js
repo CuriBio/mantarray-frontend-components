@@ -11,8 +11,8 @@ import {
   all_mantarray_commands_regexp,
   system_status_when_calibrating_regexp,
   system_status_when_buffering_regexp,
+  get_available_data_regex,
 } from "@/store/modules/flask/url_regex";
-import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
 import {
   advance_playback_progression,

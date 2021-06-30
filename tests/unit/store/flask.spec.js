@@ -15,8 +15,8 @@ import {
   system_status_when_initializing_instrument_regexp,
   system_status_when_server_initializing_regexp,
   all_mantarray_commands_regexp,
+  get_available_data_regex,
 } from "@/store/modules/flask/url_regex";
-import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 
 import { FLASK_STATUS_ENUMS } from "@/dist/mantarray.common";
 import {

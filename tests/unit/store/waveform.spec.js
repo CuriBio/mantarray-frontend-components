@@ -4,8 +4,7 @@ import axios from "axios";
 const MockAxiosAdapter = require("axios-mock-adapter");
 import { ping_get_available_data } from "@/store/modules/waveform/actions";
 import { arry, new_arry } from "./../js_utils/waveform_data_provider.js";
-import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
-import { system_status_regexp } from "@/store/modules/flask/url_regex";
+import { system_status_regexp, get_available_data_regex } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 

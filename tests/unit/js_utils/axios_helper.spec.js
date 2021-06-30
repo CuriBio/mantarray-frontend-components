@@ -5,8 +5,11 @@ const sinon = require("sinon");
 import { createLocalVue } from "@vue/test-utils";
 import { STATUS } from "@/store/modules/flask/enums";
 
-import { all_mantarray_commands_regexp, system_status_regexp } from "@/store/modules/flask/url_regex";
-import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
+import {
+  all_mantarray_commands_regexp,
+  system_status_regexp,
+  get_available_data_regex,
+} from "@/store/modules/flask/url_regex";
 import { new_arry as waveform_data_response } from "../js_utils/waveform_data_provider.js";
 import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 const sandbox = sinon.createSandbox();
