@@ -2,6 +2,10 @@
 import Vue from "vue";
 import { STATUS } from "@/store/modules/flask/enums";
 
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
 /**
  * Handles all HTTP GET calls from Vuex and updates system status if there was an error
  *
