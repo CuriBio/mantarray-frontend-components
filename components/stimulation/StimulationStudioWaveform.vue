@@ -241,6 +241,7 @@ export default {
         );
       for (const color in this.repeat_colors) {
         if (this.repeat_colors !== {}) {
+          // repetitive, but eslint errors without a conditional inside the loop
           const starting_idx = this.repeat_colors[color][0];
           const ending_idx = this.repeat_colors[color][1];
           const sliced_data_array = data_to_plot.slice(starting_idx, ending_idx);
@@ -339,7 +340,6 @@ export default {
 .g__waveform-x-axis {
   stroke: #b7b7b7;
   font-family: Muli;
-  font-size: 13px;
 }
 .g__waveform-x-axis path {
   stroke: #b7b7b7;
