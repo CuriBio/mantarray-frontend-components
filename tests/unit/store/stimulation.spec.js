@@ -122,7 +122,7 @@ describe("store/stimulation", () => {
 
     test("When a user requests to delete the current stimulation by using the trash icon, Then it should mutate state to true", async () => {
       expect(store.state.stimulation.delete_protocol).toBe(false);
-      await store.commit("stimulation/handle_delete_protocol");
+      await store.commit("stimulation/reset_state");
       expect(store.state.stimulation.delete_protocol).toBe(true);
     });
 

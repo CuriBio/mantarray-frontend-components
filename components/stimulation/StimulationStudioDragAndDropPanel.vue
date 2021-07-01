@@ -139,7 +139,7 @@ export default {
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/handle_delete_protocol") {
+      if (mutation.type === "stimulation/reset_state") {
         this.protocol_order = [];
         this.$store.state.stimulation.delete_protocol = false;
       }

@@ -114,7 +114,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     });
 
     wrapper.vm.datapoints = [1, 2, 3, 4];
-    await store.commit("stimulation/handle_delete_protocol");
+    await store.commit("stimulation/reset_state");
     expect(wrapper.vm.datapoints).toStrictEqual([]);
   });
 
