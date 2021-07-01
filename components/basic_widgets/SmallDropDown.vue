@@ -38,7 +38,7 @@
 </template>
 <script>
 export default {
-  name: "NewSelectDropDown",
+  name: "SmallDropDown",
   props: {
     options_text: { type: Array, required: true },
     input_width: { type: Number, default: 210 },

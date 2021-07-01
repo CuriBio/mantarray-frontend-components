@@ -2,6 +2,8 @@ import { mount } from "@vue/test-utils";
 import ComponentToTest from "@/components/basic_widgets/InputDropDown.vue";
 import { InputDropDown as DistComponentToTest } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
+import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
 
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
@@ -176,5 +178,31 @@ describe("InputDropDown.vue", () => {
     expect(input_text_entry_span.attributes("style")).toStrictEqual("width: 390px;");
     const input_text_entry_feedback = wrapper.find(".div__input-dropdown-controls-content-feedback");
     expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 48px;");
+  });
+
+  test("When exiting the SmallDropDown instance, Then instance is effectively destroyed", async () => {
+    const destroyed_spy = jest.spyOn(SmallDropDown, "beforeDestroy");
+    const wrapper = mount(SmallDropDown, {
+      store,
+      localVue,
+      propsData: {
+        options_text: ["test"],
+      },
+    });
+    wrapper.destroy();
+    expect(destroyed_spy).toHaveBeenCalled();
+  });
+
+  test("When exiting the NewSelectDropDown instance, Then instance is effectively destroyed", async () => {
+    const destroyed_spy = jest.spyOn(SmallDropDown, "beforeDestroy");
+    const wrapper = mount(NewSelectDropDown, {
+      store,
+      localVue,
+      propsData: {
+        options_text: ["test"],
+      },
+    });
+    wrapper.destroy();
+    expect(destroyed_spy).toHaveBeenCalled();
   });
 });

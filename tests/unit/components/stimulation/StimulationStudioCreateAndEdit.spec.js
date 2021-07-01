@@ -58,4 +58,13 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     await wrapper.vm.handle_click(1);
     expect(store.state.stimulation.protocol_assignments[1]).toBeFalsy();
   });
+
+  test("When a user clicks on Clear All to reset new protocol, Then the dropdown should reset to default option", async () => {
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+    await store.commit("stimulation/reset_state");
+    expect(wrapper.vm.selected_protocol_idx).toBe(0);
+  });
 });
