@@ -4,8 +4,8 @@ export const socket = io("ws://localhost:4567"); // TODO use constant here
 
 /**
  * Create a socket.io plugin for a Vuex store
- * @param {Object} socket the socket.io instance to connect to the Vuex store  // TODO should figure out what the actual type is
- * @return {Object} not sure how to type an anonymous func
+ * @param {Socket} socket the socket.io instance to connect to the Vuex store
+ * @return {function} function the Vuex store will use to connect the pluging to itself
  */
 export default function create_web_socket_plugin(socket) {
   return (store) => {
