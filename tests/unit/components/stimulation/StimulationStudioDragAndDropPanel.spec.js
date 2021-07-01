@@ -6,6 +6,77 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 let NuxtStore;
 let store;
+const test_protocol_order = [
+  {
+    type: "Biphasic",
+    src: "placeholder",
+    nest_protocols: [],
+    repeat: {
+      number_of_repeats: 0,
+      color: "fffff",
+    },
+    settings: {
+      phase_one_duration: 300,
+      phase_one_charge: 2,
+      interpulse_duration: 500,
+      phase_two_duration: 100,
+      phase_two_charge: -5,
+    },
+  },
+  {
+    type: "Monophasic",
+    src: "placeholder",
+    nested_protocols: [
+      {
+        type: "Monophasic",
+        src: "placeholder",
+        nested_protocols: [],
+        repeat: {
+          number_of_repeats: 0,
+          color: "fffff",
+        },
+        settings: {
+          phase_one_duration: 100,
+          phase_one_charge: -2,
+        },
+      },
+      {
+        type: "Monophasic",
+        src: "placeholder",
+        nested_protocols: [],
+        repeat: {
+          number_of_repeats: 0,
+          color: "fffff",
+        },
+        settings: {
+          phase_one_duration: 300,
+          phase_one_charge: 6,
+        },
+      },
+    ],
+    repeat: {
+      number_of_repeats: 0,
+      color: "fffff",
+    },
+    settings: {
+      phase_one_duration: 300,
+      phase_one_charge: 2,
+    },
+  },
+  {
+    type: "Monophasic",
+    src: "placeholder",
+    nested_protocols: [],
+    repeat: {
+      number_of_repeats: 0,
+      color: "fffff",
+    },
+    settings: {
+      phase_one_duration: 300,
+      phase_one_charge: 2,
+    },
+  },
+];
 
 describe("StimulationStudioDragAndDropPanel.vue", () => {
   beforeAll(async () => {
@@ -58,18 +129,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    wrapper.vm.protocol_order = [
-      { type: "Monophasic", src: "placeholder" },
-      {
-        type: "Biphasic",
-        src: "placeholder",
-        nested_protocols: [
-          { type: "Biphasic", src: "placeholder" },
-          { type: "Monophasic", src: "placeholder" },
-        ],
-      },
-      { type: "Monophasic", src: "placeholder" },
-    ];
+    wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.open_modal_for_edit("Monophasic", 0);
     expect(wrapper.vm.reopen_modal).toBe("Monophasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(0);
@@ -126,24 +186,13 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    wrapper.vm.protocol_order = [
-      { type: "Monophasic", src: "placeholder" },
-      {
-        type: "Biphasic",
-        src: "placeholder",
-        nested_protocols: [
-          { type: "Biphasic", src: "placeholder" },
-          { type: "Monophasic", src: "placeholder" },
-        ],
-      },
-      { type: "Monophasic", src: "placeholder" },
-    ];
+    wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.clone({ type: "Monophasic", src: "test" });
     expect(wrapper.vm.cloned).toBe(true);
     await wrapper.vm.check_type({ added: { element: { type: "Monophasic" }, newIndex: 3 } });
 
     await wrapper.vm.on_modal_close("Cancel");
-    expect(wrapper.vm.protocol_order).toHaveLength(3);
+    expect(wrapper.vm.protocol_order).toHaveLength(2);
 
     await wrapper.vm.check_type({ added: { element: { type: "Biphasic" }, newIndex: 1 } });
     expect(wrapper.vm.modal_type).toBeNull();
@@ -154,20 +203,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    wrapper.vm.protocol_order = [
-      { type: "Monophasic", src: "placeholder" },
-      {
-        type: "Biphasic",
-        src: "placeholder",
-        nested_protocols: [
-          { type: "Biphasic", src: "placeholder" },
-          { type: "Monophasic", src: "placeholder" },
-        ],
-        repeat: { number_of_repeats: 0 },
-      },
-      { type: "Monophasic", src: "placeholder" },
-    ];
-
+    wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.handle_repeat({ added: "test" }, 1);
     expect(wrapper.vm.repeat_modal).toBe(true);
     expect(wrapper.vm.repeat_idx).toBe(1);
@@ -186,5 +222,36 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     wrapper.vm.repeat_modal = false;
     await wrapper.vm.handle_repeat({ moved: "test" }, 1);
     expect(wrapper.vm.repeat_modal).toBe(false);
+  });
+
+  test("When a user clicks save on the settings for a waveform, Then the setting should save to the corresponding index depending on if it is a new waveform or an edited", async () => {
+    const test_settings = "test";
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    wrapper.vm.protocol_order = [
+      {
+        type: "Biphasic",
+        src: "test",
+        repeat: { color: "b7b7b7", number_of_repeats: 0 },
+        nested_protocols: [],
+      },
+    ];
+    wrapper.vm.new_cloned_idx = 0;
+    wrapper.vm.modal_type = "Biphasic";
+
+    await wrapper.vm.on_modal_close("Save", test_settings);
+    expect(wrapper.vm.protocol_order[0].settings).toBe(test_settings);
+  });
+
+  test("When a user removes the last waveform from a repeat block, Then the colored border should be removed and mutations to state should be committed", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    wrapper.vm.protocol_order = test_protocol_order;
+    await wrapper.vm.handle_repeat({ removed: "test" }, 1);
+    expect(wrapper.vm.protocol_order[1].repeat.number_of_repeats).toBe(0);
   });
 });

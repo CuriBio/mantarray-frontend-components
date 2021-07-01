@@ -1,20 +1,44 @@
 <template>
   <div class="div__stimulationstudio-current-settings-background">
-    <span class="span__stimulationstudio-current-settings-title">Repeat Protocol</span>
+    <span class="span__stimulationstudio-current-settings-title">Sequence Mode</span>
     <canvas class="canvas__stimulationstudio-horizontal-line-seperator-one" width="472" height="1"> </canvas>
-    <span class="span__stimulationstudio-current-settings-label-one">Number of repeats</span>
-    <div class="div__stimulationstudio-duration-input-container" width="162" height="57">
+    <span class="span__stimulationstudio-current-settings-label-one" :style="'left: 42%'">Frequency</span>
+    <div class="div__stimulationstudio-duration-input-container" :style="'right: 0px;'">
       <span class="span__stimulationstudio-duration-input">
         <InputWidget
           :placeholder="'5'"
-          :dom_id_suffix="'repeats'"
+          :dom_id_suffix="'hertz'"
           :invalid_text="invalid_text"
-          :input_width="100"
+          :input_width="80"
           :initial_value="current_number_of_repeats !== null ? current_number_of_repeats : ''"
           @update:value="number_of_repeats = $event"
         ></InputWidget
       ></span>
     </div>
+    <span class="span__stimulationstudio-current-settings-label-one" :style="'top: 135px; right: 15px;'">
+      Hz
+    </span>
+    <span
+      class="span__stimulationstudio-current-settings-label-one"
+      :style="'top: 135px; right: 40px; width: 50px;'"
+    >
+      for
+    </span>
+    <div class="div__stimulationstudio-duration-input-container">
+      <span class="span__stimulationstudio-duration-input">
+        <InputWidget
+          :placeholder="'1'"
+          :dom_id_suffix="'repeat_seconds'"
+          :invalid_text="invalid_text"
+          :input_width="80"
+          :initial_value="current_number_of_repeats !== null ? current_number_of_repeats : ''"
+          @update:value="number_of_repeats = $event"
+        ></InputWidget
+      ></span>
+    </div>
+    <span class="span__stimulationstudio-current-settings-label-one" :style="'top: 135px; right: 40px;'">
+      second(s)
+    </span>
     <div :class="'button-container'">
       <ButtonWidget
         :id="'button-widget-id'"
@@ -54,7 +78,7 @@ export default {
       },
     },
     current_number_of_repeats: {
-      type: Number,
+      type: String,
       default() {
         return null;
       },
@@ -65,6 +89,9 @@ export default {
       number_of_repeats: null,
       invalid_text: "",
     };
+  },
+  created() {
+    this.number_of_repeats = this.current_number_of_repeats;
   },
   methods: {
     close(idx) {
@@ -92,27 +119,9 @@ export default {
   box-shadow: none;
   z-index: 5;
   pointer-events: all;
+  display: flex;
+  justify-content: center;
 }
-
-.div__stimulationstudio-current-settings-background-mono {
-  transform: rotate(0deg);
-  box-sizing: border-box;
-  padding: 0px;
-  margin: 0px;
-  background: rgb(17, 17, 17);
-  position: absolute;
-  width: 522px;
-  height: 590px;
-  top: calc(55px - 55px);
-  left: calc(852px - 852px);
-  visibility: visible;
-  border: 2px solid rgb(0, 0, 0);
-  border-radius: 0px;
-  box-shadow: none;
-  pointer-events: all;
-  z-index: 5;
-}
-
 .span__stimulationstudio-current-settings-title {
   pointer-events: all;
   line-height: 100%;
@@ -177,22 +186,15 @@ export default {
   cursor: pointer;
 }
 
-.button-container-mono {
-  top: 540px;
-  position: absolute;
-  cursor: pointer;
-}
-
 .span__stimulationstudio-current-settings-label-one {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
-  position: absolute;
-  width: 206px;
+  position: relative;
+  width: 125px;
   height: 30px;
-  top: calc(164.5px - 55px);
-  left: 45px;
+  top: 70px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -202,17 +204,16 @@ export default {
   text-decoration: none;
   font-size: 17px;
   color: rgb(183, 183, 183);
-  text-align: right;
 }
 .div__stimulationstudio-duration-input-container {
   pointer-events: all;
   transform: rotate(0deg);
   overflow: hidden;
-  position: absolute;
+  position: relative;
   width: 162px;
   height: 57px;
-  top: calc(151px - 55px);
-  left: 250px;
+  top: 120px;
+  right: 25px;
   visibility: visible;
 }
 .span__stimulationstudio-duration-input {

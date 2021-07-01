@@ -9,7 +9,11 @@ export default {
     }
   },
   get_stimulation_type(state) {
-    if (state.new_protocol.stimulation_type.includes("Current")) return "Current";
-    if (state.new_protocol.stimulation_type.includes("Voltage")) return "Voltage";
+    if (state.new_protocol.stimulation_type.includes("Current")) return "Current (A)";
+    if (state.new_protocol.stimulation_type.includes("Voltage")) return "Voltage (V)";
+  },
+  get_time_unit(state) {
+    if (state.new_protocol.time_unit.includes("milliseconds")) return "Time (ms)";
+    if (state.new_protocol.time_unit.includes("seconds")) return "Time (s)";
   },
 };

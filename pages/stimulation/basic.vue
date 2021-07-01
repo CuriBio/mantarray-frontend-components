@@ -1,12 +1,27 @@
 <template>
   <div class="div__stimulationstudio-layout-background">
-    <div class="div__stimulationstudio-header-container" />
+    <div class="div__stimulationstudio-header-container">
+      <div class="upload-files-widget-container">
+        <UploadFilesWidget />
+      </div>
+      <div class="recording-time-container">
+        <RecordingTime />
+      </div>
+    </div>
     <div class="div__stimulationstudio-left-column-container" />
     <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
     <StimulationStudioWidget />
     <StimulationStudioCreateAndEdit />
-    <StimulationStudioDragAndDropPanel />
+    <StimulationStudioDragAndDropPanel :stimulation_type="stimulation_type" :time_unit="time_unit" />
     <StimulationStudioBlockViewEditor />
+    <StimulationStudioProtocolViewer :stimulation_type="stimulation_type" :time_unit="time_unit" />
+    <div class="button-background">
+      <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
+        <div :class="'btn-container'">
+          <span :class="'btn-label'">{{ value }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -15,6 +30,9 @@ import StimulationStudioCreateAndEdit from "@/components/stimulation/Stimulation
 import StimulationStudioWidget from "@/components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
 import StimulationStudioBlockViewEditor from "@/components/stimulation/StimulationStudioBlockViewEditor.vue";
+import StimulationStudioProtocolViewer from "@/components/stimulation/StimulationStudioProtocolViewer.vue";
+import RecordingTime from "@/components/status/RecordingTime.vue";
+import UploadFilesWidget from "@/components/status/UploadFilesWidget.vue";
 
 export default {
   name: "StimulationStudio",
@@ -23,11 +41,39 @@ export default {
     StimulationStudioCreateAndEdit,
     StimulationStudioDragAndDropPanel,
     StimulationStudioBlockViewEditor,
+    StimulationStudioProtocolViewer,
+    UploadFilesWidget,
+    RecordingTime,
+  },
+  data() {
+    return {
+      btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
+      stimulation_type: "Voltage (V)",
+      time_unit: "Time (s)",
+    };
+  },
+  created: function () {
+    this.unsubscribe = this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type === "stimulation/handle_stimulation_type") {
+        this.stimulation_type = this.$store.getters["stimulation/get_stimulation_type"];
+      }
+      if (mutation.type === "stimulation/handle_time_unit") {
+        this.time_unit = this.$store.getters["stimulation/get_time_unit"];
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+  },
+  methods: {
+    handle_click(idx) {
+      console.log("clicked");
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .div__stimulationstudio-layout-background {
   box-sizing: border-box;
   padding: 0px;
@@ -55,7 +101,36 @@ export default {
   color: rgb(255, 255, 255);
   text-align: center;
 }
-
+.btn-container:hover {
+  background: #b7b7b7c9;
+  cursor: pointer;
+}
+.button-background {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  left: 20%;
+  top: 93%;
+  height: 60px;
+  position: absolute;
+}
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: relative;
+  width: 90%;
+  height: 50px;
+  margin: 0 40px 0 40px;
+  background: #b7b7b7;
+}
+.btn-label {
+  transform: translateZ(0px);
+  line-height: 50px;
+  font-family: Muli;
+  font-size: 16px;
+  color: rgb(0, 0, 0);
+}
 .div__stimulationstudio-left-column-container {
   transform: rotate(0deg);
   box-sizing: border-box;
@@ -80,6 +155,17 @@ export default {
   left: 18%;
   height: 6%;
   border-bottom: 2px solid black;
-  pointer-events: all;
+  display: flex;
+  justify-content: center;
+}
+.upload-files-widget-container {
+  position: relative;
+  top: 15%;
+  left: 5%;
+}
+.recording-time-container {
+  position: relative;
+  left: 34%;
+  top: 15%;
 }
 </style>

@@ -57,7 +57,9 @@
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
-                @change="[types.nested_protocols.length === 1 ? handle_repeat($event, idx) : null]"
+                @change="
+                  [types.nested_protocols.length <= 1 ? handle_repeat($event, idx) : handle_internal_repeat()]
+                "
               >
                 <div
                   v-for="(nested_types, nested_idx) in types.nested_protocols"
@@ -86,6 +88,7 @@
         :waveform_type="reopen_modal"
         :button_names="['Save', 'Delete', 'Cancel']"
         :is_enabled_array="[true, true, true]"
+        :selected_waveform_settings="selected_waveform_settings"
         @close="on_modal_close"
       />
     </div>
@@ -103,7 +106,6 @@
 import draggable from "vuedraggable";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import StimulationStudioRepeatModal from "@/components/stimulation/StimulationStudioRepeatModal.vue";
-import { mapGetters } from "vuex";
 
 export default {
   name: "DragAndDropPanel",
@@ -112,12 +114,16 @@ export default {
     StimulationStudioWaveformSettingModal,
     StimulationStudioRepeatModal,
   },
+  props: {
+    stimulation_type: { type: String, default: "Voltage (mV)" },
+  },
   data() {
     return {
       icon_types: [
         { type: "Monophasic", src: "/Monophasic-tile.png" },
         { type: "Biphasic", src: "/Biphasic-tile.png" },
       ],
+      selected_waveform_settings: null,
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
@@ -130,11 +136,6 @@ export default {
       cloned: false,
       new_cloned_idx: null,
     };
-  },
-  computed: {
-    ...mapGetters("stimulation", {
-      stimulation_type: "get_stimulation_type",
-    }),
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
@@ -155,29 +156,36 @@ export default {
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
       }
+      if ((e.added && !this.cloned) || e.moved || e.removed)
+        this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
       this.cloned = false;
     },
-    on_modal_close(button) {
+    on_modal_close(button, settings) {
       this.modal_type = null;
       this.reopen_modal = null;
+      if (button === "Save") {
+        if (this.new_cloned_idx !== null) this.protocol_order[this.new_cloned_idx].settings = settings;
+        if (this.shift_click_img_idx !== null)
+          this.protocol_order[this.shift_click_img_idx].settings = settings;
+      }
       if (button === "Delete") {
-        if (this.shift_click_nested_img_idx !== null) {
+        if (this.shift_click_nested_img_idx !== null)
           this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
             this.shift_click_nested_img_idx,
             1
           );
-        } else if (this.shift_click_nested_img_idx === null) {
-          this.protocol_order.splice(this.shift_click_img_idx, 1);
-        }
+        if (this.shift_click_nested_img_idx === null) this.protocol_order.splice(this.shift_click_img_idx, 1);
       }
-      if (button === "Cancel" && this.new_cloned_idx !== null) {
-        this.protocol_order.splice(this.new_cloned_idx, 1);
-        this.new_cloned_idx = null;
+      if (button === "Cancel") {
+        if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
       }
+      this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
+      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_modal_for_edit(type, idx, nested_idx) {
+      this.selected_waveform_settings = this.protocol_order[idx].settings;
       if (type === "Monophasic") this.reopen_modal = "Monophasic";
       else if (type === "Biphasic") this.reopen_modal = "Biphasic";
       if (nested_idx !== undefined) this.shift_click_nested_img_idx = idx;
@@ -198,14 +206,18 @@ export default {
         this.repeat_modal = true;
         this.repeat_idx = idx;
       }
+      if (e.removed) {
+        this.protocol_order[idx].repeat.number_of_repeats = 0;
+        this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
+      }
+    },
+    handle_internal_repeat() {
+      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_repeat_modal_for_edit(number, idx) {
       this.current_number_of_repeats = number;
       this.repeat_modal = true;
       this.repeat_idx = idx;
-    },
-    get_style(type) {
-      if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
     },
     on_repeat_modal_close(res) {
       this.repeat_modal = null;
@@ -214,6 +226,10 @@ export default {
       if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
       this.repeat_idx = null;
       this.current_number_of_repeats = null;
+      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
+    },
+    get_style(type) {
+      if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
     },
   },
 };
@@ -228,13 +244,11 @@ export default {
   display: flex;
   justify-content: center;
 }
-
 .repeat_container {
   display: flex;
   align-items: center;
   padding: 6px;
 }
-
 .div__icon-container {
   margin-top: 80px;
   display: flex;
@@ -242,17 +256,14 @@ export default {
   width: 100%;
   border: 2px solid white;
 }
-
 .ghost {
   padding: 0 8px 0 8px;
 }
-
 .modal-container {
   left: 36%;
   position: absolute;
   top: 8%;
 }
-
 .circle {
   width: 30px;
   height: 30px;
@@ -277,7 +288,6 @@ export default {
   font-family: Muli;
   color: rgb(17, 17, 17);
 }
-
 .div__background-container {
   position: absolute;
   width: 80%;
@@ -287,7 +297,6 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
-
 .modal_overlay {
   width: 100%;
   height: 100%;
@@ -296,7 +305,6 @@ export default {
   z-index: 5;
   opacity: 0.5;
 }
-
 .div__scroll-container {
   position: relative;
   top: 47%;
@@ -308,7 +316,6 @@ export default {
   z-index: 1;
   white-space: nowrap;
 }
-
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;
   line-height: 100%;

@@ -1,10 +1,6 @@
-import { mount } from "@vue/test-utils";
+import { mount, shallowMount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
-import { shallowMount } from "@vue/test-utils";
 import { StimulationStudioWaveformSettingModal as dist_StimulationStudioCurrentSettings } from "@/dist/mantarray.common";
-// import Vue from "vue";
-
-import { createLocalVue } from "@vue/test-utils";
 
 let wrapper = null;
 
@@ -37,13 +33,13 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     // const mockMethod = jest.fn();
     const wrapper = shallowMount(StimulationStudioWaveformSettingModal, {
       localVue,
-      props: {
-        stimulation_type: "Voltage",
+      propData: {
+        stimulation_type: "Voltage (V)",
         waveform_type: "Biphasic",
       },
     });
-    const title = wrapper.find(".span__stimulationstudio-current-settings-label-three");
-    expect(title.text()).toBe("Voltage (mV)");
+    const title = wrapper.find(".span__stimulationstudio-current-settings-label-three").text();
+    expect(title).toBe("Voltage (V)");
     const biphasic_label = wrapper.find(".span__stimulationstudio-current-settings-label-twelve");
     expect(biphasic_label).toBeTruthy();
   });

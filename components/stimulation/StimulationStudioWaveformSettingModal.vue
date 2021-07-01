@@ -37,6 +37,8 @@
           :dom_id_suffix="'duration'"
           :invalid_text="''"
           :input_width="142"
+          :initial_value="selected_waveform_settings.phase_one_duration.toString()"
+          @update:value="waveform_settings.phase_one_duration = Number($event)"
         ></InputWidget
       ></span>
     </div>
@@ -46,7 +48,7 @@
     <span
       id="cmpDf2d0dbfd2edb4ffa3b8615863fa1b9a7"
       class="span__stimulationstudio-current-settings-label-three"
-      >{{ check_type }}</span
+      >{{ stimulation_type }}</span
     >
     <div
       id="cmpDf6ba8560cb2fbd91276a29c46743e99a"
@@ -60,6 +62,8 @@
           :dom_id_suffix="'current'"
           :invalid_text="''"
           :input_width="142"
+          :initial_value="selected_waveform_settings.phase_one_charge.toString()"
+          @update:value="waveform_settings.phase_one_charge = Number($event)"
         ></InputWidget>
       </span>
     </div>
@@ -93,35 +97,40 @@
         <img src="/question-icon.png" />
       </span>
     </div>
-    <canvas
-      id="cmpDefb479b0caa166978ebed24ab8c44baf"
-      class="canvas__stimulationstudio-horizontal-line-seperator-two"
-      width="472"
-      height="1"
-    >
-    </canvas>
-    <span id="cmpD1258ad074a6b3eb7b8a869173413256d" class="span__stimulationstudio-current-settings-label-six"
-      >Interpulse&nbsp;<wbr />Interval</span
-    >
-    <div
-      id="cmpD948f417edcd29d68f5801d54232d9431"
-      class="div__stimulationstudio-current-settings-interpulse"
-      width="162"
-      height="57"
-    >
-      <span
-        id="cmpD948f417edcd29d68f5801d54232d9431_txt"
-        class="span__stimulationstudio-current-settings-interpulse-input-container"
-      >
-        <InputWidget
-          :placeholder="'1000'"
-          :dom_id_suffix="'interpulse'"
-          :invalid_text="''"
-          :input_width="142"
-        ></InputWidget>
-      </span>
-    </div>
     <div v-if="waveform_type === 'Biphasic'">
+      <canvas
+        id="cmpDefb479b0caa166978ebed24ab8c44baf"
+        class="canvas__stimulationstudio-horizontal-line-seperator-two"
+        width="472"
+        height="1"
+      >
+      </canvas>
+      <span
+        id="cmpD1258ad074a6b3eb7b8a869173413256d"
+        class="span__stimulationstudio-current-settings-label-six"
+        >Interpulse&nbsp;<wbr />Interval</span
+      >
+      <div
+        id="cmpD948f417edcd29d68f5801d54232d9431"
+        class="div__stimulationstudio-current-settings-interpulse"
+        width="162"
+        height="57"
+      >
+        <span
+          id="cmpD948f417edcd29d68f5801d54232d9431_txt"
+          class="span__stimulationstudio-current-settings-interpulse-input-container"
+        >
+          <InputWidget
+            :placeholder="'1000'"
+            :dom_id_suffix="'interpulse'"
+            :invalid_text="''"
+            :input_width="142"
+            :initial_value="selected_waveform_settings.interpulse_duration.toString()"
+            @update:value="waveform_settings.interpulse_duration = Number($event)"
+          ></InputWidget>
+        </span>
+      </div>
+
       <canvas
         id="cmpDa2bea934b07f6b108e90d5efecf200a3"
         class="canvas__stimulationstudio-horizontal-line-seperator-three"
@@ -155,6 +164,8 @@
             :dom_id_suffix="'durationtwo'"
             :invalid_text="''"
             :input_width="142"
+            :initial_value="selected_waveform_settings.phase_two_duration.toString()"
+            @update:value="waveform_settings.phase_two_duration = Number($event)"
           ></InputWidget>
         </span>
       </div>
@@ -166,7 +177,7 @@
       <span
         id="cmpDdd1b9fc6423c3af17206292a54489078"
         class="span__stimulationstudio-current-settings-label-nine"
-        >{{ check_type }}</span
+        >{{ stimulation_type }}</span
       >
       <div
         id="cmpD8ecdf9c4a418509adff741b988ad0676"
@@ -179,10 +190,12 @@
           class="span__stimulationstudio-current-settings-currenttwo-input"
         >
           <InputWidget
-            :placeholder="'500'"
+            :placeholder="'-500'"
             :dom_id_suffix="'currenttwo'"
             :invalid_text="''"
             :input_width="142"
+            :initial_value="selected_waveform_settings.phase_two_charge.toString()"
+            @update:value="waveform_settings.phase_two_charge = Number($event)"
           ></InputWidget>
         </span>
       </div>
@@ -252,7 +265,7 @@
     <div :class="waveform_type === 'Monophasic' ? 'button-container-mono' : 'button-container'">
       <ButtonWidget
         :id="'button-widget-id'"
-        :button_widget_width="520"
+        :button_widget_width="521"
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
@@ -284,7 +297,7 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    stimulation_type: { type: String, default: "Current" },
+    stimulation_type: { type: String, default: "Voltage (V)" },
     waveform_type: { type: String, default: "Monophasic" },
     button_names: {
       type: Array,
@@ -298,26 +311,38 @@ export default {
         return [true, true];
       },
     },
+    selected_waveform_settings: {
+      type: Object,
+      default() {
+        return {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        };
+      },
+    },
   },
   data() {
     return {
       popover_message: "Not Editable: This data is displayed for informational purposes only.",
+      waveform_settings: {},
     };
   },
   computed: {
-    check_type: function () {
-      if (this.stimulation_type === "Current") return "Current (μA)";
-      else return "Voltage (mV)";
-    },
     check_max_type: function () {
-      if (this.stimulation_type === "Current") return "Voltage (mV)";
+      if (this.stimulation_type === "Current (μA)") return "Voltage (mV)";
       else return "Current (μA)";
     },
+  },
+  created() {
+    this.waveform_settings = this.selected_waveform_settings;
   },
   methods: {
     close(idx) {
       const button_label = this.button_names[idx];
-      this.$emit("close", button_label);
+      this.$emit("close", button_label, this.waveform_settings);
     },
   },
 };
@@ -350,7 +375,7 @@ export default {
   background: rgb(17, 17, 17);
   position: absolute;
   width: 522px;
-  height: 590px;
+  height: 490px;
   top: calc(55px - 55px);
   left: calc(852px - 852px);
   visibility: visible;
@@ -428,14 +453,15 @@ export default {
 }
 
 .button-container {
-  top: 762px;
-  left: 0;
+  top: 763px;
+  left: -1px;
   position: absolute;
   cursor: pointer;
 }
 
 .button-container-mono {
-  top: 540px;
+  top: 440px;
+  left: -1px;
   position: absolute;
   cursor: pointer;
 }
@@ -979,7 +1005,7 @@ export default {
   position: absolute;
   width: 472px;
   height: 2px;
-  top: 420px;
+  top: 320px;
   left: calc(878px - 852px);
   visibility: visible;
   background-color: #292929;
@@ -994,7 +1020,7 @@ export default {
   position: absolute;
   width: 228px;
   height: 30px;
-  top: 485px;
+  top: 385px;
   left: calc(999px - 852px);
   padding: 5px;
   visibility: visible;
@@ -1014,7 +1040,7 @@ export default {
   text-align: center;
   width: 22px;
   height: 22px;
-  top: 450px;
+  top: 350px;
   left: calc(1102px - 852px);
   color: #b7b7b7;
   visibility: visible;
