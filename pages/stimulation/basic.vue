@@ -53,12 +53,16 @@ export default {
     };
   },
   created: function () {
-    this.unsubscribe = this.$store.subscribe(async (mutation, state) => {
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (mutation.type === "stimulation/handle_stimulation_type") {
         this.stimulation_type = this.$store.getters["stimulation/get_stimulation_type"];
       }
       if (mutation.type === "stimulation/handle_time_unit") {
         this.time_unit = this.$store.getters["stimulation/get_time_unit"];
+      }
+      if (mutation.type === "stimulation/reset_state") {
+        this.time_unit = "Time (s)";
+        this.stimulation_type = "Voltage (V)";
       }
     });
   },
@@ -67,7 +71,7 @@ export default {
   },
   methods: {
     handle_click(idx) {
-      console.log("clicked");
+      if (idx === 1) this.$store.commit("stimulation/reset_state");
     },
   },
 };

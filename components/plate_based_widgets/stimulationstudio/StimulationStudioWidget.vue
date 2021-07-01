@@ -97,15 +97,15 @@ export default {
         6: [20, 21, 22, 23],
       },
       all_select_or_cancel: false,
-      hover: new Array(24).fill(false),
-      all_select: new Array(24).fill(false),
-      hover_color: new Array(24).fill(hover_color),
-      stroke_width: new Array(24).fill(no_stroke_width),
+      hover: new Array(this.number_of_wells).fill(false),
+      all_select: new Array(this.number_of_wells).fill(false),
+      hover_color: new Array(this.number_of_wells).fill(hover_color),
+      stroke_width: new Array(this.number_of_wells).fill(no_stroke_width),
       protocol_assignments: {},
     };
   },
   watch: {
-    all_select: function (oldVal, newVal) {
+    all_select: function () {
       this.$store.commit("stimulation/handle_selected_wells", this.all_select);
     },
   },
@@ -117,10 +117,14 @@ export default {
     this.unsubscribe = this.$store.subscribe((mutation) => {
       if (
         mutation.type === "stimulation/apply_selected_protocol" ||
-        mutation.type === "stimulation/clear_selected_protocol"
+        mutation.type === "stimulation/clear_selected_protocol" ||
+        mutation.type === "stimulation/reset_state"
       ) {
         this.protocol_assignments = {};
         this.protocol_assignments = this.$store.state.stimulation.protocol_assignments;
+        this.all_select = new Array(this.number_of_wells).fill(false);
+        this.stroke_width = new Array(this.number_of_wells).fill(no_stroke_width);
+        if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
       }
     });
   },

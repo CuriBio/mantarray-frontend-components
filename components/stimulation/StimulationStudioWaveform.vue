@@ -7,7 +7,7 @@
     </div>
 
     <div class="div__waveform-x-axis-title">
-      <span :style="'padding-right: 29px;'">{{ x_axis_label }}</span>
+      <span :style="'padding-right: 35px;'">{{ x_axis_label }}</span>
       <StimulationStudioZoomControls :axis="'x-axis'" />
     </div>
   </div>
@@ -281,7 +281,6 @@ export default {
   overflow: hidden;
   overflow-x: scroll;
 }
-
 .div__waveform-y-axis-title {
   line-height: 1;
   transform: rotate(270deg);
@@ -305,7 +304,6 @@ export default {
   pointer-events: all;
   box-sizing: content-box;
 }
-
 .div__waveform-x-axis-title {
   line-height: 1;
   padding: 5px;
@@ -328,7 +326,6 @@ export default {
   pointer-events: all;
   box-sizing: content-box;
 }
-
 .div__waveform-graph {
   overflow: hidden;
   user-select: none;
@@ -339,27 +336,22 @@ export default {
   z-index: 1;
   font-family: Muli;
 }
-
 .g__waveform-x-axis {
   stroke: #b7b7b7;
   font-family: Muli;
   font-size: 13px;
 }
-
 .g__waveform-x-axis path {
   stroke: #b7b7b7;
 }
-
 .g__waveform-x-axis .tick line {
   stroke: #b7b7b7;
 }
-
 .g__waveform-y-axis {
   stroke: #b7b7b7;
   font-family: Muli;
   font-size: 13px;
 }
-
 .g__waveform-y-axis path {
   stroke: #b7b7b7;
 }

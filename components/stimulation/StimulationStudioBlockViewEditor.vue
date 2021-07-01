@@ -81,7 +81,6 @@ import { mapGetters } from "vuex";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vue from "vue";
 import { BPopover } from "bootstrap-vue";
-// Vue.directive("b-popover", BPopover);
 Vue.component("BPopover", BPopover);
 
 export default {
@@ -104,7 +103,6 @@ export default {
       stimulation_type: "Voltage Controlled Stimulation",
       stop_requirement: "Until Stopped",
       frequency: "",
-      time_unit: "seconds",
       name_validity: "null",
       error_message: "",
     };
@@ -120,6 +118,17 @@ export default {
   created() {
     this.current_letter = this.current_protocol.letter;
     this.current_color = this.current_protocol.color;
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (mutation.type === "stimulation/reset_state") {
+        this.show_confirmation = false;
+        this.protocol_name = "";
+        this.frequency = "";
+        this.name_validity = "";
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
     toggle_tab(tab) {
@@ -129,11 +138,7 @@ export default {
       this.show_confirmation = !this.show_confirmation;
     },
     handle_delete() {
-      this.$store.commit("stimulation/handle_delete_protocol");
-      this.show_confirmation = false;
-      this.protocol_name = "";
-      this.frequency = "";
-      this.name_validity = "";
+      this.$store.commit("stimulation/reset_state");
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];
@@ -146,7 +151,6 @@ export default {
     },
     handle_time_unit(idx) {
       const unit = this.time_units_array[idx];
-      this.time_unit = unit;
       this.$store.commit("stimulation/handle_time_unit", unit);
     },
     check_name_validity(input) {

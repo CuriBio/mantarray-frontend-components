@@ -78,7 +78,27 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(5).trigger("click");
-    expect(wrapper.vm.time_unit).toBe("milliseconds");
+    expect(store.state.stimulation.new_protocol.time_unit).toBe("milliseconds");
+  });
+
+  test("When exiting instance, Then instance is effectively destroyed", async () => {
+    const destroyed_spy = jest.spyOn(StimulationStudioBlockViewEditor, "beforeDestroy");
+    const wrapper = mount(StimulationStudioBlockViewEditor, {
+      store,
+      localVue,
+    });
+    wrapper.destroy();
+    expect(destroyed_spy).toHaveBeenCalled();
+  });
+
+  test("When a user clicks the Clear All button, Then the dropdowns will reset to default value", async () => {
+    const wrapper = mount(StimulationStudioBlockViewEditor, {
+      store,
+      localVue,
+    });
+    wrapper.vm.stimulation_type = "Current Controlled Stimulation";
+    await store.commit("stimulation/reset_state");
+    expect(wrapper.vm.stimulation_type).toBe("Voltage Controlled Stimulation");
   });
 
   test("When a user clicks the trash icon and deletes the protocol, Then it should reset local data and mutate state", async () => {
@@ -89,6 +109,6 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.find("#trash_icon").trigger("click");
     expect(wrapper.vm.show_confirmation).toBe(true);
     await wrapper.vm.handle_delete();
-    expect(store.state.stimulation.delete_protocol).toBe(true);
+    expect(wrapper.vm.show_confirmation).toBe(false);
   });
 });

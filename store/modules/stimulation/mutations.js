@@ -12,9 +12,6 @@ export default {
   clear_selected_protocol(state) {
     state.selected_wells.map((well) => delete state.protocol_assignments[well]);
   },
-  handle_delete_protocol(state) {
-    state.delete_protocol = true;
-  },
   handle_stimulation_type(state, type) {
     state.new_protocol.stimulation_type = type;
   },
@@ -71,7 +68,6 @@ export default {
     state.x_axis_points = x_values;
     state.y_axis_points = y_values;
     state.repeat_colors = color_assignments;
-    console.log(color_assignments);
   },
   handle_zoom_in(state, axis) {
     if (axis === "x-axis") state.x_axis_scale /= 10;
@@ -80,5 +76,27 @@ export default {
   handle_zoom_out(state, axis) {
     if (axis === "x-axis") state.x_axis_scale *= 10;
     if (axis === "y-axis") state.y_axis_scale *= 10;
+  },
+  reset_state(state) {
+    const replace_state = {
+      ...state,
+      selected_wells: [],
+      protocol_assignments: {},
+      new_protocol: {
+        name: "",
+        stimulation_type: "Voltage Controlled Stimulation",
+        stop_requirement: "Until Stopped",
+        frequency: "",
+        time_unit: "seconds",
+        waveform_list: [],
+      },
+      delete_protocol: false,
+      x_axis_points: [],
+      y_axis_points: [],
+      repeat_colors: {},
+      x_axis_scale: 100000,
+      y_axis_scale: 10,
+    };
+    Object.assign(state, replace_state);
   },
 };

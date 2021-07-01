@@ -41,8 +41,10 @@ export default {
         this.datapoints = await convert_x_y_arrays_to_d3_array(state.x_axis_points, state.y_axis_points);
         this.repeat_colors = state.repeat_colors;
       }
-      if (mutation.type === "stimulation/handle_delete_protocol") {
+      if (mutation.type === "stimulation/reset_state") {
         this.datapoints = [];
+        this.y_min_max = state.y_axis_scale;
+        this.x_axis_sample_length = state.x_axis_scale;
       }
       if (mutation.type === "stimulation/handle_time_unit") {
         if (state.new_protocol.time_unit === "milliseconds") state.x_axis_scale *= 1000;

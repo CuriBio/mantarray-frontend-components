@@ -17,7 +17,7 @@ describe("StimulationStudioZoomControls.vue", () => {
     store = await NuxtStore.createStore();
   });
 
-  test("When mounting StimulationStudioCurrentSettings from the build dist file, Then it loads successfully  `Biphasic Pulse Details` as defined title text is rendered", async () => {
+  test("When a user clicks on the minus icon to zoom out on an axis, Then the specified scale should multiply by a power of 10", async () => {
     const wrapper = mount(StimulationStudioZoomControls, {
       localVue,
       store,
@@ -30,7 +30,7 @@ describe("StimulationStudioZoomControls.vue", () => {
     expect(store.state.stimulation.x_axis_scale).toBe(1000);
   });
 
-  test("When mounting  from the build dist file, Then it loads successfully  `Biphasic Pulse Details` as defined title text is rendered", async () => {
+  test("When a user clicks on the plus icon to zoom in on an axis, Then the specified scale should divide by a power of 10", async () => {
     const wrapper = mount(StimulationStudioZoomControls, {
       localVue,
       store,

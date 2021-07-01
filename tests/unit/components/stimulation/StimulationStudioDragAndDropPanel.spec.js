@@ -103,7 +103,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     wrapper.vm.protocol_order = ["Biphasic", "Monophasic", "Monophasic"];
-    await store.commit("stimulation/handle_delete_protocol");
+    await store.commit("stimulation/reset_state");
     expect(wrapper.vm.protocol_order).toStrictEqual([]);
   });
 
@@ -166,7 +166,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       { type: "Biphasic", src: "placeholder" },
       { type: "Monophasic", src: "placeholder" },
     ];
-    await store.commit("stimulation/handle_delete_protocol");
+    await store.commit("stimulation/reset_state");
     expect(wrapper.vm.protocol_order).toHaveLength(0);
     expect(store.state.stimulation.delete_protocol).toBe(false);
   });

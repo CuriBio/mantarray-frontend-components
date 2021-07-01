@@ -94,6 +94,15 @@ export default {
   created() {
     this.chosen_option = this.dropdown_options[0];
     this.options_list = this.dropdown_options;
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (mutation.type === "stimulation/reset_state") {
+        this.chosen_option = this.dropdown_options[0];
+        this.changeSelection(0);
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
     changeSelection(idx) {
