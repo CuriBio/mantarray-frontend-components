@@ -33,7 +33,7 @@
     >
       <span id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt" class="span__stimulationstudio-duration-input">
         <InputWidget
-          :placeholder="'1000'"
+          :placeholder="'10'"
           :dom_id_suffix="'duration'"
           :invalid_text="''"
           :input_width="142"
@@ -58,7 +58,7 @@
     >
       <span id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt" class="span__stimulationstudio-current-input">
         <InputWidget
-          :placeholder="'500'"
+          :placeholder="'5'"
           :dom_id_suffix="'current'"
           :invalid_text="''"
           :input_width="142"
@@ -121,7 +121,7 @@
           class="span__stimulationstudio-current-settings-interpulse-input-container"
         >
           <InputWidget
-            :placeholder="'1000'"
+            :placeholder="'10'"
             :dom_id_suffix="'interpulse'"
             :invalid_text="''"
             :input_width="142"
@@ -160,7 +160,7 @@
           class="span__stimulationstudio-current-settings-durationtwo-input"
         >
           <InputWidget
-            :placeholder="'1000'"
+            :placeholder="'10'"
             :dom_id_suffix="'durationtwo'"
             :invalid_text="''"
             :input_width="142"
@@ -190,7 +190,7 @@
           class="span__stimulationstudio-current-settings-currenttwo-input"
         >
           <InputWidget
-            :placeholder="'-500'"
+            :placeholder="'-5'"
             :dom_id_suffix="'currenttwo'"
             :invalid_text="''"
             :input_width="142"

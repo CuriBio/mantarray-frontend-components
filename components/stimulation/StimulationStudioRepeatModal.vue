@@ -1,17 +1,19 @@
 <template>
   <div class="div__stimulationstudio-current-settings-background">
-    <span class="span__stimulationstudio-current-settings-title">Sequence Mode</span>
+    <span class="span__stimulationstudio-current-settings-title">{{ get_modal_title }}</span>
     <canvas class="canvas__stimulationstudio-horizontal-line-separator"> </canvas>
-    <span class="span__stimulationstudio-current-settings-label-one">Number of Repeats:</span>
-    <div class="div__stimulationstudio-duration-input-container">
-      <InputWidget
-        :placeholder="'5'"
-        :dom_id_suffix="'hertz'"
-        :invalid_text="invalid_text"
-        :input_width="80"
-        :initial_value="current_number_of_repeats !== null ? current_number_of_repeats : ''"
-        @update:value="number_of_repeats = $event"
-      />
+    <div class="div__stimulationstudio-body-container">
+      <span>{{ get_input_description }}</span>
+      <span class="input_container">
+        <InputWidget
+          :placeholder="'5'"
+          :dom_id_suffix="'hertz'"
+          :invalid_text="invalid_text"
+          :input_width="80"
+          :initial_value="current_repeat_delay_input !== null ? current_repeat_delay_input : ''"
+          @update:value="input_value = $event"
+        />
+      </span>
     </div>
     <div :class="'button-container'">
       <ButtonWidget
@@ -20,7 +22,7 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="-1"
-        :button_names="button_names"
+        :button_names="get_button_array"
         :hover_color="['#19ac8a', '#bd4932']"
         :is_enabled="is_enabled_array"
         @btn-click="close"
@@ -39,38 +41,70 @@ export default {
     ButtonWidget,
   },
   props: {
-    button_names: {
-      type: Array,
-      default() {
-        return ["Save", "Cancel"];
-      },
-    },
     is_enabled_array: {
       type: Array,
       default() {
         return [true, true];
       },
     },
-    current_number_of_repeats: {
+    current_repeat_delay_input: {
       type: String,
       default() {
         return null;
       },
     },
+    modal_type: {
+      type: String,
+      default: "Repeat",
+    },
+    delay_open_for_edit: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      number_of_repeats: null,
+      input_value: null,
       invalid_text: "",
+      button_labels: [],
     };
   },
+  computed: {
+    get_modal_title() {
+      let title;
+      if (this.modal_type === "Repeat") title = "Sequence Mode";
+      if (this.modal_type === "Delay") title = "Delay";
+      return title;
+    },
+    get_input_description() {
+      let description;
+      if (this.modal_type === "Repeat") description = "Number of Repeats:";
+      if (this.modal_type === "Delay") description = "Duration:";
+      return description;
+    },
+    get_button_array() {
+      let button_names;
+      if (this.delay_open_for_edit === false) button_names = ["Save", "Cancel"];
+      if (this.delay_open_for_edit === true) button_names = ["Save", "Delete", "Cancel"];
+      return button_names;
+    },
+  },
   created() {
-    this.number_of_repeats = this.current_number_of_repeats;
+    this.input_value = this.current_repeat_delay_input;
+    this.button_labels = this.get_button_array;
   },
   methods: {
     close(idx) {
-      const button_label = this.button_names[idx];
-      this.$emit("close", { button_label, number_of_repeats: this.number_of_repeats });
+      const button_label = this.button_labels[idx];
+      if (this.modal_type === "Repeat")
+        this.$emit("repeat_close", { button_label, number_of_repeats: this.input_value });
+      if (this.modal_type === "Delay") {
+        const delay_settings = {
+          phase_one_duration: Number(this.input_value),
+          phase_one_charge: 0,
+        };
+        this.$emit("delay_close", button_label, delay_settings);
+      }
     },
   },
 };
@@ -138,23 +172,31 @@ export default {
   cursor: pointer;
 }
 
-.span__stimulationstudio-current-settings-label-one {
-  pointer-events: all;
+.input_container {
+  position: relative;
+  bottom: 25px;
+  right: 100px;
+  margin-left: 140px;
+}
+
+.div__stimulationstudio-body-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
   position: relative;
-  width: 200px;
-  height: 30px;
-  top: 120px;
-  padding: 5px;
+  width: 100%;
+  height: 50px;
+  top: 115px;
   visibility: visible;
   font-family: Muli;
   font-size: 17px;
   color: rgb(183, 183, 183);
 }
 
-.div__stimulationstudio-duration-input-container {
+/* .div__stimulationstudio-duration-input-container {
   pointer-events: all;
   transform: rotate(0deg);
   overflow: hidden;
@@ -163,5 +205,5 @@ export default {
   height: 57px;
   top: 110px;
   visibility: visible;
-}
+} */
 </style>
