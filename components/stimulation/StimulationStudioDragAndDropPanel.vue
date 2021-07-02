@@ -67,7 +67,7 @@
                   v-for="(nested_types, nested_idx) in types.nested_protocols"
                   :key="nested_idx"
                   :style="'position: relative;'"
-                  @click.shift.exact="open_modal_for_edit(types.type, idx, nested_idx)"
+                  @click.shift.exact="open_modal_for_edit(nested_types.type, idx, nested_idx)"
                 >
                   <img :src="nested_types.src" :style="'margin-top: 8px; cursor: pointer;'" />
                 </div>
@@ -175,8 +175,12 @@ export default {
       this.current_repeat_delay_input = null;
       if (button === "Save") {
         if (this.new_cloned_idx !== null) this.protocol_order[this.new_cloned_idx].settings = settings;
-        if (this.shift_click_img_idx !== null)
+        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null)
           this.protocol_order[this.shift_click_img_idx].settings = settings;
+        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null)
+          this.protocol_order[this.shift_click_img_idx].nested_protocols[
+            this.shift_click_nested_img_idx
+          ].settings = settings;
       }
       if (button === "Delete") {
         if (this.shift_click_nested_img_idx !== null)
@@ -197,6 +201,13 @@ export default {
     open_modal_for_edit(type, idx, nested_idx) {
       console.log(type, idx, nested_idx); // TODO fix index bug when clicking nested pulses for edit
       this.selected_waveform_settings = this.protocol_order[idx].settings;
+      this.shift_click_img_idx = idx;
+      if (nested_idx !== undefined) {
+        this.shift_click_nested_img_idx = nested_idx;
+        this.selected_waveform_settings = this.protocol_order[idx].nested_protocols[nested_idx].settings;
+      } else if (nested_idx === undefined) {
+        this.selected_waveform_settings = this.protocol_order[idx].settings;
+      }
       if (type === "Monophasic") this.reopen_modal = "Monophasic";
       if (type === "Biphasic") this.reopen_modal = "Biphasic";
       if (type === "Delay") {
@@ -205,8 +216,6 @@ export default {
         this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
       }
-      if (nested_idx !== undefined) this.shift_click_nested_img_idx = idx;
-      this.shift_click_img_idx = idx;
     },
     clone(type) {
       this.cloned = true;
