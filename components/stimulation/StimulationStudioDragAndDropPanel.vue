@@ -95,7 +95,7 @@
       />
     </div>
     <div v-if="repeat_delay_modal !== null" class="modal-container">
-      <StimulationStudioRepeatModal
+      <StimulationStudioRepeatDelayModal
         :delay_open_for_edit="delay_open_for_edit"
         :repeat_idx="repeat_idx"
         :modal_type="repeat_delay_modal"
@@ -110,14 +110,14 @@
 <script>
 import draggable from "vuedraggable";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
-import StimulationStudioRepeatModal from "@/components/stimulation/StimulationStudioRepeatModal.vue";
+import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
 
 export default {
   name: "DragAndDropPanel",
   components: {
     draggable,
     StimulationStudioWaveformSettingModal,
-    StimulationStudioRepeatModal,
+    StimulationStudioRepeatDelayModal,
   },
   props: {
     stimulation_type: { type: String, default: "Voltage (mV)" },

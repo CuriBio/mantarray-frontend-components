@@ -14,6 +14,7 @@
           @update:value="input_value = $event"
         />
       </span>
+      <span>{{ get_metric_label }}</span>
     </div>
     <div :class="'button-container'">
       <ButtonWidget
@@ -35,7 +36,7 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 
 export default {
-  name: "StimulationStudioRepeatModal",
+  name: "StimulationStudioRepeatDelayModal",
   components: {
     InputWidget,
     ButtonWidget,
@@ -87,6 +88,12 @@ export default {
       if (this.delay_open_for_edit === false) button_names = ["Save", "Cancel"];
       if (this.delay_open_for_edit === true) button_names = ["Save", "Delete", "Cancel"];
       return button_names;
+    },
+    get_metric_label() {
+      let metric_label;
+      if (this.modal_type === "Repeat") metric_label = "";
+      if (this.modal_type === "Delay") metric_label = "second(s)";
+      return metric_label;
     },
   },
   created() {
@@ -195,15 +202,4 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
 }
-
-/* .div__stimulationstudio-duration-input-container {
-  pointer-events: all;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: relative;
-  width: 162px;
-  height: 57px;
-  top: 110px;
-  visibility: visible;
-} */
 </style>
