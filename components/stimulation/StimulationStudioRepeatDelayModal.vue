@@ -7,7 +7,7 @@
       <span class="input_container">
         <InputWidget
           :placeholder="'5'"
-          :dom_id_suffix="'hertz'"
+          :dom_id_suffix="'repeat_delay'"
           :invalid_text="invalid_text"
           :input_width="80"
           :initial_value="current_repeat_delay_input !== null ? current_repeat_delay_input : ''"
