@@ -308,7 +308,7 @@ export default {
     is_enabled_array: {
       type: Array,
       default() {
-        return [true, true];
+        return [true, true, true];
       },
     },
     selected_waveform_settings: {

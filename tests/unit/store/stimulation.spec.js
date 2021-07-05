@@ -72,19 +72,35 @@ describe("store/stimulation", () => {
     });
 
     test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
+      const voltage = "Voltage (V)";
+      const current = "Current (A)";
+
       const default_type = store.getters["stimulation/get_stimulation_type"];
-      expect(default_type).toBe("Voltage (V)");
+      expect(default_type).toBe(voltage);
+
       store.state.stimulation.new_protocol.stimulation_type = "Current Controlled Stimulation";
-      const current_type = store.getters["stimulation/get_stimulation_type"];
-      expect(current_type).toBe("Current (A)");
+      const current_selection = store.getters["stimulation/get_stimulation_type"];
+      expect(current_selection).toBe(current);
+
+      store.state.stimulation.new_protocol.stimulation_type = "Voltage Controlled Stimulation";
+      const voltage_selection = store.getters["stimulation/get_stimulation_type"];
+      expect(voltage_selection).toBe(voltage);
     });
 
     test("When requesting the time unit, Then it should return what user has selected in dropdown", async () => {
+      const seconds = "Time (s)";
+      const milliseconds = "Time (ms)";
+
       const default_unit = store.getters["stimulation/get_time_unit"];
-      expect(default_unit).toBe("Time (s)");
+      expect(default_unit).toBe(seconds);
+
       store.state.stimulation.new_protocol.time_unit = "milliseconds";
-      const current_unit = store.getters["stimulation/get_time_unit"];
-      expect(current_unit).toBe("Time (ms)");
+      const ms_unit = store.getters["stimulation/get_time_unit"];
+      expect(ms_unit).toBe(milliseconds);
+
+      store.state.stimulation.new_protocol.time_unit = "seconds";
+      const s_unit = store.getters["stimulation/get_time_unit"];
+      expect(s_unit).toBe(seconds);
     });
   });
 
@@ -102,22 +118,27 @@ describe("store/stimulation", () => {
     });
 
     test("When a user adds a protocol to selected wells, Then the selected wells should be added to protocol assignments with specified protocol", async () => {
-      await store.commit("stimulation/handle_selected_wells", test_wells.SELECTED);
-      await store.commit("stimulation/apply_selected_protocol", 2);
-      expect(store.state.stimulation.protocol_assignments).toStrictEqual({
+      const test_assignment = {
         0: { letter: "B", color: "#45847b", label: "test_B" },
         1: { letter: "B", color: "#45847b", label: "test_B" },
-      });
+      };
+      await store.commit("stimulation/handle_selected_wells", test_wells.SELECTED);
+      await store.commit("stimulation/apply_selected_protocol", 2);
+
+      expect(store.state.stimulation.protocol_assignments).toStrictEqual(test_assignment);
     });
 
     test("When a user selects wells with a protocol applied, Then the selected wells should be cleared of any protocol assignments with specified protocol", async () => {
+      const test_assigment = {
+        0: { letter: "A", color: "#83c0b3", label: "test_A" },
+      };
+
       await store.commit("stimulation/handle_selected_wells", test_wells.SELECTED);
       await store.commit("stimulation/apply_selected_protocol", 1);
       await store.commit("stimulation/handle_selected_wells", test_wells.UNSELECTED);
       await store.commit("stimulation/clear_selected_protocol");
-      expect(store.state.stimulation.protocol_assignments).toStrictEqual({
-        0: { letter: "A", color: "#83c0b3", label: "test_A" },
-      });
+
+      expect(store.state.stimulation.protocol_assignments).toStrictEqual(test_assigment);
     });
 
     test("When a user requests to delete the current stimulation by using the trash icon, Then it should mutate state to true", async () => {

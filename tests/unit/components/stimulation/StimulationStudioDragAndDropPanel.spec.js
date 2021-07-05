@@ -131,23 +131,23 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.open_modal_for_edit("Monophasic", 0);
-    expect(wrapper.vm.reopen_modal).toBe("Monophasic");
+    expect(wrapper.vm.modal_type).toBe("Monophasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(0);
     expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
     expect(wrapper.find(".modal_overlay")).toBeTruthy();
 
     await wrapper.vm.on_modal_close("Delete");
     expect(wrapper.vm.protocol_order).toHaveLength(2);
-    expect(wrapper.vm.reopen_modal).toBeNull();
+    expect(wrapper.vm.modal_type).toBeNull();
 
     await wrapper.vm.open_modal_for_edit("Biphasic", 1);
-    expect(wrapper.vm.reopen_modal).toBe("Biphasic");
+    expect(wrapper.vm.modal_type).toBe("Biphasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(1);
     expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
 
     await wrapper.vm.on_modal_close("Cancel");
     expect(wrapper.vm.protocol_order).toHaveLength(2);
-    expect(wrapper.vm.reopen_modal).toBeNull();
+    expect(wrapper.vm.modal_type).toBeNull();
 
     await wrapper.vm.open_modal_for_edit("Biphasic", 0, 0);
     expect(wrapper.vm.shift_click_nested_img_idx).toBe(0);

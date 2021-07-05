@@ -8,7 +8,7 @@
       <div class="div__background-container">
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
-          <canvas class="canvas__stimulationstudio-header-separator" width="272" height="2" />
+          <canvas class="canvas__stimulationstudio-header-separator" />
           <draggable
             v-model="icon_types"
             tag="div"
@@ -81,15 +81,9 @@
       <StimulationStudioWaveformSettingModal
         :stimulation_type="stimulation_type"
         :waveform_type="modal_type"
-        @close="on_modal_close"
-      />
-    </div>
-    <div v-if="reopen_modal !== null" class="modal-container">
-      <StimulationStudioWaveformSettingModal
-        :stimulation_type="stimulation_type"
-        :waveform_type="reopen_modal"
-        :button_names="['Save', 'Delete', 'Cancel']"
-        :is_enabled_array="[true, true, true]"
+        :button_names="
+          shift_click_img_idx !== null ? button_labels.delete_option : button_labels.no_delete_option
+        "
         :selected_waveform_settings="selected_waveform_settings"
         @close="on_modal_close"
       />
@@ -129,6 +123,10 @@ export default {
         { type: "Biphasic", src: "/biphasic-tile.png" },
         { type: "Delay", src: "/delay-tile.png" },
       ],
+      button_labels: {
+        no_delete_option: ["Save", "Cancel"],
+        delete_option: ["Save", "Delete", "Cancel"],
+      },
       selected_waveform_settings: null,
       protocol_order: [],
       modal_type: null,
@@ -141,7 +139,7 @@ export default {
       current_repeat_delay_input: null,
       cloned: false,
       new_cloned_idx: null,
-      delay_open_for_edit: false,
+      delay_open_for_edit: false, // TODO Luci, clean up state management and constant names
     };
   },
   created() {
@@ -159,6 +157,7 @@ export default {
       if (e.added && this.cloned) {
         const { element, newIndex } = e.added;
         this.new_cloned_idx = newIndex;
+        this.selected_waveform_settings = element.settings;
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
         else if (element.type === "Delay") this.repeat_delay_modal = "Delay";
@@ -208,8 +207,8 @@ export default {
       } else if (nested_idx === undefined) {
         this.selected_waveform_settings = pulse.settings;
       }
-      if (type === "Monophasic") this.reopen_modal = "Monophasic";
-      if (type === "Biphasic") this.reopen_modal = "Biphasic";
+      if (type === "Monophasic") this.modal_type = "Monophasic";
+      if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
         const current = pulse.settings.phase_one_duration;
         this.current_repeat_delay_input = current.toString();
@@ -225,12 +224,20 @@ export default {
         src: type.src,
         nested_protocols: [],
         repeat: { color: random_color, number_of_repeats: 0 },
+        settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
       };
     },
     handle_repeat(e, idx) {
       if (e.added) {
         this.repeat_delay_modal = "Repeat";
         this.repeat_idx = idx;
+        console.log("repeat idx", this.repeat_idx, idx);
       }
       if (e.removed) {
         this.protocol_order[idx].repeat.number_of_repeats = 0;
