@@ -199,19 +199,19 @@ export default {
       this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_modal_for_edit(type, idx, nested_idx) {
-      console.log(type, idx, nested_idx); // TODO fix index bug when clicking nested pulses for edit
-      this.selected_waveform_settings = this.protocol_order[idx].settings;
+      const pulse = this.protocol_order[idx];
+      this.selected_waveform_settings = pulse.settings;
       this.shift_click_img_idx = idx;
       if (nested_idx !== undefined) {
         this.shift_click_nested_img_idx = nested_idx;
-        this.selected_waveform_settings = this.protocol_order[idx].nested_protocols[nested_idx].settings;
+        this.selected_waveform_settings = pulse.nested_protocols[nested_idx].settings;
       } else if (nested_idx === undefined) {
-        this.selected_waveform_settings = this.protocol_order[idx].settings;
+        this.selected_waveform_settings = pulse.settings;
       }
       if (type === "Monophasic") this.reopen_modal = "Monophasic";
       if (type === "Biphasic") this.reopen_modal = "Biphasic";
       if (type === "Delay") {
-        const current = this.protocol_order[idx].settings.phase_one_duration;
+        const current = pulse.settings.phase_one_duration;
         this.current_repeat_delay_input = current.toString();
         this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
@@ -350,6 +350,7 @@ export default {
   background: rgb(27, 27, 27);
   z-index: 1;
   white-space: nowrap;
+  overflow: visible;
 }
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;

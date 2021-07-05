@@ -205,23 +205,22 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.handle_repeat({ added: "test" }, 1);
-    expect(wrapper.vm.repeat_modal).toBe(true);
+    expect(wrapper.vm.repeat_delay_modal).toBe("Repeat");
     expect(wrapper.vm.repeat_idx).toBe(1);
 
     await wrapper.vm.on_repeat_modal_close({ button_label: "Save", number_of_repeats: 3 });
     await wrapper.vm.open_repeat_modal_for_edit(3, 1);
-    expect(wrapper.vm.current_number_of_repeats).toBe(3);
+    expect(wrapper.vm.current_repeat_delay_input).toBe(3);
 
     await wrapper.vm.handle_repeat({ added: "test" }, 1);
-    expect(wrapper.vm.repeat_modal).toBe(true);
     expect(wrapper.vm.repeat_idx).toBe(1);
 
     await wrapper.vm.on_repeat_modal_close({ button_label: "Cancel", number_of_repeats: 3 });
     expect(wrapper.vm.protocol_order[1].nested_protocols).toStrictEqual([]);
 
-    wrapper.vm.repeat_modal = false;
+    wrapper.vm.repeat_delay_modal = null;
     await wrapper.vm.handle_repeat({ moved: "test" }, 1);
-    expect(wrapper.vm.repeat_modal).toBe(false);
+    expect(wrapper.vm.repeat_delay_modal).toBeNull();
   });
 
   test("When a user clicks save on the settings for a waveform, Then the setting should save to the corresponding index depending on if it is a new waveform or an edited", async () => {

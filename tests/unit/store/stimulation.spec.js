@@ -150,12 +150,11 @@ describe("store/stimulation", () => {
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
-      const x_values = [0, 0, 100, 100, 200, 200, 400, 400, 500, 500, 600, 600, 700, 700, 900, 900, 1000];
-      const y_values = [0, 2, 2, 2, 2, 0, 0, -2, -2, 2, 2, 2, 2, 0, 0, -2, -2];
-      const colors = { b7b7b7: [0, 17] };
+      const x_values = [0, 0, 100, 100, 200, 200, 400, 400, 500];
+      const y_values = [0, 2, 2, 2, 2, 0, 0, -2, -2];
+      const colors = { b7b7b7: [0, 9] };
 
       await store.commit("stimulation/handle_protocol_order", test_protocol_order);
-
       expect(store.state.stimulation.x_axis_points).toStrictEqual(x_values);
       expect(store.state.stimulation.y_axis_points).toStrictEqual(y_values);
       expect(store.state.stimulation.repeat_colors).toStrictEqual(colors);

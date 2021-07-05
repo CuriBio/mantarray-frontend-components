@@ -23,7 +23,7 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
       localVue,
     });
     await wrapper.find("#input-widget-field-hertz").setValue("4");
-    expect(wrapper.vm.number_of_repeats).toBe("4");
+    expect(wrapper.vm.input_value).toBe("4");
   });
 
   test("When a user closes repeat modal, Then button label and new repeat value should be emitted to parent component", async () => {
@@ -33,6 +33,6 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
     });
     await wrapper.find("#input-widget-field-hertz").setValue("3");
     await wrapper.findAll(".span__button_label").at(0).trigger("click");
-    expect(wrapper.emitted("close")).toBeTruthy();
+    expect(wrapper.emitted("repeat_close")).toBeTruthy();
   });
 });

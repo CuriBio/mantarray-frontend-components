@@ -196,7 +196,7 @@ export default {
   position: relative;
   width: 100%;
   height: 50px;
-  top: 115px;
+  top: 110px;
   visibility: visible;
   font-family: Muli;
   font-size: 17px;

@@ -35,11 +35,10 @@
               :options_text="stimulation_types_array"
               @selection-changed="handle_stimulation_type"
             />
-            <!-- REMEMBER ask about invoking function to change state or  if this is okay-->
-            <span class="span__settings-label">Stimulate</span>
             <SmallDropDown
+              :style="'margin-left: 5%;'"
               :input_height="25"
-              :input_width="105"
+              :input_width="155"
               :options_text="until_options_array"
               @selection-changed="handle_stop_requirement"
             />
@@ -97,11 +96,11 @@ export default {
       current_letter: "",
       current_color: "",
       stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
-      until_options_array: ["Until Stopped", "Until ..."],
-      time_units_array: ["seconds", "milliseconds"],
+      until_options_array: ["Stimulate Until Stopped", "Repeat"],
+      time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
       protocol_name: "",
       stimulation_type: "Voltage Controlled Stimulation",
-      stop_requirement: "Until Stopped",
+      stop_requirement: "Stimulate Until Stopped",
       frequency: "",
       name_validity: "null",
       error_message: "",
@@ -249,10 +248,10 @@ button:hover {
   padding: 10px;
   font-size: 12px;
   margin-bottom: 2%;
-  margin-left: 2%;
+  margin-left: 3%;
 }
 .div__setting-panel-container {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 40px;
   display: flex;
@@ -284,7 +283,6 @@ img:hover {
   justify-self: flex-end;
   justify-content: flex-end;
   align-items: center;
-  height: 100%;
   margin: 5px;
 }
 .number_input {
