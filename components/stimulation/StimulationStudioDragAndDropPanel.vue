@@ -114,7 +114,7 @@ export default {
     StimulationStudioRepeatDelayModal,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (mV)" },
+    stimulation_type: { type: String, default: "Voltage (V)" },
   },
   data() {
     return {
@@ -210,7 +210,7 @@ export default {
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
-        const current = pulse.settings.phase_one_duration;
+        const current = this.protocol_order[idx].settings.phase_one_duration;
         this.current_repeat_delay_input = current.toString();
         this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
@@ -237,7 +237,6 @@ export default {
       if (e.added) {
         this.repeat_delay_modal = "Repeat";
         this.repeat_idx = idx;
-        console.log("repeat idx", this.repeat_idx, idx);
       }
       if (e.removed) {
         this.protocol_order[idx].repeat.number_of_repeats = 0;
