@@ -63,6 +63,10 @@ export default {
         const ending_repeat_idx = x_values.length; // keep track of color assignments
         if (nested_protocols.length > 0)
           color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
+        if (k === number_of_repeats - 1 && number_of_repeats !== 0) {
+          // TODO: Luci clean up
+          break;
+        }
       }
     }
     state.x_axis_points = x_values;
@@ -94,7 +98,7 @@ export default {
       x_axis_points: [],
       y_axis_points: [],
       repeat_colors: {},
-      x_axis_scale: 100000,
+      x_axis_scale: 10000,
       y_axis_scale: 10,
     };
     Object.assign(state, replace_state);

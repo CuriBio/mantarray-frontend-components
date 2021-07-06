@@ -1,5 +1,6 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioProtocolViewer from "@/components/stimulation/StimulationStudioProtocolViewer.vue";
+import StimulationStudioWaveform from "@/components/stimulation/StimulationStudioWaveform.vue";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -118,7 +119,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     expect(wrapper.vm.datapoints).toStrictEqual([]);
   });
 
-  test("When a user the protocol, Then all datapoints should be deleted", async () => {
+  test("When a user adds to the protocol, Then corresponding repeat colors should be reassignment upon mutation", async () => {
     const wrapper = mount(StimulationStudioProtocolViewer, {
       store,
       localVue,
@@ -126,5 +127,20 @@ describe("StimulationStudioProtocolViewer.vue", () => {
 
     await store.commit("stimulation/handle_protocol_order", test_protocol_order);
     expect(wrapper.vm.repeat_colors).toBe(store.state.stimulation.repeat_colors);
+  });
+
+  test("When a user the protocol, Then all datapoints should be deleted", async () => {
+    const wrapper = mount(StimulationStudioWaveform, {
+      store,
+      localVue,
+    });
+
+    const render_spy = jest.spyOn(wrapper.vm, "render_plot");
+    wrapper.vm.$options.watch.data_points.call(wrapper.vm, [
+      [1, 2],
+      [2, 3],
+    ]);
+
+    expect(render_spy).toHaveBeenCalled();
   });
 });

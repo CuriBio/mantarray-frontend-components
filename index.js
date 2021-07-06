@@ -82,7 +82,7 @@ export { default as StimulationStudioCreateAndEdit } from "./components/stimulat
 export { default as StimulationStudioDragAndDropPanel } from "./components/stimulation/StimulationStudioDragAndDropPanel.vue";
 export { default as StimulationStudioBlockViewEditor } from "./components/stimulation/StimulationStudioBlockViewEditor.vue";
 export { default as StimulationStudioWaveformSettingModal } from "./components/stimulation/StimulationStudioWaveformSettingModal.vue";
-export { default as StimulationStudioRepeatModal } from "./components/stimulation/StimulationStudioRepeatModal.vue";
+export { default as StimulationStudioRepeatDelayModal } from "./components/stimulation/StimulationStudioRepeatDelayModal.vue";
 export { default as StimulationStudioProtocolViewer } from "./components/stimulation/StimulationStudioProtocolViewer.vue";
 export { default as StimulationStudioWaveform } from "./components/stimulation/StimulationStudioWaveform.vue";
 export { default as StimulationStudioZoomControls } from "./components/stimulation/StimulationStudioZoomControls.vue";

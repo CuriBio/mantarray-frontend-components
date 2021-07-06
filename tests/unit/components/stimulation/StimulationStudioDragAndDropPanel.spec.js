@@ -76,6 +76,19 @@ const test_protocol_order = [
       phase_one_charge: 2,
     },
   },
+  {
+    type: "Monophasic",
+    src: "placeholder",
+    nested_protocols: [],
+    repeat: {
+      number_of_repeats: 0,
+      color: "fffff",
+    },
+    settings: {
+      phase_one_duration: 300,
+      phase_one_charge: 2,
+    },
+  },
 ];
 
 describe("StimulationStudioDragAndDropPanel.vue", () => {
@@ -131,29 +144,29 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.open_modal_for_edit("Monophasic", 0);
-    expect(wrapper.vm.reopen_modal).toBe("Monophasic");
+    expect(wrapper.vm.modal_type).toBe("Monophasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(0);
     expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
     expect(wrapper.find(".modal_overlay")).toBeTruthy();
 
     await wrapper.vm.on_modal_close("Delete");
-    expect(wrapper.vm.protocol_order).toHaveLength(2);
-    expect(wrapper.vm.reopen_modal).toBeNull();
+    expect(wrapper.vm.protocol_order).toHaveLength(3);
+    expect(wrapper.vm.modal_type).toBeNull();
 
     await wrapper.vm.open_modal_for_edit("Biphasic", 1);
-    expect(wrapper.vm.reopen_modal).toBe("Biphasic");
+    expect(wrapper.vm.modal_type).toBe("Biphasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(1);
     expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
 
     await wrapper.vm.on_modal_close("Cancel");
-    expect(wrapper.vm.protocol_order).toHaveLength(2);
-    expect(wrapper.vm.reopen_modal).toBeNull();
+    expect(wrapper.vm.protocol_order).toHaveLength(3);
+    expect(wrapper.vm.modal_type).toBeNull();
 
     await wrapper.vm.open_modal_for_edit("Biphasic", 0, 0);
     expect(wrapper.vm.shift_click_nested_img_idx).toBe(0);
 
     await wrapper.vm.on_modal_close("Delete");
-    expect(wrapper.vm.protocol_order).toHaveLength(2);
+    expect(wrapper.vm.protocol_order).toHaveLength(3);
     expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
   });
 
@@ -192,7 +205,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.check_type({ added: { element: { type: "Monophasic" }, newIndex: 3 } });
 
     await wrapper.vm.on_modal_close("Cancel");
-    expect(wrapper.vm.protocol_order).toHaveLength(2);
+    expect(wrapper.vm.protocol_order).toHaveLength(3);
 
     await wrapper.vm.check_type({ added: { element: { type: "Biphasic" }, newIndex: 1 } });
     expect(wrapper.vm.modal_type).toBeNull();
@@ -205,23 +218,22 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.handle_repeat({ added: "test" }, 1);
-    expect(wrapper.vm.repeat_modal).toBe(true);
+    expect(wrapper.vm.repeat_delay_modal).toBe("Repeat");
     expect(wrapper.vm.repeat_idx).toBe(1);
 
     await wrapper.vm.on_repeat_modal_close({ button_label: "Save", number_of_repeats: 3 });
     await wrapper.vm.open_repeat_modal_for_edit(3, 1);
-    expect(wrapper.vm.current_number_of_repeats).toBe(3);
+    expect(wrapper.vm.current_repeat_delay_input).toBe(3);
 
     await wrapper.vm.handle_repeat({ added: "test" }, 1);
-    expect(wrapper.vm.repeat_modal).toBe(true);
     expect(wrapper.vm.repeat_idx).toBe(1);
 
     await wrapper.vm.on_repeat_modal_close({ button_label: "Cancel", number_of_repeats: 3 });
     expect(wrapper.vm.protocol_order[1].nested_protocols).toStrictEqual([]);
 
-    wrapper.vm.repeat_modal = false;
+    wrapper.vm.repeat_delay_modal = null;
     await wrapper.vm.handle_repeat({ moved: "test" }, 1);
-    expect(wrapper.vm.repeat_modal).toBe(false);
+    expect(wrapper.vm.repeat_delay_modal).toBeNull();
   });
 
   test("When a user clicks save on the settings for a waveform, Then the setting should save to the corresponding index depending on if it is a new waveform or an edited", async () => {
@@ -253,5 +265,27 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.handle_repeat({ removed: "test" }, 1);
     expect(wrapper.vm.protocol_order[1].repeat.number_of_repeats).toBe(0);
+  });
+
+  test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    const idx = 2;
+    const delay_settings = {
+      phase_one_duration: 5,
+      phase_one_charge: 0,
+    };
+
+    wrapper.vm.protocol_order = test_protocol_order;
+    await wrapper.vm.open_modal_for_edit("Delay", idx);
+    expect(wrapper.vm.repeat_delay_modal).toBe("Delay");
+
+    await wrapper.vm.on_modal_close("Save", delay_settings);
+    expect(wrapper.vm.protocol_order[idx].settings.phase_one_duration).toBe(
+      delay_settings.phase_one_duration
+    );
   });
 });

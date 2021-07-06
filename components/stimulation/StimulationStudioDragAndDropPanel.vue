@@ -1,16 +1,18 @@
 <template>
   <div>
     <div
-      :class="modal_type !== null || reopen_modal !== null || repeat_modal !== null ? 'modal_overlay' : null"
+      :class="
+        modal_type !== null || reopen_modal !== null || repeat_delay_modal !== null ? 'modal_overlay' : null
+      "
     >
       <div class="div__background-container">
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
-          <canvas class="canvas__stimulationstudio-header-separator" width="272" height="2" />
+          <canvas class="canvas__stimulationstudio-header-separator" />
           <draggable
             v-model="icon_types"
             tag="div"
-            style="display: flex; width: 100%; justify-content: space-evenly; margin-top: 80px"
+            class="draggable_tile_container"
             :group="{ name: 'order', pull: 'clone', put: false }"
             :clone="clone"
           >
@@ -65,7 +67,7 @@
                   v-for="(nested_types, nested_idx) in types.nested_protocols"
                   :key="nested_idx"
                   :style="'position: relative;'"
-                  @click.shift.exact="open_modal_for_edit(types.type, idx, nested_idx)"
+                  @click.shift.exact="open_modal_for_edit(nested_types.type, idx, nested_idx)"
                 >
                   <img :src="nested_types.src" :style="'margin-top: 8px; cursor: pointer;'" />
                 </div>
@@ -79,25 +81,22 @@
       <StimulationStudioWaveformSettingModal
         :stimulation_type="stimulation_type"
         :waveform_type="modal_type"
-        @close="on_modal_close"
-      />
-    </div>
-    <div v-if="reopen_modal !== null" class="modal-container">
-      <StimulationStudioWaveformSettingModal
-        :stimulation_type="stimulation_type"
-        :waveform_type="reopen_modal"
-        :button_names="['Save', 'Delete', 'Cancel']"
-        :is_enabled_array="[true, true, true]"
+        :button_names="
+          shift_click_img_idx !== null ? button_labels.delete_option : button_labels.no_delete_option
+        "
         :selected_waveform_settings="selected_waveform_settings"
         @close="on_modal_close"
       />
     </div>
-    <div v-if="repeat_modal !== null" class="modal-container">
-      <StimulationStudioRepeatModal
+    <div v-if="repeat_delay_modal !== null" class="modal-container">
+      <StimulationStudioRepeatDelayModal
+        :delay_open_for_edit="delay_open_for_edit"
         :repeat_idx="repeat_idx"
-        :current_number_of_repeats="current_number_of_repeats"
-        :is_enabled_array="[true, true]"
-        @close="on_repeat_modal_close"
+        :modal_type="repeat_delay_modal"
+        :current_repeat_delay_input="current_repeat_delay_input"
+        :is_enabled_array="[true, true, true]"
+        @repeat_close="on_repeat_modal_close"
+        @delay_close="on_modal_close"
       />
     </div>
   </div>
@@ -105,24 +104,29 @@
 <script>
 import draggable from "vuedraggable";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
-import StimulationStudioRepeatModal from "@/components/stimulation/StimulationStudioRepeatModal.vue";
+import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
 
 export default {
   name: "DragAndDropPanel",
   components: {
     draggable,
     StimulationStudioWaveformSettingModal,
-    StimulationStudioRepeatModal,
+    StimulationStudioRepeatDelayModal,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (mV)" },
+    stimulation_type: { type: String, default: "Voltage (V)" },
   },
   data() {
     return {
       icon_types: [
-        { type: "Monophasic", src: "/Monophasic-tile.png" },
-        { type: "Biphasic", src: "/Biphasic-tile.png" },
+        { type: "Monophasic", src: "/monophasic-tile.png" },
+        { type: "Biphasic", src: "/biphasic-tile.png" },
+        { type: "Delay", src: "/delay-tile.png" },
       ],
+      button_labels: {
+        no_delete_option: ["Save", "Cancel"],
+        delete_option: ["Save", "Delete", "Cancel"],
+      },
       selected_waveform_settings: null,
       protocol_order: [],
       modal_type: null,
@@ -130,18 +134,18 @@ export default {
       reopen_modal: null,
       shift_click_img_idx: null,
       shift_click_nested_img_idx: null,
-      repeat_modal: null,
+      repeat_delay_modal: null,
       repeat_idx: null,
-      current_number_of_repeats: null,
+      current_repeat_delay_input: null,
       cloned: false,
       new_cloned_idx: null,
+      delay_open_for_edit: false, // TODO Luci, clean up state management and constant names
     };
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (mutation.type === "stimulation/reset_state") {
         this.protocol_order = [];
-        this.$store.state.stimulation.delete_protocol = false;
       }
     });
   },
@@ -153,8 +157,10 @@ export default {
       if (e.added && this.cloned) {
         const { element, newIndex } = e.added;
         this.new_cloned_idx = newIndex;
+        this.selected_waveform_settings = element.settings;
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
+        else if (element.type === "Delay") this.repeat_delay_modal = "Delay";
       }
       if ((e.added && !this.cloned) || e.moved || e.removed)
         this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
@@ -163,10 +169,17 @@ export default {
     on_modal_close(button, settings) {
       this.modal_type = null;
       this.reopen_modal = null;
+      this.repeat_delay_modal = null;
+      this.delay_open_for_edit = false;
+      this.current_repeat_delay_input = null;
       if (button === "Save") {
         if (this.new_cloned_idx !== null) this.protocol_order[this.new_cloned_idx].settings = settings;
-        if (this.shift_click_img_idx !== null)
+        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null)
           this.protocol_order[this.shift_click_img_idx].settings = settings;
+        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null)
+          this.protocol_order[this.shift_click_img_idx].nested_protocols[
+            this.shift_click_nested_img_idx
+          ].settings = settings;
       }
       if (button === "Delete") {
         if (this.shift_click_nested_img_idx !== null)
@@ -185,11 +198,23 @@ export default {
       this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_modal_for_edit(type, idx, nested_idx) {
-      this.selected_waveform_settings = this.protocol_order[idx].settings;
-      if (type === "Monophasic") this.reopen_modal = "Monophasic";
-      else if (type === "Biphasic") this.reopen_modal = "Biphasic";
-      if (nested_idx !== undefined) this.shift_click_nested_img_idx = idx;
+      const pulse = this.protocol_order[idx];
+      this.selected_waveform_settings = pulse.settings;
       this.shift_click_img_idx = idx;
+      if (nested_idx !== undefined) {
+        this.shift_click_nested_img_idx = nested_idx;
+        this.selected_waveform_settings = pulse.nested_protocols[nested_idx].settings;
+      } else if (nested_idx === undefined) {
+        this.selected_waveform_settings = pulse.settings;
+      }
+      if (type === "Monophasic") this.modal_type = "Monophasic";
+      if (type === "Biphasic") this.modal_type = "Biphasic";
+      if (type === "Delay") {
+        const current = this.protocol_order[idx].settings.phase_one_duration;
+        this.current_repeat_delay_input = current.toString();
+        this.delay_open_for_edit = true;
+        this.repeat_delay_modal = "Delay";
+      }
     },
     clone(type) {
       this.cloned = true;
@@ -199,11 +224,18 @@ export default {
         src: type.src,
         nested_protocols: [],
         repeat: { color: random_color, number_of_repeats: 0 },
+        settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
       };
     },
     handle_repeat(e, idx) {
       if (e.added) {
-        this.repeat_modal = true;
+        this.repeat_delay_modal = "Repeat";
         this.repeat_idx = idx;
       }
       if (e.removed) {
@@ -215,17 +247,17 @@ export default {
       this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_repeat_modal_for_edit(number, idx) {
-      this.current_number_of_repeats = number;
-      this.repeat_modal = true;
+      this.current_repeat_delay_input = number;
+      this.repeat_delay_modal = "Repeat";
       this.repeat_idx = idx;
     },
     on_repeat_modal_close(res) {
-      this.repeat_modal = null;
+      this.repeat_delay_modal = null;
       if (res.button_label === "Save")
         this.protocol_order[this.repeat_idx].repeat.number_of_repeats = res.number_of_repeats;
       if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
       this.repeat_idx = null;
-      this.current_number_of_repeats = null;
+      this.current_repeat_delay_input = null;
       this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
     },
     get_style(type) {
@@ -281,6 +313,15 @@ export default {
   justify-content: center;
   width: 50px;
 }
+.draggable_tile_container {
+  display: grid;
+  width: 80%;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 15% 15% 70%;
+  justify-items: center;
+  align-items: center;
+  margin-top: 80px;
+}
 .repeat_label {
   font-size: 12px;
   font-weight: bold;
@@ -315,6 +356,7 @@ export default {
   background: rgb(27, 27, 27);
   z-index: 1;
   white-space: nowrap;
+  overflow: visible;
 }
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;

@@ -69,7 +69,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(3).trigger("click");
-    expect(wrapper.vm.stop_requirement).toBe("Until ...");
+    expect(wrapper.vm.stop_requirement).toBe("Repeat");
   });
 
   test("When a user selects from the time unit dropdown, Then the corresponding selection is stored", async () => {
