@@ -31,12 +31,29 @@ export default {
     state.heatmap_values = new_value;
   },
   set_metric_data(state, new_value) {
-    state.heatmap_values[new_value.name].data.forEach((item, ix) => {
-      item.push(new_value.data[ix]);
+    state.heatmap_values[new_value.name].data.forEach((item, idx) => {
+      item.push(new_value.data[idx]);
     });
   },
+  append_metric_data(state, new_values) {
+    // TODO use UUIDs
+    const metric_values = {
+      "Twitch Force": [],
+      "Twitch Period": [],
+      "Twitch Frequency": [],
+      "Twitch Width 80": [],
+      "Contraction Velocity": [],
+      "Relaxation Velocity": [],
+    };
+    for (const well_idx in new_values) {
+      if (new_values[well_idx] !== undefined) {
+        const new_well_values = new_values[well_idx];
+        for (const metric_name in metric_values) {
+          if (new_well_values[metric_name] !== undefined) {
+            state.heatmap_values[metric_name].data[well_idx].push(...new_well_values[metric_name]);
+          }
+        }
+      }
+    }
+  },
 };
-
-// set_heatmap_on_idx(state, new_value) {
-//   state.heatmap_values[state.heatmap_idx] = new_value;
-// },

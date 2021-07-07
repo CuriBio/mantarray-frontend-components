@@ -126,11 +126,6 @@ function convert_from_json_of_well_indices_to_sparse_arrays(the_well_json, well_
 
   const last_element_x_scale = temp_well_idx_arr[temp_well_idx_arr.length - 1];
 
-  //  let well_value_sparse_arr = Array.from(
-  //    new Array(last_element_x_scale),
-  //    () => 0
-  //  );
-
   const well_value_sparse_arr = new Array(last_element_x_scale).fill(undefined);
 
   let count = 0;
@@ -198,22 +193,6 @@ function append_get_available_well_data(arr, new_arr) {
   for (const str_well_idx in inner_object_waveform_data_points) {
     if (inner_object_waveform_data_points != undefined) {
       const int_well_idx = parseInt(str_well_idx);
-      // console.log(
-      //   "Existing Array in Platewaveform x_data_points===>" +
-      //     arr[int_well_idx].x_data_points
-      // );
-      // console.log(
-      //   "Existing Array in Platewaveform y_data_points===>" +
-      //     arr[int_well_idx].y_data_points
-      // );
-      // console.log(
-      //   "New Array obtained from JSON response x_data_points===>" +
-      //     inner_object_waveform_data_points[str_well_idx].x_data_points
-      // );
-      // console.log(
-      //   "New Array obtained from JSON response y_data_points===>" +
-      //     inner_object_waveform_data_points[str_well_idx].y_data_points
-      // );
       Array.prototype.push.apply(
         arr[int_well_idx].x_data_points,
         inner_object_waveform_data_points[str_well_idx].x_data_points
