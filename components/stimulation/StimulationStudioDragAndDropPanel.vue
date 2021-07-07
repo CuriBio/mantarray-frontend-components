@@ -210,8 +210,7 @@ export default {
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
-        const current = this.protocol_order[idx].settings.phase_one_duration;
-        this.current_repeat_delay_input = current.toString();
+        this.current_repeat_delay_input = this.selected_waveform_settings.phase_one_duration.toString();
         this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
       }

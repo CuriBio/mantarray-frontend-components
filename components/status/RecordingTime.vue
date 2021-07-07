@@ -52,29 +52,32 @@ export default {
       return ("00" + n).slice(-z);
     },
     update_text_time() {
-      if (this.playback_state === this.playback_state_enums.RECORDING) {
-        const current_diff_in_centimilliseconds = this.x_time_index - this.recording_start_time;
-        let current_diff_in_ms = current_diff_in_centimilliseconds / 100;
-        const ms = current_diff_in_ms % 1000;
-        current_diff_in_ms = (current_diff_in_ms - ms) / 1000;
-        const secs = current_diff_in_ms % 60;
-        current_diff_in_ms = (current_diff_in_ms - secs) / 60;
-        const mins = current_diff_in_ms % 60;
-        const hrs = (current_diff_in_ms - mins) / 60;
+      const update_time = () => {
+        if (this.playback_state === this.playback_state_enums.RECORDING) {
+          const current_diff_in_centimilliseconds = this.x_time_index - this.recording_start_time;
+          let current_diff_in_ms = current_diff_in_centimilliseconds / 100;
+          const ms = current_diff_in_ms % 1000;
+          current_diff_in_ms = (current_diff_in_ms - ms) / 1000;
+          const secs = current_diff_in_ms % 60;
+          current_diff_in_ms = (current_diff_in_ms - secs) / 60;
+          const mins = current_diff_in_ms % 60;
+          const hrs = (current_diff_in_ms - mins) / 60;
 
-        this.recording_info = "Recording:";
-        this.recoded_time =
-          this.pad(hrs).toString() +
-          ":" +
-          this.pad(mins).toString() +
-          ":" +
-          this.pad(secs).toString() +
-          "." +
-          this.pad(ms, 3).toString();
-      } else {
-        this.recording_info = "Not Recording";
-        this.recoded_time = "";
-      }
+          this.recording_info = "Recording:";
+          this.recoded_time =
+            this.pad(hrs).toString() +
+            ":" +
+            this.pad(mins).toString() +
+            ":" +
+            this.pad(secs).toString() +
+            "." +
+            this.pad(ms, 3).toString();
+        } else {
+          this.recording_info = "Not Recording";
+          this.recoded_time = "";
+        }
+      };
+      setTimeout(update_time, 1000);
     },
   },
 };
