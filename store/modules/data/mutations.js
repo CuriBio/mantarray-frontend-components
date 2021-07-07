@@ -1,6 +1,7 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
 
 import { append_get_available_well_data } from "@/js_utils/waveform_data_formatter.js";
+import { TWITCH } from "@/store/modules/data/enums";
 
 export default {
   set_plate_waveforms(state, new_value) {
@@ -36,21 +37,14 @@ export default {
     });
   },
   append_metric_data(state, new_values) {
-    // TODO use UUIDs
-    const metric_values = {
-      "Twitch Force": [],
-      "Twitch Period": [],
-      "Twitch Frequency": [],
-      "Twitch Width 80": [],
-      "Contraction Velocity": [],
-      "Relaxation Velocity": [],
-    };
     for (const well_idx in new_values) {
       if (new_values[well_idx] !== undefined) {
         const new_well_values = new_values[well_idx];
-        for (const metric_name in metric_values) {
-          if (new_well_values[metric_name] !== undefined) {
-            state.heatmap_values[metric_name].data[well_idx].push(...new_well_values[metric_name]);
+        for (const metric_name in state.heatmap_values) {
+          if (new_well_values[TWITCH.METRIC_IDS[metric_name]] !== undefined) {
+            state.heatmap_values[metric_name].data[well_idx].push(
+              ...new_well_values[TWITCH.METRIC_IDS[metric_name]]
+            );
           }
         }
       }

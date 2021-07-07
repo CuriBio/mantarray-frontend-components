@@ -165,11 +165,17 @@ describe("store/data", () => {
 
       const stored_metrics = store.getters["data/heatmap_values"];
 
-      // TODO use UUIDs
       const new_heatmap_values = {
-        0: { "Twitch Force": [1, 2], "Relaxation Velocity": [501, 502] },
-        2: { "Twitch Force": [21, 22], "Relaxation Velocity": [521, 522] },
+        0: {
+          "89cf1105-a015-434f-b527-4169b9400e26": [1, 2], // Twitch Force
+          "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [501, 502], // Relaxation Velocity
+        },
+        2: {
+          "89cf1105-a015-434f-b527-4169b9400e26": [21, 22], // Twitch Force
+          "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [521, 522], // Relaxation Velocity
+        },
       };
+
       await new Promise((resolve) => {
         socket_server_side.emit("twitch_metrics", JSON.stringify(new_heatmap_values), (ack) => {
           resolve(ack);
