@@ -32,7 +32,7 @@ export default {
       { x_data_points: x_values, y_data_points: y_values },
       { x_data_points: x_values, y_data_points: y_values },
     ];
-    this.$store.commit("waveform/set_plate_waveforms", this.temp_datapoints);
+    this.$store.commit("data/set_plate_waveforms", this.temp_datapoints);
     const y_zoom_levels = [
       { y_min: 0, y_max: 500 },
       { y_min: 100, y_max: 400 },

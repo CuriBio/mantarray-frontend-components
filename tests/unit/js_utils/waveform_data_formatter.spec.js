@@ -5,7 +5,7 @@ import {
   append_get_available_well_data,
 } from "@/js_utils/waveform_data_formatter.js";
 
-import waveform_store_module from "@/store/modules/waveform";
+import data_store_module from "@/store/modules/data";
 
 const mantarray_single_well_simulated_45_seconds_json = require("@/tests/sample_waveform_data/mantarray/single_well/simulated_45_seconds.json");
 
@@ -91,7 +91,7 @@ describe("waveform_data_formatter.js", () => {
       expect(lar[0].x_data_points).toHaveLength(8);
     });
     test("When append_get_available_well_data is called to add new data to the Vuex store initial state, Then the Response data is appended to the correct well indices", () => {
-      const initial_vuex_state = waveform_store_module.state().plate_waveforms;
+      const initial_vuex_state = data_store_module.state().plate_waveforms;
       const new_array = append_get_available_well_data(initial_vuex_state, nr);
 
       expect(new_array[0].x_data_points).toHaveLength(4);

@@ -11,8 +11,8 @@ import {
   all_mantarray_commands_regexp,
   system_status_when_calibrating_regexp,
   system_status_when_buffering_regexp,
+  get_available_data_regex,
 } from "@/store/modules/flask/url_regex";
-import { get_available_data_regex } from "@/store/modules/waveform/url_regex";
 import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
 import {
   advance_playback_progression,
@@ -500,33 +500,33 @@ describe("store/playback", () => {
           .onGet(all_mantarray_commands_regexp)
           .reply(200);
 
-        await store.dispatch("waveform/start_get_waveform_pinging");
+        await store.dispatch("data/start_get_waveform_pinging");
       });
 
       test("When stop_live_view is dispatched, Then the clearInterval is called on the waveform_ping_interval_id and ignore_next_system_status_if_matching_this_status is set to LIVE_VIEW_ACTIVE", async () => {
         const spied_clear_interval = jest.spyOn(window, "clearInterval");
-        const expected_interval_id = store.state.waveform.waveform_ping_interval_id;
+        const expected_interval_id = store.state.data.waveform_ping_interval_id;
 
         await store.dispatch("playback/stop_live_view");
 
         expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
-        expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
+        expect(store.state.data.waveform_ping_interval_id).toBeNull();
         expect(store.state.flask.ignore_next_system_status_if_matching_this_status).toStrictEqual(
           STATUS.MESSAGE.LIVE_VIEW_ACTIVE
         );
       });
       test("Given the Vuex plate_waveforms state has some values, When stop_live_view is dispatched, Then the plate_waveforms x/y data points are reset to empty arrays", async () => {
-        store.commit("waveform/set_plate_waveforms", [
+        store.commit("data/set_plate_waveforms", [
           { x_data_points: [55], y_data_points: [2.3] },
           { x_data_points: [4], y_data_points: [999] },
         ]);
         await store.dispatch("playback/stop_live_view");
 
-        expect(store.state.waveform.plate_waveforms).toHaveLength(2);
-        expect(store.state.waveform.plate_waveforms[0].x_data_points).toHaveLength(0);
-        expect(store.state.waveform.plate_waveforms[0].y_data_points).toHaveLength(0);
-        expect(store.state.waveform.plate_waveforms[1].x_data_points).toHaveLength(0);
-        expect(store.state.waveform.plate_waveforms[1].y_data_points).toHaveLength(0);
+        expect(store.state.data.plate_waveforms).toHaveLength(2);
+        expect(store.state.data.plate_waveforms[0].x_data_points).toHaveLength(0);
+        expect(store.state.data.plate_waveforms[0].y_data_points).toHaveLength(0);
+        expect(store.state.data.plate_waveforms[1].x_data_points).toHaveLength(0);
+        expect(store.state.data.plate_waveforms[1].y_data_points).toHaveLength(0);
       });
     });
     test("Given playback_progression interval is active and Mantarray Commands are mocked to return status 200, When stop_live_view is called, Then the interval is cleared", async () => {
@@ -543,7 +543,7 @@ describe("store/playback", () => {
       await store.dispatch("playback/stop_live_view");
 
       expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
-      expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
+      expect(store.state.data.waveform_ping_interval_id).toBeNull();
     });
     test("Given playback_progression interval is active and SYSTEM_STATUS is set to PLAYING and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the SYSTEM_STATUS is set to ERROR and the interval playback_progression_interval_id is cleared", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(400);
@@ -559,7 +559,7 @@ describe("store/playback", () => {
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
       expect(store.state.flask.status_ping_interval_id).toBeNull();
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
-      expect(store.state.waveform.waveform_ping_interval_id).toBeNull();
+      expect(store.state.data.waveform_ping_interval_id).toBeNull();
     });
     test("Given x_time_index is not 0, When stop_live_view is called, Then the playback and status states mutate to calibrated and x_time_index mutates to 0", async () => {
       const api = "stop_managed_acquisition";

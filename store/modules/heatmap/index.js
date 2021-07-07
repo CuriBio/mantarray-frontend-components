@@ -4,14 +4,6 @@ import getters from "./getters";
 import mutations from "./mutations";
 
 const default_state = {
-  heatmap_values: {
-    "Twitch Force": { data: [], range_min: 0, range_max: 100 },
-    "Twitch Period": { data: [], range_min: 0, range_max: 100 },
-    "Twitch Frequency": { data: [], range_min: 0, range_max: 100 },
-    "Twitch Width 80": { data: [], range_min: 0, range_max: 100 },
-    "Contraction Velocity": { data: [], range_min: 0, range_max: 100 },
-    "Relaxation Velocity": { data: [], range_min: 0, range_max: 100 },
-  },
   heatmap_idx: null,
   heatmap_display_array: [
     "Twitch Force",

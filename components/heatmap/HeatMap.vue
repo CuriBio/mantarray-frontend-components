@@ -197,7 +197,7 @@ export default {
   },
 
   computed: {
-    ...mapState("heatmap", {
+    ...mapState("data", {
       well_values: "heatmap_values",
     }),
     metric_names: function () {

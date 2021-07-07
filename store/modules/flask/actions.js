@@ -56,7 +56,7 @@ export async function ping_system_status() {
 
         if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid) {
           if (this.rootState.playback.playback_state == PLAYBACK_ENUMS.PLAYBACK_STATES.BUFFERING) {
-            this.dispatch("waveform/start_get_waveform_pinging", null, {
+            this.dispatch("data/start_get_waveform_pinging", null, {
               root: true,
             });
           }

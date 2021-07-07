@@ -16,8 +16,8 @@ import {
   system_status_when_calibration_needed_regexp,
   system_status_when_server_initializing_regexp,
   all_mantarray_commands_regexp,
+  get_available_data_regex,
 } from "../../../../../store/modules/flask/url_regex";
-import { get_available_data_regex } from "../../../../../store/modules/waveform/url_regex";
 
 import { STATUS } from "../../../../../store/modules/flask/enums";
 
