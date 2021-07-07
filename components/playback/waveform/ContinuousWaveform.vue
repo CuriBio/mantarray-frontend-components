@@ -85,7 +85,7 @@ export default {
     ...mapState("twentyfourcontrols", {
       current_quadrant: "is_quadrant",
     }),
-    ...mapState("waveform", {
+    ...mapState("data", {
       plate_waveforms: "plate_waveforms",
     }),
     ...mapState("waveform", {

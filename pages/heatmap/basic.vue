@@ -36,7 +36,7 @@ export default {
       "Contraction Velocity": { data: data[4] },
       "Relaxation Velocity": { data: data[5] },
     };
-    this.$store.commit("heatmap/set_heatmap_values", heatmap_values);
+    this.$store.commit("data/set_heatmap_values", heatmap_values);
   },
 
   methods: {
@@ -45,37 +45,37 @@ export default {
     },
     deltaT() {
       let values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
-      this.$store.commit("heatmap/set_metric_data", {
+      this.$store.commit("data/set_metric_data", {
         name: "Twitch Force",
         data: values,
       });
 
       values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 200));
-      this.$store.commit("heatmap/set_metric_data", {
+      this.$store.commit("data/set_metric_data", {
         name: "Twitch Period",
         data: values,
       });
 
       values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 50));
-      this.$store.commit("heatmap/set_metric_data", {
+      this.$store.commit("data/set_metric_data", {
         name: "Twitch Frequency",
         data: values,
       });
 
       values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
-      this.$store.commit("heatmap/set_metric_data", {
+      this.$store.commit("data/set_metric_data", {
         name: "Twitch Width 80",
         data: values,
       });
 
       values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
-      this.$store.commit("heatmap/set_metric_data", {
+      this.$store.commit("data/set_metric_data", {
         name: "Contraction Velocity",
         data: values,
       });
 
       values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
-      this.$store.commit("heatmap/set_metric_data", {
+      this.$store.commit("data/set_metric_data", {
         name: "Relaxation Velocity",
         data: values,
       });

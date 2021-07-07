@@ -45,7 +45,7 @@ export default {
     return parsed_data;
   },
 
-  async get_waveform_action_context(context) {
+  async get_data_action_context(context) {
     // useful for testing actions
     return context;
   },

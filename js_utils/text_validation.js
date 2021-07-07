@@ -326,7 +326,7 @@ export class TextValidation {
   /**
    * Returns the feedback text this is a real parser which identfies the proper error reason failure
    *
-   * @param  {stats}     stats The stats on the value of the name lenght verification (true) is proper length else (false)
+   * @param  {stats}     stats The stats on the value of the name length verification (true) is proper length else (false)
    * @param  {name}  name The name on which the validation rules are verified
    * @param  {len}  len The len the total length of the name
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>

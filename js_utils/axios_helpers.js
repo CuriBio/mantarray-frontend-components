@@ -2,6 +2,10 @@
 import Vue from "vue";
 import { STATUS } from "@/store/modules/flask/enums";
 
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
 /**
  * Handles all HTTP GET calls from Vuex and updates system status if there was an error
  *
@@ -46,7 +50,7 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     action_context.commit("playback/stop_playback_progression", null, {
       root: true,
     });
-    action_context.commit("waveform/stop_waveform_pinging", null, {
+    action_context.commit("data/stop_waveform_pinging", null, {
       root: true,
     });
     if (error.response) {

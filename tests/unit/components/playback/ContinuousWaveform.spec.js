@@ -123,7 +123,7 @@ describe("ContinuousWaveform.vue", () => {
         y_data_points: [55, 75, 95, 88, 92, 84],
       };
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(waveform_wrapper.props("data_points")).toEqual([
@@ -144,7 +144,7 @@ describe("ContinuousWaveform.vue", () => {
         y_data_points: [55, 75, 95, 88, 92, 84],
       };
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
 
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       await wrapper.vm.$nextTick(); // wait for update
@@ -159,12 +159,12 @@ describe("ContinuousWaveform.vue", () => {
         [1250, 92],
         [1500, 84],
       ]);
-      expect(store.state.waveform.plate_waveforms[0].x_data_points.length).toEqual(6);
+      expect(store.state.data.plate_waveforms[0].x_data_points.length).toEqual(6);
 
-      store.commit("waveform/append_plate_waveforms", cr);
+      store.commit("data/append_plate_waveforms", cr);
       await wrapper.vm.$nextTick(); // wait for update
       // confirm the values updated in Vuex
-      expect(store.state.waveform.plate_waveforms[0].x_data_points.length).toEqual(10);
+      expect(store.state.data.plate_waveforms[0].x_data_points.length).toEqual(10);
 
       const waveform_data_points = waveform_wrapper.props("data_points");
 
@@ -191,7 +191,7 @@ describe("ContinuousWaveform.vue", () => {
         y_data_points: [54, 75, 95, 88, 92, 84],
       };
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       await wrapper.vm.$nextTick(); // wait for update
       const waveform_wrapper = wrapper.findComponent(Waveform);
@@ -568,7 +568,7 @@ describe("ContinuousWaveform.vue", () => {
         temp_datapoints[i] = { x_data_points: [], y_data_points: [] };
       }
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
       let default_zoom_level_idx = 1;
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
 
@@ -598,7 +598,7 @@ describe("ContinuousWaveform.vue", () => {
         y_data_points: [55, 75, 95],
       };
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(waveform_wrapper.props("data_points")).toEqual([
@@ -617,7 +617,7 @@ describe("ContinuousWaveform.vue", () => {
         x_data_points: [0, 30, 40],
         y_data_points: [55, 75, 95],
       };
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
 
       let default_zoom_level_idx = 1;
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
@@ -637,7 +637,7 @@ describe("ContinuousWaveform.vue", () => {
         x_data_points: [],
         y_data_points: [],
       };
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(waveform_wrapper.props("data_points")).toEqual([]);
@@ -654,7 +654,7 @@ describe("ContinuousWaveform.vue", () => {
         y_data_points: [60, 22, 44],
       };
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
 
       let default_zoom_level_idx = 1;
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
@@ -680,7 +680,7 @@ describe("ContinuousWaveform.vue", () => {
         y_data_points: [61, 29, 102],
       };
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
       let default_zoom_level_idx = 1;
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
 
@@ -713,7 +713,7 @@ describe("ContinuousWaveform.vue", () => {
         y_data_points: [61, 29, 102],
       };
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
 
       let default_zoom_level_idx = 1;
 
@@ -750,7 +750,7 @@ describe("ContinuousWaveform.vue", () => {
 
       store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
 
-      store.commit("waveform/set_plate_waveforms", temp_datapoints);
+      store.commit("data/set_plate_waveforms", temp_datapoints);
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       await wrapper.vm.$nextTick(); // wait for update
       const waveform_wrapper = wrapper.findComponent(Waveform);
