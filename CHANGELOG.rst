@@ -1,5 +1,12 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+
+0.3.0 (2021-07-08)
+------------------
+
+- Added y-axis-zoom for waveform display
+
+
 0.2.0 (2021-04-01)
 ------------------
 
