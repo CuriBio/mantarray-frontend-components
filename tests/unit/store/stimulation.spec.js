@@ -103,8 +103,7 @@ describe("store/stimulation", () => {
       expect(s_unit).toBe(seconds);
     });
   });
-
-  describe("stimulation/mutations", () => {
+  describe("stimulation/mutations/actions", () => {
     test("When stimulation store is initialized, Then default selected wells should be an empty array", () => {
       expect(store.state.stimulation.selected_wells).toStrictEqual([]);
     });
