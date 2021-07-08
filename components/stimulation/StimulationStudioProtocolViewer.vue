@@ -37,8 +37,8 @@ export default {
   created: function () {
     const state = this.$store.state.stimulation;
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/handle_protocol_order") {
-        this.datapoints = await convert_x_y_arrays_to_d3_array(state.x_axis_points, state.y_axis_points);
+      if (mutation.type === "stimulation/set_axis_values") {
+        this.datapoints = await convert_x_y_arrays_to_d3_array(state.x_axis_values, state.y_axis_values);
         this.repeat_colors = state.repeat_colors;
       }
       if (mutation.type === "stimulation/reset_state") {
@@ -46,12 +46,12 @@ export default {
         this.y_min_max = state.y_axis_scale;
         this.x_axis_sample_length = state.x_axis_scale;
       }
-      if (mutation.type === "stimulation/handle_time_unit") {
+      if (mutation.type === "stimulation/set_time_unit") {
         if (state.new_protocol.time_unit === "milliseconds") state.x_axis_scale *= 1000;
         if (state.new_protocol.time_unit === "seconds") state.x_axis_scale /= 1000;
         this.x_axis_sample_length = state.x_axis_scale;
       }
-      if (mutation.type === "stimulation/handle_zoom_out" || mutation.type === "stimulation/handle_zoom_in") {
+      if (mutation.type === "stimulation/set_zoom_out" || mutation.type === "stimulation/set_zoom_in") {
         this.x_axis_sample_length = state.x_axis_scale;
         this.y_min_max = state.y_axis_scale;
         state.x_axis_scale = this.x_axis_sample_length;

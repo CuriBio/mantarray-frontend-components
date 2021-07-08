@@ -1,5 +1,6 @@
 import mutations from "./mutations";
 import getters from "./getters";
+import actions from "./actions";
 
 const state = () => ({
   selected_wells: [],
@@ -9,12 +10,12 @@ const state = () => ({
     name: "",
     stimulation_type: "Voltage Controlled Stimulation",
     stop_requirement: "Until Stopped",
-    frequency: "",
+    frequency: 0,
     time_unit: "seconds",
-    waveform_list: [],
+    waveform_order: [],
   },
-  x_axis_points: [],
-  y_axis_points: [],
+  x_axis_values: [],
+  y_axis_values: [],
   repeat_colors: {},
   x_axis_scale: 100,
   y_axis_scale: 10,
@@ -25,6 +26,7 @@ export default {
   state,
   mutations,
   getters,
+  actions,
 };
 
 const hardcoded_protocols = [

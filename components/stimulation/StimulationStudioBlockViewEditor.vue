@@ -47,14 +47,9 @@
               v-model="frequency"
               class="number_input"
               placeholder=""
-              @change="frequency = $event.target.value"
+              @change="handle_repeat_frequency($event.target.value)"
             />
-            <SmallDropDown
-              :input_height="25"
-              :input_width="95"
-              :options_text="time_units_array"
-              @selection-changed="handle_time_unit"
-            />
+
             <!-- <canvas class="canvas__separator" /> -->
             <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash()" />
             <BPopover
@@ -97,7 +92,7 @@ export default {
       current_color: "",
       stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
       until_options_array: ["Stimulate Until Stopped", "Repeat"],
-      time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
+      // time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
       protocol_name: "",
       stimulation_type: "Voltage Controlled Stimulation",
       stop_requirement: "Stimulate Until Stopped",
@@ -142,16 +137,20 @@ export default {
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];
       this.stimulation_type = type;
-      this.$store.commit("stimulation/handle_stimulation_type", type);
+      this.$store.commit("stimulation/set_stimulation_type", type);
     },
     handle_stop_requirement(idx) {
       const requirement = this.until_options_array[idx];
       this.stop_requirement = requirement;
     },
-    handle_time_unit(idx) {
-      const unit = this.time_units_array[idx];
-      this.$store.commit("stimulation/handle_time_unit", unit);
+    handle_repeat_frequency(time) {
+      this.frequency = time;
+      this.$store.dispatch("stimulation/handle_new_repeat_frequency", time);
     },
+    // handle_time_unit(idx) {
+    //   const unit = this.time_units_array[idx];
+    //   this.$store.commit("stimulation/handle_time_unit", unit);
+    // },
     check_name_validity(input) {
       const matched_names = this.protocol_list.filter((protocol) => {
         return protocol.label === input;
@@ -274,7 +273,7 @@ img:hover {
   opacity: 0.6;
 }
 .img__trash-icon {
-  margin-left: 1%;
+  margin-left: 16%;
   padding-top: 4px;
 }
 .div__right-settings-panel {
@@ -284,6 +283,7 @@ img:hover {
   justify-content: flex-end;
   align-items: center;
   margin: 5px;
+  z-index: 5;
 }
 .number_input {
   background: #1c1c1c;
