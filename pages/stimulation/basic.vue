@@ -69,8 +69,6 @@ export default {
         this.stimulation_type = "Voltage (V)";
       }
     });
-    // await this.$store.dispatch("playback/start_recording");
-    // this.$store.dispatch("playback/start_live_view");
   },
   beforeDestroy() {
     this.unsubscribe();

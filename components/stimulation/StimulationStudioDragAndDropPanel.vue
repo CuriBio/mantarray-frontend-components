@@ -226,13 +226,12 @@ export default {
         this.repeat_delay_modal = "Delay";
       }
     },
-    // TODO Luci, fix CSS to move this dropdown back to BlockViewEditor component, this was a quick fix
+    // TODO Luci, fix CSS to move this dropdown back to BlockViewEditor component
     handle_time_unit(idx) {
       const unit = this.time_units_array[idx];
       this.$store.commit("stimulation/set_time_unit", unit);
     },
     clone(type) {
-      // clone required to ensure each pulse has unique settings
       this.cloned = true;
       const random_color = Math.floor(Math.random() * 16777215).toString(16);
       return {

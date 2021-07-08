@@ -92,7 +92,6 @@ export default {
       current_color: "",
       stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
       until_options_array: ["Stimulate Until Stopped", "Repeat"],
-      // time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
       protocol_name: "",
       stimulation_type: "Voltage Controlled Stimulation",
       stop_requirement: "Stimulate Until Stopped",
@@ -147,10 +146,6 @@ export default {
       this.frequency = time;
       this.$store.dispatch("stimulation/handle_new_repeat_frequency", time);
     },
-    // handle_time_unit(idx) {
-    //   const unit = this.time_units_array[idx];
-    //   this.$store.commit("stimulation/handle_time_unit", unit);
-    // },
     check_name_validity(input) {
       const matched_names = this.protocol_list.filter((protocol) => {
         return protocol.label === input;
