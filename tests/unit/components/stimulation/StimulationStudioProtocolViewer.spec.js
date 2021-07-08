@@ -93,9 +93,9 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       localVue,
     });
 
-    await store.commit("stimulation/handle_time_unit", "milliseconds");
+    await store.commit("stimulation/set_time_unit", "milliseconds");
     expect(store.state.stimulation.x_axis_scale).toBe(100000);
-    await store.commit("stimulation/handle_time_unit", "seconds");
+    await store.commit("stimulation/set_time_unit", "seconds");
     expect(store.state.stimulation.x_axis_scale).toBe(100);
   });
 
@@ -104,7 +104,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       store,
       localVue,
     });
-    await store.commit("stimulation/handle_zoom_in", "y-axis");
+    await store.commit("stimulation/set_zoom_in", "y-axis");
     expect(wrapper.vm.y_min_max).toBe(1);
   });
 
@@ -125,7 +125,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       localVue,
     });
 
-    await store.commit("stimulation/handle_protocol_order", test_protocol_order);
+    await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
     expect(wrapper.vm.repeat_colors).toBe(store.state.stimulation.repeat_colors);
   });
 

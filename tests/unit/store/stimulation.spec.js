@@ -110,10 +110,10 @@ describe("store/stimulation", () => {
     });
 
     test("When stimulation store is mutated to add or remove selected wells, Then selected wells in state should update according to wells", () => {
-      store.commit("stimulation/handle_selected_wells", test_wells.SELECTED);
+      store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
       expect(store.state.stimulation.selected_wells).toStrictEqual([0, 1]);
 
-      store.commit("stimulation/handle_selected_wells", test_wells.UNSELECTED);
+      store.dispatch("stimulation/handle_selected_wells", test_wells.UNSELECTED);
       expect(store.state.stimulation.selected_wells).toStrictEqual([1]);
     });
 
@@ -122,7 +122,7 @@ describe("store/stimulation", () => {
         0: { letter: "B", color: "#45847b", label: "test_B" },
         1: { letter: "B", color: "#45847b", label: "test_B" },
       };
-      await store.commit("stimulation/handle_selected_wells", test_wells.SELECTED);
+      await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
       await store.commit("stimulation/apply_selected_protocol", 2);
 
       expect(store.state.stimulation.protocol_assignments).toStrictEqual(test_assignment);
@@ -133,9 +133,9 @@ describe("store/stimulation", () => {
         0: { letter: "A", color: "#83c0b3", label: "test_A" },
       };
 
-      await store.commit("stimulation/handle_selected_wells", test_wells.SELECTED);
+      await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
       await store.commit("stimulation/apply_selected_protocol", 1);
-      await store.commit("stimulation/handle_selected_wells", test_wells.UNSELECTED);
+      await store.dispatch("stimulation/handle_selected_wells", test_wells.UNSELECTED);
       await store.commit("stimulation/clear_selected_protocol");
 
       expect(store.state.stimulation.protocol_assignments).toStrictEqual(test_assigment);
@@ -143,30 +143,30 @@ describe("store/stimulation", () => {
 
     test("When a user requests to delete the current stimulation by using the trash icon, Then it should mutate state to true", async () => {
       await store.commit("stimulation/reset_state");
-      expect(store.state.stimulation.x_axis_points).toStrictEqual([]);
+      expect(store.state.stimulation.x_axis_values).toStrictEqual([]);
     });
 
     test("When a user selects a new stimulation type to Current Stimulation Type, Then it should mutate state Current", async () => {
       expect(store.state.stimulation.new_protocol.stimulation_type).toBe("Voltage Controlled Stimulation");
-      await store.commit("stimulation/handle_stimulation_type", "Current Controlled Stimulation");
+      await store.commit("stimulation/set_stimulation_type", "Current Controlled Stimulation");
       expect(store.state.stimulation.new_protocol.stimulation_type).toBe("Current Controlled Stimulation");
     });
 
     test("When a user changes the time unit to milliseconds, Then it should mutate state to milliseconds", async () => {
       expect(store.state.stimulation.new_protocol.time_unit).toBe("seconds");
-      await store.commit("stimulation/handle_time_unit", "milliseconds");
+      await store.commit("stimulation/set_time_unit", "milliseconds");
       expect(store.state.stimulation.new_protocol.time_unit).toBe("milliseconds");
     });
 
     test("When a user wants to zoom in on an axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
       expect(store.state.stimulation.x_axis_scale).toBe(100);
-      await store.commit("stimulation/handle_zoom_in", "x-axis");
+      await store.commit("stimulation/set_zoom_in", "x-axis");
       expect(store.state.stimulation.x_axis_scale).toBe(10);
     });
 
     test("When a user wants to zoom out on an axis, Then the scale will multiple by a power of 10", async () => {
       expect(store.state.stimulation.x_axis_scale).toBe(100);
-      await store.commit("stimulation/handle_zoom_out", "x-axis");
+      await store.commit("stimulation/set_zoom_out", "x-axis");
       expect(store.state.stimulation.x_axis_scale).toBe(1000);
     });
 
@@ -175,9 +175,9 @@ describe("store/stimulation", () => {
       const y_values = [0, 2, 2, 2, 2, 0, 0, -2, -2];
       const colors = { b7b7b7: [0, 9] };
 
-      await store.commit("stimulation/handle_protocol_order", test_protocol_order);
-      expect(store.state.stimulation.x_axis_points).toStrictEqual(x_values);
-      expect(store.state.stimulation.y_axis_points).toStrictEqual(y_values);
+      await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
+      expect(store.state.stimulation.x_axis_values).toStrictEqual(x_values);
+      expect(store.state.stimulation.y_axis_values).toStrictEqual(y_values);
       expect(store.state.stimulation.repeat_colors).toStrictEqual(colors);
     });
   });
