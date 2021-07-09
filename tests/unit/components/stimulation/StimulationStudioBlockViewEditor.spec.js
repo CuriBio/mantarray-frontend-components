@@ -72,15 +72,6 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.stop_requirement).toBe("Repeat");
   });
 
-  test("When a user selects from the time unit dropdown, Then the corresponding selection is stored", async () => {
-    const wrapper = mount(StimulationStudioBlockViewEditor, {
-      store,
-      localVue,
-    });
-    await wrapper.findAll("li").at(5).trigger("click");
-    expect(store.state.stimulation.new_protocol.time_unit).toBe("milliseconds");
-  });
-
   test("When exiting instance, Then instance is effectively destroyed", async () => {
     const destroyed_spy = jest.spyOn(StimulationStudioBlockViewEditor, "beforeDestroy");
     const wrapper = mount(StimulationStudioBlockViewEditor, {

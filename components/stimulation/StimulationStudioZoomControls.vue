@@ -32,10 +32,10 @@ export default {
   },
   methods: {
     zoom_in() {
-      this.$store.commit("stimulation/handle_zoom_in", this.axis);
+      this.$store.commit("stimulation/set_zoom_in", this.axis);
     },
     zoom_out() {
-      this.$store.commit("stimulation/handle_zoom_out", this.axis);
+      this.$store.commit("stimulation/set_zoom_out", this.axis);
     },
   },
 };

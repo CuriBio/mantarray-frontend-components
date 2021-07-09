@@ -34,7 +34,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
       store,
       localVue,
     });
-    await store.commit("stimulation/handle_selected_wells", [false, true, false, true]);
+    await store.dispatch("stimulation/handle_selected_wells", [false, true, false, true]);
     const options = wrapper.findAll("li");
     await options.at(1).trigger("click");
     console.log(wrapper.vm.selected_protocol_idx);
@@ -50,7 +50,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
       store,
       localVue,
     });
-    await store.commit("stimulation/handle_selected_wells", [false, true, false, true]);
+    await store.dispatch("stimulation/handle_selected_wells", [false, true, false, true]);
     const options = wrapper.findAll("li");
     await options.at(1).trigger("click");
     await wrapper.vm.handle_click(0);

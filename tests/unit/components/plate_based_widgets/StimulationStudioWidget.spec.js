@@ -244,7 +244,7 @@ describe("StimulationStudioWidget.vue", () => {
       store,
       localVue,
     });
-    await store.commit("stimulation/handle_selected_wells", [false, true, false, false]);
+    await store.dispatch("stimulation/handle_selected_wells", [false, true, false, false]);
     await store.commit("stimulation/apply_selected_protocol", 2);
     expect(wrapper.vm.protocol_assignments).toBe(store.state.stimulation.protocol_assignments);
   });

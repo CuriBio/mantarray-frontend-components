@@ -8,7 +8,9 @@
         <RecordingTime />
       </div>
     </div>
-    <div class="div__stimulationstudio-left-column-container" />
+    <div class="div__stimulationstudio-left-column-container">
+      <StimulationControls />
+    </div>
     <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
     <StimulationStudioWidget />
     <StimulationStudioCreateAndEdit />
@@ -33,6 +35,7 @@ import StimulationStudioBlockViewEditor from "@/components/stimulation/Stimulati
 import StimulationStudioProtocolViewer from "@/components/stimulation/StimulationStudioProtocolViewer.vue";
 import RecordingTime from "@/components/status/RecordingTime.vue";
 import UploadFilesWidget from "@/components/status/UploadFilesWidget.vue";
+import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
 
 export default {
   name: "StimulationStudio",
@@ -44,6 +47,7 @@ export default {
     StimulationStudioProtocolViewer,
     UploadFilesWidget,
     RecordingTime,
+    StimulationControls,
   },
   data() {
     return {
@@ -52,7 +56,7 @@ export default {
       time_unit: "Time (s)",
     };
   },
-  created: function () {
+  created: async function () {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (mutation.type === "stimulation/handle_stimulation_type") {
         this.stimulation_type = this.$store.getters["stimulation/get_stimulation_type"];

@@ -331,6 +331,7 @@ export default {
     };
   },
   computed: {
+    // TODO double check these default settings, fix to match parent component
     check_max_type: function () {
       if (this.stimulation_type === "Current (μA)") return "Voltage (mV)";
       else return "Current (μA)";

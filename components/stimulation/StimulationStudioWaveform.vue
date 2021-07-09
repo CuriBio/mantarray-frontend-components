@@ -77,7 +77,15 @@ export default {
     },
     repeat_colors: {
       type: Object,
-      default: function () {},
+      default: function () {
+        return {};
+      },
+    },
+    delay_blocks: {
+      type: Array,
+      default: function () {
+        return [];
+      },
     },
   },
   data: function () {
@@ -130,8 +138,8 @@ export default {
       .attr("id", "waveform_line_node")
       .attr("class", "waveform_path_node");
 
-    // Draw black rectangles over the margins so that any excess waveform line is not visible to user
-
+    this.line = the_svg.append("g").attr("x", 40);
+    // Draw black rectangles over the margins so that any excess waveform line is not visible to use
     const blocker_color = "#000000";
     const margin_blockers_node = the_svg.append("g").attr("id", "margin_blockers_node");
 
@@ -252,6 +260,55 @@ export default {
             .attr("fill", "none")
             .attr("stroke", "#" + color)
             .attr("stroke-width", 1.5)
+            .attr(
+              "d",
+              d3_line()
+                .x(function (d) {
+                  return x_axis_scale(d[0]);
+                })
+                .y(function (d) {
+                  return y_axis_scale(d[1]);
+                })
+            );
+        }
+      }
+      for (const block of this.delay_blocks) {
+        // repetitive, but eslint errors without a conditional inside the loop
+        if (this.delay_blocks.length !== 0) {
+          console.log(this.delay_blocks);
+          const starting_idx = block[0];
+          const start_line = [
+            [starting_idx, this.y_min],
+            [starting_idx, this.y_max],
+          ];
+          const ending_idx = block[1];
+          const end_line = [
+            [ending_idx, this.y_min],
+            [ending_idx, this.y_max],
+          ];
+
+          this.waveform_line_node
+            .append("path")
+            .datum(start_line)
+            .attr("fill", "none")
+            .attr("stroke", "#ffffff")
+            .attr("stroke-dasharray", "2,2")
+            .attr(
+              "d",
+              d3_line()
+                .x(function (d) {
+                  return x_axis_scale(d[0]);
+                })
+                .y(function (d) {
+                  return y_axis_scale(d[1]);
+                })
+            );
+          this.waveform_line_node
+            .append("path")
+            .datum(end_line)
+            .attr("fill", "none")
+            .attr("stroke", "#ffffff")
+            .attr("stroke-dasharray", "2,2")
             .attr(
               "d",
               d3_line()

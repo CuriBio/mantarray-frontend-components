@@ -21,6 +21,14 @@
             </div>
           </draggable>
         </div>
+        <SmallDropDown
+          class="dropdown-container"
+          :input_height="25"
+          :input_width="95"
+          :options_text="time_units_array"
+          @selection-changed="handle_time_unit"
+        />
+
         <div class="div__scroll-container">
           <draggable
             v-model="protocol_order"
@@ -105,6 +113,7 @@
 import draggable from "vuedraggable";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
+import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 
 export default {
   name: "DragAndDropPanel",
@@ -112,6 +121,7 @@ export default {
     draggable,
     StimulationStudioWaveformSettingModal,
     StimulationStudioRepeatDelayModal,
+    SmallDropDown,
   },
   props: {
     stimulation_type: { type: String, default: "Voltage (V)" },
@@ -127,6 +137,7 @@ export default {
         no_delete_option: ["Save", "Cancel"],
         delete_option: ["Save", "Delete", "Cancel"],
       },
+      time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
       selected_waveform_settings: null,
       protocol_order: [],
       modal_type: null,
@@ -163,7 +174,7 @@ export default {
         else if (element.type === "Delay") this.repeat_delay_modal = "Delay";
       }
       if ((e.added && !this.cloned) || e.moved || e.removed)
-        this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
+        this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
       this.cloned = false;
     },
     on_modal_close(button, settings) {
@@ -195,7 +206,7 @@ export default {
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
-      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
+      this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_modal_for_edit(type, idx, nested_idx) {
       const pulse = this.protocol_order[idx];
@@ -210,11 +221,15 @@ export default {
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
-        const current = this.protocol_order[idx].settings.phase_one_duration;
-        this.current_repeat_delay_input = current.toString();
+        this.current_repeat_delay_input = this.selected_waveform_settings.phase_one_duration.toString();
         this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
       }
+    },
+    // TODO Luci, fix CSS to move this dropdown back to BlockViewEditor component
+    handle_time_unit(idx) {
+      const unit = this.time_units_array[idx];
+      this.$store.commit("stimulation/set_time_unit", unit);
     },
     clone(type) {
       this.cloned = true;
@@ -240,11 +255,11 @@ export default {
       }
       if (e.removed) {
         this.protocol_order[idx].repeat.number_of_repeats = 0;
-        this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
+        this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
       }
     },
     handle_internal_repeat() {
-      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
+      this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
     },
     open_repeat_modal_for_edit(number, idx) {
       this.current_repeat_delay_input = number;
@@ -258,7 +273,7 @@ export default {
       if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
       this.repeat_idx = null;
       this.current_repeat_delay_input = null;
-      this.$store.commit("stimulation/handle_protocol_order", this.protocol_order);
+      this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
     },
     get_style(type) {
       if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
@@ -295,6 +310,12 @@ export default {
   left: 36%;
   position: absolute;
   top: 8%;
+}
+.dropdown-container {
+  position: relative;
+  z-index: 2;
+  top: 353px;
+  left: 640px;
 }
 .circle {
   width: 30px;

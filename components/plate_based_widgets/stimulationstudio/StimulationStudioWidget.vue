@@ -106,7 +106,7 @@ export default {
   },
   watch: {
     all_select: function () {
-      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+      this.$store.dispatch("stimulation/handle_selected_wells", this.all_select);
     },
   },
   created() {
@@ -137,7 +137,7 @@ export default {
       this.all_select_or_cancel = !state;
       for (let count = 0; count < 24; count++) this.all_select[count] = state;
       state ? this.all_select.map((well) => (well = true)) : this.all_select.map((well) => (well = false));
-      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+      this.$store.dispatch("stimulation/handle_selected_wells", this.all_select);
       this.stroke_width.splice(0, this.stroke_width.length);
       this.check_stroke_width();
     },
@@ -174,7 +174,7 @@ export default {
       this.stroke_width[value] = selected_stroke_width;
       if (allEqual(this.all_select)) this.all_select_or_cancel = false;
       else this.all_select_or_cancel = true;
-      this.$store.commit("stimulation/handle_selected_wells", this.all_select);
+      this.$store.dispatch("stimulation/handle_selected_wells", this.all_select);
       this.on_wellenter(value);
     },
 
