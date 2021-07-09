@@ -61,23 +61,23 @@ export default {
         this.y_min_max = state.y_axis_scale;
         state.x_axis_scale = this.x_axis_sample_length;
       }
-      this.get_dynamic_plot_width(state.x_axis_scale);
+      // this.get_dynamic_plot_width(state.x_axis_scale);
     });
   },
   beforeDestroy() {
     this.unsubscribe();
   },
   methods: {
-    get_dynamic_plot_width(scale) {
-      return;
-      // console.log(scale);
-      // const last_time_point = this.datapoints[this.datapoints.length - 1][0];
-      // if (last_time_point >= this.x_axis_sample_length) {
-      //   this.x_axis_sample_length += scale;
-      //   this.dynamic_plot_width *= 2;
-      //   console.log(this.x_axis_sample_length, this.dynamic_plot_width);
-      // }
-    },
+    // get_dynamic_plot_width(scale) {
+    //   return;
+    //   // console.log(scale);
+    //   // const last_time_point = this.datapoints[this.datapoints.length - 1][0];
+    //   // if (last_time_point >= this.x_axis_sample_length) {
+    //   //   this.x_axis_sample_length += scale;
+    //   //   this.dynamic_plot_width *= 2;
+    //   //   console.log(this.x_axis_sample_length, this.dynamic_plot_width);
+    //   // }
+    // },
   },
 };
 </script>

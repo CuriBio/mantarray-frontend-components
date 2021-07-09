@@ -143,4 +143,19 @@ describe("StimulationStudioProtocolViewer.vue", () => {
 
     expect(render_spy).toHaveBeenCalled();
   });
+
+  test("When a user adds a delay repeat to the end of the protocol, Then it will mutation to state will automatically update in the waveform graph", async () => {
+    const wrapper = mount(StimulationStudioProtocolViewer, {
+      store,
+      localVue,
+    });
+
+    const expected_delay_values = [[1600, 1605]];
+    const test_value = 5;
+
+    await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
+    await store.dispatch("stimulation/handle_new_repeat_frequency", test_value);
+    expect(wrapper.vm.delay_blocks).toBe(store.state.stimulation.delay_blocks);
+    expect(wrapper.vm.delay_blocks).toStrictEqual(expected_delay_values);
+  });
 });
