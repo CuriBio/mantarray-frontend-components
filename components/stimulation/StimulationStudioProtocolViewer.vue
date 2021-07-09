@@ -5,11 +5,12 @@
       :y_min="-y_min_max"
       :y_max="y_min_max"
       :plot_area_pixel_height="160"
-      :plot_area_pixel_width="960"
+      :plot_area_pixel_width="dynamic_plot_width"
       :data_points="datapoints"
       :y_axis_label="stimulation_type"
       :x_axis_label="time_unit"
       :repeat_colors="repeat_colors"
+      :delay_blocks="delay_blocks"
     />
   </div>
 </template>
@@ -32,6 +33,8 @@ export default {
       datapoints: [],
       repeat_colors: {},
       x_axis_sample_length: 100,
+      dynamic_plot_width: 960,
+      delay_blocks: [],
     };
   },
   created: function () {
@@ -40,11 +43,13 @@ export default {
       if (mutation.type === "stimulation/set_axis_values") {
         this.datapoints = await convert_x_y_arrays_to_d3_array(state.x_axis_values, state.y_axis_values);
         this.repeat_colors = state.repeat_colors;
+        this.delay_blocks = state.delay_blocks;
       }
       if (mutation.type === "stimulation/reset_state") {
         this.datapoints = [];
         this.y_min_max = state.y_axis_scale;
         this.x_axis_sample_length = state.x_axis_scale;
+        this.dynamic_plot_width = 960;
       }
       if (mutation.type === "stimulation/set_time_unit") {
         if (state.new_protocol.time_unit === "milliseconds") state.x_axis_scale *= 1000;
@@ -56,10 +61,23 @@ export default {
         this.y_min_max = state.y_axis_scale;
         state.x_axis_scale = this.x_axis_sample_length;
       }
+      this.get_dynamic_plot_width(state.x_axis_scale);
     });
   },
   beforeDestroy() {
     this.unsubscribe();
+  },
+  methods: {
+    get_dynamic_plot_width(scale) {
+      return;
+      // console.log(scale);
+      // const last_time_point = this.datapoints[this.datapoints.length - 1][0];
+      // if (last_time_point >= this.x_axis_sample_length) {
+      //   this.x_axis_sample_length += scale;
+      //   this.dynamic_plot_width *= 2;
+      //   console.log(this.x_axis_sample_length, this.dynamic_plot_width);
+      // }
+    },
   },
 };
 </script>

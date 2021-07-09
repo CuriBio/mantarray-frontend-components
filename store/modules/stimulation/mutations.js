@@ -51,10 +51,14 @@ export default {
       repeat_colors: {},
       x_axis_scale: 10000,
       y_axis_scale: 10,
+      delay_blocks: [],
     };
     Object.assign(state, replace_state);
   },
   set_repeat_frequency(state, time) {
     state.new_protocol.frequency = Number(time);
+  },
+  set_delay_axis_values(state, delay) {
+    state.delay_blocks = [delay];
   },
 };

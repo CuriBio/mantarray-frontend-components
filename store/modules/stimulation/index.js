@@ -19,6 +19,7 @@ const state = () => ({
   repeat_colors: {},
   x_axis_scale: 100,
   y_axis_scale: 10,
+  delay_blocks: [],
 });
 
 export default {

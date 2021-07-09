@@ -62,12 +62,13 @@ export default {
   },
   handle_repeat_frequency({ commit, state }, { x_values, y_values }) {
     const { frequency } = this.state.stimulation.new_protocol;
+    let delay_block;
     if (frequency !== 0) {
       const last_x_value = x_values[x_values.length - 1];
       const next_x_value = last_x_value + frequency;
-      x_values.push(last_x_value, next_x_value);
-      y_values.push(0, 0);
+      delay_block = [last_x_value, next_x_value];
     }
+    if (delay_block) this.commit("stimulation/set_delay_axis_values", delay_block);
     this.commit("stimulation/set_axis_values", { x_values, y_values });
   },
   async handle_new_repeat_frequency({ dispatch, state, commit }, time) {
