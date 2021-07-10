@@ -8,6 +8,9 @@ export default {
   clear_selected_protocol(state) {
     state.selected_wells.map((well) => delete state.protocol_assignments[well]);
   },
+  set_protocol_name(state, name) {
+    state.new_protocol.name = name;
+  },
   set_stimulation_type(state, type) {
     state.new_protocol.stimulation_type = type;
   },
@@ -41,7 +44,7 @@ export default {
         name: "",
         stimulation_type: "Voltage Controlled Stimulation",
         stop_requirement: "Until Stopped",
-        frequency: 0,
+        end_delay_duration: 0,
         time_unit: "seconds",
         waveform_order: [],
       },
@@ -56,9 +59,12 @@ export default {
     Object.assign(state, replace_state);
   },
   set_repeat_frequency(state, time) {
-    state.new_protocol.frequency = Number(time);
+    state.new_protocol.end_delay_duration = Number(time);
   },
   set_delay_axis_values(state, delay) {
     state.delay_blocks = [delay];
+  },
+  set_imported_protocol(state, protocol) {
+    state.protocol_list.push(protocol);
   },
 };

@@ -18,11 +18,21 @@
         <span :class="getLabelClass(idx)">{{ value }}</span>
       </div>
     </div>
+    <div
+      v-for="(key, value, idx) in import_export_btn_labels"
+      :id="value"
+      :key="value"
+      @click.exact="handle_import_export(idx)"
+    >
+      <div :class="'div__stimulationstudio-btn-container'" :style="key">
+        <span type="button" :class="'span__stimulationstudio-btn-label'">{{ value }}</span>
+        <input ref="file" type="file" style="display: none" @change="handle_import($event.target.files)" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
 
 export default {
@@ -33,23 +43,35 @@ export default {
   data() {
     return {
       btn_labels: {
-        "Apply to Selection": " left: 19%; top: 49% ",
-        "Clear Selection": " left: 51%; top: 49% ",
-        "Use Active Stimulation Settings": " left: 3%; top: 75%; width: 40% ",
-        "Import Protocol(s)": " left: 45%; top: 75%; width: 25% ",
-        "Export Protocol(s)": " left: 72%; top: 75%; width: 25% ",
+        "Apply to Selection": " left: 19%; top: 49%; ",
+        "Clear Selection": " left: 51%; top: 49%; ",
+        "Use Active Stimulation Settings": " left: 3%; top: 75%; width: 40%; ",
+      },
+      import_export_btn_labels: {
+        "Import Protocol": " left: 45%; top: 75%; width: 25%;",
+        "Export Protocol": " left: 72%; top: 75%; width: 25%;",
       },
       selected_protocol_idx: 0,
       input_height: 45,
       input_width: 550,
+      protocol_list: [],
     };
   },
-  computed: {
-    ...mapGetters("stimulation", {
-      protocol_list: "get_protocols",
-    }),
+  created() {
+    this.update_protocols();
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (mutation.type === "stimulation/set_imported_protocol") {
+        this.update_protocols();
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
+    update_protocols() {
+      this.protocol_list = this.$store.getters["stimulation/get_protocols"];
+    },
     selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
     },
@@ -65,6 +87,16 @@ export default {
     getLabelClass(idx) {
       if (this.selected_protocol_idx === 0 && idx === 0) return "span__stimulationstudio-btn-label-disable";
       else return "span__stimulationstudio-btn-label";
+    },
+    handle_import_export(idx) {
+      if (idx === 0) this.$refs.file[idx].click();
+      if (idx === 1) this.handle_export();
+    },
+    handle_import(file) {
+      this.$store.dispatch("stimulation/handle_import_protocol", file);
+    },
+    handle_export() {
+      this.$store.dispatch("stimulation/handle_export_protocol");
     },
   },
 };
