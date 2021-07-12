@@ -31,7 +31,9 @@ export default {
 // ];
 
 const get_new_protocol_color = () => {
-  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+  const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+  if (color === "#b7b7b7" || color === "#000000") get_new_protocol_color();
+  else return color;
 };
 
 const get_new_protocol_letter = ({ protocol_list }) => {

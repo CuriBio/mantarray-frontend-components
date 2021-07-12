@@ -155,7 +155,7 @@ export default {
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state") {
+      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
         this.protocol_order = [];
       }
     });

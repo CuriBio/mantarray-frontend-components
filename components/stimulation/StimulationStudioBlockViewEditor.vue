@@ -105,7 +105,7 @@ export default {
   created() {
     this.update_protocols();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state") {
+      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
         this.show_confirmation = false;
         this.protocol_name = "";
         this.end_delay_duration = "";
@@ -133,7 +133,7 @@ export default {
       this.show_confirmation = !this.show_confirmation;
     },
     handle_delete() {
-      this.$store.commit("stimulation/reset_state");
+      this.$store.commit("stimulation/reset_new_protocol");
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];

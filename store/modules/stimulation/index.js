@@ -4,7 +4,10 @@ import actions from "./actions";
 
 const state = () => ({
   selected_wells: [],
-  protocol_list: [{ letter: "", color: "", label: "Create New" }],
+  protocol_list: [
+    { letter: "", color: "", label: "Create New" },
+    { letter: "A", color: "#118075", label: "Tester" },
+  ],
   protocol_assignments: {},
   new_protocol: {
     name: "",
