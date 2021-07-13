@@ -120,7 +120,7 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    update_protocols() {
+    update_protocols: function () {
       this.protocol_list = this.$store.getters["stimulation/get_protocols"];
       this.current_protocol = this.$store.getters["stimulation/get_next_protocol"];
       this.current_letter = this.current_protocol.letter;

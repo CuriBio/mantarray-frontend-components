@@ -4,7 +4,7 @@ export default {
   },
   get_next_protocol(state) {
     const letter = get_new_protocol_letter(state);
-    const color = get_new_protocol_color();
+    const color = get_new_protocol_color(state);
     return { color, letter };
   },
   get_stimulation_type(state) {
@@ -17,22 +17,13 @@ export default {
   },
 };
 
-// const hardcoded_protocols = [
-//   { letter: "", color: "", label: "Create New" },
-//   { letter: "A", color: "#83c0b3", label: "test_A" },
-//   { letter: "B", color: "#45847b", label: "test_B" },
-//   { letter: "C", color: "#df6147", label: "test_C" },
-//   { letter: "D", color: "#f0a061", label: "test_D" },
-//   { letter: "E", color: "#871d28", label: "" },
-//   { letter: "F", color: "#24524b", label: "" },
-//   { letter: "G", color: "#133836", label: "" },
-//   { letter: "H", color: "#f9d78c", label: "" },
-//   { letter: "I", color: "#bd3532", label: "" }
-// ];
-
-const get_new_protocol_color = () => {
+const get_new_protocol_color = ({ protocol_list }) => {
+  let check_duplicate = false;
   const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-  if (color === "#b7b7b7" || color === "#000000") get_new_protocol_color();
+  protocol_list.map((protocol) => {
+    if (protocol.color === color) check_duplicate = true;
+  });
+  if (color === "#b7b7b7" || color === "#000000" || check_duplicate) get_new_protocol_color();
   else return color;
 };
 

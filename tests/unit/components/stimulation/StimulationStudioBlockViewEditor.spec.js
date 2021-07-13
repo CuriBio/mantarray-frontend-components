@@ -37,7 +37,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     const input = wrapper.find(".number_input");
     input.element.value = "5";
     await input.trigger("change");
-    expect(wrapper.vm.frequency).toBe("5");
+    expect(wrapper.vm.end_delay_duration).toBe("5");
   });
 
   test("When a user adds new protocol name, Then it will be checked if it is a unique name or if it already exists", async () => {
@@ -49,7 +49,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.name_validity).toBe("border: 1px solid #19ac8a");
     expect(wrapper.vm.error_message).toBe("");
 
-    await wrapper.vm.check_name_validity("test_A");
+    await wrapper.vm.check_name_validity("Tester");
     expect(wrapper.vm.name_validity).toBe("border: 1px solid #bd3532");
     expect(wrapper.vm.error_message).toBe("*Protocol name already exists");
   });
@@ -61,6 +61,17 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
     await wrapper.findAll("li").at(1).trigger("click");
     expect(wrapper.vm.stimulation_type).toBe("Current Controlled Stimulation");
+  });
+
+  test("When a user imports a new protocol, Then the the next available protocol letter/color assignment will get updated", async () => {
+    const updateSpy = jest.spyOn(StimulationStudioBlockViewEditor.methods, "update_protocols");
+    mount(StimulationStudioBlockViewEditor, {
+      store,
+      localVue,
+    });
+    const test_protocol = { label: "test", color: "#123456", letter: "B" };
+    await store.commit("stimulation/set_imported_protocol", test_protocol);
+    expect(updateSpy).toHaveBeenCalledWith();
   });
 
   test("When a user selects from the stop requirement dropdown, Then the corresponding selection is stored", async () => {
@@ -79,7 +90,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     wrapper.destroy();
-    expect(destroyed_spy).toHaveBeenCalled();
+    expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
   test("When a user clicks the Clear All button, Then the dropdowns will reset to default value", async () => {
