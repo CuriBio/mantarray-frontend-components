@@ -1,5 +1,6 @@
 import Vuex from "vuex";
 import { createLocalVue, mount } from "@vue/test-utils";
+import { active } from "d3";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -152,27 +153,23 @@ describe("store/stimulation", () => {
     });
 
     test("When a user imports a new protocol file, Then it will be read by the FileReader API and dispatched", async () => {
-      const event = {
-        target: {
-          files: [
-            {
-              name: "protocol.json",
-              size: 20000,
-              type: "application/json",
-            },
-          ],
-        },
+      const file = {
+        name: "test.json",
+        size: 450,
+        type: "application/json",
       };
-      const fileReader = {
+
+      const reader = {
         readAsText: jest.fn(),
         onload: jest.fn(),
         onerror: jest.fn(),
+        result: JSON.stringify({ name: "TEST" }),
       };
-
-      jest.spyOn(global, "FileReader").mockImplementation(() => fileReader);
-      // const uintArray = new Uint8Array();
-      await store.dispatch("stimulation/handle_import_protocol", event.target.files[0]);
-      expect(fileReader.readAsText).toHaveBeenCalledTimes(1);
+      jest.spyOn(global, "FileReader").mockImplementation(() => reader);
+      await store.dispatch("stimulation/handle_import_protocol", file);
+      reader.onload();
+      reader.onerror();
+      expect(reader.readAsText).toHaveBeenCalledTimes(1);
     });
 
     test("When a user clicks to export current protocol, Then json document will be downloaded locally", async () => {
