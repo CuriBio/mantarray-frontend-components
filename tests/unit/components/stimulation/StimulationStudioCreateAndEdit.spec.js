@@ -1,5 +1,7 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioCreateAndEdit from "@/components/stimulation/StimulationStudioCreateAndEdit.vue";
+import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -58,6 +60,25 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     expect(store.state.stimulation.protocol_assignments[1]).toBeTruthy();
     await wrapper.vm.handle_click(1);
     expect(store.state.stimulation.protocol_assignments[1]).toBeFalsy();
+  });
+
+  test("When the dropdown is rendered to the page in the StimulationStudioCreateAndEdit component, Then there should be no title", () => {
+    mount(NewSelectDropDown, {
+      localVue,
+      store,
+      propsData: {
+        options_text: ["test"],
+      },
+    });
+
+    const input_height_background = NewSelectDropDown.computed.input_height_background.call({
+      title_label: "",
+    });
+    const input_widget_top = NewSelectDropDown.computed.input_widget_top.call({
+      title_label: "",
+    });
+    expect(input_height_background).toBe(60);
+    expect(input_widget_top).toBe(0);
   });
 
   test("When a user imports a new protocol, Then the the available protocol list in dropdown will get updated", async () => {
