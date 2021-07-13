@@ -135,22 +135,22 @@ describe("store/data", () => {
       http_server.close();
     });
 
-    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
-      store.commit("data/set_plate_waveforms", ar);
+    // test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
+    //   store.commit("data/set_plate_waveforms", ar);
 
-      const stored_waveform = store.getters["data/plate_waveforms"];
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+    //   const stored_waveform = store.getters["data/plate_waveforms"];
+    //   expect(stored_waveform).toHaveLength(24);
+    //   expect(stored_waveform[0].x_data_points).toHaveLength(4);
 
-      await new Promise((resolve) => {
-        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
-          resolve(ack);
-        });
-      });
+    //   await new Promise((resolve) => {
+    //     socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
+    //       resolve(ack);
+    //     });
+    //   });
 
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(8);
-    });
+    //   expect(stored_waveform).toHaveLength(24);
+    //   expect(stored_waveform[0].x_data_points).toHaveLength(8);
+    // });
     test("When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
       // TODO use UUIDs
       const init_heatmap_values = {
