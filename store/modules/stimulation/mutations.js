@@ -19,6 +19,7 @@ export default {
   },
   set_waveform_order(state, array) {
     state.new_protocol.waveform_order = array;
+    console.log(state.new_protocol.waveform_order);
   },
   set_axis_values(state, { x_values, y_values }) {
     state.x_axis_values = x_values;

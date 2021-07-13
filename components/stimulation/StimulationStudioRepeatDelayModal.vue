@@ -109,6 +109,9 @@ export default {
         const delay_settings = {
           phase_one_duration: Number(this.input_value),
           phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
         };
         this.$emit("delay_close", button_label, delay_settings);
       }

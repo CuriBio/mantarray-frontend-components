@@ -76,7 +76,9 @@ export default {
       this.selected_protocol_idx = idx;
     },
     handle_click(idx) {
-      if (idx === 0) this.$store.commit("stimulation/apply_selected_protocol", this.selected_protocol_idx);
+      if (idx === 0 && this.selected_protocol_idx === 0) return;
+      if (idx === 0 && this.selected_protocol_idx !== 0)
+        this.$store.commit("stimulation/apply_selected_protocol", this.selected_protocol_idx);
       else if (idx === 1) this.$store.commit("stimulation/clear_selected_protocol");
     },
     getClass(idx) {

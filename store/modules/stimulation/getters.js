@@ -20,6 +20,7 @@ export default {
 const get_new_protocol_color = ({ protocol_list }) => {
   let check_duplicate = false;
   const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+  // ensures there are no duplicate colors
   protocol_list.map((protocol) => {
     if (protocol.color === color) check_duplicate = true;
   });
@@ -27,6 +28,7 @@ const get_new_protocol_color = ({ protocol_list }) => {
   else return color;
 };
 
+// TODO Luci, handle if there are more than 26 protocols
 const get_new_protocol_letter = ({ protocol_list }) => {
   const current_protocol_assignment = protocol_list[protocol_list.length - 1].letter;
   const current_alphabet_idx = alphabet.indexOf(current_protocol_assignment);
