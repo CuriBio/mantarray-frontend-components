@@ -89,7 +89,8 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
       store,
       localVue,
     });
-    await wrapper.findAll(".span__stimulationstudio-btn-label").at(3).trigger("click");
+    await wrapper.vm.handle_import_export(1);
+    await wrapper.vm.handle_import_export(0);
 
     expect(export_spy).toHaveBeenCalledTimes(1);
   });

@@ -163,9 +163,16 @@ describe("store/stimulation", () => {
           ],
         },
       };
-      const fileReaderSpy = jest.spyOn(FileReader.prototype, "readAsText").mockImplementation(() => null);
+      const fileReader = {
+        readAsText: jest.fn(),
+        onload: jest.fn(),
+        onerror: jest.fn(),
+      };
+
+      jest.spyOn(global, "FileReader").mockImplementation(() => fileReader);
+      // const uintArray = new Uint8Array();
       await store.dispatch("stimulation/handle_import_protocol", event.target.files[0]);
-      expect(fileReaderSpy).toHaveBeenCalledWith(event.target.files[0]);
+      expect(fileReader.readAsText).toHaveBeenCalledTimes(1);
     });
 
     test("When a user clicks to export current protocol, Then json document will be downloaded locally", async () => {
