@@ -33,5 +33,5 @@ const get_new_protocol_letter = ({ protocol_list }) => {
   return alphabet[current_alphabet_idx + 1];
 };
 
-const alphabet = Array.from(Array(26).keys()).map(i => String.fromCharCode(65 + i));
+const alphabet = Array.from(Array(26).keys()).map((i) => String.fromCharCode(65 + i));
 
