@@ -45,7 +45,7 @@ export default {
         this.repeat_colors = state.repeat_colors;
         this.delay_blocks = state.delay_blocks;
       }
-      if (mutation.type === "stimulation/reset_state") {
+      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
         this.datapoints = [];
         this.y_min_max = state.y_axis_scale;
         this.x_axis_sample_length = state.x_axis_scale;

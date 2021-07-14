@@ -8,6 +8,9 @@ export default {
   clear_selected_protocol(state) {
     state.selected_wells.map((well) => delete state.protocol_assignments[well]);
   },
+  set_protocol_name(state, name) {
+    state.new_protocol.name = name;
+  },
   set_stimulation_type(state, type) {
     state.new_protocol.stimulation_type = type;
   },
@@ -32,6 +35,26 @@ export default {
     if (axis === "x-axis") state.x_axis_scale *= 10;
     if (axis === "y-axis") state.y_axis_scale *= 10;
   },
+  reset_new_protocol(state) {
+    const replace_state = {
+      ...state,
+      new_protocol: {
+        name: "",
+        stimulation_type: "Voltage Controlled Stimulation",
+        stop_requirement: "Until Stopped",
+        end_delay_duration: 0,
+        time_unit: "seconds",
+        waveform_order: [],
+      },
+      x_axis_values: [],
+      y_axis_values: [],
+      repeat_colors: {},
+      x_axis_scale: 10000,
+      y_axis_scale: 10,
+      delay_blocks: [],
+    };
+    Object.assign(state, replace_state);
+  },
   reset_state(state) {
     const replace_state = {
       ...state,
@@ -41,11 +64,10 @@ export default {
         name: "",
         stimulation_type: "Voltage Controlled Stimulation",
         stop_requirement: "Until Stopped",
-        frequency: 0,
+        end_delay_duration: 0,
         time_unit: "seconds",
         waveform_order: [],
       },
-      delete_protocol: false,
       x_axis_values: [],
       y_axis_values: [],
       repeat_colors: {},
@@ -56,9 +78,12 @@ export default {
     Object.assign(state, replace_state);
   },
   set_repeat_frequency(state, time) {
-    state.new_protocol.frequency = Number(time);
+    state.new_protocol.end_delay_duration = Number(time);
   },
   set_delay_axis_values(state, delay) {
     state.delay_blocks = [delay];
+  },
+  set_imported_protocol(state, protocol) {
+    state.protocol_list.push(protocol);
   },
 };

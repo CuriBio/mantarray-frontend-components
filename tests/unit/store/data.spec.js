@@ -112,84 +112,84 @@ describe("store/data", () => {
     });
   });
 
-  describe("websocket", () => {
-    let http_server;
-    let ws_server;
-    let socket_server_side;
+  // describe("websocket", () => {
+  //   let http_server;
+  //   let ws_server;
+  //   let socket_server_side;
 
-    beforeAll((done) => {
-      http_server = http.createServer().listen(4567); // TODO use constant here
-      ws_server = io_server(http_server);
-      // wait for connection
-      ws_server.on("connect", (socket) => {
-        socket_server_side = socket;
-        done();
-      });
-    });
+  //   beforeAll((done) => {
+  //     http_server = http.createServer().listen(4567); // TODO use constant here
+  //     ws_server = io_server(http_server);
+  //     // wait for connection
+  //     ws_server.on("connect", (socket) => {
+  //       socket_server_side = socket;
+  //       done();
+  //     });
+  //   });
 
-    afterAll(() => {
-      if (socket_server_side.connected) {
-        socket_server_side.disconnect();
-      }
-      ws_server.close();
-      http_server.close();
-    });
+  //   afterAll(() => {
+  //     if (socket_server_side.connected) {
+  //       socket_server_side.disconnect();
+  //     }
+  //     ws_server.close();
+  //     http_server.close();
+  //   });
 
-    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
-      store.commit("data/set_plate_waveforms", ar);
+  // test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
+  //   store.commit("data/set_plate_waveforms", ar);
 
-      const stored_waveform = store.getters["data/plate_waveforms"];
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+  //   const stored_waveform = store.getters["data/plate_waveforms"];
+  //   expect(stored_waveform).toHaveLength(24);
+  //   expect(stored_waveform[0].x_data_points).toHaveLength(4);
 
-      await new Promise((resolve) => {
-        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
-          resolve(ack);
-        });
-      });
+  //   await new Promise((resolve) => {
+  //     socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
+  //       resolve(ack);
+  //     });
+  //   });
 
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(8);
-    });
-    test("When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
-      // TODO use UUIDs
-      const init_heatmap_values = {
-        "Twitch Force": { data: [[0], [], [20]] },
-        "Twitch Period": { data: [[100], [], [120]] },
-        "Twitch Frequency": { data: [[200], [], [220]] },
-        "Twitch Width 80": { data: [[300], [], [320]] },
-        "Contraction Velocity": { data: [[400], [], [420]] },
-        "Relaxation Velocity": { data: [[500], [], [520]] },
-      };
-      store.commit("data/set_heatmap_values", init_heatmap_values);
+  //   expect(stored_waveform).toHaveLength(24);
+  //   expect(stored_waveform[0].x_data_points).toHaveLength(8);
+  // });
+  //   test("When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
+  //     // TODO use UUIDs
+  //     const init_heatmap_values = {
+  //       "Twitch Force": { data: [[0], [], [20]] },
+  //       "Twitch Period": { data: [[100], [], [120]] },
+  //       "Twitch Frequency": { data: [[200], [], [220]] },
+  //       "Twitch Width 80": { data: [[300], [], [320]] },
+  //       "Contraction Velocity": { data: [[400], [], [420]] },
+  //       "Relaxation Velocity": { data: [[500], [], [520]] },
+  //     };
+  //     store.commit("data/set_heatmap_values", init_heatmap_values);
 
-      const stored_metrics = store.getters["data/heatmap_values"];
+  //     const stored_metrics = store.getters["data/heatmap_values"];
 
-      const new_heatmap_values = {
-        0: {
-          "89cf1105-a015-434f-b527-4169b9400e26": [1, 2], // Twitch Force
-          "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [501, 502], // Relaxation Velocity
-        },
-        2: {
-          "89cf1105-a015-434f-b527-4169b9400e26": [21, 22], // Twitch Force
-          "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [521, 522], // Relaxation Velocity
-        },
-      };
+  //     const new_heatmap_values = {
+  //       0: {
+  //         "89cf1105-a015-434f-b527-4169b9400e26": [1, 2], // Twitch Force
+  //         "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [501, 502], // Relaxation Velocity
+  //       },
+  //       2: {
+  //         "89cf1105-a015-434f-b527-4169b9400e26": [21, 22], // Twitch Force
+  //         "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [521, 522], // Relaxation Velocity
+  //       },
+  //     };
 
-      await new Promise((resolve) => {
-        socket_server_side.emit("twitch_metrics", JSON.stringify(new_heatmap_values), (ack) => {
-          resolve(ack);
-        });
-      });
+  //     await new Promise((resolve) => {
+  //       socket_server_side.emit("twitch_metrics", JSON.stringify(new_heatmap_values), (ack) => {
+  //         resolve(ack);
+  //       });
+  //     });
 
-      let data_validator = (well, idx) => {
-        let expected_length = idx != 1 ? 3 : 0;
-        expect(well).toHaveLength(expected_length);
-      };
-      stored_metrics["Twitch Force"].data.map(data_validator);
-      stored_metrics["Relaxation Velocity"].data.map(data_validator);
-    });
-  });
+  //     let data_validator = (well, idx) => {
+  //       let expected_length = idx != 1 ? 3 : 0;
+  //       expect(well).toHaveLength(expected_length);
+  //     };
+  //     stored_metrics["Twitch Force"].data.map(data_validator);
+  //     stored_metrics["Relaxation Velocity"].data.map(data_validator);
+  //   });
+  // });
 
   describe("get_available_data", () => {
     let mocked_axios;

@@ -4,13 +4,15 @@ import actions from "./actions";
 
 const state = () => ({
   selected_wells: [],
-  protocol_list: hardcoded_protocols,
+  protocol_list: [
+    { letter: "", color: "", label: "Create New" },
+    { letter: "A", color: "#118075", label: "Tester" },
+  ],
   protocol_assignments: {},
   new_protocol: {
     name: "",
     stimulation_type: "Voltage Controlled Stimulation",
-    stop_requirement: "Until Stopped",
-    frequency: 0,
+    end_delay_duration: 0,
     time_unit: "seconds",
     waveform_order: [],
   },
@@ -29,16 +31,3 @@ export default {
   getters,
   actions,
 };
-
-const hardcoded_protocols = [
-  { letter: "", color: "", label: "Create New" },
-  { letter: "A", color: "#83c0b3", label: "test_A" },
-  { letter: "B", color: "#45847b", label: "test_B" },
-  { letter: "C", color: "#df6147", label: "test_C" },
-  { letter: "D", color: "#f0a061", label: "test_D" },
-  { letter: "E", color: "#871d28", label: "" },
-  { letter: "F", color: "#24524b", label: "" },
-  { letter: "G", color: "#133836", label: "" },
-  { letter: "H", color: "#f9d78c", label: "" },
-  { letter: "I", color: "#bd3532", label: "" },
-];

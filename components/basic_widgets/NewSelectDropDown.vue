@@ -55,10 +55,49 @@ export default {
       visible: false,
       chosen_option: null,
       options_list: [],
+      dropdown_options: [],
     };
   },
   computed: {
-    dropdown_options: function () {
+    input_height_background: function () {
+      return this.title_label !== "" ? 100 : 60;
+    },
+    input_widget_top: function () {
+      return this.title_label !== "" ? 40 : 0;
+    },
+  },
+  watch: {
+    chosen_option: function () {
+      this.filter_options();
+    },
+  },
+  created() {
+    this.get_dropdown_options();
+    this.chosen_option = this.dropdown_options[0];
+    this.filter_options();
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (mutation.type === "stimulation/reset_state") {
+        this.chosen_option = this.options_list[0];
+        this.changeSelection(0);
+      }
+      if (mutation.type === "stimulation/set_imported_protocol") {
+        this.get_dropdown_options();
+        this.filter_options();
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+  },
+  methods: {
+    changeSelection(idx) {
+      this.chosen_option = this.dropdown_options[idx];
+      this.$emit("selection-changed", idx);
+    },
+    toggle() {
+      this.visible = !this.visible;
+    },
+    get_dropdown_options() {
       const list = [];
       for (let i = 0; i < this.options_text.length; i++) {
         let name;
@@ -75,42 +114,12 @@ export default {
             });
         list.push(name);
       }
-      return list;
+      this.dropdown_options = list;
     },
-    input_height_background: function () {
-      return this.title_label !== "" ? 100 : 60;
-    },
-    input_widget_top: function () {
-      return this.title_label !== "" ? 40 : 0;
-    },
-  },
-  watch: {
-    chosen_option: function () {
+    filter_options() {
       this.options_list = this.dropdown_options.filter((option) => {
         if (option !== this.chosen_option) return option;
       });
-    },
-  },
-  created() {
-    this.chosen_option = this.dropdown_options[0];
-    this.options_list = this.dropdown_options;
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state") {
-        this.chosen_option = this.dropdown_options[0];
-        this.changeSelection(0);
-      }
-    });
-  },
-  beforeDestroy() {
-    this.unsubscribe();
-  },
-  methods: {
-    changeSelection(idx) {
-      this.chosen_option = this.dropdown_options[idx];
-      this.$emit("selection-changed", idx);
-    },
-    toggle() {
-      this.visible = !this.visible;
     },
   },
 };
@@ -192,7 +201,7 @@ ul {
   width: 100%;
   list-style-type: none;
   padding: 0;
-  margin-top: 32px;
+  margin-top: 35px;
   left: 0;
   font-size: 16px;
   position: absolute;

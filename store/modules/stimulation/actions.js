@@ -2,7 +2,7 @@ export default {
   handle_selected_wells({ commit }, wells) {
     const well_values = [];
     wells.filter((well, idx) => {
-      if (well === true) well_values.push(idx);
+      if (well) well_values.push(idx);
     });
     this.commit("stimulation/set_selected_wells", well_values);
   },
@@ -61,19 +61,55 @@ export default {
     this.commit("stimulation/set_waveform_order", array);
   },
   handle_repeat_frequency({ commit, state }, { x_values, y_values }) {
-    const { frequency } = this.state.stimulation.new_protocol;
+    const { end_delay_duration } = this.state.stimulation.new_protocol;
     let delay_block;
-    if (frequency !== 0) {
+    if (end_delay_duration !== 0) {
       const last_x_value = x_values[x_values.length - 1];
-      const next_x_value = last_x_value + frequency;
+      const next_x_value = last_x_value + end_delay_duration;
       delay_block = [last_x_value, next_x_value];
     }
-    if (delay_block) this.commit("stimulation/set_delay_axis_values", delay_block);
+    if (delay_block) this.commit("stimulation/set_delay_axis_values", delay_block); // TODO lUci, look at conditional
     this.commit("stimulation/set_axis_values", { x_values, y_values });
   },
   async handle_new_repeat_frequency({ dispatch, state, commit }, time) {
     const { waveform_order } = this.state.stimulation.new_protocol;
     await this.commit("stimulation/set_repeat_frequency", time);
     this.dispatch("stimulation/handle_protocol_order", waveform_order);
+  },
+  async handle_import_protocol({ commit, state, dispatch }, file) {
+    const reader = new FileReader();
+    reader.onload = async function () {
+      const response = JSON.parse(reader.result);
+      await dispatch("add_imported_protocol", response);
+    };
+    reader.onerror = function () {
+      console.log(reader.onerror);
+      alert("Import unsuccessful");
+    };
+    reader.readAsText(file);
+  },
+  async handle_export_protocol({ commit, state }) {
+    const { new_protocol } = this.state.stimulation;
+    const text_to_write = JSON.stringify(new_protocol);
+    const text_file_blob = new Blob([text_to_write], { type: "application/json" });
+    const file_name_to_save = new_protocol.name;
+    const download_link = document.createElement("a");
+    download_link.download = file_name_to_save;
+    download_link.innerHTML = "Download File";
+    if (window.webkitURL != null) {
+      download_link.href = window.webkitURL.createObjectURL(text_file_blob);
+    } else {
+      download_link.href = window.URL.createObjectURL(text_file_blob);
+      download_link.style.display = "none";
+      document.body.appendChild(download_link);
+    }
+    download_link.click();
+    download_link.remove();
+  },
+  async add_imported_protocol({ commit, state, getters }, { name }) {
+    const assignment = await this.getters["stimulation/get_next_protocol"];
+    const { color, letter } = assignment;
+    const updated_protocol = { color, letter, label: name };
+    this.commit("stimulation/set_imported_protocol", updated_protocol);
   },
 };

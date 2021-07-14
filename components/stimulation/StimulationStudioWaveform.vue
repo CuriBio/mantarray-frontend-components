@@ -274,8 +274,7 @@ export default {
       }
       for (const block of this.delay_blocks) {
         // repetitive, but eslint errors without a conditional inside the loop
-        if (this.delay_blocks.length !== 0) {
-          console.log(this.delay_blocks);
+        if (this.delay_blocks.length !== 0 && !isNaN(block[1])) {
           const starting_idx = block[0];
           const start_line = [
             [starting_idx, this.y_min],

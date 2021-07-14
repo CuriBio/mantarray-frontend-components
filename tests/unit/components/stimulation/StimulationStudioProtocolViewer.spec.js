@@ -140,8 +140,8 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       [1, 2],
       [2, 3],
     ]);
-
-    expect(render_spy).toHaveBeenCalled();
+    wrapper.vm.$options.watch.x_axis_min.call(wrapper.vm, 100);
+    expect(render_spy).toHaveBeenCalledTimes(2);
   });
 
   test("When a user adds a delay repeat to the end of the protocol, Then it will mutation to state will automatically update in the waveform graph", async () => {

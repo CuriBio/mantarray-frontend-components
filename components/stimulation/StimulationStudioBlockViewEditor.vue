@@ -44,7 +44,7 @@
             />
             <span class="span__settings-label">every</span>
             <input
-              v-model="frequency"
+              v-model="end_delay_duration"
               class="number_input"
               placeholder=""
               @change="handle_repeat_frequency($event.target.value)"
@@ -71,7 +71,6 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vue from "vue";
 import { BPopover } from "bootstrap-vue";
@@ -95,28 +94,25 @@ export default {
       protocol_name: "",
       stimulation_type: "Voltage Controlled Stimulation",
       stop_requirement: "Stimulate Until Stopped",
-      frequency: "",
+      end_delay_duration: "",
       name_validity: "null",
       error_message: "",
+      protocol_list: [],
+      current_protocol: "",
     };
   },
-  computed: {
-    ...mapGetters("stimulation", {
-      current_protocol: "get_next_protocol",
-    }),
-    ...mapGetters("stimulation", {
-      protocol_list: "get_protocols",
-    }),
-  },
+
   created() {
-    this.current_letter = this.current_protocol.letter;
-    this.current_color = this.current_protocol.color;
+    this.update_protocols();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state") {
+      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
         this.show_confirmation = false;
         this.protocol_name = "";
-        this.frequency = "";
+        this.end_delay_duration = "";
         this.name_validity = "";
+      }
+      if (mutation.type === "stimulation/set_imported_protocol") {
+        this.update_protocols();
       }
     });
   },
@@ -124,6 +120,13 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    update_protocols: function () {
+      this.protocol_list = this.$store.getters["stimulation/get_protocols"];
+      this.current_protocol = this.$store.getters["stimulation/get_next_protocol"];
+      this.current_letter = this.current_protocol.letter;
+      this.current_color = this.current_protocol.color;
+      this.$emit("handle_current_assignment", this.current_protocol);
+    },
     toggle_tab(tab) {
       tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");
     },
@@ -131,7 +134,7 @@ export default {
       this.show_confirmation = !this.show_confirmation;
     },
     handle_delete() {
-      this.$store.commit("stimulation/reset_state");
+      this.$store.commit("stimulation/reset_new_protocol");
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];
@@ -143,7 +146,7 @@ export default {
       this.stop_requirement = requirement;
     },
     handle_repeat_frequency(time) {
-      this.frequency = time;
+      this.end_delay_duration = time;
       this.$store.dispatch("stimulation/handle_new_repeat_frequency", time);
     },
     check_name_validity(input) {
@@ -153,6 +156,7 @@ export default {
       if (matched_names.length === 0) {
         this.name_validity = "border: 1px solid #19ac8a";
         this.error_message = "";
+        this.$store.commit("stimulation/set_protocol_name", input);
       }
       if (matched_names.length > 0) {
         this.name_validity = "border: 1px solid #bd3532";
@@ -278,7 +282,6 @@ img:hover {
   justify-content: flex-end;
   align-items: center;
   margin: 5px;
-  z-index: 5;
 }
 .number_input {
   background: #1c1c1c;
