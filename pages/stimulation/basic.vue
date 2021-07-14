@@ -15,7 +15,7 @@
     <StimulationStudioWidget />
     <StimulationStudioCreateAndEdit />
     <StimulationStudioDragAndDropPanel :stimulation_type="stimulation_type" :time_unit="time_unit" />
-    <StimulationStudioBlockViewEditor @handle_current_assignment="handle_current_assignment" />
+    <StimulationStudioBlockViewEditor />
     <StimulationStudioProtocolViewer :stimulation_type="stimulation_type" :time_unit="time_unit" />
     <div class="button-background">
       <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
@@ -65,7 +65,7 @@ export default {
       if (mutation.type === "stimulation/set_time_unit") {
         this.time_unit = this.$store.getters["stimulation/get_time_unit"];
       }
-      if (mutation.type === "stimulation/reset_state") {
+      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
         this.time_unit = "Time (s)";
         this.stimulation_type = "Voltage (V)";
       }
@@ -75,17 +75,12 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    handle_click(idx) {
-      const { color, letter } = this.current_assignment;
-      const { name } = this.$store.state.stimulation.new_protocol;
+    async handle_click(idx) {
       if (idx === 1) this.$store.commit("stimulation/reset_state");
       if (idx === 0) {
-        this.$store.commit("stimulation/set_imported_protocol", { color, letter, label: name });
+        await this.$store.dispatch("stimulation/add_saved_protocol");
         this.$store.commit("stimulation/reset_new_protocol");
       }
-    },
-    handle_current_assignment(assignment) {
-      this.current_assignment = assignment;
     },
   },
 };

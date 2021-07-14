@@ -331,10 +331,9 @@ export default {
     };
   },
   computed: {
-    // TODO double check these default settings, fix to match parent component
     check_max_type: function () {
-      if (this.stimulation_type === "Current (μA)") return "Voltage (mV)";
-      else return "Current (μA)";
+      if (this.stimulation_type === "Current (A)") return "Voltage (V)";
+      else return "Current (A)";
     },
   },
   created() {
@@ -343,6 +342,9 @@ export default {
   methods: {
     close(idx) {
       const button_label = this.button_names[idx];
+      for (const input in this.waveform_settings) {
+        if (this.waveform_settings[input] === "") this.waveform_settings[input] = 0;
+      }
       this.$emit("close", button_label, this.waveform_settings);
     },
   },

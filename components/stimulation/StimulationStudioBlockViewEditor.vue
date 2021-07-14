@@ -125,7 +125,6 @@ export default {
       this.current_protocol = this.$store.getters["stimulation/get_next_protocol"];
       this.current_letter = this.current_protocol.letter;
       this.current_color = this.current_protocol.color;
-      this.$emit("handle_current_assignment", this.current_protocol);
     },
     toggle_tab(tab) {
       tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");

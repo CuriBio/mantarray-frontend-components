@@ -48,7 +48,8 @@ export default {
       if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
         this.datapoints = [];
         this.y_min_max = state.y_axis_scale;
-        this.x_axis_sample_length = state.x_axis_scale;
+        this.x_axis_sample_length = 100;
+        state.x_axis_scale = 100;
         this.dynamic_plot_width = 960;
       }
       if (mutation.type === "stimulation/set_time_unit") {

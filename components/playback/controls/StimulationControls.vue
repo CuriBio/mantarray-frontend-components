@@ -53,8 +53,8 @@ export default {
   methods: {
     async handle_play_stop() {
       this.play_state = !this.play_state;
-      if (this.play_state) await this.$store.dispatch("playback/start_recording");
-      if (!this.play_state) await this.$store.dispatch("playback/stop_recording");
+      if (this.play_state) await this.$store.dispatch("stimulation/create_protocol_message");
+      // if (!this.play_state) await this.$store.dispatch("playback/stop_recording");
     },
   },
 };
@@ -104,6 +104,10 @@ export default {
   grid-column: 4;
   height: 20px;
   width: 20px;
+}
+.span__stimulation-controls-play-stop-button:hover {
+  color: #b7b7b7c9;
+  cursor: pointer;
 }
 .svg__stimulation-controls-loop-button {
   position: relative;

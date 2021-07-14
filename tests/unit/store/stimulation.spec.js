@@ -212,17 +212,17 @@ describe("store/stimulation", () => {
 
     test("When a user requests to delete the current stimulation by using the trash icon, Then it should reset just the Protocol Viewer and Block View Editor components", async () => {
       await store.commit("stimulation/reset_new_protocol");
-      expect(store.state.stimulation.new_protocol.waveform_order).toStrictEqual([]);
+      expect(store.state.stimulation.new_protocol.pulses).toStrictEqual([]);
     });
 
     test("When a user requests to delete the all of their current changes to entire stim studio, Then it should reset the entire state", async () => {
       store.state.stimulation.protocol_assignments = { test: "test" };
-      store.state.stimulation.new_protocol.waveform_order = ["test", "test1"];
+      store.state.stimulation.new_protocol.pulses = ["test", "test1"];
 
       await store.commit("stimulation/reset_state");
 
       expect(store.state.stimulation.protocol_assignments).toStrictEqual({});
-      expect(store.state.stimulation.new_protocol.waveform_order).toStrictEqual([]);
+      expect(store.state.stimulation.new_protocol.pulses).toStrictEqual([]);
     });
 
     test("When a user selects a new stimulation type to Current Stimulation Type, Then it should mutate state Current", async () => {

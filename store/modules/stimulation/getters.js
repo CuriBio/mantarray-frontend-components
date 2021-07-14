@@ -5,6 +5,7 @@ export default {
   get_next_protocol(state) {
     const letter = get_new_protocol_letter(state);
     const color = get_new_protocol_color(state);
+    state.current_assignment = { letter, color };
     return { color, letter };
   },
   get_stimulation_type(state) {
@@ -17,10 +18,10 @@ export default {
   },
 };
 
+// TODO consider eliminating high contract colors
 const get_new_protocol_color = ({ protocol_list }) => {
   let check_duplicate = false;
   const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-  // ensures there are no duplicate colors
   protocol_list.map((protocol) => {
     if (protocol.color === color) check_duplicate = true;
   });
