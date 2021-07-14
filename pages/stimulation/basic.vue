@@ -59,10 +59,10 @@ export default {
   },
   created: async function () {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/handle_stimulation_type") {
+      if (mutation.type === "stimulation/set_stimulation_type") {
         this.stimulation_type = this.$store.getters["stimulation/get_stimulation_type"];
       }
-      if (mutation.type === "stimulation/handle_time_unit") {
+      if (mutation.type === "stimulation/set_time_unit") {
         this.time_unit = this.$store.getters["stimulation/get_time_unit"];
       }
       if (mutation.type === "stimulation/reset_state") {

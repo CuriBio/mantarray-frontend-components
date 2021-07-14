@@ -6,6 +6,7 @@ export default {
     });
     this.commit("stimulation/set_selected_wells", well_values);
   },
+
   handle_protocol_order({ commit, dispatch }, array) {
     // TODO: clean up function, must be a more concise way of performing
     const x_values = [0];

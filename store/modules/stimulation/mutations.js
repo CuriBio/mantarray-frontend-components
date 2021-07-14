@@ -12,7 +12,8 @@ export default {
     state.new_protocol.name = name;
   },
   set_stimulation_type(state, type) {
-    state.new_protocol.stimulation_type = type;
+    if (type.includes("Current")) state.new_protocol.stimulation_type = "C";
+    if (type.includes("Voltage")) state.new_protocol.stimulation_type = "V";
   },
   set_time_unit(state, unit) {
     state.new_protocol.time_unit = unit;
@@ -41,7 +42,7 @@ export default {
       ...state,
       new_protocol: {
         name: "",
-        stimulation_type: "Voltage Controlled Stimulation",
+        stimulation_type: "V",
         stop_requirement: "Until Stopped",
         end_delay_duration: 0,
         time_unit: "seconds",
@@ -63,7 +64,7 @@ export default {
       protocol_assignments: {},
       new_protocol: {
         name: "",
-        stimulation_type: "Voltage Controlled Stimulation",
+        stimulation_type: "V",
         stop_requirement: "Until Stopped",
         end_delay_duration: 0,
         time_unit: "seconds",

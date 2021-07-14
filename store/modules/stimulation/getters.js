@@ -8,8 +8,8 @@ export default {
     return { color, letter };
   },
   get_stimulation_type(state) {
-    if (state.new_protocol.stimulation_type.includes("Current")) return "Current (A)";
-    if (state.new_protocol.stimulation_type.includes("Voltage")) return "Voltage (V)";
+    if (state.new_protocol.stimulation_type === "C") return "Current (A)";
+    if (state.new_protocol.stimulation_type === "V") return "Voltage (V)";
   },
   get_time_unit(state) {
     if (state.new_protocol.time_unit.includes("milliseconds")) return "Time (ms)";
