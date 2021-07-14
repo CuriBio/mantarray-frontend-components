@@ -99,7 +99,4 @@ export default {
   set_imported_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
   },
-  set_protocol_message({ protocol_message }, message) {
-    protocol_message.Protocol = message;
-  },
 };

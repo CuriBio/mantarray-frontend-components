@@ -1,5 +1,6 @@
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
+import { post_stim_message, post_stim_status } from "../../../js_utils/axios_helpers";
 
 export default {
   handle_selected_wells({ commit }, wells) {
@@ -15,7 +16,6 @@ export default {
     });
   },
   handle_protocol_order({ commit, dispatch }, new_pulse_order) {
-    // TODO: Luci clean up
     const x_values = [0];
     const y_values = [0];
     const color_assignments = {};
@@ -41,6 +41,7 @@ export default {
         y_values.push(setting.phase_two_charge, setting.phase_two_charge);
       }
     };
+
     new_pulse_order.map((pulse) => {
       const number_of_repeats = pulse.repeat.number_of_repeats;
       const repeat_color = pulse.repeat.color;
@@ -63,12 +64,12 @@ export default {
         }
       }
     });
+    this.commit("stimulation/set_repeat_color_assignments", color_assignments);
+    this.commit("stimulation/set_pulses", { pulses, new_pulse_order });
     this.dispatch("stimulation/handle_repeat_frequency", {
       x_values,
       y_values,
     });
-    this.commit("stimulation/set_repeat_color_assignments", color_assignments);
-    this.commit("stimulation/set_pulses", { pulses, new_pulse_order });
   },
   handle_repeat_frequency({ commit, state }, { x_values, y_values }) {
     const { end_delay_duration } = this.state.stimulation.new_protocol;
@@ -132,8 +133,8 @@ export default {
     const updated_protocol = { color, letter, label: new_protocol.name, protocol: new_protocol };
     this.commit("stimulation/set_imported_protocol", updated_protocol);
   },
-  create_protocol_message({ commit, state }) {
-    const message = [];
+  async create_protocol_message({ commit, state }) {
+    const message = { Protocol: [] };
     const { protocol_assignments } = this.state.stimulation;
     for (const well in protocol_assignments) {
       if (protocol_assignments !== {}) {
@@ -144,9 +145,13 @@ export default {
           well_number,
           pulses,
         };
-        message.push(protocol_model);
+        message.Protocol.push(protocol_model);
       }
     }
-    this.commit("stimulation/set_protocol_message", message);
+    await post_stim_message(message);
+    await post_stim_status(true);
+  },
+  async stop_stim_status() {
+    await post_stim_status(false);
   },
 };

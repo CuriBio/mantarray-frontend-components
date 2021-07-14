@@ -54,7 +54,7 @@ export default {
     async handle_play_stop() {
       this.play_state = !this.play_state;
       if (this.play_state) await this.$store.dispatch("stimulation/create_protocol_message");
-      // if (!this.play_state) await this.$store.dispatch("playback/stop_recording");
+      if (!this.play_state) await this.$store.dispatch("stimulation/stop_stim_status");
     },
   },
 };

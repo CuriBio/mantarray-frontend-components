@@ -18,7 +18,6 @@ const state = () => ({
     detailed_pulses: [],
   },
   current_assignment: { letter: "", color: "" },
-  protocol_message: { Protocol: [] },
   x_axis_values: [],
   y_axis_values: [],
   repeat_colors: {},
