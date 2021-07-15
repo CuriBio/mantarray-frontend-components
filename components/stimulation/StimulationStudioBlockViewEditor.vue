@@ -135,7 +135,10 @@ export default {
         this.end_delay_duration = "";
         this.name_validity = "";
       }
-      if (mutation.type === "stimulation/set_imported_protocol") {
+      if (
+        mutation.type === "stimulation/set_imported_protocol" ||
+        mutation.type === "stimulation/add_saved_protocol"
+      ) {
         this.update_protocols();
       }
     });

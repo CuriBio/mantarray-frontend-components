@@ -10,11 +10,7 @@ export default {
     });
     this.commit("stimulation/set_selected_wells", well_values);
   },
-  apply_selected_protocol(state, idx) {
-    state.selected_wells.map((well) => {
-      state.protocol_assignments[well] = state.protocol_list[idx];
-    });
-  },
+
   handle_protocol_order({ commit, dispatch }, new_pulse_order) {
     const x_values = [0];
     const y_values = [0];
@@ -134,6 +130,7 @@ export default {
     this.commit("stimulation/set_imported_protocol", updated_protocol);
   },
   async create_protocol_message({ commit, state }) {
+    const status = true;
     const message = { protocol: [] };
     const { protocol_assignments } = this.state.stimulation;
     for (const well in protocol_assignments) {
@@ -149,7 +146,6 @@ export default {
       }
     }
     await post_stim_message(message);
-    const status = true;
     await post_stim_status(status);
     this.commit("stimulation/set_stim_status", status);
   },

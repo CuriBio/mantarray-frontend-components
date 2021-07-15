@@ -1,6 +1,6 @@
 import Vuex from "vuex";
-import { createLocalVue, mount } from "@vue/test-utils";
-import { active } from "d3";
+import { createLocalVue } from "@vue/test-utils";
+import * as axios_helpers from "../../../js_utils/axios_helpers.js";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -88,11 +88,11 @@ describe("store/stimulation", () => {
       const default_type = store.getters["stimulation/get_stimulation_type"];
       expect(default_type).toBe(voltage);
 
-      store.state.stimulation.new_protocol.stimulation_type = "Current Controlled Stimulation";
+      store.state.stimulation.new_protocol.stimulation_type = "C";
       const current_selection = store.getters["stimulation/get_stimulation_type"];
       expect(current_selection).toBe(current);
 
-      store.state.stimulation.new_protocol.stimulation_type = "Voltage Controlled Stimulation";
+      store.state.stimulation.new_protocol.stimulation_type = "V";
       const voltage_selection = store.getters["stimulation/get_stimulation_type"];
       expect(voltage_selection).toBe(voltage);
     });
@@ -199,7 +199,7 @@ describe("store/stimulation", () => {
 
     test("When a user selects wells with a protocol applied, Then the selected wells should be cleared of any protocol assignments with specified protocol", async () => {
       const test_assigment = {
-        0: { letter: "A", color: "#118075", label: "Tester" },
+        0: { letter: "A", color: "#118075", label: "Tester", protocol: { test: null } },
       };
 
       await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
@@ -226,9 +226,11 @@ describe("store/stimulation", () => {
     });
 
     test("When a user selects a new stimulation type to Current Stimulation Type, Then it should mutate state Current", async () => {
-      expect(store.state.stimulation.new_protocol.stimulation_type).toBe("Voltage Controlled Stimulation");
+      expect(store.state.stimulation.new_protocol.stimulation_type).toBe("V");
       await store.commit("stimulation/set_stimulation_type", "Current Controlled Stimulation");
-      expect(store.state.stimulation.new_protocol.stimulation_type).toBe("Current Controlled Stimulation");
+      expect(store.state.stimulation.new_protocol.stimulation_type).toBe("C");
+      await store.commit("stimulation/set_stimulation_type", "Voltage Controlled Stimulation");
+      expect(store.state.stimulation.new_protocol.stimulation_type).toBe("V");
     });
 
     test("When a user changes the time unit to milliseconds, Then it should mutate state to milliseconds", async () => {
@@ -267,6 +269,49 @@ describe("store/stimulation", () => {
       expect(x_axis_values).toStrictEqual(x_values);
       expect(y_axis_values).toStrictEqual(y_values);
       expect(repeat_colors).toStrictEqual(colors);
+    });
+
+    test("When a user wants to save the new protocol by clicking on Save Changes button, Then the new protocol will be commited to state", async () => {
+      const { current_assignment, new_protocol } = store.state.stimulation;
+      current_assignment.letter = "C";
+      current_assignment.color = "#000000";
+      new_protocol.name = "test";
+
+      const expected_protocol = { letter: "C", color: "#000000", label: "test", protocol: new_protocol };
+
+      await store.dispatch("stimulation/add_saved_protocol");
+      expect(store.state.stimulation.protocol_list[2]).toStrictEqual(expected_protocol);
+    });
+
+    test("When a starts a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
+      const axios_message_spy = jest.spyOn(axios_helpers, "post_stim_message").mockImplementation(() => null);
+      const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
+      const test_assignment = {
+        4: {
+          letter: "C",
+          color: "#000000",
+          label: "test",
+          protocol: { stimulation_type: "C", pulses: ["test"] },
+        },
+      };
+      const expected_message = {
+        protocol: [
+          {
+            stimulation_type: "C",
+            well_number: "A02",
+            pulses: ["test"],
+          },
+        ],
+      };
+      store.state.stimulation.protocol_assignments = test_assignment;
+      await store.dispatch("stimulation/create_protocol_message");
+      expect(axios_message_spy).toHaveBeenCalledWith(expected_message);
+      expect(axios_status_spy).toHaveBeenCalledWith(true);
+    });
+    test("When a stops a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
+      const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
+      await store.dispatch("stimulation/stop_stim_status");
+      expect(axios_status_spy).toHaveBeenCalledWith(false);
     });
 
     test("When a user adds a repeat delay into the input of the settings panel, Then it will appear at the end of the waveform in the graph", async () => {

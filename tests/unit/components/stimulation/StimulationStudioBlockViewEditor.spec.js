@@ -1,5 +1,6 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioBlockViewEditor from "@/components/stimulation/StimulationStudioBlockViewEditor.vue";
+import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -60,7 +61,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(1).trigger("click");
-    expect(wrapper.vm.stimulation_type).toBe("Current Controlled Stimulation");
+    expect(store.state.stimulation.new_protocol.stimulation_type).toBe("C");
   });
 
   test("When a user imports a new protocol, Then the the next available protocol letter/color assignment will get updated", async () => {
@@ -94,13 +95,16 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
   });
 
   test("When a user clicks the Clear All button, Then the dropdowns will reset to default value", async () => {
-    const wrapper = mount(StimulationStudioBlockViewEditor, {
+    const wrapper = mount(SmallDropDown, {
       store,
       localVue,
+      propsData: {
+        options_text: ["test", "test_1"],
+      },
     });
-    wrapper.vm.stimulation_type = "Current Controlled Stimulation";
+    const expected_obj = { id: 0, name: "test" };
     await store.commit("stimulation/reset_state");
-    expect(wrapper.vm.stimulation_type).toBe("Voltage Controlled Stimulation");
+    expect(wrapper.vm.chosen_option).toStrictEqual(expected_obj);
   });
 
   test("When a user clicks the trash icon and deletes the protocol, Then it should reset local data and mutate state", async () => {

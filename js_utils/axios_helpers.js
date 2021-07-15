@@ -76,15 +76,7 @@ export async function post_stim_message(message) {
     await Vue.axios.post(`${baseURL}${URL}`, body);
   } catch (error) {
     console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
-    if (error.response) {
-      console.log(error.response.data); // allow-log
-      console.log(error.response.status); // allow-log
-      console.log(error.response.headers); // allow-log
-    } else if (error.request) {
-      console.log(error.request); // allow-log
-    } else {
-      console.log("Error", error.message); // allow-log
-    }
+    if (error.response) return error.response.status;
   }
 }
 
@@ -100,14 +92,6 @@ export async function post_stim_status(status) {
     await Vue.axios.post(`${baseURL}${URL}`);
   } catch (error) {
     console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
-    if (error.response) {
-      console.log(error.response.data); // allow-log
-      console.log(error.response.status); // allow-log
-      console.log(error.response.headers); // allow-log
-    } else if (error.request) {
-      console.log(error.request); // allow-log
-    } else {
-      console.log("Error", error.message); // allow-log
-    }
+    if (error.response) return error.response.status;
   }
 }
