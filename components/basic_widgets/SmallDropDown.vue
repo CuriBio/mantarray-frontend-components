@@ -27,7 +27,7 @@
             :id="item.name"
             :key="item.id"
             :value="item"
-            @click="changeSelection(item.id)"
+            @click="change_selection(item.id)"
           >
             {{ item.name }}
           </li>
@@ -82,9 +82,10 @@ export default {
     this.chosen_option = this.dropdown_options[0];
     this.options_list = this.dropdown_options;
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state") {
+      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
         this.chosen_option = this.dropdown_options[0];
-        this.changeSelection(0);
+        this.change_selection(0);
+        this.visisbility = false;
       }
     });
   },
@@ -92,7 +93,7 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    changeSelection(idx) {
+    change_selection(idx) {
       this.chosen_option = this.dropdown_options[idx];
       this.$emit("selection-changed", idx);
     },

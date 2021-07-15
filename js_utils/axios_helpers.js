@@ -62,3 +62,36 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
   }
   return result;
 }
+
+/**
+ * Function to post protocol message for stim studio
+ * @param  {Object} message of type Object
+ * @return {Int} Int status code if error
+ */
+export async function post_stim_message(message) {
+  const baseURL = "http://localhost:4567";
+  const URL = "/set_protocol";
+  const body = { data: JSON.stringify(message) };
+  try {
+    await Vue.axios.post(`${baseURL}${URL}`, body);
+  } catch (error) {
+    console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
+    if (error.response) return error.response.status;
+  }
+}
+
+/**
+ * Function to post play status for stim studio
+ * @param  {Boolean} status of type Boolean.
+ * @return {Int} Int status code if error
+ */
+export async function post_stim_status(status) {
+  const baseURL = "http://localhost:4567";
+  const URL = `/set_stim_status?running=${status}`;
+  try {
+    await Vue.axios.post(`${baseURL}${URL}`);
+  } catch (error) {
+    console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
+    if (error.response) return error.response.status;
+  }
+}

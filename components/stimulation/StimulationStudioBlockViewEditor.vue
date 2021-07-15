@@ -76,6 +76,31 @@ import Vue from "vue";
 import { BPopover } from "bootstrap-vue";
 Vue.component("BPopover", BPopover);
 
+/**
+ * @vue-data {String} active_tab - Shows current selected tab
+ * @vue-data {Boolean} disabled - Disables the name input field
+ * @vue-data {Boolean} show_confirmation - Determines if delete popover is visible
+ * @vue-data {String} current_letter - Next available letter in alphabet
+ * @vue-data {String} current_color -  Next available color in alphabet
+ * @vue-data {Array} stimulation_types_array - Availble options in dropdown
+ * @vue-data {Array} until_options_array - Available options in dropdown
+ * @vue-data {String} protocol_name - Inputted new protocol name
+ * @vue-data {String} stop_requirement - Selected requirement from dropdown
+ * @vue-data {String} end_delay_duration - Inputted delay to be set at the end of the protocol between repeats
+ * @vue-data {String} name_validity - Corresponding border style after name validity check
+ * @vue-data {String} error_message - Error message that appears under name input field after validity check
+ * @vue-data {Array} protocol_list - All available protocols from Vuex
+ * @vue-data {String} current_protocol - The next available, unused protocol from Vuex
+ * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
+ * @vue-event {Event} handle_trash - Toggle view of delete popover on trash icon
+ * @vue-event {Event} toggle_tab - Toggles which tab is active
+ * @vue-event {Event} handle_delete - Confirms and commits the deletion of protocol to state
+ * @vue-event {Event} handle_stimulation_type - Commits the new selected stimulation type to state
+ * @vue-event {Event} handle_stop_requirement - Currently just assigns the new stop requirement to local state
+ * @vue-event {Event} handle_repeat_frequency - Commits the new delay input to state
+ * @vue-event {Event} check_name_validity - Checks if the inputted name has already been used
+ */
+
 export default {
   name: "ProtocolBlockViewEditor",
   components: {
@@ -92,7 +117,6 @@ export default {
       stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
       until_options_array: ["Stimulate Until Stopped", "Repeat"],
       protocol_name: "",
-      stimulation_type: "Voltage Controlled Stimulation",
       stop_requirement: "Stimulate Until Stopped",
       end_delay_duration: "",
       name_validity: "null",
@@ -111,7 +135,10 @@ export default {
         this.end_delay_duration = "";
         this.name_validity = "";
       }
-      if (mutation.type === "stimulation/set_imported_protocol") {
+      if (
+        mutation.type === "stimulation/set_imported_protocol" ||
+        mutation.type === "stimulation/add_saved_protocol"
+      ) {
         this.update_protocols();
       }
     });
@@ -125,7 +152,6 @@ export default {
       this.current_protocol = this.$store.getters["stimulation/get_next_protocol"];
       this.current_letter = this.current_protocol.letter;
       this.current_color = this.current_protocol.color;
-      this.$emit("handle_current_assignment", this.current_protocol);
     },
     toggle_tab(tab) {
       tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");
@@ -138,7 +164,6 @@ export default {
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];
-      this.stimulation_type = type;
       this.$store.commit("stimulation/set_stimulation_type", type);
     },
     handle_stop_requirement(idx) {

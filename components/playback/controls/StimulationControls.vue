@@ -6,8 +6,8 @@
       <svg class="svg__stimulation-active-button" height="20" width="20">
         <defs>
           <radialGradient id="greenGradient">
-            <stop offset="10%" :stop-color="play_state ? 'lightgreen' : '#b7b7b7'" />
-            <stop offset="95%" :stop-color="play_state ? 'rgb(0, 88, 0)' : '#858585'" />
+            <stop offset="10%" :stop-color="current_gradient[0]" />
+            <stop offset="95%" :stop-color="current_gradient[1]" />
           </radialGradient>
         </defs>
         <circle cx="10" cy="10" r="10" fill="url('#greenGradient')" />
@@ -40,6 +40,14 @@ library.add(fa_play_circle, fa_stop_circle);
 
 // TODO Luci, swap out PNG for SVG once folder becomes available
 
+/**
+ * @vue-data {Boolean} play_state - Current play state of stimulation
+ * @vue-data {Array} active_gradient - Active gradient colors for icon while stimulation is running
+ * @vue-data {Array} inactive_gradient - Inactive gradient colors for icon if stimulation is stopped
+ * @vue-data {Array} crueent_gradient - Dynamically assigned gradient based on when BE recieves start/stop request
+ * @vue-event {event} handle_play_stop - Commits corresponding request to state depending on play_state
+ */
+
 export default {
   name: "StimulationControls",
   components: {
@@ -48,13 +56,28 @@ export default {
   data() {
     return {
       play_state: false,
+      active_gradient: ["lightgreen", "rgb(0, 88, 0)"],
+      inactive_gradient: ["#b7b7b7", "#858585"],
+      current_gradient: ["#b7b7b7", "#858585"],
     };
+  },
+  created() {
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      // waits for response from BE before turning green
+      if (mutation.type === "stimulation/set_stim_status") {
+        if (this.play_state) this.current_gradient = this.active_gradient;
+        if (!this.play_state) this.current_gradient = this.inactive_gradient;
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
     async handle_play_stop() {
       this.play_state = !this.play_state;
-      if (this.play_state) await this.$store.dispatch("playback/start_recording");
-      if (!this.play_state) await this.$store.dispatch("playback/stop_recording");
+      if (this.play_state) await this.$store.dispatch("stimulation/create_protocol_message");
+      if (!this.play_state) await this.$store.dispatch("stimulation/stop_stim_status");
     },
   },
 };
@@ -104,6 +127,10 @@ export default {
   grid-column: 4;
   height: 20px;
   width: 20px;
+}
+.span__stimulation-controls-play-stop-button:hover {
+  color: #b7b7b7c9;
+  cursor: pointer;
 }
 .svg__stimulation-controls-loop-button {
   position: relative;

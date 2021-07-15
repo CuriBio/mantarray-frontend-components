@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div
-      :class="
-        modal_type !== null || reopen_modal !== null || repeat_delay_modal !== null ? 'modal_overlay' : null
-      "
-    >
+    <div :class="modal_type !== null || repeat_delay_modal !== null ? 'modal_overlay' : null">
       <div class="div__background-container">
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
@@ -115,6 +111,35 @@ import StimulationStudioWaveformSettingModal from "@/components/stimulation/Stim
 import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 
+/**
+ * @vue-props {String} stimulation_type - Current selected stimulation type user selects from drowdown
+ * @vue-data {Array} icon_type - The source for the draggable pulse tiles
+ * @vue-data {Object} button_labels - Available button labels for modals
+ * @vue-data {Array} time_units_array - Available units of time for drop down in settings panel
+ * @vue-data {Object} selected_waveform_settings - This is the saved setting for a pulse that changes when a user opens a modal to edit a pulse
+ * @vue-data {Array} protocol_order -  This is the complete order of pulses/delays/repeats in the entire new protocol
+ * @vue-data {String} modal_type - Tracks which modal should open based on pulse type
+ * @vue-data {String} setting_type - This is the stimulation type that user selects from drop down in settings panel
+ * @vue-data {Int} shift_click_img_idx - Index of selected waveform to edit in order to save new settings to correct pulse
+ * @vue-data {Int} shift_click_nested_img_idx - Index of selected nested waveform to edit in order to save new settings to correct pulse
+ * @vue-data {String} repeat_delay_modal - Tracks which modal should open based on if it is a repeat or delay
+ * @vue-data {Int} repeat_idx - Index of new repeat block to add settings to correct pulse
+ * @vue-data {String} current_repeat_delay_input - Saved input for a delay block that changes depending on which delay block is opened for edit
+ * @vue-data {Boolean} cloned - Determines if a placed tile in protocol order is new and needs a modal to open appear to set settings or just an order rearrangement of existing tiles
+ * @vue-data {Int} new_cloned_idx - If tile placed in protocol order is new, this index allows settings to be saved to correct index in order
+ * @vue-data {Boolean} delay_open_for_edit - Determines if existing delay input should appear in modal for a reedit or if it's a new delay block with blank settings
+ * @vue-event {Event} check_type - Checks if tile placed is new or existing and opens corresponding modal for settings or commits change in protocol order to state
+ * @vue-event {Event} on_modal_close - Handles settings when modal is closed dependent on which button the user selects and which modal type is open, commits change to state
+ * @vue-event {Event} open_modal_for_edit - Assigns selected pulse settings to modal for reedit and saves current selected index
+ * @vue-event {Event} handle_time_unit - Tracks which unit of time has been selected from dropdown in settings panel
+ * @vue-event {Event} clone - Creates blank properties for new pulse placed in protocol order so that each pulse has unique properties and is not affected by one another, a side effect from VueDraggable
+ * @vue-event {Event} handle_repeat - Opens repeat modal and saves selected index or if user removes last tile from repeat block, it commits change to state
+ * @vue-event {Event} handle_internal_repeat - If user changes order of pulses inside of repeat block, this commits the change to state
+ * @vue-event {Event} open_repeat_for_edit - Assigns current repeat input of selected block to be opened with modal for edit
+ * @vue-event {Event} on_repeat_modal_close - Handles close of repeat block according to button selected and commits change to state
+ * @vue-event {Event} get_style - If a repeat block is created, this returns corresponding colored border
+ */
+
 export default {
   name: "DragAndDropPanel",
   components: {
@@ -142,7 +167,6 @@ export default {
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
-      reopen_modal: null,
       shift_click_img_idx: null,
       shift_click_nested_img_idx: null,
       repeat_delay_modal: null,
@@ -179,7 +203,6 @@ export default {
     },
     on_modal_close(button, settings) {
       this.modal_type = null;
-      this.reopen_modal = null;
       this.repeat_delay_modal = null;
       this.delay_open_for_edit = false;
       this.current_repeat_delay_input = null;

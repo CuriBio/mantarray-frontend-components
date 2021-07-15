@@ -18,6 +18,16 @@
 import StimulationStudioWaveform from "@/components/stimulation/StimulationStudioWaveform.vue";
 import { convert_x_y_arrays_to_d3_array } from "@/js_utils/waveform_data_formatter.js";
 
+/**
+ * @vue-props {Sting} stimulation_type - Current selected stimulation_type assigned to y axis label/scale
+ * @vue-props {String} time_unit - Current selected unit of time assigned to x axis label/scale
+ * @vue-data {Int} y_min_max - The y axis min and max values
+ * @vue-data {Array} datapoints - The d3 formatted x and y axis points
+ * @vue-data {Object} repeat_colors - Corresponding color assignments from repeat blocks in pulse order to be assigned to color of line in graph
+ * @vue-data {Int} x_axis_sample_length - x-axis max value
+ * @vue-data {Array} delay_blocks - Delay block to appear at end of graph to show in between repeats
+ */
+
 export default {
   name: "StimulationStudioProtocolViewer",
   components: {
@@ -48,8 +58,10 @@ export default {
       if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
         this.datapoints = [];
         this.y_min_max = state.y_axis_scale;
-        this.x_axis_sample_length = state.x_axis_scale;
+        this.x_axis_sample_length = 100;
+        state.x_axis_scale = 100;
         this.dynamic_plot_width = 960;
+        this.delay_blocks = state.delay_blocks;
       }
       if (mutation.type === "stimulation/set_time_unit") {
         if (state.new_protocol.time_unit === "milliseconds") state.x_axis_scale *= 1000;

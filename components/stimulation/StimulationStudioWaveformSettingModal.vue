@@ -286,8 +286,19 @@ import { faBalanceScale } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { VBPopover } from "bootstrap-vue";
 Vue.directive("b-popover", VBPopover);
-
 library.add(faBalanceScale);
+
+/**
+ * @vue-props {String} stimulation_type - Current type of stimulation
+ * @vue-props {String} waveform_type - Type of pulse for modal
+ * @vue-props {Array} button_names - Array of button labels for modal
+ * @vue-props {Array} is_enabled_array - Array of which buttons are disabled
+ * @vue-props {Object} selected_waveform_settings - Settings for modal if it's a reedit
+ * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
+ * @vue-data {Object} waveform_setting - Model for new inputs to be assigned
+ * @vue-computed {String} check_max_type - Computes last label for disabled input field
+ * @vue-method {event} close - emits close of modal and data to parent component
+ */
 
 export default {
   name: "WaveformSettingModal",
@@ -331,10 +342,9 @@ export default {
     };
   },
   computed: {
-    // TODO double check these default settings, fix to match parent component
     check_max_type: function () {
-      if (this.stimulation_type === "Current (μA)") return "Voltage (mV)";
-      else return "Current (μA)";
+      if (this.stimulation_type === "Current (A)") return "Voltage (V)";
+      else return "Current (A)";
     },
   },
   created() {
@@ -343,6 +353,9 @@ export default {
   methods: {
     close(idx) {
       const button_label = this.button_names[idx];
+      for (const input in this.waveform_settings) {
+        if (this.waveform_settings[input] === "") this.waveform_settings[input] = 0;
+      }
       this.$emit("close", button_label, this.waveform_settings);
     },
   },
