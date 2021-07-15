@@ -14,8 +14,8 @@
     </div>
     <canvas class="canvas__stimulationstudio-button-separator" />
     <div v-for="(key, value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
-      <div :class="getClass(idx)" :style="key">
-        <span :class="getLabelClass(idx)">{{ value }}</span>
+      <div :class="get_class(idx)" :style="key">
+        <span :class="get_label_class(idx)">{{ value }}</span>
       </div>
     </div>
     <div
@@ -34,6 +34,23 @@
 
 <script>
 import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+
+/**
+ * @vue-data {Object} btn_labels - Label and style of buttons
+ * @vue-data {Object} import_export_btn_labels - Label and style of export and import buttons
+ * @vue-data {Int} selected_protocol_idx - Index of selected protocol from dropdown
+ * @vue-data {Int} input_height - Height passed down to dropdown for styling
+ * @vue-data {Int} input_width -  Width passed down to dropdown for styling
+ * @vue-data {Array} protocol_list - Availble protocols to display in dropdown
+ * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
+ * @vue-event {Event} selected_protocol_change - Changes when a new protocol is selected from dropdown
+ * @vue-event {Event} handle_click - Performs functions based on which button is clicked regarding assigning and clearing protocols from plate editor
+ * @vue-event {Event} get_class - Dynamically renders button class depending on if button is disabled
+ * @vue-event {Event} get_label_class - Dynamically renders button labels class depending on if button is disabled
+ * @vue-event {Event} handle_import_export - On click, it reassigns function to input[type=file] to upload file
+ * @vue-event {Event} handle_import - Dispatches imported file to be handled in store
+ * @vue-event {Event} handle_export - Dispatches request to store to write current protocol
+ */
 
 export default {
   name: "StimulationStudioCreateAndEdit",
@@ -81,12 +98,12 @@ export default {
         this.$store.commit("stimulation/apply_selected_protocol", this.selected_protocol_idx);
       else if (idx === 1) this.$store.commit("stimulation/clear_selected_protocol");
     },
-    getClass(idx) {
+    get_class(idx) {
       if (this.selected_protocol_idx === 0 && idx === 0)
         return "div__stimulationstudio-btn-container-disable";
       else return "div__stimulationstudio-btn-container";
     },
-    getLabelClass(idx) {
+    get_label_class(idx) {
       if (this.selected_protocol_idx === 0 && idx === 0) return "span__stimulationstudio-btn-label-disable";
       else return "span__stimulationstudio-btn-label";
     },

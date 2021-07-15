@@ -6,8 +6,8 @@
       <svg class="svg__stimulation-active-button" height="20" width="20">
         <defs>
           <radialGradient id="greenGradient">
-            <stop offset="10%" :stop-color="play_state ? 'lightgreen' : '#b7b7b7'" />
-            <stop offset="95%" :stop-color="play_state ? 'rgb(0, 88, 0)' : '#858585'" />
+            <stop offset="10%" :stop-color="current_gradient[0]" />
+            <stop offset="95%" :stop-color="current_gradient[1]" />
           </radialGradient>
         </defs>
         <circle cx="10" cy="10" r="10" fill="url('#greenGradient')" />
@@ -48,7 +48,22 @@ export default {
   data() {
     return {
       play_state: false,
+      active_gradient: ["lightgreen", "rgb(0, 88, 0)"],
+      inactive_gradient: ["#b7b7b7", "#858585"],
+      current_gradient: ["#b7b7b7", "#858585"],
     };
+  },
+  created() {
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      // waits for response from BE before turning green
+      if (mutation.type === "stimulation/set_stim_status") {
+        if (this.play_state) this.current_gradient = this.active_gradient;
+        if (!this.play_state) this.current_gradient = this.inactive_gradient;
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
     async handle_play_stop() {

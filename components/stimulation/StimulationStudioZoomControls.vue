@@ -18,6 +18,14 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faMinusCircle);
 library.add(faPlusCircle);
 
+/**
+ * @vue-props {String} axis - Determines which axis scale the controls change
+ * @vue-data {String} zoom_in_message - Popover on hover for zoom in button
+ * @vue-data {String} zoom_out_message - Popover on hover for zoom out button
+ * @vue-method {event} zoom_in - Commits the zoom-in to change corresponding scale
+ * @vue-method {event} zoom_out - Commits the zoom-out to change corresponding scale
+ */
+
 export default {
   name: "StimulationStudioZoomControls",
   components: { FontAwesomeIcon },

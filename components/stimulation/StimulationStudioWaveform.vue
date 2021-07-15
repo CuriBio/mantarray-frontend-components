@@ -17,7 +17,6 @@ import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear
 import StimulationStudioZoomControls from "@/components/stimulation/StimulationStudioZoomControls.vue";
 /**
  * @vue-prop {String} title - Current title of the waveform
- * @vue-prop {Int} samples_per_second - Current samples per second
  * @vue-prop {Int} x_axis_sample_length - Current X Axis sample length
  * @vue-prop {Int} x_axis_min - Current position on X Axis
  * @vue-prop {Int} y_min - Current Minimum scale position on Y Axis

@@ -134,7 +134,7 @@ export default {
     this.commit("stimulation/set_imported_protocol", updated_protocol);
   },
   async create_protocol_message({ commit, state }) {
-    const message = { Protocol: [] };
+    const message = { protocol: [] };
     const { protocol_assignments } = this.state.stimulation;
     for (const well in protocol_assignments) {
       if (protocol_assignments !== {}) {
@@ -145,13 +145,17 @@ export default {
           well_number,
           pulses,
         };
-        message.Protocol.push(protocol_model);
+        message.protocol.push(protocol_model);
       }
     }
     await post_stim_message(message);
-    await post_stim_status(true);
+    const status = true;
+    await post_stim_status(status);
+    this.commit("stimulation/set_stim_status", status);
   },
   async stop_stim_status() {
-    await post_stim_status(false);
+    const status = false;
+    await post_stim_status(status);
+    this.commit("stimulation/set_stim_status", status);
   },
 };
