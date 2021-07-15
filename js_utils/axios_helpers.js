@@ -66,7 +66,7 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
 /**
  * Function to post protocol message for stim studio
  * @param  {Object} message of type Object
- * @return {Object} JSON response.
+ * @return {Int} Int status code if error
  */
 export async function post_stim_message(message) {
   const baseURL = "http://localhost:4567";
@@ -83,7 +83,7 @@ export async function post_stim_message(message) {
 /**
  * Function to post play status for stim studio
  * @param  {Boolean} status of type Boolean.
- * @return {Object} JSON response.
+ * @return {Int} Int status code if error
  */
 export async function post_stim_status(status) {
   const baseURL = "http://localhost:4567";
