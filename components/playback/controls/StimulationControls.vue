@@ -40,6 +40,14 @@ library.add(fa_play_circle, fa_stop_circle);
 
 // TODO Luci, swap out PNG for SVG once folder becomes available
 
+/**
+ * @vue-data {Boolean} play_state - Current play state of stimulation
+ * @vue-data {Array} active_gradient - Active gradient colors for icon while stimulation is running
+ * @vue-data {Array} inactive_gradient - Inactive gradient colors for icon if stimulation is stopped
+ * @vue-data {Array} crueent_gradient - Dynamically assigned gradient based on when BE recieves start/stop request
+ * @vue-event {event} handle_play_stop - Commits corresponding request to state depending on play_state
+ */
+
 export default {
   name: "StimulationControls",
   components: {
