@@ -1,13 +1,19 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-0.3.0 (unreleased)
-------------------
+0.4.0 (unreleased)
+ ------------------
 
-- Added y-axis-zoom for waveform display
-- Added heatmap
-- Added websocket to receive waveform data asynchronously and in real time
-- Added stimulation studio
+ - Added Gen 1 heatmap
+ - Added websocket to receive waveform data asynchronously and in real time
+ - Added initial stimulation studio
+ - Removed /get_available_data
+
+
+ 0.3.0 (2021-07-08)
+ ------------------
+
+ - Added y-axis-zoom for waveform display
 
 0.2.0 (2021-04-01)
 ------------------
