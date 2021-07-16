@@ -11,7 +11,6 @@ import {
   all_mantarray_commands_regexp,
   system_status_when_calibrating_regexp,
   system_status_when_buffering_regexp,
-  get_available_data_regex,
 } from "@/store/modules/flask/url_regex";
 import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
 import {
@@ -492,25 +491,17 @@ describe("store/playback", () => {
         );
       });
     });
-    describe("Given Waveform Pinging is active and /get_available_data returns 204 and Mantarray Command routes return status 200", () => {
+    describe("Given Mantarray Command routes return status 200", () => {
       beforeEach(async () => {
-        mocked_axios
-          .onGet(get_available_data_regex)
-          .reply(204)
-          .onGet(all_mantarray_commands_regexp)
-          .reply(200);
-
-        await store.dispatch("data/start_get_waveform_pinging");
+        mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
       });
 
-      test("When stop_live_view is dispatched, Then the clearInterval is called on the waveform_ping_interval_id and ignore_next_system_status_if_matching_this_status is set to LIVE_VIEW_ACTIVE", async () => {
+      test("When stop_live_view is dispatched, Then ignore_next_system_status_if_matching_this_status is set to LIVE_VIEW_ACTIVE", async () => {
         const spied_clear_interval = jest.spyOn(window, "clearInterval");
         const expected_interval_id = store.state.data.waveform_ping_interval_id;
 
         await store.dispatch("playback/stop_live_view");
 
-        expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
-        expect(store.state.data.waveform_ping_interval_id).toBeNull();
         expect(store.state.flask.ignore_next_system_status_if_matching_this_status).toStrictEqual(
           STATUS.MESSAGE.LIVE_VIEW_ACTIVE
         );
@@ -637,14 +628,12 @@ describe("store/playback", () => {
       });
     });
 
-    test("Given the /system_status is mocked with LIVE_VIEW_ACTIVE as response and /get_available_data as 204, When playback state mutates to BUFFERING and starts status_pinging in Flask, Then playback state mutates to LIVE_VIEW_ACTIVE and ignore_next_system_status_if_matching_this_status mutates to CALIBRATED", async () => {
+    test("Given the /system_status is mocked with LIVE_VIEW_ACTIVE as response, When playback state mutates to BUFFERING and starts status_pinging in Flask, Then playback state mutates to LIVE_VIEW_ACTIVE and ignore_next_system_status_if_matching_this_status mutates to CALIBRATED", async () => {
       const api = "start_managed_acquisition";
 
       mocked_axios
         .onGet(system_status_when_buffering_regexp)
-        .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE })
-        .onGet(get_available_data_regex)
-        .reply(204);
+        .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE });
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
