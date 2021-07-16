@@ -9,10 +9,10 @@ import { STATUS } from "./enums";
  * @return {void}
  */
 export async function ping_system_status() {
+  // const current_time_index = this.rootState.playback.x_time_index;
   const payload = {
     baseurl: "http://localhost:4567",
-    endpoint: "system_status?current_vuex_status_uuid=",
-    val: this.state.status_uuid,
+    endpoint: "system_status?current_vuex_status_uuid=" + this.state.status_uuid, // + "currently_displayed_time_index=" + current_time_index
   };
   const whole_url = `${payload.baseurl}/${payload.endpoint}${payload.val}`;
   // console.log("about to ping system status: " + whole_url)
@@ -55,11 +55,6 @@ export async function ping_system_status() {
         }
 
         if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid) {
-          if (this.rootState.playback.playback_state == PLAYBACK_ENUMS.PLAYBACK_STATES.BUFFERING) {
-            this.dispatch("data/start_get_waveform_pinging", null, {
-              root: true,
-            });
-          }
           this.dispatch(
             "playback/transition_playback_state",
             PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,
