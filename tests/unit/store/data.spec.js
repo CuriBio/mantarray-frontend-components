@@ -1,7 +1,12 @@
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
+import axios from "axios";
+const MockAxiosAdapter = require("axios-mock-adapter");
+import { system_status_regexp } from "@/store/modules/flask/url_regex";
+import { STATUS } from "@/store/modules/flask/enums";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
+import { ping_system_status } from "../../../store/modules/flask/actions";
 
 const http = require("http");
 const io_server = require("socket.io");
@@ -186,54 +191,56 @@ describe("store/data", () => {
     });
   });
 
-  // describe("Live View Active behavior", () => {
-  //   let mocked_axios;
-  //   let context = null;
+  // TODO move these to another test file
+  describe("Given current status is LIVE_VIEW_ACTIVE", () => {
+    let mocked_axios;
+    let context = null;
 
-  //   beforeEach(async () => {
-  //     mocked_axios = new MockAxiosAdapter(axios);
+    beforeEach(async () => {
+      mocked_axios = new MockAxiosAdapter(axios);
 
-  //     store.commit("data/set_plate_waveforms", ar);
-  //     context = await store.dispatch("flask/get_flask_action_context");
-  //   });
+      store.commit("data/set_plate_waveforms", ar);
+      context = await store.dispatch("flask/get_flask_action_context");
 
-  // TODO - maybe also make sure it's only included when live view is active?
-  // test("Given that the playback x_time_index is set to a specific value in Vuex, Then the /system_status route is called with Axios with the x_time_index as a parameter", async () => {
-  //   const expected_idx = 9876;
-  //   store.commit("playback/set_x_time_index", expected_idx);
-  //   mocked_axios.onGet(system_status_regexp).reply(200, nr);
+      store.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
+    });
 
-  //   const bound_ping_system_status = ping_system_status.bind(context);
-  //   await bound_ping_system_status();
-  //   expect(mocked_axios.history.get).toHaveLength(1);
-  //   expect(mocked_axios.history.get[0].url).toMatch(
-  //     "http://localhost:4567/system_status?currently_displayed_time_index=" + expected_idx // TODO
-  //   );
-  // });
+    test("Given that the playback x_time_index is set to a specific value in Vuex, Then the /system_status route is called with Axios with the x_time_index as a parameter", async () => {
+      const expected_idx = 9876;
+      store.commit("playback/set_x_time_index", expected_idx);
+      mocked_axios.onGet(system_status_regexp).reply(200, nr);
 
-  // TODO
-  // test("Given /system_status is mocked to return 200 (and some dummy response) and live_view is started and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then both intervals are cleared in Vuex (status pinging, and playback progression)", async () => {
-  //   mocked_axios
-  //     .onGet(system_status_regexp)
-  //     .reply(200, {
-  //       ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
-  //       in_simulation_mode: true,
-  //     })
-  //     .onGet("/start_recording")
-  //     .reply(405);
+      const bound_ping_system_status = ping_system_status.bind(context);
+      await bound_ping_system_status();
+      expect(mocked_axios.history.get).toHaveLength(1);
+      expect(mocked_axios.history.get[0].url).toMatch(new RegExp("http://localhost:4567/system_status?"));
+      expect(mocked_axios.history.get[0].url).toMatch(
+        new RegExp("currently_displayed_time_index=" + expected_idx)
+      );
+    });
 
-  //   await store.dispatch("flask/start_status_pinging");
-  //   await store.dispatch("playback/start_playback_progression");
+    test("Given /system_status is mocked to return 200 (and some dummy response) and and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then both intervals are cleared in Vuex (status pinging, and playback progression)", async () => {
+      mocked_axios
+        .onGet(system_status_regexp)
+        .reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          in_simulation_mode: true,
+        })
+        .onGet("/start_recording")
+        .reply(405);
 
-  //   // confirm pre-conditions
-  //   expect(store.state.flask.status_ping_interval_id).not.toBeNull();
-  //   expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
+      await store.dispatch("flask/start_status_pinging");
+      await store.dispatch("playback/start_playback_progression");
 
-  //   await store.dispatch("playback/start_recording");
+      // confirm pre-conditions
+      expect(store.state.flask.status_ping_interval_id).not.toBeNull();
+      expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
 
-  //   expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
-  //   expect(store.state.flask.status_ping_interval_id).toBeNull();
-  //   expect(store.state.playback.playback_progression_interval_id).toBeNull();
-  // });
-  // });
+      await store.dispatch("playback/start_recording");
+
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+      expect(store.state.flask.status_ping_interval_id).toBeNull();
+      expect(store.state.playback.playback_progression_interval_id).toBeNull();
+    });
+  });
 });
