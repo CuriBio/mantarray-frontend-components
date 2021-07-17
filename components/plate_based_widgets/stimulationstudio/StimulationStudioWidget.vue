@@ -118,9 +118,9 @@ export default {
       if (
         mutation.type === "stimulation/apply_selected_protocol" ||
         mutation.type === "stimulation/clear_selected_protocol" ||
-        mutation.type === "stimulation/reset_state"
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
       ) {
-        this.protocol_assignments = {};
         this.protocol_assignments = this.$store.state.stimulation.protocol_assignments;
         this.all_select = new Array(this.number_of_wells).fill(false);
         this.stroke_width = new Array(this.number_of_wells).fill(no_stroke_width);

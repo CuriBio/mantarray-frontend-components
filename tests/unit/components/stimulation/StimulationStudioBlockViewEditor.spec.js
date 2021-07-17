@@ -61,7 +61,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(1).trigger("click");
-    expect(store.state.stimulation.new_protocol.stimulation_type).toBe("C");
+    expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
   });
 
   test("When a user imports a new protocol, Then the the next available protocol letter/color assignment will get updated", async () => {

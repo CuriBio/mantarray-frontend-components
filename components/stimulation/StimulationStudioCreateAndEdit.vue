@@ -77,8 +77,13 @@ export default {
   created() {
     this.update_protocols();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/set_imported_protocol") {
+      if (
+        mutation.type === "stimulation/set_imported_protocol" ||
+        mutation.type === "stimulation/set_edit_mode_off" ||
+        mutation.type === "stimulation/add_saved_protocol"
+      ) {
         this.update_protocols();
+        this.selected_protocol_idx = 0;
       }
     });
   },
@@ -91,12 +96,21 @@ export default {
     },
     selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
+      if (idx === 0) {
+        this.$store.commit("stimulation/set_edit_mode_off");
+        this.$store.commit("stimulation/reset_protocol_editor");
+      }
     },
     handle_click(idx) {
+      const selected_protocol = this.protocol_list[this.selected_protocol_idx];
       if (idx === 0 && this.selected_protocol_idx === 0) return;
       if (idx === 0 && this.selected_protocol_idx !== 0)
-        this.$store.commit("stimulation/apply_selected_protocol", this.selected_protocol_idx);
+        this.$store.commit("stimulation/apply_selected_protocol", selected_protocol);
       else if (idx === 1) this.$store.commit("stimulation/clear_selected_protocol");
+      else if (idx === 2) {
+        this.$emit("handle_selection_change", selected_protocol);
+        this.$store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+      }
     },
     get_class(idx) {
       if (this.selected_protocol_idx === 0 && idx === 0)

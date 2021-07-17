@@ -42,7 +42,8 @@ export default {
   props: {
     options_text: { type: Array, required: true },
     input_width: { type: Number, default: 210 },
-    input_height: { type: Number, default: 0 }, // This prop is utilized by the parent component
+    input_height: { type: Number, default: 0 },
+    options_idx: { type: Number, default: 0 },
   },
   data() {
     return {
@@ -82,10 +83,13 @@ export default {
     this.chosen_option = this.dropdown_options[0];
     this.options_list = this.dropdown_options;
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
         this.chosen_option = this.dropdown_options[0];
         this.change_selection(0);
-        this.visisbility = false;
+        this.visible = false;
       }
     });
   },

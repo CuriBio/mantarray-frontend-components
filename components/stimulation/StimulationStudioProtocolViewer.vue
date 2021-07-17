@@ -50,12 +50,15 @@ export default {
   created: function () {
     const state = this.$store.state.stimulation;
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/set_axis_values") {
+      if (mutation.type === "stimulation/set_axis_values" || mutation.type === "stimulation/set_edit_mode") {
         this.datapoints = await convert_x_y_arrays_to_d3_array(state.x_axis_values, state.y_axis_values);
         this.repeat_colors = state.repeat_colors;
         this.delay_blocks = state.delay_blocks;
       }
-      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
         this.datapoints = [];
         this.y_min_max = state.y_axis_scale;
         this.x_axis_sample_length = 100;
@@ -63,11 +66,12 @@ export default {
         this.dynamic_plot_width = 960;
         this.delay_blocks = state.delay_blocks;
       }
-      if (mutation.type === "stimulation/set_time_unit") {
-        if (state.new_protocol.time_unit === "milliseconds") state.x_axis_scale *= 1000;
-        if (state.new_protocol.time_unit === "seconds") state.x_axis_scale /= 1000;
-        this.x_axis_sample_length = state.x_axis_scale;
-      }
+      // if (mutation.type === "stimulation/set_time_unit") {
+      //   // TODO Luci, you're handling time units in pages and here-- move to parent
+      //   if (state.protocol_editor.time_unit === "milliseconds") state.x_axis_scale *= 1000;
+      //   if (state.protocol_editor.time_unit === "seconds") state.x_axis_scale /= 1000;
+      //   this.x_axis_sample_length = state.x_axis_scale;
+      // }
       if (mutation.type === "stimulation/set_zoom_out" || mutation.type === "stimulation/set_zoom_in") {
         this.x_axis_sample_length = state.x_axis_scale;
         this.y_min_max = state.y_axis_scale;

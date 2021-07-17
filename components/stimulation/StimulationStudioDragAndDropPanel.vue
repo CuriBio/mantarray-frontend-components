@@ -179,8 +179,14 @@ export default {
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
         this.protocol_order = [];
+      }
+      if (mutation.type === "stimulation/set_edit_mode") {
+        this.protocol_order = this.$store.getters["stimulation/get_protocol_order"];
       }
     });
   },

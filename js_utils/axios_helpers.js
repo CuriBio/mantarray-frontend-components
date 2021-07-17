@@ -74,6 +74,7 @@ export async function post_stim_message(message) {
   const body = { data: JSON.stringify(message) };
   try {
     await Vue.axios.post(`${baseURL}${URL}`, body);
+    return;
   } catch (error) {
     console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
     if (error.response) return error.response.status;
@@ -90,6 +91,7 @@ export async function post_stim_status(status) {
   const URL = `/set_stim_status?running=${status}`;
   try {
     await Vue.axios.post(`${baseURL}${URL}`);
+    return;
   } catch (error) {
     console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
     if (error.response) return error.response.status;

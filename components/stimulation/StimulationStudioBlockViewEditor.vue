@@ -90,7 +90,6 @@ Vue.component("BPopover", BPopover);
  * @vue-data {String} name_validity - Corresponding border style after name validity check
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
- * @vue-data {String} current_protocol - The next available, unused protocol from Vuex
  * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
  * @vue-event {Event} handle_trash - Toggle view of delete popover on trash icon
  * @vue-event {Event} toggle_tab - Toggles which tab is active
@@ -122,14 +121,16 @@ export default {
       name_validity: "null",
       error_message: "",
       protocol_list: [],
-      current_protocol: "",
     };
   },
-
   created() {
     this.update_protocols();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
+        this.update_protocols();
         this.show_confirmation = false;
         this.protocol_name = "";
         this.end_delay_duration = "";
@@ -141,6 +142,11 @@ export default {
       ) {
         this.update_protocols();
       }
+      if (mutation.type === "stimulation/set_edit_mode") {
+        this.update_protocols();
+        this.protocol_name = this.$store.getters["stimulation/get_protocol_name"];
+        this.end_delay_duration = this.$store.getters["stimulation/get_end_delay_duration"];
+      }
     });
   },
   beforeDestroy() {
@@ -149,9 +155,9 @@ export default {
   methods: {
     update_protocols: function () {
       this.protocol_list = this.$store.getters["stimulation/get_protocols"];
-      this.current_protocol = this.$store.getters["stimulation/get_next_protocol"];
-      this.current_letter = this.current_protocol.letter;
-      this.current_color = this.current_protocol.color;
+      const { letter, color } = this.$store.getters["stimulation/get_next_protocol"];
+      this.current_letter = letter;
+      this.current_color = color;
     },
     toggle_tab(tab) {
       tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");
@@ -160,7 +166,7 @@ export default {
       this.show_confirmation = !this.show_confirmation;
     },
     handle_delete() {
-      this.$store.commit("stimulation/reset_new_protocol");
+      this.$store.dispatch("stimulation/handle_protocol_editor_reset");
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];

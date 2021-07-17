@@ -3,34 +3,47 @@ export default {
     return state.protocol_list;
   },
   get_next_protocol(state) {
-    const letter = get_new_protocol_letter(state);
-    const color = get_new_protocol_color(state);
-    state.current_assignment = { letter, color };
-    return { color, letter };
+    if (!state.edit_mode.status) {
+      const letter = get_protocol_editor_letter(state);
+      const color = get_protocol_editor_color(state);
+      state.current_assignment = { letter, color };
+      return { color, letter };
+    } else if (state.edit_mode.status) {
+      return state.current_assignment;
+    }
   },
   get_stimulation_type(state) {
-    if (state.new_protocol.stimulation_type === "C") return "Current (A)";
-    if (state.new_protocol.stimulation_type === "V") return "Voltage (V)";
+    if (state.protocol_editor.stimulation_type === "C") return "Current (A)";
+    if (state.protocol_editor.stimulation_type === "V") return "Voltage (V)";
   },
   get_time_unit(state) {
-    if (state.new_protocol.time_unit.includes("milliseconds")) return "Time (ms)";
-    if (state.new_protocol.time_unit.includes("seconds")) return "Time (s)";
+    if (state.protocol_editor.time_unit.includes("milliseconds")) return "Time (ms)";
+    if (state.protocol_editor.time_unit.includes("seconds")) return "Time (s)";
+  },
+  get_protocol_order(state) {
+    return state.protocol_editor.detailed_pulses;
+  },
+  get_protocol_name(state) {
+    return state.protocol_editor.name;
+  },
+  get_end_delay_duration(state) {
+    return state.protocol_editor.end_delay_duration;
   },
 };
 
 // TODO consider eliminating high contract colors
-const get_new_protocol_color = ({ protocol_list }) => {
+const get_protocol_editor_color = ({ protocol_list }) => {
   let check_duplicate = false;
   const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
   protocol_list.map((protocol) => {
     if (protocol.color === color) check_duplicate = true;
   });
-  if (color === "#b7b7b7" || color === "#000000" || check_duplicate) get_new_protocol_color();
+  if (color === "#b7b7b7" || color === "#000000" || check_duplicate) get_protocol_editor_color();
   else return color;
 };
 
 // TODO Luci, handle if there are more than 26 protocols
-const get_new_protocol_letter = ({ protocol_list }) => {
+const get_protocol_editor_letter = ({ protocol_list }) => {
   const current_protocol_assignment = protocol_list[protocol_list.length - 1].letter;
   const current_alphabet_idx = alphabet.indexOf(current_protocol_assignment);
   return alphabet[current_alphabet_idx + 1];

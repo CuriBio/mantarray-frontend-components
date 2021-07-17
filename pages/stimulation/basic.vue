@@ -13,7 +13,7 @@
     </div>
     <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
     <StimulationStudioWidget />
-    <StimulationStudioCreateAndEdit />
+    <StimulationStudioCreateAndEdit @handle_selection_change="handle_selection_change" />
     <StimulationStudioDragAndDropPanel :stimulation_type="stimulation_type" :time_unit="time_unit" />
     <StimulationStudioBlockViewEditor />
     <StimulationStudioProtocolViewer :stimulation_type="stimulation_type" :time_unit="time_unit" />
@@ -55,6 +55,7 @@ export default {
       stimulation_type: "Voltage (V)",
       time_unit: "Time (s)",
       current_assignment: {},
+      selected_protocol: {},
     };
   },
   created: async function () {
@@ -65,7 +66,10 @@ export default {
       if (mutation.type === "stimulation/set_time_unit") {
         this.time_unit = this.$store.getters["stimulation/get_time_unit"];
       }
-      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
         this.time_unit = "Time (s)";
         this.stimulation_type = "Voltage (V)";
       }
@@ -76,11 +80,15 @@ export default {
   },
   methods: {
     async handle_click(idx) {
-      if (idx === 1) this.$store.commit("stimulation/reset_state");
       if (idx === 0) {
         await this.$store.dispatch("stimulation/add_saved_protocol");
-        this.$store.commit("stimulation/reset_new_protocol");
+        this.$store.commit("stimulation/reset_protocol_editor");
       }
+      if (idx === 1) this.$store.commit("stimulation/reset_state");
+      if (idx === 2) this.$store.dispatch("stimulation/edit_selected_protocol", this.selected_protocol);
+    },
+    handle_selection_change(protocol) {
+      this.selected_protocol = protocol;
     },
   },
 };

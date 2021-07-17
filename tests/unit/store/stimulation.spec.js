@@ -88,11 +88,11 @@ describe("store/stimulation", () => {
       const default_type = store.getters["stimulation/get_stimulation_type"];
       expect(default_type).toBe(voltage);
 
-      store.state.stimulation.new_protocol.stimulation_type = "C";
+      store.state.stimulation.protocol_editor.stimulation_type = "C";
       const current_selection = store.getters["stimulation/get_stimulation_type"];
       expect(current_selection).toBe(current);
 
-      store.state.stimulation.new_protocol.stimulation_type = "V";
+      store.state.stimulation.protocol_editor.stimulation_type = "V";
       const voltage_selection = store.getters["stimulation/get_stimulation_type"];
       expect(voltage_selection).toBe(voltage);
     });
@@ -104,11 +104,11 @@ describe("store/stimulation", () => {
       const default_unit = store.getters["stimulation/get_time_unit"];
       expect(default_unit).toBe(seconds);
 
-      store.state.stimulation.new_protocol.time_unit = "milliseconds";
+      store.state.stimulation.protocol_editor.time_unit = "milliseconds";
       const ms_unit = store.getters["stimulation/get_time_unit"];
       expect(ms_unit).toBe(milliseconds);
 
-      store.state.stimulation.new_protocol.time_unit = "seconds";
+      store.state.stimulation.protocol_editor.time_unit = "seconds";
       const s_unit = store.getters["stimulation/get_time_unit"];
       expect(s_unit).toBe(seconds);
     });
@@ -130,14 +130,14 @@ describe("store/stimulation", () => {
     test("When stimulation store is mutated with a new protocol name, Then said name should update in state", () => {
       const name = "Test_name";
       store.commit("stimulation/set_protocol_name", name);
-      expect(store.state.stimulation.new_protocol.name).toBe(name);
+      expect(store.state.stimulation.protocol_editor.name).toBe(name);
     });
 
     test("When stimulation store is mutated with a new delay frequency, Then said frequency should update in state", () => {
       const delay = "10";
       const int_delay = 10;
       store.commit("stimulation/set_repeat_frequency", delay);
-      expect(store.state.stimulation.new_protocol.end_delay_duration).toBe(int_delay);
+      expect(store.state.stimulation.protocol_editor.end_delay_duration).toBe(int_delay);
     });
 
     test("When a user adds a protocol to selected wells, Then the selected wells should be added to protocol assignments with specified protocol", async () => {
@@ -211,32 +211,32 @@ describe("store/stimulation", () => {
     });
 
     test("When a user requests to delete the current stimulation by using the trash icon, Then it should reset just the Protocol Viewer and Block View Editor components", async () => {
-      await store.commit("stimulation/reset_new_protocol");
-      expect(store.state.stimulation.new_protocol.pulses).toStrictEqual([]);
+      await store.commit("stimulation/reset_protocol_editor");
+      expect(store.state.stimulation.protocol_editor.pulses).toStrictEqual([]);
     });
 
     test("When a user requests to delete the all of their current changes to entire stim studio, Then it should reset the entire state", async () => {
       store.state.stimulation.protocol_assignments = { test: "test" };
-      store.state.stimulation.new_protocol.pulses = ["test", "test1"];
+      store.state.stimulation.protocol_editor.pulses = ["test", "test1"];
 
       await store.commit("stimulation/reset_state");
 
       expect(store.state.stimulation.protocol_assignments).toStrictEqual({});
-      expect(store.state.stimulation.new_protocol.pulses).toStrictEqual([]);
+      expect(store.state.stimulation.protocol_editor.pulses).toStrictEqual([]);
     });
 
     test("When a user selects a new stimulation type to Current Stimulation Type, Then it should mutate state Current", async () => {
-      expect(store.state.stimulation.new_protocol.stimulation_type).toBe("V");
+      expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("V");
       await store.commit("stimulation/set_stimulation_type", "Current Controlled Stimulation");
-      expect(store.state.stimulation.new_protocol.stimulation_type).toBe("C");
+      expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
       await store.commit("stimulation/set_stimulation_type", "Voltage Controlled Stimulation");
-      expect(store.state.stimulation.new_protocol.stimulation_type).toBe("V");
+      expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("V");
     });
 
     test("When a user changes the time unit to milliseconds, Then it should mutate state to milliseconds", async () => {
-      expect(store.state.stimulation.new_protocol.time_unit).toBe("seconds");
+      expect(store.state.stimulation.protocol_editor.time_unit).toBe("seconds");
       await store.commit("stimulation/set_time_unit", "milliseconds");
-      expect(store.state.stimulation.new_protocol.time_unit).toBe("milliseconds");
+      expect(store.state.stimulation.protocol_editor.time_unit).toBe("milliseconds");
     });
 
     test("When a user wants to zoom in on an axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
@@ -272,12 +272,12 @@ describe("store/stimulation", () => {
     });
 
     test("When a user wants to save the new protocol by clicking on Save Changes button, Then the new protocol will be commited to state", async () => {
-      const { current_assignment, new_protocol } = store.state.stimulation;
+      const { current_assignment, protocol_editor } = store.state.stimulation;
       current_assignment.letter = "C";
       current_assignment.color = "#000000";
-      new_protocol.name = "test";
+      protocol_editor.name = "test";
 
-      const expected_protocol = { letter: "C", color: "#000000", label: "test", protocol: new_protocol };
+      const expected_protocol = { letter: "C", color: "#000000", label: "test", protocol: protocol_editor };
 
       await store.dispatch("stimulation/add_saved_protocol");
       expect(store.state.stimulation.protocol_list[2]).toStrictEqual(expected_protocol);
