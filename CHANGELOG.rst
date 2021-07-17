@@ -7,6 +7,7 @@ Changelog for Mantarray Frontend Components
  - Added Gen 1 heatmap
  - Added websocket to receive waveform data asynchronously and in real time
  - Added initial stimulation studio
+ - Added currently_displayed_time_index parameter to /system_status call to Flask
  - Removed /get_available_data
 
 
