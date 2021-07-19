@@ -17,9 +17,9 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     store = await NuxtStore.createStore();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  // afterEach(() => {
+  //   jest.clearAllMocks();
+  // });
 
   test("When mounting StimulationStudioCreateAndEdit from the component file, Then the correct number of protocols from state should appear in the drop down selection", () => {
     const wrapper = mount(StimulationStudioCreateAndEdit, {
