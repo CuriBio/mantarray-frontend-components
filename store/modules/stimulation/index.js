@@ -12,7 +12,7 @@ const state = () => ({
   new_protocol: {
     name: "",
     stimulation_type: "Voltage Controlled Stimulation",
-    end_delay: 0,
+    end_delay_duration: 0,
     time_unit: "seconds",
     waveform_order: [],
   },
