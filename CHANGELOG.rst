@@ -8,13 +8,14 @@ Changelog for Mantarray Frontend Components
  - Added websocket to receive waveform data asynchronously and in real time
  - Added initial stimulation studio
  - Added currently_displayed_time_index parameter to /system_status call to Flask
+ - Fixed Y-axis zoom logic
  - Removed /get_available_data
 
 
  0.3.0 (2021-07-08)
  ------------------
 
- - Added y-axis-zoom for waveform display
+ - Added Y-axis zoom for waveform display
 
 0.2.0 (2021-04-01)
 ------------------
