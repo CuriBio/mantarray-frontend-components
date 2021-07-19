@@ -170,20 +170,6 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
   });
 
-  test("When user wants to delete entire waveform protocol by using trash icon to mutate state, Then the protocol container will become empty", async () => {
-    const wrapper = mount(StimulationStudioDragAndDropPanel, {
-      store,
-      localVue,
-    });
-    wrapper.vm.protocol_order = [
-      { type: "Biphasic", src: "placeholder" },
-      { type: "Monophasic", src: "placeholder" },
-    ];
-    await store.commit("stimulation/reset_state");
-    expect(wrapper.vm.protocol_order).toHaveLength(0);
-    expect(store.state.stimulation.delete_protocol).toBe(false);
-  });
-
   test("When exiting instance, Then instance is effectively destroyed", async () => {
     const destroyed_spy = jest.spyOn(StimulationStudioDragAndDropPanel, "beforeDestroy");
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
@@ -191,7 +177,17 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     wrapper.destroy();
-    expect(destroyed_spy).toHaveBeenCalled();
+    expect(destroyed_spy).toHaveBeenCalledWith();
+  });
+
+  test("When an order changes inside of a nested loop, Then the new order should be dispatched", async () => {
+    const action_spy = jest.spyOn(store, "dispatch");
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    await wrapper.vm.handle_internal_repeat();
+    expect(action_spy).toHaveBeenCalledTimes(2);
   });
 
   test("When a user adds a new waveform to the protocol editor and cancels the addition, Then the modal should only appear when it's been cloned and should remove new waveform when cancelled", async () => {
