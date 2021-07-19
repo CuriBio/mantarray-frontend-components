@@ -135,24 +135,19 @@ describe("store/data", () => {
       http_server.close();
     });
 
-    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
-      store.commit("data/set_plate_waveforms", ar);
-
-      const stored_waveform = store.getters["data/plate_waveforms"];
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+    test("Given ws client has a 'message' event handler, When ws server emits a 'message' event, Then client receives message", async () => {
+      let expected_message = "Test Message";
 
       await new Promise((resolve) => {
-        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
-          resolve(ack);
+        socket_client_side.on("message", (message) => {
+          expect(message).toEqual(expected_message);
+          resolve();
         });
+        socket_server_side.send(expected_message);
       });
-
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(8);
     });
     test("When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
-      // TODO use UUIDs
+      // TODO use UUIDs?
       const init_heatmap_values = {
         "Twitch Force": { data: [[0], [], [20]] },
         "Twitch Period": { data: [[100], [], [120]] },
@@ -188,6 +183,22 @@ describe("store/data", () => {
       };
       stored_metrics["Twitch Force"].data.map(data_validator);
       stored_metrics["Relaxation Velocity"].data.map(data_validator);
+    });
+    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
+      store.commit("data/set_plate_waveforms", ar);
+
+      const stored_waveform = store.getters["data/plate_waveforms"];
+      expect(stored_waveform).toHaveLength(24);
+      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      expect(stored_waveform).toHaveLength(24);
+      expect(stored_waveform[0].x_data_points).toHaveLength(8);
     });
   });
 

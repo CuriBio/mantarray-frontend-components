@@ -3,8 +3,6 @@
 import Vuex from "vuex";
 import data_module from "./modules/data";
 import playback_module from "./modules/playback";
-// const playback_module = require("./modules/playback").default;
-// const waveform_module = require("./modules/waveform").default;
 import waveform_module from "./modules/waveform";
 import twentyfourcontrols_module from "./modules/twentyfourcontrols";
 import flask_module from "./modules/flask";
