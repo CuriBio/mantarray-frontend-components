@@ -13,7 +13,7 @@
         "
         :radio_buttons="button_names_future"
         :title="'Feature under development'"
-      ></RadioButtonWidget>
+      />
     </div>
     <!-- original mockflow ID: id="cmpD0b403c0dbaf4c4a4549aee8d1fe4810d" -->
     <span class="span__y-axis-controls-settings-setup">Set&nbsp;<wbr />Y-Axis&nbsp;<wbr />Values</span>
@@ -28,7 +28,7 @@
         :input_width="106"
         :default_state="false"
         @update:value="on_update_max_value($event)"
-      ></InputWidget>
+      />
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
     <span class="span__y-axis-controls-settings-input-max-units">uV</span>
@@ -43,7 +43,7 @@
         :input_width="106"
         :default_state="false"
         @update:value="on_update_min_value($event)"
-      ></InputWidget>
+      />
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
     <span class="span__y-axis-controls-settings-input-min-units">uV</span>
@@ -59,8 +59,7 @@
         :hover_color="hover_colors_y_axis_widget"
         :is_enabled="enable_list_y_axis_widget"
         @btn-click="user_selection"
-      >
-      </ButtonWidget>
+      />
     </div>
   </div>
 </template>
@@ -124,57 +123,58 @@ export default {
     this.hover_colors_y_axis_widget = ["#FFFFFF", "#FFFFFF"];
   },
   methods: {
-    on_update_max_value: function (new_value) {
+    on_update_max_value: async function (new_value) {
       const max_value = parseInt(new_value);
       if (max_value < 0) {
         this.max_y_value = "cannot be negative";
-        this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
+        this.enable_list_y_axis_widget = [false, true];
+      } else if (max_value > 1000000) {
+        this.max_y_value = "very large";
+        this.enable_list_y_axis_widget = [false, true];
+      } else if (new_value == "" || new_value == "-") {
+        this.max_y_value = "invalid";
         this.enable_list_y_axis_widget = [false, true];
       } else {
-        if (max_value > 1000000) {
-          this.max_y_value = "very large";
-          this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
-          this.enable_list_y_axis_widget = [false, true];
-        } else {
-          this.maximum = max_value;
-          this.max_y_value = "";
-          if (this.minimum != "") {
-            if (this.minimum < this.maximum) {
-              this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
-              this.enable_list_y_axis_widget = [true, true];
-            }
+        this.max_y_value = "";
+        if (this.minimum != "") {
+          if (this.minimum < this.maximum) {
+            this.enable_list_y_axis_widget = [true, true];
           }
         }
       }
+      this.maximum = max_value;
       if (new_value == "" || new_value == "-") {
         this.max_y_value = "invalid";
-        this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
         this.enable_list_y_axis_widget = [false, true];
       }
+      await this.on_update_min_value(this.minimum);
     },
     on_update_min_value: function (new_value) {
       const min_value = parseInt(new_value);
+
       if (min_value < 0) {
         this.min_y_value = "cannot be negative";
-        this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
         this.enable_list_y_axis_widget = [false, true];
+      } else if (min_value >= this.maximum || isNaN(this.maximum)) {
+        this.max_y_value = "min greater than max";
+        this.min_y_value = "min greater than max";
+        this.enable_list_y_axis_widget = [false, true];
+      } else if (this.max_y_value === "very large") {
+        this.enable_list_y_axis_widget = [false, true];
+        this.min_y_value = "";
       } else {
-        if (min_value >= this.maximum) {
-          this.max_y_value = "min greater than max";
-          this.min_y_value = "min greater than max";
-          this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
-          this.enable_list_y_axis_widget = [false, true];
-        } else {
-          this.minimum = min_value;
-          this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
-          this.enable_list_y_axis_widget = [true, true];
-          this.min_y_value = "";
-          this.max_y_value = "";
-        }
+        this.enable_list_y_axis_widget = [true, true];
+        this.min_y_value = "";
+        this.max_y_value = "";
       }
-      if (new_value == "" || new_value == "-") {
+      this.minimum = min_value;
+      if (new_value == "" || new_value == "-" || isNaN(min_value)) {
         this.min_y_value = "invalid";
-        this.enable_list_y_axis_widget.splice(0, this.enable_list_y_axis_widget.length);
+        this.enable_list_y_axis_widget = [false, true];
+        if (isNaN(this.maximum)) this.max_y_value = "invalid";
+      }
+      if ((new_value == "" && this.maximum < 0) || this.maximum < 0) {
+        this.max_y_value = "cannot be negative";
         this.enable_list_y_axis_widget = [false, true];
       }
     },
