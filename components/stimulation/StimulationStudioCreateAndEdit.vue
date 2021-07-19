@@ -93,7 +93,7 @@ export default {
       if (idx === 1) this.handle_export();
     },
     handle_import(file) {
-      this.$store.dispatch("stimulation/handle_import_protocol", file);
+      this.$store.dispatch("stimulation/handle_import_protocol", file[0]);
     },
     handle_export() {
       this.$store.dispatch("stimulation/handle_export_protocol");
