@@ -4,7 +4,7 @@ Changelog for Mantarray Frontend Components
 0.4.0 (unreleased)
  ------------------
 
- - Added Gen 1 heatmap
+ - Added initial Gen 1 heatmap
  - Added websocket to receive waveform data asynchronously and in real time
  - Added initial stimulation studio
  - Added currently_displayed_time_index parameter to /system_status call to Flask

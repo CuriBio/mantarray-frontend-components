@@ -497,11 +497,7 @@ describe("store/playback", () => {
       });
 
       test("When stop_live_view is dispatched, Then ignore_next_system_status_if_matching_this_status is set to LIVE_VIEW_ACTIVE", async () => {
-        const spied_clear_interval = jest.spyOn(window, "clearInterval");
-        const expected_interval_id = store.state.data.waveform_ping_interval_id;
-
         await store.dispatch("playback/stop_live_view");
-
         expect(store.state.flask.ignore_next_system_status_if_matching_this_status).toStrictEqual(
           STATUS.MESSAGE.LIVE_VIEW_ACTIVE
         );
@@ -534,7 +530,7 @@ describe("store/playback", () => {
       await store.dispatch("playback/stop_live_view");
 
       expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
-      expect(store.state.data.waveform_ping_interval_id).toBeNull();
+      expect(store.state.data.playback_progression_interval_id).toBeNull();
     });
     test("Given playback_progression interval is active and SYSTEM_STATUS is set to PLAYING and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the SYSTEM_STATUS is set to ERROR and the interval playback_progression_interval_id is cleared", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(400);
@@ -550,7 +546,6 @@ describe("store/playback", () => {
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
       expect(store.state.flask.status_ping_interval_id).toBeNull();
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
-      expect(store.state.data.waveform_ping_interval_id).toBeNull();
     });
     test("Given x_time_index is not 0, When stop_live_view is called, Then the playback and status states mutate to calibrated and x_time_index mutates to 0", async () => {
       const api = "stop_managed_acquisition";
