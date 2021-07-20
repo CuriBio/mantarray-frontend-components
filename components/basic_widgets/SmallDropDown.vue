@@ -14,10 +14,7 @@
         class="span__input-dropdown-controls-content-input-txt-widget"
         :style="'width: ' + input_width + 'px;'"
       >
-        <span class="span__input-controls-content-input-txt-widget">
-          <span :style="'color:' + chosen_option.color">{{ chosen_option.letter }}</span>
-          {{ chosen_option.name }}</span
-        >
+        <span class="span__input-controls-content-input-txt-widget">{{ chosen_option.name }}</span>
       </div>
       <div class="arrow" :class="{ expanded: visible }" />
       <div :class="{ hidden: !visible, visible }">
@@ -78,9 +75,12 @@ export default {
         if (option !== this.chosen_option) return option;
       });
     },
+    options_idx: function () {
+      this.get_preselected_option();
+    },
   },
   created() {
-    this.chosen_option = this.dropdown_options[0];
+    this.get_preselected_option();
     this.options_list = this.dropdown_options;
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (
@@ -97,6 +97,9 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    get_preselected_option() {
+      this.chosen_option = this.dropdown_options[this.options_idx];
+    },
     change_selection(idx) {
       this.chosen_option = this.dropdown_options[idx];
       this.$emit("selection-changed", idx);

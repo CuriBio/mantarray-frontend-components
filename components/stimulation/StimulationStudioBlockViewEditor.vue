@@ -33,6 +33,7 @@
               :input_height="25"
               :input_width="190"
               :options_text="stimulation_types_array"
+              :options_idx="stimulation_type_idx"
               @selection-changed="handle_stimulation_type"
             />
             <SmallDropDown
@@ -73,6 +74,7 @@
 <script>
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vue from "vue";
+import { mapState } from "vuex";
 import { BPopover } from "bootstrap-vue";
 Vue.component("BPopover", BPopover);
 
@@ -121,7 +123,13 @@ export default {
       name_validity: "null",
       error_message: "",
       protocol_list: [],
+      stimulation_type_idx: 0,
     };
+  },
+  computed: {
+    ...mapState("stimulation", {
+      stimulation_type: (state) => state.protocol_editor.stimulation_type,
+    }),
   },
   created() {
     this.update_protocols();
@@ -146,6 +154,7 @@ export default {
         this.update_protocols();
         this.protocol_name = this.$store.getters["stimulation/get_protocol_name"];
         this.end_delay_duration = this.$store.getters["stimulation/get_end_delay_duration"];
+        this.stimulation_type == "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
       }
     });
   },
@@ -170,6 +179,7 @@ export default {
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];
+      this.stimulation_type_idx = idx;
       this.$store.commit("stimulation/set_stimulation_type", type);
     },
     handle_stop_requirement(idx) {

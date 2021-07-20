@@ -122,17 +122,31 @@ export default {
     const updated_protocol = { color, letter, label: protocol.name, protocol };
     this.commit("stimulation/set_imported_protocol", updated_protocol);
   },
-  add_saved_protocol({ commit, state }) {
+  add_saved_protocol({ commit, state, dispatch }) {
     const { protocol_editor, edit_mode, protocol_list } = this.state.stimulation;
     const { letter, color } = this.state.stimulation.current_assignment;
     const updated_protocol = { color, letter, label: protocol_editor.name, protocol: protocol_editor };
     if (!edit_mode.status) {
       this.commit("stimulation/set_imported_protocol", updated_protocol);
     } else if (edit_mode.status) {
-      protocol_list.map((protocol) => {
-        if (protocol.letter === edit_mode.letter) protocol = updated_protocol;
-        this.commit("stimulation/set_edit_mode_off");
+      protocol_list.map((protocol, idx) => {
+        if (protocol.letter === edit_mode.letter)
+          protocol_list[idx] = {
+            ...protocol,
+            label: protocol_editor.name,
+            protocol: protocol_editor,
+          };
       });
+      this.commit("stimulation/set_edit_mode_off");
+      this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
+    }
+  },
+  update_protocol_assignments({ state }, updated_protocol) {
+    const { protocol_assignments } = this.state.stimulation;
+    for (const assignment in protocol_assignments) {
+      if (protocol_assignments[assignment].letter === updated_protocol.letter) {
+        protocol_assignments[assignment] = updated_protocol;
+      }
     }
   },
   async create_protocol_message({ commit, state }) {
@@ -154,6 +168,7 @@ export default {
     await post_stim_message(message);
     await post_stim_status(status);
     this.commit("stimulation/set_stim_status", status);
+    console.log(message);
   },
   async stop_stim_status() {
     const status = false;

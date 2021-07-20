@@ -13,9 +13,9 @@ const state = () => ({
       label: "Tester",
       protocol: {
         name: "Tester",
-        stimulation_type: "V",
+        stimulation_type: "C",
         end_delay_duration: 20,
-        time_unit: "seconds",
+        time_unit: "milliseconds",
         pulses: [
           {
             phase_one_duration: 15,
