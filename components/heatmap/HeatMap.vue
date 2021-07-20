@@ -15,12 +15,10 @@
     </div>
 
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
-    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">
-      Well A01 ({{ unit }}):
-    </div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">No Wells Selected</div>
 
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
-    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value">0</div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value"></div>
 
     <!-- original mockflow ID: cmpD0f9518f2e3b32a8fd2907a6c9167ed79 -->
     <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-well-label">
@@ -164,6 +162,7 @@ import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue"
 import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
 import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+import { METRIC_UNITS } from "@/store/modules/heatmap/enums";
 
 export default {
   name: "HeatMap",
@@ -190,7 +189,6 @@ export default {
       height: 481,
       is_apply_set: false,
       input_height: 45,
-      unit: "μN",
       heatmap_option: "",
       max_heatmap_value: "invalid",
       min_heatmap_value: "invalid",
@@ -233,6 +231,9 @@ export default {
         total += this.well_values[this.entrykey].data[well_idx].slice(-1)[0];
       });
       return (total / this.selected_wells.length).toFixed(3);
+    },
+    unit: function () {
+      return METRIC_UNITS[this.entrykey];
     },
   },
 
