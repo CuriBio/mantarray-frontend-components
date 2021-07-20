@@ -84,19 +84,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       localVue,
     });
     wrapper.destroy();
-    expect(destroyed_spy).toHaveBeenCalled();
-  });
-
-  test("When a user switch time unit in drop down, Then the x-axis scale should change accordingly", async () => {
-    const wrapper = mount(StimulationStudioProtocolViewer, {
-      store,
-      localVue,
-    });
-
-    await store.commit("stimulation/set_time_unit", "milliseconds");
-    expect(store.state.stimulation.x_axis_scale).toBe(100000);
-    await store.commit("stimulation/set_time_unit", "seconds");
-    expect(store.state.stimulation.x_axis_scale).toBe(100);
+    expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
   test("When user wants to zoom in on an axis in the Protocol Viewer, Then the scale will be divided by 10", async () => {
@@ -141,7 +129,11 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       [2, 3],
     ]);
     wrapper.vm.$options.watch.x_axis_min.call(wrapper.vm, 100);
-    expect(render_spy).toHaveBeenCalledTimes(2);
+    wrapper.vm.$options.watch.x_axis_sample_length.call(wrapper.vm, 1000);
+    wrapper.vm.$options.watch.y_min.call(wrapper.vm, 0);
+    wrapper.vm.$options.watch.y_max.call(wrapper.vm, 100);
+
+    expect(render_spy).toHaveBeenCalledTimes(5);
   });
 
   test("When a user adds a delay repeat to the end of the protocol, Then it will mutation to state will automatically update in the waveform graph", async () => {

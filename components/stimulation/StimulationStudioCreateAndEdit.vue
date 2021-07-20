@@ -34,6 +34,7 @@
 
 <script>
 import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+import { mapActions, mapMutations } from "vuex";
 
 /**
  * @vue-data {Object} btn_labels - Label and style of buttons
@@ -91,25 +92,36 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    ...mapActions("stimulation", [
+      "get_protocols",
+      "edit_selected_protocol",
+      "handle_import_protocol",
+      "handle_export_protocol",
+    ]),
+    ...mapMutations("stimulation", [
+      "set_edit_mode_off",
+      "reset_protocol_editor",
+      "clear_selected_protocol",
+      "apply_selected_protocol",
+    ]),
     update_protocols() {
       this.protocol_list = this.$store.getters["stimulation/get_protocols"];
     },
     selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
       if (idx === 0) {
-        this.$store.commit("stimulation/set_edit_mode_off");
-        this.$store.commit("stimulation/reset_protocol_editor");
+        this.set_edit_mode_off();
+        this.reset_protocol_editor();
       }
     },
     handle_click(idx) {
       const selected_protocol = this.protocol_list[this.selected_protocol_idx];
       if (idx === 0 && this.selected_protocol_idx === 0) return;
-      if (idx === 0 && this.selected_protocol_idx !== 0)
-        this.$store.commit("stimulation/apply_selected_protocol", selected_protocol);
-      else if (idx === 1) this.$store.commit("stimulation/clear_selected_protocol");
+      if (idx === 0 && this.selected_protocol_idx !== 0) this.apply_selected_protocol(selected_protocol);
+      else if (idx === 1) this.clear_selected_protocol();
       else if (idx === 2) {
         this.$emit("handle_selection_change", selected_protocol);
-        this.$store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+        this.edit_selected_protocol(selected_protocol);
       }
     },
     get_class(idx) {
@@ -126,10 +138,10 @@ export default {
       if (idx === 1) this.handle_export();
     },
     handle_import(file) {
-      this.$store.dispatch("stimulation/handle_import_protocol", file[0]);
+      this.handle_import_protocol(file[0]);
     },
     handle_export() {
-      this.$store.dispatch("stimulation/handle_export_protocol");
+      this.handle_export_protocol();
     },
   },
 };

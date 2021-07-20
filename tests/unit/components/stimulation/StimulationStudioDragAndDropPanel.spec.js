@@ -180,6 +180,21 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
+  test("When a user selects a protocol to edit, Then the DragAndDropPanel component should get the selected pulse order and unit of time to display for edit", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    const expected_idx = 1;
+    const selected_protocol = store.state.stimulation.protocol_list[1];
+    const expected_pulse_order = store.state.stimulation.protocol_list[1].protocol.detailed_pulses;
+    await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+
+    expect(wrapper.vm.time_units_idx).toBe(expected_idx);
+    expect(wrapper.vm.protocol_order).toStrictEqual(expected_pulse_order);
+  });
+
   test("When an order changes inside of a nested loop, Then the new order should be dispatched", async () => {
     const action_spy = jest.spyOn(store, "dispatch");
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
@@ -251,6 +266,17 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     await wrapper.vm.on_modal_close("Save", test_settings);
     expect(wrapper.vm.protocol_order[0].settings).toBe(test_settings);
+  });
+
+  test("When a user switch time unit in drop down, Then the x-axis scale should change accordingly", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.findAll("li").at(1).trigger("click");
+
+    expect(wrapper.vm.time_units_idx).toBe(1);
   });
 
   test("When a user removes the last waveform from a repeat block, Then the colored border should be removed and mutations to state should be committed", async () => {

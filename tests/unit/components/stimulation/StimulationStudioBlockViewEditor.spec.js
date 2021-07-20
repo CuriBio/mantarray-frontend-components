@@ -30,6 +30,19 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.active_tab).toBe("Basic");
   });
 
+  test("When a user wants to open a protocol settings to edit, Then the mutation will trigger saved settings to appear in the protocol editor", async () => {
+    const wrapper = mount(StimulationStudioBlockViewEditor, {
+      store,
+      localVue,
+    });
+    const test_param = store.state.stimulation.protocol_list[1];
+
+    await store.dispatch("stimulation/edit_selected_protocol", test_param);
+    expect(wrapper.vm.stimulation_type_idx).toBe(1);
+    expect(wrapper.vm.current_letter).toBe(test_param.letter);
+    expect(wrapper.vm.end_delay_duration).toBe(20);
+  });
+
   test("When a user adds input to frequency input, Then the change will be recorded in data", async () => {
     const wrapper = mount(StimulationStudioBlockViewEditor, {
       store,

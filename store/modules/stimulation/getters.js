@@ -1,6 +1,6 @@
 export default {
-  get_protocols(state) {
-    return state.protocol_list;
+  get_protocols({ protocol_list }) {
+    return protocol_list;
   },
   get_next_protocol(state) {
     if (!state.edit_mode.status) {
@@ -12,22 +12,25 @@ export default {
       return state.current_assignment;
     }
   },
-  get_stimulation_type(state) {
-    if (state.protocol_editor.stimulation_type === "C") return "Current (A)";
-    if (state.protocol_editor.stimulation_type === "V") return "Voltage (V)";
+  get_stimulation_type({ protocol_editor }) {
+    if (protocol_editor.stimulation_type === "C") return "Current (A)";
+    if (protocol_editor.stimulation_type === "V") return "Voltage (V)";
   },
-  get_time_unit(state) {
-    if (state.protocol_editor.time_unit.includes("milliseconds")) return "Time (ms)";
-    if (state.protocol_editor.time_unit.includes("seconds")) return "Time (s)";
+  get_time_unit({ protocol_editor }) {
+    if (protocol_editor.time_unit.includes("milliseconds")) return "Time (ms)";
+    if (protocol_editor.time_unit.includes("seconds")) return "Time (s)";
+    if (protocol_editor.time_unit.includes("hours")) return "Time (hr)";
+    if (protocol_editor.time_unit.includes("minutes")) return "Time (min)";
   },
-  get_protocol_order(state) {
-    return state.protocol_editor.detailed_pulses;
+
+  get_protocol_order({ protocol_editor }) {
+    return protocol_editor.detailed_pulses;
   },
-  get_protocol_name(state) {
-    return state.protocol_editor.name;
+  get_protocol_name({ protocol_editor }) {
+    return protocol_editor.name;
   },
-  get_end_delay_duration(state) {
-    return state.protocol_editor.end_delay_duration;
+  get_end_delay_duration({ protocol_editor }) {
+    return protocol_editor.end_delay_duration;
   },
 };
 

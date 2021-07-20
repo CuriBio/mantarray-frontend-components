@@ -7,7 +7,6 @@ describe("store/stimulation", () => {
   localVue.use(Vuex);
   let NuxtStore;
   let store;
-
   const test_wells = {
     SELECTED: [true, true, false, false, false],
     UNSELECTED: [false, true, false, false, false],
@@ -97,9 +96,35 @@ describe("store/stimulation", () => {
       expect(voltage_selection).toBe(voltage);
     });
 
+    test("When requesting the detailed pulse order, name, and end delay duration to edit existing protocol in the editor, Then it should return specified pulse order", async () => {
+      const selected_protocol = store.state.stimulation.protocol_list[1];
+      const { detailed_pulses, name, end_delay_duration } = selected_protocol.protocol;
+      await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+
+      const actual_detailed_pulses = store.getters["stimulation/get_protocol_order"];
+      expect(actual_detailed_pulses).toStrictEqual(detailed_pulses);
+
+      const actual_name = store.getters["stimulation/get_protocol_name"];
+      expect(actual_name).toBe(name);
+
+      const actual_delay = store.getters["stimulation/get_end_delay_duration"];
+      expect(actual_delay).toBe(end_delay_duration);
+    });
+
+    test("Given a protocol has been selected for edit, When requesting the protocol assignment in the protocol editor, Then it should return the assignment of the selected protocol for edit", async () => {
+      const selected_protocol = store.state.stimulation.protocol_list[1];
+      const { letter, color } = selected_protocol;
+      const expected_assignment = { letter, color };
+      await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+      const default_type = store.getters["stimulation/get_next_protocol"];
+      expect(default_type).toStrictEqual(expected_assignment);
+    });
+
     test("When requesting the time unit, Then it should return what user has selected in dropdown", async () => {
       const seconds = "Time (s)";
       const milliseconds = "Time (ms)";
+      const hours = "Time (hr)";
+      const minutes = "Time (min)";
 
       const default_unit = store.getters["stimulation/get_time_unit"];
       expect(default_unit).toBe(seconds);
@@ -111,6 +136,14 @@ describe("store/stimulation", () => {
       store.state.stimulation.protocol_editor.time_unit = "seconds";
       const s_unit = store.getters["stimulation/get_time_unit"];
       expect(s_unit).toBe(seconds);
+
+      store.state.stimulation.protocol_editor.time_unit = "hours";
+      const h_unit = store.getters["stimulation/get_time_unit"];
+      expect(h_unit).toBe(hours);
+
+      store.state.stimulation.protocol_editor.time_unit = "minutes";
+      const m_unit = store.getters["stimulation/get_time_unit"];
+      expect(m_unit).toBe(minutes);
     });
   });
   describe("stimulation/mutations/actions", () => {
@@ -145,9 +178,10 @@ describe("store/stimulation", () => {
         0: { letter: "B", color: "#45847b", label: "test_B" },
         1: { letter: "B", color: "#45847b", label: "test_B" },
       };
-      store.state.stimulation.protocol_list.push(test_assignment[0]);
+      const { protocol_list } = store.state.stimulation;
+      protocol_list.push(test_assignment[0]);
       await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
-      await store.commit("stimulation/apply_selected_protocol", 2);
+      await store.commit("stimulation/apply_selected_protocol", protocol_list[2]);
 
       expect(store.state.stimulation.protocol_assignments).toStrictEqual(test_assignment);
     });
@@ -203,7 +237,7 @@ describe("store/stimulation", () => {
       };
 
       await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
-      await store.commit("stimulation/apply_selected_protocol", 1);
+      await store.commit("stimulation/apply_selected_protocol", test_assigment[0]);
       await store.dispatch("stimulation/handle_selected_wells", test_wells.UNSELECTED);
       await store.commit("stimulation/clear_selected_protocol");
 
@@ -281,6 +315,55 @@ describe("store/stimulation", () => {
 
       await store.dispatch("stimulation/add_saved_protocol");
       expect(store.state.stimulation.protocol_list[2]).toStrictEqual(expected_protocol);
+    });
+
+    test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the updated protocol will be commited to state in the available protocol list", async () => {
+      const { protocol_list, protocol_editor, edit_mode } = store.state.stimulation;
+      const selected_protocol = protocol_list[1];
+      const { protocol } = protocol_list[1];
+      const old_name = "Tester";
+      const new_name = "New_name";
+
+      expect(protocol.name).toBe(old_name);
+      await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+      expect(protocol_editor.name).toBe(old_name);
+      expect(edit_mode.status).toBe(true);
+      await store.commit("stimulation/set_protocol_name", new_name);
+      await store.dispatch("stimulation/add_saved_protocol");
+      const test = protocol_list[1].protocol.name;
+      expect(test).toBe(new_name);
+      expect(edit_mode.status).toBe(false);
+    });
+
+    test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the editted protocol will be updated in protocol assignments if assigned", async () => {
+      const { protocol_list, protocol_assignments } = store.state.stimulation;
+      const selected_protocol = protocol_list[1];
+      const old_name = "Tester";
+      const new_name = "New_name";
+
+      await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
+      await store.commit("stimulation/apply_selected_protocol", selected_protocol);
+
+      const pre_assignment_name = protocol_assignments[0].protocol.name;
+      expect(pre_assignment_name).toBe(old_name);
+      await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+      await store.commit("stimulation/set_protocol_name", new_name);
+      await store.dispatch("stimulation/add_saved_protocol");
+      const post_assignment_name = protocol_assignments[0].protocol.name;
+      expect(post_assignment_name).toBe(new_name);
+    });
+
+    test("When a user wants to delete an existing protocol by clicking on trash icon, Then the selected protocol will be removed from the list of available protocols, removed from any assigned wells, and the editor will be reset", async () => {
+      const { protocol_list, protocol_assignments } = store.state.stimulation;
+      const selected_protocol = protocol_list[1];
+
+      await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
+      await store.commit("stimulation/apply_selected_protocol", selected_protocol);
+      await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+      await store.dispatch("stimulation/handle_protocol_editor_reset");
+
+      expect(protocol_assignments).toStrictEqual({});
+      expect(protocol_list).toHaveLength(1);
     });
 
     test("When a starts a stimulation, Then the protocol message should be created and then posted to the BE", async () => {

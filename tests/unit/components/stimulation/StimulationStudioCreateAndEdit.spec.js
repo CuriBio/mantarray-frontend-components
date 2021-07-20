@@ -92,6 +92,41 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     expect(updateSpy).toHaveBeenCalledWith();
   });
 
+  test("When a user selects Create New in the protocol dropdown, Then the protocol editor will reset to be empty", async () => {
+    const mutation_spy = jest.spyOn(store, "commit");
+    const reset_protocol_editor = {
+      end_delay_duration: 0,
+      name: "",
+      pulses: [],
+      stimulation_type: "V",
+      stop_requirement: "Until Stopped",
+      time_unit: "seconds",
+    };
+
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+
+    await wrapper.findAll("li").at(0).trigger("click");
+
+    await wrapper.findAll("li").at(0).trigger("click");
+
+    expect(mutation_spy).toHaveBeenCalledTimes(2);
+    expect(store.state.stimulation.protocol_editor).toStrictEqual(reset_protocol_editor);
+  });
+
+  test("When a user selects Use Active Stim Settings button to edit a selected protocol, Then the protocol will be dispatched to fill the protocol editor and sent to parent component", async () => {
+    const action_spy = jest.spyOn(store, "dispatch");
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+    await wrapper.findAll("li").at(0).trigger("click");
+    await wrapper.vm.handle_click(2);
+    expect(action_spy).toHaveBeenCalledTimes(1);
+  });
+
   test("When exiting instance, Then instance is effectively destroyed", async () => {
     const destroyed_spy = jest.spyOn(StimulationStudioCreateAndEdit, "beforeDestroy");
     const wrapper = mount(StimulationStudioCreateAndEdit, {
