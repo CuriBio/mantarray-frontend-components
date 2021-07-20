@@ -4,22 +4,27 @@
     <div class="div__heatmap-layout-background"></div>
 
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
-    <div class="div__heatmap-layout-twitch-force-label">{{ entrykey }} (μN)</div>
+    <div class="div__heatmap-layout-twitch-force-label">{{ entrykey }} ({{ unit }})</div>
 
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
-      <PlateHeatMap :platecolor="passing_plate_colors" @platewell-selected="compute_mean"></PlateHeatMap>
+      <PlateHeatMap
+        :platecolor="passing_plate_colors"
+        @platewell-selected="on_well_selection_changed"
+      ></PlateHeatMap>
     </div>
 
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
-    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">Well A01 (μN):</div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">
+      Well A01 ({{ unit }}):
+    </div>
 
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
     <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value">0</div>
 
     <!-- original mockflow ID: cmpD0f9518f2e3b32a8fd2907a6c9167ed79 -->
     <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-well-label">
-      Mean of {{ well_selected_count }} Wells (μN):
+      Mean of {{ selected_wells.length }} Wells ({{ unit }}):
     </div>
 
     <!-- original mockflow ID: cmpDbf7507b833445c460899c3735fd95527 -->
@@ -189,9 +194,7 @@ export default {
       heatmap_option: "",
       max_heatmap_value: "invalid",
       min_heatmap_value: "invalid",
-      is_mean_value_active: false,
-      mean_value: 0,
-      well_selected_count: 0,
+      selected_wells: [],
     };
   },
 
@@ -220,6 +223,16 @@ export default {
           return "#B7B7B7";
         }
       });
+    },
+    is_mean_value_active: function () {
+      return this.selected_wells.length > 0;
+    },
+    mean_value: function () {
+      let total = 0;
+      this.selected_wells.map((well_idx) => {
+        total += this.well_values[this.entrykey].data[well_idx].slice(-1)[0];
+      });
+      return (total / this.selected_wells.length).toFixed(3);
     },
   },
 
@@ -352,21 +365,13 @@ export default {
       }
     },
 
-    compute_mean: function (all_select) {
-      let total = 0;
-      this.well_selected_count = 0;
-      this.is_mean_value_active = true;
-
+    on_well_selection_changed: function (all_select) {
+      this.selected_wells = [];
       for (let i = 0; i < all_select.length; i++) {
         if (all_select[i] == true) {
-          this.well_selected_count = this.well_selected_count + 1;
-          total = total + this.well_values[this.entrykey].data[i];
+          this.selected_wells.push(i);
         }
       }
-      if (this.well_selected_count == 0) {
-        this.is_mean_value_active = false;
-      }
-      this.mean_value = (total / this.well_selected_count).toFixed(3);
     },
 
     apply_heatmap_settings: function () {
