@@ -136,6 +136,7 @@ describe("store/data", () => {
     });
 
     test("Given ws client has a 'message' event handler, When ws server emits a 'message' event, Then client receives message", async () => {
+      // Sanity test for websockets
       let expected_message = "Test Message";
 
       await new Promise((resolve) => {
@@ -147,7 +148,6 @@ describe("store/data", () => {
       });
     });
     test("When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
-      // TODO use UUIDs?
       const init_heatmap_values = {
         "Twitch Force": { data: [[0], [], [20]] },
         "Twitch Period": { data: [[100], [], [120]] },

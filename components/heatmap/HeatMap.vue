@@ -184,7 +184,6 @@ export default {
       provided_uuid: "0",
       height: 481,
       is_apply_set: false,
-      radio_option_idx: 0,
       input_height: 45,
       unit: "μN",
       heatmap_option: "",
@@ -203,9 +202,6 @@ export default {
     metric_names: function () {
       return Object.keys(this.well_values);
     },
-    ...mapState("heatmap", {
-      all_gradients: "heatmap_options_gradient",
-    }),
     ...mapState("gradient", {
       gradients: "gradients",
     }),
@@ -274,11 +270,8 @@ export default {
     },
 
     radio_option_selected: function (option_value) {
-      // const option_name = option_value.name;
       const option_idx = option_value.index;
-      if (this.gradient_theme_names[option_value.index]) {
-        this.radio_option_idx = option_idx;
-        this.$store.commit("heatmap/set_heatmap_options_idx", option_idx);
+      if (this.gradient_theme_names[option_idx]) {
         this.$store.commit("gradient/set_gradient_theme_idx", option_idx);
       }
     },
@@ -381,9 +374,6 @@ export default {
         min: this.lower,
         max: this.upper,
       });
-      /* this.upper_final = this.upper; */
-      /* this.lower_final = this.lower; */
-      /* this.range = this.all_gradients[this.radio_option_idx]; */
     },
 
     reset_heatmap_settings: function () {
@@ -394,7 +384,6 @@ export default {
       this.entrykey = "Twitch Force";
       this.on_update_maximum("");
       this.on_update_minimum("");
-      this.range = this.all_gradients[0];
     },
   },
 };
