@@ -2,27 +2,27 @@ export default {
   set_selected_wells(state, wells) {
     state.selected_wells = wells;
   },
-  apply_selected_protocol(state, idx) {
+  apply_selected_protocol(state, protocol) {
     state.selected_wells.map((well) => {
-      state.protocol_assignments[well] = state.protocol_list[idx];
+      state.protocol_assignments[well] = protocol;
     });
   },
   clear_selected_protocol(state) {
     state.selected_wells.map((well) => delete state.protocol_assignments[well]);
   },
-  set_protocol_name({ new_protocol }, name) {
-    new_protocol.name = name;
+  set_protocol_name({ protocol_editor }, name) {
+    protocol_editor.name = name;
   },
-  set_stimulation_type({ new_protocol }, type) {
-    if (type.includes("Current")) new_protocol.stimulation_type = "C";
-    if (type.includes("Voltage")) new_protocol.stimulation_type = "V";
+  set_stimulation_type({ protocol_editor }, type) {
+    if (type[0] === "C") protocol_editor.stimulation_type = "C";
+    if (type[0] === "V") protocol_editor.stimulation_type = "V";
   },
-  set_time_unit({ new_protocol }, unit) {
-    new_protocol.time_unit = unit;
+  set_time_unit({ protocol_editor }, unit) {
+    protocol_editor.time_unit = unit;
   },
-  set_pulses({ new_protocol }, { pulses, new_pulse_order }) {
-    new_protocol.pulses = pulses;
-    new_protocol.detailed_pulses = new_pulse_order;
+  set_pulses({ protocol_editor }, { pulses, new_pulse_order }) {
+    protocol_editor.pulses = pulses;
+    protocol_editor.detailed_pulses = new_pulse_order;
   },
   set_axis_values(state, { x_values, y_values }) {
     state.x_axis_values = x_values;
@@ -39,10 +39,10 @@ export default {
     if (axis === "x-axis") state.x_axis_scale *= 10;
     if (axis === "y-axis") state.y_axis_scale *= 10;
   },
-  reset_new_protocol(state) {
+  reset_protocol_editor(state) {
     const replace_state = {
       ...state,
-      new_protocol: {
+      protocol_editor: {
         name: "",
         stimulation_type: "V",
         stop_requirement: "Until Stopped",
@@ -64,7 +64,7 @@ export default {
       ...state,
       selected_wells: [],
       protocol_assignments: {},
-      new_protocol: {
+      protocol_editor: {
         name: "",
         stimulation_type: "V",
         stop_requirement: "Until Stopped",
@@ -81,11 +81,11 @@ export default {
     };
     Object.assign(state, replace_state);
   },
-  set_repeat_frequency({ new_protocol }, time) {
-    new_protocol.end_delay_duration = Number(time);
+  set_repeat_frequency({ protocol_editor }, time) {
+    protocol_editor.end_delay_duration = Number(time);
   },
   set_delay_axis_values(state, delay) {
-    const { end_delay_duration, pulses } = state.new_protocol;
+    const { end_delay_duration, pulses } = state.protocol_editor;
     const delay_pulse_model = {
       phase_one_duration: end_delay_duration,
       phase_one_charge: 0,
@@ -101,5 +101,13 @@ export default {
   },
   set_stim_status(state, bool) {
     state.stim_status = bool;
+  },
+  set_edit_mode({ edit_mode }, { label, letter }) {
+    edit_mode.status = true;
+    edit_mode.label = label;
+    edit_mode.letter = letter;
+  },
+  set_edit_mode_off({ edit_mode }) {
+    edit_mode.status = false;
   },
 };

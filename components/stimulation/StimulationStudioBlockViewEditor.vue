@@ -33,6 +33,7 @@
               :input_height="25"
               :input_width="190"
               :options_text="stimulation_types_array"
+              :options_idx="stimulation_type_idx"
               @selection-changed="handle_stimulation_type"
             />
             <SmallDropDown
@@ -73,6 +74,7 @@
 <script>
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vue from "vue";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { BPopover } from "bootstrap-vue";
 Vue.component("BPopover", BPopover);
 
@@ -90,7 +92,6 @@ Vue.component("BPopover", BPopover);
  * @vue-data {String} name_validity - Corresponding border style after name validity check
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
- * @vue-data {String} current_protocol - The next available, unused protocol from Vuex
  * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
  * @vue-event {Event} handle_trash - Toggle view of delete popover on trash icon
  * @vue-event {Event} toggle_tab - Toggles which tab is active
@@ -122,14 +123,28 @@ export default {
       name_validity: "null",
       error_message: "",
       protocol_list: [],
-      current_protocol: "",
+      stimulation_type_idx: 0,
     };
   },
-
+  computed: {
+    ...mapState("stimulation", {
+      stimulation_type: (state) => state.protocol_editor.stimulation_type,
+    }),
+    ...mapGetters("stimulation", [
+      "get_protocol_name",
+      "get_end_delay_duration",
+      "get_protocols",
+      "get_next_protocol",
+    ]),
+  },
   created() {
     this.update_protocols();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
+        this.update_protocols();
         this.show_confirmation = false;
         this.protocol_name = "";
         this.end_delay_duration = "";
@@ -141,17 +156,25 @@ export default {
       ) {
         this.update_protocols();
       }
+      if (mutation.type === "stimulation/set_edit_mode") {
+        this.update_protocols();
+        this.protocol_name = this.get_protocol_name;
+        this.end_delay_duration = this.get_end_delay_duration;
+        this.stimulation_type == "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
+      }
     });
   },
   beforeDestroy() {
     this.unsubscribe();
   },
   methods: {
+    ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_repeat_frequency"]),
+    ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name"]),
     update_protocols: function () {
-      this.protocol_list = this.$store.getters["stimulation/get_protocols"];
-      this.current_protocol = this.$store.getters["stimulation/get_next_protocol"];
-      this.current_letter = this.current_protocol.letter;
-      this.current_color = this.current_protocol.color;
+      this.protocol_list = this.get_protocols;
+      const { letter, color } = this.get_next_protocol;
+      this.current_letter = letter;
+      this.current_color = color;
     },
     toggle_tab(tab) {
       tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");
@@ -160,11 +183,12 @@ export default {
       this.show_confirmation = !this.show_confirmation;
     },
     handle_delete() {
-      this.$store.commit("stimulation/reset_new_protocol");
+      this.handle_protocol_editor_reset();
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];
-      this.$store.commit("stimulation/set_stimulation_type", type);
+      this.stimulation_type_idx = idx;
+      this.set_stimulation_type(type);
     },
     handle_stop_requirement(idx) {
       const requirement = this.until_options_array[idx];
@@ -172,7 +196,7 @@ export default {
     },
     handle_repeat_frequency(time) {
       this.end_delay_duration = time;
-      this.$store.dispatch("stimulation/handle_new_repeat_frequency", time);
+      this.handle_new_repeat_frequency(time);
     },
     check_name_validity(input) {
       const matched_names = this.protocol_list.filter((protocol) => {
@@ -181,7 +205,7 @@ export default {
       if (matched_names.length === 0) {
         this.name_validity = "border: 1px solid #19ac8a";
         this.error_message = "";
-        this.$store.commit("stimulation/set_protocol_name", input);
+        this.set_protocol_name(input);
       }
       if (matched_names.length > 0) {
         this.name_validity = "border: 1px solid #bd3532";

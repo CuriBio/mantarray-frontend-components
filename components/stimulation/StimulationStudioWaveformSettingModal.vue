@@ -228,7 +228,7 @@
           ></InputWidget>
         </span>
         <span v-b-popover.hover="popover_message" class="disabled_popover_container">
-          <img src="/question-icon.png" />
+          <FontAwesomeIcon :icon="['fas', 'question-circle']" />
         </span>
       </div>
     </div>
@@ -282,11 +282,11 @@ import Vue from "vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faBalanceScale } from "@fortawesome/free-solid-svg-icons";
+import { faBalanceScale, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { VBPopover } from "bootstrap-vue";
 Vue.directive("b-popover", VBPopover);
-library.add(faBalanceScale);
+library.add(faBalanceScale, faQuestionCircle);
 
 /**
  * @vue-props {String} stimulation_type - Current type of stimulation
@@ -426,8 +426,9 @@ export default {
   position: absolute;
   font-family: Muli;
   font-size: 10px;
-  left: 115px;
+  left: 112px;
   top: 16px;
+  opacity: 0.4;
 }
 
 .canvas__stimulationstudio-horizontal-line-seperator-one {

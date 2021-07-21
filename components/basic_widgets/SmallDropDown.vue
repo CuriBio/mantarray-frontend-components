@@ -14,10 +14,7 @@
         class="span__input-dropdown-controls-content-input-txt-widget"
         :style="'width: ' + input_width + 'px;'"
       >
-        <span class="span__input-controls-content-input-txt-widget">
-          <span :style="'color:' + chosen_option.color">{{ chosen_option.letter }}</span>
-          {{ chosen_option.name }}</span
-        >
+        <span class="span__input-controls-content-input-txt-widget">{{ chosen_option.name }}</span>
       </div>
       <div class="arrow" :class="{ expanded: visible }" />
       <div :class="{ hidden: !visible, visible }">
@@ -42,7 +39,8 @@ export default {
   props: {
     options_text: { type: Array, required: true },
     input_width: { type: Number, default: 210 },
-    input_height: { type: Number, default: 0 }, // This prop is utilized by the parent component
+    input_height: { type: Number, default: 0 },
+    options_idx: { type: Number, default: 0 },
   },
   data() {
     return {
@@ -77,15 +75,21 @@ export default {
         if (option !== this.chosen_option) return option;
       });
     },
+    options_idx: function () {
+      this.get_preselected_option();
+    },
   },
   created() {
-    this.chosen_option = this.dropdown_options[0];
+    this.get_preselected_option();
     this.options_list = this.dropdown_options;
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
         this.chosen_option = this.dropdown_options[0];
         this.change_selection(0);
-        this.visisbility = false;
+        this.visible = false;
       }
     });
   },
@@ -93,6 +97,9 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    get_preselected_option() {
+      this.chosen_option = this.dropdown_options[this.options_idx];
+    },
     change_selection(idx) {
       this.chosen_option = this.dropdown_options[idx];
       this.$emit("selection-changed", idx);

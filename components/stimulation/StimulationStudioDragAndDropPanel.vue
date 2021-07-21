@@ -22,6 +22,7 @@
           :input_height="25"
           :input_width="95"
           :options_text="time_units_array"
+          :options_idx="time_units_idx"
           @selection-changed="handle_time_unit"
         />
 
@@ -107,6 +108,7 @@
 </template>
 <script>
 import draggable from "vuedraggable";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
@@ -175,12 +177,26 @@ export default {
       cloned: false,
       new_cloned_idx: null,
       delay_open_for_edit: false, // TODO Luci, clean up state management and constant names
+      time_units_idx: 0,
     };
+  },
+  computed: {
+    ...mapState("stimulation", {
+      time_unit: (state) => state.protocol_editor.time_unit,
+    }),
+    ...mapGetters("stimulation", ["get_protocol_order"]),
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state" || mutation.type === "stimulation/reset_new_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
         this.protocol_order = [];
+      }
+      if (mutation.type === "stimulation/set_edit_mode") {
+        this.protocol_order = this.get_protocol_order;
+        this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       }
     });
   },
@@ -188,6 +204,8 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    ...mapActions("stimulation", ["handle_protocol_order"]),
+    ...mapMutations("stimulation", ["set_time_unit"]),
     check_type(e) {
       if (e.added && this.cloned) {
         const { element, newIndex } = e.added;
@@ -197,8 +215,7 @@ export default {
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
         else if (element.type === "Delay") this.repeat_delay_modal = "Delay";
       }
-      if ((e.added && !this.cloned) || e.moved || e.removed)
-        this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
+      if ((e.added && !this.cloned) || e.moved || e.removed) this.handle_protocol_order(this.protocol_order);
       this.cloned = false;
     },
     on_modal_close(button, settings) {
@@ -229,7 +246,7 @@ export default {
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
-      this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
+      this.handle_protocol_order(this.protocol_order);
     },
     open_modal_for_edit(type, idx, nested_idx) {
       const pulse = this.protocol_order[idx];
@@ -252,7 +269,8 @@ export default {
     // TODO Luci, fix CSS to move this dropdown back to BlockViewEditor component
     handle_time_unit(idx) {
       const unit = this.time_units_array[idx];
-      this.$store.commit("stimulation/set_time_unit", unit);
+      this.time_units_idx = idx;
+      this.set_time_unit(unit);
     },
     clone(type) {
       this.cloned = true;
@@ -278,11 +296,11 @@ export default {
       }
       if (e.removed) {
         this.protocol_order[idx].repeat.number_of_repeats = 0;
-        this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
+        this.handle_protocol_order(this.protocol_order);
       }
     },
     handle_internal_repeat() {
-      this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
+      this.handle_protocol_order(this.protocol_order);
     },
     open_repeat_modal_for_edit(number, idx) {
       this.current_repeat_delay_input = number;
@@ -296,7 +314,7 @@ export default {
       if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
       this.repeat_idx = null;
       this.current_repeat_delay_input = null;
-      this.$store.dispatch("stimulation/handle_protocol_order", this.protocol_order);
+      this.handle_protocol_order(this.protocol_order);
     },
     get_style(type) {
       if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;

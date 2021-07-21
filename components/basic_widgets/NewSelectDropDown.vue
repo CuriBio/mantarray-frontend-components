@@ -29,7 +29,7 @@
       <div class="arrow" :class="{ expanded: visible }"></div>
       <div :class="{ hidden: !visible, visible }">
         <ul>
-          <li v-for="item in options_list" :key="item.id" :value="item" @click="changeSelection(item.id)">
+          <li v-for="item in options_list" :key="item.id" :value="item" @click="change_selection(item.id)">
             <span :style="'color:' + item.color">{{ item.letter }}</span
             >{{ item.name }}
           </li>
@@ -46,7 +46,7 @@ export default {
     value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")
     options_text: { type: Array, required: true },
     input_width: { type: Number, default: 210 },
-    options_id: { type: String, default: "" },
+    options_idx: { type: String, default: "" },
     input_height: { type: Number, default: 0 }, // This prop is utilized by the parent component
   },
   data() {
@@ -76,13 +76,23 @@ export default {
     this.chosen_option = this.dropdown_options[0];
     this.filter_options();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/reset_state") {
-        this.chosen_option = this.options_list[0];
-        this.changeSelection(0);
-      }
-      if (mutation.type === "stimulation/set_imported_protocol") {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
         this.get_dropdown_options();
+        this.chosen_option = this.dropdown_options[0];
         this.filter_options();
+      }
+      if (
+        mutation.type === "stimulation/set_imported_protocol" ||
+        mutation.type === "stimulation/add_saved_protocol"
+      ) {
+        this.get_dropdown_options();
+        const imported_idx = this.dropdown_options.length - 1;
+        this.chosen_option = this.options_list[imported_idx];
+        this.filter_options();
+        this.change_selection(imported_idx);
       }
     });
   },
@@ -90,7 +100,7 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    changeSelection(idx) {
+    change_selection(idx) {
       this.chosen_option = this.dropdown_options[idx];
       this.$emit("selection-changed", idx);
     },
