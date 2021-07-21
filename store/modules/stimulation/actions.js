@@ -165,8 +165,12 @@ export default {
         message.protocol.push(protocol_model);
       }
     }
-    await post_stim_message(message);
-    await post_stim_status(status);
+    try {
+      await post_stim_message(message);
+      await post_stim_status(status);
+    } catch (error) {
+      console.log(error);
+    }
     this.commit("stimulation/set_stim_status", status);
     console.log(message);
   },
