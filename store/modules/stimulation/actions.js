@@ -68,17 +68,16 @@ export default {
   },
   handle_repeat_frequency({ commit, state }, { x_values, y_values }) {
     const { end_delay_duration, time_unit } = this.state.stimulation.protocol_editor;
-    const delay_conversion = {
-      seconds: 1000,
-      milliseconds: 1,
-      minutes: 60000,
-      hours: 3600000,
-    };
-
-    let delay_block;
     const converted_x_values = ms_to_s_conversion(x_values);
+    let delay_block;
+    const delay_conversion = {
+      seconds: 1,
+      milliseconds: 0.001,
+      minutes: 60,
+      hours: 3600,
+    };
     if (end_delay_duration !== 0) {
-      const converted_delay = end_delay_duration / delay_conversion[time_unit];
+      const converted_delay = end_delay_duration * delay_conversion[time_unit];
       const last_x_value = converted_x_values[x_values.length - 1];
       const next_x_value = last_x_value + converted_delay;
       delay_block = [last_x_value, next_x_value];
@@ -86,7 +85,6 @@ export default {
     if (end_delay_duration === 0) {
       delay_block = [NaN, NaN];
     }
-    console.log(converted_x_values);
     this.commit("stimulation/set_delay_axis_values", delay_block);
     this.commit("stimulation/set_axis_values", { converted_x_values, y_values });
   },

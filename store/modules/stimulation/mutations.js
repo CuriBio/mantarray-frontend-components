@@ -85,14 +85,22 @@ export default {
     protocol_editor.end_delay_duration = Number(time);
   },
   set_delay_axis_values(state, delay) {
-    const { end_delay_duration, pulses } = state.protocol_editor;
+    const { end_delay_duration, pulses, time_unit } = state.protocol_editor;
+    const delay_conversion = {
+      seconds: 1000000,
+      milliseconds: 1000,
+      minutes: 60000000,
+      hours: 3600000000,
+    };
+    const converted_delay_duration = end_delay_duration * delay_conversion[time_unit];
     const delay_pulse_model = {
-      phase_one_duration: end_delay_duration,
+      phase_one_duration: converted_delay_duration,
       phase_one_charge: 0,
       interpulse_duration: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
     };
+    console.log(delay_pulse_model);
     state.delay_blocks = [delay];
     pulses.push(delay_pulse_model);
   },
