@@ -95,6 +95,7 @@
         :value.sync="entrykey"
         :options_text="metric_names"
         :options_id="'display'"
+        :options_idx="display_option_idx"
         :input_width="entry_width"
         :input_height="input_height"
         @selection-changed="metric_selection_changed"
@@ -180,6 +181,7 @@ export default {
       option: [{ text: "", value: "Auto-Scale" }],
       label: "",
       entrykey: "Twitch Force",
+      display_option_idx: 0,
       keyplaceholder: "Twitch Force",
       error_text: "An ID is required",
       entry_width: 201,
@@ -188,7 +190,7 @@ export default {
       provided_uuid: "0",
       height: 481,
       input_height: 45,
-      heatmap_option: "",
+      // heatmap_option: "",
       max_value_error_msg: "invalid",
       min_value_error_msg: "invalid",
       selected_wells: [],
@@ -253,8 +255,7 @@ export default {
         this.on_empty_flag = true;
         this.error_text = "An ID is required";
       }
-      this.heatmap_option = this.entrykey;
-      // const display_idx = this.well_values[this.entrykey];
+      // this.heatmap_option = this.entrykey;
       if (this.entrykey in this.well_values) {
         this.on_empty_flag = false;
         this.lower = this.well_values[this.entrykey].range_min;
@@ -284,13 +285,14 @@ export default {
     },
 
     metric_selection_changed: function (index) {
+      this.display_option_idx = index;
       this.entrykey = this.metric_names[index];
     },
 
     radio_option_selected: function (option_value) {
-      const option_idx = option_value.index;
-      if (this.gradient_theme_names[option_idx]) {
-        this.$store.commit("gradient/set_gradient_theme_idx", option_idx);
+      const grandient_option_idx = option_value.index;
+      if (this.gradient_theme_names[grandient_option_idx]) {
+        this.$store.commit("gradient/set_gradient_theme_idx", grandient_option_idx);
       }
     },
 
@@ -363,11 +365,18 @@ export default {
     },
 
     reset_heatmap_settings: function () {
-      this.upper = 0;
-      this.lower = 0;
-      this.entrykey = "Twitch Force";
+      // reset display dropdown
+      this.metric_selection_changed(0);
+      // reset min/max inputs
+      document.getElementById("input-widget-field-max").value = "";
+      document.getElementById("input-widget-field-min").value = "";
       this.on_update_maximum("");
       this.on_update_minimum("");
+      // reset gradient range
+      this.$store.commit("gradient/set_gradient_range", {
+        min: 0,
+        max: 100,
+      });
     },
   },
 };
