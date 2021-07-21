@@ -16,7 +16,7 @@
     <StimulationStudioCreateAndEdit @handle_selection_change="handle_selection_change" />
     <StimulationStudioDragAndDropPanel :stimulation_type="stimulation_type" :time_unit="time_unit" />
     <StimulationStudioBlockViewEditor />
-    <StimulationStudioProtocolViewer :stimulation_type="stimulation_type" :time_unit="time_unit" />
+    <StimulationStudioProtocolViewer :stimulation_type="stimulation_type" />
     <div class="button-background">
       <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
         <div :class="'btn-container'">

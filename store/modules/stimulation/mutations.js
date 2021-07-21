@@ -24,8 +24,8 @@ export default {
     protocol_editor.pulses = pulses;
     protocol_editor.detailed_pulses = new_pulse_order;
   },
-  set_axis_values(state, { x_values, y_values }) {
-    state.x_axis_values = x_values;
+  set_axis_values(state, { converted_x_values, y_values }) {
+    state.x_axis_values = converted_x_values;
     state.y_axis_values = y_values;
   },
   set_repeat_color_assignments(state, assignments) {
