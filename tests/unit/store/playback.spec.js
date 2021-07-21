@@ -530,7 +530,7 @@ describe("store/playback", () => {
       await store.dispatch("playback/stop_live_view");
 
       expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
-      expect(store.state.data.playback_progression_interval_id).toBeNull();
+      expect(store.state.playback.playback_progression_interval_id).toBeNull();
     });
     test("Given playback_progression interval is active and SYSTEM_STATUS is set to PLAYING and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the SYSTEM_STATUS is set to ERROR and the interval playback_progression_interval_id is cleared", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(400);

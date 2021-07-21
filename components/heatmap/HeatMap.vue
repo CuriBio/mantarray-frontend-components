@@ -372,6 +372,7 @@ export default {
       document.getElementById("input-widget-field-min").value = "";
       this.on_update_maximum("");
       this.on_update_minimum("");
+      // TODO reset gradient theme selection
       // reset gradient range
       this.$store.commit("gradient/set_gradient_range", {
         min: 0,
