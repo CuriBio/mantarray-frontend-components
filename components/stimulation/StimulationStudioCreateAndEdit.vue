@@ -109,9 +109,15 @@ export default {
     },
     selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
+      const selected_protocol = this.protocol_list[idx];
+
       if (idx === 0) {
         this.set_edit_mode_off();
         this.reset_protocol_editor();
+      }
+      if (idx !== 0) {
+        this.$emit("handle_selection_change", selected_protocol);
+        this.edit_selected_protocol(selected_protocol);
       }
     },
     handle_click(idx) {
@@ -119,10 +125,6 @@ export default {
       if (idx === 0 && this.selected_protocol_idx === 0) return;
       if (idx === 0 && this.selected_protocol_idx !== 0) this.apply_selected_protocol(selected_protocol);
       else if (idx === 1) this.clear_selected_protocol();
-      else if (idx === 2) {
-        this.$emit("handle_selection_change", selected_protocol);
-        this.edit_selected_protocol(selected_protocol);
-      }
     },
     get_class(idx) {
       if (this.selected_protocol_idx === 0 && idx === 0)

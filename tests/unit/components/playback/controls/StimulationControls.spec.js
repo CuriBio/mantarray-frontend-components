@@ -17,6 +17,10 @@ describe("store/stimulation", () => {
     store = await NuxtStore.createStore();
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("StimulationControls", () => {
     test("When StimulationControls mounts, Then the initial play state should be false", () => {
       const wrapper = mount(StimulationControls, {

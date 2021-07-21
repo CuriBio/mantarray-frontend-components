@@ -87,21 +87,22 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
       store,
       localVue,
     });
-    const test_protocol = { label: "test", color: "#123456", letter: "B" };
+    const test_protocol = store.state.stimulation.protocol_list[1];
     await store.commit("stimulation/set_imported_protocol", test_protocol);
     expect(updateSpy).toHaveBeenCalledWith();
   });
 
   test("When a user selects Create New in the protocol dropdown, Then the protocol editor will reset to be empty", async () => {
-    const mutation_spy = jest.spyOn(store, "commit");
-    const reset_protocol_editor = {
-      end_delay_duration: 0,
-      name: "",
-      pulses: [],
-      stimulation_type: "V",
-      stop_requirement: "Until Stopped",
-      time_unit: "seconds",
-    };
+    // const reset_protocol_editor = {
+    //   end_delay_duration: 0,
+    //   name: "",
+    //   pulses: [],
+    //   stimulation_type: "V",
+    //   stop_requirement: "Until Stopped",
+    //   time_unit: "seconds"
+    // };
+    const reset_spy = jest.spyOn(StimulationStudioCreateAndEdit.methods, "reset_protocol_editor");
+    const edit_spy = jest.spyOn(StimulationStudioCreateAndEdit.methods, "edit_selected_protocol");
 
     const wrapper = mount(StimulationStudioCreateAndEdit, {
       store,
@@ -110,10 +111,11 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
 
     await wrapper.findAll("li").at(0).trigger("click");
 
+    expect(edit_spy).toHaveBeenCalledTimes(1);
+
     await wrapper.findAll("li").at(0).trigger("click");
 
-    expect(mutation_spy).toHaveBeenCalledTimes(2);
-    expect(store.state.stimulation.protocol_editor).toStrictEqual(reset_protocol_editor);
+    expect(reset_spy).toHaveBeenCalledTimes(1);
   });
 
   test("When a user selects Use Active Stim Settings button to edit a selected protocol, Then the protocol will be dispatched to fill the protocol editor and sent to parent component", async () => {
@@ -123,7 +125,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(0).trigger("click");
-    await wrapper.vm.handle_click(2);
+
     expect(action_spy).toHaveBeenCalledTimes(1);
   });
 
