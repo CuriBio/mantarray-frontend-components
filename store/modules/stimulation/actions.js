@@ -68,7 +68,7 @@ export default {
   },
   handle_repeat_frequency({ commit, state }, { x_values, y_values }) {
     const { end_delay_duration, time_unit } = this.state.stimulation.protocol_editor;
-    const converted_x_values = ms_to_s_conversion(x_values);
+    const converted_x_values = x_values.map((value) => (value /= 1000));
     let delay_block;
     const delay_conversion = {
       seconds: 1,
@@ -164,11 +164,19 @@ export default {
     for (const well in protocol_assignments) {
       if (protocol_assignments !== {}) {
         const { stimulation_type, pulses } = protocol_assignments[well].protocol;
+        const converted_pulses = pulses.map((pulse) => ({
+          ...pulse,
+          phase_one_duration: (pulse.phase_one_duration *= 1000),
+          phase_two_duration: (pulse.phase_two_duration *= 1000),
+          interpulse_duration: (pulse.interpulse_duration *= 1000),
+        }));
+
         const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well, true);
+
         const protocol_model = {
           stimulation_type,
           well_number,
-          pulses,
+          pulses: converted_pulses,
         };
         message.protocol.push(protocol_model);
       }
@@ -180,7 +188,6 @@ export default {
       console.log(error);
     }
     this.commit("stimulation/set_stim_status", status);
-    console.log(message);
   },
   async stop_stim_status() {
     const status = false;
@@ -218,8 +225,4 @@ export default {
     }
     this.commit("stimulation/reset_protocol_editor");
   },
-};
-
-const ms_to_s_conversion = (array) => {
-  return array.map((value) => (value /= 1000));
 };

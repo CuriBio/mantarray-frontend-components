@@ -271,6 +271,7 @@ export default {
       const unit = this.time_units_array[idx];
       this.time_units_idx = idx;
       this.set_time_unit(unit);
+      this.handle_protocol_order(this.protocol_order);
     },
     clone(type) {
       this.cloned = true;

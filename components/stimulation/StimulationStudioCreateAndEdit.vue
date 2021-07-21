@@ -110,15 +110,14 @@ export default {
     selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
       const selected_protocol = this.protocol_list[idx];
-
       if (idx === 0) {
         this.set_edit_mode_off();
         this.reset_protocol_editor();
       }
       if (idx !== 0) {
-        this.$emit("handle_selection_change", selected_protocol);
         this.edit_selected_protocol(selected_protocol);
       }
+      this.$emit("handle_selection_change", selected_protocol);
     },
     handle_click(idx) {
       const selected_protocol = this.protocol_list[this.selected_protocol_idx];

@@ -86,6 +86,7 @@ export default {
       }
       if (idx === 1) this.$store.commit("stimulation/reset_state");
       if (idx === 2) this.$store.dispatch("stimulation/edit_selected_protocol", this.selected_protocol);
+      this.selected_protocol = null;
     },
     handle_selection_change(protocol) {
       this.selected_protocol = protocol;
