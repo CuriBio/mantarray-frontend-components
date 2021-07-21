@@ -61,7 +61,7 @@
     <div class="div__heatmap-layout-maximum-input-container" width="121" height="52">
       <InputWidget
         :placeholder="'100'"
-        :invalid_text="max_heatmap_value"
+        :invalid_text="max_value_error_msg"
         :input_width="105"
         :dom_id_suffix="'max'"
         @update:value="on_update_maximum($event)"
@@ -75,7 +75,7 @@
     <div class="div__heatmap-layout-minimum-input-container" width="121" height="52">
       <InputWidget
         :placeholder="'0'"
-        :invalid_text="min_heatmap_value"
+        :invalid_text="min_value_error_msg"
         :input_width="105"
         :dom_id_suffix="'min'"
         @update:value="on_update_minimum($event)"
@@ -187,12 +187,13 @@ export default {
       on_empty_flag: true,
       provided_uuid: "0",
       height: 481,
-      is_apply_set: false,
       input_height: 45,
       heatmap_option: "",
-      max_heatmap_value: "invalid",
-      min_heatmap_value: "invalid",
+      max_value_error_msg: "invalid",
+      min_value_error_msg: "invalid",
       selected_wells: [],
+      upper: 100,
+      lower: 0,
     };
   },
 
@@ -235,6 +236,13 @@ export default {
     unit: function () {
       return METRIC_UNITS[this.entrykey];
     },
+    is_apply_set: function () {
+      return (
+        this.max_value_error_msg === "" &&
+        this.min_value_error_msg === "" &&
+        this.entrykey in this.well_values
+      );
+    },
   },
 
   watch: {
@@ -251,13 +259,11 @@ export default {
         this.on_empty_flag = false;
         this.lower = this.well_values[this.entrykey].range_min;
         this.upper = this.well_values[this.entrykey].range_max;
-        this.is_apply_set = true;
       } else {
         this.lower = null;
         this.upper = null;
         this.error_text = "Choose an option";
         this.on_empty_flag = true;
-        this.is_apply_set = false;
       }
     },
   },
@@ -265,16 +271,14 @@ export default {
   methods: {
     auto_scale: function (new_value) {
       /* if (new_value == "Auto-Scale") { */
-      /*   this.max_heatmap_value = ""; */
-      /*   this.min_heatmap_value = ""; */
+      /*   this.max_value_error_msg = ""; */
+      /*   this.min_value_error_msg = ""; */
       /*   this.heatmap_option = this.entrykey = this.nicknames_list[0]; */
-      /*   this.is_apply_set = true; */
       /*   this.$store.commit("heatmap/heatmap_autoscale", true); */
       /* } else { */
-      /*   this.max_heatmap_value = "invalid"; */
-      /*   this.min_heatmap_value = "invalid"; */
+      /*   this.max_value_error_msg = "invalid"; */
+      /*   this.min_value_error_msg = "invalid"; */
       /*   this.heatmap_option = this.entrykey = ""; */
-      /*   this.is_apply_set = false; */
       /*   this.$store.commit("heatmap/heatmap_autoscale", false); */
       /* } */
     },
@@ -291,78 +295,52 @@ export default {
     },
 
     on_update_maximum: function (new_value) {
-      const max = parseInt(new_value);
-      if (new_value != "") {
-        if (max < 0 || new_value == "-") {
-          this.max_heatmap_value = "cannot be negative";
-          this.is_apply_set = false;
-        } else {
-          if (max == this.lower) {
-            this.max_heatmap_value = "max is equal to min";
-            this.is_apply_set = false;
-            this.upper = max;
-          } else {
-            if (max > this.lower) {
-              this.upper = max;
-              this.max_heatmap_value = "";
-              if (this.min_heatmap_value == "" || this.min_heatmap_value == "min is more than max") {
-                this.min_heatmap_value = "";
-                this.is_apply_set = true;
-              }
-            } else {
-              this.is_apply_set = false;
-              this.upper = max;
-              if (this.max_heatmap_value != "min is more than max") {
-                this.max_heatmap_value = "min is more than max";
-              }
-            }
-          }
-        }
-        if (max > 1000) {
-          this.max_heatmap_value = "larger than 1000";
-          this.is_apply_set = false;
-        }
+      this.upper = parseInt(new_value);
+      if (new_value == "") {
+        this.max_value_error_msg = "invalid";
+      } else if (this.upper < 0 || new_value == "-") {
+        this.max_value_error_msg = "cannot be negative";
+      } else if (this.upper > 1000) {
+        this.max_value_error_msg = "larger than 1000";
+      } else if (this.upper < this.lower) {
+        this.max_value_error_msg = "min is more than max";
+      } else if (this.upper == this.lower) {
+        this.max_value_error_msg = "max is equal to min";
       } else {
-        this.max_heatmap_value = "invalid";
-        this.is_apply_set = false;
+        // new value is valid
+        this.max_value_error_msg = "";
+        // update min error msg if caused by max value
+        if (
+          this.min_value_error_msg == "min is equal to max" ||
+          this.min_value_error_msg == "min is more than max"
+        ) {
+          this.min_value_error_msg = "";
+        }
       }
     },
 
     on_update_minimum: function (new_value) {
-      const min = parseInt(new_value);
-      if (new_value != "") {
-        if (min < 0 || new_value == "-") {
-          this.min_heatmap_value = "cannot be negative";
-          this.is_apply_set = false;
-        } else {
-          if (min == this.upper) {
-            this.min_heatmap_value = "min is equal to max";
-            this.is_apply_set = false;
-            this.lower = min;
-          } else {
-            if (min < this.upper) {
-              this.lower = min;
-              this.min_heatmap_value = "";
-              if (this.max_heatmap_value == "" || this.max_heatmap_value == "min is more than max") {
-                this.max_heatmap_value = "";
-                this.is_apply_set = true;
-              }
-            } else {
-              this.is_apply_set = false;
-              this.lower = min;
-              if (this.min_heatmap_value != "min is more than max") {
-                this.min_heatmap_value = "min is more than max";
-              }
-            }
-          }
-        }
-        if (min > 1000) {
-          this.min_heatmap_value = "larger than 1000";
-          this.is_apply_set = false;
-        }
+      this.lower = parseInt(new_value);
+      if (new_value == "") {
+        this.min_value_error_msg = "invalid";
+      } else if (this.lower < 0 || new_value == "-") {
+        this.min_value_error_msg = "cannot be negative";
+      } else if (this.lower > 1000) {
+        this.min_value_error_msg = "larger than 1000";
+      } else if (this.lower > this.upper) {
+        this.min_value_error_msg = "min is more than max";
+      } else if (this.lower == this.upper) {
+        this.min_value_error_msg = "min is equal to max";
       } else {
-        this.min_heatmap_value = "invalid";
-        this.is_apply_set = false;
+        // new value is valid
+        this.min_value_error_msg = "";
+        // update max error msg if caused by min value
+        if (
+          this.max_value_error_msg == "max is equal to min" ||
+          this.max_value_error_msg == "min is more than max"
+        ) {
+          this.max_value_error_msg = "";
+        }
       }
     },
 
@@ -376,16 +354,16 @@ export default {
     },
 
     apply_heatmap_settings: function () {
-      this.$store.commit("gradient/set_gradient_range", {
-        min: this.lower,
-        max: this.upper,
-      });
+      if (this.is_apply_set) {
+        this.$store.commit("gradient/set_gradient_range", {
+          min: this.lower,
+          max: this.upper,
+        });
+      }
     },
 
     reset_heatmap_settings: function () {
-      this.upper_final = 0;
       this.upper = 0;
-      this.lower_final = 0;
       this.lower = 0;
       this.entrykey = "Twitch Force";
       this.on_update_maximum("");
