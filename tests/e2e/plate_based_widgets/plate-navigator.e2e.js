@@ -3,10 +3,7 @@ import { Selector } from "testcafe";
 const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
-const base_screenshot_path = path.join(
-  "plate_based_widgets",
-  "plate-navigator"
-);
+const base_screenshot_path = path.join("plate_based_widgets", "plate-navigator");
 
 const well_in_top_left_selector = Selector("#well_0");
 const well_in_top_right_selector = Selector("#well_12");
@@ -23,28 +20,16 @@ test("Plate Navigator updates shifting Quadrant -1 to Quadrant -2 to Quadrant -3
   await testcafe_page_visual_regression(t, screenshot_path);
   let active_quadrant_str = "top-left-quadrant-active";
   await t.hover(well_in_top_left_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-top-left"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-top-left");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_top_right_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-top-right"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-top-right");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_bottom_right_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-bottom-right"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-bottom-right");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_bottom_left_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-bottom-left"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-bottom-left");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(Selector(well_in_top_right_selector));
@@ -52,28 +37,16 @@ test("Plate Navigator updates shifting Quadrant -1 to Quadrant -2 to Quadrant -3
   await testcafe_page_visual_regression(t, screenshot_path);
   active_quadrant_str = "top-right-quadrant-active";
   await t.hover(well_in_top_left_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-top-left"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-top-left");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_top_right_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-top-right"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-top-right");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_bottom_right_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-bottom-right"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-bottom-right");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_bottom_left_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-bottom-left"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-bottom-left");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(Selector(well_in_bottom_left_selector));
@@ -81,28 +54,16 @@ test("Plate Navigator updates shifting Quadrant -1 to Quadrant -2 to Quadrant -3
   await testcafe_page_visual_regression(t, screenshot_path);
   active_quadrant_str = "bottom-left-quadrant-active";
   await t.hover(well_in_top_left_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-top-left"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-top-left");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_top_right_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-top-right"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-top-right");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_bottom_right_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-bottom-right"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-bottom-right");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_bottom_left_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-bottom-left"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-bottom-left");
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(Selector(well_in_bottom_right_selector));
@@ -110,28 +71,16 @@ test("Plate Navigator updates shifting Quadrant -1 to Quadrant -2 to Quadrant -3
   await testcafe_page_visual_regression(t, screenshot_path);
   active_quadrant_str = "bottom-right-quadrant-active";
   await t.hover(well_in_top_left_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-top-left"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-top-left");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_top_right_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-top-right"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-top-right");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_bottom_right_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-bottom-right"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-bottom-right");
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.hover(well_in_bottom_left_selector);
-  screenshot_path = path.join(
-    base_screenshot_path,
-    active_quadrant_str + "--hovering-on-bottom-left"
-  );
+  screenshot_path = path.join(base_screenshot_path, active_quadrant_str + "--hovering-on-bottom-left");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 

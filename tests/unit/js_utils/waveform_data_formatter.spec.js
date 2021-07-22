@@ -2,10 +2,10 @@ import {
   convert_from_json_of_sample_idx_and_value,
   find_closest_array_idx,
   get_array_slice_to_display,
-  append_get_available_well_data,
+  append_well_data,
 } from "@/js_utils/waveform_data_formatter.js";
 
-import waveform_store_module from "@/store/modules/waveform";
+import data_store_module from "@/store/modules/data";
 
 const mantarray_single_well_simulated_45_seconds_json = require("@/tests/sample_waveform_data/mantarray/single_well/simulated_45_seconds.json");
 
@@ -56,68 +56,43 @@ describe("waveform_data_formatter.js", () => {
 
   describe("get_array_slice_to_display", () => {
     test("When called with starting and ending values exactly matching values in the array, Then it returns a slice inclusive of those indices", () => {
-      const arr = get_array_slice_to_display(
-        converted_array_x,
-        converted_array_y,
-        0,
-        70000
-      );
+      const arr = get_array_slice_to_display(converted_array_x, converted_array_y, 0, 70000);
       expect(arr).toHaveLength(13);
       expect(arr[0][0]).toStrictEqual(0);
       expect(arr[arr.length - 1][0]).toStrictEqual(70000);
     });
     test("When called with an end value higher than the highest value in the array, Then it returns a slice ending at the last index in the array", () => {
-      const arr = get_array_slice_to_display(
-        converted_array_x,
-        converted_array_y,
-        3981000,
-        3995000
-      );
+      const arr = get_array_slice_to_display(converted_array_x, converted_array_y, 3981000, 3995000);
       expect(arr).toHaveLength(4);
       expect(arr[0][0]).toStrictEqual(3981000);
       expect(arr[arr.length - 1][0]).toStrictEqual(3994000);
     });
     test("When called with a starting value in between two elements in the array, Then it returns a slice beginning with the index of the value lower than the starting value", () => {
-      const arr = get_array_slice_to_display(
-        converted_array_x,
-        converted_array_y,
-        1,
-        69999
-      );
+      const arr = get_array_slice_to_display(converted_array_x, converted_array_y, 1, 69999);
       expect(arr).toHaveLength(13);
       expect(arr[0][0]).toStrictEqual(0);
       expect(arr[arr.length - 1][0]).toStrictEqual(70000);
     });
 
     test("When called with starting and ending values in between elements in the array, Then it returns extra elements on both sides of the slice", () => {
-      const arr = get_array_slice_to_display(
-        converted_array_x,
-        converted_array_y,
-        1,
-        69998
-      );
+      const arr = get_array_slice_to_display(converted_array_x, converted_array_y, 1, 69998);
       expect(arr).toHaveLength(13);
       expect(arr[0][0]).toStrictEqual(0);
       expect(arr[arr.length - 1][0]).toStrictEqual(70000);
     });
     test("When the starting search space is negative but reaches zero, Then it still returns the first element", () => {
-      const arr = get_array_slice_to_display(
-        [0, 50],
-        [200, 300],
-        -70000,
-        70000
-      );
+      const arr = get_array_slice_to_display([0, 50], [200, 300], -70000, 70000);
       expect(arr).toHaveLength(1);
       expect(arr[0][0]).toStrictEqual(0);
       expect(arr[0][1]).toStrictEqual(200);
     });
     test("When waveform data object is appended with existing waveform data object, Then the returned value is the correct length", () => {
-      const lar = append_get_available_well_data(ar, nr);
+      const lar = append_well_data(ar, nr);
       expect(lar[0].x_data_points).toHaveLength(8);
     });
-    test("When append_get_available_well_data is called to add new data to the Vuex store initial state, Then the Response data is appended to the correct well indices", () => {
-      const initial_vuex_state = waveform_store_module.state().plate_waveforms;
-      const new_array = append_get_available_well_data(initial_vuex_state, nr);
+    test("When append_well_data is called to add new data to the Vuex store initial state, Then the Response data is appended to the correct well indices", () => {
+      const initial_vuex_state = data_store_module.state().plate_waveforms;
+      const new_array = append_well_data(initial_vuex_state, nr);
 
       expect(new_array[0].x_data_points).toHaveLength(4);
       expect(new_array[0].x_data_points[3]).toStrictEqual(52000);

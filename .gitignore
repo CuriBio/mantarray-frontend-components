@@ -18,7 +18,6 @@ venv/
 tests/__coverage__
 test-report.html
 
-
 docs/build/
 
 # Testcafe screenshots
@@ -28,3 +27,5 @@ docs/build/
 **/e2e/screenshots/*-actual-diff.png
 **/e2e/screenshots/**/thumbnails
 **/e2e/screenshots/thumbnails
+
+.vscode/*

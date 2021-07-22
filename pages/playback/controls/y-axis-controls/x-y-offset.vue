@@ -1,14 +1,11 @@
 <template>
   <div>
-    <YAxisControls
-      :css_top_anchor="'2px'"
-      :css_left_anchor="'28px'"
-    ></YAxisControls>
+    <YAxisControls :css_top_anchor="'2px'" :css_left_anchor="'28px'"></YAxisControls>
   </div>
 </template>
 
 <script>
-import { YAxisControls } from "../../../../dist/mantarray.common";
+import { YAxisControls } from "@/dist/mantarray.common";
 
 export default {
   components: {

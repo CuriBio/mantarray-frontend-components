@@ -1,9 +1,6 @@
 <template>
   <div>
-    <ComponentToTest
-      :selected="pre_select_wells"
-      :platecolor="passing_plate_colors"
-    ></ComponentToTest>
+    <ComponentToTest :selected="pre_select_wells" :platecolor="passing_plate_colors"></ComponentToTest>
   </div>
 </template>
 

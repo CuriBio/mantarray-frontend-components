@@ -13,10 +13,7 @@ export default {
     DesktopPlayerControls,
   },
   created: function () {
-    this.$store.commit(
-      "playback/set_playback_state",
-      playback_module.ENUMS.PLAYBACK_STATES.RECORDING
-    );
+    this.$store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.RECORDING);
     this.$store.commit("playback/set_barcode_number", "MA200440004");
   },
 };

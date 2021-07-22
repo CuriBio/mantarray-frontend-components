@@ -66,9 +66,7 @@ describe("XAxisControls.vue", () => {
       // confirm expected pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(0);
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-in-button");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
@@ -92,9 +90,7 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_x_axis_zoom_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(4);
@@ -121,16 +117,12 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_x_axis_zoom_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(4);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-x-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-x-axis-controls--disabled");
     });
     it("should add the disabled CSS class to the button after clicking to move into the max zoom level", async () => {
       const propsData = {};
@@ -149,34 +141,24 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_x_axis_zoom_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(3);
 
-      expect(target_button.classes()).not.toContain(
-        "div__playback-x-axis-controls--disabled"
-      );
+      expect(target_button.classes()).not.toContain("div__playback-x-axis-controls--disabled");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.waveform.x_zoom_level_idx).toEqual(4);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-x-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-x-axis-controls--disabled");
     });
     it("should add the disabled CSS class to the button after clicking to move into the max zoom level with 3 total zoom levels", async () => {
       const propsData = {};
 
-      let x_zoom_levels = [
-        { x_scale: 30 * 100000 },
-        { x_scale: 15 * 100000 },
-        { x_scale: 5 * 100000 },
-      ];
+      let x_zoom_levels = [{ x_scale: 30 * 100000 }, { x_scale: 15 * 100000 }, { x_scale: 5 * 100000 }];
 
       let default_x_axis_zoom_idx = 1;
 
@@ -186,25 +168,19 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_x_axis_zoom_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(1);
 
-      expect(target_button.classes()).not.toContain(
-        "div__playback-x-axis-controls--disabled"
-      );
+      expect(target_button.classes()).not.toContain("div__playback-x-axis-controls--disabled");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.waveform.x_zoom_level_idx).toEqual(2);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-x-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-x-axis-controls--disabled");
     });
 
     it("should add the enabled CSS class to the button if the component initially loads not at the maximum zoom level", async () => {
@@ -225,16 +201,12 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_x_axis_zoom_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-in-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-in-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(1);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-x-axis-controls--enabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-x-axis-controls--enabled");
     });
   });
   describe("x-zoom-out", () => {
@@ -255,9 +227,7 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(1);
@@ -283,9 +253,7 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(0);
@@ -314,16 +282,12 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(0);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-x-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-x-axis-controls--disabled");
     });
 
     it("should add the enabled CSS class to the button if the component initially loads not at the lowest zoom level", async () => {
@@ -344,16 +308,12 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(1);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-x-axis-controls--enabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-x-axis-controls--enabled");
     });
 
     it("should add the disabled CSS class to the button after clicking to move into the min zoom level", async () => {
@@ -374,25 +334,19 @@ describe("XAxisControls.vue", () => {
       store.commit("waveform/set_x_axis_zoom_idx", default_zoom_level_idx);
       await wrapper.vm.$nextTick(); // wait for update
 
-      const target_button = wrapper.find(
-        ".span__playback-x-axis-controls-zoom-out-button"
-      );
+      const target_button = wrapper.find(".span__playback-x-axis-controls-zoom-out-button");
 
       // confirm pre-condition
       expect(store.state.waveform.x_zoom_level_idx).toEqual(1);
 
-      expect(target_button.classes()).not.toContain(
-        "div__playback-x-axis-controls--disabled"
-      );
+      expect(target_button.classes()).not.toContain("div__playback-x-axis-controls--disabled");
 
       target_button.trigger("click");
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.waveform.x_zoom_level_idx).toEqual(0);
 
-      expect(target_button.classes()).toContain(
-        "div__playback-x-axis-controls--disabled"
-      );
+      expect(target_button.classes()).toContain("div__playback-x-axis-controls--disabled");
     });
   });
 });

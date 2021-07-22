@@ -37,9 +37,7 @@ describe("Waveform.vue", () => {
     };
 
     wrapper = shallowMount(dist_Waveform, { propsData });
-    expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(
-      "A07"
-    );
+    expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual("A07");
   });
 
   test("When initially mounted, Then the text value in the DOM matches the title prop", () => {
@@ -49,9 +47,7 @@ describe("Waveform.vue", () => {
     };
     wrapper = shallowMount(Waveform, { propsData });
 
-    expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(
-      expected_value
-    );
+    expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(expected_value);
   });
 
   test("When the title prop is updated, Then the text value in the DOM should update", async () => {
@@ -62,16 +58,12 @@ describe("Waveform.vue", () => {
     wrapper = shallowMount(Waveform, { propsData });
 
     // confirm initial condition
-    expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(
-      expected_value
-    );
+    expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(expected_value);
     const new_expected_value = "D12";
     wrapper.setProps({ title: new_expected_value });
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(
-      new_expected_value
-    );
+    expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(new_expected_value);
   });
 
   // // TODO (Eli 2/3/20): figure out how to unit test prop validators so this can be added
@@ -93,9 +85,7 @@ describe("Waveform.vue", () => {
       propsData.x_axis_label = expected_value;
       wrapper = shallowMount(Waveform, { propsData });
 
-      expect(wrapper.find(x_axis_title_selector_text).text()).toStrictEqual(
-        expected_value
-      );
+      expect(wrapper.find(x_axis_title_selector_text).text()).toStrictEqual(expected_value);
     });
 
     test("When the x_axis_label prop is updated, Then the x-axis title updates", async () => {
@@ -104,17 +94,13 @@ describe("Waveform.vue", () => {
       wrapper = shallowMount(Waveform, { propsData });
 
       // confirm pre-condition
-      expect(wrapper.find(x_axis_title_selector_text).text()).toStrictEqual(
-        expected_value
-      );
+      expect(wrapper.find(x_axis_title_selector_text).text()).toStrictEqual(expected_value);
 
       const new_expected_value = "Frequency";
       wrapper.setProps({ x_axis_label: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(wrapper.find(x_axis_title_selector_text).text()).toStrictEqual(
-        new_expected_value
-      );
+      expect(wrapper.find(x_axis_title_selector_text).text()).toStrictEqual(new_expected_value);
     });
 
     test("When initially mounted, Then the left label of the x-axis should be 0 by default", () => {
@@ -167,9 +153,7 @@ describe("Waveform.vue", () => {
 
       const ticks_with_text = get_x_axis_ticks_with_text(wrapper);
 
-      expect(
-        ticks_with_text.at(ticks_with_text.length - 1).text()
-      ).toStrictEqual("4.0"); // Eli (2/2/20): D3 includes the comma by default...this is not stating an opinion that the comma should or should not be there...still TBD
+      expect(ticks_with_text.at(ticks_with_text.length - 1).text()).toStrictEqual("4.0"); // Eli (2/2/20): D3 includes the comma by default...this is not stating an opinion that the comma should or should not be there...still TBD
     });
 
     test("When the x_axis_sample_length prop is updated, Then the right label of the x-axis is updated", async () => {
@@ -181,16 +165,12 @@ describe("Waveform.vue", () => {
 
       const ticks_with_text_before = get_x_axis_ticks_with_text(wrapper);
       // confirm initial state
-      expect(
-        ticks_with_text_before.at(ticks_with_text_before.length - 1).text()
-      ).toStrictEqual("1.0");
+      expect(ticks_with_text_before.at(ticks_with_text_before.length - 1).text()).toStrictEqual("1.0");
 
       wrapper.setProps({ x_axis_sample_length: 2 * 100000 });
       await wrapper.vm.$nextTick(); // wait for update
       const ticks_with_text_after = get_x_axis_ticks_with_text(wrapper);
-      expect(
-        ticks_with_text_after.at(ticks_with_text_after.length - 1).text()
-      ).toStrictEqual("2.0");
+      expect(ticks_with_text_after.at(ticks_with_text_after.length - 1).text()).toStrictEqual("2.0");
     });
   });
 
@@ -202,9 +182,7 @@ describe("Waveform.vue", () => {
 
       wrapper = shallowMount(Waveform, { propsData });
 
-      expect(wrapper.find(y_axis_title_selector_text).text()).toStrictEqual(
-        expected_value
-      );
+      expect(wrapper.find(y_axis_title_selector_text).text()).toStrictEqual(expected_value);
     });
 
     test("When the y_axis_label prop is updated, Then the y-axis title updates", async () => {
@@ -213,17 +191,13 @@ describe("Waveform.vue", () => {
       wrapper = shallowMount(Waveform, { propsData });
 
       // confirm pre-condition
-      expect(wrapper.find(y_axis_title_selector_text).text()).toStrictEqual(
-        expected_value
-      );
+      expect(wrapper.find(y_axis_title_selector_text).text()).toStrictEqual(expected_value);
 
       const new_expected_value = "Frequency";
       wrapper.setProps({ y_axis_label: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(wrapper.find(y_axis_title_selector_text).text()).toStrictEqual(
-        new_expected_value
-      );
+      expect(wrapper.find(y_axis_title_selector_text).text()).toStrictEqual(new_expected_value);
     });
     test("When initially mounted, Then the bottom label of the y-axis is 0 by default", () => {
       const propsData = {
@@ -273,9 +247,7 @@ describe("Waveform.vue", () => {
 
       const ticks_with_text = get_y_axis_ticks_with_text(wrapper);
 
-      expect(
-        ticks_with_text.at(ticks_with_text.length - 1).text()
-      ).toStrictEqual("400");
+      expect(ticks_with_text.at(ticks_with_text.length - 1).text()).toStrictEqual("400");
     });
 
     test("When initially mounted, Then the top label of the y-axis is set to the value of y_max provided in props", () => {
@@ -287,9 +259,7 @@ describe("Waveform.vue", () => {
 
       const ticks_with_text = get_y_axis_ticks_with_text(wrapper);
 
-      expect(
-        ticks_with_text.at(ticks_with_text.length - 1).text()
-      ).toStrictEqual("160");
+      expect(ticks_with_text.at(ticks_with_text.length - 1).text()).toStrictEqual("160");
     });
 
     test("When the y_max prop is updated, Then the top label of the y-axis is updated", async () => {
@@ -301,16 +271,12 @@ describe("Waveform.vue", () => {
 
       const ticks_with_text_before = get_y_axis_ticks_with_text(wrapper);
       // confirm initial state
-      expect(
-        ticks_with_text_before.at(ticks_with_text_before.length - 1).text()
-      ).toStrictEqual("100");
+      expect(ticks_with_text_before.at(ticks_with_text_before.length - 1).text()).toStrictEqual("100");
 
       wrapper.setProps({ y_max: 500 });
       await wrapper.vm.$nextTick(); // wait for update
       const ticks_with_text_after = get_y_axis_ticks_with_text(wrapper);
-      expect(
-        ticks_with_text_after.at(ticks_with_text_after.length - 1).text()
-      ).toStrictEqual("500");
+      expect(ticks_with_text_after.at(ticks_with_text_after.length - 1).text()).toStrictEqual("500");
     });
   });
 
@@ -320,10 +286,7 @@ describe("Waveform.vue", () => {
     let attributes_used_to_calculate_coords = null;
     const reduced_array_x = converted_array_x.slice(0, 19);
     const reduced_array_y = converted_array_y.slice(0, 19);
-    const x_y_data = convert_x_y_arrays_to_d3_array(
-      reduced_array_x,
-      reduced_array_y
-    );
+    const x_y_data = convert_x_y_arrays_to_d3_array(reduced_array_x, reduced_array_y);
 
     beforeEach(async () => {
       propsData = {
@@ -350,18 +313,10 @@ describe("Waveform.vue", () => {
       expect(pixel_coords).toHaveLength(19);
       const svg_nodes = wrapper.findAll("#svg_of_waveform > g");
 
-      expect(svg_nodes.wrappers[0].attributes("id")).toStrictEqual(
-        "waveform_line_node"
-      );
-      expect(svg_nodes.wrappers[1].attributes("id")).toStrictEqual(
-        "margin_blockers_node"
-      );
-      expect(svg_nodes.wrappers[2].attributes("id")).toStrictEqual(
-        "x_axis_node"
-      );
-      expect(svg_nodes.wrappers[3].attributes("id")).toStrictEqual(
-        "y_axis_node"
-      );
+      expect(svg_nodes.wrappers[0].attributes("id")).toStrictEqual("waveform_line_node");
+      expect(svg_nodes.wrappers[1].attributes("id")).toStrictEqual("margin_blockers_node");
+      expect(svg_nodes.wrappers[2].attributes("id")).toStrictEqual("x_axis_node");
+      expect(svg_nodes.wrappers[3].attributes("id")).toStrictEqual("y_axis_node");
     });
     test("When mounted, Then it creates margin blockers of the appropriate size", async () => {
       expect(pixel_coords).toHaveLength(19);
@@ -373,37 +328,25 @@ describe("Waveform.vue", () => {
       expect(parseInt(this_blocker_node.attributes("x"))).toStrictEqual(-60);
       expect(parseInt(this_blocker_node.attributes("y"))).toStrictEqual(-10);
       expect(parseInt(this_blocker_node.attributes("width"))).toStrictEqual(60);
-      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(
-        400
-      );
+      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(400);
 
       this_blocker_node = blocker_node.find("#margin_blocker_right");
       expect(parseInt(this_blocker_node.attributes("x"))).toStrictEqual(371);
       expect(parseInt(this_blocker_node.attributes("y"))).toStrictEqual(-10);
       expect(parseInt(this_blocker_node.attributes("width"))).toStrictEqual(30);
-      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(
-        400
-      );
+      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(400);
 
       this_blocker_node = blocker_node.find("#margin_blocker_top");
       expect(parseInt(this_blocker_node.attributes("x"))).toStrictEqual(0);
       expect(parseInt(this_blocker_node.attributes("y"))).toStrictEqual(-10);
-      expect(parseInt(this_blocker_node.attributes("width"))).toStrictEqual(
-        371
-      );
-      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(
-        10
-      );
+      expect(parseInt(this_blocker_node.attributes("width"))).toStrictEqual(371);
+      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(10);
 
       this_blocker_node = blocker_node.find("#margin_blocker_bottom");
       expect(parseInt(this_blocker_node.attributes("x"))).toStrictEqual(0);
       expect(parseInt(this_blocker_node.attributes("y"))).toStrictEqual(360);
-      expect(parseInt(this_blocker_node.attributes("width"))).toStrictEqual(
-        371
-      );
-      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(
-        30
-      );
+      expect(parseInt(this_blocker_node.attributes("width"))).toStrictEqual(371);
+      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(30);
     });
 
     test("When component is mounted, Then the line is drawn based on the initial props", async () => {
@@ -436,14 +379,8 @@ describe("Waveform.vue", () => {
       );
 
       expect(calculated_data_from_pixels[0][1]).toBeCloseTo(290.429978, 4);
-      expect(calculated_data_from_pixels[14][0]).toBeCloseTo(
-        79000.00000000001,
-        8
-      );
-      expect(calculated_data_from_pixels[14][1]).toBeCloseTo(
-        84.90614533999998,
-        4
-      );
+      expect(calculated_data_from_pixels[14][0]).toBeCloseTo(79000.00000000001, 8);
+      expect(calculated_data_from_pixels[14][1]).toBeCloseTo(84.90614533999998, 4);
     });
     test("When data_points prop is updated, Then the drawn line updates", async () => {
       // confirm initial condition
@@ -451,10 +388,7 @@ describe("Waveform.vue", () => {
 
       const reduced_array_x_2 = converted_array_x_2.slice(0, 17);
       const reduced_array_y_2 = converted_array_y_2.slice(0, 17);
-      const x_y_data = convert_x_y_arrays_to_d3_array(
-        reduced_array_x_2,
-        reduced_array_y_2
-      );
+      const x_y_data = convert_x_y_arrays_to_d3_array(reduced_array_x_2, reduced_array_y_2);
 
       wrapper.setProps({
         data_points: x_y_data,

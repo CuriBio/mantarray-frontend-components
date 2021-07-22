@@ -9,7 +9,7 @@ export { convert_from_json_of_sample_idx_and_value } from "./js_utils/waveform_d
 export { get_well_slice_to_display } from "./js_utils/waveform_data_formatter";
 export { get_array_slice_to_display } from "./js_utils/waveform_data_formatter";
 export { convert_from_json_of_well_indices_and_x_y_arrays } from "./js_utils/waveform_data_formatter";
-export { append_get_available_well_data } from "./js_utils/waveform_data_formatter";
+export { append_well_data } from "./js_utils/waveform_data_formatter";
 export { WellTitle } from "./js_utils/labware_calculations";
 export { TextValidation } from "./js_utils/text_validation";
 
@@ -28,6 +28,7 @@ export {
   system_status_when_server_initializing_regexp,
   all_mantarray_commands_regexp,
 } from "./store/modules/flask/url_regex";
+export { default as stimulation_store_module } from "./store/modules/stimulation";
 
 // Waveform Components
 export { default as Waveform } from "./components/playback/waveform/Waveform.vue";
@@ -54,6 +55,7 @@ export { default as PlateWell } from "./components/basic_widgets/PlateWell.vue";
 export { default as InputWidget } from "./components/basic_widgets/InputWidget.vue";
 export { default as ButtonWidget } from "./components/basic_widgets/ButtonWidget.vue";
 export { default as InputDropDown } from "./components/basic_widgets/InputDropDown.vue";
+export { default as NewSelectDropDown } from "./components/basic_widgets/NewSelectDropDown.vue";
 export { default as CheckBoxWidget } from "./components/basic_widgets/CheckBoxWidget.vue";
 export { default as RadioButtonWidget } from "./components/basic_widgets/RadioButtonWidget.vue";
 export { default as StimulationStudioPlateWell } from "./components/basic_widgets/StimulationStudioPlateWell.vue";
@@ -70,8 +72,17 @@ export { default as SimulationMode } from "./components/status/SimulationMode.vu
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
 export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
-export { default as HeatMapColorBar } from "./components/status/HeatMapColorBar.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
 export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+
+// Stimulation Studio
+export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";
+export { default as StimulationStudioDragAndDropPanel } from "./components/stimulation/StimulationStudioDragAndDropPanel.vue";
+export { default as StimulationStudioBlockViewEditor } from "./components/stimulation/StimulationStudioBlockViewEditor.vue";
+export { default as StimulationStudioWaveformSettingModal } from "./components/stimulation/StimulationStudioWaveformSettingModal.vue";
+export { default as StimulationStudioRepeatDelayModal } from "./components/stimulation/StimulationStudioRepeatDelayModal.vue";
+export { default as StimulationStudioProtocolViewer } from "./components/stimulation/StimulationStudioProtocolViewer.vue";
+export { default as StimulationStudioWaveform } from "./components/stimulation/StimulationStudioWaveform.vue";
+export { default as StimulationStudioZoomControls } from "./components/stimulation/StimulationStudioZoomControls.vue";

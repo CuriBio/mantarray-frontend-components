@@ -1,8 +1,6 @@
 <template>
   <div class="div__playback-desktop-player-controls">
-    <span class="span__playback-desktop-player-controls-text"
-      >Record Options:</span
-    >
+    <span class="span__playback-desktop-player-controls-text">Record Options:</span>
     <div
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
     >
@@ -27,12 +25,8 @@
       <path
         d="M36,10A26,26,0,1,1,10,36,26.1,26.1,0,0,1,36,10M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0Z"
       ></path>
-      <path
-        d="M36,38.7a2.9,2.9,0,0,1-3-3V18.5a3,3,0,0,1,6,0V35.7A2.9,2.9,0,0,1,36,38.7Z"
-      ></path>
-      <path
-        d="M36,38.9H26.8a3,3,0,0,1-3-3,2.9,2.9,0,0,1,3-3H36a2.9,2.9,0,0,1,3,3A3,3,0,0,1,36,38.9Z"
-      ></path>
+      <path d="M36,38.7a2.9,2.9,0,0,1-3-3V18.5a3,3,0,0,1,6,0V35.7A2.9,2.9,0,0,1,36,38.7Z"></path>
+      <path d="M36,38.9H26.8a3,3,0,0,1-3-3,2.9,2.9,0,0,1,3-3H36a2.9,2.9,0,0,1,3,3A3,3,0,0,1,36,38.9Z"></path>
     </svg>
 
     <span
@@ -46,9 +40,7 @@
       v-b-popover.hover.bottomright="calibrate_tooltip_text"
       class="svg__playback-desktop-player-controls-button svg__playback-desktop-player-controls-calibrate-button"
       viewBox="0 0 30 30"
-      :class="
-        svg__playback_desktop_player_controls_calibrate_button__dynamic_class
-      "
+      :class="svg__playback_desktop_player_controls_calibrate_button__dynamic_class"
       :title="calibrate_title"
       @click="on_calibrate_click()"
     >
@@ -56,9 +48,7 @@
       <path
         d="M15,0A15,15,0,1,0,30,15,15,15,0,0,0,15,0Zm8.81,21.29H6.19a10.79,10.79,0,0,1-1.95-5h.88a1.25,1.25,0,1,0,0-2.5H4.24A10.91,10.91,0,0,1,6.52,8.26L7.24,9A1.25,1.25,0,1,0,9,7.21L8.3,6.5a10.74,10.74,0,0,1,5.4-2.25V5.54a1.25,1.25,0,0,0,2.5,0V4.23a10.77,10.77,0,0,1,5.51,2.28l-.84.84a1.26,1.26,0,0,0,.88,2.14,1.29,1.29,0,0,0,.89-.37l.84-.85a10.79,10.79,0,0,1,2.28,5.48h-.88a1.25,1.25,0,1,0,0,2.5h.88A10.79,10.79,0,0,1,23.81,21.29Z"
       ></path>
-      <path
-        d="M16.25,15.34V9.8a1.25,1.25,0,0,0-2.5,0v5.54a2.07,2.07,0,1,0,2.5,0Z"
-      ></path>
+      <path d="M16.25,15.34V9.8a1.25,1.25,0,0,0-2.5,0v5.54a2.07,2.07,0,1,0,2.5,0Z"></path>
       <ellipse
         v-show="
           playback_state !== playback_state_enums.NEEDS_CALIBRATION &&
@@ -79,9 +69,7 @@
       v-b-popover.hover.bottomright="liveview_tooltip_text"
       class="svg__playback-desktop-player-controls-button svg__playback-desktop-player-controls-live-view-button"
       viewBox="0 0 30 30"
-      :class="
-        svg__playback_desktop_player_controls_live_view_button__dynamic_class
-      "
+      :class="svg__playback_desktop_player_controls_live_view_button__dynamic_class"
       :title="liveview_title"
       @click="on_live_view_click()"
     >
@@ -111,16 +99,12 @@
       v-b-popover.hover.bottomright="record_tooltip_text"
       class="svg__playback-desktop-player-controls-button svg__playback-desktop-player-controls-record-button svg__playback-desktop-player-controls-record-button--inactive"
       viewBox="0 0 72 72"
-      :class="
-        svg__playback_desktop_player_controls_record_button__inactive__dynamic_class
-      "
+      :class="svg__playback_desktop_player_controls_record_button__inactive__dynamic_class"
       :title="record_title"
       @click="on_activate_record_click()"
     >
       <!-- original mockflow ID: id="cmpD065153341d021afab2bfa7dccd1fae68"-->
-      <path
-        d="M36,10A26,26,0,1,1,10,36,26.1,26.1,0,0,1,36,10M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0Z"
-      >
+      <path d="M36,10A26,26,0,1,1,10,36,26.1,26.1,0,0,1,36,10M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0Z">
         <!--Outer circle-->
       </path>
       <path d="M36,21.6A14.4,14.4,0,1,0,50.4,36,14.3,14.3,0,0,0,36,21.6Z">
@@ -132,16 +116,12 @@
       v-b-popover.hover.bottomright="record_tooltip_text"
       class="svg__playback-desktop-player-controls-button svg__playback-desktop-player-controls-record-button svg__playback-desktop-player-controls-record-button--active"
       viewBox="0 0 72 72"
-      :class="
-        svg__playback_desktop_player_controls_record_button__active__dynamic_class
-      "
+      :class="svg__playback_desktop_player_controls_record_button__active__dynamic_class"
       :title="record_title"
       @click="on_stop_record_click()"
     >
       <!-- original mockflow ID: id="cmpD065153341d021afab2bfa7dccd1fae68"-->
-      <path
-        d="M36,10A26,26,0,1,1,10,36,26.1,26.1,0,0,1,36,10M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0Z"
-      >
+      <path d="M36,10A26,26,0,1,1,10,36,26.1,26.1,0,0,1,36,10M36,0A36,36,0,1,0,72,36,36,36,0,0,0,36,0Z">
         <!--Outer circle-->
       </path>
 
@@ -163,10 +143,7 @@ import { mapState } from "vuex";
 import playback_module from "@/store/modules/playback";
 import PlayerControlsSettingsButton from "./PlayerControlsSettingsButton.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faPlayCircle as fa_play_circle,
-  faSpinner as fa_spinner,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlayCircle as fa_play_circle, faSpinner as fa_spinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import Vue from "vue";
@@ -267,9 +244,7 @@ export default {
       if (this.playback_state === this.playback_state_enums.RECORDING) {
         return "Must stop recording before deactivating.";
       }
-      if (
-        this.playback_state === this.playback_state_enums.CALIBRATION_NEEDED
-      ) {
+      if (this.playback_state === this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Must calibrate before activating.";
       }
       if (this.playback_state === this.playback_state_enums.CALIBRATED) {
@@ -311,8 +286,7 @@ export default {
     svg__playback_desktop_player_controls_live_view_button__dynamic_class: function () {
       return {
         "span__playback-desktop-player-controls--available":
-          this.playback_state === this.playback_state_enums.CALIBRATED &&
-          this.is_valid_barcode != false,
+          this.playback_state === this.playback_state_enums.CALIBRATED && this.is_valid_barcode != false,
         "span__playback-desktop-player-controls--active":
           this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE,
         "span__playback-desktop-player-controls--running-in-background":
@@ -357,7 +331,7 @@ export default {
   },
 };
 </script>
-<style>
+<style type="text/css">
 .div__playback-desktop-player-controls {
   --span__playback-desktop-player-controls-button--Top: 37px;
   --span__playback-desktop-player-controls-button--LeftmostLeft: 16px;
@@ -453,8 +427,7 @@ export default {
   fill: #db2400;
 }
 
-.span__playback-desktop-player-controls--active
-  .svg__playback-desktop-player-controls-live-view-button-iris,
+.span__playback-desktop-player-controls--active .svg__playback-desktop-player-controls-live-view-button-iris,
 .span__playback-desktop-player-controls--running-in-background
   .svg__playback-desktop-player-controls-live-view-button-iris,
 .ellipse__playback-desktop-player-controls-calibrate-button-indicator {

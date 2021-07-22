@@ -10,11 +10,7 @@ fixture`basic_widgets/stimulation-well/basic`
 `http://localhost:8080/basic_widgets/stimulation-well/basic`; // specify the start page
 
 test("StimulationWellWidget when the no protocol is applied", async (t) => {
-  const screenshot_path = path.join(
-    "basic_widgets",
-    "simulation-well",
-    "basic-stimulation-well"
-  );
+  const screenshot_path = path.join("basic_widgets", "simulation-well", "basic-stimulation-well");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
@@ -23,11 +19,7 @@ fixture`basic_widgets/stimulation-well/basic-protocol-applied`
 `http://localhost:8080/basic_widgets/stimulation-well/basic-protocol-applied`; // specify the start page
 
 test("StimulationWellWidget with the protocol is applied", async (t) => {
-  const screenshot_path = path.join(
-    "basic_widgets",
-    "simulation-well",
-    "basic-stimulation-protocol-applied"
-  );
+  const screenshot_path = path.join("basic_widgets", "simulation-well", "basic-stimulation-protocol-applied");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
@@ -36,10 +28,6 @@ fixture`basic_widgets/stimulation-well/x-y-offset`
 `http://localhost:8080/basic_widgets/stimulation-well/x-y-offset`; // specify the start page
 
 test("StimulationWellWidget with the X Y Offset applied", async (t) => {
-  const screenshot_path = path.join(
-    "basic_widgets",
-    "simulation-well",
-    "x-y-offset"
-  );
+  const screenshot_path = path.join("basic_widgets", "simulation-well", "x-y-offset");
   await testcafe_page_visual_regression(t, screenshot_path);
 });

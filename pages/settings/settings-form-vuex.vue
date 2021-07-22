@@ -53,10 +53,7 @@ export default {
         user_ids: array_of_userid_2,
       },
     ];
-    this.$store.commit(
-      "settings/set_customer_account_ids",
-      array_of_customerids
-    );
+    this.$store.commit("settings/set_customer_account_ids", array_of_customerids);
     this.$store.commit("settings/set_customer_index", 0);
     this.$store.commit("settings/set_user_index", 0);
   },

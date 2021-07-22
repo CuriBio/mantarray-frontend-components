@@ -19,13 +19,7 @@ export default {
   },
   created: function () {
     const x_values = [0, 3000, 7000, 14000, 23000];
-    const y_values = [
-      290.429978,
-      298.5820692,
-      327.728242,
-      352.3291106,
-      370.8505055,
-    ];
+    const y_values = [290.429978, 298.5820692, 327.728242, 352.3291106, 370.8505055];
     this.temp_datapoints = [
       { x_data_points: x_values, y_data_points: y_values },
       { x_data_points: x_values, y_data_points: y_values },
@@ -34,7 +28,7 @@ export default {
       { x_data_points: x_values, y_data_points: y_values },
       { x_data_points: x_values, y_data_points: y_values },
     ];
-    this.$store.commit("waveform/set_plate_waveforms", this.temp_datapoints);
+    this.$store.commit("data/set_plate_waveforms", this.temp_datapoints);
     const y_zoom_levels = [
       { y_min: 0, y_max: 500 },
       { y_min: 100, y_max: 400 },
@@ -53,10 +47,7 @@ export default {
     ];
     const default_x_zoom_level_idx = 2;
     this.$store.commit("waveform/set_x_axis_zoom_levels", x_zoom_levels);
-    this.$store.commit(
-      "waveform/set_x_axis_zoom_idx",
-      default_x_zoom_level_idx
-    );
+    this.$store.commit("waveform/set_x_axis_zoom_idx", default_x_zoom_level_idx);
   },
 };
 </script>

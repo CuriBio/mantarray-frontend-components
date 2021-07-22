@@ -1,13 +1,8 @@
 <template>
   <div>
     <div class="div__edituser-form-controls"></div>
-    <span class="span__edituser-form-controls-content-title">
-      Edit&nbsp;<wbr />User&nbsp;<wbr />ID
-    </span>
-    <div
-      id="uuid"
-      style="top: 50px; left: 50px; position: absolute; z-index: 24"
-    >
+    <span class="span__edituser-form-controls-content-title"> Edit&nbsp;<wbr />User&nbsp;<wbr />ID </span>
+    <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
         :title_label="'Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
@@ -16,14 +11,12 @@
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
+        :default_state="false"
         @update:value="on_update_uuid($event)"
       ></InputWidget>
     </div>
 
-    <div
-      id="nickname"
-      style="top: 145px; left: 50px; position: absolute; z-index: 23"
-    >
+    <div id="nickname" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
         :title_label="'ID Nickname'"
         :placeholder="'Marie Curie'"
@@ -31,6 +24,7 @@
         :invalid_text="error_text_nickname"
         :input_width="400"
         :dom_id_suffix="'nickname-id'"
+        :default_state="false"
         @update:value="on_update_nickname($event)"
       ></InputWidget>
     </div>
@@ -43,6 +37,7 @@
         :button_names="['Cancel', 'Delete ID', 'Save ID']"
         :hover_color="['#bd4932', '#bd4932', '#19ac8a']"
         :is_enabled="enablelist_edit_user"
+        :default_state="false"
         @btn-click="clicked_button"
       >
       </ButtonWidget>
@@ -182,8 +177,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget
-  > #input-widget-field-nickname-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-nickname-id {
   font-family: Muli;
 }
 </style>

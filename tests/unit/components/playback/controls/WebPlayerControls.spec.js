@@ -37,9 +37,7 @@ describe("WebPlayerControls.vue", () => {
       store,
       localVue,
     });
-    const target_span = wrapper.find(
-      ".span__playback-web-player-controls-text"
-    );
+    const target_span = wrapper.find(".span__playback-web-player-controls-text");
 
     expect(target_span.text()).toEqual("Playback Options:");
   });
@@ -57,9 +55,7 @@ describe("WebPlayerControls.vue", () => {
       localVue,
     });
 
-    expect(store.state.playback.playback_state).toEqual(
-      playback_module.ENUMS.PLAYBACK_STATES["STOPPED"]
-    );
+    expect(store.state.playback.playback_state).toEqual(playback_module.ENUMS.PLAYBACK_STATES["STOPPED"]);
   });
 
   it("mutates loop_playback state in Vuex when control is clicked", async () => {
@@ -69,9 +65,7 @@ describe("WebPlayerControls.vue", () => {
       store,
       localVue,
     });
-    const loop_playback_button = wrapper.find(
-      ".svg__playback-web-player-controls-loop-button"
-    );
+    const loop_playback_button = wrapper.find(".svg__playback-web-player-controls-loop-button");
 
     // confirm initial state
     expect(store.state.playback.loop_playback).toEqual(false);
@@ -90,38 +84,24 @@ describe("WebPlayerControls.vue", () => {
       store,
       localVue,
     });
-    const loop_playback_button = wrapper.find(
-      ".svg__playback-web-player-controls-loop-button"
-    );
+    const loop_playback_button = wrapper.find(".svg__playback-web-player-controls-loop-button");
 
     // confirm initial state
     expect(store.state.playback.loop_playback).toEqual(false);
-    expect(loop_playback_button.classes()).not.toContain(
-      "span__playback-web-player-controls--active"
-    );
-    expect(loop_playback_button.classes()).toContain(
-      "span__playback-web-player-controls--available"
-    );
+    expect(loop_playback_button.classes()).not.toContain("span__playback-web-player-controls--active");
+    expect(loop_playback_button.classes()).toContain("span__playback-web-player-controls--available");
 
     store.commit("playback/set_loop_playback", true);
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(loop_playback_button.classes()).toContain(
-      "span__playback-web-player-controls--active"
-    );
-    expect(loop_playback_button.classes()).not.toContain(
-      "span__playback-web-player-controls--available"
-    );
+    expect(loop_playback_button.classes()).toContain("span__playback-web-player-controls--active");
+    expect(loop_playback_button.classes()).not.toContain("span__playback-web-player-controls--available");
 
     store.commit("playback/set_loop_playback", false);
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(loop_playback_button.classes()).not.toContain(
-      "span__playback-web-player-controls--active"
-    );
-    expect(loop_playback_button.classes()).toContain(
-      "span__playback-web-player-controls--available"
-    );
+    expect(loop_playback_button.classes()).not.toContain("span__playback-web-player-controls--active");
+    expect(loop_playback_button.classes()).toContain("span__playback-web-player-controls--available");
   });
 
   it.each([
@@ -139,13 +119,9 @@ describe("WebPlayerControls.vue", () => {
         localVue,
       });
       const target_button = wrapper.find(selector_str);
-      const playback_state_enum =
-        playback_module.ENUMS.PLAYBACK_STATES[playback_state_enum_str];
+      const playback_state_enum = playback_module.ENUMS.PLAYBACK_STATES[playback_state_enum_str];
       // set initial state
-      await store.dispatch(
-        "playback/transition_playback_state",
-        playback_state_enum
-      );
+      await store.dispatch("playback/transition_playback_state", playback_state_enum);
       await wrapper.vm.$nextTick(); // wait for update
 
       target_button.trigger("click");
@@ -162,11 +138,7 @@ describe("WebPlayerControls.vue", () => {
     ["PLAYING", "PAUSED", ".svg__playback-web-player-controls-pause-button"],
   ])(
     "transitions playback state in Vuex from %s to %s when the button matching %s is clicked",
-    async (
-      starting_playback_state_enum,
-      ending_playback_state_enum,
-      selector_str
-    ) => {
+    async (starting_playback_state_enum, ending_playback_state_enum, selector_str) => {
       const propsData = {};
       wrapper = shallowMount(WebPlayerControls, {
         propsData,
@@ -191,46 +163,21 @@ describe("WebPlayerControls.vue", () => {
   );
 
   it.each([
-    [
-      ".span__playback-web-player-controls-play-button",
-      "FILE_NOT_LOADED",
-      false,
-      false,
-    ],
+    [".span__playback-web-player-controls-play-button", "FILE_NOT_LOADED", false, false],
     [".span__playback-web-player-controls-play-button", "STOPPED", true, false],
     [".span__playback-web-player-controls-play-button", "PAUSED", true, false],
     [".span__playback-web-player-controls-play-button", "PLAYING", false, true],
-    [
-      ".svg__playback-web-player-controls-pause-button",
-      "FILE_NOT_LOADED",
-      false,
-      false,
-    ],
-    [
-      ".svg__playback-web-player-controls-pause-button",
-      "STOPPED",
-      false,
-      false,
-    ],
+    [".svg__playback-web-player-controls-pause-button", "FILE_NOT_LOADED", false, false],
+    [".svg__playback-web-player-controls-pause-button", "STOPPED", false, false],
     [".svg__playback-web-player-controls-pause-button", "PAUSED", false, true],
     [".svg__playback-web-player-controls-pause-button", "PLAYING", true, false],
-    [
-      ".svg__playback-web-player-controls-stop-button",
-      "FILE_NOT_LOADED",
-      false,
-      false,
-    ],
+    [".svg__playback-web-player-controls-stop-button", "FILE_NOT_LOADED", false, false],
     [".svg__playback-web-player-controls-stop-button", "STOPPED", false, false],
     [".svg__playback-web-player-controls-stop-button", "PAUSED", true, false],
     [".svg__playback-web-player-controls-stop-button", "PLAYING", true, false],
   ])(
     "updates display of button matching %s when playback_state changes in Vuex to %s so that available is %s and active is %s",
-    async (
-      selector_str,
-      playback_state_enum,
-      expected_available,
-      expected_active
-    ) => {
+    async (selector_str, playback_state_enum, expected_available, expected_active) => {
       const propsData = {};
       wrapper = shallowMount(WebPlayerControls, {
         propsData,
@@ -240,29 +187,18 @@ describe("WebPlayerControls.vue", () => {
       const target_button = wrapper.find(selector_str);
 
       // set initial state
-      store.commit(
-        "playback/set_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES[playback_state_enum]
-      );
+      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES[playback_state_enum]);
       await wrapper.vm.$nextTick(); // wait for update
       const the_classes = target_button.classes();
       if (expected_available) {
-        expect(the_classes).toContain(
-          "span__playback-web-player-controls--available"
-        );
+        expect(the_classes).toContain("span__playback-web-player-controls--available");
       } else {
-        expect(the_classes).not.toContain(
-          "span__playback-web-player-controls--available"
-        );
+        expect(the_classes).not.toContain("span__playback-web-player-controls--available");
       }
       if (expected_active) {
-        expect(the_classes).toContain(
-          "span__playback-web-player-controls--active"
-        );
+        expect(the_classes).toContain("span__playback-web-player-controls--active");
       } else {
-        expect(the_classes).not.toContain(
-          "span__playback-web-player-controls--active"
-        );
+        expect(the_classes).not.toContain("span__playback-web-player-controls--active");
       }
     }
   );

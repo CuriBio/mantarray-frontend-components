@@ -33,11 +33,7 @@ export default {
       error_text: "An ID is required",
       entry_width: 400,
       disallow_entry: false,
-      nicknames_list: [
-        "Customer Account 1",
-        "Customer Account-2",
-        "Customer Account-3",
-      ],
+      nicknames_list: ["Customer Account 1", "Customer Account-2", "Customer Account-3"],
       on_empty_flag: true,
     };
   },

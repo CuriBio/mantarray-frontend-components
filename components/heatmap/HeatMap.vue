@@ -2,202 +2,388 @@
   <div>
     <!--  original mockflow ID:  cmpDf4f7dd55b2e166cb0d0e843ee15b7aad -->
     <div class="div__heatmap-layout-background"></div>
+
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
-    <div class="div__heatmap-layout-twitch-force-label">Twitch Force (μN)</div>
+    <div class="div__heatmap-layout-twitch-force-label">{{ entrykey }} ({{ unit }})</div>
+
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
-      <PlateHeatMap :platecolor="passing_plate_colors"></PlateHeatMap>
+      <PlateHeatMap
+        :platecolor="passing_plate_colors"
+        @platewell-selected="on_well_selection_changed"
+      ></PlateHeatMap>
     </div>
+
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
-    <div class="div__heatmap-layout-heatmap-well-label">Well A01 (μN):</div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">No Wells Selected</div>
+
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
-    <div class="div__heatmap-layout-heatmap-well-value">0</div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value"></div>
+
+    <!-- original mockflow ID: cmpD0f9518f2e3b32a8fd2907a6c9167ed79 -->
+    <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-well-label">
+      Mean of {{ selected_wells.length }} Wells ({{ unit }}):
+    </div>
+
+    <!-- original mockflow ID: cmpDbf7507b833445c460899c3735fd95527 -->
+    <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-value-well-label">
+      {{ mean_value }}
+    </div>
+
     <!-- original mockflow ID: cmpDb59694a85eb967571cf98a41b5fa7481 -->
     <div class="div__heatmap-layout-heatmap-colorbar-container">
-      <HeatMapColorBar
-        :gradient_uuid="provided_uuid"
-        :lower_range="lower"
-        :upper_range="upper"
-        :heatmap_height="height"
-        :gradient_range="range"
-        :units="unit"
-      ></HeatMapColorBar>
+      <GradientBar :gradient_height="481" :gradient_width="40" :units="unit"></GradientBar>
     </div>
+
     <!-- original mockflow ID: cmpDceaaf3ae28ae1a3394f714f82cb8848d -->
     <div class="div__heatmap-layout-heatmap-settings-panel"></div>
+
     <!-- original mockflow ID: cmpD64bd4f78c20868d7dd5a9b4aa39bf217 -->
-    <span class="span__heatmap-layout-heatmap-settings-label">
-      Heatmap&nbsp;<wbr />Settings
-    </span>
+    <span class="span__heatmap-layout-heatmap-settings-label">Heatmap Settings</span>
+
     <!-- original mockflow ID: cmpD56369ad2e65893ae5ca594f14a64e378 -->
-    <canvas
-      class="canvas__heatmap-settings-title-seperator"
-      width="272"
-      height="2"
-    >
-    </canvas>
+    <canvas class="canvas__heatmap-settings-title-seperator" width="272" height="2"> </canvas>
+
     <!-- original mockflow ID: cmpD9c0a6e873d03a7f83e8a68941610e993 -->
-    <span class="span__heatmap-layout-heatmap-scale-label">
-      Scale&nbsp;<wbr />Bar</span
-    >
+    <span class="span__heatmap-layout-heatmap-scale-label">Scale Bar</span>
+
     <!-- original mockflow ID:  cmpD5cceb38a3af00a6bd7589d883fa87688 -->
     <div class="div__heatmap-layout-checkbox-container">
-      <CheckBoxWidget :checkbox_options="option"></CheckBoxWidget>
+      <CheckBoxWidget :checkbox_options="option" @checkbox-selected="auto_scale"></CheckBoxWidget>
     </div>
+
     <!-- original mockflow ID:  cmpD8a25d29c92a6f84cc071bcf466ca36ce -->
-    <span class="span__heatmap-layout-checkbox-label"
-      >Auto&nbsp;<wbr />Scale</span
-    >
+    <span class="span__heatmap-layout-checkbox-label">Auto&nbsp;<wbr />Scale</span>
     <!-- original mockflow ID:  cmpDda68e4034616b4f5e244dc57e815c027 -->
     <span class="span__heatmap-layout-maximum-label">Maximum</span>
+
     <!-- original mockflow ID:  cmpDb88cb7785bf9ca45549b1866c2c20122 -->
-    <div
-      class="div__heatmap-layout-maximum-input-container"
-      width="121"
-      height="52"
-    >
+    <div class="div__heatmap-layout-maximum-input-container" width="121" height="52">
       <InputWidget
         :placeholder="'100'"
-        :invalid_text="''"
+        :invalid_text="max_value_error_msg"
         :input_width="105"
+        :dom_id_suffix="'max'"
+        @update:value="on_update_maximum($event)"
       ></InputWidget>
     </div>
+
     <!-- original mockflow ID:  cmpDc06480c6344db8d23dca86a4c1e88ab4 -->
     <span class="span__heatmap-layout-minimum-input-container">Minimum</span>
+
     <!-- original mockflow ID:  cmpD1fda22cfac2b66c17a7f3def056669a0 -->
-    <div
-      class="div__heatmap-layout-minimum-input-container"
-      width="121"
-      height="52"
-    >
+    <div class="div__heatmap-layout-minimum-input-container" width="121" height="52">
       <InputWidget
         :placeholder="'0'"
-        :invalid_text="''"
+        :invalid_text="min_value_error_msg"
         :input_width="105"
+        :dom_id_suffix="'min'"
+        @update:value="on_update_minimum($event)"
       ></InputWidget>
     </div>
+
     <!-- original mockflow ID:  cmpD8d0ef3020c7613af7ae63fa5722de759  -->
-    <canvas
-      class="canvas__heatmap-settings-scale-seperator"
-      width="212"
-      height="2"
-    >
-    </canvas>
+    <canvas class="canvas__heatmap-settings-scale-seperator" width="212" height="2"> </canvas>
+
     <!-- original mockflow ID: cmpD4146e3d532d7eb0719ee0d6e06485940 -->
     <span class="span__heatmap-layout-display-label">Display</span>
+
     <!-- original mockflow ID: cmpDa1c3ce66a0c6d38c39ace76539269b2f  -->
     <div class="div__heatmap-layout-display-input-dropdown-container">
-      <InputDropDown
+      <NewSelectDropDown
         :title_label="label"
-        :placeholder="keyplaceholder"
-        :invalid_text="error_text"
         :value.sync="entrykey"
+        :options_text="metric_names"
+        :options_id="'display'"
+        :options_idx="display_option_idx"
         :input_width="entry_width"
-        :disabled="disallow_entry"
-        :options_text="nicknames_list"
-        :message_if_blank="on_empty_flag"
-      ></InputDropDown>
+        :input_height="input_height"
+        @selection-changed="metric_selection_changed"
+      />
     </div>
+
     <!-- original mockflow ID: cmpDc08190eb24c68e02c278bde19882becb -->
-    <canvas
-      class="canvas__heatmap-settings-color-scheme-seperator"
-      width="212"
-      height="2"
-    >
-    </canvas>
+    <canvas class="canvas__heatmap-settings-color-scheme-seperator" width="212" height="2"> </canvas>
+
     <!-- original mockflow ID: cmpD03029ea224291e6817f40d3ac9f24b19 -->
-    <span class="span__heatmap-settings-color-scheme-label">
-      Color&nbsp;<wbr />Scheme</span
-    >
+    <span class="span__heatmap-settings-color-scheme-label"> Color Scheme</span>
     <div class="div__heatmap-radio-buttons-container">
-      <RadioButtonWidget :radio_buttons="button_names"></RadioButtonWidget>
+      <RadioButtonWidget
+        :radio_buttons="gradient_theme_names"
+        :pre_selected="0"
+        @radio-btn-selected="radio_option_selected"
+      ></RadioButtonWidget>
     </div>
+
     <!-- orginal mockflow ID: cmpD5bc3214687200b065320c06b0a15e013 -->
-    <span class="span__heatmap-settings-qc-options-label"
-      >QC&nbsp;<wbr />Options</span
+    <span class="span__heatmap-settings-qc-options-label">QC Options</span>
+
+    <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7 -->
+    <div
+      class="div__heatmap-settings-apply-btn-container"
+      :class="[
+        !is_apply_set
+          ? 'div__heatmap-settings-apply-btn-container-disable'
+          : 'div__heatmap-settings-apply-btn-container-enable',
+      ]"
     >
+      <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_cvs -->
+      <canvas class="canvas__heatmap-settings-apply-btn-container"> </canvas>
+
+      <!-- original mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_txt -->
+      <span
+        class="span__heatmap-settings-apply-btn-label"
+        :class="[
+          !is_apply_set
+            ? 'span__heatmap-settings-apply-btn-label-disable'
+            : 'span__heatmap-settings-apply-btn-label-enable',
+        ]"
+        @click="apply_heatmap_settings"
+      >
+        Apply
+      </span>
+    </div>
+
+    <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300 -->
+    <div class="div__heatmap-settings-reset-btn-container">
+      <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300_cvs -->
+      <canvas class="canvas__heatmap-settings-reset-btn-container"></canvas>
+
+      <!-- original mockflow ID : cmpD2f909255bf15b8f4daa88ed03c6a8300_txt -->
+      <span class="span__heatmap-settings-reset-btn-label" @click="reset_heatmap_settings"> Reset </span>
+    </div>
   </div>
 </template>
+
 <script>
+import { mapState, mapGetters } from "vuex";
 import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
-import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
+import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
 import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
-import HeatMapColorBar from "@/components/status/HeatMapColorBar.vue";
+import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+import { METRIC_UNITS } from "@/store/modules/heatmap/enums";
 
 export default {
   name: "HeatMap",
   components: {
     PlateHeatMap,
-    HeatMapColorBar,
+    GradientBar,
     InputWidget,
-    InputDropDown,
+    NewSelectDropDown,
     CheckBoxWidget,
     RadioButtonWidget,
   },
+
   data() {
     return {
-      button_names: ["Warm", "Cool", "Blue/Red", "Purple/Green"],
-      option: [{ text: "", value: "Ascorbic Acid" }],
+      option: [{ text: "", value: "Auto-Scale" }],
       label: "",
-      entrykey: "",
+      entrykey: "Twitch Force",
+      display_option_idx: 0,
       keyplaceholder: "Twitch Force",
       error_text: "An ID is required",
       entry_width: 201,
       disallow_entry: false,
-      nicknames_list: [
-        "Twitch Force",
-        "Twitch Period",
-        "Twitch Frequency",
-        "Twitch Width 80",
-        "Contraction Velocity",
-        "Relaxation Velocity",
-      ],
       on_empty_flag: true,
       provided_uuid: "0",
       height: 481,
-      lower: 0,
+      input_height: 45,
+      // heatmap_option: "",
+      max_value_error_msg: "invalid",
+      min_value_error_msg: "invalid",
+      selected_wells: [],
       upper: 100,
-      unit: "μN",
-      range: [
-        { color: "#bd3532", offset: "0%" },
-        { color: "#f9d78c", offset: "100%" },
-      ],
+      lower: 0,
     };
   },
-  created: function () {
-    const plate_colors = [
-      "#F9D78C",
-      "#DF6147",
-      "#DF6147",
-      "#F0A061",
-      "#DF6147",
-      "#BD3532",
-      "#BD3532",
-      "#F0A061",
-      "#F0A061",
-      "#BD3532",
-      "#BD3532",
-      "#F9D78C",
-      "#F0A061",
-      "#F0A061",
-      "#DF6147",
-      "#DF6147",
-      "#F9D78C",
-      "#DF6147",
-      "#F0A061",
-      "#F9D78C",
-      "#F0A061",
-      "#F0A061",
-      "#F9D78C",
-      "#DF6147",
-    ];
-    this.passing_plate_colors = plate_colors;
+
+  computed: {
+    ...mapState("data", {
+      well_values: "heatmap_values",
+    }),
+    metric_names: function () {
+      return Object.keys(this.well_values);
+    },
+    ...mapState("gradient", {
+      gradients: "gradients",
+    }),
+    ...mapGetters("gradient", {
+      gradient_map: "gradient_color_mapping",
+    }),
+    gradient_theme_names: function () {
+      return this.gradients.map((t) => t.name);
+    },
+    passing_plate_colors: function () {
+      return this.well_values[this.entrykey].data.map((well) => {
+        if (well.length > 0) {
+          // const average = (a) => a.reduce((x, y) => x + y) / a.length;
+          // return this.gradient_map(average(well.slice(-5)));
+          return this.gradient_map(well.slice(-1)[0]);
+        } else {
+          return "#B7B7B7";
+        }
+      });
+    },
+    is_mean_value_active: function () {
+      return this.selected_wells.length > 0;
+    },
+    mean_value: function () {
+      let total = 0;
+      this.selected_wells.map((well_idx) => {
+        total += this.well_values[this.entrykey].data[well_idx].slice(-1)[0];
+      });
+      return (total / this.selected_wells.length).toFixed(3);
+    },
+    unit: function () {
+      return METRIC_UNITS[this.entrykey];
+    },
+    is_apply_set: function () {
+      return (
+        this.max_value_error_msg === "" &&
+        this.min_value_error_msg === "" &&
+        this.entrykey in this.well_values
+      );
+    },
   },
-  methods: {},
+
+  watch: {
+    entrykey: function () {
+      if (this.entrykey != "") {
+        this.error_text = "Choose an option";
+      } else {
+        this.on_empty_flag = true;
+        this.error_text = "An ID is required";
+      }
+      // this.heatmap_option = this.entrykey;
+      if (this.entrykey in this.well_values) {
+        this.on_empty_flag = false;
+        this.lower = this.well_values[this.entrykey].range_min;
+        this.upper = this.well_values[this.entrykey].range_max;
+      } else {
+        this.lower = null;
+        this.upper = null;
+        this.error_text = "Choose an option";
+        this.on_empty_flag = true;
+      }
+    },
+  },
+
+  methods: {
+    auto_scale: function (new_value) {
+      /* if (new_value == "Auto-Scale") { */
+      /*   this.max_value_error_msg = ""; */
+      /*   this.min_value_error_msg = ""; */
+      /*   this.heatmap_option = this.entrykey = this.nicknames_list[0]; */
+      /*   this.$store.commit("heatmap/heatmap_autoscale", true); */
+      /* } else { */
+      /*   this.max_value_error_msg = "invalid"; */
+      /*   this.min_value_error_msg = "invalid"; */
+      /*   this.heatmap_option = this.entrykey = ""; */
+      /*   this.$store.commit("heatmap/heatmap_autoscale", false); */
+      /* } */
+    },
+
+    metric_selection_changed: function (index) {
+      this.display_option_idx = index;
+      this.entrykey = this.metric_names[index];
+    },
+
+    radio_option_selected: function (option_value) {
+      const grandient_option_idx = option_value.index;
+      if (this.gradient_theme_names[grandient_option_idx]) {
+        this.$store.commit("gradient/set_gradient_theme_idx", grandient_option_idx);
+      }
+    },
+
+    on_update_maximum: function (new_value) {
+      this.upper = parseInt(new_value);
+      if (isNaN(this.upper)) {
+        this.max_value_error_msg = "invalid";
+      } else if (this.upper < 0 || new_value[0] == "-") {
+        this.max_value_error_msg = "cannot be negative";
+      } else if (this.upper > 1000) {
+        this.max_value_error_msg = "larger than 1000";
+      } else if (this.upper < this.lower) {
+        this.max_value_error_msg = "min is more than max";
+      } else if (this.upper == this.lower) {
+        this.max_value_error_msg = "max is equal to min";
+      } else {
+        // new value is valid
+        this.max_value_error_msg = "";
+        // update min error msg if caused by max value
+        if (
+          this.min_value_error_msg == "min is equal to max" ||
+          this.min_value_error_msg == "min is more than max"
+        ) {
+          this.min_value_error_msg = "";
+        }
+      }
+    },
+
+    on_update_minimum: function (new_value) {
+      this.lower = parseInt(new_value);
+      if (isNaN(this.lower)) {
+        this.min_value_error_msg = "invalid";
+      } else if (this.lower < 0 || new_value[0] == "-") {
+        this.min_value_error_msg = "cannot be negative";
+      } else if (this.lower > 1000) {
+        this.min_value_error_msg = "larger than 1000";
+      } else if (this.lower > this.upper) {
+        this.min_value_error_msg = "min is more than max";
+      } else if (this.lower == this.upper) {
+        this.min_value_error_msg = "min is equal to max";
+      } else {
+        // new value is valid
+        this.min_value_error_msg = "";
+        // update max error msg if caused by min value
+        if (
+          this.max_value_error_msg == "max is equal to min" ||
+          this.max_value_error_msg == "min is more than max"
+        ) {
+          this.max_value_error_msg = "";
+        }
+      }
+    },
+
+    on_well_selection_changed: function (all_select) {
+      this.selected_wells = [];
+      for (let i = 0; i < all_select.length; i++) {
+        if (all_select[i] == true) {
+          this.selected_wells.push(i);
+        }
+      }
+    },
+
+    apply_heatmap_settings: function () {
+      if (this.is_apply_set) {
+        this.$store.commit("gradient/set_gradient_range", {
+          min: this.lower,
+          max: this.upper,
+        });
+      }
+    },
+
+    reset_heatmap_settings: function () {
+      // reset display dropdown
+      this.metric_selection_changed(0);
+      // reset min/max inputs
+      document.getElementById("input-widget-field-max").value = "";
+      document.getElementById("input-widget-field-min").value = "";
+      this.on_update_maximum("");
+      this.on_update_minimum("");
+      // TODO reset gradient theme selection
+      // reset gradient range
+      this.$store.commit("gradient/set_gradient_range", {
+        min: 0,
+        max: 100,
+      });
+    },
+  },
 };
 </script>
+
 <style>
 .div__heatmap-layout-background {
   transform: rotate(0deg);
@@ -270,7 +456,7 @@ export default {
   position: absolute;
   top: 631px;
   left: 287.455px;
-  width: 165px;
+  width: 288px;
   height: 35px;
   overflow: hidden;
   visibility: visible;
@@ -309,12 +495,63 @@ export default {
   pointer-events: all;
 }
 
+.div__heatmap-layout-heatmap-mean-well-label {
+  line-height: 1;
+  transform: rotate(0deg);
+  padding: 5px;
+  margin: 0px;
+  color: rgb(183, 183, 183);
+  font-family: Muli;
+  position: absolute;
+  top: 631px;
+  left: 287.455px;
+  width: 288px;
+  height: 35px;
+  overflow: hidden;
+  visibility: visible;
+  user-select: none;
+  text-align: left;
+  font-size: 23px;
+  letter-spacing: normal;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  z-index: 76;
+  pointer-events: all;
+}
+
+.div__heatmap-layout-heatmap-mean-value-well-label {
+  line-height: 1;
+  transform: rotate(0deg);
+  padding: 5px;
+  margin: 0px;
+  overflow-wrap: break-word;
+  color: rgb(255, 255, 255);
+  font-family: Muli;
+  position: absolute;
+  top: 631px;
+  left: 537.455px;
+  width: 127px;
+  height: 35px;
+  overflow: hidden;
+  visibility: visible;
+  user-select: none;
+  text-align: left;
+  font-size: 23px;
+  letter-spacing: normal;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  z-index: 78;
+  pointer-events: all;
+}
+
 .div__heatmap-layout-heatmap-colorbar-container {
   transform: rotate(0deg);
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: linear-gradient(rgb(189, 53, 50), rgb(249, 215, 140));
+  /*background: linear-gradient(rgb(189, 53, 50), rgb(249, 215, 140));*/
   position: absolute;
   width: 41px;
   height: 481px;
@@ -443,7 +680,7 @@ export default {
   position: absolute;
   width: 82px;
   height: 30px;
-  top: 193.217px;
+  top: 189.217px;
   left: 1385.86px;
   padding: 5px;
   visibility: visible;
@@ -463,8 +700,8 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 121px;
-  height: 52px;
-  top: 180.925px;
+  height: 59px;
+  top: 178.925px;
   left: 1473.44px;
   visibility: visible;
 }
@@ -477,7 +714,7 @@ export default {
   position: absolute;
   width: 83px;
   height: 30px;
-  top: 245.217px;
+  top: 249.217px;
   left: 1385.86px;
   padding: 5px;
   visibility: visible;
@@ -497,8 +734,8 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 121px;
-  height: 52px;
-  top: 232.925px;
+  height: 59px;
+  top: 240.925px;
   left: 1473.44px;
   visibility: visible;
 }
@@ -509,7 +746,7 @@ export default {
   position: absolute;
   width: 212px;
   height: 2px;
-  top: 298px;
+  top: 305px;
   left: 1374px;
   visibility: visible;
   background-color: #3f3f3f;
@@ -545,11 +782,11 @@ export default {
   transform: rotate(0deg);
   position: absolute;
   width: 210px;
-  height: 50px;
   top: 347px;
   left: 1384px;
   padding: 5px;
   visibility: visible;
+  z-index: 10;
 }
 
 .canvas__heatmap-settings-color-scheme-seperator {
@@ -614,13 +851,120 @@ export default {
   text-align: center;
 }
 
+.div__heatmap-settings-apply-btn-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 130px;
+  height: 55px;
+  top: 806px;
+  left: 1341px;
+  visibility: visible;
+  z-index: 152;
+}
+
+.div__heatmap-settings-apply-btn-container-disable {
+  background: #b7b7b7;
+}
+
+.div__heatmap-settings-apply-btn-container-enable {
+  background: #b7b7b7;
+}
+
+.div__heatmap-settings-apply-btn-container-enable:hover {
+  background: #19ac8a;
+}
+
+.canvas__heatmap-settings-apply-btn-container {
+  -webkit-transform: translateZ(0);
+  position: absolute;
+  width: 130px;
+  height: 55px;
+  top: 0px;
+  left: 0px;
+}
+
+.span__heatmap-settings-apply-btn-label {
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 120px;
+  height: 45px;
+  line-height: 47px;
+  top: 5px;
+  left: 5px;
+  user-select: none;
+  font-family: Muli;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.span__heatmap-settings-apply-btn-label-disable {
+  color: #6e6f72;
+}
+
+.span__heatmap-settings-apply-btn-label-enable {
+  color: rgb(0, 0, 0);
+}
+
+.div__heatmap-settings-reset-btn-container {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 130px;
+  height: 55px;
+  top: 806px;
+  left: 1490.08px;
+  visibility: visible;
+  z-index: 154;
+}
+
+.canvas__heatmap-settings-reset-btn-container {
+  -webkit-transform: translateZ(0);
+  position: absolute;
+  width: 130px;
+  height: 55px;
+  top: 0px;
+  left: 0px;
+  background: #b7b7b7;
+}
+
+.span__heatmap-settings-reset-btn-label {
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: normal;
+  transform: translateZ(0px);
+  position: absolute;
+  width: 120px;
+  height: 45px;
+  line-height: 47px;
+  top: 5px;
+  left: 5px;
+  user-select: none;
+  font-family: Muli;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 16px;
+  color: rgb(0, 0, 0);
+}
+
 .div__heatmap-layout-checkbox-container > .div__checkbox-background {
   width: 0px;
   height: 0px;
 }
 
-.div__heatmap-layout-display-input-dropdown-container
-  > .div__input-dropdown-background {
+.div__heatmap-layout-display-input-dropdown-container > .div__input-dropdown-background {
   background: none;
   border: none;
 }

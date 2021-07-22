@@ -5,9 +5,7 @@
       :pre_selected="1"
       @radio-btn-selected="handle_radio_click"
     ></RadioButtonWidget>
-    <div style="top: 100px; left: 108px; position: absolute">
-      Label : {{ label }} Index : {{ index }}
-    </div>
+    <div style="top: 100px; left: 108px; position: absolute">Label : {{ label }} Index : {{ index }}</div>
   </div>
 </template>
 

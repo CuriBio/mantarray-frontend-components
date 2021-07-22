@@ -1,22 +1,15 @@
 <template>
   <div>
     <!-- original mockflow ID: id="cmpDd7c4156bb0839a33f5be9502418562bf" -->
-    <div
-      class="div__status-error-catch-background"
-      :style="error_background_cssprops"
-    ></div>
+    <div class="div__status-error-catch-background" :style="error_background_cssprops"></div>
     <!-- original mockflow ID: id="cmpD94339a6591e3ead19b4308b3a8b0cb68" -->
-    <span class="div_status-error-catch-title-label"
-      >An&nbsp;<wbr />error&nbsp;<wbr />occurred.
-    </span>
+    <span class="div_status-error-catch-title-label">An&nbsp;<wbr />error&nbsp;<wbr />occurred. </span>
     <!-- original mockflow ID: id="cmpD7504e31fab5b6799a0bbf3fe2514622e" -->
     <div class="div_status-error-catch-alert-txt">
       <p>Mantarray software is about to shut down.</p>
       <p>
         Please send this log file to
-        <a
-          id="error_contact"
-          href="mailto:contact@curibio.com ? subject = Mantarray Error log"
+        <a id="error_contact" href="mailto:contact@curibio.com ? subject = Mantarray Error log"
           >contact@curibio.com</a
         >
       </p>
@@ -72,11 +65,7 @@ export default {
       return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";
     },
     error_catch_button_cssprops: function () {
-      return (
-        "top: " +
-        (220 + this.compute_number_of_rows * 12) +
-        "px; left: 0px; position: absolute"
-      );
+      return "top: " + (220 + this.compute_number_of_rows * 12) + "px; left: 0px; position: absolute";
     },
   },
   watch: {},

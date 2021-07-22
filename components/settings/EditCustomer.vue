@@ -4,10 +4,7 @@
     <span class="span__editcustomer-form-controls-content-title">
       Edit&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID
     </span>
-    <div
-      id="uuid"
-      style="top: 50px; left: 50px; position: absolute; z-index: 24"
-    >
+    <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
         :title_label="'Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
@@ -16,14 +13,12 @@
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
+        :default_state="false"
         @update:value="on_update_uuid($event)"
       ></InputWidget>
     </div>
 
-    <div
-      id="apikey"
-      style="top: 145px; left: 50px; position: absolute; z-index: 23"
-    >
+    <div id="apikey" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
         :title_label="'API Key (Optional)'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
@@ -32,13 +27,11 @@
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'apikey-id'"
+        :default_state="false"
         @update:value="on_update_api($event)"
       ></InputWidget>
     </div>
-    <div
-      id="nickname"
-      style="top: 241px; left: 50px; position: absolute; z-index: 22"
-    >
+    <div id="nickname" style="top: 241px; left: 50px; position: absolute; z-index: 22">
       <InputWidget
         :title_label="'ID Nickname'"
         :placeholder="'Curi Bio Main Account'"
@@ -46,6 +39,7 @@
         :initial_value="nickname"
         :input_width="400"
         :dom_id_suffix="'nickname-id'"
+        :default_state="false"
         @update:value="on_update_nickname($event)"
       ></InputWidget>
     </div>
@@ -58,6 +52,7 @@
         :button_names="['Cancel', 'Delete ID', 'Save ID']"
         :hover_color="['#bd4932', '#bd4932', '#19ac8a']"
         :is_enabled="enablelist_edit_customer"
+        :default_state="false"
         @btn-click="clicked_button"
       >
       </ButtonWidget>
@@ -210,8 +205,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget
-  > #input-widget-field-nickname-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-nickname-id {
   font-family: Muli;
 }
 </style>

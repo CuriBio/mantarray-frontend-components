@@ -3,53 +3,40 @@
     <div
       class="div__simulationstudio-plate-well-location"
       :style="'top:' + computed_top + 'px;' + 'left:' + computed_left + 'px;'"
+      @mouseenter="on_enter_well(index)"
+      @mouseleave="on_leave_well(index)"
+      @click.exact="on_click_exact(index)"
+      @click.shift.exact="on_click_shift_exact(index)"
     >
       <PlateWell
-        :classname="classname"
-        :svg_height="svg_height"
-        :svg_width="svg_width"
-        :circle_x="circle_x"
-        :circle_y="circle_y"
-        :radius="radius"
+        class="well"
+        :svg_height="70"
+        :svg_width="70"
+        :circle_x="38"
+        :circle_y="35"
+        :radius="26"
         :strk="stroke"
         :plate_fill="protocol_fill"
-        :stroke_wdth="stroke_width"
+        :stroke_wdth="stroke_wdth"
         :index="index"
       ></PlateWell>
+      <span :class="'span__simulationstudio-plate-well-protocol-location'">
+        {{ protocol_type }}
+      </span>
     </div>
-    <span
-      class="span__simulationstudio-plate-well-protocol-location"
-      :style="
-        'top:' +
-        computed_protocol_top +
-        'px;' +
-        'left:' +
-        computed_protocol_left +
-        'px;'
-      "
-    >
-      {{ protocol_type }}
-    </span>
   </div>
 </template>
 <script>
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
-
 export default {
   name: "StimulationStudioPlateWell",
   components: {
     PlateWell,
   },
   props: {
-    classname: { type: String, default: "" },
-    svg_height: { type: Number, default: 0 },
-    svg_width: { type: Number, default: 0 },
-    circle_x: { type: Number, default: 0 },
-    circle_y: { type: Number, default: 0 },
-    radius: { type: Number, default: 0 },
     stroke: { type: String, default: "" },
     protocol_fill: { type: String, default: "" },
-    stroke_width: { type: Number, default: 0 },
+    stroke_wdth: { type: Number, default: 0 },
     index: {
       type: Number,
       default: 0,
@@ -84,28 +71,28 @@ export default {
         case 12:
         case 16:
         case 20:
-          return 25.427;
+          return 26;
         case 1:
         case 5:
         case 9:
         case 13:
         case 17:
         case 21:
-          return 85.352;
+          return 86;
         case 2:
         case 6:
         case 10:
         case 14:
         case 18:
         case 22:
-          return 145.278;
+          return 146;
         case 3:
         case 7:
         case 11:
         case 15:
         case 19:
         case 23:
-          return 205.157;
+          return 206;
       }
     },
     // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
@@ -116,27 +103,27 @@ export default {
         case 1:
         case 2:
         case 3:
-          return 29.979;
+          return 30;
         case 4:
         case 5:
         case 6:
         case 7:
-          return 91.584;
+          return 91;
         case 8:
         case 9:
         case 10:
         case 11:
-          return 153.188;
+          return 153;
         case 12:
         case 13:
         case 14:
         case 15:
-          return 214.792;
+          return 215;
         case 16:
         case 17:
         case 18:
         case 19:
-          return 276.4;
+          return 277;
         case 20:
         case 21:
         case 22:
@@ -144,75 +131,19 @@ export default {
           return 339;
       }
     },
-    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
-    // eslint-disable-next-line vue/return-in-computed-property
-    computed_protocol_top: function () {
-      switch (this.index) {
-        case 0:
-        case 4:
-        case 8:
-        case 12:
-        case 16:
-        case 20:
-          return 43;
-        case 1:
-        case 5:
-        case 9:
-        case 13:
-        case 17:
-        case 21:
-          return 102.925;
-        case 2:
-        case 6:
-        case 10:
-        case 14:
-        case 18:
-        case 22:
-          return 162.851;
-        case 3:
-        case 7:
-        case 11:
-        case 15:
-        case 19:
-        case 23:
-          return 222.73;
-      }
+  },
+  methods: {
+    on_enter_well(index) {
+      this.$emit("enter-well", index);
     },
-    // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
-    // eslint-disable-next-line vue/return-in-computed-property
-    computed_protocol_left: function () {
-      switch (this.index) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-          return 52.5;
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-          return 114.105;
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-          return 175.709;
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-          return 237.313;
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-          return 298.921;
-        case 20:
-        case 21:
-        case 22:
-        case 23:
-          return 361.521;
-      }
+    on_leave_well(index) {
+      this.$emit("leave-well", index);
+    },
+    on_click_exact(index) {
+      this.$emit("click-exact", index);
+    },
+    on_click_shift_exact(index) {
+      this.$emit("click-shift-exact", index);
     },
   },
 };
@@ -225,27 +156,19 @@ export default {
   width: 66px;
   height: 66px;
   visibility: visible;
-  z-index: 9;
+  /* z-index: 8; */
 }
-
 .span__simulationstudio-plate-well-protocol-location {
-  pointer-events: all;
   line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  left: 33px;
+  bottom: 19px;
   font-weight: bold;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 20px;
+  visibility: visible;
+  font-family: Muli;
   color: rgb(255, 255, 255);
-  text-align: center;
-  z-index: 101;
+  cursor: pointer;
 }
 </style>

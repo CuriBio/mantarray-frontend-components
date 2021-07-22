@@ -22,19 +22,10 @@
       </svg>
     </div>
     <!--  original mockflow ID: cmpD2eba17f4bc0b8222a44b2a8fffec29f8 -->
-    <span class="span__upload-file-label-txt">
-      Successfully&nbsp;<wbr />Uploaded:
-    </span>
+    <span class="span__upload-file-label-txt"> Successfully&nbsp;<wbr />Uploaded: </span>
     <!-- original mockflow ID: cmpD58c69d7de8aa0934dca9ef4e8beabbdc -->
-    <span class="span__upload-file-count-container">
-      {{ value }}/{{ max }}
-    </span>
-    <b-progress
-      id="upload-progress-bar"
-      :value="value"
-      :max="max"
-      variant="success"
-    ></b-progress>
+    <span class="span__upload-file-count-container"> {{ value }}/{{ max }} </span>
+    <b-progress id="upload-progress-bar" :value="value" :max="max" variant="success"></b-progress>
   </div>
 </template>
 <script>

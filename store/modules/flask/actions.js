@@ -9,10 +9,14 @@ import { STATUS } from "./enums";
  * @return {void}
  */
 export async function ping_system_status() {
+  let endpoint = "system_status?current_vuex_status_uuid=" + this.state.status_uuid;
+  if (this.state.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
+    const current_time_index = this.rootState.playback.x_time_index;
+    endpoint += "currently_displayed_time_index=" + current_time_index;
+  }
   const payload = {
     baseurl: "http://localhost:4567",
-    endpoint: "system_status?current_vuex_status_uuid=",
-    val: this.state.status_uuid,
+    endpoint: endpoint,
   };
   const whole_url = `${payload.baseurl}/${payload.endpoint}${payload.val}`;
   // console.log("about to ping system status: " + whole_url)
@@ -38,10 +42,7 @@ export async function ping_system_status() {
       }
     }
     this.commit("set_simulation_status", simulation_mode);
-    if (
-      this.state.ignore_next_system_status_if_matching_this_status !==
-      status_uuid
-    ) {
+    if (this.state.ignore_next_system_status_if_matching_this_status !== status_uuid) {
       if (status_uuid != this.state.status_uuid) {
         this.commit("set_status_uuid", status_uuid);
         if (status_uuid == STATUS.MESSAGE.CALIBRATION_NEEDED_uuid) {
@@ -52,22 +53,12 @@ export async function ping_system_status() {
           );
         }
         if (status_uuid == STATUS.MESSAGE.STOPPED) {
-          this.dispatch(
-            "playback/transition_playback_state",
-            PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED,
-            { root: true }
-          );
+          this.dispatch("playback/transition_playback_state", PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED, {
+            root: true,
+          });
         }
 
         if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid) {
-          if (
-            this.rootState.playback.playback_state ==
-            PLAYBACK_ENUMS.PLAYBACK_STATES.BUFFERING
-          ) {
-            this.dispatch("waveform/start_get_waveform_pinging", null, {
-              root: true,
-            });
-          }
           this.dispatch(
             "playback/transition_playback_state",
             PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,

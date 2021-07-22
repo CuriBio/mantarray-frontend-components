@@ -36,9 +36,7 @@ describe("RecordingTime.vue", () => {
       store,
       localVue,
     });
-    expect(wrapper.find(".span__recording-text").text()).toStrictEqual(
-      "Not Recording"
-    );
+    expect(wrapper.find(".span__recording-text").text()).toStrictEqual("Not Recording");
     expect(wrapper.find(".span__time-text").text()).toStrictEqual("");
   });
   test("Given that RecordingTime is mounted successfully from the build dist file, When Recording Start is initiated from the Vuex Store data, Then the text changes to Recording and time is 00:00:00.000", async () => {
@@ -56,12 +54,8 @@ describe("RecordingTime.vue", () => {
     await store.dispatch("playback/start_recording");
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(wrapper.find(".span__recording-text").text()).toStrictEqual(
-      "Recording:"
-    );
-    expect(wrapper.find(".span__time-text").text()).toStrictEqual(
-      "00:00:00.000"
-    );
+    expect(wrapper.find(".span__recording-text").text()).toStrictEqual("Recording:");
+    expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:00.000");
   });
   test("Given that get method is mocked with a http response 200, When the x time index is committed in Vuex to a new value, Then the text display updates to show the difference between the x time index when recording started and the new value (the amount of time elapsed since the recording was started)", async () => {
     const propsData = {};
@@ -78,20 +72,14 @@ describe("RecordingTime.vue", () => {
     await store.dispatch("playback/start_recording");
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(wrapper.find(".span__recording-text").text()).toStrictEqual(
-      "Recording:"
-    );
-    expect(wrapper.find(".span__time-text").text()).toStrictEqual(
-      "00:00:00.000"
-    );
+    expect(wrapper.find(".span__recording-text").text()).toStrictEqual("Recording:");
+    expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:00.000");
     await wrapper.vm.$nextTick(); // wait for update
 
     store.commit("playback/set_x_time_index", 6736300);
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(wrapper.find(".span__time-text").text()).toStrictEqual(
-      "00:00:55.018"
-    );
+    expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:55.018");
   });
   test("Given that get method is mocked with a http response 200, When Recording start is initiated at x_time_index is mutated to 6736300, Then the text updates 00:00:55.018 and stop_recording initiates resets text to null", async () => {
     const propsData = {};
@@ -109,17 +97,13 @@ describe("RecordingTime.vue", () => {
     await store.dispatch("playback/start_recording");
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(wrapper.find(".span__time-text").text()).toStrictEqual(
-      "00:00:00.000"
-    );
+    expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:00.000");
     await wrapper.vm.$nextTick(); // wait for update
 
     store.commit("playback/set_x_time_index", 6736300);
     await wrapper.vm.$nextTick(); // wait for update
 
-    expect(wrapper.find(".span__time-text").text()).toStrictEqual(
-      "00:00:55.018"
-    );
+    expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:55.018");
 
     await store.dispatch("playback/stop_recording");
     await wrapper.vm.$nextTick(); // wait for update

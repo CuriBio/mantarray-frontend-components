@@ -2,6 +2,10 @@
 import Vue from "vue";
 import { STATUS } from "@/store/modules/flask/enums";
 
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
+
 /**
  * Handles all HTTP GET calls from Vuex and updates system status if there was an error
  *
@@ -33,10 +37,7 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     }
     // if (error.response) {
     // if (error.response.status === 404) {
-    if (
-      action_context.rootState.flask.status_uuid ===
-      STATUS.MESSAGE.SERVER_STILL_INITIALIZING
-    ) {
+    if (action_context.rootState.flask.status_uuid === STATUS.MESSAGE.SERVER_STILL_INITIALIZING) {
       return error;
       // return error.response;
     }
@@ -49,9 +50,6 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     action_context.commit("playback/stop_playback_progression", null, {
       root: true,
     });
-    action_context.commit("waveform/stop_waveform_pinging", null, {
-      root: true,
-    });
     if (error.response) {
       return error.response;
     }
@@ -60,4 +58,39 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     // }
   }
   return result;
+}
+
+/**
+ * Function to post protocol message for stim studio
+ * @param  {Object} message of type Object
+ * @return {Int} Int status code if error
+ */
+export async function post_stim_message(message) {
+  const baseURL = "http://localhost:4567";
+  const URL = "/set_protocol";
+  const body = { data: JSON.stringify(message) };
+  try {
+    await Vue.axios.post(`${baseURL}${URL}`, body);
+    return;
+  } catch (error) {
+    console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
+    if (error.response) return error.response.status;
+  }
+}
+
+/**
+ * Function to post play status for stim studio
+ * @param  {Boolean} status of type Boolean.
+ * @return {Int} Int status code if error
+ */
+export async function post_stim_status(status) {
+  const baseURL = "http://localhost:4567";
+  const URL = `/set_stim_status?running=${status}`;
+  try {
+    await Vue.axios.post(`${baseURL}${URL}`);
+    return;
+  } catch (error) {
+    console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
+    if (error.response) return error.response.status;
+  }
 }

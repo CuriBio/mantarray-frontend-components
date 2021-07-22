@@ -53,8 +53,7 @@ export default {
     },
     update_text_time() {
       if (this.playback_state === this.playback_state_enums.RECORDING) {
-        const current_diff_in_centimilliseconds =
-          this.x_time_index - this.recording_start_time;
+        const current_diff_in_centimilliseconds = this.x_time_index - this.recording_start_time;
         let current_diff_in_ms = current_diff_in_centimilliseconds / 100;
         const ms = current_diff_in_ms % 1000;
         current_diff_in_ms = (current_diff_in_ms - ms) / 1000;

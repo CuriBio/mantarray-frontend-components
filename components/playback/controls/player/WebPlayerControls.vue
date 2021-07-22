@@ -1,8 +1,6 @@
 <template>
   <div class="div__playback-web-player-controls">
-    <span class="span__playback-web-player-controls-text"
-      >Playback Options:</span
-    >
+    <span class="span__playback-web-player-controls-text">Playback Options:</span>
     <div class="div__playback-web-player-controls-settings-button">
       <PlayerControlsSettingsButton
         ><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"--></PlayerControlsSettingsButton
@@ -104,8 +102,7 @@ export default {
         "span__playback-web-player-controls--active":
           this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.PLAYING,
         "span__playback-web-player-controls--available":
-          this.playback_state ===
-            playback_module.ENUMS.PLAYBACK_STATES.STOPPED ||
+          this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.STOPPED ||
           this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.PAUSED,
       };
     },
@@ -120,8 +117,7 @@ export default {
     svg__playback_web_player_controls_stop_button__dynamic_class: function () {
       return {
         "span__playback-web-player-controls--available":
-          this.playback_state ===
-            playback_module.ENUMS.PLAYBACK_STATES.PLAYING ||
+          this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.PLAYING ||
           this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.PAUSED,
       };
     },
@@ -147,9 +143,7 @@ export default {
       }
     },
     on_pause_click: function () {
-      if (
-        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.PLAYING
-      ) {
+      if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.PLAYING) {
         this.$store.dispatch(
           "playback/transition_playback_state",
           playback_module.ENUMS.PLAYBACK_STATES.PAUSED

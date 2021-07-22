@@ -7,6 +7,7 @@
       :invalid_text="error_text"
       :input_width="400"
       :disabled="false"
+      :default_state="false"
       @update:value="on_update($event)"
     ></InputWidget>
   </div>
