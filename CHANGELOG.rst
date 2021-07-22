@@ -1,8 +1,15 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-0.4.0 (unreleased)
- ------------------
+
+0.4.1 (2021-07-22)
+------------------
+
+- Fixed exporting of new features
+
+
+0.4.0 (2021-07-22)
+------------------
 
  - Added initial Gen 1 heatmap
  - Added websocket to receive waveform data asynchronously and in real time
@@ -13,7 +20,7 @@ Changelog for Mantarray Frontend Components
 
 
  0.3.0 (2021-07-08)
- ------------------
+------------------
 
  - Added Y-axis zoom for waveform display
 
