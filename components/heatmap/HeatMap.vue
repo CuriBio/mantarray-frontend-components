@@ -218,8 +218,9 @@ export default {
     passing_plate_colors: function () {
       return this.well_values[this.entrykey].data.map((well) => {
         if (well.length > 0) {
-          const average = (a) => a.reduce((x, y) => x + y) / a.length;
-          return this.gradient_map(average(well.slice(-5)));
+          // const average = (a) => a.reduce((x, y) => x + y) / a.length;
+          // return this.gradient_map(average(well.slice(-5)));
+          return this.gradient_map(well.slice(-1)[0]);
         } else {
           return "#B7B7B7";
         }
