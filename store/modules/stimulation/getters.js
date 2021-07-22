@@ -13,8 +13,8 @@ export default {
     }
   },
   get_stimulation_type({ protocol_editor }) {
-    if (protocol_editor.stimulation_type === "C") return "Current (A)";
-    if (protocol_editor.stimulation_type === "V") return "Voltage (V)";
+    if (protocol_editor.stimulation_type === "C") return "Current (µA)";
+    if (protocol_editor.stimulation_type === "V") return "Voltage (mV)";
   },
   get_time_unit({ protocol_editor }) {
     if (protocol_editor.time_unit.includes("milliseconds")) return "Time (ms)";

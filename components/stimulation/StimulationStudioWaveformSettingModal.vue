@@ -308,7 +308,7 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (V)" },
+    stimulation_type: { type: String, default: "Voltage (mV)" },
     waveform_type: { type: String, default: "Monophasic" },
     button_names: {
       type: Array,
@@ -343,8 +343,8 @@ export default {
   },
   computed: {
     check_max_type: function () {
-      if (this.stimulation_type === "Current (A)") return "Voltage (V)";
-      else return "Current (A)";
+      if (this.stimulation_type === "Current (µA)") return "Voltage (mV)";
+      else return "Current (µA)";
     },
   },
   created() {

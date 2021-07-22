@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
-      stimulation_type: "Voltage (V)",
+      stimulation_type: "Voltage (mV)",
       time_unit: "Time (s)",
       current_assignment: {},
       selected_protocol: {},

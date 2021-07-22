@@ -32,12 +32,12 @@ export default {
     state.repeat_colors = assignments;
   },
   set_zoom_in(state, axis) {
-    if (axis === "x-axis") state.x_axis_scale /= 10;
-    if (axis === "y-axis") state.y_axis_scale /= 10;
+    if (axis === "x-axis") state.x_axis_scale /= 1.5;
+    if (axis === "y-axis") state.y_axis_scale /= 1.5;
   },
   set_zoom_out(state, axis) {
-    if (axis === "x-axis") state.x_axis_scale *= 10;
-    if (axis === "y-axis") state.y_axis_scale *= 10;
+    if (axis === "x-axis") state.x_axis_scale *= 1.5;
+    if (axis === "y-axis") state.y_axis_scale *= 1.5;
   },
   reset_protocol_editor(state) {
     const replace_state = {
@@ -54,7 +54,7 @@ export default {
       y_axis_values: [],
       repeat_colors: {},
       x_axis_scale: 100,
-      y_axis_scale: 10,
+      y_axis_scale: 5,
       delay_blocks: [],
     };
     Object.assign(state, replace_state);
@@ -76,7 +76,7 @@ export default {
       y_axis_values: [],
       repeat_colors: {},
       x_axis_scale: 100,
-      y_axis_scale: 10,
+      y_axis_scale: 5,
       delay_blocks: [],
     };
     Object.assign(state, replace_state);

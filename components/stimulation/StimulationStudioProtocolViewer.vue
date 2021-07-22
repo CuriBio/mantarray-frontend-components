@@ -34,11 +34,11 @@ export default {
     StimulationStudioWaveform,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (V)" },
+    stimulation_type: { type: String, default: "Voltage (mV)" },
   },
   data() {
     return {
-      y_min_max: 10,
+      y_min_max: 5,
       datapoints: [],
       repeat_colors: {},
       x_axis_sample_length: 100,
