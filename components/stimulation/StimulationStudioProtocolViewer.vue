@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      y_min_max: 5,
+      y_min_max: 500,
       datapoints: [],
       repeat_colors: {},
       x_axis_sample_length: 100,

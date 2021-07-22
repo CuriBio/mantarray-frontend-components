@@ -163,7 +163,7 @@ export default {
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
   pointer-events: all;
-  z-index: 2;
+  z-index: 3;
 }
 .span__stimulationstudio-layout-create_edit-header-label {
   pointer-events: all;

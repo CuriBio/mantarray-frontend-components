@@ -55,7 +55,7 @@ export default {
       stimulation_type: "Voltage (mV)",
       time_unit: "Time (s)",
       current_assignment: {},
-      selected_protocol: {},
+      selected_protocol: { label: "Create New", color: "", letter: "" },
     };
   },
   created: async function () {
@@ -71,7 +71,7 @@ export default {
         mutation.type === "stimulation/reset_protocol_editor"
       ) {
         this.time_unit = "Time (s)";
-        this.stimulation_type = "Voltage (V)";
+        this.stimulation_type = "Voltage (mV)";
       }
     });
   },
@@ -82,14 +82,18 @@ export default {
     async handle_click(idx) {
       if (idx === 0) {
         await this.$store.dispatch("stimulation/add_saved_protocol");
-        this.$store.commit("stimulation/reset_protocol_editor");
+        this.$store.dispatch("stimulation/handle_protocol_editor_reset");
+        this.selected_protocol = { label: "Create New", color: "", letter: "" };
       }
       if (idx === 1) this.$store.commit("stimulation/reset_state");
-      if (idx === 2) this.$store.dispatch("stimulation/edit_selected_protocol", this.selected_protocol);
-      this.selected_protocol = null;
+      if (idx === 2 && this.selected_protocol.label !== "Create New")
+        this.$store.dispatch("stimulation/edit_selected_protocol", this.selected_protocol);
+      else if (idx === 2 && this.selected_protocol.label === "Create New")
+        this.$store.commit("stimulation/reset_protocol_editor");
     },
     handle_selection_change(protocol) {
       this.selected_protocol = protocol;
+      console.log("current protocol in editor:", this.selected_protocol);
     },
   },
 };

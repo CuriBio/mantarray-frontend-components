@@ -46,7 +46,7 @@ export default {
         name: "",
         stimulation_type: "V",
         stop_requirement: "Until Stopped",
-        end_delay_duration: 0,
+        end_delay_duration: "",
         time_unit: "seconds",
         pulses: [],
       },
@@ -54,7 +54,7 @@ export default {
       y_axis_values: [],
       repeat_colors: {},
       x_axis_scale: 100,
-      y_axis_scale: 5,
+      y_axis_scale: 500,
       delay_blocks: [],
     };
     Object.assign(state, replace_state);
@@ -68,7 +68,7 @@ export default {
         name: "",
         stimulation_type: "V",
         stop_requirement: "Until Stopped",
-        end_delay_duration: 0,
+        end_delay_duration: "",
         time_unit: "seconds",
         pulses: [],
       },
@@ -76,7 +76,7 @@ export default {
       y_axis_values: [],
       repeat_colors: {},
       x_axis_scale: 100,
-      y_axis_scale: 5,
+      y_axis_scale: 500,
       delay_blocks: [],
     };
     Object.assign(state, replace_state);

@@ -213,7 +213,7 @@ export default {
         message.protocol.push(protocol_model);
       }
     }
-    // console.log(message);
+
     try {
       await post_stim_message(message);
       await post_stim_status(status);
@@ -235,15 +235,11 @@ export default {
     const { stimulation_type, time_unit, end_delay_duration, detailed_pulses } = protocol.protocol;
     this.state.stimulation.current_assignment = { letter, color };
 
-    try {
-      await this.commit("stimulation/set_protocol_name", label);
-      await this.commit("stimulation/set_stimulation_type", stimulation_type);
-      await this.commit("stimulation/set_time_unit", time_unit);
-      await this.commit("stimulation/set_repeat_frequency", end_delay_duration);
-      await this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
-    } catch (error) {
-      console.log(error);
-    }
+    await this.commit("stimulation/set_protocol_name", label);
+    await this.commit("stimulation/set_stimulation_type", stimulation_type);
+    await this.commit("stimulation/set_time_unit", time_unit);
+    await this.commit("stimulation/set_repeat_frequency", end_delay_duration);
+    await this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
 
     this.commit("stimulation/set_edit_mode", { label, letter });
   },

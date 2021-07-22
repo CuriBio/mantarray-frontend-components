@@ -195,7 +195,7 @@ export default {
         this.protocol_order = [];
       }
       if (mutation.type === "stimulation/set_edit_mode") {
-        this.protocol_order = this.get_protocol_order;
+        this.protocol_order = this.$store.getters["stimulation/get_protocol_order"];
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       }
     });

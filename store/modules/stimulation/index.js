@@ -13,7 +13,7 @@ const state = () => ({
       label: "Tester",
       protocol: {
         name: "Tester",
-        stimulation_type: "C",
+        stimulation_type: "V",
         end_delay_duration: 20,
         time_unit: "milliseconds",
         pulses: [
@@ -54,7 +54,7 @@ const state = () => ({
   protocol_editor: {
     name: "",
     stimulation_type: "V",
-    end_delay_duration: 0,
+    end_delay_duration: "",
     time_unit: "seconds",
     pulses: [],
     detailed_pulses: [],
@@ -64,7 +64,7 @@ const state = () => ({
   y_axis_values: [],
   repeat_colors: {},
   x_axis_scale: 100,
-  y_axis_scale: 5,
+  y_axis_scale: 500,
   delay_blocks: [],
   stim_status: false,
   edit_mode: { status: false, protocol: "" },
