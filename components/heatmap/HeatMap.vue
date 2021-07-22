@@ -299,9 +299,9 @@ export default {
 
     on_update_maximum: function (new_value) {
       this.upper = parseInt(new_value);
-      if (new_value == "") {
+      if (isNaN(this.upper)) {
         this.max_value_error_msg = "invalid";
-      } else if (this.upper < 0 || new_value == "-") {
+      } else if (this.upper < 0 || new_value[0] == "-") {
         this.max_value_error_msg = "cannot be negative";
       } else if (this.upper > 1000) {
         this.max_value_error_msg = "larger than 1000";
@@ -324,9 +324,9 @@ export default {
 
     on_update_minimum: function (new_value) {
       this.lower = parseInt(new_value);
-      if (new_value == "") {
+      if (isNaN(this.lower)) {
         this.min_value_error_msg = "invalid";
-      } else if (this.lower < 0 || new_value == "-") {
+      } else if (this.lower < 0 || new_value[0] == "-") {
         this.min_value_error_msg = "cannot be negative";
       } else if (this.lower > 1000) {
         this.min_value_error_msg = "larger than 1000";
