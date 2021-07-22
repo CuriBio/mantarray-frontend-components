@@ -156,13 +156,13 @@ export default {
     this.commit("stimulation/set_imported_protocol", updated_protocol);
   },
 
-  add_saved_protocol({ commit, state, dispatch }) {
+  async add_saved_protocol({ commit, state, dispatch }) {
     const { protocol_editor, edit_mode, protocol_list } = this.state.stimulation;
     const { letter, color } = this.state.stimulation.current_assignment;
     const updated_protocol = { color, letter, label: protocol_editor.name, protocol: protocol_editor };
 
     if (!edit_mode.status) {
-      this.commit("stimulation/set_imported_protocol", updated_protocol);
+      this.commit("stimulation/set_new_protocol", updated_protocol);
     } else if (edit_mode.status) {
       protocol_list.map((protocol, idx) => {
         if (protocol.letter === edit_mode.letter)
@@ -173,8 +173,8 @@ export default {
           };
       });
 
-      this.commit("stimulation/set_edit_mode_off");
-      this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
+      await this.commit("stimulation/set_edit_mode_off");
+      await this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
     }
   },
 
@@ -234,12 +234,16 @@ export default {
     const { label, letter, color } = protocol;
     const { stimulation_type, time_unit, end_delay_duration, detailed_pulses } = protocol.protocol;
     this.state.stimulation.current_assignment = { letter, color };
-
-    await this.commit("stimulation/set_protocol_name", label);
-    await this.commit("stimulation/set_stimulation_type", stimulation_type);
-    await this.commit("stimulation/set_time_unit", time_unit);
-    await this.commit("stimulation/set_repeat_frequency", end_delay_duration);
-    await this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
+    console.log(detailed_pulses);
+    try {
+      await this.commit("stimulation/set_protocol_name", label);
+      await this.commit("stimulation/set_stimulation_type", stimulation_type);
+      await this.commit("stimulation/set_time_unit", time_unit);
+      await this.commit("stimulation/set_repeat_frequency", end_delay_duration);
+      await this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
+    } catch (error) {
+      console.log(error);
+    }
 
     this.commit("stimulation/set_edit_mode", { label, letter });
   },

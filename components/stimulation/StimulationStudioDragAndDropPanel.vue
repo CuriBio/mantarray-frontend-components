@@ -108,7 +108,7 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
@@ -183,8 +183,8 @@ export default {
   computed: {
     ...mapState("stimulation", {
       time_unit: (state) => state.protocol_editor.time_unit,
+      detailed_pulses: (state) => state.protocol_editor.detailed_pulses,
     }),
-    ...mapGetters("stimulation", ["get_protocol_order"]),
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
@@ -195,7 +195,8 @@ export default {
         this.protocol_order = [];
       }
       if (mutation.type === "stimulation/set_edit_mode") {
-        this.protocol_order = this.$store.getters["stimulation/get_protocol_order"];
+        // mapState or mapGetter was not updating correctly, only directly acessing state
+        this.protocol_order = this.$store.state.stimulation.protocol_editor.detailed_pulses;
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       }
     });

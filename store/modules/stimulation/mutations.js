@@ -46,7 +46,7 @@ export default {
         name: "",
         stimulation_type: "V",
         stop_requirement: "Until Stopped",
-        end_delay_duration: "",
+        end_delay_duration: 0,
         time_unit: "seconds",
         pulses: [],
       },
@@ -68,7 +68,7 @@ export default {
         name: "",
         stimulation_type: "V",
         stop_requirement: "Until Stopped",
-        end_delay_duration: "",
+        end_delay_duration: 0,
         time_unit: "seconds",
         pulses: [],
       },
@@ -104,6 +104,9 @@ export default {
     pulses.push(delay_pulse_model);
   },
   set_imported_protocol({ protocol_list }, protocol) {
+    protocol_list.push(protocol);
+  },
+  set_new_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
   },
   set_stim_status(state, bool) {

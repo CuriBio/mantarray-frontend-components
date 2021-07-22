@@ -93,7 +93,6 @@ export default {
     },
     handle_selection_change(protocol) {
       this.selected_protocol = protocol;
-      console.log("current protocol in editor:", this.selected_protocol);
     },
   },
 };
