@@ -2,7 +2,6 @@ import Vuex from "vuex";
 import axios from "axios";
 const MockAxiosAdapter = require("axios-mock-adapter");
 import { createLocalVue } from "@vue/test-utils";
-const wait_for_expect = require("wait-for-expect");
 
 import { STATUS } from "@/store/modules/flask/enums";
 import playback_module from "@/store/modules/playback";
@@ -15,7 +14,6 @@ import {
   system_status_when_initializing_instrument_regexp,
   system_status_when_server_initializing_regexp,
   all_mantarray_commands_regexp,
-  get_available_data_regex,
 } from "@/store/modules/flask/url_regex";
 
 import { FLASK_STATUS_ENUMS } from "@/dist/mantarray.common";
@@ -114,43 +112,6 @@ describe("store/flask", () => {
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
-    });
-    test("Given playback state is BUFFERING and /system_status returns LIVE_VIEW_ACTIVE and /get_available_data returns code 204, When ping_system_status in called, Then start_waveform_pinging is invoked", async () => {
-      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.BUFFERING);
-      mocked_axios
-        .onGet(system_status_regexp)
-        .reply(200, {
-          ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid,
-          in_simulation_mode: false,
-        })
-        .onGet(get_available_data_regex)
-        .reply(204);
-
-      await bound_ping_system_status();
-
-      await wait_for_expect(() => {
-        expect(store.state.data.waveform_ping_interval_id).not.toBeNull();
-      });
-    });
-    test("Given playback state is RECORDING and /system_status returns LIVE_VIEW_ACTIVE and /get_available_data returns code 204, When ping_system_status in called, Then start_waveform_pinging is not invoked", async () => {
-      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.RECORDING);
-      mocked_axios
-        .onGet(system_status_regexp)
-        .reply(200, {
-          ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid,
-          in_simulation_mode: false,
-        })
-        .onGet(get_available_data_regex)
-        .reply(204);
-
-      await bound_ping_system_status();
-      const expected_interval_id = 173;
-      const spied_set_interval = jest.spyOn(window, "setInterval");
-      spied_set_interval.mockReturnValueOnce(expected_interval_id);
-
-      await store.dispatch("data/start_get_waveform_pinging");
-      expect(spied_set_interval.mock.calls).toHaveLength(1);
-      expect(store.state.data.waveform_ping_interval_id).toStrictEqual(expected_interval_id);
     });
     test("Given /system_status is mocked to return CALIBRATED as the status and the current status is CALIBRATING, When ping_system_status is called, Then the URL should include the current state UUID and the vuex status should update to CALIBRATED and the Vuex Playback State should update to CALIBRATED", async () => {
       mocked_axios.onGet(system_status_regexp).reply(200, {

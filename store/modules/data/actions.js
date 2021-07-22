@@ -2,26 +2,6 @@
 
 import { get_recording } from "../../../store/ApiService.js";
 import { convert_from_json_of_well_indices_and_x_y_arrays } from "../../../js_utils/waveform_data_formatter.js";
-import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
-
-/**
- * Function to Ping Flask server to get_available_data for waveform
- * @return {void}
- */
-export async function ping_get_available_data() {
-  const current_time_index = this.rootState.playback.x_time_index;
-  const payload = {
-    baseurl: "http://localhost:4567",
-    endpoint: "get_available_data?currently_displayed_time_index=" + current_time_index, // TODO (Tanner 6/27/21): should add `currently_displayed_time_index=` to another route call after `get_available_data` is removed, maybe add it to `system_status`
-  };
-  let result = 0;
-  const whole_url = `${payload.baseurl}/${payload.endpoint}`;
-  result = await call_axios_get_from_vuex(whole_url, this);
-  if (result.status == 200) {
-    const data = result.data;
-    this.commit("append_plate_waveforms", data);
-  }
-}
 
 export default {
   async fetchApi({ commit }) {
@@ -48,14 +28,5 @@ export default {
   async get_data_action_context(context) {
     // useful for testing actions
     return context;
-  },
-
-  async start_get_waveform_pinging(context) {
-    if (context.state.waveform_ping_interval_id === null) {
-      const bound_ping_get_waveform_data = ping_get_available_data.bind(context);
-      await bound_ping_get_waveform_data(); // call the function immediately, instead of waiting for the first interval to elapse
-      const new_interval_id = setInterval(bound_ping_get_waveform_data, 7000);
-      context.commit("set_waveform_ping_interval_id", new_interval_id);
-    }
   },
 };

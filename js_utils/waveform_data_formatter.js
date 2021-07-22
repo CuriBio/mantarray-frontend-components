@@ -180,7 +180,7 @@ function get_well_slice_to_display(
  * @param   {array} new_arr the array
  * @return  {array} arr appended
  */
-function append_get_available_well_data(arr, new_arr) {
+function append_well_data(arr, new_arr) {
   const inner_object_waveform_data = new_arr.waveform_data;
   const inner_object_basic_data = inner_object_waveform_data.basic_data;
   const inner_object_waveform_data_points = inner_object_basic_data.waveform_data_points;
@@ -215,4 +215,4 @@ exports.convert_from_json_of_well_indices_to_sparse_arrays = convert_from_json_o
 exports.find_closest_well_idx = find_closest_well_idx;
 exports.get_well_slice_to_display = get_well_slice_to_display;
 exports.convert_x_y_arrays_to_d3_array = convert_x_y_arrays_to_d3_array;
-exports.append_get_available_well_data = append_get_available_well_data;
+exports.append_well_data = append_well_data;
