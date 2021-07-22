@@ -456,7 +456,7 @@ export default {
   position: absolute;
   top: 631px;
   left: 287.455px;
-  width: 165px;
+  width: 288px;
   height: 35px;
   overflow: hidden;
   visibility: visible;
