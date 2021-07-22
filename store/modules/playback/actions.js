@@ -103,7 +103,6 @@ export default {
       endpoint: "stop_managed_acquisition",
     };
     await this.dispatch("playback/start_stop_axios_request", payload);
-    context.commit("data/stop_waveform_pinging", null, { root: true });
     context.commit("data/clear_plate_waveforms", null, { root: true });
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
     context.commit("set_x_time_index", 0);

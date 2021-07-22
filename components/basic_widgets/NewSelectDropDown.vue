@@ -46,7 +46,7 @@ export default {
     value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")
     options_text: { type: Array, required: true },
     input_width: { type: Number, default: 210 },
-    options_idx: { type: String, default: "" },
+    options_idx: { type: Number, default: 0 },
     input_height: { type: Number, default: 0 }, // This prop is utilized by the parent component
   },
   data() {
@@ -69,6 +69,9 @@ export default {
   watch: {
     chosen_option: function () {
       this.filter_options();
+    },
+    options_idx: function () {
+      this.get_preselected_option();
     },
   },
   created() {
@@ -100,6 +103,9 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    get_preselected_option() {
+      this.chosen_option = this.dropdown_options[this.options_idx];
+    },
     change_selection(idx) {
       this.chosen_option = this.dropdown_options[idx];
       this.$emit("selection-changed", idx);

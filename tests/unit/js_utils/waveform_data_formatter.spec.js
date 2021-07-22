@@ -2,7 +2,7 @@ import {
   convert_from_json_of_sample_idx_and_value,
   find_closest_array_idx,
   get_array_slice_to_display,
-  append_get_available_well_data,
+  append_well_data,
 } from "@/js_utils/waveform_data_formatter.js";
 
 import data_store_module from "@/store/modules/data";
@@ -87,12 +87,12 @@ describe("waveform_data_formatter.js", () => {
       expect(arr[0][1]).toStrictEqual(200);
     });
     test("When waveform data object is appended with existing waveform data object, Then the returned value is the correct length", () => {
-      const lar = append_get_available_well_data(ar, nr);
+      const lar = append_well_data(ar, nr);
       expect(lar[0].x_data_points).toHaveLength(8);
     });
-    test("When append_get_available_well_data is called to add new data to the Vuex store initial state, Then the Response data is appended to the correct well indices", () => {
+    test("When append_well_data is called to add new data to the Vuex store initial state, Then the Response data is appended to the correct well indices", () => {
       const initial_vuex_state = data_store_module.state().plate_waveforms;
-      const new_array = append_get_available_well_data(initial_vuex_state, nr);
+      const new_array = append_well_data(initial_vuex_state, nr);
 
       expect(new_array[0].x_data_points).toHaveLength(4);
       expect(new_array[0].x_data_points[3]).toStrictEqual(52000);

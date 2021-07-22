@@ -2,11 +2,11 @@ import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import axios from "axios";
 const MockAxiosAdapter = require("axios-mock-adapter");
-import { ping_get_available_data } from "@/store/modules/data/actions";
-import { system_status_regexp, get_available_data_regex } from "@/store/modules/flask/url_regex";
+import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
+import { ping_system_status } from "../../../store/modules/flask/actions";
 
 const http = require("http");
 const io_server = require("socket.io");
@@ -113,6 +113,10 @@ describe("store/data", () => {
   });
 
   describe("websocket", () => {
+    // windows CI is having issues
+    if (process.platform == "win32") {
+      return;
+    }
     let http_server;
     let ws_server;
     let socket_server_side;
@@ -135,24 +139,19 @@ describe("store/data", () => {
       http_server.close();
     });
 
-    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
-      store.commit("data/set_plate_waveforms", ar);
-
-      const stored_waveform = store.getters["data/plate_waveforms"];
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+    test("Given ws client has a 'message' event handler, When ws server emits a 'message' event, Then client receives message", async () => {
+      // Sanity test for websockets
+      let expected_message = "Test Message";
 
       await new Promise((resolve) => {
-        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
-          resolve(ack);
+        socket_client_side.on("message", (message) => {
+          expect(message).toEqual(expected_message);
+          resolve();
         });
+        socket_server_side.send(expected_message);
       });
-
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(8);
     });
     test("When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
-      // TODO use UUIDs
       const init_heatmap_values = {
         "Twitch Force": { data: [[0], [], [20]] },
         "Twitch Period": { data: [[100], [], [120]] },
@@ -189,9 +188,26 @@ describe("store/data", () => {
       stored_metrics["Twitch Force"].data.map(data_validator);
       stored_metrics["Relaxation Velocity"].data.map(data_validator);
     });
+    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
+      store.commit("data/set_plate_waveforms", ar);
+
+      const stored_waveform = store.getters["data/plate_waveforms"];
+      expect(stored_waveform).toHaveLength(24);
+      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      expect(stored_waveform).toHaveLength(24);
+      expect(stored_waveform[0].x_data_points).toHaveLength(8);
+    });
   });
 
-  describe("get_available_data", () => {
+  // TODO move these to another test file
+  describe("Given current status is LIVE_VIEW_ACTIVE", () => {
     let mocked_axios;
     let context = null;
 
@@ -199,90 +215,47 @@ describe("store/data", () => {
       mocked_axios = new MockAxiosAdapter(axios);
 
       store.commit("data/set_plate_waveforms", ar);
-      context = await store.dispatch("data/get_data_action_context");
+      context = await store.dispatch("flask/get_flask_action_context");
+
+      store.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
     });
 
-    test("When ping_get_available_data is invoked, Then the /get_available_data route is called with Axios", async () => {
-      mocked_axios.onGet(get_available_data_regex).reply(200, nr);
-
-      const bound_ping_get_waveform_data = ping_get_available_data.bind(context);
-      await bound_ping_get_waveform_data();
-      expect(mocked_axios.history.get).toHaveLength(1);
-      expect(mocked_axios.history.get[0].url).toMatch("http://localhost:4567/get_available_data");
-    });
-    test("Given that the playback x_time_index is set to a specific value in Vuex, When ping_get_available_data is invoked, Then the /get_available_data route is called with Axios with the x_time_index as a parameter", async () => {
+    test("Given that the playback x_time_index is set to a specific value in Vuex, Then the /system_status route is called with Axios with the x_time_index as a parameter", async () => {
       const expected_idx = 9876;
       store.commit("playback/set_x_time_index", expected_idx);
-      mocked_axios.onGet(get_available_data_regex).reply(200, nr);
+      mocked_axios.onGet(system_status_regexp).reply(200, nr);
 
-      const bound_ping_get_waveform_data = ping_get_available_data.bind(context);
-      await bound_ping_get_waveform_data();
+      const bound_ping_system_status = ping_system_status.bind(context);
+      await bound_ping_system_status();
       expect(mocked_axios.history.get).toHaveLength(1);
+      expect(mocked_axios.history.get[0].url).toMatch(new RegExp("http://localhost:4567/system_status?"));
       expect(mocked_axios.history.get[0].url).toMatch(
-        "http://localhost:4567/get_available_data?currently_displayed_time_index=" + expected_idx
+        new RegExp("currently_displayed_time_index=" + expected_idx)
       );
     });
-    test("When the get_available_data is invoked, Then http error response of empty data its handled", async () => {
+
+    test("Given /system_status is mocked to return 200 (and some dummy response) and and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then both intervals are cleared in Vuex (status pinging, and playback progression)", async () => {
       mocked_axios
-        .onGet(get_available_data_regex) // We pass in_simulation_mode true and validate default false is replaced
-        .reply(204, {}); // 513 there is no HTTP status code with this value so it will be caught in the server.
-      // 204 No Content is the right HTTP status code.
-      const bound_ping_get_waveform_data = ping_get_available_data.bind(context);
-      await bound_ping_get_waveform_data();
-      expect(mocked_axios.history.get).toHaveLength(1);
-      expect(mocked_axios.history.get[0].url).toMatch("http://localhost:4567/get_available_data");
-    });
-    test("Given that the axios get method to respond with http status 200, When the start_get_waveform_pinging action is dispatched, Then setInterval is invoked and the interval ID stored in Vuex", async () => {
-      mocked_axios.onGet(get_available_data_regex).reply(200, nr);
+        .onGet(system_status_regexp)
+        .reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          in_simulation_mode: true,
+        })
+        .onGet("/start_recording")
+        .reply(405);
 
-      // confirm pre-condition
-      expect(store.state.data.waveform_ping_interval_id).toBeNull();
-      const expected_interval_id = 173;
-      const spied_set_interval = jest.spyOn(window, "setInterval");
-      spied_set_interval.mockReturnValueOnce(expected_interval_id);
+      await store.dispatch("flask/start_status_pinging");
+      await store.dispatch("playback/start_playback_progression");
 
-      await store.dispatch("data/start_get_waveform_pinging");
-      expect(spied_set_interval.mock.calls).toHaveLength(1);
-      expect(store.state.data.waveform_ping_interval_id).toStrictEqual(expected_interval_id);
-    });
+      // confirm pre-conditions
+      expect(store.state.flask.status_ping_interval_id).not.toBeNull();
+      expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
 
-    describe("Given get waveform pinging is active", () => {
-      beforeEach(async () => {
-        mocked_axios.onGet(get_available_data_regex).reply(200, nr);
+      await store.dispatch("playback/start_recording");
 
-        await store.dispatch("data/start_get_waveform_pinging");
-      });
-      test("When start_get_available_data is dispatched, Then the waveform_ping_interval_id does not change and setInterval is not called again", async () => {
-        const initial_interval_id = store.state.data.waveform_ping_interval_id;
-        await store.dispatch("data/start_get_waveform_pinging");
-
-        expect(store.state.data.waveform_ping_interval_id).toStrictEqual(initial_interval_id);
-      });
-      test("Given /system_status is mocked to return 200 (and some dummy response) and live_view is started and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then all 3 intervals are cleared in Vuex (status pinging, data pinging, and playback progression)", async () => {
-        mocked_axios
-          .onGet(system_status_regexp)
-          .reply(200, {
-            ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
-            in_simulation_mode: true,
-          })
-          .onGet("/start_recording")
-          .reply(405);
-
-        await store.dispatch("flask/start_status_pinging");
-        await store.dispatch("playback/start_playback_progression");
-
-        // confirm pre-conditions
-        expect(store.state.data.waveform_ping_interval_id).not.toBeNull();
-        expect(store.state.flask.status_ping_interval_id).not.toBeNull();
-        expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
-
-        await store.dispatch("playback/start_recording");
-
-        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
-        expect(store.state.flask.status_ping_interval_id).toBeNull();
-        expect(store.state.playback.playback_progression_interval_id).toBeNull();
-        expect(store.state.data.waveform_ping_interval_id).toBeNull();
-      });
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
+      expect(store.state.flask.status_ping_interval_id).toBeNull();
+      expect(store.state.playback.playback_progression_interval_id).toBeNull();
     });
   });
 });

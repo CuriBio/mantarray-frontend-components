@@ -41,7 +41,7 @@ export default {
 
   methods: {
     start_well_data() {
-      this.interval = setInterval(this.deltaT, 100);
+      this.interval = setInterval(this.deltaT, 500);
     },
     deltaT() {
       let values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));

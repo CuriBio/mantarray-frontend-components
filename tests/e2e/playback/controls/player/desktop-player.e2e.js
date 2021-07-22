@@ -16,7 +16,6 @@ import {
   system_status_when_calibration_needed_regexp,
   system_status_when_server_initializing_regexp,
   all_mantarray_commands_regexp,
-  get_available_data_regex,
 } from "../../../../../store/modules/flask/url_regex";
 
 import { STATUS } from "../../../../../store/modules/flask/enums";
@@ -97,12 +96,6 @@ const mocked_system_status_recording_when_in_recording = RequestMock()
     "Access-Control-Allow-Origin": "*",
   });
 
-const mocked_get_available_data_handler = RequestMock()
-  .onRequestTo(get_available_data_regex)
-  .respond(null, 204, {
-    "Access-Control-Allow-Origin": "*",
-  });
-
 /* Eli (6/11/20): note for the future---you can remove and add mocks on the fly during a test as well. https://github.com/DevExpress/testcafe/issues/2477
     await t.removeRequestHooks(mock1);
 
@@ -138,8 +131,7 @@ fixture`playback/controls/player/desktop-player/calibration-needed`
     mocked_all_mantarray_commands,
     mocked_static_system_status_states,
     mocked_system_status_finish_calibration,
-    mocked_system_status_finish_buffering,
-    mocked_get_available_data_handler
+    mocked_system_status_finish_buffering
   );
 
 test("DesktopPlayerControls UI updates transitioning through 'needs calibration'-->'stopped'-->'playing'-->'recording'-->'playing'-->'recording'-->'playing'-->'stopped'-->'playing'-->'stopped'-->['stopped' after clicking calibrate again]", async (t) => {
@@ -244,8 +236,7 @@ fixture`playback/controls/player/desktop-player/x-y-offset`
     mocked_all_mantarray_commands,
     mocked_static_system_status_states,
     mocked_system_status_finish_calibration,
-    mocked_system_status_finish_buffering,
-    mocked_get_available_data_handler
+    mocked_system_status_finish_buffering
   );
 
 test("Given x/y offset of div containing DesktopPlayerControls, Then the component renders in offset position", async (t) => {
