@@ -24,7 +24,7 @@
       <InputWidget
         :placeholder="'1000'"
         :dom_id_suffix="'max'"
-        :invalid_text="max_y_value"
+        :invalid_text="max_value_error_msg"
         :input_width="106"
         :default_state="false"
         @update:value="on_update_max_value($event)"
@@ -39,7 +39,7 @@
       <InputWidget
         :placeholder="'0'"
         :dom_id_suffix="'min'"
-        :invalid_text="min_y_value"
+        :invalid_text="min_value_error_msg"
         :input_width="106"
         :default_state="false"
         @update:value="on_update_min_value($event)"
@@ -109,8 +109,8 @@ export default {
         },
         { text: "...", value: "...", disabled: true },
       ],
-      max_y_value: "invalid",
-      min_y_value: "invalid",
+      max_value_error_msg: "invalid",
+      min_value_error_msg: "invalid",
       maximum: "",
       minimum: "",
     };
@@ -126,16 +126,16 @@ export default {
     on_update_max_value: async function (new_value) {
       const max_value = parseInt(new_value);
       if (max_value < 0) {
-        this.max_y_value = "cannot be negative";
+        this.max_value_error_msg = "cannot be negative";
         this.enable_list_y_axis_widget = [false, true];
       } else if (max_value > 1000000) {
-        this.max_y_value = "very large";
+        this.max_value_error_msg = "very large";
         this.enable_list_y_axis_widget = [false, true];
       } else if (new_value == "" || new_value == "-") {
-        this.max_y_value = "invalid";
+        this.max_value_error_msg = "invalid";
         this.enable_list_y_axis_widget = [false, true];
       } else {
-        this.max_y_value = "";
+        this.max_value_error_msg = "";
         if (this.minimum != "") {
           if (this.minimum < this.maximum) {
             this.enable_list_y_axis_widget = [true, true];
@@ -144,37 +144,36 @@ export default {
       }
       this.maximum = max_value;
       if (new_value == "" || new_value == "-") {
-        this.max_y_value = "invalid";
+        this.max_value_error_msg = "invalid";
         this.enable_list_y_axis_widget = [false, true];
       }
       await this.on_update_min_value(this.minimum);
     },
     on_update_min_value: function (new_value) {
       const min_value = parseInt(new_value);
-
       if (min_value < 0) {
-        this.min_y_value = "cannot be negative";
+        this.min_value_error_msg = "cannot be negative";
         this.enable_list_y_axis_widget = [false, true];
       } else if (min_value >= this.maximum || isNaN(this.maximum)) {
-        this.max_y_value = "min greater than max";
-        this.min_y_value = "min greater than max";
+        this.max_value_error_msg = "min greater than max";
+        this.min_value_error_msg = "min greater than max";
         this.enable_list_y_axis_widget = [false, true];
-      } else if (this.max_y_value === "very large") {
+      } else if (this.max_value_error_msg === "very large") {
         this.enable_list_y_axis_widget = [false, true];
-        this.min_y_value = "";
+        this.min_value_error_msg = "";
       } else {
         this.enable_list_y_axis_widget = [true, true];
-        this.min_y_value = "";
-        this.max_y_value = "";
+        this.min_value_error_msg = "";
+        this.max_value_error_msg = "";
       }
       this.minimum = min_value;
-      if (new_value == "" || new_value == "-" || isNaN(min_value)) {
-        this.min_y_value = "invalid";
+      if (new_value === "" || new_value === "-" || isNaN(min_value)) {
+        this.min_value_error_msg = "invalid";
         this.enable_list_y_axis_widget = [false, true];
-        if (isNaN(this.maximum)) this.max_y_value = "invalid";
+        if (isNaN(this.maximum)) this.max_value_error_msg = "invalid";
       }
       if ((new_value == "" && this.maximum < 0) || this.maximum < 0) {
-        this.max_y_value = "cannot be negative";
+        this.max_value_error_msg = "cannot be negative";
         this.enable_list_y_axis_widget = [false, true];
       }
     },
