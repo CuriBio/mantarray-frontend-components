@@ -35,7 +35,6 @@ module.exports = {
     // ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$":
     //   "jest-transform-stub",
   },
-  transformIgnorePatterns: ["/node_modules/(?!colorjs.io)/.*"],
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.ubuntu_codebuild_cache/"],
   // we will use this to create snapshot tests
   snapshotSerializers: ["jest-serializer-vue"],

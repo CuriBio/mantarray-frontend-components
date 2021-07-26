@@ -1,6 +1,12 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.4.2 (2021-07-26)
+------------------
+
+- Fixed issue with min y zoom value of 0 being marked invalid after updating max value
+
+
 0.4.1 (2021-07-22)
 ------------------
 
@@ -10,44 +16,44 @@ Changelog for Mantarray Frontend Components
 0.4.0 (2021-07-22)
 ------------------
 
- - Added initial Gen 1 heatmap
- - Added websocket to receive waveform data asynchronously and in real time
- - Added initial stimulation studio
- - Added currently_displayed_time_index parameter to /system_status call to Flask
- - Fixed Y-axis zoom logic
- - Removed /get_available_data
+- Added initial Gen 1 heatmap
+- Added websocket to receive waveform data asynchronously and in real time
+- Added initial stimulation studio
+- Added currently_displayed_time_index parameter to /system_status call to Flask
+- Fixed Y-axis zoom logic for input validation
+- Removed /get_available_data
 
 
- 0.3.0 (2021-07-08)
+0.3.0 (2021-07-08)
 ------------------
 
- - Added Y-axis zoom for waveform display
+- Added Y-axis zoom for waveform display
 
 0.2.0 (2021-04-01)
 ------------------
 
- - Added ability to skip ahead if the live view is lagging while being rendered
+- Added ability to skip ahead if the live view is lagging while being rendered
 
 0.1.13 (2021-03-29)
 ------------------
 
- - Added more detailed logging on axios errors to Flask backend
+- Added more detailed logging on axios errors to Flask backend
 
 0.1.12 (2021-01-27)
 ------------------
 
- - Fixed issue where an immediately returned /system_status could change the state if a start/stop calibration/recording/liveview command was just sent
+- Fixed issue where an immediately returned /system_status could change the state if a start/stop calibration/recording/liveview command was just sent
 
 0.1.11 (2021-01-15)
 ------------------
 
- - Fixed visual issues with button to manually edit barcode
+- Fixed visual issues with button to manually edit barcode
 
 0.1.10 (2021-01-14)
 ------------------
 
- - Added back the capability of manual platebarcode entry and validation rules.
- - Included additional E2E VRT testcases of platebarcode entry scanner and manual entry.
+- Added back the capability of manual platebarcode entry and validation rules.
+- Included additional E2E VRT testcases of platebarcode entry scanner and manual entry.
 
 0.1.9 (2021-01-06)
 ------------------
