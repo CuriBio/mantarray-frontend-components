@@ -152,7 +152,7 @@ export default {
       }
       if (
         mutation.type === "stimulation/set_imported_protocol" ||
-        mutation.type === "stimulation/add_saved_protocol"
+        mutation.type === "stimulation/set_new_protocol"
       ) {
         this.update_protocols();
       }
