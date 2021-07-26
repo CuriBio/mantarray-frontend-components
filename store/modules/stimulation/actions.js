@@ -153,6 +153,7 @@ export default {
     const assignment = await this.getters["stimulation/get_next_protocol"];
     const { color, letter } = assignment;
     const updated_protocol = { color, letter, label: protocol.name, protocol };
+    this.commit("stimulation/set_edit_mode", { label: protocol.name, letter });
     this.commit("stimulation/set_imported_protocol", updated_protocol);
   },
 
@@ -234,7 +235,7 @@ export default {
     const { label, letter, color } = protocol;
     const { stimulation_type, time_unit, end_delay_duration, detailed_pulses } = protocol.protocol;
     this.state.stimulation.current_assignment = { letter, color };
-    console.log(detailed_pulses);
+
     try {
       await this.commit("stimulation/set_protocol_name", label);
       await this.commit("stimulation/set_stimulation_type", stimulation_type);

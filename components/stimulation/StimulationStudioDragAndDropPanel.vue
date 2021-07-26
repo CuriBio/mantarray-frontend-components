@@ -183,7 +183,6 @@ export default {
   computed: {
     ...mapState("stimulation", {
       time_unit: (state) => state.protocol_editor.time_unit,
-      detailed_pulses: (state) => state.protocol_editor.detailed_pulses,
     }),
   },
   created() {
@@ -224,6 +223,7 @@ export default {
       this.repeat_delay_modal = null;
       this.delay_open_for_edit = false;
       this.current_repeat_delay_input = null;
+
       if (button === "Save") {
         if (this.new_cloned_idx !== null) this.protocol_order[this.new_cloned_idx].settings = settings;
         if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null)
@@ -233,6 +233,7 @@ export default {
             this.shift_click_nested_img_idx
           ].settings = settings;
       }
+
       if (button === "Delete") {
         if (this.shift_click_nested_img_idx !== null)
           this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
@@ -241,9 +242,11 @@ export default {
           );
         if (this.shift_click_nested_img_idx === null) this.protocol_order.splice(this.shift_click_img_idx, 1);
       }
+
       if (button === "Cancel") {
         if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
       }
+
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
