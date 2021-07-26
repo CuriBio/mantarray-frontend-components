@@ -87,13 +87,14 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
-  test("When user wants to zoom in on an axis in the Protocol Viewer, Then the scale will be divided by 10", async () => {
+  test("When user wants to zoom in on an axis in the Protocol Viewer, Then the scale will be divided by 1.5", async () => {
     const wrapper = mount(StimulationStudioProtocolViewer, {
       store,
       localVue,
     });
+    const expected_scale = 333.3333333333333;
     await store.commit("stimulation/set_zoom_in", "y-axis");
-    expect(wrapper.vm.y_min_max).toBe(1);
+    expect(wrapper.vm.y_min_max).toBe(expected_scale);
   });
 
   test("When a user deletes the protocol, Then all datapoints should be deleted", async () => {
@@ -142,7 +143,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       localVue,
     });
 
-    const expected_delay_values = [[1600, 1605]];
+    const expected_delay_values = [[1.6, 6.6]];
     const test_value = 5;
 
     await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);

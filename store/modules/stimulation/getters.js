@@ -23,7 +23,7 @@ export default {
     if (protocol_editor.time_unit.includes("minutes")) return "Time (min)";
   },
 
-  get_protocol_order({ protocol_editor }) {
+  get_detailed_pulse_order({ protocol_editor }) {
     return protocol_editor.detailed_pulses;
   },
   get_protocol_name({ protocol_editor }) {

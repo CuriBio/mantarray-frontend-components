@@ -56,6 +56,7 @@ export default {
       x_axis_scale: 100,
       y_axis_scale: 500,
       delay_blocks: [],
+      edit_mode: { status: false, letter: "", label: "" },
     };
     Object.assign(state, replace_state);
   },
@@ -78,6 +79,7 @@ export default {
       x_axis_scale: 100,
       y_axis_scale: 500,
       delay_blocks: [],
+      edit_mode: { status: false, letter: "", label: "" },
     };
     Object.assign(state, replace_state);
   },
@@ -103,10 +105,10 @@ export default {
     state.delay_blocks = [delay];
     pulses.push(delay_pulse_model);
   },
-  set_imported_protocol({ protocol_list }, protocol) {
+  set_new_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
   },
-  set_new_protocol({ protocol_list }, protocol) {
+  set_imported_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
   },
   set_stim_status(state, bool) {

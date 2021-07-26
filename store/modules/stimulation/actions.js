@@ -152,9 +152,10 @@ export default {
   async add_imported_protocol({ commit, state, getters }, protocol) {
     const assignment = await this.getters["stimulation/get_next_protocol"];
     const { color, letter } = assignment;
-    const updated_protocol = { color, letter, label: protocol.name, protocol };
-    this.commit("stimulation/set_edit_mode", { label: protocol.name, letter });
-    this.commit("stimulation/set_imported_protocol", updated_protocol);
+    const imported_protocol = { color, letter, label: protocol.name, protocol };
+
+    await this.commit("stimulation/set_edit_mode", { label: protocol.name, letter });
+    this.commit("stimulation/set_imported_protocol", imported_protocol);
   },
 
   async add_saved_protocol({ commit, state, dispatch }) {
@@ -227,6 +228,7 @@ export default {
 
   async stop_stim_status() {
     const status = false;
+
     await post_stim_status(status);
     this.commit("stimulation/set_stim_status", status);
   },
@@ -246,7 +248,7 @@ export default {
       console.log(error);
     }
 
-    this.commit("stimulation/set_edit_mode", { label, letter });
+    this.commit("stimulation/set_edit_mode", protocol);
   },
 
   async handle_protocol_editor_reset({ commit, state }) {

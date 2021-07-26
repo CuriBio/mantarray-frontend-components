@@ -85,12 +85,15 @@ export default {
         this.$store.dispatch("stimulation/handle_protocol_editor_reset");
         this.selected_protocol = { label: "Create New", color: "", letter: "" };
       }
+
       if (idx === 1) this.$store.commit("stimulation/reset_state");
-      if (idx === 2 && this.selected_protocol.label !== "Create New")
+
+      if (idx === 2 && this.selected_protocol.label !== "Create New") {
         this.$store.dispatch("stimulation/edit_selected_protocol", this.selected_protocol);
-      else if (idx === 2 && this.selected_protocol.label === "Create New")
+      } else if (idx === 2 && this.selected_protocol.label === "Create New")
         this.$store.commit("stimulation/reset_protocol_editor");
     },
+
     handle_selection_change(protocol) {
       this.selected_protocol = protocol;
     },

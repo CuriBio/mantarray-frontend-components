@@ -88,7 +88,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
       localVue,
     });
     const test_protocol = store.state.stimulation.protocol_list[1];
-    await store.commit("stimulation/set_imported_protocol", test_protocol);
+    await store.commit("stimulation/set_new_protocol", test_protocol);
     expect(updateSpy).toHaveBeenCalledWith();
   });
 

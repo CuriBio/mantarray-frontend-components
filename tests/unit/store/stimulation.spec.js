@@ -81,8 +81,8 @@ describe("store/stimulation", () => {
     });
 
     test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
-      const voltage = "Voltage (V)";
-      const current = "Current (A)";
+      const voltage = "Voltage (mV)";
+      const current = "Current (µA)";
 
       const default_type = store.getters["stimulation/get_stimulation_type"];
       expect(default_type).toBe(voltage);
@@ -101,7 +101,7 @@ describe("store/stimulation", () => {
       const { detailed_pulses, name, end_delay_duration } = selected_protocol.protocol;
       await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
 
-      const actual_detailed_pulses = store.getters["stimulation/get_protocol_order"];
+      const actual_detailed_pulses = store.getters["stimulation/get_detailed_pulse_order"];
       expect(actual_detailed_pulses).toStrictEqual(detailed_pulses);
 
       const actual_name = store.getters["stimulation/get_protocol_name"];
@@ -276,25 +276,25 @@ describe("store/stimulation", () => {
     test("When a user wants to zoom in on an axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
       expect(store.state.stimulation.x_axis_scale).toBe(100);
       await store.commit("stimulation/set_zoom_in", "x-axis");
-      expect(store.state.stimulation.x_axis_scale).toBe(10);
+      expect(store.state.stimulation.x_axis_scale).toBe(66.66666666666667);
 
-      expect(store.state.stimulation.y_axis_scale).toBe(10);
+      expect(store.state.stimulation.y_axis_scale).toBe(500);
       await store.commit("stimulation/set_zoom_in", "y-axis");
-      expect(store.state.stimulation.y_axis_scale).toBe(1);
+      expect(store.state.stimulation.y_axis_scale).toBe(333.3333333333333);
     });
 
     test("When a user wants to zoom out on an axis, Then the scale will multiple by a power of 10", async () => {
       expect(store.state.stimulation.x_axis_scale).toBe(100);
       await store.commit("stimulation/set_zoom_out", "x-axis");
-      expect(store.state.stimulation.x_axis_scale).toBe(1000);
+      expect(store.state.stimulation.x_axis_scale).toBe(150);
 
-      expect(store.state.stimulation.y_axis_scale).toBe(10);
+      expect(store.state.stimulation.y_axis_scale).toBe(500);
       await store.commit("stimulation/set_zoom_out", "y-axis");
-      expect(store.state.stimulation.y_axis_scale).toBe(100);
+      expect(store.state.stimulation.y_axis_scale).toBe(750);
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
-      const x_values = [0, 0, 100, 100, 200, 200, 400, 400, 500];
+      const x_values = [0, 0, 0.1, 0.1, 0.2, 0.2, 0.4, 0.4, 0.5];
       const y_values = [0, 2, 2, 2, 2, 0, 0, -2, -2];
       const colors = { b7b7b7: [0, 9] };
 
@@ -366,7 +366,7 @@ describe("store/stimulation", () => {
       expect(protocol_list).toHaveLength(1);
     });
 
-    test("When a starts a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
+    test("When a user starts a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
       const axios_message_spy = jest.spyOn(axios_helpers, "post_stim_message").mockImplementation(() => null);
       const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
       const test_assignment = {
@@ -374,7 +374,18 @@ describe("store/stimulation", () => {
           letter: "C",
           color: "#000000",
           label: "test",
-          protocol: { stimulation_type: "C", pulses: ["test"] },
+          protocol: {
+            stimulation_type: "C",
+            pulses: [
+              {
+                phase_one_duration: 1500,
+                phase_one_charge: 500,
+                interpulse_duration: 0,
+                phase_two_charge: 0,
+                phase_two_duration: 0,
+              },
+            ],
+          },
         },
       };
       const expected_message = {
@@ -382,7 +393,15 @@ describe("store/stimulation", () => {
           {
             stimulation_type: "C",
             well_number: "A02",
-            pulses: ["test"],
+            pulses: [
+              {
+                phase_one_duration: 1500000,
+                phase_one_charge: 500,
+                interpulse_duration: 0,
+                phase_two_charge: 0,
+                phase_two_duration: 0,
+              },
+            ],
           },
         ],
       };
@@ -391,7 +410,7 @@ describe("store/stimulation", () => {
       expect(axios_message_spy).toHaveBeenCalledWith(expected_message);
       expect(axios_status_spy).toHaveBeenCalledWith(true);
     });
-    test("When a stops a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
+    test("When a user stops a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
       const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
       await store.dispatch("stimulation/stop_stim_status");
       expect(axios_status_spy).toHaveBeenCalledWith(false);

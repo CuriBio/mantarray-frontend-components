@@ -79,7 +79,7 @@ export default {
     this.update_protocols();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (
-        mutation.type === "stimulation/set_imported_protocol" ||
+        mutation.type === "stimulation/set_new_protocol" ||
         mutation.type === "stimulation/set_edit_mode_off" ||
         mutation.type === "stimulation/add_saved_protocol"
       ) {
