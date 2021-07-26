@@ -1,7 +1,7 @@
 import getters from "./getters";
 import mutations from "./mutations";
 
-import Color from "colorjs.io";
+import Color from "colorjs.io/dist/color.cjs.min.js";
 
 const gradient_themes = [
   { name: "Warm", color_min: "#f9d78c", color_max: "#bd3532", space: "hsl" },

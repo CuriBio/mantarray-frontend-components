@@ -14,13 +14,12 @@ export { WellTitle } from "./js_utils/labware_calculations";
 export { TextValidation } from "./js_utils/text_validation";
 
 // Store
+export { default as data_store_module } from "./store/modules/data";
 export { default as playback_store_module } from "./store/modules/playback";
-export { ENUMS as PLAYBACK_ENUMS } from "./store/modules/playback/enums";
 export { default as settings_store_module } from "./store/modules/settings";
 export { default as waveform_store_module } from "./store/modules/waveform";
 export { default as twentyfourcontrols_store_module } from "./store/modules/twentyfourcontrols";
 export { default as flask_store_module } from "./store/modules/flask";
-export { STATUS as FLASK_STATUS_ENUMS } from "./store/modules/flask/enums";
 export {
   system_status_regexp,
   system_status_when_server_ready_regexp,
@@ -29,6 +28,14 @@ export {
   all_mantarray_commands_regexp,
 } from "./store/modules/flask/url_regex";
 export { default as stimulation_store_module } from "./store/modules/stimulation";
+export { default as heatmap_store_module } from "./store/modules/heatmap";
+export { default as gradient_store_module } from "./store/modules/gradient";
+export { TWITCH as DATA_ENUMS } from "./store/modules/data/enums";
+export { ENUMS as PLAYBACK_ENUMS } from "./store/modules/playback/enums";
+export { STATUS as FLASK_STATUS_ENUMS } from "./store/modules/flask/enums";
+export { METRIC_UNITS as HEATMAP_METRIC_UNITS } from "./store/modules/heatmap/enums";
+export { default as create_web_socket_plugin } from "./store/plugins/websocket";
+export { socket } from "./store/plugins/websocket";
 
 // Waveform Components
 export { default as Waveform } from "./components/playback/waveform/Waveform.vue";
@@ -72,6 +79,7 @@ export { default as SimulationMode } from "./components/status/SimulationMode.vu
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
 export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
+export { default as GradientBar } from "./components/status/GradientBar.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
