@@ -18,7 +18,7 @@ export async function ping_system_status() {
     baseurl: "http://localhost:4567",
     endpoint: endpoint,
   };
-  const whole_url = `${payload.baseurl}/${payload.endpoint}${payload.val}`;
+  const whole_url = `${payload.baseurl}/${payload.endpoint}`;
   // console.log("about to ping system status: " + whole_url)
   let result = 0;
   // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
