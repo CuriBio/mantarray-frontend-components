@@ -34,12 +34,12 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     const wrapper = shallowMount(StimulationStudioWaveformSettingModal, {
       localVue,
       propData: {
-        stimulation_type: "Voltage (V)",
+        stimulation_type: "Voltage (mV)",
         waveform_type: "Biphasic",
       },
     });
     const title = wrapper.find(".span__stimulationstudio-current-settings-label-three").text();
-    expect(title).toBe("Voltage (V)");
+    expect(title).toBe("Voltage (mV)");
     const biphasic_label = wrapper.find(".span__stimulationstudio-current-settings-label-twelve");
     expect(biphasic_label).toBeTruthy();
   });

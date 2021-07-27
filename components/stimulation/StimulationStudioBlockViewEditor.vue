@@ -152,7 +152,7 @@ export default {
       }
       if (
         mutation.type === "stimulation/set_imported_protocol" ||
-        mutation.type === "stimulation/add_saved_protocol"
+        mutation.type === "stimulation/set_new_protocol"
       ) {
         this.update_protocols();
       }
@@ -170,7 +170,7 @@ export default {
   methods: {
     ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_repeat_frequency"]),
     ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name"]),
-    update_protocols: function () {
+    update_protocols() {
       this.protocol_list = this.get_protocols;
       const { letter, color } = this.get_next_protocol;
       this.current_letter = letter;

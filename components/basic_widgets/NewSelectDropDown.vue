@@ -1,24 +1,24 @@
 <template>
   <div
-    class="div__input-dropdown-background"
+    class="div__select-dropdown-background"
     :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
   >
     <span
       v-if="title_label !== ''"
-      class="span__input-dropdown-content-label"
+      class="span__select-dropdown-content-label"
       :style="'width: ' + input_width + 'px;'"
     >
       {{ title_label }}
     </span>
     <div
-      class="div__input-dropdown-controls-content-widget"
+      class="div__select-dropdown-controls-content-widget"
       :style="
         'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;' + 'height:' + input_height + 'px;'
       "
       @click="toggle()"
     >
       <div
-        class="span__input-dropdown-controls-content-input-txt-widget"
+        class="span__select-dropdown-controls-content-input-txt-widget"
         :style="'width: ' + input_width + 'px;'"
       >
         <span class="span__input-controls-content-input-txt-widget">
@@ -70,9 +70,6 @@ export default {
     chosen_option: function () {
       this.filter_options();
     },
-    options_idx: function () {
-      this.get_preselected_option();
-    },
   },
   created() {
     this.get_dropdown_options();
@@ -87,10 +84,7 @@ export default {
         this.chosen_option = this.dropdown_options[0];
         this.filter_options();
       }
-      if (
-        mutation.type === "stimulation/set_imported_protocol" ||
-        mutation.type === "stimulation/add_saved_protocol"
-      ) {
+      if (mutation.type === "stimulation/set_imported_protocol") {
         this.get_dropdown_options();
         const imported_idx = this.dropdown_options.length - 1;
         this.chosen_option = this.options_list[imported_idx];
@@ -141,7 +135,7 @@ export default {
 };
 </script>
 <style scoped>
-.div__input-dropdown-background {
+.div__select-dropdown-background {
   transform: rotate(0deg);
   padding: 0px;
   margin: 0px;
@@ -152,7 +146,7 @@ export default {
   box-shadow: none;
   cursor: pointer;
 }
-.span__input-dropdown-content-label {
+.span__select-dropdown-content-label {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -184,7 +178,7 @@ export default {
   color: #b7b7b7;
   background-color: #1c1c1c;
 }
-.div__input-dropdown-controls-content-widget {
+.div__select-dropdown-controls-content-widget {
   pointer-events: all;
   transform: rotate(0deg);
   position: absolute;

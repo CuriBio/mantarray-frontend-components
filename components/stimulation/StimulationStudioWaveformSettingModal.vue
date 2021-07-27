@@ -33,7 +33,7 @@
     >
       <span id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt" class="span__stimulationstudio-duration-input">
         <InputWidget
-          :placeholder="'10'"
+          :placeholder="'1000 ms'"
           :dom_id_suffix="'duration'"
           :invalid_text="''"
           :input_width="142"
@@ -58,7 +58,7 @@
     >
       <span id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt" class="span__stimulationstudio-current-input">
         <InputWidget
-          :placeholder="'5'"
+          :placeholder="'500'"
           :dom_id_suffix="'current'"
           :invalid_text="''"
           :input_width="142"
@@ -94,7 +94,7 @@
         ></InputWidget>
       </span>
       <span v-b-popover.hover="popover_message" class="disabled_popover_container">
-        <img src="/question-icon.png" />
+        <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
       </span>
     </div>
     <div v-if="waveform_type === 'Biphasic'">
@@ -121,7 +121,7 @@
           class="span__stimulationstudio-current-settings-interpulse-input-container"
         >
           <InputWidget
-            :placeholder="'10'"
+            :placeholder="'1000 ms'"
             :dom_id_suffix="'interpulse'"
             :invalid_text="''"
             :input_width="142"
@@ -160,7 +160,7 @@
           class="span__stimulationstudio-current-settings-durationtwo-input"
         >
           <InputWidget
-            :placeholder="'10'"
+            :placeholder="'1000 ms'"
             :dom_id_suffix="'durationtwo'"
             :invalid_text="''"
             :input_width="142"
@@ -190,7 +190,7 @@
           class="span__stimulationstudio-current-settings-currenttwo-input"
         >
           <InputWidget
-            :placeholder="'-5'"
+            :placeholder="'-500'"
             :dom_id_suffix="'currenttwo'"
             :invalid_text="''"
             :input_width="142"
@@ -228,7 +228,7 @@
           ></InputWidget>
         </span>
         <span v-b-popover.hover="popover_message" class="disabled_popover_container">
-          <FontAwesomeIcon :icon="['fas', 'question-circle']" />
+          <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
         </span>
       </div>
     </div>
@@ -308,7 +308,7 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (V)" },
+    stimulation_type: { type: String, default: "Voltage (mV)" },
     waveform_type: { type: String, default: "Monophasic" },
     button_names: {
       type: Array,
@@ -343,8 +343,8 @@ export default {
   },
   computed: {
     check_max_type: function () {
-      if (this.stimulation_type === "Current (A)") return "Voltage (V)";
-      else return "Current (A)";
+      if (this.stimulation_type === "Current (µA)") return "Voltage (mV)";
+      else return "Current (µA)";
     },
   },
   created() {
@@ -400,6 +400,10 @@ export default {
   z-index: 5;
 }
 
+.question_icon {
+  font-size: 20px;
+  color: #b7b7b7;
+}
 .span__stimulationstudio-current-settings-title {
   pointer-events: all;
   line-height: 100%;
@@ -426,9 +430,8 @@ export default {
   position: absolute;
   font-family: Muli;
   font-size: 10px;
-  left: 112px;
-  top: 16px;
-  opacity: 0.4;
+  left: 115px;
+  top: 20px;
 }
 
 .canvas__stimulationstudio-horizontal-line-seperator-one {
