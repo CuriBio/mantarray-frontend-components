@@ -42,7 +42,7 @@
     <span class="span__heatmap-layout-heatmap-settings-label">Heatmap Settings</span>
 
     <!-- original mockflow ID: cmpD56369ad2e65893ae5ca594f14a64e378 -->
-    <canvas class="canvas__heatmap-settings-title-seperator" width="272" height="2"> </canvas>
+    <canvas class="canvas__heatmap-settings-title-seperator"> </canvas>
 
     <!-- original mockflow ID: cmpD9c0a6e873d03a7f83e8a68941610e993 -->
     <span class="span__heatmap-layout-heatmap-scale-label">Scale Bar</span>
@@ -590,7 +590,7 @@ export default {
   position: absolute;
   width: 300px;
   height: 34px;
-  top: 62px;
+  top: 17px;
   left: 1331px;
   padding: 5px;
   visibility: visible;
@@ -608,10 +608,10 @@ export default {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;
-  width: 272px;
+  width: 260px;
   height: 2px;
-  top: 100px;
-  left: 1330px;
+  top: 55px;
+  left: 1350px;
   visibility: visible;
   background-color: #3f3f3f;
   opacity: 0.5;
@@ -625,7 +625,7 @@ export default {
   position: absolute;
   width: 300px;
   height: 30px;
-  top: 113.991px;
+  top: 69px;
   left: 1330px;
   padding: 5px;
   visibility: visible;
@@ -645,7 +645,7 @@ export default {
   position: absolute;
   width: 50px;
   height: 50px;
-  top: 152px;
+  top: 107px;
   left: 1423px;
   visibility: visible;
 }
@@ -658,7 +658,7 @@ export default {
   position: absolute;
   width: 86px;
   height: 20px;
-  top: 152.991px;
+  top: 108px;
   left: 1444.28px;
   padding: 5px;
   visibility: visible;
@@ -680,7 +680,7 @@ export default {
   position: absolute;
   width: 82px;
   height: 30px;
-  top: 189.217px;
+  top: 145px;
   left: 1385.86px;
   padding: 5px;
   visibility: visible;
@@ -701,7 +701,7 @@ export default {
   position: absolute;
   width: 121px;
   height: 59px;
-  top: 178.925px;
+  top: 134px;
   left: 1473.44px;
   visibility: visible;
 }
@@ -714,7 +714,7 @@ export default {
   position: absolute;
   width: 83px;
   height: 30px;
-  top: 249.217px;
+  top: 205px;
   left: 1385.86px;
   padding: 5px;
   visibility: visible;
@@ -735,7 +735,7 @@ export default {
   position: absolute;
   width: 121px;
   height: 59px;
-  top: 240.925px;
+  top: 196px;
   left: 1473.44px;
   visibility: visible;
 }
@@ -746,7 +746,7 @@ export default {
   position: absolute;
   width: 212px;
   height: 2px;
-  top: 305px;
+  top: 260px;
   left: 1374px;
   visibility: visible;
   background-color: #3f3f3f;
@@ -761,7 +761,7 @@ export default {
   position: absolute;
   width: 301px;
   height: 30px;
-  top: 312.667px;
+  top: 268px;
   left: 1331px;
   padding: 5px;
   visibility: visible;
@@ -782,7 +782,7 @@ export default {
   transform: rotate(0deg);
   position: absolute;
   width: 210px;
-  top: 347px;
+  top: 302px;
   left: 1384px;
   padding: 5px;
   visibility: visible;
@@ -795,7 +795,7 @@ export default {
   position: absolute;
   width: 212px;
   height: 2px;
-  top: 417px;
+  top: 372px;
   left: 1374px;
   visibility: visible;
   background-color: #3f3f3f;
@@ -810,7 +810,7 @@ export default {
   position: absolute;
   width: 301px;
   height: 30px;
-  top: 426.667px;
+  top: 382px;
   left: 1331px;
   padding: 5px;
   visibility: visible;
@@ -825,7 +825,7 @@ export default {
 }
 
 .div__heatmap-radio-buttons-container {
-  top: 458px;
+  top: 413px;
   left: 1407.5px;
   position: absolute;
 }
@@ -837,7 +837,7 @@ export default {
   position: absolute;
   width: 300px;
   height: 25px;
-  top: 597.667px;
+  top: 553px;
   left: 1331.36px;
   padding: 5px;
   visibility: visible;
