@@ -84,10 +84,7 @@ export default {
         this.chosen_option = this.dropdown_options[0];
         this.filter_options();
       }
-      if (
-        mutation.type === "stimulation/set_imported_protocol" ||
-        mutation.type === "stimulation/add_saved_protocol"
-      ) {
+      if (mutation.type === "stimulation/set_imported_protocol") {
         this.get_dropdown_options();
         const imported_idx = this.dropdown_options.length - 1;
         this.chosen_option = this.options_list[imported_idx];
