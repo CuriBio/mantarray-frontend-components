@@ -305,14 +305,18 @@ describe("store/stimulation", () => {
       expect(repeat_colors).toStrictEqual(colors);
     });
 
-    test("When a user wants to save the new protocol by clicking on Save Changes button, Then the new protocol will be commited to state", async () => {
+    test("When a user wants to save the new protocol by clicking on Save Changes button, Then the new protocol will be committed to state", async () => {
       const { current_assignment, protocol_editor } = store.state.stimulation;
-      current_assignment.letter = "C";
+      current_assignment.letter = "B";
       current_assignment.color = "#000000";
-      protocol_editor.name = "test";
+      protocol_editor.name = "mock_protocol";
 
-      const expected_protocol = { letter: "C", color: "#000000", label: "test", protocol: protocol_editor };
-
+      const expected_protocol = {
+        letter: "B",
+        color: "#000000",
+        label: "mock_protocol",
+        protocol: protocol_editor,
+      };
       await store.dispatch("stimulation/add_saved_protocol");
       expect(store.state.stimulation.protocol_list[2]).toStrictEqual(expected_protocol);
     });
