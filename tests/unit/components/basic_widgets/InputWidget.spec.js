@@ -271,7 +271,6 @@ describe("InputWidget.vue", () => {
       input_width: 390,
       display_text_message: false,
       disable_paste: true,
-      default_state: false,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -293,7 +292,6 @@ describe("InputWidget.vue", () => {
       input_width: 390,
       display_text_message: false,
       disable_paste: true,
-      default_state: false,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -316,7 +314,6 @@ describe("InputWidget.vue", () => {
       input_width: 390,
       display_text_message: false,
       disable_paste: true,
-      default_state: true,
     };
     wrapper = mount(ComponentToTest, {
       propsData,

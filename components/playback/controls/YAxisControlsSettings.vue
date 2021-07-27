@@ -26,7 +26,7 @@
         :dom_id_suffix="'max'"
         :invalid_text="max_value_error_msg"
         :input_width="106"
-        :default_state="false"
+        :
         @update:value="on_update_max_value($event)"
       />
     </div>
@@ -41,7 +41,7 @@
         :dom_id_suffix="'min'"
         :invalid_text="min_value_error_msg"
         :input_width="106"
-        :default_state="false"
+        :
         @update:value="on_update_min_value($event)"
       />
     </div>

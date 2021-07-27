@@ -6,7 +6,7 @@
       <span>{{ get_input_description }}</span>
       <span class="input_container">
         <InputWidget
-          :placeholder="'5'"
+          :placeholder="'15000'"
           :dom_id_suffix="'repeat_delay'"
           :invalid_text="invalid_text"
           :input_width="80"
@@ -83,6 +83,10 @@ export default {
       input_value: null,
       invalid_text: "",
       button_labels: [],
+      invalid_err_msg: {
+        num_err: "Must be a number",
+        required: "Required",
+      },
     };
   },
   computed: {
