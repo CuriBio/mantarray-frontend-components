@@ -164,7 +164,11 @@ export default {
     const updated_protocol = { color, letter, label: protocol_editor.name, protocol: protocol_editor };
 
     if (!edit_mode.status) {
-      this.commit("stimulation/set_new_protocol", updated_protocol);
+      // check if protocol has already been added
+      const duplicate_array = protocol_list.map((protocol) => {
+        if (protocol.label === updated_protocol.label) return true;
+      });
+      if (duplicate_array.length === 0) this.commit("stimulation/set_new_protocol", updated_protocol);
     } else if (edit_mode.status) {
       protocol_list.map((protocol, idx) => {
         if (protocol.letter === edit_mode.letter)
