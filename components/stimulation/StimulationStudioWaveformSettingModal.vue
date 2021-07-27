@@ -355,9 +355,9 @@ export default {
     },
     check_validity(value, label) {
       const valid_inputs = [];
-      const number_regex = new RegExp("^[0-9]*$");
+      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"); // accepts positive and negative integers including decimals, decimals need a leading 0 if < 1
 
-      if (!number_regex.test(value)) {
+      if (!number_regex.test(value) && value !== "") {
         this.err_msg[label] = this.invalid_err_msg.num_err;
       } else if (value === "") {
         this.err_msg[label] = this.invalid_err_msg.required;
