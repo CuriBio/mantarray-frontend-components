@@ -284,12 +284,6 @@ export default {
         return ["Save", "Cancel"];
       },
     },
-    is_enabled_array: {
-      type: Array,
-      default() {
-        return [false, true, true];
-      },
-    },
     selected_waveform_settings: {
       type: Object,
       default() {
@@ -319,6 +313,7 @@ export default {
         phase_two_duration: "Required",
         phase_two_charge: "Required",
       },
+      is_enabled_array: [false, true, true],
     };
   },
   computed: {
@@ -329,6 +324,12 @@ export default {
   },
   created() {
     this.waveform_settings = this.selected_waveform_settings;
+    for (const input in this.waveform_settings) {
+      if (this.waveform_settings !== {}) {
+        const value = this.waveform_settings[input];
+        this.check_validity(value, input);
+      }
+    }
   },
   methods: {
     close(idx) {
