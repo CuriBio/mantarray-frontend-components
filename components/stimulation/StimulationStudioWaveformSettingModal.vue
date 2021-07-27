@@ -68,7 +68,7 @@
     <div id="cmpDf07f8e650ebe6951292aa4edcc603608" class="div__stimulationstudio-voltage-input-container">
       <span id="cmpDf07f8e650ebe6951292aa4edcc603608_txt" class="span__stimulationstudio-voltage-input">
         <InputWidget
-          :placeholder="'250'"
+          :initial_value="'250'"
           :dom_id_suffix="'voltage'"
           :invalid_text="''"
           :input_width="142"
@@ -190,7 +190,7 @@
           class="span__stimulationstudio-current-settings-voltagetwo-input"
         >
           <InputWidget
-            :placeholder="'250'"
+            :initial_value="'250'"
             :dom_id_suffix="'voltagetwo'"
             :invalid_text="''"
             :input_width="142"
@@ -314,6 +314,7 @@ export default {
         phase_two_charge: "Required",
       },
       is_enabled_array: [false, true, true],
+      all_valid: false,
     };
   },
   computed: {
@@ -322,8 +323,24 @@ export default {
       else return "Current (µA)";
     },
   },
+  watch: {
+    all_valid() {
+      if (this.all_valid) this.is_enabled_array = [true, true, true];
+      if (!this.all_valid) this.is_enabled_array = [false, true, true];
+    },
+  },
   created() {
     this.waveform_settings = this.selected_waveform_settings;
+
+    if (this.waveform_type === "Monophasic") {
+      this.waveform_settings = {
+        ...this.waveform_settings,
+        interpulse_duration: 0,
+        phase_two_duration: 0,
+        phase_two_charge: 0,
+      };
+    }
+
     for (const input in this.waveform_settings) {
       if (this.waveform_settings !== {}) {
         const value = this.waveform_settings[input];
@@ -334,13 +351,12 @@ export default {
   methods: {
     close(idx) {
       const button_label = this.button_names[idx];
-      for (const input in this.waveform_settings) {
-        if (this.waveform_settings[input] === "") this.waveform_settings[input] = 0;
-      }
       this.$emit("close", button_label, this.waveform_settings);
     },
     check_validity(value, label) {
+      const valid_inputs = [];
       const number_regex = new RegExp("^[0-9]*$");
+
       if (!number_regex.test(value)) {
         this.err_msg[label] = this.invalid_err_msg.num_err;
       } else if (value === "") {
@@ -349,6 +365,13 @@ export default {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.waveform_settings[label] = Number(value);
       }
+
+      for (const input in this.err_msg) {
+        if (this.err_msg[input] === "") valid_inputs.push(true);
+      }
+
+      if (valid_inputs.length === 5) this.all_valid = true;
+      else this.all_valid = false;
     },
   },
 };
