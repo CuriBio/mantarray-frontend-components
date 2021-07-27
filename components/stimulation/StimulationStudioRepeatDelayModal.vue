@@ -78,7 +78,7 @@ export default {
       invalid_text: "Required",
       button_labels: [],
       invalid_err_msg: {
-        num_err: "Must be a number",
+        num_err: "Must be a (+) number",
         required: "Required",
       },
       is_enabled_array: [false, true, true],
@@ -119,7 +119,7 @@ export default {
   },
   created() {
     this.input_value = this.current_repeat_delay_input;
-    this.check_validity(this.input_value);
+    if (this.current_repeat_delay_input !== null) this.check_validity(this.input_value);
     this.button_labels = this.get_button_array;
   },
   methods: {
@@ -139,7 +139,7 @@ export default {
       }
     },
     check_validity(value) {
-      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
+      const number_regex = new RegExp("^([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
 
       if (!number_regex.test(value) && value !== "") {
         this.invalid_text = this.invalid_err_msg.num_err;
@@ -236,7 +236,7 @@ export default {
   position: relative;
   width: 100%;
   height: 90px;
-  top: 110px;
+  top: 95px;
   visibility: visible;
   font-family: Muli;
   font-size: 17px;
