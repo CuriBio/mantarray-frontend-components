@@ -65,7 +65,7 @@ export default {
     },
     modal_type: {
       type: String,
-      default: "Repeat",
+      required: true,
     },
     delay_open_for_edit: {
       type: Boolean,
@@ -80,6 +80,7 @@ export default {
       invalid_err_msg: {
         num_err: "Must be a (+) number",
         required: "Required",
+        valid: "",
       },
       is_enabled_array: [false, true, true],
       is_valid: false,

@@ -99,7 +99,6 @@
         :repeat_idx="repeat_idx"
         :modal_type="repeat_delay_modal"
         :current_repeat_delay_input="current_repeat_delay_input"
-        :is_enabled_array="[true, true, true]"
         @repeat_close="on_repeat_modal_close"
         @delay_close="on_modal_close"
       />

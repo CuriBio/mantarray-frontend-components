@@ -47,7 +47,7 @@
       <span id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt" class="span__stimulationstudio-current-input">
         <InputWidget
           :placeholder="'500'"
-          :dom_id_suffix="'current'"
+          :dom_id_suffix="'charge'"
           :invalid_text="err_msg.phase_one_charge"
           :input_width="142"
           :initial_value="selected_waveform_settings.phase_one_charge.toString()"
@@ -69,7 +69,7 @@
       <span id="cmpDf07f8e650ebe6951292aa4edcc603608_txt" class="span__stimulationstudio-voltage-input">
         <InputWidget
           :initial_value="'250'"
-          :dom_id_suffix="'voltage'"
+          :dom_id_suffix="'max_charge'"
           :invalid_text="''"
           :input_width="142"
           :disabled="true"
@@ -163,7 +163,7 @@
         >
           <InputWidget
             :placeholder="'-500'"
-            :dom_id_suffix="'currenttwo'"
+            :dom_id_suffix="'chargetwo'"
             :invalid_text="err_msg.phase_two_charge"
             :input_width="142"
             :initial_value="selected_waveform_settings.phase_two_charge.toString()"
@@ -191,7 +191,7 @@
         >
           <InputWidget
             :initial_value="'250'"
-            :dom_id_suffix="'voltagetwo'"
+            :dom_id_suffix="'max_chargetwo'"
             :invalid_text="''"
             :input_width="142"
             :disabled="true"
