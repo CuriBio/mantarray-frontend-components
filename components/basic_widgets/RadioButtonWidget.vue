@@ -35,12 +35,24 @@ export default {
   },
 
   created: function () {
-    if (this.pre_selected != undefined) {
-      this.selected = this.radio_buttons[this.pre_selected].value;
-    }
+    this.preselect();
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (mutation.type === "gradient/reset_gradient_theme_idx") {
+        this.preselect();
+      }
+    });
+  },
+
+  beforeDestroy() {
+    this.unsubscribe();
   },
 
   methods: {
+    preselect: function () {
+      if (this.pre_selected != undefined) {
+        this.selected = this.radio_buttons[this.pre_selected].value;
+      }
+    },
     radio_toggle: function (ev) {
       const btn_info = {
         name: this.selected,

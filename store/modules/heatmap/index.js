@@ -4,11 +4,14 @@ import getters from "./getters";
 import mutations from "./mutations";
 
 const default_state = {
+  selected_wells: [],
+  well_selection_statuses: new Array(24).fill(false),
+  display_option: "Twitch Force",
+  display_option_idx: 0,
   heatmap_autoscale: false,
 };
 
-// adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2
-const state = () => JSON.parse(JSON.stringify(default_state));
+const state = () => default_state;
 
 export default {
   namespaced: true,

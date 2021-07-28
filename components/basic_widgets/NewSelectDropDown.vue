@@ -70,10 +70,13 @@ export default {
     chosen_option: function () {
       this.filter_options();
     },
+    options_idx: function () {
+      this.get_preselected_option();
+    },
   },
   created() {
     this.get_dropdown_options();
-    this.chosen_option = this.dropdown_options[0];
+    this.chosen_option = this.dropdown_options[this.options_idx];
     this.filter_options();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (

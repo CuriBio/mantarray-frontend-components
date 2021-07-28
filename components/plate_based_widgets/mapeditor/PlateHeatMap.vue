@@ -71,6 +71,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -88,12 +89,6 @@ export default {
   name: "PlateHeatMap",
   components: { FontAwesomeIcon, PlateWell },
   props: {
-    selected: {
-      type: Array,
-      default: function () {
-        return new Array(24).fill(false);
-      },
-    },
     platecolor: {
       type: Array,
       default: function () {
@@ -104,15 +99,9 @@ export default {
   data() {
     return {
       all_select_or_cancel: true,
-      x_origin: 0,
-      y_origin: 0,
-      rect_width: 0,
-      rect_height: 0,
-      all_select: this.selected,
       hover: new Array(24).fill(false),
       hover_color: new Array(24).fill(hover_color),
       stroke_width: new Array(24).fill(no_stroke_width),
-      temp_stroke_width: [],
       row_values: ["A", "B", "C", "D"],
       column_values: ["1", "2", "3", "4", "5", "6"],
       column_wells: [
@@ -129,16 +118,20 @@ export default {
         [2, 6, 10, 14, 18, 22],
         [3, 7, 11, 15, 19, 23],
       ],
-      testerf: false,
     };
+  },
+  computed: {
+    ...mapState("heatmap", {
+      well_selection_statuses: "well_selection_statuses",
+    }),
   },
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);
-    for (let j = 0; j < this.all_select.length; j++) {
-      this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
+    for (let j = 0; j < this.well_selection_statuses.length; j++) {
+      this.stroke_width[j] = !this.well_selection_statuses[j] ? no_stroke_width : selected_stroke_width;
     }
     const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-    this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+    this.all_select_or_cancel = allEqual(this.well_selection_statuses) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
   },
   methods: {
     column_left_offset(column) {
@@ -228,15 +221,12 @@ export default {
         this.test_event("- icon clicked");
       }
       this.all_select_or_cancel = !state;
-      for (let count = 0; count < 24; count++) {
-        this.all_select[count] = state;
-      }
+      this.on_plate_well_selected(new Array(24).fill(state));
       this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[j] = !this.all_select[j] ? hover_color : selected_color;
+      for (let j = 0; j < this.well_selection_statuses.length; j++) {
+        this.stroke_width[j] = !this.well_selection_statuses[j] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[j] = !this.well_selection_statuses[j] ? hover_color : selected_color;
       }
-      this.on_plate_well_selected();
     },
     on_plus_minus_enter_hover(state) {
       if (state == true) {
@@ -245,8 +235,8 @@ export default {
         this.test_event("- icon enter => Hover");
       }
       this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? hover_stroke_width : selected_stroke_width;
+      for (let j = 0; j < this.well_selection_statuses.length; j++) {
+        this.stroke_width[j] = !this.well_selection_statuses[j] ? hover_stroke_width : selected_stroke_width;
       }
     },
     on_plus_minus_leave_hover(state) {
@@ -256,8 +246,8 @@ export default {
         this.test_event("- icon leave => Hover");
       }
       this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
+      for (let j = 0; j < this.well_selection_statuses.length; j++) {
+        this.stroke_width[j] = !this.well_selection_statuses[j] ? no_stroke_width : selected_stroke_width;
         if (state == false) {
           this.hover_color[j] = selected_color;
         }
@@ -268,36 +258,35 @@ export default {
       new_list[value] = true;
       this.test_event("Well clicked");
       this.stroke_width[value] = selected_stroke_width;
-      this.all_select = new_list;
+      this.on_plate_well_selected(new_list);
       if (this.all_select_or_cancel == false) {
         this.all_select_or_cancel = true;
       }
       this.on_wellenter(value);
-      this.on_plate_well_selected();
     },
     basic_shift_or_ctrl_select(value) {
       this.test_event("Well Shift or Ctrl clicked");
-      this.testerf = !this.testerf;
       const allEqual = (arr) => arr.every((v) => v === true);
-      this.all_select[value] = !this.all_select[value];
+      const new_list = [...this.well_selection_statuses];
+      new_list[value] = !this.well_selection_statuses[value];
+      this.on_plate_well_selected(new_list);
       this.stroke_width[value] = selected_stroke_width;
-      if (allEqual(this.all_select)) {
+      if (allEqual(this.well_selection_statuses)) {
         this.all_select_or_cancel = false;
       } else {
         this.all_select_or_cancel = true;
       }
       this.on_wellenter(value);
-      this.on_plate_well_selected();
     },
     on_wellenter(value) {
       this.hover[value] = true;
       this.hover_color[value] = hover_color;
       this.stroke_width.splice(0, this.stroke_width.length);
       this.test_event("well enter =>" + value + " Hover");
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
+      for (let j = 0; j < this.well_selection_statuses.length; j++) {
+        this.stroke_width[j] = !this.well_selection_statuses[j] ? no_stroke_width : selected_stroke_width;
       }
-      if (this.all_select[value] == true) {
+      if (this.well_selection_statuses[value] == true) {
         this.stroke_width[value] = selected_stroke_width;
       } else {
         this.stroke_width[value] = hover_stroke_width;
@@ -308,8 +297,8 @@ export default {
       this.hover_color[value] = selected_color;
       this.stroke_width.splice(0, this.stroke_width.length);
       this.test_event("well leave =>" + value + " Hover");
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
+      for (let i = 0; i < this.well_selection_statuses.length; i++) {
+        this.stroke_width[i] = !this.well_selection_statuses[i] ? no_stroke_width : selected_stroke_width;
       }
     },
     on_row_select(row) {
@@ -320,12 +309,11 @@ export default {
       if (this.all_select_or_cancel == false) {
         this.all_select_or_cancel = true;
       }
-      this.all_select = new_list;
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
+      this.on_plate_well_selected(new_list);
+      for (let i = 0; i < this.well_selection_statuses.length; i++) {
+        this.stroke_width[i] = !this.well_selection_statuses[i] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.well_selection_statuses[i] ? hover_color : selected_color;
       }
-      this.on_plate_well_selected();
     },
     on_column_select(column) {
       const new_list = new Array(24).fill(false);
@@ -335,18 +323,16 @@ export default {
       if (this.all_select_or_cancel == false) {
         this.all_select_or_cancel = true;
       }
-      this.all_select = new_list;
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
+      this.on_plate_well_selected(new_list);
+      for (let i = 0; i < this.well_selection_statuses.length; i++) {
+        this.stroke_width[i] = !this.well_selection_statuses[i] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.well_selection_statuses[i] ? hover_color : selected_color;
       }
-      this.on_plate_well_selected();
     },
     on_row_ctrl_click_or_shift_click(row) {
-      const new_list = [];
       let result = false;
       this.test_event(row + " ctrl or shift clicked");
-      for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
+      const new_list = [...this.well_selection_statuses];
       this.stroke_width.splice(0, this.stroke_width.length);
       result =
         new_list[this.row_wells[row][0]] &&
@@ -356,20 +342,18 @@ export default {
       this.row_wells[row].map((well) => {
         new_list[well] = !result;
       });
-      this.all_select = new_list;
+      this.on_plate_well_selected(new_list);
       const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
+      this.all_select_or_cancel = allEqual(this.well_selection_statuses) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+      for (let i = 0; i < this.well_selection_statuses.length; i++) {
+        this.stroke_width[i] = !this.well_selection_statuses[i] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.well_selection_statuses[i] ? hover_color : selected_color;
       }
-      this.on_plate_well_selected();
     },
     on_column_ctrl_click_or_shift_click(column) {
       this.test_event(column + " ctrl or shift clicked");
-      const new_list = [];
       let result = false;
-      for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
+      const new_list = [...this.well_selection_statuses];
       this.stroke_width.splice(0, this.stroke_width.length);
       result =
         new_list[this.column_wells[column][0]] &&
@@ -379,14 +363,13 @@ export default {
       this.column_wells[column].map((well) => {
         new_list[well] = !result;
       });
-      this.all_select = new_list;
+      this.on_plate_well_selected(new_list);
       const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
+      this.all_select_or_cancel = allEqual(this.well_selection_statuses) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+      for (let i = 0; i < this.well_selection_statuses.length; i++) {
+        this.stroke_width[i] = !this.well_selection_statuses[i] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.well_selection_statuses[i] ? hover_color : selected_color;
       }
-      this.on_plate_well_selected();
     },
     on_column_enter_hover(column) {
       this.test_event(column + " hover enter");
@@ -401,9 +384,9 @@ export default {
     on_column_leave_hover(column) {
       this.test_event(column + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
+      for (let i = 0; i < this.well_selection_statuses.length; i++) {
+        this.stroke_width[i] = !this.well_selection_statuses[i] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.well_selection_statuses[i] ? hover_color : selected_color;
       }
     },
     on_row_enter_hover(row) {
@@ -419,13 +402,21 @@ export default {
     on_row_leave_hover(row) {
       this.test_event(row + " hover leave");
       this.stroke_width.splice(0, this.stroke_width.length);
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
+      for (let i = 0; i < this.well_selection_statuses.length; i++) {
+        this.stroke_width[i] = !this.well_selection_statuses[i] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.well_selection_statuses[i] ? hover_color : selected_color;
       }
     },
-    on_plate_well_selected() {
-      this.$emit("platewell-selected", this.all_select);
+    on_plate_well_selected(new_selection_statuses) {
+      this.$store.commit("heatmap/set_well_selection_statuses", new_selection_statuses);
+      const selected_wells = [];
+      for (let i = 0; i < new_selection_statuses.length; i++) {
+        if (new_selection_statuses[i] == true) {
+          selected_wells.push(i);
+        }
+      }
+      this.$store.commit("heatmap/set_selected_wells", selected_wells);
+      // this.$emit("platewell-selected", this.well_selection_statuses);
     },
     test_event(evnt) {
       if (debug_mode != undefined) {

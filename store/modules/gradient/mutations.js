@@ -7,4 +7,9 @@ export default {
     state.gradient_range_min = new_value.min;
     state.gradient_range_max = new_value.max;
   },
+  reset_gradient_theme_idx(state) {
+    // Tanner (7/27/21): tried just calling set_gradient_theme_idx(0), did not seem to want to work
+    state.gradient_theme_idx = 0;
+    state.gradient = state.gradients[state.gradient_theme_idx];
+  },
 };

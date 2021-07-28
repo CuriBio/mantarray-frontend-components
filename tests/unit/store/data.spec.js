@@ -153,7 +153,7 @@ describe("store/data", () => {
       });
     });
     test("Given that playback state is live view, When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
-      store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATE.LIVE_VIEW_ACTIVE);
+      store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
 
       const init_heatmap_values = {
         "Twitch Force": { data: [[0], [], [20]] },
