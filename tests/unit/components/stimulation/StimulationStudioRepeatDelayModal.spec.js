@@ -21,8 +21,12 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
     const wrapper = mount(StimulationStudioRepeatDelayModal, {
       store,
       localVue,
+      propsData: {
+        modal_type: "Repeat",
+        current_repeat_delay_input: "4",
+      },
     });
-    await wrapper.find("#input-widget-field-repeat_delay").setValue("4");
+
     expect(wrapper.vm.input_value).toBe("4");
   });
 
@@ -30,6 +34,9 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
     const wrapper = mount(StimulationStudioRepeatDelayModal, {
       store,
       localVue,
+      propsData: {
+        modal_type: "Repeat",
+      },
     });
     await wrapper.find("#input-widget-field-repeat_delay").setValue("3");
     await wrapper.findAll(".span__button_label").at(0).trigger("click");
@@ -58,5 +65,38 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
       delay_open_for_edit: true,
     });
     expect(get_button_array).toStrictEqual(["Save", "Delete", "Cancel"]);
+  });
+
+  test("When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
+    const wrapper = mount(StimulationStudioRepeatDelayModal, {
+      localVue,
+      propsData: {
+        modal_type: "Delay",
+      },
+    });
+    const target_input_field = wrapper.find("#input-widget-field-repeat_delay");
+
+    await target_input_field.setValue("test");
+    expect(wrapper.vm.invalid_text).toBe("Must be a (+) number");
+
+    await target_input_field.setValue("1500");
+    expect(wrapper.vm.invalid_text).toBe("");
+
+    await target_input_field.setValue("");
+    expect(wrapper.vm.invalid_text).toBe("Required");
+  });
+
+  test("When a user wants to save the delay/repeat value, Then it will only be possible once a all validation checks pass for input", async () => {
+    const wrapper = mount(StimulationStudioRepeatDelayModal, {
+      localVue,
+      propsData: {
+        modal_type: "Delay",
+      },
+    });
+    await wrapper.find("#input-widget-field-repeat_delay").setValue("5000");
+    expect(wrapper.vm.is_valid).toBe(true);
+
+    await wrapper.find("#input-widget-field-repeat_delay").setValue("test");
+    expect(wrapper.vm.is_valid).toBe(false);
   });
 });

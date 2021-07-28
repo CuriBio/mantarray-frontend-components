@@ -7,7 +7,6 @@
       :invalid_text="'This field is required'"
       :input_width="400"
       :disabled="true"
-      :default_state="false"
     ></InputWidget>
   </div>
 </template>

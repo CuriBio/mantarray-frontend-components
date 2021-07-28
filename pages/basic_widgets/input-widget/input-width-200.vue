@@ -5,7 +5,6 @@
       :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
       :invalid_text="'This field is required'"
       :input_width="200"
-      :default_state="false"
     ></InputWidget>
   </div>
 </template>

@@ -13,8 +13,6 @@
     <canvas
       id="cmpD1bd9abe7f57064ecc21010fe87aa8e0a"
       class="canvas__stimulationstudio-horizontal-line-seperator-one"
-      width="472"
-      height="1"
     >
     </canvas>
     <span
@@ -25,20 +23,15 @@
     <span id="cmpD31286f8dd12f44eb6bfea7751c014f90" class="span__stimulationstudio-current-settings-label-one"
       >Stimulus&nbsp;<wbr />Duration</span
     >
-    <div
-      id="cmpD830cdea88a8752e1fdd278dd0215b99d"
-      class="div__stimulationstudio-duration-input-container"
-      width="162"
-      height="57"
-    >
+    <div id="cmpD830cdea88a8752e1fdd278dd0215b99d" class="div__stimulationstudio-duration-input-container">
       <span id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt" class="span__stimulationstudio-duration-input">
         <InputWidget
           :placeholder="'1000 ms'"
           :dom_id_suffix="'duration'"
-          :invalid_text="''"
+          :invalid_text="err_msg.phase_one_duration"
           :input_width="142"
           :initial_value="selected_waveform_settings.phase_one_duration.toString()"
-          @update:value="waveform_settings.phase_one_duration = Number($event)"
+          @update:value="check_validity($event, 'phase_one_duration')"
         ></InputWidget
       ></span>
     </div>
@@ -50,20 +43,15 @@
       class="span__stimulationstudio-current-settings-label-three"
       >{{ stimulation_type }}</span
     >
-    <div
-      id="cmpDf6ba8560cb2fbd91276a29c46743e99a"
-      class="div__stimulationstudio-current-input-container"
-      width="162"
-      height="57"
-    >
+    <div id="cmpDf6ba8560cb2fbd91276a29c46743e99a" class="div__stimulationstudio-current-input-container">
       <span id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt" class="span__stimulationstudio-current-input">
         <InputWidget
           :placeholder="'500'"
-          :dom_id_suffix="'current'"
-          :invalid_text="''"
+          :dom_id_suffix="'charge'"
+          :invalid_text="err_msg.phase_one_charge"
           :input_width="142"
           :initial_value="selected_waveform_settings.phase_one_charge.toString()"
-          @update:value="waveform_settings.phase_one_charge = Number($event)"
+          @update:value="check_validity($event, 'phase_one_charge')"
         ></InputWidget>
       </span>
     </div>
@@ -77,20 +65,14 @@
       class="span__stimulationstudio-current-settings-label-five"
       >Max&nbsp;<wbr />{{ check_max_type }}</span
     >
-    <div
-      id="cmpDf07f8e650ebe6951292aa4edcc603608"
-      class="div__stimulationstudio-voltage-input-container"
-      width="162"
-      height="57"
-    >
+    <div id="cmpDf07f8e650ebe6951292aa4edcc603608" class="div__stimulationstudio-voltage-input-container">
       <span id="cmpDf07f8e650ebe6951292aa4edcc603608_txt" class="span__stimulationstudio-voltage-input">
         <InputWidget
-          :placeholder="'250'"
-          :dom_id_suffix="'voltage'"
+          :initial_value="'250'"
+          :dom_id_suffix="'max_charge'"
           :invalid_text="''"
           :input_width="142"
           :disabled="true"
-          :default_state="true"
         ></InputWidget>
       </span>
       <span v-b-popover.hover="popover_message" class="disabled_popover_container">
@@ -101,8 +83,6 @@
       <canvas
         id="cmpDefb479b0caa166978ebed24ab8c44baf"
         class="canvas__stimulationstudio-horizontal-line-seperator-two"
-        width="472"
-        height="1"
       >
       </canvas>
       <span
@@ -113,8 +93,6 @@
       <div
         id="cmpD948f417edcd29d68f5801d54232d9431"
         class="div__stimulationstudio-current-settings-interpulse"
-        width="162"
-        height="57"
       >
         <span
           id="cmpD948f417edcd29d68f5801d54232d9431_txt"
@@ -123,10 +101,10 @@
           <InputWidget
             :placeholder="'1000 ms'"
             :dom_id_suffix="'interpulse'"
-            :invalid_text="''"
+            :invalid_text="err_msg.interpulse_duration"
             :input_width="142"
             :initial_value="selected_waveform_settings.interpulse_duration.toString()"
-            @update:value="waveform_settings.interpulse_duration = Number($event)"
+            @update:value="check_validity($event, 'interpulse_duration')"
           ></InputWidget>
         </span>
       </div>
@@ -134,8 +112,6 @@
       <canvas
         id="cmpDa2bea934b07f6b108e90d5efecf200a3"
         class="canvas__stimulationstudio-horizontal-line-seperator-three"
-        width="472"
-        height="1"
       >
       </canvas>
       <span
@@ -152,8 +128,6 @@
       <div
         id="cmpD818347e832e1274793ffe2c57a5d0a9c"
         class="div__stimulationstudio-current-settings-durationtwo-container"
-        width="162"
-        height="57"
       >
         <span
           id="cmpD818347e832e1274793ffe2c57a5d0a9c_txt"
@@ -162,10 +136,10 @@
           <InputWidget
             :placeholder="'1000 ms'"
             :dom_id_suffix="'durationtwo'"
-            :invalid_text="''"
+            :invalid_text="err_msg.phase_two_duration"
             :input_width="142"
             :initial_value="selected_waveform_settings.phase_two_duration.toString()"
-            @update:value="waveform_settings.phase_two_duration = Number($event)"
+            @update:value="check_validity($event, 'phase_two_duration')"
           ></InputWidget>
         </span>
       </div>
@@ -182,8 +156,6 @@
       <div
         id="cmpD8ecdf9c4a418509adff741b988ad0676"
         class="div__stimulationstudio-current-settings-currenttwo-input-container"
-        width="162"
-        height="57"
       >
         <span
           id="cmpD8ecdf9c4a418509adff741b988ad0676_txt"
@@ -191,11 +163,11 @@
         >
           <InputWidget
             :placeholder="'-500'"
-            :dom_id_suffix="'currenttwo'"
-            :invalid_text="''"
+            :dom_id_suffix="'chargetwo'"
+            :invalid_text="err_msg.phase_two_charge"
             :input_width="142"
             :initial_value="selected_waveform_settings.phase_two_charge.toString()"
-            @update:value="waveform_settings.phase_two_charge = Number($event)"
+            @update:value="check_validity($event, 'phase_two_charge')"
           ></InputWidget>
         </span>
       </div>
@@ -212,16 +184,14 @@
       <div
         id="cmpDef68ed4233a43cc387c949c403ef9260"
         class="div__stimulationstudio-current-settings-voltagetwo-input-container"
-        width="162"
-        height="57"
       >
         <span
           id="cmpDef68ed4233a43cc387c949c403ef9260_txt"
           class="span__stimulationstudio-current-settings-voltagetwo-input"
         >
           <InputWidget
-            :placeholder="'250'"
-            :dom_id_suffix="'voltagetwo'"
+            :initial_value="'250'"
+            :dom_id_suffix="'max_chargetwo'"
             :invalid_text="''"
             :input_width="142"
             :disabled="true"
@@ -239,8 +209,6 @@
           ? 'canvas__stimulationstudio-horizontal-line-seperator-four-mono'
           : 'canvas__stimulationstudio-horizontal-line-seperator-four'
       "
-      width="472"
-      height="2"
     >
     </canvas>
     <div
@@ -292,12 +260,15 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-props {String} stimulation_type - Current type of stimulation
  * @vue-props {String} waveform_type - Type of pulse for modal
  * @vue-props {Array} button_names - Array of button labels for modal
- * @vue-props {Array} is_enabled_array - Array of which buttons are disabled
  * @vue-props {Object} selected_waveform_settings - Settings for modal if it's a reedit
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
  * @vue-data {Object} waveform_setting - Model for new inputs to be assigned
+ * @vue-data {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
+ * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
+ * @vue-data {Boolean} all_valid - True if all inputs pass the validation check and allows Save button to become enabled
  * @vue-computed {String} check_max_type - Computes last label for disabled input field
  * @vue-method {event} close - emits close of modal and data to parent component
+ * @vue-method {event} check_validity - checks if inputs are valid numbers only and not empty
  */
 
 export default {
@@ -314,12 +285,6 @@ export default {
       type: Array,
       default() {
         return ["Save", "Cancel"];
-      },
-    },
-    is_enabled_array: {
-      type: Array,
-      default() {
-        return [true, true, true];
       },
     },
     selected_waveform_settings: {
@@ -339,6 +304,20 @@ export default {
     return {
       popover_message: "Not Editable: This data is displayed for informational purposes only.",
       waveform_settings: {},
+      invalid_err_msg: {
+        num_err: "Must be a number",
+        required: "Required",
+        valid: "",
+      },
+      err_msg: {
+        phase_one_duration: "Required",
+        phase_one_charge: "Required",
+        interpulse_duration: "Required",
+        phase_two_duration: "Required",
+        phase_two_charge: "Required",
+      },
+      is_enabled_array: [false, true, true],
+      all_valid: false,
     };
   },
   computed: {
@@ -347,16 +326,55 @@ export default {
       else return "Current (µA)";
     },
   },
+  watch: {
+    all_valid() {
+      if (this.all_valid) this.is_enabled_array = [true, true, true];
+      if (!this.all_valid) this.is_enabled_array = [false, true, true];
+    },
+  },
   created() {
     this.waveform_settings = this.selected_waveform_settings;
+
+    if (this.waveform_type === "Monophasic") {
+      this.waveform_settings = {
+        ...this.waveform_settings,
+        interpulse_duration: 0,
+        phase_two_duration: 0,
+        phase_two_charge: 0,
+      };
+    }
+
+    for (const input in this.waveform_settings) {
+      if (this.waveform_settings !== {}) {
+        const value = this.waveform_settings[input];
+        this.check_validity(value, input);
+      }
+    }
   },
   methods: {
     close(idx) {
       const button_label = this.button_names[idx];
-      for (const input in this.waveform_settings) {
-        if (this.waveform_settings[input] === "") this.waveform_settings[input] = 0;
-      }
       this.$emit("close", button_label, this.waveform_settings);
+    },
+    check_validity(value, label) {
+      const valid_inputs = [];
+      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"); // accepts positive and negative integers including decimals, decimals need a leading 0 if < 1
+
+      if (!number_regex.test(value) && value !== "") {
+        this.err_msg[label] = this.invalid_err_msg.num_err;
+      } else if (value === "") {
+        this.err_msg[label] = this.invalid_err_msg.required;
+      } else if (number_regex.test(value) && value !== "") {
+        this.err_msg[label] = this.invalid_err_msg.valid;
+        this.waveform_settings[label] = Number(value);
+      }
+
+      for (const input in this.err_msg) {
+        if (this.err_msg[input] === "") valid_inputs.push(true);
+      }
+
+      if (valid_inputs.length === 5) this.all_valid = true;
+      else this.all_valid = false;
     },
   },
 };
@@ -430,7 +448,7 @@ export default {
   position: absolute;
   font-family: Muli;
   font-size: 10px;
-  left: 115px;
+  left: 170px;
   top: 20px;
 }
 
@@ -441,9 +459,8 @@ export default {
   width: 472px;
   height: 2px;
   top: calc(104px - 45px);
-  left: calc(878px - 852px);
+  left: calc(878px - 854px);
   visibility: visible;
-
   background-color: #292929;
   opacity: 0.5;
 }
@@ -457,7 +474,7 @@ export default {
   width: 499px;
   height: 30px;
   top: calc(122.5px - 55px);
-  left: calc(863px - 852px);
+  left: calc(863px - 854px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -511,7 +528,7 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 162px;
-  height: 57px;
+  height: 90px;
   top: calc(151px - 55px);
   left: calc(1031px - 852px);
   visibility: visible;
@@ -524,7 +541,7 @@ export default {
   transform: translateZ(0px);
   position: absolute;
   width: 150px;
-  height: 50px;
+  height: 90px;
   line-height: 45px;
   top: 6px;
   left: 6px;
@@ -594,7 +611,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 162px;
+  width: 190px;
   height: 90px;
   top: calc(221px - 55px);
   left: calc(1031px - 852px);
@@ -666,7 +683,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 162px;
+  width: 190px;
   height: 57px;
   top: calc(291px - 55px);
   left: calc(1031px - 852px);
@@ -719,7 +736,7 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 162px;
-  height: 57px;
+  height: 90px;
   top: calc(390px - 55px);
   left: calc(1031px - 852px);
   visibility: visible;
@@ -732,7 +749,7 @@ export default {
   transform: translateZ(0px);
   position: absolute;
   width: 150px;
-  height: 50px;
+  height: 90px;
   line-height: 45px;
   top: 6px;
   left: 6px;
@@ -803,7 +820,7 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 162px;
-  height: 57px;
+  height: 90px;
   top: calc(504px - 55px);
   left: calc(1031px - 852px);
   visibility: visible;
@@ -816,7 +833,7 @@ export default {
   transform: translateZ(0px);
   position: absolute;
   width: 150px;
-  height: 50px;
+  height: 90px;
   line-height: 45px;
   top: 6px;
   left: 6px;
@@ -875,7 +892,7 @@ export default {
   overflow: hidden;
   position: absolute;
   width: 162px;
-  height: 57px;
+  height: 90px;
   top: calc(574px - 55px);
   left: calc(1031px - 852px);
   visibility: visible;
@@ -888,7 +905,7 @@ export default {
   transform: translateZ(0px);
   position: absolute;
   width: 150px;
-  height: 50px;
+  height: 90px;
   line-height: 45px;
   top: 6px;
   left: 6px;
@@ -946,7 +963,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 162px;
+  width: 190px;
   height: 57px;
   top: calc(644px - 55px);
   left: calc(1031px - 852px);

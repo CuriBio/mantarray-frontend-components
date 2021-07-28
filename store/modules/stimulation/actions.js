@@ -150,12 +150,19 @@ export default {
   },
 
   async add_imported_protocol({ commit, state, getters }, protocol) {
+    const { protocol_list } = this.state.stimulation;
     const assignment = await this.getters["stimulation/get_next_protocol"];
     const { color, letter } = assignment;
     const imported_protocol = { color, letter, label: protocol.name, protocol };
-
-    await this.commit("stimulation/set_edit_mode", { label: protocol.name, letter });
-    this.commit("stimulation/set_imported_protocol", imported_protocol);
+    const duplicates = [];
+    // check for duplicates
+    protocol_list.map((protocol) => {
+      if (protocol.label === imported_protocol.label) duplicates.push(true);
+    });
+    if (duplicates.length === 0) {
+      await this.commit("stimulation/set_edit_mode", { label: protocol.name, letter });
+      this.commit("stimulation/set_imported_protocol", imported_protocol);
+    }
   },
 
   async add_saved_protocol({ commit, state, dispatch }) {
@@ -174,7 +181,6 @@ export default {
             protocol: protocol_editor,
           };
       });
-
       await this.commit("stimulation/set_edit_mode_off");
       await this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
     }
