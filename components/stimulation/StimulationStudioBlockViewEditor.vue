@@ -201,12 +201,14 @@ export default {
       const matched_names = this.protocol_list.filter((protocol) => {
         return protocol.label === input;
       });
-      if (matched_names.length === 0) {
+      if (input === "") {
+        this.name_validity = "";
+        this.error_message = "";
+      } else if (matched_names.length === 0 && input !== "") {
         this.name_validity = "border: 1px solid #19ac8a";
         this.error_message = "";
         this.set_protocol_name(input);
-      }
-      if (matched_names.length > 0) {
+      } else if (matched_names.length > 0) {
         this.name_validity = "border: 1px solid #bd3532";
         this.error_message = "*Protocol name already exists";
       }
