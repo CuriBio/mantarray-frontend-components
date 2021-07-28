@@ -21,7 +21,7 @@
         class="span__select-dropdown-controls-content-input-txt-widget"
         :style="'width: ' + input_width + 'px;'"
       >
-        <span class="span__input-controls-content-input-txt-widget">
+        <span class="span__input-controls-content-dropdown-widget">
           <span :style="'color:' + chosen_option.color">{{ chosen_option.letter }}</span>
           {{ chosen_option.name }}</span
         >
@@ -165,7 +165,7 @@ export default {
   text-align: center;
   cursor: pointer;
 }
-.span__input-controls-content-input-txt-widget {
+.span__input-controls-content-dropdown-widget {
   padding-left: 10px;
   padding-right: 10px;
   white-space: nowrap;

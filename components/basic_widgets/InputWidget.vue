@@ -101,6 +101,20 @@ export default {
       return this.disable_paste == true ? "return false;" : "";
     },
   },
+  created() {
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (
+        (this.dom_id_suffix === "heatmap-max" || this.dom_id_suffix === "heatmap-min") &&
+        mutation.type === "gradient/reset_gradient_range"
+      ) {
+        this.input_value = this.initial_value;
+        this.$emit("update:value", this.input_value);
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+  },
   methods: {
     on_b_form_input: function () {
       this.$emit("update:value", this.input_value);

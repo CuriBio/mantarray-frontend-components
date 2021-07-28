@@ -4,13 +4,14 @@
     <div class="div__heatmap-layout-background"></div>
 
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
-    <div class="div__heatmap-layout-twitch-force-label">{{ display_option }} ({{ unit }})</div>
+    <div class="div__heatmap-layout-twitch-metric-label">{{ display_option }} ({{ unit }})</div>
 
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
       <PlateHeatMap :platecolor="passing_plate_colors"></PlateHeatMap>
     </div>
 
+    <!-- Tanner (7/28/21): Could probably combine the following 4 components -->
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
     <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">No Wells Selected</div>
 
@@ -60,7 +61,7 @@
         :placeholder="'100'"
         :invalid_text="max_value_error_msg"
         :input_width="105"
-        :dom_id_suffix="'max'"
+        :dom_id_suffix="'heatmap-max'"
         @update:value="on_update_maximum($event)"
       ></InputWidget>
     </div>
@@ -74,7 +75,7 @@
         :placeholder="'0'"
         :invalid_text="min_value_error_msg"
         :input_width="105"
-        :dom_id_suffix="'min'"
+        :dom_id_suffix="'heatmap-min'"
         @update:value="on_update_minimum($event)"
       ></InputWidget>
     </div>
@@ -346,15 +347,6 @@ export default {
       }
     },
 
-    // on_well_selection_changed: function (all_select) {
-    //   this.selected_wells = [];
-    //   for (let i = 0; i < all_select.length; i++) {
-    //     if (all_select[i] == true) {
-    //       this.selected_wells.push(i);
-    //     }
-    //   }
-    // },
-
     apply_heatmap_settings: function () {
       if (this.is_apply_set) {
         this.$store.commit("gradient/set_gradient_range", {
@@ -367,18 +359,10 @@ export default {
     reset_heatmap_settings: function () {
       // reset display dropdown
       this.metric_selection_changed(0);
-      // reset min/max inputs
-      document.getElementById("input-widget-field-max").value = "";
-      document.getElementById("input-widget-field-min").value = "";
-      this.on_update_maximum("");
-      this.on_update_minimum("");
       // reset gradient theme, radio button is subscribed to this mutation and will reset itself
       this.$store.commit("gradient/reset_gradient_theme_idx");
-      // reset gradient range
-      this.$store.commit("gradient/set_gradient_range", {
-        min: 0,
-        max: 100,
-      });
+      // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
+      this.$store.commit("gradient/reset_gradient_range");
     },
   },
 };
@@ -403,7 +387,7 @@ export default {
   pointer-events: all;
 }
 
-.div__heatmap-layout-twitch-force-label {
+.div__heatmap-layout-twitch-metric-label {
   line-height: 1;
   transform: rotate(0deg);
   padding: 5px;

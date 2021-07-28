@@ -11,6 +11,7 @@ const default_state = {
   heatmap_autoscale: false,
 };
 
+// adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2
 const state = () => JSON.parse(JSON.stringify(default_state));
 
 export default {
