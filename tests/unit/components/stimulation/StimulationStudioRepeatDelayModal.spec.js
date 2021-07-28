@@ -23,9 +23,10 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
       localVue,
       propsData: {
         modal_type: "Repeat",
+        current_repeat_delay_input: "4",
       },
     });
-    await wrapper.find("#input-widget-field-repeat_delay").setValue("4");
+
     expect(wrapper.vm.input_value).toBe("4");
   });
 
