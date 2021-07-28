@@ -11,7 +11,7 @@ const default_state = {
   heatmap_autoscale: false,
 };
 
-const state = () => default_state;
+const state = () => JSON.parse(JSON.stringify(default_state));
 
 export default {
   namespaced: true,

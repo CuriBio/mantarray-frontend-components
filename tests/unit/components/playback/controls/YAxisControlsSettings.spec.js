@@ -3,16 +3,30 @@ import YAxisControlsSettings from "@/components/playback/controls/YAxisControlsS
 import { shallowMount } from "@vue/test-utils";
 import { YAxisControlsSettings as dist_YAxisControlsSettings } from "@/dist/mantarray.common";
 import Vue from "vue";
+import Vuex from "vuex";
 
 import { createLocalVue } from "@vue/test-utils";
 
 let wrapper = null;
 
 const localVue = createLocalVue();
+localVue.use(Vuex);
+let NuxtStore;
+let store;
 
 describe("YAxisControlsSettings.vue", () => {
+  beforeAll(async () => {
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+
+  beforeEach(async () => {
+    store = await NuxtStore.createStore();
+  });
+
   test("When mounting YAxisControlsSettings from the build dist file, Then it loads successfully  `Y-Axis Display Mode` as defined title text is rendered", () => {
     wrapper = mount(dist_YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_span = wrapper.find(".span__y-axis-control-settings-label");
@@ -20,6 +34,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("When mounting YAxisControlsSettings from the component file, Then it loads successfully  `Y-Axis Display Mode` as defined title text is rendered", () => {
     wrapper = shallowMount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_span = wrapper.find(".span__y-axis-control-settings-label");
@@ -27,6 +42,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than zero ( < 0), Then the invalid text should indicate invalid message 'cannot be negative'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
@@ -37,6 +53,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Minimum' value - (negative), Then the invalid text should indicate  message 'invalid'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_min_input = wrapper.find("#input-widget-field-min");
@@ -47,6 +64,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Minimum' value  (empty), Then the invalid text should indicate  message 'invalid'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_min_input = wrapper.find("#input-widget-field-min");
@@ -57,6 +75,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Minimum' value less than zero ( < 0), Then the invalid text should indicate invalid message 'cannot be negative'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_min_input = wrapper.find("#input-widget-field-min");
@@ -67,6 +86,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than zero ( > 1000000), Then the invalid text should indicate invalid message 'maximum above 1000000'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
@@ -77,6 +97,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value - (negative), Then the invalid text should indicate  message 'invalid'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
@@ -87,6 +108,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value  (empty), Then the invalid text should indicate  message 'invalid'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
@@ -97,6 +119,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than 'Minimum', Then the invalid text should indicate invalid message 'min greater than max'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
@@ -111,6 +134,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than 'Minimum', Then the invalid text should indicate invalid message 'cannot be negative'", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
@@ -125,6 +149,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters 'Maximum' value less than 'Minimum', Then the invalid text should be empty", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
@@ -143,6 +168,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the user enters valid 'Maximum' and 'Minimum' range and click the button 'Apply', Then an event 'y-axis-new-range' with (y_max,y_min) is sent to parent component", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
@@ -165,6 +191,7 @@ describe("YAxisControlsSettings.vue", () => {
   });
   test("Given that the YAxisControlsSettings is mounted successfully, When the click the button 'Cancel', Then an event 'y-axis-no-change' with no data is is sent to parent component", async () => {
     wrapper = mount(YAxisControlsSettings, {
+      store,
       localVue,
     });
 

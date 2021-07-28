@@ -36,13 +36,12 @@ export default {
 
   created: function () {
     this.preselect();
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+    this.unsubscribe = this.$store.subscribe((mutation) => {
       if (mutation.type === "gradient/reset_gradient_theme_idx") {
         this.preselect();
       }
     });
   },
-
   beforeDestroy() {
     this.unsubscribe();
   },
