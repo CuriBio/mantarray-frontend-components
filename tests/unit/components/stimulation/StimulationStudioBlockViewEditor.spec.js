@@ -66,6 +66,10 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.check_name_validity("Tester");
     expect(wrapper.vm.name_validity).toBe("border: 1px solid #bd3532");
     expect(wrapper.vm.error_message).toBe("*Protocol name already exists");
+
+    await wrapper.vm.check_name_validity("");
+    expect(wrapper.vm.name_validity).toBe("");
+    expect(wrapper.vm.error_message).toBe("");
   });
 
   test("When a user selects from the stimulation type dropdown, Then the corresponding selection is stored", async () => {
