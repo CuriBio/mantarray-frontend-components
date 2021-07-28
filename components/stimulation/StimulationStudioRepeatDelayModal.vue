@@ -36,18 +36,21 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 
 /**
- * @vue-props {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
  * @vue-props {String} current_repeat_delay_input - Current input if modal is open for editing
  * @vue-props {String} modal_type - Determines if delay or repeat styling is assigned to modal
  * @vue-props {Boolean} delay_open_for_edit - States if delay modal is open for a reedit
  * @vue-data {String} input_value - Value input into modal
  * @vue-data {String} invalid_text - Validity check for input
  * @vue-data {Array} button_labels - Button labels for modal
+ * @vue-data {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
+ * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
+ * @vue-data {Boolean} is_valid - True if input passes the validation check and allows Save button to become enabled
  * @vue-computed {String} get_modal_title - Title dependent on if its a repeat or delay modal
  * @vue-computed {String} get_input_description - Subtitle dependent on if its a repeat or delay modal
  * @vue-computed {Array} get_button_array - Button array dependent on if its a reedit or not
  * @vue-computed {String} get_metric_label - Label dependent on if its a repeat or delay modal
  * @vue-method {event} close - emits close of modal and data to parent component
+ * @vue-method {event} check_validity - checks if inputs are valid numbers only and not empty
  */
 
 export default {

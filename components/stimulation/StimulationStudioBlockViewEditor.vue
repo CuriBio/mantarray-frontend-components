@@ -50,9 +50,7 @@
               placeholder=""
               @change="handle_repeat_frequency($event.target.value)"
             />
-
-            <!-- <canvas class="canvas__separator" /> -->
-            <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash()" />
+            <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash_modal" />
             <BPopover
               target="trash_icon"
               trigger="click"
@@ -61,7 +59,7 @@
             >
               <div class="popover_label">Are you sure?</div>
               <div class="popover_button_container">
-                <button class="delete_button_container" @click="handle_delete()">Delete</button>
+                <button class="delete_button_container" @click="handle_delete">Delete</button>
                 <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
               </div>
             </BPopover>
@@ -93,7 +91,7 @@ Vue.component("BPopover", BPopover);
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
  * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
- * @vue-event {Event} handle_trash - Toggle view of delete popover on trash icon
+ * @vue-event {Event} handle_trash_modal - Toggle view of delete popover on trash icon
  * @vue-event {Event} toggle_tab - Toggles which tab is active
  * @vue-event {Event} handle_delete - Confirms and commits the deletion of protocol to state
  * @vue-event {Event} handle_stimulation_type - Commits the new selected stimulation type to state
@@ -179,7 +177,7 @@ export default {
     toggle_tab(tab) {
       tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");
     },
-    handle_trash() {
+    handle_trash_modal() {
       this.show_confirmation = !this.show_confirmation;
     },
     handle_delete() {
@@ -191,6 +189,7 @@ export default {
       this.set_stimulation_type(type);
     },
     handle_stop_requirement(idx) {
+      // eventually handle in state, unsure yet how this is used
       const requirement = this.until_options_array[idx];
       this.stop_requirement = requirement;
     },

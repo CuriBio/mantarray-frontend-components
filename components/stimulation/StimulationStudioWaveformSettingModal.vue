@@ -260,12 +260,15 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-props {String} stimulation_type - Current type of stimulation
  * @vue-props {String} waveform_type - Type of pulse for modal
  * @vue-props {Array} button_names - Array of button labels for modal
- * @vue-props {Array} is_enabled_array - Array of which buttons are disabled
  * @vue-props {Object} selected_waveform_settings - Settings for modal if it's a reedit
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
  * @vue-data {Object} waveform_setting - Model for new inputs to be assigned
+ * @vue-data {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
+ * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
+ * @vue-data {Boolean} all_valid - True if all inputs pass the validation check and allows Save button to become enabled
  * @vue-computed {String} check_max_type - Computes last label for disabled input field
  * @vue-method {event} close - emits close of modal and data to parent component
+ * @vue-method {event} check_validity - checks if inputs are valid numbers only and not empty
  */
 
 export default {
