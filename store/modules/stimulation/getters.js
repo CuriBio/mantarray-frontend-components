@@ -16,12 +16,6 @@ export default {
     if (protocol_editor.stimulation_type === "C") return "Current (µA)";
     if (protocol_editor.stimulation_type === "V") return "Voltage (mV)";
   },
-  get_time_unit({ protocol_editor }) {
-    if (protocol_editor.time_unit.includes("milliseconds")) return "Time (ms)";
-    if (protocol_editor.time_unit.includes("seconds")) return "Time (s)";
-    if (protocol_editor.time_unit.includes("hours")) return "Time (hr)";
-    if (protocol_editor.time_unit.includes("minutes")) return "Time (min)";
-  },
 
   get_detailed_pulse_order({ protocol_editor }) {
     return protocol_editor.detailed_pulses;

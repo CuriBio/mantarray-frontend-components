@@ -35,12 +35,31 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    const test_param = store.state.stimulation.protocol_list[1];
+    const v_test_param = store.state.stimulation.protocol_list[1];
+    const c_test_param = {
+      // for testing and building other fxns
+      letter: "B",
+      color: "#118075",
+      label: "mock_tester",
+      protocol: {
+        name: "mock_tester",
+        stimulation_type: "C",
+        end_delay_duration: 40,
+        time_unit: "milliseconds",
+        pulses: [],
+        detailed_pulses: [],
+      },
+    };
 
-    await store.dispatch("stimulation/edit_selected_protocol", test_param);
+    await store.dispatch("stimulation/edit_selected_protocol", v_test_param);
     expect(wrapper.vm.stimulation_type_idx).toBe(0);
-    expect(wrapper.vm.current_letter).toBe(test_param.letter);
+    expect(wrapper.vm.current_letter).toBe(v_test_param.letter);
     expect(wrapper.vm.end_delay_duration).toBe(20);
+
+    await store.dispatch("stimulation/edit_selected_protocol", c_test_param);
+    expect(wrapper.vm.stimulation_type_idx).toBe(1);
+    expect(wrapper.vm.current_letter).toBe(c_test_param.letter);
+    expect(wrapper.vm.end_delay_duration).toBe(40);
   });
 
   test("When a user adds input to frequency input, Then the change will be recorded in data", async () => {
@@ -61,6 +80,10 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
     await wrapper.vm.check_name_validity("test");
     expect(wrapper.vm.name_validity).toBe("border: 1px solid #19ac8a");
+    expect(wrapper.vm.error_message).toBe("");
+
+    await wrapper.vm.check_name_validity("");
+    expect(wrapper.vm.name_validity).toBe("");
     expect(wrapper.vm.error_message).toBe("");
 
     await wrapper.vm.check_name_validity("Tester");

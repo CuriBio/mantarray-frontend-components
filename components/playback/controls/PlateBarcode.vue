@@ -138,7 +138,7 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 288px;
+  width: 287px;
   height: 34px;
   background: #1c1c1c;
   -webkit-box-sizing: content-box;

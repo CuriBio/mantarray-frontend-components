@@ -174,7 +174,6 @@ export default {
             protocol: protocol_editor,
           };
       });
-
       await this.commit("stimulation/set_edit_mode_off");
       await this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
     }

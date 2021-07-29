@@ -55,7 +55,7 @@ describe("DesktopPlayerControls.vue", () => {
     });
     const target_span = wrapper.find(".span__playback-desktop-player-controls-text");
 
-    expect(target_span.text()).toEqual("Record Options:");
+    expect(target_span.text()).toEqual("Record Options");
   });
 
   test("Given an invalid barcode in Vuex and the playback state is CALIBRATED, Then the Start Live View button should be Unavailable, When barcode becomes valid in Vuex Then Start Live View should be Available, Then when barcode becomes invalid, Start Live View becomes unavailable", async () => {
