@@ -6,7 +6,7 @@
         top: 0px;
         left: 0px;
         background-color: rgba(255, 255, 255, 0);
-        width: 288px;
+        width: 287px;
         height: 55px;
         position: absolute;
         overflow: hidden;
@@ -25,7 +25,7 @@
           margin: 0px;
           background: #e21e1e;
           position: absolute;
-          width: 288px;
+          width: 287px;
           height: 55px;
           top: 0px;
           left: 0px;
@@ -41,14 +41,14 @@
         unselectable="on"
         group-id=""
         class="sdrag"
-        width="288"
+        width="287"
         height="55"
         style="
           overflow: hidden;
           transform: rotate(0deg);
           user-select: none;
           position: absolute;
-          width: 288px;
+          width: 287px;
           height: 55px;
           top: 0px;
           left: 0px;
@@ -59,7 +59,7 @@
       >
         <div
           id="Da8b3f2b0d2d765e9e828addbe2451ca1_base"
-          width="288"
+          width="287"
           height="55"
           style="
             -webkit-transform: translateZ(0);
@@ -67,7 +67,7 @@
             opacity: 0;
             border: 0px solid;
             position: absolute;
-            width: 288px;
+            width: 287px;
             height: 55px;
             top: 0px;
             left: 0px;
@@ -147,7 +147,7 @@
           transform: rotate(0deg);
           overflow: hidden;
           position: absolute;
-          width: 288px;
+          width: 287px;
           height: 16px;
           top: 10px;
           left: -4.823529px;
@@ -170,14 +170,14 @@
         unselectable="on"
         group-id=""
         class="sdrag"
-        width="288"
+        width="287"
         height="16"
         style="
           overflow: hidden;
           transform: rotate(0deg);
           user-select: none;
           position: absolute;
-          width: 288px;
+          width: 287px;
           height: 16px;
           top: 10px;
           left: 0.176471px;
@@ -188,7 +188,7 @@
       >
         <div
           id="D38e122d9d8d294fa97a320550b2a0a9e_base"
-          width="288"
+          width="287"
           height="16"
           style="
             -webkit-transform: translateZ(0);
@@ -196,7 +196,7 @@
             opacity: 0;
             border: 0px solid;
             position: absolute;
-            width: 288px;
+            width: 287px;
             height: 16px;
             top: 0px;
             left: 0px;
