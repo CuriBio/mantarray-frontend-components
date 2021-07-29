@@ -69,6 +69,7 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
 
   test("When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
     const wrapper = mount(StimulationStudioRepeatDelayModal, {
+      store,
       localVue,
       propsData: {
         modal_type: "Delay",
@@ -88,6 +89,7 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
 
   test("When a user wants to save the delay/repeat value, Then it will only be possible once a all validation checks pass for input", async () => {
     const wrapper = mount(StimulationStudioRepeatDelayModal, {
+      store,
       localVue,
       propsData: {
         modal_type: "Delay",

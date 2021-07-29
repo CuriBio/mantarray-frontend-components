@@ -60,6 +60,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
   });
   test("When a user opens the pulse settings modal, Then the user can only save the settings if all inputs pass the validity checks", async () => {
     const wrapper = mount(StimulationStudioWaveformSettingModal, {
+      store,
       localVue,
       propData: {
         stimulation_type: "Voltage (mV)",
@@ -88,6 +89,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
 
   test("When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
     const wrapper = mount(StimulationStudioWaveformSettingModal, {
+      store,
       localVue,
       propData: {
         stimulation_type: "Voltage (mV)",
