@@ -376,7 +376,7 @@ export default {
   margin: 0px;
   background: rgb(0, 0, 0);
   position: absolute;
-  width: 1630px;
+  width: 1629px;
   height: 885px;
   top: 0px;
   left: 1px;
