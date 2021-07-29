@@ -233,11 +233,10 @@ export default {
 
       if (button === "Save") {
         if (this.new_cloned_idx !== null) new_pulse.settings = settings;
-        else if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null) {
+        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null)
           Object.assign(edited_pulse.settings, settings);
-        } else if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null) {
+        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null)
           Object.assign(edited_pulse.nested_protocols[this.shift_click_nested_img_idx].settings, settings);
-        }
       }
 
       if (button === "Delete") {
