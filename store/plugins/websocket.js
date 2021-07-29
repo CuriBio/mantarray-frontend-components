@@ -22,7 +22,7 @@ export default function create_web_socket_plugin(socket) {
     socket.on("twitch_metrics", function (metrics_json, cb = null) {
       // guard against metrics coming right after live view stops so heatmap stay cleared
       if (store.state.playback.playback_state !== ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE) {
-        return; // TODO update test for this
+        return;
       }
       const new_metric_data = JSON.parse(metrics_json);
       store.commit("data/append_metric_data", new_metric_data);

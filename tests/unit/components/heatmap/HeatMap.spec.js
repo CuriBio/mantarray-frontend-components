@@ -2,7 +2,6 @@ import { mount } from "@vue/test-utils";
 import HeatMap from "@/components/heatmap/HeatMap.vue";
 import { HeatMap as DistComponentToTest } from "@/dist/mantarray.common";
 import { createLocalVue } from "@vue/test-utils";
-import Vue from "vue";
 import Vuex from "vuex";
 
 const max_warm_rgb = "rgb(74.118% 20.784% 19.608%)";
