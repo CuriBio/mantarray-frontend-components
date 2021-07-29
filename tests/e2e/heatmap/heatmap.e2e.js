@@ -4,8 +4,8 @@ const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-const input_max = Selector("#input-widget-field-max");
-const input_min = Selector("#input-widget-field-min");
+const input_max = Selector("#input-widget-field-heatmap-max");
+const input_min = Selector("#input-widget-field-heatmap-min");
 const heatmap_apply = Selector(".span__heatmap-settings-apply-btn-label");
 const heatmap_reset = Selector(".span__heatmap-settings-reset-btn-label");
 
@@ -76,3 +76,22 @@ test("testing the HeatMap Layout and the Display Value is set to 'Twitch Force' 
   await t.click(heatmap_apply);
   await testcafe_page_visual_regression(t, screenshot_path);
 });
+// TODO fix the above tests and add more thorough testing for min/max value editing
+
+// TODO try this as an E2E test instead
+// test("Given default gradient themes are loaded, When a radio button for a different color scheme is pressed, Then the gradient bar background is updated", async () => {
+//   const wrapper = mount(HeatMap, {
+//     store,
+//     localVue,
+//   });
+
+//   const target_radio_btn = wrapper.findAll("input[type='radio']");
+//   target_radio_btn.at(1).setChecked(true);
+//   await target_radio_btn.at(1).trigger("change");
+//   wrapper.vm.$children.map((c) => c.$forceUpdate());
+//   expect(wrapper.find(".div__heatmap-gradient-holder").attributes().style).toEqual("");
+
+//   target_radio_btn.at(1).setChecked(true);
+//   await target_radio_btn.at(1).trigger("change");
+//   expect(wrapper.find(".div__heatmap-gradient-holder").attributes().style).toEqual("");
+// });
