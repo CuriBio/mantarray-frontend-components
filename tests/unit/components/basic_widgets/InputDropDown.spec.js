@@ -190,11 +190,11 @@ describe("InputDropDown.vue", () => {
       },
     });
     wrapper.destroy();
-    expect(destroyed_spy).toHaveBeenCalled();
+    expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
   test("When exiting the NewSelectDropDown instance, Then instance is effectively destroyed", async () => {
-    const destroyed_spy = jest.spyOn(SmallDropDown, "beforeDestroy");
+    const destroyed_spy = jest.spyOn(NewSelectDropDown, "beforeDestroy");
     const wrapper = mount(NewSelectDropDown, {
       store,
       localVue,
@@ -203,6 +203,6 @@ describe("InputDropDown.vue", () => {
       },
     });
     wrapper.destroy();
-    expect(destroyed_spy).toHaveBeenCalled();
+    expect(destroyed_spy).toHaveBeenCalledWith();
   });
 });

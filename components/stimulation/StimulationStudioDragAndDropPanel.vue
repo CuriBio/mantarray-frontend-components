@@ -108,7 +108,7 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
@@ -184,7 +184,6 @@ export default {
     ...mapState("stimulation", {
       time_unit: (state) => state.protocol_editor.time_unit,
     }),
-    ...mapGetters("stimulation", ["get_protocol_order"]),
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
@@ -194,8 +193,10 @@ export default {
       ) {
         this.protocol_order = [];
       }
+
       if (mutation.type === "stimulation/set_edit_mode") {
-        this.protocol_order = this.get_protocol_order;
+        // mapState or mapGetter was not updating correctly, only directly acessing state
+        this.protocol_order = this.$store.state.stimulation.protocol_editor.detailed_pulses;
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       }
     });
@@ -206,15 +207,18 @@ export default {
   methods: {
     ...mapActions("stimulation", ["handle_protocol_order"]),
     ...mapMutations("stimulation", ["set_time_unit"]),
+
     check_type(e) {
       if (e.added && this.cloned) {
         const { element, newIndex } = e.added;
         this.new_cloned_idx = newIndex;
         this.selected_waveform_settings = element.settings;
+
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
         else if (element.type === "Delay") this.repeat_delay_modal = "Delay";
       }
+
       if ((e.added && !this.cloned) || e.moved || e.removed) this.handle_protocol_order(this.protocol_order);
       this.cloned = false;
     },
@@ -223,26 +227,27 @@ export default {
       this.repeat_delay_modal = null;
       this.delay_open_for_edit = false;
       this.current_repeat_delay_input = null;
+      const new_pulse = this.protocol_order[this.new_cloned_idx];
+      const edited_pulse = this.protocol_order[this.shift_click_img_idx];
+
       if (button === "Save") {
-        if (this.new_cloned_idx !== null) this.protocol_order[this.new_cloned_idx].settings = settings;
+        if (this.new_cloned_idx !== null) new_pulse.settings = settings;
         if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null)
-          this.protocol_order[this.shift_click_img_idx].settings = settings;
+          edited_pulse.settings = settings;
         if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null)
-          this.protocol_order[this.shift_click_img_idx].nested_protocols[
-            this.shift_click_nested_img_idx
-          ].settings = settings;
+          edited_pulse.nested_protocols[this.shift_click_nested_img_idx].settings = settings;
       }
+
       if (button === "Delete") {
         if (this.shift_click_nested_img_idx !== null)
-          this.protocol_order[this.shift_click_img_idx].nested_protocols.splice(
-            this.shift_click_nested_img_idx,
-            1
-          );
+          edited_pulse.nested_protocols.splice(this.shift_click_nested_img_idx, 1);
         if (this.shift_click_nested_img_idx === null) this.protocol_order.splice(this.shift_click_img_idx, 1);
       }
+
       if (button === "Cancel") {
         if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
       }
+
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
@@ -252,12 +257,14 @@ export default {
       const pulse = this.protocol_order[idx];
       this.selected_waveform_settings = pulse.settings;
       this.shift_click_img_idx = idx;
+
       if (nested_idx !== undefined) {
         this.shift_click_nested_img_idx = nested_idx;
         this.selected_waveform_settings = pulse.nested_protocols[nested_idx].settings;
       } else if (nested_idx === undefined) {
         this.selected_waveform_settings = pulse.settings;
       }
+
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
@@ -266,15 +273,18 @@ export default {
         this.repeat_delay_modal = "Delay";
       }
     },
-    // TODO Luci, fix CSS to move this dropdown back to BlockViewEditor component
+
     handle_time_unit(idx) {
       const unit = this.time_units_array[idx];
       this.time_units_idx = idx;
+
       this.set_time_unit(unit);
+      this.handle_protocol_order(this.protocol_order);
     },
     clone(type) {
       this.cloned = true;
       const random_color = Math.floor(Math.random() * 16777215).toString(16);
+
       return {
         type: type.type,
         src: type.src,
@@ -294,6 +304,7 @@ export default {
         this.repeat_delay_modal = "Repeat";
         this.repeat_idx = idx;
       }
+
       if (e.removed) {
         this.protocol_order[idx].repeat.number_of_repeats = 0;
         this.handle_protocol_order(this.protocol_order);
@@ -309,9 +320,12 @@ export default {
     },
     on_repeat_modal_close(res) {
       this.repeat_delay_modal = null;
+
       if (res.button_label === "Save")
         this.protocol_order[this.repeat_idx].repeat.number_of_repeats = res.number_of_repeats;
+
       if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
+
       this.repeat_idx = null;
       this.current_repeat_delay_input = null;
       this.handle_protocol_order(this.protocol_order);

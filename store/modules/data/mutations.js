@@ -40,4 +40,12 @@ export default {
       }
     }
   },
+  clear_heatmap_values(state) {
+    for (const metric_name in state.heatmap_values) {
+      if (state.heatmap_values[metric_name].data !== undefined) {
+        const num_wells = state.heatmap_values[metric_name].data.length;
+        state.heatmap_values[metric_name].data = [...Array(num_wells)].map((e) => Array(0));
+      }
+    }
+  },
 };

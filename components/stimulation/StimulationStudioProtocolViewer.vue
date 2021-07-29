@@ -8,7 +8,7 @@
       :plot_area_pixel_width="dynamic_plot_width"
       :data_points="datapoints"
       :y_axis_label="stimulation_type"
-      :x_axis_label="time_unit"
+      :x_axis_label="x_axis_label"
       :repeat_colors="repeat_colors"
       :delay_blocks="delay_blocks"
     />
@@ -34,17 +34,17 @@ export default {
     StimulationStudioWaveform,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (V)" },
-    time_unit: { type: String, default: "Time (s)" },
+    stimulation_type: { type: String, default: "Voltage (mV)" },
   },
   data() {
     return {
-      y_min_max: 10,
+      y_min_max: 500,
       datapoints: [],
       repeat_colors: {},
       x_axis_sample_length: 100,
       dynamic_plot_width: 960,
       delay_blocks: [],
+      x_axis_label: "Time (s)",
     };
   },
   created: function () {
@@ -66,12 +66,6 @@ export default {
         this.dynamic_plot_width = 960;
         this.delay_blocks = state.delay_blocks;
       }
-      // if (mutation.type === "stimulation/set_time_unit") {
-      //   // TODO Luci, you're handling time units in pages and here-- move to parent
-      //   if (state.protocol_editor.time_unit === "milliseconds") state.x_axis_scale *= 1000;
-      //   if (state.protocol_editor.time_unit === "seconds") state.x_axis_scale /= 1000;
-      //   this.x_axis_sample_length = state.x_axis_scale;
-      // }
       if (mutation.type === "stimulation/set_zoom_out" || mutation.type === "stimulation/set_zoom_in") {
         this.x_axis_sample_length = state.x_axis_scale;
         this.y_min_max = state.y_axis_scale;

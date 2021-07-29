@@ -38,7 +38,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     const test_param = store.state.stimulation.protocol_list[1];
 
     await store.dispatch("stimulation/edit_selected_protocol", test_param);
-    expect(wrapper.vm.stimulation_type_idx).toBe(1);
+    expect(wrapper.vm.stimulation_type_idx).toBe(0);
     expect(wrapper.vm.current_letter).toBe(test_param.letter);
     expect(wrapper.vm.end_delay_duration).toBe(20);
   });
@@ -84,7 +84,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     const test_protocol = { label: "test", color: "#123456", letter: "B" };
-    await store.commit("stimulation/set_imported_protocol", test_protocol);
+    await store.commit("stimulation/set_new_protocol", test_protocol);
     expect(updateSpy).toHaveBeenCalledWith();
   });
 

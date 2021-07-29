@@ -17,7 +17,7 @@ describe("StimulationStudioZoomControls.vue", () => {
     store = await NuxtStore.createStore();
   });
 
-  test("When a user clicks on the minus icon to zoom out on an axis, Then the specified scale should multiply by a power of 10", async () => {
+  test("When a user clicks on the minus icon to zoom out on an axis, Then the specified scale should multiply by 1.5", async () => {
     const wrapper = mount(StimulationStudioZoomControls, {
       localVue,
       store,
@@ -27,10 +27,10 @@ describe("StimulationStudioZoomControls.vue", () => {
     });
     expect(store.state.stimulation.x_axis_scale).toBe(100);
     await wrapper.find(".span__axis-controls-zoom-out-button").trigger("click");
-    expect(store.state.stimulation.x_axis_scale).toBe(1000);
+    expect(store.state.stimulation.x_axis_scale).toBe(150);
   });
 
-  test("When a user clicks on the plus icon to zoom in on an axis, Then the specified scale should divide by a power of 10", async () => {
+  test("When a user clicks on the plus icon to zoom in on an axis, Then the specified scale should divide by 1.5", async () => {
     const wrapper = mount(StimulationStudioZoomControls, {
       localVue,
       store,
@@ -38,8 +38,9 @@ describe("StimulationStudioZoomControls.vue", () => {
         axis: "y-axis",
       },
     });
-    expect(store.state.stimulation.y_axis_scale).toBe(10);
+    const expected_scale = 333.3333333333333;
+    expect(store.state.stimulation.y_axis_scale).toBe(500);
     await wrapper.find(".span__axis-controls-zoom-in-button").trigger("click");
-    expect(store.state.stimulation.y_axis_scale).toBe(1);
+    expect(store.state.stimulation.y_axis_scale).toBe(expected_scale);
   });
 });

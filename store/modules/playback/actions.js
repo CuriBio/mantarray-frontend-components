@@ -113,6 +113,7 @@ export default {
       root: true,
     });
     context.commit("stop_playback_progression");
+    context.commit("data/clear_heatmap_values", null, { root: true });
 
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {

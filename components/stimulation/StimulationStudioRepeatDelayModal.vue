@@ -107,7 +107,7 @@ export default {
     get_metric_label() {
       let metric_label;
       if (this.modal_type === "Repeat") metric_label = "";
-      if (this.modal_type === "Delay") metric_label = "second(s)";
+      if (this.modal_type === "Delay") metric_label = "milliseconds";
       return metric_label;
     },
   },

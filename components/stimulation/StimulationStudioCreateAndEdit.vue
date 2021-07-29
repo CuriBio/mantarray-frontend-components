@@ -79,7 +79,7 @@ export default {
     this.update_protocols();
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (
-        mutation.type === "stimulation/set_imported_protocol" ||
+        mutation.type === "stimulation/set_new_protocol" ||
         mutation.type === "stimulation/set_edit_mode_off" ||
         mutation.type === "stimulation/add_saved_protocol"
       ) {
@@ -110,15 +110,14 @@ export default {
     selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
       const selected_protocol = this.protocol_list[idx];
-
       if (idx === 0) {
         this.set_edit_mode_off();
         this.reset_protocol_editor();
       }
       if (idx !== 0) {
-        this.$emit("handle_selection_change", selected_protocol);
         this.edit_selected_protocol(selected_protocol);
       }
+      this.$emit("handle_selection_change", selected_protocol);
     },
     handle_click(idx) {
       const selected_protocol = this.protocol_list[this.selected_protocol_idx];
@@ -164,7 +163,7 @@ export default {
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
   pointer-events: all;
-  z-index: 2;
+  z-index: 3;
 }
 .span__stimulationstudio-layout-create_edit-header-label {
   pointer-events: all;

@@ -13,7 +13,7 @@ const state = () => ({
       label: "Tester",
       protocol: {
         name: "Tester",
-        stimulation_type: "C",
+        stimulation_type: "V",
         end_delay_duration: 20,
         time_unit: "milliseconds",
         pulses: [
@@ -39,7 +39,7 @@ const state = () => ({
             nested_protocols: [],
             repeat: { color: "d822f9", number_of_repeats: 0 },
             settings: {
-              phase_one_duration: 15,
+              phase_one_duration: 15000,
               phase_one_charge: 0,
               interpulse_duration: 0,
               phase_two_duration: 0,
@@ -64,10 +64,10 @@ const state = () => ({
   y_axis_values: [],
   repeat_colors: {},
   x_axis_scale: 100,
-  y_axis_scale: 10,
+  y_axis_scale: 500,
   delay_blocks: [],
   stim_status: false,
-  edit_mode: { status: false, protocol: "" },
+  edit_mode: { status: false, protocol: "", label: "", color: "" },
 });
 
 export default {

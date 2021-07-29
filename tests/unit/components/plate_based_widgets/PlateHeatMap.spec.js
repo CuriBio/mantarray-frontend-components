@@ -21,11 +21,9 @@ describe("PlateHeatMap.vue", () => {
   });
 
   test("When mounting PlateHeatMap from the build dist file, Then it loads successfully", async () => {
-    const select = new Array(24).fill(false);
     const color = new Array(24).fill("#b7b7b7");
 
     const propsData = {
-      selected: select,
       platecolor: color,
     };
     const wrapper = mount(DistComponentToTest, {
@@ -49,11 +47,9 @@ describe("PlateHeatMap.vue", () => {
   });
 
   test("Given that none of the wells are selected, minus button should not be visible and stroke outlines should be zero on all wells, When user clicks the plus button, Then all 24 wells should have a stroke outline", async () => {
-    const select = new Array(24).fill(false);
     const color = new Array(24).fill("#b7b7b7");
 
     const propsData = {
-      selected: select,
       platecolor: color,
     };
     const wrapper = mount(PlateHeatMap, {
@@ -81,11 +77,9 @@ describe("PlateHeatMap.vue", () => {
   });
 
   test("Given that no wells are selected, When user Shift+Click on all the wells from 1 to 24, Then all 24 wells have stroke width of 4px", async () => {
-    const select = new Array(24).fill(false);
     const color = new Array(24).fill("#b7b7b7");
 
     const propsData = {
-      selected: select,
       platecolor: color,
     };
     const wrapper = mount(PlateHeatMap, {
@@ -115,11 +109,9 @@ describe("PlateHeatMap.vue", () => {
   });
 
   test("Given all wells are selected, When a well, column, or row is unselected, Then minus icon should toggle to plus", async () => {
-    const select = new Array(24).fill(false);
     const color = new Array(24).fill("#b7b7b7");
 
     const propsData = {
-      selected: select,
       platecolor: color,
     };
     const wrapper = mount(PlateHeatMap, {
@@ -200,7 +192,6 @@ describe("PlateHeatMap.vue", () => {
     "Given no wells are selected, When the user selects a row/column label, Then the corresponding unselected wells will have a stroke_width of 4",
     async (id, wells) => {
       const propsData = {
-        selected: new Array(24).fill(false),
         platecolor: new Array(24).fill("#b7b7b7"),
       };
       const wrapper = mount(PlateHeatMap, {
@@ -229,7 +220,6 @@ describe("PlateHeatMap.vue", () => {
     "Given no wells are selected, When the user enters and leaves a row/column label, Then corresponding unselected wells will toggle stroke-width of 2px and 0px",
     async (id, wells) => {
       const propsData = {
-        selected: new Array(24).fill(false),
         platecolor: new Array(24).fill("#b7b7b7"),
       };
       const wrapper = mount(PlateHeatMap, {
@@ -247,7 +237,6 @@ describe("PlateHeatMap.vue", () => {
 
   test("Given no wells are selected, When the user shift+clicks a column label, Then corresponding unselected wells will toggle stroke-width of 4px and 0px", async () => {
     const propsData = {
-      selected: new Array(24).fill(false),
       platecolor: new Array(24).fill("#b7b7b7"),
     };
     const wrapper = mount(PlateHeatMap, {
@@ -273,7 +262,6 @@ describe("PlateHeatMap.vue", () => {
 
   test("Given no wells are selected, When user shift+clicks a row label, Then corresponding unselected wells will toggle stroke-width of 4px and 0px", async () => {
     const propsData = {
-      selected: new Array(24).fill(false),
       platecolor: new Array(24).fill("#b7b7b7"),
     };
     const wrapper = mount(PlateHeatMap, {
