@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="div__stimulationstudio-left-column-container">
-      <StimulationControls />
+      <StimulationStudioControls />
     </div>
     <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
     <StimulationStudioWidget />
@@ -35,7 +35,7 @@ import StimulationStudioBlockViewEditor from "@/components/stimulation/Stimulati
 import StimulationStudioProtocolViewer from "@/components/stimulation/StimulationStudioProtocolViewer.vue";
 import RecordingTime from "@/components/status/RecordingTime.vue";
 import UploadFilesWidget from "@/components/status/UploadFilesWidget.vue";
-import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
+import StimulationStudioControls from "@/components/playback/controls/StimulationStudioControls.vue";
 
 export default {
   name: "StimulationStudio",
@@ -47,7 +47,7 @@ export default {
     StimulationStudioProtocolViewer,
     UploadFilesWidget,
     RecordingTime,
-    StimulationControls,
+    StimulationStudioControls,
   },
   data() {
     return {

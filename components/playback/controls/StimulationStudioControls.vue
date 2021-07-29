@@ -49,7 +49,7 @@ library.add(fa_play_circle, fa_stop_circle);
  */
 
 export default {
-  name: "StimulationControls",
+  name: "StimulationStudioControls",
   components: {
     FontAwesomeIcon,
   },
