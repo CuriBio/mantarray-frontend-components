@@ -164,7 +164,7 @@ export default {
         delete_option: ["Save", "Delete", "Cancel"],
       },
       time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
-      selected_waveform_settings: null,
+      selected_waveform_settings: {},
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
@@ -195,7 +195,9 @@ export default {
 
       if (mutation.type === "stimulation/set_edit_mode") {
         // mapState or mapGetter was not updating correctly, only directly acessing state
-        this.protocol_order = this.$store.state.stimulation.protocol_editor.detailed_pulses;
+        this.protocol_order = JSON.parse(
+          JSON.stringify(this.$store.state.stimulation.protocol_editor.detailed_pulses)
+        );
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       }
     });
@@ -231,10 +233,11 @@ export default {
 
       if (button === "Save") {
         if (this.new_cloned_idx !== null) new_pulse.settings = settings;
-        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null)
-          edited_pulse.settings = settings;
-        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null)
-          edited_pulse.nested_protocols[this.shift_click_nested_img_idx].settings = settings;
+        else if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null) {
+          Object.assign(edited_pulse.settings, settings);
+        } else if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null) {
+          Object.assign(edited_pulse.nested_protocols[this.shift_click_nested_img_idx].settings, settings);
+        }
       }
 
       if (button === "Delete") {
@@ -246,7 +249,6 @@ export default {
       if (button === "Cancel") {
         if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
       }
-
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
@@ -254,14 +256,13 @@ export default {
     },
     open_modal_for_edit(type, idx, nested_idx) {
       const pulse = this.protocol_order[idx];
-      this.selected_waveform_settings = pulse.settings;
       this.shift_click_img_idx = idx;
 
       if (nested_idx !== undefined) {
         this.shift_click_nested_img_idx = nested_idx;
-        this.selected_waveform_settings = pulse.nested_protocols[nested_idx].settings;
+        Object.assign(this.selected_waveform_settings, pulse.nested_protocols[nested_idx].settings);
       } else if (nested_idx === undefined) {
-        this.selected_waveform_settings = pulse.settings;
+        Object.assign(this.selected_waveform_settings, pulse.settings);
       }
 
       if (type === "Monophasic") this.modal_type = "Monophasic";

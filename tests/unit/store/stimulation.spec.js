@@ -119,32 +119,6 @@ describe("store/stimulation", () => {
       const default_type = store.getters["stimulation/get_next_protocol"];
       expect(default_type).toStrictEqual(expected_assignment);
     });
-
-    test("When requesting the time unit, Then it should return what user has selected in dropdown", async () => {
-      const seconds = "Time (s)";
-      const milliseconds = "Time (ms)";
-      const hours = "Time (hr)";
-      const minutes = "Time (min)";
-
-      const default_unit = store.getters["stimulation/get_time_unit"];
-      expect(default_unit).toBe(seconds);
-
-      store.state.stimulation.protocol_editor.time_unit = "milliseconds";
-      const ms_unit = store.getters["stimulation/get_time_unit"];
-      expect(ms_unit).toBe(milliseconds);
-
-      store.state.stimulation.protocol_editor.time_unit = "seconds";
-      const s_unit = store.getters["stimulation/get_time_unit"];
-      expect(s_unit).toBe(seconds);
-
-      store.state.stimulation.protocol_editor.time_unit = "hours";
-      const h_unit = store.getters["stimulation/get_time_unit"];
-      expect(h_unit).toBe(hours);
-
-      store.state.stimulation.protocol_editor.time_unit = "minutes";
-      const m_unit = store.getters["stimulation/get_time_unit"];
-      expect(m_unit).toBe(minutes);
-    });
   });
   describe("stimulation/mutations/actions", () => {
     test("When stimulation store is initialized, Then default selected wells should be an empty array", () => {
