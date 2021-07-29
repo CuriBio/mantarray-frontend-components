@@ -1,6 +1,6 @@
 <template>
   <div class="div__playback-desktop-player-controls">
-    <span class="span__playback-desktop-player-controls-text">Record Options:</span>
+    <span class="span__playback-desktop-player-controls-text">Record Options</span>
     <div
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
     >
