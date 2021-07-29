@@ -4,6 +4,7 @@ import axios from "axios";
 const MockAxiosAdapter = require("axios-mock-adapter");
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
+import { ENUMS } from "@/store/modules/playback/enums";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
 import { ping_system_status } from "../../../store/modules/flask/actions";
@@ -151,7 +152,9 @@ describe("store/data", () => {
         socket_server_side.send(expected_message);
       });
     });
-    test("When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
+    test("Given that playback state is live view, When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
+      store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
+
       const init_heatmap_values = {
         "Twitch Force": { data: [[0], [], [20]] },
         "Twitch Period": { data: [[100], [], [120]] },

@@ -515,6 +515,20 @@ describe("store/playback", () => {
         expect(store.state.data.plate_waveforms[1].x_data_points).toHaveLength(0);
         expect(store.state.data.plate_waveforms[1].y_data_points).toHaveLength(0);
       });
+      test("Given the Vuex heatmap_values state has some values, When stop_live_view is dispatched, Then the heatmap_values inner arrays are all reset to empty arrays", async () => {
+        store.commit("data/set_heatmap_values", {
+          "Twitch Force": { data: [[0], [10]] },
+          "Twitch Frequency": { data: [[100], [110]] },
+        });
+        await store.dispatch("playback/stop_live_view");
+
+        expect(store.state.data.heatmap_values["Twitch Force"].data).toHaveLength(2);
+        expect(store.state.data.heatmap_values["Twitch Force"].data[0]).toHaveLength(0);
+        expect(store.state.data.heatmap_values["Twitch Force"].data[1]).toHaveLength(0);
+        expect(store.state.data.heatmap_values["Twitch Frequency"].data).toHaveLength(2);
+        expect(store.state.data.heatmap_values["Twitch Frequency"].data[0]).toHaveLength(0);
+        expect(store.state.data.heatmap_values["Twitch Frequency"].data[1]).toHaveLength(0);
+      });
     });
     test("Given playback_progression interval is active and Mantarray Commands are mocked to return status 200, When stop_live_view is called, Then the interval is cleared", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);

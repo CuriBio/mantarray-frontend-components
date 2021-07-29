@@ -4,16 +4,14 @@
     <div class="div__heatmap-layout-background"></div>
 
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
-    <div class="div__heatmap-layout-twitch-force-label">{{ entrykey }} ({{ unit }})</div>
+    <div class="div__heatmap-layout-twitch-metric-label">{{ display_option }} ({{ unit }})</div>
 
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
-      <PlateHeatMap
-        :platecolor="passing_plate_colors"
-        @platewell-selected="on_well_selection_changed"
-      ></PlateHeatMap>
+      <PlateHeatMap :platecolor="passing_plate_colors"></PlateHeatMap>
     </div>
 
+    <!-- Tanner (7/28/21): Could probably combine the following 4 components -->
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
     <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">No Wells Selected</div>
 
@@ -42,7 +40,7 @@
     <span class="span__heatmap-layout-heatmap-settings-label">Heatmap Settings</span>
 
     <!-- original mockflow ID: cmpD56369ad2e65893ae5ca594f14a64e378 -->
-    <canvas class="canvas__heatmap-settings-title-seperator" width="272" height="2"> </canvas>
+    <canvas class="canvas__heatmap-settings-title-seperator"> </canvas>
 
     <!-- original mockflow ID: cmpD9c0a6e873d03a7f83e8a68941610e993 -->
     <span class="span__heatmap-layout-heatmap-scale-label">Scale Bar</span>
@@ -63,7 +61,7 @@
         :placeholder="'100'"
         :invalid_text="max_value_error_msg"
         :input_width="105"
-        :dom_id_suffix="'max'"
+        :dom_id_suffix="'heatmap-max'"
         @update:value="on_update_maximum($event)"
       ></InputWidget>
     </div>
@@ -77,7 +75,7 @@
         :placeholder="'0'"
         :invalid_text="min_value_error_msg"
         :input_width="105"
-        :dom_id_suffix="'min'"
+        :dom_id_suffix="'heatmap-min'"
         @update:value="on_update_minimum($event)"
       ></InputWidget>
     </div>
@@ -92,7 +90,7 @@
     <div class="div__heatmap-layout-display-input-dropdown-container">
       <NewSelectDropDown
         :title_label="label"
-        :value.sync="entrykey"
+        :value.sync="display_option"
         :options_text="metric_names"
         :options_id="'display'"
         :options_idx="display_option_idx"
@@ -180,8 +178,6 @@ export default {
     return {
       option: [{ text: "", value: "Auto-Scale" }],
       label: "",
-      entrykey: "Twitch Force",
-      display_option_idx: 0,
       keyplaceholder: "Twitch Force",
       error_text: "An ID is required",
       entry_width: 201,
@@ -190,10 +186,9 @@ export default {
       provided_uuid: "0",
       height: 481,
       input_height: 45,
-      // heatmap_option: "",
       max_value_error_msg: "invalid",
       min_value_error_msg: "invalid",
-      selected_wells: [],
+      // selected_wells: [],
       upper: 100,
       lower: 0,
     };
@@ -202,6 +197,11 @@ export default {
   computed: {
     ...mapState("data", {
       well_values: "heatmap_values",
+    }),
+    ...mapState("heatmap", {
+      display_option: "display_option",
+      display_option_idx: "display_option_idx",
+      selected_wells: "selected_wells",
     }),
     metric_names: function () {
       return Object.keys(this.well_values);
@@ -216,7 +216,7 @@ export default {
       return this.gradients.map((t) => t.name);
     },
     passing_plate_colors: function () {
-      return this.well_values[this.entrykey].data.map((well) => {
+      return this.well_values[this.display_option].data.map((well) => {
         if (well.length > 0) {
           // const average = (a) => a.reduce((x, y) => x + y) / a.length;
           // return this.gradient_map(average(well.slice(-5)));
@@ -232,62 +232,62 @@ export default {
     mean_value: function () {
       let total = 0;
       this.selected_wells.map((well_idx) => {
-        total += this.well_values[this.entrykey].data[well_idx].slice(-1)[0];
+        total += this.well_values[this.display_option].data[well_idx].slice(-1)[0];
       });
       return (total / this.selected_wells.length).toFixed(3);
     },
     unit: function () {
-      return METRIC_UNITS[this.entrykey];
+      return METRIC_UNITS[this.display_option];
     },
     is_apply_set: function () {
       return (
         this.max_value_error_msg === "" &&
         this.min_value_error_msg === "" &&
-        this.entrykey in this.well_values
+        this.display_option in this.well_values
       );
     },
   },
 
-  watch: {
-    entrykey: function () {
-      if (this.entrykey != "") {
-        this.error_text = "Choose an option";
-      } else {
-        this.on_empty_flag = true;
-        this.error_text = "An ID is required";
-      }
-      // this.heatmap_option = this.entrykey;
-      if (this.entrykey in this.well_values) {
-        this.on_empty_flag = false;
-        this.lower = this.well_values[this.entrykey].range_min;
-        this.upper = this.well_values[this.entrykey].range_max;
-      } else {
-        this.lower = null;
-        this.upper = null;
-        this.error_text = "Choose an option";
-        this.on_empty_flag = true;
-      }
-    },
-  },
+  // watch: {
+  //   display_option: function () {
+  //     if (this.display_option != "") {
+  //       this.error_text = "Choose an option";
+  //     } else {
+  //       this.on_empty_flag = true;
+  //       this.error_text = "An ID is required";
+  //     }
+  //     if (this.display_option in this.well_values) {
+  //       this.on_empty_flag = false;
+  //       // Tanner (7/27/21): not sure what these following two lines are attempting to do or if they're needed at all. Could probably refactor this whole function
+  //       this.lower = this.well_values[this.display_option].range_min;
+  //       this.upper = this.well_values[this.display_option].range_max;
+  //     } else {
+  //       this.lower = null;
+  //       this.upper = null;
+  //       this.error_text = "Choose an option";
+  //       this.on_empty_flag = true;
+  //     }
+  //   },
+  // },
 
   methods: {
     auto_scale: function (new_value) {
-      /* if (new_value == "Auto-Scale") { */
-      /*   this.max_value_error_msg = ""; */
-      /*   this.min_value_error_msg = ""; */
-      /*   this.heatmap_option = this.entrykey = this.nicknames_list[0]; */
-      /*   this.$store.commit("heatmap/heatmap_autoscale", true); */
-      /* } else { */
-      /*   this.max_value_error_msg = "invalid"; */
-      /*   this.min_value_error_msg = "invalid"; */
-      /*   this.heatmap_option = this.entrykey = ""; */
-      /*   this.$store.commit("heatmap/heatmap_autoscale", false); */
-      /* } */
+      // if (new_value == "Auto-Scale") {
+      //   // this.max_value_error_msg = "";
+      //   // this.min_value_error_msg = "";
+      //   this.heatmap_option = this.display_option = this.nicknames_list[0];
+      //   this.$store.commit("heatmap/heatmap_autoscale", true);
+      // } else {
+      //   // this.max_value_error_msg = "invalid";
+      //   // this.min_value_error_msg = "invalid";
+      //   this.heatmap_option = this.display_option = "";
+      //   this.$store.commit("heatmap/heatmap_autoscale", false);
+      // }
     },
 
     metric_selection_changed: function (index) {
-      this.display_option_idx = index;
-      this.entrykey = this.metric_names[index];
+      this.$store.commit("heatmap/set_display_option_idx", index);
+      this.$store.commit("heatmap/set_display_option", this.metric_names[index]);
     },
 
     radio_option_selected: function (option_value) {
@@ -347,15 +347,6 @@ export default {
       }
     },
 
-    on_well_selection_changed: function (all_select) {
-      this.selected_wells = [];
-      for (let i = 0; i < all_select.length; i++) {
-        if (all_select[i] == true) {
-          this.selected_wells.push(i);
-        }
-      }
-    },
-
     apply_heatmap_settings: function () {
       if (this.is_apply_set) {
         this.$store.commit("gradient/set_gradient_range", {
@@ -368,17 +359,10 @@ export default {
     reset_heatmap_settings: function () {
       // reset display dropdown
       this.metric_selection_changed(0);
-      // reset min/max inputs
-      document.getElementById("input-widget-field-max").value = "";
-      document.getElementById("input-widget-field-min").value = "";
-      this.on_update_maximum("");
-      this.on_update_minimum("");
-      // TODO reset gradient theme selection
-      // reset gradient range
-      this.$store.commit("gradient/set_gradient_range", {
-        min: 0,
-        max: 100,
-      });
+      // reset gradient theme, radio button is subscribed to this mutation and will reset itself
+      this.$store.commit("gradient/reset_gradient_theme_idx");
+      // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
+      this.$store.commit("gradient/reset_gradient_range");
     },
   },
 };
@@ -403,7 +387,7 @@ export default {
   pointer-events: all;
 }
 
-.div__heatmap-layout-twitch-force-label {
+.div__heatmap-layout-twitch-metric-label {
   line-height: 1;
   transform: rotate(0deg);
   padding: 5px;
@@ -590,7 +574,7 @@ export default {
   position: absolute;
   width: 300px;
   height: 34px;
-  top: 62px;
+  top: 17px;
   left: 1331px;
   padding: 5px;
   visibility: visible;
@@ -608,10 +592,10 @@ export default {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;
-  width: 272px;
+  width: 260px;
   height: 2px;
-  top: 100px;
-  left: 1330px;
+  top: 55px;
+  left: 1350px;
   visibility: visible;
   background-color: #3f3f3f;
   opacity: 0.5;
@@ -625,7 +609,7 @@ export default {
   position: absolute;
   width: 300px;
   height: 30px;
-  top: 113.991px;
+  top: 69px;
   left: 1330px;
   padding: 5px;
   visibility: visible;
@@ -645,7 +629,7 @@ export default {
   position: absolute;
   width: 50px;
   height: 50px;
-  top: 152px;
+  top: 107px;
   left: 1423px;
   visibility: visible;
 }
@@ -658,7 +642,7 @@ export default {
   position: absolute;
   width: 86px;
   height: 20px;
-  top: 152.991px;
+  top: 108px;
   left: 1444.28px;
   padding: 5px;
   visibility: visible;
@@ -680,7 +664,7 @@ export default {
   position: absolute;
   width: 82px;
   height: 30px;
-  top: 189.217px;
+  top: 145px;
   left: 1385.86px;
   padding: 5px;
   visibility: visible;
@@ -701,7 +685,7 @@ export default {
   position: absolute;
   width: 121px;
   height: 59px;
-  top: 178.925px;
+  top: 134px;
   left: 1473.44px;
   visibility: visible;
 }
@@ -714,7 +698,7 @@ export default {
   position: absolute;
   width: 83px;
   height: 30px;
-  top: 249.217px;
+  top: 205px;
   left: 1385.86px;
   padding: 5px;
   visibility: visible;
@@ -735,7 +719,7 @@ export default {
   position: absolute;
   width: 121px;
   height: 59px;
-  top: 240.925px;
+  top: 196px;
   left: 1473.44px;
   visibility: visible;
 }
@@ -746,7 +730,7 @@ export default {
   position: absolute;
   width: 212px;
   height: 2px;
-  top: 305px;
+  top: 260px;
   left: 1374px;
   visibility: visible;
   background-color: #3f3f3f;
@@ -761,7 +745,7 @@ export default {
   position: absolute;
   width: 301px;
   height: 30px;
-  top: 312.667px;
+  top: 268px;
   left: 1331px;
   padding: 5px;
   visibility: visible;
@@ -782,7 +766,7 @@ export default {
   transform: rotate(0deg);
   position: absolute;
   width: 210px;
-  top: 347px;
+  top: 302px;
   left: 1384px;
   padding: 5px;
   visibility: visible;
@@ -795,7 +779,7 @@ export default {
   position: absolute;
   width: 212px;
   height: 2px;
-  top: 417px;
+  top: 372px;
   left: 1374px;
   visibility: visible;
   background-color: #3f3f3f;
@@ -810,7 +794,7 @@ export default {
   position: absolute;
   width: 301px;
   height: 30px;
-  top: 426.667px;
+  top: 382px;
   left: 1331px;
   padding: 5px;
   visibility: visible;
@@ -825,7 +809,7 @@ export default {
 }
 
 .div__heatmap-radio-buttons-container {
-  top: 458px;
+  top: 413px;
   left: 1407.5px;
   position: absolute;
 }
@@ -837,7 +821,7 @@ export default {
   position: absolute;
   width: 300px;
   height: 25px;
-  top: 597.667px;
+  top: 553px;
   left: 1331.36px;
   padding: 5px;
   visibility: visible;
