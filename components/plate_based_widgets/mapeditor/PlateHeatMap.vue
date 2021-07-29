@@ -461,7 +461,6 @@ export default {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 90px;
   height: 39px;
@@ -488,7 +487,6 @@ export default {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 37px;
   height: 35px;
@@ -505,7 +503,6 @@ export default {
   text-align: left;
 }
 .span__heatmap-toggle-plus-minus-icon {
-  overflow: hidden;
   white-space: nowrap;
   text-align: center;
   font-weight: normal;
