@@ -117,8 +117,7 @@ export default {
   },
   watch: {
     is_valid() {
-      if (this.is_valid) this.is_enabled_array = [true, true, true];
-      if (!this.is_valid) this.is_enabled_array = [false, true, true];
+      this.is_enabled_array = [this.is_valid, true, true];
     },
   },
   created() {

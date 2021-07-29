@@ -373,8 +373,7 @@ export default {
         if (this.err_msg[input] === "") valid_inputs.push(true);
       }
 
-      if (valid_inputs.length === 5) this.all_valid = true;
-      else this.all_valid = false;
+      this.all_valid = valid_inputs.length === 5;
     },
   },
 };

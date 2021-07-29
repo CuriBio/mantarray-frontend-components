@@ -113,7 +113,7 @@ export default {
       if (idx === 0) {
         this.set_edit_mode_off();
         this.reset_protocol_editor();
-      } else if (idx !== 0) this.edit_selected_protocol(selected_protocol);
+      } else this.edit_selected_protocol(selected_protocol);
 
       this.$emit("handle_selection_change", selected_protocol);
     },
