@@ -208,7 +208,7 @@ export default {
           phase_two_duration: (pulse.phase_two_duration *= 1000),
         }));
 
-        const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well, true);
+        const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well, false);
         const protocol_model = {
           stimulation_type,
           well_number,
