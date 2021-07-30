@@ -116,7 +116,7 @@ export default {
   methods: {},
 };
 </script>
-<style type="text/css">
+<style scoped>
 .div__input-dropdown-background {
   transform: rotate(0deg);
   box-sizing: border-box;
