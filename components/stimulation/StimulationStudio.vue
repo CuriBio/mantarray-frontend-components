@@ -1,22 +1,21 @@
 <template>
   <div class="div__stimulationstudio-layout-background">
-    <div class="div__stimulationstudio-header-container">
-      <div class="upload-files-widget-container">
-        <UploadFilesWidget />
-      </div>
-      <div class="recording-time-container">
-        <RecordingTime />
-      </div>
-    </div>
-    <div class="div__stimulationstudio-left-column-container">
-      <StimulationStudioControls />
-    </div>
     <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
-    <StimulationStudioWidget />
-    <StimulationStudioCreateAndEdit @handle_selection_change="handle_selection_change" />
-    <StimulationStudioDragAndDropPanel :stimulation_type="stimulation_type" :time_unit="time_unit" />
-    <StimulationStudioBlockViewEditor />
-    <StimulationStudioProtocolViewer :stimulation_type="stimulation_type" />
+    <StimulationStudioWidget class="stimulationstudio_widget-container" />
+    <StimulationStudioCreateAndEdit
+      class="stimulationstudio_createandedit-container"
+      @handle_selection_change="handle_selection_change"
+    />
+    <StimulationStudioDragAndDropPanel
+      class="stimulationstudio_draganddroppanel-container"
+      :stimulation_type="stimulation_type"
+      :time_unit="time_unit"
+    />
+    <StimulationStudioBlockViewEditor class="stimulationstudio_blockvieweditor-container" />
+    <StimulationStudioProtocolViewer
+      class="stimulationstudio_protocolviewer-container"
+      :stimulation_type="stimulation_type"
+    />
     <div class="button-background">
       <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
         <div :class="'btn-container'">
@@ -33,9 +32,6 @@ import StimulationStudioWidget from "@/components/plate_based_widgets/stimulatio
 import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
 import StimulationStudioBlockViewEditor from "@/components/stimulation/StimulationStudioBlockViewEditor.vue";
 import StimulationStudioProtocolViewer from "@/components/stimulation/StimulationStudioProtocolViewer.vue";
-import RecordingTime from "@/components/status/RecordingTime.vue";
-import UploadFilesWidget from "@/components/status/UploadFilesWidget.vue";
-import StimulationStudioControls from "@/components/playback/controls/StimulationStudioControls.vue";
 
 export default {
   name: "StimulationStudio",
@@ -45,9 +41,6 @@ export default {
     StimulationStudioDragAndDropPanel,
     StimulationStudioBlockViewEditor,
     StimulationStudioProtocolViewer,
-    UploadFilesWidget,
-    RecordingTime,
-    StimulationStudioControls,
   },
   data() {
     return {
@@ -108,20 +101,20 @@ export default {
   margin: 0px;
   background: rgb(0, 0, 0);
   position: absolute;
-  width: 1800px;
-  height: 1000px;
+  width: 1629px;
+  height: 885px;
   left: 1px;
-  border: 0px none rgb(0, 0, 0);
+  display: grid;
+  grid-template-columns: 555px 705px 365px;
+  grid-template-rows: 60px 290px 220px 297px;
 }
 
 .span__stimulationstudio-header-label {
   pointer-events: all;
+  grid-area: 1 / 1 / 2 / 2;
+  align-self: center;
   line-height: 100%;
-  left: 22%;
-  top: 5%;
   transform: rotate(0deg);
-  position: absolute;
-  padding-top: 25px;
   visibility: visible;
   user-select: none;
   font-family: Muli;
@@ -137,7 +130,7 @@ export default {
   width: 60%;
   display: flex;
   justify-content: center;
-  left: 20%;
+  left: 10%;
   top: 93%;
   height: 60px;
   position: absolute;
@@ -159,41 +152,22 @@ export default {
   font-size: 16px;
   color: rgb(0, 0, 0);
 }
-.div__stimulationstudio-left-column-container {
-  transform: rotate(0deg);
-  box-sizing: border-box;
-  padding: 0px;
-  margin: 0px;
-  background: rgb(17, 17, 17);
-  position: absolute;
-  bottom: 0;
-  width: 18%;
-  height: 94%;
-  visibility: visible;
-  border: 0px none rgb(0, 0, 0);
-  border-radius: 0px;
-  box-shadow: none;
-  pointer-events: all;
+.stimulationstudio_widget-container {
+  grid-area: 2 / 1 / 3 / 2;
+  right: 20px;
 }
-.div__stimulationstudio-header-container {
-  transform: rotate(0deg);
-  background: rgb(17, 17, 17);
-  position: absolute;
-  width: 82%;
-  left: 18%;
-  height: 6%;
-  border-bottom: 2px solid black;
-  display: flex;
-  justify-content: center;
+.stimulationstudio_createandedit-container {
+  grid-area: 2 / 2 / 3 / 3;
 }
-.upload-files-widget-container {
-  position: relative;
-  top: 15%;
-  left: 5%;
+
+.stimulationstudio_draganddroppanel-container {
+  grid-area: 1 / 3 / 4 / 3;
 }
-.recording-time-container {
-  position: relative;
-  left: 34%;
-  top: 15%;
+.stimulationstudio_blockvieweditor-container {
+  grid-area: 3 / 1 / 4 / 3;
+}
+.stimulationstudio_protocolviewer-container {
+  grid-area: 4 / 1 / 5 / 3;
+  left: 35px;
 }
 </style>

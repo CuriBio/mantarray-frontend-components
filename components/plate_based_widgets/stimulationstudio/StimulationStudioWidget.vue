@@ -324,8 +324,7 @@ export default {
   position: absolute;
   width: 415px;
   height: 280px;
-  top: 11%;
-  left: 20%;
+
   visibility: visible;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;

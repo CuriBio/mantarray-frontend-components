@@ -339,11 +339,12 @@ export default {
 .div__DragAndDdrop-panel {
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 23%;
+  width: 85%;
   height: 100%;
   bottom: 0;
   display: flex;
   justify-content: center;
+  justify-self: flex-end;
 }
 .repeat_container {
   display: flex;
@@ -366,10 +367,10 @@ export default {
   top: 8%;
 }
 .dropdown-container {
-  position: relative;
+  position: absolute;
   z-index: 2;
-  top: 353px;
-  left: 640px;
+  top: 350px;
+  left: -115px;
 }
 .circle {
   width: 30px;
@@ -406,9 +407,8 @@ export default {
 }
 .div__background-container {
   position: absolute;
-  width: 80%;
-  left: 20%;
-  height: 94%;
+  width: 365px;
+  height: 100%;
   bottom: 0;
   display: flex;
   justify-content: flex-end;
@@ -422,16 +422,17 @@ export default {
   opacity: 0.5;
 }
 .div__scroll-container {
-  position: relative;
-  top: 47%;
-  width: 73%;
-  right: 26%;
-  height: 13%;
+  position: absolute;
+  top: 440px;
+  width: 336%;
+  height: 120px;
+  right: 353px;
   overflow-x: scroll;
   background: rgb(27, 27, 27);
   z-index: 1;
   white-space: nowrap;
   overflow: visible;
+  border: 1px solid rgb(17, 17, 17);
 }
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;

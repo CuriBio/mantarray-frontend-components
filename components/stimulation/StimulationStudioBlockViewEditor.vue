@@ -219,12 +219,11 @@ export default {
 <style scoped>
 .div__BlockViewEditor-background {
   background: rgb(0, 0, 0);
-  position: absolute;
+  position: relative;
   border-radius: 10px;
-  width: 60%;
-  height: 24%;
-  top: 41%;
-  left: 20%;
+  width: 90%;
+  height: 100%;
+  left: 35px;
   font-family: muli;
 }
 
@@ -322,7 +321,7 @@ img:hover {
   opacity: 0.6;
 }
 .img__trash-icon {
-  margin-left: 16%;
+  margin-left: 11%;
   padding-top: 4px;
 }
 .div__right-settings-panel {
@@ -335,7 +334,7 @@ img:hover {
 }
 .number_input {
   background: #1c1c1c;
-  height: 26px;
+  height: 25.5px;
   width: 40px;
   border: none;
   color: #b7b7b7;
@@ -374,10 +373,9 @@ img:hover {
 }
 .div__Editor-background {
   transform: rotate(0deg);
-  box-sizing: border-box;
   background: rgb(17, 17, 17);
-  width: 100%;
-  height: 82%;
+  width: 110%;
+  height: 92%;
 }
 .div__Tabs-panel {
   background: rgb(17, 17, 17);
