@@ -6,7 +6,7 @@
       <span>{{ get_input_description }}</span>
       <span class="input_container">
         <InputWidget
-          :placeholder="'15000'"
+          :placeholder="''"
           :dom_id_suffix="'repeat_delay'"
           :invalid_text="invalid_text"
           :input_width="100"
