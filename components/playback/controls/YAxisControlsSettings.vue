@@ -30,7 +30,7 @@
       />
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
-    <span class="span__y-axis-controls-settings-input-max-units">uV</span>
+    <span class="span__y-axis-controls-settings-input-max-units">µN</span>
     <!-- original mockflow ID: id="cmpDfd4427b907fb9a6aeb301b47d0146569" -->
     <span class="span__y-axis-controls-settings-min-value">Minimum:</span>
     <!-- original mockflow ID: id="cmpD6a9398a35a4e46ab44ef8d7d37256767" -->
@@ -44,7 +44,7 @@
       />
     </div>
     <!-- original mockflow ID: id="cmpD549973a497f2bedf77cd8fd2d19b7948" -->
-    <span class="span__y-axis-controls-settings-input-min-units">uV</span>
+    <span class="span__y-axis-controls-settings-input-min-units">µN</span>
     <div style="top: 309px; left: 0px; position: absolute; z-index: 38">
       <ButtonWidget
         :button_widget_width="298"
