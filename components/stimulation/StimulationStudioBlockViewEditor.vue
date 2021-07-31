@@ -1,69 +1,67 @@
 <template>
-  <div :class="show_confirmation ? 'modal_overlay' : null">
-    <div class="div__BlockViewEditor-background">
-      <div class="div__Tabs-panel">
-        <span
-          :id="'Basic'"
-          :class="active_tab === 'Advanced' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
-          @click="toggle_tab($event.target.id)"
-          >Basic</span
-        >
-        <span
-          :id="'Advanced'"
-          :class="active_tab === 'Basic' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
-          @click="toggle_tab($event.target.id)"
-          >Advanced</span
-        >
-      </div>
-      <div class="div__Editor-background">
-        <div class="div__setting-panel-container">
-          <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
-          <input
-            v-model="protocol_name"
-            class="protocol_input"
-            placeholder="Protocol Name"
-            :disabled="disabled === true"
-            :style="name_validity"
-            @change="check_name_validity($event.target.value)"
+  <div class="div__BlockViewEditor-background">
+    <div class="div__Tabs-panel">
+      <span
+        :id="'Basic'"
+        :class="active_tab === 'Advanced' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
+        @click="toggle_tab($event.target.id)"
+        >Basic</span
+      >
+      <span
+        :id="'Advanced'"
+        :class="active_tab === 'Basic' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
+        @click="toggle_tab($event.target.id)"
+        >Advanced</span
+      >
+    </div>
+    <div class="div__Editor-background">
+      <div class="div__setting-panel-container">
+        <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
+        <input
+          v-model="protocol_name"
+          class="protocol_input"
+          placeholder="Protocol Name"
+          :disabled="disabled === true"
+          :style="name_validity"
+          @change="check_name_validity($event.target.value)"
+        />
+        <span class="error-message">{{ error_message }}</span>
+        <img class="img__pencil-icon" src="/pencil-icon.png" @click="disabled = !disabled" />
+        <div class="div__right-settings-panel">
+          <SmallDropDown
+            :input_height="25"
+            :input_width="190"
+            :options_text="stimulation_types_array"
+            :options_idx="stimulation_type_idx"
+            @selection-changed="handle_stimulation_type"
           />
-          <span class="error-message">{{ error_message }}</span>
-          <img class="img__pencil-icon" src="/pencil-icon.png" @click="disabled = !disabled" />
-          <div class="div__right-settings-panel">
-            <SmallDropDown
-              :input_height="25"
-              :input_width="190"
-              :options_text="stimulation_types_array"
-              :options_idx="stimulation_type_idx"
-              @selection-changed="handle_stimulation_type"
-            />
-            <SmallDropDown
-              :style="'margin-left: 5%;'"
-              :input_height="25"
-              :input_width="155"
-              :options_text="until_options_array"
-              @selection-changed="handle_stop_requirement"
-            />
-            <span class="span__settings-label">every</span>
-            <input
-              v-model="end_delay_duration"
-              class="number_input"
-              placeholder=""
-              @change="handle_repeat_frequency($event.target.value)"
-            />
-            <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash_modal" />
-            <BPopover
-              target="trash_icon"
-              trigger="click"
-              :show.sync="show_confirmation"
-              custom-class="popover_class"
-            >
-              <div class="popover_label">Are you sure?</div>
-              <div class="popover_button_container">
-                <button class="delete_button_container" @click="handle_delete">Delete</button>
-                <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
-              </div>
-            </BPopover>
-          </div>
+          <SmallDropDown
+            :style="'margin-left: 5%;'"
+            :input_height="25"
+            :input_width="155"
+            :options_text="until_options_array"
+            @selection-changed="handle_stop_requirement"
+          />
+          <span class="span__settings-label">every</span>
+          <input
+            v-model="end_delay_duration"
+            class="number_input"
+            placeholder=""
+            @change="handle_repeat_frequency($event.target.value)"
+          />
+          <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash_modal" />
+          <BPopover
+            target="trash_icon"
+            trigger="click"
+            :show.sync="show_confirmation"
+            custom-class="delete_popover_class"
+          >
+            <div class="delete_popover_label">Are you sure?</div>
+            <div class="popover_button_container">
+              <button class="delete_button_container" @click="handle_delete">Delete</button>
+              <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
+            </div>
+          </BPopover>
         </div>
       </div>
     </div>
@@ -226,15 +224,6 @@ export default {
   left: 35px;
   font-family: muli;
 }
-
-.modal_overlay {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background: rgb(0, 0, 0);
-  z-index: 5;
-  opacity: 0.5;
-}
 .error-message {
   color: #bd3532;
   position: absolute;
@@ -244,7 +233,7 @@ export default {
   font-style: italic;
 }
 
-.popover_class {
+.delete_popover_class {
   height: 85px;
   width: 170px;
   font-family: Muli;
@@ -255,7 +244,7 @@ export default {
   border: 1px solid #b7b7b7;
 }
 
-.popover_label {
+.delete_popover_label {
   font-weight: bold;
   padding: 2px 0 10px 37px;
   color: #b7b7b7;

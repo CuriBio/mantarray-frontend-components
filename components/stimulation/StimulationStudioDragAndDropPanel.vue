@@ -93,7 +93,7 @@
         @close="on_modal_close"
       />
     </div>
-    <div v-if="repeat_delay_modal !== null" class="modal-container">
+    <div v-if="repeat_delay_modal !== null" class="modal-container" :style="'top: 200px;'">
       <StimulationStudioRepeatDelayModal
         :delay_open_for_edit="delay_open_for_edit"
         :repeat_idx="repeat_idx"
@@ -362,7 +362,7 @@ export default {
   padding: 0 8px 0 8px;
 }
 .modal-container {
-  left: 36%;
+  left: 33%;
   position: absolute;
   top: 8%;
 }
@@ -414,12 +414,15 @@ export default {
   justify-content: flex-end;
 }
 .modal_overlay {
-  width: 100%;
-  height: 100%;
+  width: 1629px;
+  height: 885px;
   position: absolute;
+  left: 0;
   background: rgb(0, 0, 0);
   z-index: 5;
-  opacity: 0.5;
+  opacity: 0.6;
+  display: flex;
+  justify-content: flex-end;
 }
 .div__scroll-container {
   position: absolute;

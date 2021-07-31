@@ -331,7 +331,7 @@ export default {
   },
 };
 </script>
-<style type="text/css">
+<style type="text/css" scoped>
 .div__playback-desktop-player-controls {
   --span__playback-desktop-player-controls-button--Top: 37px;
   --span__playback-desktop-player-controls-button--LeftmostLeft: 16px;

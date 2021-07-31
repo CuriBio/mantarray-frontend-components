@@ -261,7 +261,7 @@ export default {
   },
 };
 </script>
-<style type="text/css">
+<style type="text/css" scoped>
 .span__playback-y-axis-controls-zoom-label {
   pointer-events: all;
   line-height: 100%;

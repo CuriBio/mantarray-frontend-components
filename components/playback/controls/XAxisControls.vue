@@ -162,7 +162,7 @@ export default {
   },
 };
 </script>
-<style type="text/css">
+<style type="text/css" scoped>
 .div__playback-x-axis-controls {
   height: 45px;
   width: calc(100vw - 353px);
