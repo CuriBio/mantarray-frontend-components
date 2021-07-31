@@ -14,7 +14,7 @@ describe("DistTextValidation", () => {
   });
 });
 describe("TextValidation", () => {
-  test("Given a text validation is for platebarcode, When called toString(), Then return would match the text rule of 'platebarcode' applied", () => {
+  test("Given a text validation is for plate_barcode, When called toString(), Then return would match the text rule of 'plate_barcode' applied", () => {
     const validation = TextValidation_PlateBarcode;
     expect(validation.toString()).toStrictEqual("TextValidation.plate_barcode");
   });
@@ -49,7 +49,7 @@ describe("TextValidation.validate_plate_barcode", () => {
     ["12200440012", "numbers"],
     ["*#200440012", "symbols"],
   ])(
-    "Given a text %s as the platebarcode, When the alphabets of MA, MB or M1 the [input.length = 11] barcode fails the defined criteria with wrong %s, Then validation fails and feedback text is <space>",
+    "Given a text %s as the plate_barcode, When the alphabets of MA, MB or M1 the [input.length = 11] barcode fails the defined criteria with wrong %s, Then validation fails and feedback text is <space>",
     (plate_bar_code, type) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
@@ -61,7 +61,7 @@ describe("TextValidation.validate_plate_barcode", () => {
     ["MA203670012", "367"],
     ["MA209990121", "999"],
   ])(
-    "Given a text %s as the platebarcode, When the  [input.length = 11] values in the index range of [4-6] is  %s fails the defined criteria of DAY range(001 -- 367), Then validation fails and feedback text is <space>",
+    "Given a text %s as the plate_barcode, When the  [input.length = 11] values in the index range of [4-6] is  %s fails the defined criteria of DAY range(001 -- 367), Then validation fails and feedback text is <space>",
     (plate_bar_code, error) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
@@ -79,7 +79,7 @@ describe("TextValidation.validate_plate_barcode", () => {
     ["MA*#300001", "10", "Invalid symbols", " "],
     [null, "0", "its null", " "],
   ])(
-    "Given a text %s as the platebarcode, When the  [input.length = %s] values in the index range of [2-3] is %s fails the defined criteria of YEAR EQUAL 20, Then validation fails and feedback text is <space>",
+    "Given a text %s as the plate_barcode, When the  [input.length = %s] values in the index range of [2-3] is %s fails the defined criteria of YEAR EQUAL 20, Then validation fails and feedback text is <space>",
     (plate_bar_code, len, error, result) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
@@ -92,7 +92,7 @@ describe("TextValidation.validate_plate_barcode", () => {
     ["MA20001 021", "<space>"],
     ["MA20001º21", "scientific symbols"],
   ])(
-    "Given a text %s as the platebarcode with invalid special charcters on the [input.length = 11], When the middle of the charcters [7-till end]  contained %s fails the defined criteria, Then validation fails and feedback text is <space>",
+    "Given a text %s as the plate_barcode with invalid special charcters on the [input.length = 11], When the middle of the charcters [7-till end]  contained %s fails the defined criteria, Then validation fails and feedback text is <space>",
     (plate_bar_code, error) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;
@@ -104,7 +104,7 @@ describe("TextValidation.validate_plate_barcode", () => {
     ["MA20011浩211", "unicode present length 11"],
     ["MA二千万一千〇九", "All unicode"],
   ])(
-    "Given a text %s as the platebarcode with invalid charcters with the [input.length = 11 or 10], When the text has %s fails the the defined criteria, Then validation fails and feedback text is <space>",
+    "Given a text %s as the plate_barcode with invalid charcters with the [input.length = 11 or 10], When the text has %s fails the the defined criteria, Then validation fails and feedback text is <space>",
     (plate_bar_code, error) => {
       const text = plate_bar_code;
       const TestPlateBarCode = TextValidation_PlateBarcode;

@@ -1,6 +1,13 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+
+0.4.4 (2021-08-02)
+------------------
+
+- Added support for entering barcodes with "ML" header.
+
+
 0.4.3 (2021-07-28)
 ------------------
 
@@ -58,8 +65,8 @@ Changelog for Mantarray Frontend Components
 0.1.10 (2021-01-14)
 ------------------
 
-- Added back the capability of manual platebarcode entry and validation rules.
-- Included additional E2E VRT testcases of platebarcode entry scanner and manual entry.
+- Added back the capability of manual plate barcode entry and validation rules.
+- Included additional E2E VRT testcases of plate barcode entry scanner and manual entry.
 
 0.1.9 (2021-01-06)
 ------------------
