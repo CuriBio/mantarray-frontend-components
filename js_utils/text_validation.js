@@ -124,15 +124,11 @@ export class TextValidation {
   /**
    * Returns the feedback text for the plate barcode validation
    *
-   * @param  {string}  barcode The text on which the validation rules are verified
-   * @return {string} The string is either empty on valid and <space> on invalid
+   * @param  {string}  barcode The barcode string to validate
+   * @return {string} "" if barcode is valid, " " otherwise
    *
    */
   validate_plate_barcode(barcode) {
-    // TODOs tanner
-    // - make sure tests with old barcodes still pass
-    // - add tests for new barcodes
-    // - make sure to test ""
     if (barcode == null) {
       return " ";
     }

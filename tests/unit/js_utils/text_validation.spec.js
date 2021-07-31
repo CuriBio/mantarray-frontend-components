@@ -69,7 +69,7 @@ describe("TextValidation.validate_plate_barcode with old barcodes", () => {
     }
   );
   test.each([
-    // TODO separate out these tests
+    // TODO separate out these tests by the following categories in comments
     // invalid chars
     ["MA 13000012", "11", "<space>", " "],
     ["MA  300000", "10", "2<space>", " "],
@@ -78,15 +78,16 @@ describe("TextValidation.validate_plate_barcode with old barcodes", () => {
     ["MBFF0440991", "11", "YEAR is SET AS FF", " "],
     // bad len
     ["MB2204409", "9", "Length less than 9", " "],
+    ["", "0", "Empty", " "],
+    [null, "null", "null", " "],
+    [undefined, "undefined", "undefined", " "],
     ["MB2204409913", "12", "Length more than 11", " "],
-    [null, "0", "its null", " "],
     // valid year barcodes
     ["MB190440991", "11", "YEAR is SET AS 19", ""],
     ["MB210440991", "11", "YEAR is SET AS 21", ""],
     ["MB100440991", "11", "YEAR is SET AS 10", ""],
   ])(
     "When validating barcode: %s with length %s and characters: '%s' present, Then ' ' is returned",
-    // Given a text %s as the plate_barcode, When the  [input.length = %s] values in the index range of [2-3] is %s fails the defined criteria of YEAR EQUAL 20, Then validation fails and feedback text is <space>",
     (plate_barcode, len, error, result) => {
       const text = plate_barcode;
       const TestPlateBarCode = TextValidation_PlateBarcode;

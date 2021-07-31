@@ -100,6 +100,7 @@ describe("PlateBarcode.vue", () => {
     expect(wrapper.find("input").text()).toEqual("");
   });
   test.each([
+    ["", "error due to empty string", null],
     [
       "AB200440012",
       "error not matching MA MB MD",
@@ -115,10 +116,10 @@ describe("PlateBarcode.vue", () => {
     ["MB190440991", "year 19 now allowed", "MB190440991"],
     ["MB210440991", "year 21 now allowed", "MB210440991"],
     ["MB100440991", "year 10 now allowed", "MB100440991"],
-    ["MA*#300001", "error as *# asterisk", null],
-    ["MA20222111*", "error as * asterisk", null],
-    ["MA20010*#12", "error as *# asterisk", null],
-    ["MA20001 021", "error due <space> in day", null],
+    ["MA*#300001", "error with invalids chars '*#'", null],
+    ["MA20222111*", "error with invalids chars '*'", null],
+    ["MA20010*#12", "error with invalids chars '*#'", null],
+    ["MA20001 021", "error due to <space> in day", null],
     ["MA20001º21", "error due to symbol º", null],
     ["MA20210न21", "error due to unicode", null],
     ["MA20011浩211", "error due to unicode", null],
@@ -129,6 +130,7 @@ describe("PlateBarcode.vue", () => {
     ["MA20**#*", "error due to not matching length (10,11)", null],
     ["MA20044001", "All criteria matches", "MA20044001"],
     ["M120044099", "error as M1 is disallowed", null],
+    ["MD20044099", "error as MD is disallowed", null],
     ["ME20044099", "All criteria matches", "ME20044099"], // new rule allow ME
     // New barcode format (currently only ML header)
     ["ML34567890123", "error due tolength over 12", null],
@@ -150,7 +152,7 @@ describe("PlateBarcode.vue", () => {
     ["ML2021366144", "julian data '366'", "ML2021366144"],
   ])(
     "Given that barcode entry is in manual mode and a barcode with text %s is entered, When validation rule validate_plate_barcode is given barcode with %s, Then %s is stored in Vuex playback.barcode and flask.barcode_manual_mode is set to true",
-    async (platecode, reason, store_data) => {
+    async (barcode, reason, store_data) => {
       const spied_text_validator = jest.spyOn(TextValidation.prototype, "validate_plate_barcode");
 
       store.commit("flask/set_barcode_manual_mode", true);
@@ -168,8 +170,8 @@ describe("PlateBarcode.vue", () => {
       await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-plate-barcode'
       // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
       const input_id = wrapper.find("#plateinfo");
-      wrapper.find("input").setValue(platecode);
-      expect(spied_text_validator).toHaveBeenCalledWith(platecode);
+      wrapper.find("input").setValue(barcode);
+      expect(spied_text_validator).toHaveBeenCalledWith(barcode);
       expect(store.state.playback.barcode).toEqual(store_data);
       // check if the flask barcode_manual_mode is set to true.
       expect(store.state.flask.barcode_manual_mode).toBe(true);
@@ -239,7 +241,7 @@ describe("PlateBarcode.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     expect(store.state.playback.barcode).toBeNull();
   });
-  test("Set a proper platecode [input.length = 11] has and validate that no the red squiggle line is not present", async () => {
+  test("Set a proper plate barcode [input.length = 11] has and validate that no the red squiggle line is not present", async () => {
     wrapper.find("input").setValue("M120044099");
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find("input").html()).toContain('spellcheck="false"');
