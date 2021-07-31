@@ -1,9 +1,16 @@
 "use strict";
 
+// dependencies
+const uuidBase62 = require("@tofandel/uuid-base62"); // External library depenency of @tofandel/uuid-base62
+/* eslint-disable new-cap */
+uuidBase62.customBase = new uuidBase62.baseX("23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"); // Custom Base 57 defined as per requirement.
+/* eslint-enable */
+
+// Helper function for validate_plate_barcode
 const _validate_old_barcode = function (barcode) {
   const plate_barcode_len = barcode.length;
   // check that barcode is a valid length
-  if (plate_barcode_len < 10 || plate_barcode_len >= 12) {
+  if (plate_barcode_len < 10 || plate_barcode_len > 11) {
     return " ";
   }
   const start_code = barcode.slice(0, 2); // Tanner (7/30/21): "old" barcodes with the same format are MA, MB, ME
@@ -17,13 +24,7 @@ const _validate_old_barcode = function (barcode) {
       return " ";
     }
   }
-  // check year is in range 00 to 99   [2 characters]
-  const year_code = barcode.slice(2, 4);
-  const year = parseInt(year_code);
-  if (year < 0 || year > 99) {
-    return " ";
-  }
-  // check day code is of range 001 to 366 [3 characters]
+  // check julian data is in range 001 to 366 [3 characters]
   const day_code = barcode.slice(4, 7);
   const day = parseInt(day_code);
   if (day < 1 || day > 366) {
@@ -32,6 +33,7 @@ const _validate_old_barcode = function (barcode) {
   return "";
 };
 
+// Helper function for validate_plate_barcode
 const _validate_new_barcode = function (barcode) {
   const plate_barcode_len = barcode.length;
   // check that barcode is a valid length
@@ -46,19 +48,19 @@ const _validate_new_barcode = function (barcode) {
       return " ";
     }
   }
-  // check year is at least 2021   [2 characters]
+  // check year is at least 2021 [4 characters]
   const year_code = barcode.slice(2, 6);
   const year = parseInt(year_code);
   if (year < 2021) {
     return " ";
   }
-  // check day code is of range 001 to 366 [3 characters]
+  // check julian data is in range 001 to 366 [3 characters]
   const day_code = barcode.slice(6, 9);
   const day = parseInt(day_code);
   if (day < 1 || day > 366) {
     return " ";
   }
-  // check kit ID
+  // check kit ID [3 characters]
   const kit_id_remainder = parseInt(barcode.slice(9)) % 4;
   // Tanner (7/30/21): currently this number must have a remainder of 0 or 1 when divided by 4
   if (kit_id_remainder > 1) {
@@ -67,17 +69,12 @@ const _validate_new_barcode = function (barcode) {
   return "";
 };
 
-// dependencies
-const uuidBase62 = require("@tofandel/uuid-base62"); // External library depenency of @tofandel/uuid-base62
-/* eslint-disable new-cap */
-uuidBase62.customBase = new uuidBase62.baseX("23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"); // Custom Base 57 defined as per requirement.
-/* eslint-enable */
 /** Allows text validation for the pre-defined criteria rules applied on the text by definitions */
 export class TextValidation {
   /**
    * Take the rule name and set the value for validation of strings been verfied
    *
-   * @param {string} validation_rules - The string name  of the validation rules been activated
+   * @param {string}  validation_rules - The string name  of the validation rules been activated
    */
   constructor(validation_rules) {
     this.rule = validation_rules;
@@ -93,7 +90,7 @@ export class TextValidation {
   /**
    * Returns the feedback text with either value of "" or text with reason for failure
    *
-   * @param  {text}  text The text on which the validation rules are verified
+   * @param  {string}  text The text on which the validation rules are verified
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
   validate(text) {
@@ -127,8 +124,8 @@ export class TextValidation {
   /**
    * Returns the feedback text for the plate barcode validation
    *
-   * @param  {text}   barcode The text on which the validation rules are verified
-   * @return {string}  The string is either empty on valid and <space> on invalid
+   * @param  {string}  barcode The text on which the validation rules are verified
+   * @return {string} The string is either empty on valid and <space> on invalid
    *
    */
   validate_plate_barcode(barcode) {
@@ -144,8 +141,8 @@ export class TextValidation {
   /**
    * Returns the feedback text for the uuidBase57 encoding validation
    *
-   * @param  {uuidtext}   uuidtext The uuidtext on which the validation rules are verified
-   * @return {string}  The string is either empty on valid or invalid text
+   * @param  {string}  uuidtext The uuidtext on which the validation rules are verified
+   * @return {string} The string is either empty on valid or invalid text
    *
    */
   validate_uuidBase_fiftyseven_encode(uuidtext) {
@@ -175,66 +172,43 @@ export class TextValidation {
   /**
    * Returns the feedback text for the uuidBase57 encoding validation
    *
-   * @param  {len}    len The len contains the length of uuidbase57 encoded data
-   * @param  {source} source The source identifies first level identified validation and errors.
-   * @param  {uuidtext} uuidtext The uuidtext on which the validation rules are verified
-   * @return {string}  The string is either empty on valid or invalid text with specific information.
+   * @param  {number}  len The len contains the length of uuidbase57 encoded data
+   * @param  {string}  source The source identifies first level identified validation and errors.
+   * @param  {string}  uuidtext The uuidtext on which the validation rules are verified
+   * @return {string} The string is either empty on valid or invalid text with specific information.
    *
    */
   uuid_errorfinder(len, source, uuidtext) {
     let feedback_text = "";
     let invalid_builder = "";
-    let error = false;
     for (let i = 0; i < uuidtext.length; i++) {
       const scan_ascii = uuidtext.charCodeAt(i);
       if (scan_ascii === 48) {
-        invalid_builder = invalid_builder + "0";
-        error = true;
-      }
-      if (scan_ascii === 49) {
-        invalid_builder = invalid_builder + "1";
-        error = true;
-      }
-      if (scan_ascii === 73) {
-        invalid_builder = invalid_builder + "I";
-        error = true;
-      }
-      if (scan_ascii === 108) {
-        invalid_builder = invalid_builder + "l";
-        error = true;
-      }
-      if (scan_ascii === 79) {
-        invalid_builder = invalid_builder + "O";
-        error = true;
-      }
-      if (error === true) {
-        invalid_builder = invalid_builder + ",";
-        error = false;
+        invalid_builder += "0,";
+      } else if (scan_ascii === 49) {
+        invalid_builder += "1,";
+      } else if (scan_ascii === 73) {
+        invalid_builder += "I,";
+      } else if (scan_ascii === 79) {
+        invalid_builder += "O,";
+      } else if (scan_ascii === 108) {
+        invalid_builder += "l,";
       }
     }
-    if (len < 22) {
-      if (len == 0) {
-        feedback_text = "This field is required";
-      } else {
-        feedback_text = "The entered ID is " + len + " characters. All valid IDs are exactly 22 characters.";
-      }
-    } else {
-      if (invalid_builder != "") {
-        feedback_text = "The entered ID has an invalid character " + invalid_builder;
-      } else {
-        if (source == "error") {
-          feedback_text = "Entry permitted for Alphanumeric only";
-        } else {
-          if (source == "encoderror") {
-            feedback_text = "This combination of 22 characters is invalid encoded id";
-          } else {
-            feedback_text = "";
-          }
-        }
-      }
-    }
-    if (len > 22) {
+    if (len == 0) {
+      feedback_text = "This field is required";
+    } else if (len < 22) {
       feedback_text = "The entered ID is " + len + " characters. All valid IDs are exactly 22 characters.";
+    } else if (len > 22) {
+      feedback_text = "The entered ID is " + len + " characters. All valid IDs are exactly 22 characters.";
+    } else if (invalid_builder != "") {
+      feedback_text = "The entered ID has an invalid character " + invalid_builder;
+    } else if (source == "error") {
+      feedback_text = "Entry permitted for Alphanumeric only";
+    } else if (source == "encoderror") {
+      feedback_text = "This combination of 22 characters is invalid encoded id";
+    } else {
+      feedback_text = "";
     }
     return feedback_text;
   }
