@@ -119,32 +119,6 @@ describe("store/stimulation", () => {
       const default_type = store.getters["stimulation/get_next_protocol"];
       expect(default_type).toStrictEqual(expected_assignment);
     });
-
-    test("When requesting the time unit, Then it should return what user has selected in dropdown", async () => {
-      const seconds = "Time (s)";
-      const milliseconds = "Time (ms)";
-      const hours = "Time (hr)";
-      const minutes = "Time (min)";
-
-      const default_unit = store.getters["stimulation/get_time_unit"];
-      expect(default_unit).toBe(seconds);
-
-      store.state.stimulation.protocol_editor.time_unit = "milliseconds";
-      const ms_unit = store.getters["stimulation/get_time_unit"];
-      expect(ms_unit).toBe(milliseconds);
-
-      store.state.stimulation.protocol_editor.time_unit = "seconds";
-      const s_unit = store.getters["stimulation/get_time_unit"];
-      expect(s_unit).toBe(seconds);
-
-      store.state.stimulation.protocol_editor.time_unit = "hours";
-      const h_unit = store.getters["stimulation/get_time_unit"];
-      expect(h_unit).toBe(hours);
-
-      store.state.stimulation.protocol_editor.time_unit = "minutes";
-      const m_unit = store.getters["stimulation/get_time_unit"];
-      expect(m_unit).toBe(minutes);
-    });
   });
   describe("stimulation/mutations/actions", () => {
     test("When stimulation store is initialized, Then default selected wells should be an empty array", () => {
@@ -305,14 +279,18 @@ describe("store/stimulation", () => {
       expect(repeat_colors).toStrictEqual(colors);
     });
 
-    test("When a user wants to save the new protocol by clicking on Save Changes button, Then the new protocol will be commited to state", async () => {
+    test("When a user wants to save the new protocol by clicking on Save Changes button, Then the new protocol will be committed to state", async () => {
       const { current_assignment, protocol_editor } = store.state.stimulation;
-      current_assignment.letter = "C";
+      current_assignment.letter = "B";
       current_assignment.color = "#000000";
-      protocol_editor.name = "test";
+      protocol_editor.name = "mock_protocol";
 
-      const expected_protocol = { letter: "C", color: "#000000", label: "test", protocol: protocol_editor };
-
+      const expected_protocol = {
+        letter: "B",
+        color: "#000000",
+        label: "mock_protocol",
+        protocol: protocol_editor,
+      };
       await store.dispatch("stimulation/add_saved_protocol");
       expect(store.state.stimulation.protocol_list[2]).toStrictEqual(expected_protocol);
     });
@@ -392,7 +370,7 @@ describe("store/stimulation", () => {
         protocol: [
           {
             stimulation_type: "C",
-            well_number: "A02",
+            well_number: "A2",
             pulses: [
               {
                 phase_one_duration: 1500000,

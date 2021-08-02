@@ -27,7 +27,7 @@ describe("BarcodeEditDialog.vue", () => {
     const target_span = wrapper.find(".span__barcode-edit-dialog-label");
     expect(target_span.text()).toStrictEqual("Warning!");
   });
-  test("Given that BarcodeEditDialog is active, When the lifecyle hook mounted is created, Then dialog message and option to switch over to manual mode for platebarcode is displayed", async () => {
+  test("Given that BarcodeEditDialog is active, When the lifecyle hook mounted is created, Then dialog message and option to switch over to manual mode for plate_barcode is displayed", async () => {
     wrapper = mount(ComponentToTest, {
       localVue,
     });
@@ -49,7 +49,7 @@ describe("BarcodeEditDialog.vue", () => {
     const cancel_yes_btn = wrapper.findAll(".span__button_label");
     await cancel_yes_btn.at(1).trigger("click");
     await wrapper.vm.$nextTick();
-    const yes_btn_events = wrapper.emitted("yes-platebarcode");
+    const yes_btn_events = wrapper.emitted("yes-plate-barcode");
     expect(yes_btn_events).toHaveLength(1);
     expect(yes_btn_events[0]).toStrictEqual([]);
   });
@@ -61,7 +61,7 @@ describe("BarcodeEditDialog.vue", () => {
     const cancel_yes_btn = wrapper.findAll(".span__button_label");
     await cancel_yes_btn.at(0).trigger("click");
     await wrapper.vm.$nextTick();
-    const yes_btn_events = wrapper.emitted("cancel-platebarcode");
+    const yes_btn_events = wrapper.emitted("cancel-plate-barcode");
     expect(yes_btn_events).toHaveLength(1);
     expect(yes_btn_events[0]).toStrictEqual([]);
   });

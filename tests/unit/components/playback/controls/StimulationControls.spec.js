@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import { createLocalVue, mount } from "@vue/test-utils";
-import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
+import StimulationStudioControls from "@/components/playback/controls/StimulationStudioControls.vue";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -21,9 +21,9 @@ describe("store/stimulation", () => {
     jest.clearAllMocks();
   });
 
-  describe("StimulationControls", () => {
-    test("When StimulationControls mounts, Then the initial play state should be false", () => {
-      const wrapper = mount(StimulationControls, {
+  describe("StimulationStudioControls", () => {
+    test("When StimulationStudioControls mounts, Then the initial play state should be false", () => {
+      const wrapper = mount(StimulationStudioControls, {
         store,
         localVue,
       });
@@ -32,8 +32,8 @@ describe("store/stimulation", () => {
     });
 
     test("When exiting instance, Then instance is effectively destroyed", async () => {
-      const destroyed_spy = jest.spyOn(StimulationControls, "beforeDestroy");
-      const wrapper = mount(StimulationControls, {
+      const destroyed_spy = jest.spyOn(StimulationStudioControls, "beforeDestroy");
+      const wrapper = mount(StimulationStudioControls, {
         store,
         localVue,
       });
@@ -44,7 +44,7 @@ describe("store/stimulation", () => {
       jest
         .spyOn(store, "dispatch")
         .mockImplementation(async () => await store.commit("stimulation/set_stim_status", false));
-      const wrapper = mount(StimulationControls, {
+      const wrapper = mount(StimulationStudioControls, {
         store,
         localVue,
       });
@@ -59,7 +59,7 @@ describe("store/stimulation", () => {
         .spyOn(store, "dispatch")
         .mockImplementation(async () => await store.commit("stimulation/set_stim_status", true));
 
-      const wrapper = mount(StimulationControls, {
+      const wrapper = mount(StimulationStudioControls, {
         store,
         localVue,
       });

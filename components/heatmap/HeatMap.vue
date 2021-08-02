@@ -1,14 +1,14 @@
 <template>
   <div>
     <!--  original mockflow ID:  cmpDf4f7dd55b2e166cb0d0e843ee15b7aad -->
-    <div class="div__heatmap-layout-background"></div>
+    <div class="div__heatmap-layout-background" />
 
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
     <div class="div__heatmap-layout-twitch-metric-label">{{ display_option }} ({{ unit }})</div>
 
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
-      <PlateHeatMap :platecolor="passing_plate_colors"></PlateHeatMap>
+      <PlateHeatMap :platecolor="passing_plate_colors" />
     </div>
 
     <!-- Tanner (7/28/21): Could probably combine the following 4 components -->
@@ -16,7 +16,7 @@
     <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">No Wells Selected</div>
 
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
-    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value"></div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value" />
 
     <!-- original mockflow ID: cmpD0f9518f2e3b32a8fd2907a6c9167ed79 -->
     <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-well-label">
@@ -30,24 +30,24 @@
 
     <!-- original mockflow ID: cmpDb59694a85eb967571cf98a41b5fa7481 -->
     <div class="div__heatmap-layout-heatmap-colorbar-container">
-      <GradientBar :gradient_height="481" :gradient_width="40" :units="unit"></GradientBar>
+      <GradientBar :gradient_height="481" :gradient_width="40" :units="unit" />
     </div>
 
     <!-- original mockflow ID: cmpDceaaf3ae28ae1a3394f714f82cb8848d -->
-    <div class="div__heatmap-layout-heatmap-settings-panel"></div>
+    <div class="div__heatmap-layout-heatmap-settings-panel" />
 
     <!-- original mockflow ID: cmpD64bd4f78c20868d7dd5a9b4aa39bf217 -->
     <span class="span__heatmap-layout-heatmap-settings-label">Heatmap Settings</span>
 
     <!-- original mockflow ID: cmpD56369ad2e65893ae5ca594f14a64e378 -->
-    <canvas class="canvas__heatmap-settings-title-seperator"> </canvas>
+    <canvas class="canvas__heatmap-settings-title-seperator" />
 
     <!-- original mockflow ID: cmpD9c0a6e873d03a7f83e8a68941610e993 -->
     <span class="span__heatmap-layout-heatmap-scale-label">Scale Bar</span>
 
     <!-- original mockflow ID:  cmpD5cceb38a3af00a6bd7589d883fa87688 -->
     <div class="div__heatmap-layout-checkbox-container">
-      <CheckBoxWidget :checkbox_options="option" @checkbox-selected="auto_scale"></CheckBoxWidget>
+      <CheckBoxWidget :checkbox_options="option" @checkbox-selected="auto_scale" />
     </div>
 
     <!-- original mockflow ID:  cmpD8a25d29c92a6f84cc071bcf466ca36ce -->
@@ -63,7 +63,7 @@
         :input_width="105"
         :dom_id_suffix="'heatmap-max'"
         @update:value="on_update_maximum($event)"
-      ></InputWidget>
+      />
     </div>
 
     <!-- original mockflow ID:  cmpDc06480c6344db8d23dca86a4c1e88ab4 -->
@@ -77,11 +77,11 @@
         :input_width="105"
         :dom_id_suffix="'heatmap-min'"
         @update:value="on_update_minimum($event)"
-      ></InputWidget>
+      />
     </div>
 
     <!-- original mockflow ID:  cmpD8d0ef3020c7613af7ae63fa5722de759  -->
-    <canvas class="canvas__heatmap-settings-scale-seperator" width="212" height="2"> </canvas>
+    <canvas class="canvas__heatmap-settings-scale-seperator" width="212" height="2" />
 
     <!-- original mockflow ID: cmpD4146e3d532d7eb0719ee0d6e06485940 -->
     <span class="span__heatmap-layout-display-label">Display</span>
@@ -101,7 +101,7 @@
     </div>
 
     <!-- original mockflow ID: cmpDc08190eb24c68e02c278bde19882becb -->
-    <canvas class="canvas__heatmap-settings-color-scheme-seperator" width="212" height="2"> </canvas>
+    <canvas class="canvas__heatmap-settings-color-scheme-seperator" width="212" height="2" />
 
     <!-- original mockflow ID: cmpD03029ea224291e6817f40d3ac9f24b19 -->
     <span class="span__heatmap-settings-color-scheme-label"> Color Scheme</span>
@@ -110,7 +110,7 @@
         :radio_buttons="gradient_theme_names"
         :pre_selected="0"
         @radio-btn-selected="radio_option_selected"
-      ></RadioButtonWidget>
+      />
     </div>
 
     <!-- orginal mockflow ID: cmpD5bc3214687200b065320c06b0a15e013 -->
@@ -126,7 +126,7 @@
       ]"
     >
       <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_cvs -->
-      <canvas class="canvas__heatmap-settings-apply-btn-container"> </canvas>
+      <canvas class="canvas__heatmap-settings-apply-btn-container" />
 
       <!-- original mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_txt -->
       <span
@@ -145,7 +145,7 @@
     <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300 -->
     <div class="div__heatmap-settings-reset-btn-container">
       <!-- original mockflow ID: cmpD2f909255bf15b8f4daa88ed03c6a8300_cvs -->
-      <canvas class="canvas__heatmap-settings-reset-btn-container"></canvas>
+      <canvas class="canvas__heatmap-settings-reset-btn-container" />
 
       <!-- original mockflow ID : cmpD2f909255bf15b8f4daa88ed03c6a8300_txt -->
       <span class="span__heatmap-settings-reset-btn-label" @click="reset_heatmap_settings"> Reset </span>
@@ -376,10 +376,10 @@ export default {
   margin: 0px;
   background: rgb(0, 0, 0);
   position: absolute;
-  width: 1630px;
+  width: 1629px;
   height: 885px;
   top: 0px;
-  left: 1px;
+  left: 0px;
   visibility: visible;
   border: 0px none rgb(0, 0, 0);
   border-radius: 0px;
@@ -558,7 +558,7 @@ export default {
   width: 300px;
   height: 885px;
   top: 0px;
-  left: 1330px;
+  left: 1331px;
   visibility: visible;
   border: 0px none rgb(0, 0, 0);
   border-radius: 0px;
@@ -610,7 +610,7 @@ export default {
   width: 300px;
   height: 30px;
   top: 69px;
-  left: 1330px;
+  left: 1331px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -743,7 +743,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 301px;
+  width: 300px;
   height: 30px;
   top: 268px;
   left: 1331px;
@@ -792,7 +792,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 301px;
+  width: 300px;
   height: 30px;
   top: 382px;
   left: 1331px;

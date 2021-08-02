@@ -1,71 +1,67 @@
 <template>
-  <div :class="show_confirmation ? 'modal_overlay' : null">
-    <div class="div__BlockViewEditor-background">
-      <div class="div__Tabs-panel">
-        <span
-          :id="'Basic'"
-          :class="active_tab === 'Advanced' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
-          @click="toggle_tab($event.target.id)"
-          >Basic</span
-        >
-        <span
-          :id="'Advanced'"
-          :class="active_tab === 'Basic' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
-          @click="toggle_tab($event.target.id)"
-          >Advanced</span
-        >
-      </div>
-      <div class="div__Editor-background">
-        <div class="div__setting-panel-container">
-          <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
-          <input
-            v-model="protocol_name"
-            class="protocol_input"
-            placeholder="Protocol Name"
-            :disabled="disabled === true"
-            :style="name_validity"
-            @change="check_name_validity($event.target.value)"
+  <div class="div__BlockViewEditor-background">
+    <div class="div__Tabs-panel">
+      <span
+        :id="'Basic'"
+        :class="active_tab === 'Advanced' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
+        @click="toggle_tab($event.target.id)"
+        >Basic</span
+      >
+      <span
+        :id="'Advanced'"
+        :class="active_tab === 'Basic' ? 'span__Inactive-Tab-labels' : 'span__Active-Tab-label'"
+        @click="toggle_tab($event.target.id)"
+        >Advanced</span
+      >
+    </div>
+    <div class="div__Editor-background">
+      <div class="div__setting-panel-container">
+        <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
+        <input
+          v-model="protocol_name"
+          class="protocol_input"
+          placeholder="Protocol Name"
+          :disabled="disabled === true"
+          :style="name_validity"
+          @change="check_name_validity($event.target.value)"
+        />
+        <span class="error-message">{{ error_message }}</span>
+        <img class="img__pencil-icon" src="/pencil-icon.png" @click="disabled = !disabled" />
+        <div class="div__right-settings-panel">
+          <SmallDropDown
+            :input_height="25"
+            :input_width="190"
+            :options_text="stimulation_types_array"
+            :options_idx="stimulation_type_idx"
+            @selection-changed="handle_stimulation_type"
           />
-          <span class="error-message">{{ error_message }}</span>
-          <img class="img__pencil-icon" src="/pencil-icon.png" @click="disabled = !disabled" />
-          <div class="div__right-settings-panel">
-            <SmallDropDown
-              :input_height="25"
-              :input_width="190"
-              :options_text="stimulation_types_array"
-              :options_idx="stimulation_type_idx"
-              @selection-changed="handle_stimulation_type"
-            />
-            <SmallDropDown
-              :style="'margin-left: 5%;'"
-              :input_height="25"
-              :input_width="155"
-              :options_text="until_options_array"
-              @selection-changed="handle_stop_requirement"
-            />
-            <span class="span__settings-label">every</span>
-            <input
-              v-model="end_delay_duration"
-              class="number_input"
-              placeholder=""
-              @change="handle_repeat_frequency($event.target.value)"
-            />
-
-            <!-- <canvas class="canvas__separator" /> -->
-            <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash()" />
-            <BPopover
-              target="trash_icon"
-              trigger="click"
-              :show.sync="show_confirmation"
-              custom-class="popover_class"
-            >
-              <div class="popover_label">Are you sure?</div>
-              <div class="popover_button_container">
-                <button class="delete_button_container" @click="handle_delete()">Delete</button>
-                <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
-              </div>
-            </BPopover>
-          </div>
+          <SmallDropDown
+            :style="'margin-left: 5%;'"
+            :input_height="25"
+            :input_width="155"
+            :options_text="until_options_array"
+            @selection-changed="handle_stop_requirement"
+          />
+          <span class="span__settings-label">every</span>
+          <input
+            v-model="end_delay_duration"
+            class="number_input"
+            placeholder=""
+            @change="handle_repeat_frequency($event.target.value)"
+          />
+          <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash_modal" />
+          <BPopover
+            target="trash_icon"
+            trigger="click"
+            :show.sync="show_confirmation"
+            custom-class="delete_popover_class"
+          >
+            <div class="delete_popover_label">Are you sure?</div>
+            <div class="popover_button_container">
+              <button class="delete_button_container" @click="handle_delete">Delete</button>
+              <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
+            </div>
+          </BPopover>
         </div>
       </div>
     </div>
@@ -93,7 +89,7 @@ Vue.component("BPopover", BPopover);
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
  * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
- * @vue-event {Event} handle_trash - Toggle view of delete popover on trash icon
+ * @vue-event {Event} handle_trash_modal - Toggle view of delete popover on trash icon
  * @vue-event {Event} toggle_tab - Toggles which tab is active
  * @vue-event {Event} handle_delete - Confirms and commits the deletion of protocol to state
  * @vue-event {Event} handle_stimulation_type - Commits the new selected stimulation type to state
@@ -179,7 +175,7 @@ export default {
     toggle_tab(tab) {
       tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");
     },
-    handle_trash() {
+    handle_trash_modal() {
       this.show_confirmation = !this.show_confirmation;
     },
     handle_delete() {
@@ -191,6 +187,7 @@ export default {
       this.set_stimulation_type(type);
     },
     handle_stop_requirement(idx) {
+      // eventually handle in state, unsure yet how this is used
       const requirement = this.until_options_array[idx];
       this.stop_requirement = requirement;
     },
@@ -202,12 +199,14 @@ export default {
       const matched_names = this.protocol_list.filter((protocol) => {
         return protocol.label === input;
       });
-      if (matched_names.length === 0) {
+      if (input === "") {
+        this.name_validity = "";
+        this.error_message = "";
+      } else if (matched_names.length === 0 && input !== "") {
         this.name_validity = "border: 1px solid #19ac8a";
         this.error_message = "";
         this.set_protocol_name(input);
-      }
-      if (matched_names.length > 0) {
+      } else if (matched_names.length > 0) {
         this.name_validity = "border: 1px solid #bd3532";
         this.error_message = "*Protocol name already exists";
       }
@@ -218,22 +217,12 @@ export default {
 <style scoped>
 .div__BlockViewEditor-background {
   background: rgb(0, 0, 0);
-  position: absolute;
+  position: relative;
   border-radius: 10px;
-  width: 60%;
-  height: 24%;
-  top: 41%;
-  left: 20%;
-  font-family: muli;
-}
-
-.modal_overlay {
-  width: 100%;
+  width: 90%;
   height: 100%;
-  position: absolute;
-  background: rgb(0, 0, 0);
-  z-index: 5;
-  opacity: 0.5;
+  left: 35px;
+  font-family: muli;
 }
 .error-message {
   color: #bd3532;
@@ -244,7 +233,7 @@ export default {
   font-style: italic;
 }
 
-.popover_class {
+.delete_popover_class {
   height: 85px;
   width: 170px;
   font-family: Muli;
@@ -255,7 +244,7 @@ export default {
   border: 1px solid #b7b7b7;
 }
 
-.popover_label {
+.delete_popover_label {
   font-weight: bold;
   padding: 2px 0 10px 37px;
   color: #b7b7b7;
@@ -321,7 +310,7 @@ img:hover {
   opacity: 0.6;
 }
 .img__trash-icon {
-  margin-left: 16%;
+  margin-left: 11%;
   padding-top: 4px;
 }
 .div__right-settings-panel {
@@ -334,7 +323,7 @@ img:hover {
 }
 .number_input {
   background: #1c1c1c;
-  height: 26px;
+  height: 25.5px;
   width: 40px;
   border: none;
   color: #b7b7b7;
@@ -373,10 +362,9 @@ img:hover {
 }
 .div__Editor-background {
   transform: rotate(0deg);
-  box-sizing: border-box;
   background: rgb(17, 17, 17);
-  width: 100%;
-  height: 82%;
+  width: 110%;
+  height: 92%;
 }
 .div__Tabs-panel {
   background: rgb(17, 17, 17);

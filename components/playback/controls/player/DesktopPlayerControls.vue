@@ -1,6 +1,6 @@
 <template>
   <div class="div__playback-desktop-player-controls">
-    <span class="span__playback-desktop-player-controls-text">Record Options:</span>
+    <span class="span__playback-desktop-player-controls-text">Record Options</span>
     <div
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
     >
@@ -337,7 +337,7 @@ export default {
   --span__playback-desktop-player-controls-button--LeftmostLeft: 16px;
   --span__playback-desktop-player-controls-button--LeftSeparation: 55.5px;
   height: 81px;
-  width: 288px;
+  width: 287px;
   top: 0px;
   left: 0px;
   position: absolute;

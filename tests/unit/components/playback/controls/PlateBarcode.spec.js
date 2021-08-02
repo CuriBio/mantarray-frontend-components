@@ -100,41 +100,60 @@ describe("PlateBarcode.vue", () => {
     expect(wrapper.find("input").text()).toEqual("");
   });
   test.each([
+    ["", "error due to empty string", null],
     [
       "AB200440012",
-      "validate_plate_barcode",
       "error not matching MA MB MD",
       null, //  vuex value
     ],
-    ["12200440012", "validate_plate_barcode", "error not matching MA MB MD", null],
-    ["*#200440012", "validate_plate_barcode", "error not matching MA MB MD", null],
-    ["MA200000012", "validate_plate_barcode", "error as day is 0", null],
-    ["MA203670012", "validate_plate_barcode", "error as day is 367", null],
-    ["MA209990121", "validate_plate_barcode", "error as day is 999", null],
-    ["MA 13000012", "validate_plate_barcode", "error due to <space>", null],
-    ["MA  300000", "validate_plate_barcode", "error due to 2<space>", null],
-    ["MB190440991", "validate_plate_barcode", "year 19 now allowed", "MB190440991"],
-    ["MB210440991", "validate_plate_barcode", "year 21 now allowed", "MB210440991"],
-    ["MB100440991", "validate_plate_barcode", "year 10 now allowed", "MB100440991"],
-    ["MA*#300001", "validate_plate_barcode", "error as *# asterisk", null],
-    ["MA20222111*", "validate_plate_barcode", "error as * asterisk", null],
-    ["MA20010*#12", "validate_plate_barcode", "error as *# asterisk", null],
-    ["MA20001 021", "validate_plate_barcode", "error due <space> in day", null],
-    ["MA20001º21", "validate_plate_barcode", "error due to symbol º", null],
-    ["MA20210न21", "validate_plate_barcode", "error due to unicode", null],
-    ["MA20011浩211", "validate_plate_barcode", "error due to unicode", null],
-    ["MA二千万一千〇九", "validate_plate_barcode", "error due to all unicode", null],
-    ["MA", "validate_plate_barcode", "error due to not matching length (10,11)", null],
-    ["MA20", "validate_plate_barcode", "error due to not matching length (10,11)", null],
-    ["MA20044", "validate_plate_barcode", "error due to not matching length (10,11)", null],
-    ["MA20**#*", "validate_plate_barcode", "error due to not matching length (10,11)", null],
-    ["MA20044001", "validate_plate_barcode", "All criteria matches", "MA20044001"],
-    ["M120044099", "validate_plate_barcode", "error as M1 is disallowed", null],
-    ["ME20044099", "validate_plate_barcode", "All criteria matches", "ME20044099"], // new rule allow ME
+    ["12200440012", "error not matching MA MB MD", null],
+    ["*#200440012", "error not matching MA MB MD", null],
+    ["MA200000012", "error as day is 0", null],
+    ["MA203670012", "error as day is 367", null],
+    ["MA209990121", "error as day is 999", null],
+    ["MA 13000012", "error due to <space>", null],
+    ["MA  300000", "error due to 2<space>", null],
+    ["MB190440991", "year 19 now allowed", "MB190440991"],
+    ["MB210440991", "year 21 now allowed", "MB210440991"],
+    ["MB100440991", "year 10 now allowed", "MB100440991"],
+    ["MA*#300001", "error with invalids chars '*#'", null],
+    ["MA20222111*", "error with invalids chars '*'", null],
+    ["MA20010*#12", "error with invalids chars '*#'", null],
+    ["MA20001 021", "error due to <space> in day", null],
+    ["MA20001º21", "error due to symbol º", null],
+    ["MA20210न21", "error due to unicode", null],
+    ["MA20011浩211", "error due to unicode", null],
+    ["MA二千万一千〇九", "error due to all unicode", null],
+    ["MA", "error due to not matching length (10,11)", null],
+    ["MA20", "error due to not matching length (10,11)", null],
+    ["MA20044", "error due to not matching length (10,11)", null],
+    ["MA20**#*", "error due to not matching length (10,11)", null],
+    ["MA20044001", "All criteria matches", "MA20044001"],
+    ["M120044099", "error as M1 is disallowed", null],
+    ["MD20044099", "error as MD is disallowed", null],
+    ["ME20044099", "All criteria matches", "ME20044099"], // new rule allow ME
+    // New barcode format (currently only ML header)
+    ["ML34567890123", "error due tolength over 12", null],
+    ["ML345678901", "error due tolength under 12", null],
+    ["ML2021$72144", "error due to invalid character '$'", null],
+    ["ML2020172144", "error due to invalid year '2020'", null],
+    ["ML2021000144", "error due to invalid Julian date '000'", null],
+    ["ML2021367144", "error due to invalid Julian date '367'", null],
+    ["ML2021172002", "error due to invalid kit ID '002'", null],
+    ["ML2021172003", "error due to invalid kit ID '003'", null],
+    ["ML2021172146", "error due to invalid kit ID '146'", null],
+    ["ML2021172147", "error due to invalid kit ID '147'", null],
+    ["ML2021172145", "valid kit ID '145'", "ML2021172145"],
+    ["ML2021172144", "valid kit ID '144'", "ML2021172144"],
+    ["ML2021172004", "valid kit ID '004'", "ML2021172004"],
+    ["ML2021172001", "valid kit ID '001'", "ML2021172001"],
+    ["ML9999172001", "year '9999'", "ML9999172001"],
+    ["ML2021001144", "julian data '001'", "ML2021001144"],
+    ["ML2021366144", "julian data '366'", "ML2021366144"],
   ])(
-    "Given that its in manual mode and a barcode with text  %s, When validation rule %s criteria FAILS for invalid barcode or PASSES due %s for a valid barcode, Then only valid barcode %s is stored in Vuex playback.barcode and flask.barcode_manual_mode is set to true",
-    async (platecode, validation_rule, reason, store_data) => {
-      const spied_text_validator = jest.spyOn(TextValidation.prototype, validation_rule);
+    "Given that barcode entry is in manual mode and a barcode with text %s is entered, When validation rule validate_plate_barcode is given barcode with %s, Then %s is stored in Vuex playback.barcode and flask.barcode_manual_mode is set to true",
+    async (barcode, reason, store_data) => {
+      const spied_text_validator = jest.spyOn(TextValidation.prototype, "validate_plate_barcode");
 
       store.commit("flask/set_barcode_manual_mode", true);
       expect(store.state.playback.barcode).toBeNull();
@@ -148,11 +167,11 @@ describe("PlateBarcode.vue", () => {
         attachToDocument: true,
       });
 
-      await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+      await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-plate-barcode'
       // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
       const input_id = wrapper.find("#plateinfo");
-      wrapper.find("input").setValue(platecode);
-      expect(spied_text_validator).toHaveBeenCalledWith(platecode);
+      wrapper.find("input").setValue(barcode);
+      expect(spied_text_validator).toHaveBeenCalledWith(barcode);
       expect(store.state.playback.barcode).toEqual(store_data);
       // check if the flask barcode_manual_mode is set to true.
       expect(store.state.flask.barcode_manual_mode).toBe(true);
@@ -168,7 +187,7 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-plate-barcode'
     // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     wrapper.find("input").setValue("MA200440012");
@@ -177,7 +196,7 @@ describe("PlateBarcode.vue", () => {
     expect(store.state.playback.barcode).not.toBeNull();
     store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.BUFFERING);
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.vm.platebarcode).toEqual("MA200440012");
+    expect(wrapper.vm.plate_barcode).toEqual("MA200440012");
   });
   test("Given that its in manual mode and a valid barcode has been entered in the [input.length = 11] and playback state is CALIBRATED, When Playback State is mutated to CALIBRATING, Then the text of the Barcode Inpput remains as the valid barcode instead of becoming blank", async () => {
     const propsData = {};
@@ -189,7 +208,7 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-plate-barcode'
     // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     wrapper.find("input").setValue("MA200440012");
@@ -198,7 +217,7 @@ describe("PlateBarcode.vue", () => {
     expect(store.state.playback.barcode).not.toBeNull();
     store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING);
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.vm.platebarcode).toEqual("MA200440012");
+    expect(wrapper.vm.plate_barcode).toEqual("MA200440012");
   });
 
   test("Given that its in manual mode and that the User entered a valid barcode of 11 characters, When user tries to enter barcode with an additional 12th digit, then it is not considered valid in Vuex", async () => {
@@ -211,7 +230,7 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-plate-barcode'
     // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     wrapper.find("input").setValue("MA200440012"); // test case will fail on delating if (barcode_len >= 10 && barcode_len < 12) in API validatePlateBarcode()
@@ -222,7 +241,7 @@ describe("PlateBarcode.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     expect(store.state.playback.barcode).toBeNull();
   });
-  test("Set a proper platecode [input.length = 11] has and validate that no the red squiggle line is not present", async () => {
+  test("Set a proper plate barcode [input.length = 11] has and validate that no the red squiggle line is not present", async () => {
     wrapper.find("input").setValue("M120044099");
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find("input").html()).toContain('spellcheck="false"');
@@ -237,7 +256,7 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-plate-barcode'
     // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     const mEvent = {
@@ -258,7 +277,7 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    await wrapper.vm.manual_mode_on(); // This the valid form of testing an in coming event of 'yes-plate-barcode'
     // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
@@ -272,7 +291,7 @@ describe("PlateBarcode.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     expect(store.state.playback.barcode).toBeNull();
   });
-  test("On BarcodeEditDialog if the user chooses to 'Cancel' manual mode and the event 'cancel-platebarcode' is emitted then BarcodeEditDialog is hidden", async () => {
+  test("On BarcodeEditDialog if the user chooses to 'Cancel' manual mode and the event 'cancel-plate-barcode' is emitted then BarcodeEditDialog is hidden", async () => {
     const propsData = {};
 
     let wrapper = mount(PlateBarcode, {
@@ -282,7 +301,7 @@ describe("PlateBarcode.vue", () => {
       attachToDocument: true,
     });
 
-    await wrapper.vm.manual_mode_off(); // This the valid form of testing an in coming event of 'yes-platebarcode'
+    await wrapper.vm.manual_mode_off(); // This the valid form of testing an in coming event of 'yes-plate-barcode'
     // refer to the file SettingsFormCustomerUser.spec.js line 95 a similar approach was followed and accepted.
 
     Vue.nextTick(() => {

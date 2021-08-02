@@ -39,7 +39,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
 });
 
 test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog and click on 'Yes'", async (t) => {
-  let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-platebarcode");
+  let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-plate-barcode");
 
   await t.click(barcode_pencil_click);
   const span__button_label = Selector(".span__button_label");
@@ -50,7 +50,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
 });
 
 test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog and click on 'Yes' and valid plate-platecode", async (t) => {
-  let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-valid-platebarcode");
+  let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-valid-plate-barcode");
 
   await t.click(barcode_pencil_click);
   const span__button_label = Selector(".span__button_label");
@@ -62,7 +62,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
 });
 
 test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog, click on 'Yes' and invalid plate-platecode", async (t) => {
-  let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-invalid-platebarcode");
+  let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-invalid-plate-barcode");
 
   await t.click(barcode_pencil_click);
   const span__button_label = Selector(".span__button_label");

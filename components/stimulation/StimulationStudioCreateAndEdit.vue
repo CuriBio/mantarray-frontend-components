@@ -80,8 +80,7 @@ export default {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (
         mutation.type === "stimulation/set_new_protocol" ||
-        mutation.type === "stimulation/set_edit_mode_off" ||
-        mutation.type === "stimulation/add_saved_protocol"
+        mutation.type === "stimulation/set_edit_mode_off"
       ) {
         this.update_protocols();
         this.selected_protocol_idx = 0;
@@ -93,7 +92,6 @@ export default {
   },
   methods: {
     ...mapActions("stimulation", [
-      "get_protocols",
       "edit_selected_protocol",
       "handle_import_protocol",
       "handle_export_protocol",
@@ -103,6 +101,7 @@ export default {
       "reset_protocol_editor",
       "clear_selected_protocol",
       "apply_selected_protocol",
+      "set_selected_protocol_for_edit",
     ]),
     update_protocols() {
       this.protocol_list = this.$store.getters["stimulation/get_protocols"];
@@ -110,13 +109,12 @@ export default {
     selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
       const selected_protocol = this.protocol_list[idx];
+
       if (idx === 0) {
         this.set_edit_mode_off();
         this.reset_protocol_editor();
-      }
-      if (idx !== 0) {
-        this.edit_selected_protocol(selected_protocol);
-      }
+      } else this.edit_selected_protocol(selected_protocol);
+
       this.$emit("handle_selection_change", selected_protocol);
     },
     handle_click(idx) {
@@ -153,11 +151,9 @@ export default {
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-  top: 11%;
-  left: 45%;
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 630px;
+  width: 640px;
   height: 280px;
   visibility: visible;
   border-radius: 10px;

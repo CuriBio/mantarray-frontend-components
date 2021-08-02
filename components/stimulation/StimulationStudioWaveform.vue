@@ -369,8 +369,8 @@ export default {
   font-family: Muli;
   font-weight: bold;
   position: sticky;
-  top: 220px;
-  left: 325px;
+  top: 212px;
+  left: 400px;
   width: 430px;
   height: 29px;
   overflow: hidden;

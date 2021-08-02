@@ -15,7 +15,11 @@
 
       <div
         class="div__input-controls-content-widget"
-        :class="get_validity_class()"
+        :class="[
+          !input_is_valid
+            ? 'div__input-controls-content-widget--invalid'
+            : 'div__input-controls-content-widget--valid',
+        ]"
         :style="'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'"
       >
         <span class="span__input-controls-content-input-txt-widget" :style="'width: ' + input_width + 'px;'">
@@ -73,7 +77,6 @@ export default {
     dom_id_suffix: { type: String, default: "" }, // TODO (Eli 11/3/20): consider defaulting this to a random UUID if no value supplied
     display_text_message: { type: Boolean, default: true }, // display_text_message (boolean) if set to false would not render invalid_text
     disable_paste: { type: Boolean, default: false }, // disable_paste (boolean) if set to true would prevent cut and paste of text into input
-    default_state: { type: Boolean, default: true },
   },
   data() {
     return {
@@ -82,11 +85,9 @@ export default {
       // very essential else the input box would appear poping out on the right side outside the background, request to consult Eli or Raghu
     };
   },
-
   computed: {
     input_is_valid: function () {
-      if (this.default_state) return null;
-      else return this.invalid_text === "";
+      return this.invalid_text === "";
     },
     input_height_background: function () {
       return this.title_label !== "" ? 100 : 60;
@@ -119,11 +120,6 @@ export default {
     on_b_form_input: function () {
       this.$emit("update:value", this.input_value);
     },
-    get_validity_class: function () {
-      if (this.default_state) return null;
-      if (this.input_is_valid) return "div__input-controls-content-widget--valid";
-      if (!this.input_is_valid) return "div__input-controls-content-widget--invalid";
-    },
   },
 };
 </script>
@@ -144,9 +140,9 @@ export default {
   z-index: 3;
   pointer-events: all;
 }
-
 .span__input-content-label {
   pointer-events: all;
+  align: center;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
@@ -166,7 +162,6 @@ export default {
   text-align: center;
   z-index: 25;
 }
-
 .span__input-controls-content-input-txt-widget {
   padding-left: 0px;
   padding-right: 0px;
@@ -188,7 +183,6 @@ export default {
   color: rgb(255, 255, 255);
   background-color: #2f2f2f;
 }
-
 .div__input-controls-content-widget {
   pointer-events: all;
   transform: rotate(0deg);
@@ -200,19 +194,16 @@ export default {
   z-index: 7;
   background-color: #1c1c1c;
 }
-
 .div__input-controls-content-widget--invalid {
   border-width: thin;
   border-style: solid;
   border-color: #bd3532;
 }
-
 .div__input-controls-content-widget--valid {
   border-width: thin;
   border-style: solid;
   border-color: #19ac8a;
 }
-
 .div__input-controls-content-feedback {
   line-height: 1;
   transform: rotate(0deg);

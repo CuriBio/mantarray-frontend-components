@@ -49,7 +49,7 @@ library.add(fa_play_circle, fa_stop_circle);
  */
 
 export default {
-  name: "StimulationControls",
+  name: "StimulationStudioControls",
   components: {
     FontAwesomeIcon,
   },
@@ -86,13 +86,14 @@ export default {
 .div__stimulation-controls-container {
   position: absolute;
   background: black;
-  height: 110px;
-  width: 100%;
-  top: 40%;
+  height: 85px;
+  width: 287px;
   padding: 5px;
   font-family: Muli;
   padding-left: 20px;
   font-weight: lighter;
+  top: 0px;
+  left: 0px;
 }
 .span__additional-controls-header {
   color: rgb(255, 255, 255);
@@ -101,9 +102,9 @@ export default {
 .div__border-container {
   position: relative;
   border: 3px solid rgb(17, 17, 17);
-  height: 50px;
-  width: 40%;
-  top: 10%;
+  height: 55%;
+  width: 45%;
+  top: 8%;
   left: 30%;
   display: grid;
   grid-template-columns: repeat(25%, 4);
@@ -112,13 +113,13 @@ export default {
   padding: 5px;
 }
 .span__stimulation-label {
-  position: absolute;
+  position: relative;
   color: rgb(255, 255, 255);
   font-size: 9px;
   background: black;
-  top: 31%;
-  left: 41%;
+  top: 23%;
   z-index: 1;
+  right: 40px;
   letter-spacing: 1px;
 }
 .span__stimulation-controls-play-stop-button {
@@ -146,9 +147,9 @@ export default {
 }
 .img__waveform-icon {
   position: relative;
-  bottom: 45px;
-  height: 67px;
-  right: 40px;
+  bottom: 40px;
+  height: 57px;
+  right: 28px;
 }
 .fontawesome_icon_class {
   height: 20px;
@@ -156,9 +157,9 @@ export default {
 }
 .img__additional-controls-icon {
   position: relative;
-  opacity: 50%;
-  height: 65px;
-  bottom: 45px;
-  left: -15px;
+  bottom: 40px;
+  height: 57px;
+  right: 10px;
+  opacity: 0.3;
 }
 </style>

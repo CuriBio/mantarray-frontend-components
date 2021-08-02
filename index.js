@@ -49,6 +49,7 @@ export { default as WebPlayerControls } from "./components/playback/controls/pla
 export { default as DesktopPlayerControls } from "./components/playback/controls/player/DesktopPlayerControls.vue";
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
 export { default as PlateBarcode } from "./components/playback/controls/PlateBarcode.vue";
+export { default as StimulationStudioControls } from "./components/playback/controls/StimulationStudioControls.vue";
 
 // Settings Components
 export { default as SettingsForm } from "./components/settings/SettingsForm.vue";
@@ -94,3 +95,4 @@ export { default as StimulationStudioRepeatDelayModal } from "./components/stimu
 export { default as StimulationStudioProtocolViewer } from "./components/stimulation/StimulationStudioProtocolViewer.vue";
 export { default as StimulationStudioWaveform } from "./components/stimulation/StimulationStudioWaveform.vue";
 export { default as StimulationStudioZoomControls } from "./components/stimulation/StimulationStudioZoomControls.vue";
+export { default as StimulationStudio } from "./components/stimulation/StimulationStudio.vue";

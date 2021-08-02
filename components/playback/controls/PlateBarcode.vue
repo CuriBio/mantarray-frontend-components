@@ -26,21 +26,21 @@
       spellcheck="false"
       onpaste="return false;"
       class="input__plate-barcode-entry"
-      :value="platebarcode"
+      :value="plate_barcode"
       @input="validatePlateBarcode"
     />
     <div v-show="manual" class="input__plate-barcode-manual-entry-enable">
       <span class="input__plate-barcode-manual-entry-enable-icon">
-        <div id="edit-platebarcode" v-b-modal.edit-platebarcode-modal>
+        <div id="edit-plate-barcode" v-b-modal.edit-plate-barcode-modal>
           <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
         </div>
       </span>
     </div>
     <!--</div>-->
-    <b-modal id="edit-platebarcode-modal" size="sm" hide-footer hide-header hide-header-close>
+    <b-modal id="edit-plate-barcode-modal" size="sm" hide-footer hide-header hide-header-close>
       <BarcodeEditDialog
-        @cancel-platebarcode="manual_mode_off"
-        @yes-platebarcode="manual_mode_on"
+        @cancel-plate-barcode="manual_mode_off"
+        @yes-plate-barcode="manual_mode_on"
       ></BarcodeEditDialog>
     </b-modal>
   </div>
@@ -57,7 +57,7 @@ import BarcodeEditDialog from "@/components/status/BarcodeEditDialog.vue";
 library.add(faPencilAlt);
 const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 /**
- * @vue-data {String} platebarcode - Current plate bar code
+ * @vue-data {String} plate_barcode - Current plate barcode
  * @vue-data {String} playback_state_enums - Current state of playback
  * @vue-computed {String} playback_state - Current value in Vuex store
  * @vue-event {String} validatePlateBarcode - User entered String parser
@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       manual: true,
-      platebarcode: "",
+      plate_barcode: "",
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
     };
   },
@@ -87,15 +87,15 @@ export default {
     }),
   },
   updated() {
-    this.platebarcode = this.$store.state.playback.barcode;
+    this.plate_barcode = this.$store.state.playback.barcode;
   },
   methods: {
     manual_mode_off: function () {
-      this.$bvModal.hide("edit-platebarcode-modal");
+      this.$bvModal.hide("edit-plate-barcode-modal");
     },
     manual_mode_on: function () {
       this.manual = false;
-      this.$bvModal.hide("edit-platebarcode-modal");
+      this.$bvModal.hide("edit-plate-barcode-modal");
       this.$store.commit("flask/set_barcode_manual_mode", true);
       this.$store.commit("playback/set_barcode_number_manual_mode", null);
     },
@@ -138,7 +138,7 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 288px;
+  width: 287px;
   height: 34px;
   background: #1c1c1c;
   -webkit-box-sizing: content-box;
@@ -240,8 +240,8 @@ input:focus {
 .fa-pencil-alt:hover {
   color: #ececed;
 }
-/* Center the edit-platebarcode-modal pop-up dialog within the viewport */
-#edit-platebarcode-modal {
+/* Center the edit-plate-barcode-modal pop-up dialog within the viewport */
+#edit-plate-barcode-modal {
   position: fixed;
   margin: 5% auto;
   top: 15%;

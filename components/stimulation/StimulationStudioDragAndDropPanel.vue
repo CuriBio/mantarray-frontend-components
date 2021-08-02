@@ -93,13 +93,12 @@
         @close="on_modal_close"
       />
     </div>
-    <div v-if="repeat_delay_modal !== null" class="modal-container">
+    <div v-if="repeat_delay_modal !== null" class="modal-container" :style="'top: 200px;'">
       <StimulationStudioRepeatDelayModal
         :delay_open_for_edit="delay_open_for_edit"
         :repeat_idx="repeat_idx"
         :modal_type="repeat_delay_modal"
         :current_repeat_delay_input="current_repeat_delay_input"
-        :is_enabled_array="[true, true, true]"
         @repeat_close="on_repeat_modal_close"
         @delay_close="on_modal_close"
       />
@@ -165,7 +164,7 @@ export default {
         delete_option: ["Save", "Delete", "Cancel"],
       },
       time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
-      selected_waveform_settings: null,
+      selected_waveform_settings: {},
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
@@ -196,7 +195,9 @@ export default {
 
       if (mutation.type === "stimulation/set_edit_mode") {
         // mapState or mapGetter was not updating correctly, only directly acessing state
-        this.protocol_order = this.$store.state.stimulation.protocol_editor.detailed_pulses;
+        this.protocol_order = JSON.parse(
+          JSON.stringify(this.$store.state.stimulation.protocol_editor.detailed_pulses)
+        );
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       }
     });
@@ -233,9 +234,9 @@ export default {
       if (button === "Save") {
         if (this.new_cloned_idx !== null) new_pulse.settings = settings;
         if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null)
-          edited_pulse.settings = settings;
+          Object.assign(edited_pulse.settings, settings);
         if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null)
-          edited_pulse.nested_protocols[this.shift_click_nested_img_idx].settings = settings;
+          Object.assign(edited_pulse.nested_protocols[this.shift_click_nested_img_idx].settings, settings);
       }
 
       if (button === "Delete") {
@@ -247,7 +248,6 @@ export default {
       if (button === "Cancel") {
         if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
       }
-
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
@@ -255,14 +255,13 @@ export default {
     },
     open_modal_for_edit(type, idx, nested_idx) {
       const pulse = this.protocol_order[idx];
-      this.selected_waveform_settings = pulse.settings;
       this.shift_click_img_idx = idx;
 
       if (nested_idx !== undefined) {
         this.shift_click_nested_img_idx = nested_idx;
-        this.selected_waveform_settings = pulse.nested_protocols[nested_idx].settings;
+        Object.assign(this.selected_waveform_settings, pulse.nested_protocols[nested_idx].settings);
       } else if (nested_idx === undefined) {
-        this.selected_waveform_settings = pulse.settings;
+        Object.assign(this.selected_waveform_settings, pulse.settings);
       }
 
       if (type === "Monophasic") this.modal_type = "Monophasic";
@@ -340,11 +339,12 @@ export default {
 .div__DragAndDdrop-panel {
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 23%;
+  width: 85%;
   height: 100%;
   bottom: 0;
   display: flex;
   justify-content: center;
+  justify-self: flex-end;
 }
 .repeat_container {
   display: flex;
@@ -362,15 +362,15 @@ export default {
   padding: 0 8px 0 8px;
 }
 .modal-container {
-  left: 36%;
+  left: 33%;
   position: absolute;
   top: 8%;
 }
 .dropdown-container {
-  position: relative;
+  position: absolute;
   z-index: 2;
-  top: 353px;
-  left: 640px;
+  top: 350px;
+  left: -115px;
 }
 .circle {
   width: 30px;
@@ -407,32 +407,35 @@ export default {
 }
 .div__background-container {
   position: absolute;
-  width: 80%;
-  left: 20%;
-  height: 94%;
+  width: 365px;
+  height: 100%;
   bottom: 0;
   display: flex;
   justify-content: flex-end;
 }
 .modal_overlay {
-  width: 100%;
-  height: 100%;
+  width: 1629px;
+  height: 885px;
   position: absolute;
+  left: 0;
   background: rgb(0, 0, 0);
   z-index: 5;
-  opacity: 0.5;
+  opacity: 0.6;
+  display: flex;
+  justify-content: flex-end;
 }
 .div__scroll-container {
-  position: relative;
-  top: 47%;
-  width: 73%;
-  right: 26%;
-  height: 13%;
+  position: absolute;
+  top: 440px;
+  width: 336%;
+  height: 120px;
+  right: 353px;
   overflow-x: scroll;
   background: rgb(27, 27, 27);
   z-index: 1;
   white-space: nowrap;
   overflow: visible;
+  border: 1px solid rgb(17, 17, 17);
 }
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;
