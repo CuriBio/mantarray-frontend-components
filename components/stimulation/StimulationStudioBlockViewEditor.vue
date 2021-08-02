@@ -88,6 +88,7 @@ Vue.component("BPopover", BPopover);
  * @vue-data {String} name_validity - Corresponding border style after name validity check
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
+ * @vue-data {Int} stimulation_type_idx - Used to change preselected index in the dropdown when user wants to edit existing protocols
  * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
  * @vue-event {Event} handle_trash_modal - Toggle view of delete popover on trash icon
  * @vue-event {Event} toggle_tab - Toggles which tab is active
