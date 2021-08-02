@@ -5,7 +5,8 @@ Changelog for Mantarray Frontend Components
 0.4.4 (2021-08-02)
 ------------------
 
-- Added support for entering barcodes with "ML" header.
+- Added support for entering barcodes with "ML" header
+- Fixed misc styling issues
 
 
 0.4.3 (2021-07-28)
