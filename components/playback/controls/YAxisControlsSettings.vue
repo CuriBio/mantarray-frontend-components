@@ -383,7 +383,7 @@ export default {
 .popover-header {
   font-weight: 700;
   background-color: #f7f7f7;
-  font-size: 12px;
+  font-size: 10px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
 }
@@ -403,7 +403,7 @@ export default {
   font-weight: 400;
   color: #000000;
   background-color: #ffffff;
-  font-size: 14px;
+  font-size: 12px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
 }
