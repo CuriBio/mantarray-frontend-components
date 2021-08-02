@@ -151,11 +151,9 @@ export default {
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-  top: 11%;
-  left: 45%;
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 630px;
+  width: 640px;
   height: 280px;
   visibility: visible;
   border-radius: 10px;

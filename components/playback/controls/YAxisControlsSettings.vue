@@ -191,7 +191,7 @@ export default {
   },
 };
 </script>
-<style>
+<style type="text/css">
 .canvas__y-axis-control-settings-background {
   pointer-events: all;
   transform: rotate(0deg);

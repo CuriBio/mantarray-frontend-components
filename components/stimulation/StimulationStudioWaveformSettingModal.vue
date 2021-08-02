@@ -75,7 +75,7 @@
           :disabled="true"
         ></InputWidget>
       </span>
-      <span v-b-popover.hover="popover_message" class="disabled_popover_container">
+      <span v-popover.hover="popover_message" class="disabled_popover_container">
         <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
       </span>
     </div>
@@ -197,7 +197,7 @@
             :disabled="true"
           ></InputWidget>
         </span>
-        <span v-b-popover.hover="popover_message" class="disabled_popover_container">
+        <span v-popover.hover.right="popover_message" class="disabled_popover_container">
           <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
         </span>
       </div>
@@ -253,7 +253,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { VBPopover } from "bootstrap-vue";
-Vue.directive("b-popover", VBPopover);
+Vue.directive("popover", VBPopover);
 library.add(faBalanceScale, faQuestionCircle);
 
 /**
@@ -444,7 +444,7 @@ export default {
 }
 
 .disabled_popover_container {
-  position: absolute;
+  position: relative;
   font-family: Muli;
   font-size: 10px;
   left: 170px;

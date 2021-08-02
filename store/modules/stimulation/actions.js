@@ -150,6 +150,8 @@ export default {
   },
 
   async add_imported_protocol({ commit, state, getters }, protocol) {
+    await this.commit("stimulation/set_edit_mode_off");
+
     const assignment = await this.getters["stimulation/get_next_protocol"];
     const { color, letter } = assignment;
     const imported_protocol = { color, letter, label: protocol.name, protocol };
@@ -174,6 +176,7 @@ export default {
             protocol: protocol_editor,
           };
       });
+
       await this.commit("stimulation/set_edit_mode_off");
       await this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
     }
@@ -205,7 +208,7 @@ export default {
           phase_two_duration: (pulse.phase_two_duration *= 1000),
         }));
 
-        const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well, true);
+        const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well, false);
         const protocol_model = {
           stimulation_type,
           well_number,

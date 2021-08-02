@@ -370,7 +370,7 @@ describe("store/stimulation", () => {
         protocol: [
           {
             stimulation_type: "C",
-            well_number: "A02",
+            well_number: "A2",
             pulses: [
               {
                 phase_one_duration: 1500000,

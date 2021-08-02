@@ -42,7 +42,7 @@ export default {
       datapoints: [],
       repeat_colors: {},
       x_axis_sample_length: 100,
-      dynamic_plot_width: 960,
+      dynamic_plot_width: 1160,
       delay_blocks: [],
       x_axis_label: "Time (s)",
     };
@@ -63,7 +63,7 @@ export default {
         this.y_min_max = state.y_axis_scale;
         this.x_axis_sample_length = 100;
         state.x_axis_scale = 100;
-        this.dynamic_plot_width = 960;
+        this.dynamic_plot_width = 1160;
         this.delay_blocks = state.delay_blocks;
       }
       if (mutation.type === "stimulation/set_zoom_out" || mutation.type === "stimulation/set_zoom_in") {
@@ -94,10 +94,8 @@ export default {
 <style scoped>
 .protocol-viewer-background {
   background: rgb(0, 0, 0);
-  position: absolute;
-  height: 27%;
-  width: 60%;
-  left: 20%;
-  top: 66%;
+  position: relative;
+  height: 50%;
+  width: 100%;
 }
 </style>
