@@ -103,6 +103,7 @@ describe("store/playback", () => {
         expect(store.state.playback.x_time_index).toStrictEqual(initial_x_time_index);
 
         bound_advance_playback_progression();
+        // TODO figure out why this check is sporadically failing
         expect(store.state.playback.x_time_index).toStrictEqual(
           initial_x_time_index +
             store.state.playback.num_milliseconds_to_fast_forward_if_delayed *
