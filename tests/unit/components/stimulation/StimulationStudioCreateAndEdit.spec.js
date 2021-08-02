@@ -9,6 +9,52 @@ localVue.use(Vuex);
 let NuxtStore;
 let store;
 
+const test_protocol_list = [
+  { letter: "", color: "", label: "Create New" },
+  {
+    letter: "A",
+    color: "#118075",
+    label: "Tester",
+    protocol: {
+      name: "Tester",
+      stimulation_type: "V",
+      end_delay_duration: 20,
+      time_unit: "milliseconds",
+      pulses: [
+        {
+          phase_one_duration: 15,
+          phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
+        },
+        {
+          phase_one_duration: 20,
+          phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
+        },
+      ],
+      detailed_pulses: [
+        {
+          type: "Delay",
+          src: "/delay-tile.png",
+          nested_protocols: [],
+          repeat: { color: "d822f9", number_of_repeats: 0 },
+          settings: {
+            phase_one_duration: 15000,
+            phase_one_charge: 0,
+            interpulse_duration: 0,
+            phase_two_duration: 0,
+            phase_two_charge: 0,
+          },
+        },
+      ],
+    },
+  },
+];
+
 describe("StimulationStudioCreateAndEdit.vue", () => {
   beforeAll(async () => {
     const storePath = `${process.env.buildDir}/store.js`;
@@ -17,6 +63,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
   });
 
   afterEach(() => {
