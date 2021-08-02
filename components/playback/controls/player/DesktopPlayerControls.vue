@@ -331,7 +331,7 @@ export default {
   },
 };
 </script>
-<style type="text/css" scoped>
+<style type="text/css">
 .div__playback-desktop-player-controls {
   --span__playback-desktop-player-controls-button--Top: 37px;
   --span__playback-desktop-player-controls-button--LeftmostLeft: 16px;
@@ -462,7 +462,7 @@ export default {
 .popover-header {
   font-weight: 700;
   background-color: #f7f7f7;
-  font-size: 10px;
+  font-size: 12px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
 }
@@ -482,7 +482,7 @@ export default {
   font-weight: 400;
   color: #000000;
   background-color: #ffffff;
-  font-size: 12px;
+  font-size: 14px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
 }
