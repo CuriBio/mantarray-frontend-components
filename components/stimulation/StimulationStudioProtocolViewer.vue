@@ -95,6 +95,6 @@ export default {
   background: rgb(0, 0, 0);
   position: relative;
   height: 50%;
-  width: 98%;
+  width: 100%;
 }
 </style>

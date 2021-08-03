@@ -30,7 +30,7 @@ jobs:
           - "tests/e2e/basic_widgets"
           - "tests/e2e/plate_based_widgets"
           # - "tests/e2e/heatmap"
-          - "tests/e2e/stimulation"
+          # - "tests/e2e/stimulation"
 
         include:
           # only enable coverage on the fastest job
