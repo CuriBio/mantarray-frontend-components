@@ -33,6 +33,7 @@
             :input_width="190"
             :options_text="stimulation_types_array"
             :options_idx="stimulation_type_idx"
+            :dom_id_suffix="'stimulation_type'"
             @selection-changed="handle_stimulation_type"
           />
           <SmallDropDown
@@ -40,6 +41,7 @@
             :input_height="25"
             :input_width="155"
             :options_text="until_options_array"
+            :dom_id_suffix="'stop_options'"
             @selection-changed="handle_stop_requirement"
           />
           <span class="span__settings-label">every</span>

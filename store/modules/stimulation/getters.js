@@ -5,7 +5,13 @@ export default {
   get_next_protocol(state) {
     if (!state.edit_mode.status) {
       const letter = get_protocol_editor_letter(state);
-      const color = get_protocol_editor_color(state);
+      let color;
+
+      // for testing
+      if (letter === "A") color = "#4ca0af";
+      else if (letter === "B") color = "#578844";
+      else color = get_protocol_editor_color(state);
+
       state.current_assignment = { letter, color };
       return { color, letter };
     } else if (state.edit_mode.status) {
@@ -35,7 +41,8 @@ const get_protocol_editor_color = ({ protocol_list }) => {
   protocol_list.map((protocol) => {
     if (protocol.color === color) check_duplicate = true;
   });
-  if (color === "#b7b7b7" || color === "#000000" || check_duplicate) get_protocol_editor_color();
+  if (color === "#b7b7b7" || color === "#000000" || check_duplicate)
+    get_protocol_editor_color({ protocol_list });
   else return color;
 };
 

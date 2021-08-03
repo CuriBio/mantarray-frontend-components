@@ -1,6 +1,6 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioCreateAndEdit from "@/components/stimulation/StimulationStudioCreateAndEdit.vue";
-import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 
 import Vuex from "vuex";
 
@@ -110,7 +110,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
   });
 
   test("When the dropdown is rendered to the page in the StimulationStudioCreateAndEdit component, Then there should be no title", () => {
-    mount(NewSelectDropDown, {
+    mount(SelectDropDown, {
       localVue,
       store,
       propsData: {
@@ -118,10 +118,10 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
       },
     });
 
-    const input_height_background = NewSelectDropDown.computed.input_height_background.call({
+    const input_height_background = SelectDropDown.computed.input_height_background.call({
       title_label: "",
     });
-    const input_widget_top = NewSelectDropDown.computed.input_widget_top.call({
+    const input_widget_top = SelectDropDown.computed.input_widget_top.call({
       title_label: "",
     });
     expect(input_height_background).toBe(60);
