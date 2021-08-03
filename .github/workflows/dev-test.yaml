@@ -29,7 +29,7 @@ jobs:
           - "tests/e2e/settings"
           - "tests/e2e/basic_widgets"
           - "tests/e2e/plate_based_widgets"
-          - "tests/e2e/heatmap"
+          # - "tests/e2e/heatmap"
           - "tests/e2e/stimulation"
 
         include:
