@@ -26,7 +26,7 @@
           @change="check_name_validity($event.target.value)"
         />
         <span class="error-message">{{ error_message }}</span>
-        <img class="img__pencil-icon" src="/pencil-icon.png" @click="disabled = !disabled" />
+        <FontAwesomeIcon class="pencil-icon" :icon="['fa', 'pencil-alt']" @click="disabled = !disabled" />
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
@@ -51,7 +51,12 @@
             placeholder=""
             @change="handle_repeat_frequency($event.target.value)"
           />
-          <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash_modal" />
+          <FontAwesomeIcon
+            id="trash_icon"
+            class="trash-icon"
+            :icon="['fa', 'trash']"
+            @click="handle_trash_modal"
+          />
           <BPopover
             target="trash_icon"
             trigger="click"
@@ -74,6 +79,11 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vue from "vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { BPopover } from "bootstrap-vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faPencilAlt, faTrash);
 Vue.component("BPopover", BPopover);
 
 /**
@@ -106,6 +116,7 @@ export default {
   components: {
     SmallDropDown,
     BPopover,
+    FontAwesomeIcon,
   },
   data() {
     return {
@@ -304,18 +315,25 @@ button:hover {
   font-weight: bold;
   font-size: 22px;
 }
-.img__pencil-icon {
+.pencil-icon {
   left: 4%;
+  color: #b7b7b7;
   position: relative;
 }
-img:hover {
+.trash-icon {
+  margin-left: 12%;
+  margin-right: 1%;
+  color: #b7b7b7;
+  padding-top: 4px;
+  font-size: 20px;
+}
+
+.pencil-icon:hover,
+.trash-icon:hover {
   cursor: pointer;
   opacity: 0.6;
 }
-.img__trash-icon {
-  margin-left: 11%;
-  padding-top: 4px;
-}
+
 .div__right-settings-panel {
   width: 80%;
   display: flex;
@@ -367,7 +385,7 @@ img:hover {
   transform: rotate(0deg);
   background: rgb(17, 17, 17);
   width: 110%;
-  height: 92%;
+  height: 87%;
 }
 .div__Tabs-panel {
   background: rgb(17, 17, 17);
