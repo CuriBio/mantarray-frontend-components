@@ -379,7 +379,7 @@ export default {
   width: 1629px;
   height: 885px;
   top: 0px;
-  left: 1px;
+  left: 0px;
   visibility: visible;
   border: 0px none rgb(0, 0, 0);
   border-radius: 0px;
@@ -558,7 +558,7 @@ export default {
   width: 300px;
   height: 885px;
   top: 0px;
-  left: 1330px;
+  left: 1331px;
   visibility: visible;
   border: 0px none rgb(0, 0, 0);
   border-radius: 0px;
@@ -610,7 +610,7 @@ export default {
   width: 300px;
   height: 30px;
   top: 69px;
-  left: 1330px;
+  left: 1331px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -743,7 +743,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 301px;
+  width: 300px;
   height: 30px;
   top: 268px;
   left: 1331px;
@@ -792,7 +792,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 301px;
+  width: 300px;
   height: 30px;
   top: 382px;
   left: 1331px;

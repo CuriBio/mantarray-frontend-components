@@ -37,10 +37,10 @@ export default {
     manual_entry: function (choice) {
       switch (choice) {
         case 0:
-          this.$emit("cancel-platebarcode");
+          this.$emit("cancel-plate-barcode");
           break;
         case 1:
-          this.$emit("yes-platebarcode");
+          this.$emit("yes-plate-barcode");
           break;
       }
     },

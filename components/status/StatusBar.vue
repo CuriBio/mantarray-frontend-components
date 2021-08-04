@@ -118,7 +118,7 @@ export default {
 .div__status-bar {
   top: 0px;
   left: 0px;
-  width: 288px;
+  width: 287px;
   height: 32px;
   background: #1c1c1c;
   border: none;
