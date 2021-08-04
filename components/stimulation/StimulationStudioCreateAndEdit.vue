@@ -5,7 +5,7 @@
     >
     <span class="span__stimulationstudio-layout-subheader-label">Select/Create Protocol</span>
     <div class="div__stimulationstudio-select-dropdown-container">
-      <NewSelectDropDown
+      <SelectDropDown
         :options_text="protocol_list"
         :input_width="input_width"
         :input_height="input_height"
@@ -13,10 +13,15 @@
       />
     </div>
     <canvas class="canvas__stimulationstudio-button-separator" />
-    <div v-for="(key, value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
-      <div :class="get_class(idx)" :style="key">
-        <span :class="get_label_class(idx)">{{ value }}</span>
-      </div>
+    <div
+      v-for="(key, value, idx) in btn_labels"
+      :id="value"
+      :key="value"
+      :class="get_class(idx)"
+      :style="key"
+      @click.exact="handle_click(idx)"
+    >
+      <span :class="get_label_class(idx)">{{ value }}</span>
     </div>
     <div
       v-for="(key, value, idx) in import_export_btn_labels"
@@ -33,7 +38,7 @@
 </template>
 
 <script>
-import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 import { mapActions, mapMutations } from "vuex";
 
 /**
@@ -56,7 +61,7 @@ import { mapActions, mapMutations } from "vuex";
 export default {
   name: "StimulationStudioCreateAndEdit",
   components: {
-    NewSelectDropDown,
+    SelectDropDown,
   },
   data() {
     return {

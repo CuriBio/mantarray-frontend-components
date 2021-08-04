@@ -88,7 +88,7 @@
 
     <!-- original mockflow ID: cmpDa1c3ce66a0c6d38c39ace76539269b2f  -->
     <div class="div__heatmap-layout-display-input-dropdown-container">
-      <NewSelectDropDown
+      <SelectDropDown
         :title_label="label"
         :value.sync="display_option"
         :options_text="metric_names"
@@ -157,7 +157,7 @@
 import { mapState, mapGetters } from "vuex";
 import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
-import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
 import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
@@ -169,7 +169,7 @@ export default {
     PlateHeatMap,
     GradientBar,
     InputWidget,
-    NewSelectDropDown,
+    SelectDropDown,
     CheckBoxWidget,
     RadioButtonWidget,
   },

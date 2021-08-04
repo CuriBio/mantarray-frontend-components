@@ -12,7 +12,7 @@
             :group="{ name: 'order', pull: 'clone', put: false }"
             :clone="clone"
           >
-            <div v-for="(types, idx) in icon_types" :key="idx">
+            <div v-for="(types, idx) in icon_types" :id="types.type" :key="idx">
               <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
             </div>
           </draggable>
@@ -23,6 +23,7 @@
           :input_width="95"
           :options_text="time_units_array"
           :options_idx="time_units_idx"
+          :dom_id_suffix="'time_units'"
           @selection-changed="handle_time_unit"
         />
 
@@ -364,7 +365,7 @@ export default {
 .modal-container {
   left: 33%;
   position: absolute;
-  top: 8%;
+  top: 5%;
 }
 .dropdown-container {
   position: absolute;
@@ -460,5 +461,9 @@ export default {
   visibility: visible;
   background-color: #3f3f3f;
   opacity: 0.5;
+}
+
+.dropzone {
+  visibility: visible;
 }
 </style>

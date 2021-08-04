@@ -1,6 +1,6 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioCreateAndEdit from "@/components/stimulation/StimulationStudioCreateAndEdit.vue";
-import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 
 import Vuex from "vuex";
 
@@ -8,6 +8,52 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 let NuxtStore;
 let store;
+
+const test_protocol_list = [
+  { letter: "", color: "", label: "Create New" },
+  {
+    letter: "A",
+    color: "#118075",
+    label: "Tester",
+    protocol: {
+      name: "Tester",
+      stimulation_type: "V",
+      end_delay_duration: 20,
+      time_unit: "milliseconds",
+      pulses: [
+        {
+          phase_one_duration: 15,
+          phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
+        },
+        {
+          phase_one_duration: 20,
+          phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
+        },
+      ],
+      detailed_pulses: [
+        {
+          type: "Delay",
+          src: "/delay-tile.png",
+          nested_protocols: [],
+          repeat: { color: "d822f9", number_of_repeats: 0 },
+          settings: {
+            phase_one_duration: 15000,
+            phase_one_charge: 0,
+            interpulse_duration: 0,
+            phase_two_duration: 0,
+            phase_two_charge: 0,
+          },
+        },
+      ],
+    },
+  },
+];
 
 describe("StimulationStudioCreateAndEdit.vue", () => {
   beforeAll(async () => {
@@ -17,6 +63,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
   });
 
   afterEach(() => {
@@ -63,7 +110,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
   });
 
   test("When the dropdown is rendered to the page in the StimulationStudioCreateAndEdit component, Then there should be no title", () => {
-    mount(NewSelectDropDown, {
+    mount(SelectDropDown, {
       localVue,
       store,
       propsData: {
@@ -71,10 +118,10 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
       },
     });
 
-    const input_height_background = NewSelectDropDown.computed.input_height_background.call({
+    const input_height_background = SelectDropDown.computed.input_height_background.call({
       title_label: "",
     });
-    const input_widget_top = NewSelectDropDown.computed.input_widget_top.call({
+    const input_widget_top = SelectDropDown.computed.input_widget_top.call({
       title_label: "",
     });
     expect(input_height_background).toBe(60);

@@ -9,7 +9,6 @@
     <StimulationStudioDragAndDropPanel
       class="stimulationstudio_draganddroppanel-container"
       :stimulation_type="stimulation_type"
-      :time_unit="time_unit"
     />
     <StimulationStudioBlockViewEditor class="stimulationstudio_blockvieweditor-container" />
     <StimulationStudioProtocolViewer
@@ -33,6 +32,14 @@ import StimulationStudioDragAndDropPanel from "@/components/stimulation/Stimulat
 import StimulationStudioBlockViewEditor from "@/components/stimulation/StimulationStudioBlockViewEditor.vue";
 import StimulationStudioProtocolViewer from "@/components/stimulation/StimulationStudioProtocolViewer.vue";
 
+/**
+ * @vue-data {Array} btn_labels - button labels for base of stim studio component
+ * @vue-data {String} stimulation_type - Current selected stimulation type in BlockViewEditor component
+ * @vue-data {Object} selected_protocol - Current selected protocol from drop down in CreateAndEdit component
+ * @vue-event {Event} handle_click - Handles what gets executed when any of the base buttons are selected
+ * @vue-event {Event} handle_selection_changed - Gets emitted when a user selected a protocol for edit so it can be used if new changes need to be discarded
+ */
+
 export default {
   name: "StimulationStudio",
   components: {
@@ -46,8 +53,6 @@ export default {
     return {
       btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
       stimulation_type: "Voltage (mV)",
-      time_unit: "Time (s)",
-      current_assignment: {},
       selected_protocol: { label: "Create New", color: "", letter: "" },
     };
   },
@@ -56,14 +61,10 @@ export default {
       if (mutation.type === "stimulation/set_stimulation_type") {
         this.stimulation_type = this.$store.getters["stimulation/get_stimulation_type"];
       }
-      if (mutation.type === "stimulation/set_time_unit") {
-        this.time_unit = this.$store.getters["stimulation/get_time_unit"];
-      }
       if (
         mutation.type === "stimulation/reset_state" ||
         mutation.type === "stimulation/reset_protocol_editor"
       ) {
-        this.time_unit = "Time (s)";
         this.stimulation_type = "Voltage (mV)";
       }
     });

@@ -45,16 +45,63 @@ describe("store/stimulation", () => {
     },
   ];
 
-  beforeAll(async () => {
-    const storePath = `${process.env.buildDir}/store.js`;
-    NuxtStore = await import(storePath);
-  });
-
-  beforeEach(async () => {
-    store = await NuxtStore.createStore();
-  });
+  const test_protocol_list = [
+    { letter: "", color: "", label: "Create New" },
+    {
+      letter: "A",
+      color: "#118075",
+      label: "Tester",
+      protocol: {
+        name: "Tester",
+        stimulation_type: "V",
+        end_delay_duration: 20,
+        time_unit: "milliseconds",
+        pulses: [
+          {
+            phase_one_duration: 15,
+            phase_one_charge: 0,
+            interpulse_duration: 0,
+            phase_two_duration: 0,
+            phase_two_charge: 0,
+          },
+          {
+            phase_one_duration: 20,
+            phase_one_charge: 0,
+            interpulse_duration: 0,
+            phase_two_duration: 0,
+            phase_two_charge: 0,
+          },
+        ],
+        detailed_pulses: [
+          {
+            type: "Delay",
+            src: "/delay-tile.png",
+            nested_protocols: [],
+            repeat: { color: "d822f9", number_of_repeats: 0 },
+            settings: {
+              phase_one_duration: 15000,
+              phase_one_charge: 0,
+              interpulse_duration: 0,
+              phase_two_duration: 0,
+              phase_two_charge: 0,
+            },
+          },
+        ],
+      },
+    },
+  ];
 
   describe("stimulation/getters", () => {
+    beforeAll(async () => {
+      const storePath = `${process.env.buildDir}/store.js`;
+      NuxtStore = await import(storePath);
+    });
+
+    beforeEach(async () => {
+      store = await NuxtStore.createStore();
+      store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
+    });
+
     test("When the protocol dropdown displays available protocols, Then only only protocols with defined label should return", async () => {
       const protocols = store.getters["stimulation/get_protocols"];
       const labeled_protocols = store.state.stimulation.protocol_list.filter(
@@ -121,6 +168,16 @@ describe("store/stimulation", () => {
     });
   });
   describe("stimulation/mutations/actions", () => {
+    beforeAll(async () => {
+      const storePath = `${process.env.buildDir}/store.js`;
+      NuxtStore = await import(storePath);
+    });
+
+    beforeEach(async () => {
+      store = await NuxtStore.createStore();
+      store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
+    });
+
     test("When stimulation store is initialized, Then default selected wells should be an empty array", () => {
       const { selected_wells } = store.state.stimulation;
       expect(selected_wells).toStrictEqual([]);
@@ -291,12 +348,14 @@ describe("store/stimulation", () => {
         label: "mock_protocol",
         protocol: protocol_editor,
       };
+
       await store.dispatch("stimulation/add_saved_protocol");
       expect(store.state.stimulation.protocol_list[2]).toStrictEqual(expected_protocol);
     });
 
     test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the updated protocol will be commited to state in the available protocol list", async () => {
       const { protocol_list, protocol_editor, edit_mode } = store.state.stimulation;
+
       const selected_protocol = protocol_list[1];
       const { protocol } = protocol_list[1];
       const old_name = "Tester";
@@ -308,8 +367,10 @@ describe("store/stimulation", () => {
       expect(edit_mode.status).toBe(true);
       await store.commit("stimulation/set_protocol_name", new_name);
       await store.dispatch("stimulation/add_saved_protocol");
+
       const test = protocol_list[1].protocol.name;
       expect(test).toBe(new_name);
+
       expect(edit_mode.status).toBe(false);
     });
 

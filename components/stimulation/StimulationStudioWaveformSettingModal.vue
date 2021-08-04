@@ -265,6 +265,7 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-data {Object} waveform_setting - Model for new inputs to be assigned
  * @vue-data {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
  * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
+ * @vue-data {Object} err_msg - Object containing all initial error messages for inputs
  * @vue-data {Boolean} all_valid - True if all inputs pass the validation check and allows Save button to become enabled
  * @vue-computed {String} check_max_type - Computes last label for disabled input field
  * @vue-method {event} close - emits close of modal and data to parent component
