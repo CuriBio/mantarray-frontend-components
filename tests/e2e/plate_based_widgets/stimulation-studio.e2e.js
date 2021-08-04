@@ -19,7 +19,7 @@ test("StimulationStudioWidget when the no protocol is applied to any Stimulation
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-// test("StimulationStudioWidget when the Teal color is applied to any StimulationStudioPlateWell", async (t) => {
+// test("StimulationStudioWidget when the Teal color is applied to any StimulationStudioPlateWell", async t => {
 //   const screenshot_path = path.join("plate_based_widgets", "simulation-studio", "basic-teal-color");
 //   await t.click(teal);
 //   await testcafe_page_visual_regression(t, screenshot_path);

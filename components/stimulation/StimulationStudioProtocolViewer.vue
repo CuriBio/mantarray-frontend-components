@@ -20,7 +20,6 @@ import { convert_x_y_arrays_to_d3_array } from "@/js_utils/waveform_data_formatt
 
 /**
  * @vue-props {Sting} stimulation_type - Current selected stimulation_type assigned to y axis label/scale
- * @vue-props {String} time_unit - Current selected unit of time assigned to x axis label/scale
  * @vue-data {Int} y_min_max - The y axis min and max values
  * @vue-data {Array} datapoints - The d3 formatted x and y axis points
  * @vue-data {Object} repeat_colors - Corresponding color assignments from repeat blocks in pulse order to be assigned to color of line in graph
@@ -42,7 +41,7 @@ export default {
       datapoints: [],
       repeat_colors: {},
       x_axis_sample_length: 100,
-      dynamic_plot_width: 1160,
+      dynamic_plot_width: 1150,
       delay_blocks: [],
       x_axis_label: "Time (s)",
     };
@@ -63,7 +62,7 @@ export default {
         this.y_min_max = state.y_axis_scale;
         this.x_axis_sample_length = 100;
         state.x_axis_scale = 100;
-        this.dynamic_plot_width = 1160;
+        this.dynamic_plot_width = 1150;
         this.delay_blocks = state.delay_blocks;
       }
       if (mutation.type === "stimulation/set_zoom_out" || mutation.type === "stimulation/set_zoom_in") {
