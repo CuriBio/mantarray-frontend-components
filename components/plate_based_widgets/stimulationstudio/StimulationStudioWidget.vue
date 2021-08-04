@@ -350,7 +350,6 @@ export default {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 22px;
   height: 25px;
@@ -371,7 +370,6 @@ export default {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 53px;
   height: 27px;

@@ -64,7 +64,7 @@ export default {
   font-weight: normal;
   position: relative;
   padding-right: 11px;
-  font-size: 18px;
+  font-size: 16px;
   left: 160px;
 }
 .span__axis-controls-zoom-in-button {
@@ -72,8 +72,8 @@ export default {
   text-align: center;
   font-weight: normal;
   position: relative;
-  font-size: 18px;
-  left: 155px;
+  font-size: 16px;
+  left: 150px;
 }
 * {
   -webkit-font-smoothing: antialiased;

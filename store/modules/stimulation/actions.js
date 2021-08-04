@@ -26,7 +26,7 @@ export default {
         setting.phase_one_duration + x_values[x_values.length - 1]
       );
       y_values.push(setting.phase_one_charge, setting.phase_one_charge);
-      if (setting.interpulse_duration > 0) {
+      if (setting.phase_two_duration > 0) {
         x_values.push(
           x_values[x_values.length - 1],
           setting.interpulse_duration + x_values[x_values.length - 1]
@@ -176,7 +176,7 @@ export default {
             protocol: protocol_editor,
           };
       });
-      console.log(updated_protocol);
+
       await this.commit("stimulation/set_edit_mode_off");
       await this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
     }

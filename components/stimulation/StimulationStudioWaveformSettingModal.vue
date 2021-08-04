@@ -419,7 +419,7 @@ export default {
 }
 
 .question_icon {
-  font-size: 20px;
+  font-size: 18px;
   color: #b7b7b7;
 }
 .span__stimulationstudio-current-settings-title {
@@ -681,7 +681,6 @@ export default {
 .div__stimulationstudio-voltage-input-container {
   pointer-events: all;
   transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 190px;
   height: 57px;
@@ -961,7 +960,6 @@ export default {
 .div__stimulationstudio-current-settings-voltagetwo-input-container {
   pointer-events: all;
   transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 190px;
   height: 57px;
