@@ -69,7 +69,7 @@
     <div id="cmpDf07f8e650ebe6951292aa4edcc603608" class="div__stimulationstudio-voltage-input-container">
       <span id="cmpDf07f8e650ebe6951292aa4edcc603608_txt" class="span__stimulationstudio-voltage-input">
         <InputWidget
-          :initial_value="'250'"
+          :initial_value="'25'"
           :dom_id_suffix="'max_charge'"
           :invalid_text="''"
           :input_width="142"
@@ -191,7 +191,7 @@
           class="span__stimulationstudio-current-settings-voltagetwo-input"
         >
           <InputWidget
-            :initial_value="'250'"
+            :initial_value="'25'"
             :dom_id_suffix="'max_chargetwo'"
             :invalid_text="''"
             :input_width="142"
@@ -282,7 +282,7 @@ export default {
   },
   props: {
     stimulation_type: { type: String, default: "Voltage (mV)" },
-    waveform_type: { type: String, default: "Monophasic" },
+    waveform_type: { type: String, default: "Biphasic" },
     button_names: {
       type: Array,
       default() {
@@ -312,7 +312,7 @@ export default {
         max_duration: "Duration must be <= 50ms",
         valid: "",
         max_current: "Must be within +/- 100",
-        max_voltage: "Must be within +/- 32",
+        max_voltage: "Must be within +/- 1200",
       },
       err_msg: {
         phase_one_duration: "Required",
@@ -338,7 +338,7 @@ export default {
   },
   created() {
     this.waveform_settings = this.selected_waveform_settings;
-
+    console.log(this.selected_waveform_settings);
     if (this.waveform_type === "Monophasic") {
       this.waveform_settings = {
         ...this.waveform_settings,
@@ -361,7 +361,7 @@ export default {
       this.$emit("close", button_label, this.waveform_settings);
     },
     check_validity(value, label) {
-      this.waveform_settings[label] = Number(value);
+      this.waveform_settings[label] = value;
       const valid_inputs = [];
 
       if (label.includes("duration")) {
@@ -389,8 +389,11 @@ export default {
       else if (check_duration) {
         if (!number_regex.test(value) && value !== "") {
           this.err_msg[label] = this.invalid_err_msg.num_err;
-        } else if (value === "" || value === 0) this.err_msg[label] = this.invalid_err_msg.required;
-        else if (number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.valid;
+        } else if (value === "" || value === "0") this.err_msg[label] = this.invalid_err_msg.required;
+        else if (number_regex.test(value) && value !== "") {
+          this.err_msg[label] = this.invalid_err_msg.valid;
+          this.waveform_settings[label] = Number(value);
+        }
       }
     },
     check_charge_validity(value, label) {
@@ -398,15 +401,15 @@ export default {
 
       if (this.stimulation_type.includes("C")) {
         if (-100 > value || 100 < value) this.err_msg[label] = this.invalid_err_msg.max_current;
-        else if (!number_regex.test(value) && value !== "") {
+        else if (!number_regex.test(value) && value !== "")
           this.err_msg[label] = this.invalid_err_msg.num_err;
-        } else if (value === "" || value === 0) this.err_msg[label] = this.invalid_err_msg.required;
+        else if (value === "" || value === 0) this.err_msg[label] = this.invalid_err_msg.required;
         else if (number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.valid;
       } else if (this.stimulation_type.includes("V")) {
         if (-1200 > value || 1200 < value) this.err_msg[label] = this.invalid_err_msg.max_voltage;
-        else if (!number_regex.test(value) && value !== "") {
+        else if (!number_regex.test(value) && value !== "")
           this.err_msg[label] = this.invalid_err_msg.num_err;
-        } else if (value === "" || value === 0) this.err_msg[label] = this.invalid_err_msg.required;
+        else if (value === "" || value === "0") this.err_msg[label] = this.invalid_err_msg.required;
         else if (number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.valid;
       }
     },

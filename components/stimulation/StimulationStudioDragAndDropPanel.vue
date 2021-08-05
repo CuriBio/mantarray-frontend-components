@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="modal_type !== null || repeat_delay_modal !== null ? 'modal_overlay' : null">
-      <div class="div__background-container">
+      <div>
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
           <canvas class="canvas__stimulationstudio-header-separator" />
@@ -13,14 +13,14 @@
             :clone="clone"
           >
             <div v-for="(types, idx) in icon_types" :id="types.type" :key="idx">
-              <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+              <img :src="types.src" />
             </div>
           </draggable>
         </div>
         <SmallDropDown
           class="dropdown-container"
           :input_height="25"
-          :input_width="95"
+          :input_width="90"
           :options_text="time_units_array"
           :options_idx="time_units_idx"
           :dom_id_suffix="'time_units'"
@@ -31,7 +31,7 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
-            style="height: 118px; display: flex"
+            style="height: 100px; display: flex"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
@@ -52,16 +52,12 @@
                   </span>
                 </div>
               </div>
-              <img
-                :src="types.src"
-                :style="'cursor: pointer;'"
-                @click.shift.exact="open_modal_for_edit(types.type, idx)"
-              />
+              <img :src="types.src" @click.shift.exact="open_modal_for_edit(types.type, idx)" />
 
               <draggable
                 v-model="types.nested_protocols"
                 class="dropzone"
-                style="height: 120px; display: flex"
+                style="height: 100px; display: flex"
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
@@ -75,7 +71,7 @@
                   :style="'position: relative;'"
                   @click.shift.exact="open_modal_for_edit(nested_types.type, idx, nested_idx)"
                 >
-                  <img :src="nested_types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+                  <img :src="nested_types.src" :style="'margin-top: 4px;'" />
                 </div>
               </draggable>
             </div>
@@ -94,7 +90,7 @@
         @close="on_modal_close"
       />
     </div>
-    <div v-if="repeat_delay_modal !== null" class="modal-container" :style="'top: 200px;'">
+    <div v-if="repeat_delay_modal !== null" class="modal-container">
       <StimulationStudioRepeatDelayModal
         :delay_open_for_edit="delay_open_for_edit"
         :repeat_idx="repeat_idx"
@@ -340,9 +336,10 @@ export default {
 .div__DragAndDdrop-panel {
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 85%;
-  height: 100%;
+  width: 300px;
+  height: 885px;
   bottom: 0;
+  left: 1329px;
   display: flex;
   justify-content: center;
   justify-self: flex-end;
@@ -350,28 +347,32 @@ export default {
 .repeat_container {
   display: flex;
   align-items: center;
-  padding: 6px;
+  padding: 4px;
 }
-.div__icon-container {
-  margin-top: 80px;
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  border: 2px solid white;
+.img__icon-container {
+  cursor: pointer;
+  height: 93px;
+  width: 92px;
 }
+
+img {
+  height: 93px;
+  width: 92px;
+}
+
 .ghost {
-  padding: 0 8px 0 8px;
+  padding: 0 7px;
 }
 .modal-container {
-  left: 33%;
+  left: 26%;
   position: absolute;
-  top: 5%;
+  /* top: 5%; */
 }
 .dropdown-container {
   position: absolute;
   z-index: 2;
-  top: 350px;
-  left: -115px;
+  top: 372px;
+  left: 1188px;
 }
 .circle {
   width: 30px;
@@ -406,37 +407,28 @@ export default {
   font-family: Muli;
   color: rgb(17, 17, 17);
 }
-.div__background-container {
-  position: absolute;
-  width: 365px;
-  height: 100%;
-  bottom: 0;
-  display: flex;
-  justify-content: flex-end;
-}
+
 .modal_overlay {
   width: 1629px;
   height: 885px;
   position: absolute;
-  left: 0;
+  top: 0;
   background: rgb(0, 0, 0);
   z-index: 5;
   opacity: 0.6;
-  display: flex;
-  justify-content: flex-end;
 }
 .div__scroll-container {
   position: absolute;
-  top: 440px;
-  width: 336%;
-  height: 120px;
-  right: 353px;
+  top: 460px;
+  width: 1301px;
+  height: 100px;
+  right: 312px;
   overflow-x: scroll;
-  background: rgb(27, 27, 27);
+  background: rgb(17, 17, 17);
+  overflow: visible;
   z-index: 1;
   white-space: nowrap;
   overflow: visible;
-  border: 1px solid rgb(17, 17, 17);
 }
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;

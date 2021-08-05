@@ -23,8 +23,8 @@ export default {
         protocol: {
           name: "Tester",
           stimulation_type: "V",
-          rest_duration: 20,
-          time_unit: "seconds",
+          rest_duration: 1,
+          time_unit: "milliseconds",
           pulses: [
             {
               phase_one_duration: 15,
@@ -48,7 +48,7 @@ export default {
               nested_protocols: [],
               repeat: { color: "d822f9", number_of_repeats: 0 },
               settings: {
-                phase_one_duration: 15000,
+                phase_one_duration: 15,
                 phase_one_charge: 0,
                 interpulse_duration: 0,
                 phase_two_duration: 0,

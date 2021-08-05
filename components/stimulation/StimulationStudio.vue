@@ -1,6 +1,6 @@
 <template>
   <div class="div__stimulationstudio-layout-background">
-    <span class="span__stimulationstudio-header-label">Stimulation Studio </span>
+    <span class="span__stimulationstudio-header-label">Stimulation Studio</span>
     <StimulationStudioWidget class="stimulationstudio_widget-container" />
     <StimulationStudioCreateAndEdit
       class="stimulationstudio_createandedit-container"
@@ -106,22 +106,22 @@ export default {
   position: absolute;
   width: 1629px;
   height: 885px;
-  left: 1px;
-  display: grid;
-  grid-template-columns: 555px 705px 365px;
-  grid-template-rows: 60px 290px 220px 297px;
 }
 
 .span__stimulationstudio-header-label {
   pointer-events: all;
-  grid-area: 1 / 1 / 2 / 2;
   align-self: center;
   line-height: 100%;
+  position: relative;
   transform: rotate(0deg);
   visibility: visible;
   user-select: none;
   font-family: Muli;
   font-size: 23px;
+  width: 658px;
+  height: 24px;
+  top: 20px;
+  left: 200px;
   color: rgb(255, 255, 255);
   text-align: center;
 }
@@ -144,33 +144,35 @@ export default {
   align-content: center;
   position: relative;
   width: 90%;
-  height: 50px;
+  height: 45px;
   margin: 0 40px 0 40px;
   background: #b7b7b7;
 }
 .btn-label {
   transform: translateZ(0px);
-  line-height: 50px;
+  line-height: 45px;
   font-family: Muli;
   font-size: 16px;
   color: rgb(0, 0, 0);
 }
 .stimulationstudio_widget-container {
-  grid-area: 2 / 1 / 3 / 2;
-  right: 20px;
+  top: 77px;
+  left: 132px;
 }
 .stimulationstudio_createandedit-container {
-  grid-area: 2 / 2 / 3 / 3;
+  top: 77px;
+  left: 563px;
 }
 
 .stimulationstudio_draganddroppanel-container {
-  grid-area: 1 / 3 / 4 / 3;
+  top: 0px;
 }
 .stimulationstudio_blockvieweditor-container {
-  grid-area: 3 / 1 / 4 / 3;
+  top: 375px;
+  left: 6px;
 }
 .stimulationstudio_protocolviewer-container {
-  grid-area: 4 / 1 / 5 / 3;
-  left: 35px;
+  top: 570px;
+  left: 6px;
 }
 </style>

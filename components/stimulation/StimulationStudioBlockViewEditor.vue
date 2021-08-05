@@ -19,7 +19,7 @@
         <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
         <input
           v-model="protocol_name"
-          class="protocol_input"
+          class="protocol_name_nput"
           placeholder="Protocol Name"
           :disabled="disabled === true"
           :style="name_validity"
@@ -30,7 +30,7 @@
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
-            :input_width="190"
+            :input_width="196"
             :options_text="stimulation_types_array"
             :options_idx="stimulation_type_idx"
             :dom_id_suffix="'stimulation_type'"
@@ -39,7 +39,7 @@
           <SmallDropDown
             :style="'margin-left: 5%;'"
             :input_height="25"
-            :input_width="155"
+            :input_width="176"
             :options_text="until_options_array"
             :dom_id_suffix="'stop_options'"
             @selection-changed="handle_stop_requirement"
@@ -54,7 +54,7 @@
           <FontAwesomeIcon
             id="trash_icon"
             class="trash-icon"
-            :icon="['fa', 'trash']"
+            :icon="['fa', 'trash-alt']"
             @click="handle_trash_modal"
           />
           <BPopover
@@ -80,10 +80,10 @@ import Vue from "vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { BPopover } from "bootstrap-vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faPencilAlt, faTrash);
+library.add(faPencilAlt, faTrashAlt);
 Vue.component("BPopover", BPopover);
 
 /**
@@ -231,11 +231,9 @@ export default {
 <style scoped>
 .div__BlockViewEditor-background {
   background: rgb(0, 0, 0);
-  position: relative;
+  position: absolute;
   border-radius: 10px;
-  width: 90%;
-  height: 100%;
-  left: 35px;
+  width: 1322px;
   font-family: muli;
 }
 .error-message {
@@ -305,7 +303,7 @@ button:hover {
   width: 100%;
   height: 40px;
   display: flex;
-  top: 2%;
+  top: 1%;
   align-items: center;
 }
 
@@ -313,7 +311,7 @@ button:hover {
   position: relative;
   left: 2%;
   font-weight: bold;
-  font-size: 22px;
+  font-size: 25px;
 }
 .pencil-icon {
   left: 4%;
@@ -321,10 +319,10 @@ button:hover {
   position: relative;
 }
 .trash-icon {
-  margin-left: 12%;
+  margin-left: 11%;
   margin-right: 1%;
-  color: #b7b7b7;
-  padding-top: 4px;
+  color: #4c4c4c;
+  padding-top: 2px;
   font-size: 20px;
 }
 
@@ -335,7 +333,8 @@ button:hover {
 }
 
 .div__right-settings-panel {
-  width: 80%;
+  left: 1000px;
+  width: 90%;
   display: flex;
   justify-self: flex-end;
   justify-content: flex-end;
@@ -344,18 +343,18 @@ button:hover {
 }
 .number_input {
   background: #1c1c1c;
-  height: 25.5px;
-  width: 40px;
+  height: 25px;
+  width: 50px;
   border: none;
   color: #b7b7b7;
   font-size: 12px;
   margin-right: 1%;
   text-align: center;
 }
-.protocol_input {
+.protocol_name_nput {
   background: rgb(0, 0, 0);
-  height: 30px;
-  width: 250px;
+  height: 25px;
+  width: 300px;
   left: 3%;
   position: relative;
   border: none;
@@ -366,7 +365,7 @@ button:hover {
   background: rgb(8, 8, 8);
   border: 2px solid rgb(17, 17, 17);
   width: 50%;
-  height: 90%;
+  height: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -384,13 +383,13 @@ button:hover {
 .div__Editor-background {
   transform: rotate(0deg);
   background: rgb(17, 17, 17);
-  width: 110%;
-  height: 87%;
+  width: 1322px;
+  height: 175px;
 }
 .div__Tabs-panel {
   background: rgb(17, 17, 17);
-  width: 20%;
-  height: 13%;
+  width: 200px;
+  height: 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;

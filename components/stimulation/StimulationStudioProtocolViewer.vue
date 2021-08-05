@@ -41,7 +41,7 @@ export default {
       datapoints: [],
       repeat_colors: {},
       x_axis_sample_length: 100,
-      dynamic_plot_width: 1150,
+      dynamic_plot_width: 1200,
       delay_blocks: [],
       x_axis_label: "Time (ms)",
     };
@@ -93,8 +93,9 @@ export default {
 <style scoped>
 .protocol-viewer-background {
   background: rgb(0, 0, 0);
-  position: relative;
+  position: absolute;
   height: 50%;
-  width: 100%;
+  width: 1322px;
+  height: 200px;
 }
 </style>

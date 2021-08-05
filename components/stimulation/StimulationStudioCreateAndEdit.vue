@@ -68,15 +68,15 @@ export default {
       btn_labels: {
         "Apply to Selection": " left: 19%; top: 49%; ",
         "Clear Selection": " left: 51%; top: 49%; ",
-        "Use Active Stimulation Settings": " left: 3%; top: 75%; width: 40%; ",
+        "Use Active Stimulation Settings": " left: 3%; top: 76%; width: 40%; ",
       },
       import_export_btn_labels: {
-        "Import Protocol": " left: 45%; top: 75%; width: 25%;",
-        "Export Protocol": " left: 72%; top: 75%; width: 25%;",
+        "Import Protocol": " left: 45%; top: 76%; width: 25%;",
+        "Export Protocol": " left: 72%; top: 76%; width: 25%;",
       },
       selected_protocol_idx: 0,
       input_height: 45,
-      input_width: 550,
+      input_width: 600,
       protocol_list: [],
     };
   },
@@ -204,7 +204,7 @@ export default {
   width: 210px;
   height: 50px;
   top: 75px;
-  right: 380px;
+  right: 410px;
   padding: 5px;
   z-index: 3;
 }
@@ -219,7 +219,7 @@ export default {
   align-content: center;
   position: absolute;
   width: 30%;
-  height: 50px;
+  height: 45px;
   background: #b7b7b7;
 }
 
@@ -229,7 +229,7 @@ export default {
   align-content: center;
   position: absolute;
   width: 30%;
-  height: 50px;
+  height: 45px;
   background: #b7b7b7c9;
 }
 
@@ -240,7 +240,7 @@ export default {
 
 .span__stimulationstudio-btn-label {
   transform: translateZ(0px);
-  line-height: 50px;
+  line-height: 45px;
   font-family: Muli;
   font-size: 16px;
   color: rgb(0, 0, 0);
@@ -248,7 +248,7 @@ export default {
 
 .span__stimulationstudio-btn-label-disable {
   transform: translateZ(0px);
-  line-height: 50px;
+  line-height: 45px;
   font-family: Muli;
   font-size: 16px;
   color: #6e6f72;
@@ -258,7 +258,7 @@ export default {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;
-  width: 90%;
+  width: 620px;
   height: 2px;
   top: 70%;
   visibility: visible;
