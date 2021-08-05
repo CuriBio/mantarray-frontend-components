@@ -46,10 +46,10 @@
           />
           <span class="span__settings-label">every</span>
           <input
-            v-model="end_delay_duration"
+            v-model="rest_duration"
             class="number_input"
             placeholder=""
-            @change="handle_repeat_frequency($event.target.value)"
+            @change="handle_rest_duration($event.target.value)"
           />
           <FontAwesomeIcon
             id="trash_icon"
@@ -96,7 +96,7 @@ Vue.component("BPopover", BPopover);
  * @vue-data {Array} until_options_array - Available options in dropdown
  * @vue-data {String} protocol_name - Inputted new protocol name
  * @vue-data {String} stop_requirement - Selected requirement from dropdown
- * @vue-data {String} end_delay_duration - Inputted delay to be set at the end of the protocol between repeats
+ * @vue-data {String} rest_duration - Inputted delay to be set at the end of the protocol between repeats
  * @vue-data {String} name_validity - Corresponding border style after name validity check
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
@@ -107,7 +107,7 @@ Vue.component("BPopover", BPopover);
  * @vue-event {Event} handle_delete - Confirms and commits the deletion of protocol to state
  * @vue-event {Event} handle_stimulation_type - Commits the new selected stimulation type to state
  * @vue-event {Event} handle_stop_requirement - Currently just assigns the new stop requirement to local state
- * @vue-event {Event} handle_repeat_frequency - Commits the new delay input to state
+ * @vue-event {Event} handle_rest_duration - Commits the new delay input to state
  * @vue-event {Event} check_name_validity - Checks if the inputted name has already been used
  */
 
@@ -129,7 +129,7 @@ export default {
       until_options_array: ["Stimulate Until Stopped", "Repeat"],
       protocol_name: "",
       stop_requirement: "Stimulate Until Stopped",
-      end_delay_duration: "",
+      rest_duration: "",
       name_validity: "null",
       error_message: "",
       protocol_list: [],
@@ -142,7 +142,7 @@ export default {
     }),
     ...mapGetters("stimulation", [
       "get_protocol_name",
-      "get_end_delay_duration",
+      "get_rest_duration",
       "get_protocols",
       "get_next_protocol",
     ]),
@@ -157,7 +157,7 @@ export default {
         this.update_protocols();
         this.show_confirmation = false;
         this.protocol_name = "";
-        this.end_delay_duration = "";
+        this.rest_duration = "";
         this.name_validity = "";
       }
       if (
@@ -169,7 +169,7 @@ export default {
       if (mutation.type === "stimulation/set_edit_mode") {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
-        this.end_delay_duration = this.get_end_delay_duration;
+        this.rest_duration = this.get_rest_duration;
         this.stimulation_type == "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
       }
     });
@@ -178,7 +178,7 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_repeat_frequency"]),
+    ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_rest_duration"]),
     ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name"]),
     update_protocols() {
       this.protocol_list = this.get_protocols;
@@ -205,9 +205,9 @@ export default {
       const requirement = this.until_options_array[idx];
       this.stop_requirement = requirement;
     },
-    handle_repeat_frequency(time) {
-      this.end_delay_duration = time;
-      this.handle_new_repeat_frequency(time);
+    handle_rest_duration(time) {
+      this.rest_duration = time;
+      this.handle_new_rest_duration(time);
     },
     check_name_validity(input) {
       const matched_names = this.protocol_list.filter((protocol) => {

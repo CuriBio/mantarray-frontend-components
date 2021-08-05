@@ -24,8 +24,8 @@ export default {
     protocol_editor.pulses = pulses;
     protocol_editor.detailed_pulses = new_pulse_order;
   },
-  set_axis_values(state, { converted_x_values, y_values }) {
-    state.x_axis_values = converted_x_values;
+  set_axis_values(state, { x_values, y_values }) {
+    state.x_axis_values = x_values;
     state.y_axis_values = y_values;
   },
   set_repeat_color_assignments(state, assignments) {
@@ -46,7 +46,7 @@ export default {
         name: "",
         stimulation_type: "V",
         stop_requirement: "Until Stopped",
-        end_delay_duration: 0,
+        rest_duration: 0,
         time_unit: "seconds",
         pulses: [],
       },
@@ -69,7 +69,7 @@ export default {
         name: "",
         stimulation_type: "V",
         stop_requirement: "Until Stopped",
-        end_delay_duration: 0,
+        rest_duration: 0,
         time_unit: "seconds",
         pulses: [],
       },
@@ -83,18 +83,18 @@ export default {
     };
     Object.assign(state, replace_state);
   },
-  set_repeat_frequency({ protocol_editor }, time) {
-    protocol_editor.end_delay_duration = Number(time);
+  set_rest_duration({ protocol_editor }, time) {
+    protocol_editor.rest_duration = Number(time);
   },
   set_delay_axis_values(state, delay) {
-    const { end_delay_duration, pulses, time_unit } = state.protocol_editor;
+    const { rest_duration, pulses, time_unit } = state.protocol_editor;
     const delay_conversion = {
       seconds: 1000,
       milliseconds: 1,
       minutes: 60000,
       hours: 3600000,
     };
-    const converted_delay_duration = end_delay_duration * delay_conversion[time_unit];
+    const converted_delay_duration = rest_duration * delay_conversion[time_unit];
     const delay_pulse_model = {
       phase_one_duration: converted_delay_duration,
       phase_one_charge: 0,

@@ -147,7 +147,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     const test_value = 5;
 
     await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
-    await store.dispatch("stimulation/handle_new_repeat_frequency", test_value);
+    await store.dispatch("stimulation/handle_new_rest_duration", test_value);
     expect(wrapper.vm.delay_blocks).toBe(store.state.stimulation.delay_blocks);
     expect(wrapper.vm.delay_blocks).toStrictEqual(expected_delay_values);
   });

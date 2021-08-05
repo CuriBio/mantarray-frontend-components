@@ -23,7 +23,7 @@ export default {
         protocol: {
           name: "Tester",
           stimulation_type: "V",
-          end_delay_duration: 20,
+          rest_duration: 20,
           time_unit: "seconds",
           pulses: [
             {

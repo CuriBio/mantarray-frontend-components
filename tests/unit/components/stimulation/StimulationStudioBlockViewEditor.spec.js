@@ -17,7 +17,7 @@ const test_protocol_list = [
     protocol: {
       name: "Tester",
       stimulation_type: "V",
-      end_delay_duration: 20,
+      rest_duration: 20,
       time_unit: "milliseconds",
       pulses: [
         {
@@ -91,7 +91,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       protocol: {
         name: "mock_tester",
         stimulation_type: "C",
-        end_delay_duration: 40,
+        rest_duration: 40,
         time_unit: "milliseconds",
         pulses: [],
         detailed_pulses: [],
@@ -101,12 +101,12 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await store.dispatch("stimulation/edit_selected_protocol", v_test_param);
     expect(wrapper.vm.stimulation_type_idx).toBe(0);
     expect(wrapper.vm.current_letter).toBe(v_test_param.letter);
-    expect(wrapper.vm.end_delay_duration).toBe(20);
+    expect(wrapper.vm.rest_duration).toBe(20);
 
     await store.dispatch("stimulation/edit_selected_protocol", c_test_param);
     expect(wrapper.vm.stimulation_type_idx).toBe(1);
     expect(wrapper.vm.current_letter).toBe(c_test_param.letter);
-    expect(wrapper.vm.end_delay_duration).toBe(40);
+    expect(wrapper.vm.rest_duration).toBe(40);
   });
 
   test("When a user adds input to frequency input, Then the change will be recorded in data", async () => {
@@ -117,7 +117,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     const input = wrapper.find(".number_input");
     input.element.value = "5";
     await input.trigger("change");
-    expect(wrapper.vm.end_delay_duration).toBe("5");
+    expect(wrapper.vm.rest_duration).toBe("5");
   });
 
   test("When a user adds new protocol name, Then it will be checked if it is a unique name or if it already exists", async () => {

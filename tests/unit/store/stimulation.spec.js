@@ -54,7 +54,7 @@ describe("store/stimulation", () => {
       protocol: {
         name: "Tester",
         stimulation_type: "V",
-        end_delay_duration: 20,
+        rest_duration: 20,
         time_unit: "milliseconds",
         pulses: [
           {
@@ -128,8 +128,8 @@ describe("store/stimulation", () => {
     });
 
     test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
-      const voltage = "Voltage (mV)";
-      const current = "Current (µA)";
+      const voltage = "Voltage (V)";
+      const current = "Current (mA)";
 
       const default_type = store.getters["stimulation/get_stimulation_type"];
       expect(default_type).toBe(voltage);
@@ -145,7 +145,7 @@ describe("store/stimulation", () => {
 
     test("When requesting the detailed pulse order, name, and end delay duration to edit existing protocol in the editor, Then it should return specified pulse order", async () => {
       const selected_protocol = store.state.stimulation.protocol_list[1];
-      const { detailed_pulses, name, end_delay_duration } = selected_protocol.protocol;
+      const { detailed_pulses, name, rest_duration } = selected_protocol.protocol;
       await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
 
       const actual_detailed_pulses = store.getters["stimulation/get_detailed_pulse_order"];
@@ -154,8 +154,8 @@ describe("store/stimulation", () => {
       const actual_name = store.getters["stimulation/get_protocol_name"];
       expect(actual_name).toBe(name);
 
-      const actual_delay = store.getters["stimulation/get_end_delay_duration"];
-      expect(actual_delay).toBe(end_delay_duration);
+      const actual_delay = store.getters["stimulation/get_rest_duration"];
+      expect(actual_delay).toBe(rest_duration);
     });
 
     test("Given a protocol has been selected for edit, When requesting the protocol assignment in the protocol editor, Then it should return the assignment of the selected protocol for edit", async () => {
@@ -200,8 +200,8 @@ describe("store/stimulation", () => {
     test("When stimulation store is mutated with a new delay frequency, Then said frequency should update in state", () => {
       const delay = "10";
       const int_delay = 10;
-      store.commit("stimulation/set_repeat_frequency", delay);
-      expect(store.state.stimulation.protocol_editor.end_delay_duration).toBe(int_delay);
+      store.commit("stimulation/set_rest_duration", delay);
+      expect(store.state.stimulation.protocol_editor.rest_duration).toBe(int_delay);
     });
 
     test("When a user adds a protocol to selected wells, Then the selected wells should be added to protocol assignments with specified protocol", async () => {
@@ -458,7 +458,7 @@ describe("store/stimulation", () => {
     test("When a user adds a repeat delay into the input of the settings panel, Then it will appear at the end of the waveform in the graph", async () => {
       const test_delay = 10;
       const expected_block = [[0, 10]];
-      await store.dispatch("stimulation/handle_new_repeat_frequency", test_delay);
+      await store.dispatch("stimulation/handle_new_rest_duration", test_delay);
       const { delay_blocks } = store.state.stimulation;
       expect(delay_blocks).toStrictEqual(expected_block);
     });

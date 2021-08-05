@@ -69,45 +69,44 @@ export default {
 
     this.commit("stimulation/set_repeat_color_assignments", color_assignments);
     this.commit("stimulation/set_pulses", { pulses, new_pulse_order });
-    this.dispatch("stimulation/handle_repeat_frequency", {
+    this.dispatch("stimulation/handle_rest_duration", {
       x_values,
       y_values,
     });
   },
 
-  handle_repeat_frequency({ commit, state }, { x_values, y_values }) {
-    const { end_delay_duration, time_unit } = this.state.stimulation.protocol_editor;
-    const converted_x_values = x_values.map((value) => (value /= 1000));
+  handle_rest_duration({ commit, state }, { x_values, y_values }) {
+    const { rest_duration, time_unit } = this.state.stimulation.protocol_editor;
     let delay_block;
 
     const delay_conversion = {
-      seconds: 1,
-      milliseconds: 0.001,
-      minutes: 60,
+      seconds: 1000,
+      milliseconds: 1,
+      minutes: 60000,
       hours: 3600,
     };
 
-    if (end_delay_duration !== 0) {
-      const converted_delay = end_delay_duration * delay_conversion[time_unit];
-      const last_x_value = converted_x_values[x_values.length - 1];
+    if (rest_duration !== 0) {
+      const converted_delay = rest_duration * delay_conversion[time_unit];
+      const last_x_value = x_values[x_values.length - 1];
       const next_x_value = last_x_value + converted_delay;
       delay_block = [last_x_value, next_x_value];
     }
 
-    if (end_delay_duration === 0) {
+    if (rest_duration === 0) {
       delay_block = [NaN, NaN];
     }
 
     this.commit("stimulation/set_delay_axis_values", delay_block);
-    this.commit("stimulation/set_axis_values", { converted_x_values, y_values });
+    this.commit("stimulation/set_axis_values", { x_values, y_values });
   },
 
-  async handle_new_repeat_frequency({ dispatch, state, commit }, time) {
+  async handle_new_rest_duration({ dispatch, state, commit }, time) {
     const { detailed_pulses } = this.state.stimulation.protocol_editor;
 
     if (time === "") time = "0";
 
-    await this.commit("stimulation/set_repeat_frequency", time);
+    await this.commit("stimulation/set_rest_duration", time);
     this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
   },
 
@@ -196,15 +195,19 @@ export default {
     const status = true;
     const message = { protocol: [] };
     const { protocol_assignments } = this.state.stimulation;
+    const charge_conversion = {
+      C: 1000,
+      V: 1,
+    };
 
     for (const well in protocol_assignments) {
       if (protocol_assignments !== {}) {
         const { stimulation_type, pulses } = protocol_assignments[well].protocol;
-
         const converted_pulses = pulses.map((pulse) => ({
-          ...pulse,
           phase_one_duration: (pulse.phase_one_duration *= 1000),
+          phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]),
           interpulse_duration: (pulse.interpulse_duration *= 1000),
+          phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]),
           phase_two_duration: (pulse.phase_two_duration *= 1000),
         }));
 
@@ -237,14 +240,14 @@ export default {
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {
     const { label, letter, color } = protocol;
-    const { stimulation_type, time_unit, end_delay_duration, detailed_pulses } = protocol.protocol;
+    const { stimulation_type, time_unit, rest_duration, detailed_pulses } = protocol.protocol;
     this.state.stimulation.current_assignment = { letter, color };
 
     try {
       await this.commit("stimulation/set_protocol_name", label);
       await this.commit("stimulation/set_stimulation_type", stimulation_type);
       await this.commit("stimulation/set_time_unit", time_unit);
-      await this.commit("stimulation/set_repeat_frequency", end_delay_duration);
+      await this.commit("stimulation/set_rest_duration", rest_duration);
       await this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
     } catch (error) {
       console.log(error);

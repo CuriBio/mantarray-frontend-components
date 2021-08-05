@@ -18,7 +18,7 @@ const test_protocol_list = [
     protocol: {
       name: "Tester",
       stimulation_type: "V",
-      end_delay_duration: 20,
+      rest_duration: 20,
       time_unit: "milliseconds",
       pulses: [
         {
@@ -141,7 +141,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
 
   test("When a user selects Create New in the protocol dropdown, Then the protocol editor will reset to be empty", async () => {
     // const reset_protocol_editor = {
-    //   end_delay_duration: 0,
+    //   rest_duration: 0,
     //   name: "",
     //   pulses: [],
     //   stimulation_type: "V",

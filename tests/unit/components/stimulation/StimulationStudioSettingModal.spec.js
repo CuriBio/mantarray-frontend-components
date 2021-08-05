@@ -49,12 +49,12 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       store,
       localVue,
       propData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage (V)",
         waveform_type: "Biphasic",
       },
     });
     const title = wrapper.find(".span__stimulationstudio-current-settings-label-three").text();
-    expect(title).toBe("Voltage (mV)");
+    expect(title).toBe("Voltage (V)");
     const biphasic_label = wrapper.find(".span__stimulationstudio-current-settings-label-twelve");
     expect(biphasic_label).toBeTruthy();
   });
@@ -63,7 +63,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       store,
       localVue,
       propData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage (V)",
         waveform_type: "Monophasic",
       },
     });
@@ -92,7 +92,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       store,
       localVue,
       propData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage (V)",
         waveform_type: "Monophasic",
       },
     });

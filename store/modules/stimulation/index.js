@@ -9,7 +9,7 @@ const state = () => ({
   protocol_editor: {
     name: "",
     stimulation_type: "V",
-    end_delay_duration: 0,
+    rest_duration: 0,
     time_unit: "seconds",
     pulses: [],
     detailed_pulses: [],

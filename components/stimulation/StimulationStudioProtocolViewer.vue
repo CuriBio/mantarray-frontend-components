@@ -33,7 +33,7 @@ export default {
     StimulationStudioWaveform,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (mV)" },
+    stimulation_type: { type: String, default: "Voltage (V)" },
   },
   data() {
     return {
@@ -43,7 +43,7 @@ export default {
       x_axis_sample_length: 100,
       dynamic_plot_width: 1150,
       delay_blocks: [],
-      x_axis_label: "Time (s)",
+      x_axis_label: "Time (ms)",
     };
   },
   created: function () {

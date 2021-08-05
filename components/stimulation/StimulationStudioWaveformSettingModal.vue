@@ -26,14 +26,15 @@
     <div id="cmpD830cdea88a8752e1fdd278dd0215b99d" class="div__stimulationstudio-duration-input-container">
       <span id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt" class="span__stimulationstudio-duration-input">
         <InputWidget
-          :placeholder="'1000 ms'"
+          :placeholder="'10 ms'"
           :dom_id_suffix="'duration'"
           :invalid_text="err_msg.phase_one_duration"
           :input_width="142"
           :initial_value="selected_waveform_settings.phase_one_duration.toString()"
           @update:value="check_validity($event, 'phase_one_duration')"
-        ></InputWidget
-      ></span>
+        />
+        ></span
+      >
     </div>
     <span id="cmpDad40b728ec40e75944b1291803f7785b" class="span__stimulationstudio-current-settings-label-two"
       >Balance&nbsp;<wbr />Charge</span
@@ -46,13 +47,13 @@
     <div id="cmpDf6ba8560cb2fbd91276a29c46743e99a" class="div__stimulationstudio-current-input-container">
       <span id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt" class="span__stimulationstudio-current-input">
         <InputWidget
-          :placeholder="'500'"
+          :placeholder="'100'"
           :dom_id_suffix="'charge'"
           :invalid_text="err_msg.phase_one_charge"
           :input_width="142"
           :initial_value="selected_waveform_settings.phase_one_charge.toString()"
           @update:value="check_validity($event, 'phase_one_charge')"
-        ></InputWidget>
+        />
       </span>
     </div>
     <span
@@ -73,7 +74,7 @@
           :invalid_text="''"
           :input_width="142"
           :disabled="true"
-        ></InputWidget>
+        />
       </span>
       <span v-popover.hover="popover_message" class="disabled_popover_container">
         <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
@@ -99,13 +100,13 @@
           class="span__stimulationstudio-current-settings-interpulse-input-container"
         >
           <InputWidget
-            :placeholder="'1000 ms'"
+            :placeholder="'10 ms'"
             :dom_id_suffix="'interpulse'"
             :invalid_text="err_msg.interpulse_duration"
             :input_width="142"
             :initial_value="selected_waveform_settings.interpulse_duration.toString()"
             @update:value="check_validity($event, 'interpulse_duration')"
-          ></InputWidget>
+          />
         </span>
       </div>
 
@@ -134,13 +135,13 @@
           class="span__stimulationstudio-current-settings-durationtwo-input"
         >
           <InputWidget
-            :placeholder="'1000 ms'"
+            :placeholder="'10 ms'"
             :dom_id_suffix="'durationtwo'"
             :invalid_text="err_msg.phase_two_duration"
             :input_width="142"
             :initial_value="selected_waveform_settings.phase_two_duration.toString()"
             @update:value="check_validity($event, 'phase_two_duration')"
-          ></InputWidget>
+          />
         </span>
       </div>
       <span
@@ -162,13 +163,13 @@
           class="span__stimulationstudio-current-settings-currenttwo-input"
         >
           <InputWidget
-            :placeholder="'-500'"
+            :placeholder="'-100'"
             :dom_id_suffix="'chargetwo'"
             :invalid_text="err_msg.phase_two_charge"
             :input_width="142"
             :initial_value="selected_waveform_settings.phase_two_charge.toString()"
             @update:value="check_validity($event, 'phase_two_charge')"
-          ></InputWidget>
+          />
         </span>
       </div>
       <span
@@ -195,7 +196,7 @@
             :invalid_text="''"
             :input_width="142"
             :disabled="true"
-          ></InputWidget>
+          />
         </span>
         <span v-popover.hover.right="popover_message" class="disabled_popover_container">
           <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
@@ -308,7 +309,10 @@ export default {
       invalid_err_msg: {
         num_err: "Must be a number",
         required: "Required",
+        max_duration: "Duration must be <= 50ms",
         valid: "",
+        max_current: "Must be within +/- 100",
+        max_voltage: "Must be within +/- 32",
       },
       err_msg: {
         phase_one_duration: "Required",
@@ -323,14 +327,13 @@ export default {
   },
   computed: {
     check_max_type: function () {
-      if (this.stimulation_type === "Current (µA)") return "Voltage (mV)";
-      else return "Current (µA)";
+      if (this.stimulation_type === "Current (mA)") return "Voltage (mV)";
+      else return "Current (mA)";
     },
   },
   watch: {
     all_valid() {
-      if (this.all_valid) this.is_enabled_array = [true, true, true];
-      if (!this.all_valid) this.is_enabled_array = [false, true, true];
+      this.is_enabled_array = [this.all_valid, true, true];
     },
   },
   created() {
@@ -358,16 +361,15 @@ export default {
       this.$emit("close", button_label, this.waveform_settings);
     },
     check_validity(value, label) {
+      this.waveform_settings[label] = Number(value);
       const valid_inputs = [];
-      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"); // accepts positive and negative integers including decimals, decimals need a leading 0 if < 1
 
-      if (!number_regex.test(value) && value !== "") {
-        this.err_msg[label] = this.invalid_err_msg.num_err;
-      } else if (value === "") {
-        this.err_msg[label] = this.invalid_err_msg.required;
-      } else if (number_regex.test(value) && value !== "") {
-        this.err_msg[label] = this.invalid_err_msg.valid;
-        this.waveform_settings[label] = Number(value);
+      if (label.includes("duration")) {
+        this.check_pulse_duration("phase_one_duration");
+        this.check_pulse_duration("phase_two_duration");
+        this.check_pulse_duration("interpulse_duration");
+      } else if (label.includes("charge")) {
+        this.check_charge_validity(value, label);
       }
 
       for (const input in this.err_msg) {
@@ -375,6 +377,38 @@ export default {
       }
 
       this.all_valid = valid_inputs.length === 5;
+    },
+    check_pulse_duration(label) {
+      const { phase_one_duration, phase_two_duration, interpulse_duration } = this.waveform_settings;
+      const value = this.waveform_settings[label];
+      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
+      const check_duration =
+        Number(phase_one_duration) + Number(phase_two_duration) + Number(interpulse_duration) <= 50;
+
+      if (!check_duration) this.err_msg[label] = this.invalid_err_msg.max_duration;
+      else if (check_duration) {
+        if (!number_regex.test(value) && value !== "") {
+          this.err_msg[label] = this.invalid_err_msg.num_err;
+        } else if (value === "" || value === 0) this.err_msg[label] = this.invalid_err_msg.required;
+        else if (number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.valid;
+      }
+    },
+    check_charge_validity(value, label) {
+      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
+
+      if (this.stimulation_type.includes("C")) {
+        if (-100 > value || 100 < value) this.err_msg[label] = this.invalid_err_msg.max_current;
+        else if (!number_regex.test(value) && value !== "") {
+          this.err_msg[label] = this.invalid_err_msg.num_err;
+        } else if (value === "" || value === 0) this.err_msg[label] = this.invalid_err_msg.required;
+        else if (number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.valid;
+      } else if (this.stimulation_type.includes("V")) {
+        if (-1200 > value || 1200 < value) this.err_msg[label] = this.invalid_err_msg.max_voltage;
+        else if (!number_regex.test(value) && value !== "") {
+          this.err_msg[label] = this.invalid_err_msg.num_err;
+        } else if (value === "" || value === 0) this.err_msg[label] = this.invalid_err_msg.required;
+        else if (number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.valid;
+      }
     },
   },
 };
