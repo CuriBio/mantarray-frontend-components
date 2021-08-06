@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       play_state: false,
-      active_gradient: ["lightgreen", "rgb(0, 88, 0)"],
+      active_gradient: ["#19ac8a", "#24524b"],
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
     };

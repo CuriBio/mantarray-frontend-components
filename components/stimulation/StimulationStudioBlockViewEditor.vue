@@ -19,7 +19,7 @@
         <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
         <input
           v-model="protocol_name"
-          class="protocol_input"
+          class="protocol_name_nput"
           placeholder="Protocol Name"
           :disabled="disabled === true"
           :style="name_validity"
@@ -30,7 +30,7 @@
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
-            :input_width="190"
+            :input_width="196"
             :options_text="stimulation_types_array"
             :options_idx="stimulation_type_idx"
             :dom_id_suffix="'stimulation_type'"
@@ -39,22 +39,22 @@
           <SmallDropDown
             :style="'margin-left: 5%;'"
             :input_height="25"
-            :input_width="155"
+            :input_width="176"
             :options_text="until_options_array"
             :dom_id_suffix="'stop_options'"
             @selection-changed="handle_stop_requirement"
           />
           <span class="span__settings-label">every</span>
           <input
-            v-model="end_delay_duration"
+            v-model="rest_duration"
             class="number_input"
             placeholder=""
-            @change="handle_repeat_frequency($event.target.value)"
+            @change="handle_rest_duration($event.target.value)"
           />
           <FontAwesomeIcon
             id="trash_icon"
             class="trash-icon"
-            :icon="['fa', 'trash']"
+            :icon="['fa', 'trash-alt']"
             @click="handle_trash_modal"
           />
           <BPopover
@@ -80,10 +80,10 @@ import Vue from "vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { BPopover } from "bootstrap-vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faPencilAlt, faTrash);
+library.add(faPencilAlt, faTrashAlt);
 Vue.component("BPopover", BPopover);
 
 /**
@@ -96,7 +96,7 @@ Vue.component("BPopover", BPopover);
  * @vue-data {Array} until_options_array - Available options in dropdown
  * @vue-data {String} protocol_name - Inputted new protocol name
  * @vue-data {String} stop_requirement - Selected requirement from dropdown
- * @vue-data {String} end_delay_duration - Inputted delay to be set at the end of the protocol between repeats
+ * @vue-data {String} rest_duration - Inputted delay to be set at the end of the protocol between repeats
  * @vue-data {String} name_validity - Corresponding border style after name validity check
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
@@ -107,7 +107,7 @@ Vue.component("BPopover", BPopover);
  * @vue-event {Event} handle_delete - Confirms and commits the deletion of protocol to state
  * @vue-event {Event} handle_stimulation_type - Commits the new selected stimulation type to state
  * @vue-event {Event} handle_stop_requirement - Currently just assigns the new stop requirement to local state
- * @vue-event {Event} handle_repeat_frequency - Commits the new delay input to state
+ * @vue-event {Event} handle_rest_duration - Commits the new delay input to state
  * @vue-event {Event} check_name_validity - Checks if the inputted name has already been used
  */
 
@@ -129,7 +129,7 @@ export default {
       until_options_array: ["Stimulate Until Stopped", "Repeat"],
       protocol_name: "",
       stop_requirement: "Stimulate Until Stopped",
-      end_delay_duration: "",
+      rest_duration: "",
       name_validity: "null",
       error_message: "",
       protocol_list: [],
@@ -142,7 +142,7 @@ export default {
     }),
     ...mapGetters("stimulation", [
       "get_protocol_name",
-      "get_end_delay_duration",
+      "get_rest_duration",
       "get_protocols",
       "get_next_protocol",
     ]),
@@ -157,7 +157,7 @@ export default {
         this.update_protocols();
         this.show_confirmation = false;
         this.protocol_name = "";
-        this.end_delay_duration = "";
+        this.rest_duration = "";
         this.name_validity = "";
       }
       if (
@@ -169,7 +169,7 @@ export default {
       if (mutation.type === "stimulation/set_edit_mode") {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
-        this.end_delay_duration = this.get_end_delay_duration;
+        this.rest_duration = this.get_rest_duration;
         this.stimulation_type == "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
       }
     });
@@ -178,7 +178,7 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_repeat_frequency"]),
+    ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_rest_duration"]),
     ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name"]),
     update_protocols() {
       this.protocol_list = this.get_protocols;
@@ -205,9 +205,9 @@ export default {
       const requirement = this.until_options_array[idx];
       this.stop_requirement = requirement;
     },
-    handle_repeat_frequency(time) {
-      this.end_delay_duration = time;
-      this.handle_new_repeat_frequency(time);
+    handle_rest_duration(time) {
+      this.rest_duration = time;
+      this.handle_new_rest_duration(time);
     },
     check_name_validity(input) {
       const matched_names = this.protocol_list.filter((protocol) => {
@@ -231,11 +231,9 @@ export default {
 <style scoped>
 .div__BlockViewEditor-background {
   background: rgb(0, 0, 0);
-  position: relative;
+  position: absolute;
   border-radius: 10px;
-  width: 90%;
-  height: 100%;
-  left: 35px;
+  width: 1322px;
   font-family: muli;
 }
 .error-message {
@@ -305,7 +303,7 @@ button:hover {
   width: 100%;
   height: 40px;
   display: flex;
-  top: 2%;
+  top: 1%;
   align-items: center;
 }
 
@@ -313,7 +311,7 @@ button:hover {
   position: relative;
   left: 2%;
   font-weight: bold;
-  font-size: 22px;
+  font-size: 25px;
 }
 .pencil-icon {
   left: 4%;
@@ -321,10 +319,10 @@ button:hover {
   position: relative;
 }
 .trash-icon {
-  margin-left: 12%;
+  margin-left: 11%;
   margin-right: 1%;
-  color: #b7b7b7;
-  padding-top: 4px;
+  color: #4c4c4c;
+  padding-top: 2px;
   font-size: 20px;
 }
 
@@ -335,7 +333,8 @@ button:hover {
 }
 
 .div__right-settings-panel {
-  width: 80%;
+  left: 1000px;
+  width: 90%;
   display: flex;
   justify-self: flex-end;
   justify-content: flex-end;
@@ -344,18 +343,18 @@ button:hover {
 }
 .number_input {
   background: #1c1c1c;
-  height: 25.5px;
-  width: 40px;
+  height: 25px;
+  width: 50px;
   border: none;
   color: #b7b7b7;
   font-size: 12px;
   margin-right: 1%;
   text-align: center;
 }
-.protocol_input {
+.protocol_name_nput {
   background: rgb(0, 0, 0);
-  height: 30px;
-  width: 250px;
+  height: 25px;
+  width: 300px;
   left: 3%;
   position: relative;
   border: none;
@@ -366,7 +365,7 @@ button:hover {
   background: rgb(8, 8, 8);
   border: 2px solid rgb(17, 17, 17);
   width: 50%;
-  height: 90%;
+  height: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -384,13 +383,13 @@ button:hover {
 .div__Editor-background {
   transform: rotate(0deg);
   background: rgb(17, 17, 17);
-  width: 110%;
-  height: 87%;
+  width: 1322px;
+  height: 175px;
 }
 .div__Tabs-panel {
   background: rgb(17, 17, 17);
-  width: 20%;
-  height: 13%;
+  width: 200px;
+  height: 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;

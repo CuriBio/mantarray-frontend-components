@@ -370,7 +370,7 @@ export default {
   font-weight: bold;
   position: sticky;
   top: 212px;
-  left: 400px;
+  left: 450px;
   width: 430px;
   height: 29px;
   overflow: hidden;

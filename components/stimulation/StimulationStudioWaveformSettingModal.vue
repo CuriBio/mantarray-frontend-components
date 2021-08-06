@@ -2,13 +2,13 @@
   <div
     id="cmpD2f15f130a7c848b6dfa50e77a7bd35ad"
     :class="
-      waveform_type === 'Monophasic'
+      pulse_type === 'Monophasic'
         ? 'div__stimulationstudio-current-settings-background-mono'
         : 'div__stimulationstudio-current-settings-background'
     "
   >
     <span id="cmpD5b2290fff52de686574ddc4481707a03" class="span__stimulationstudio-current-settings-title"
-      >{{ waveform_type }}&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
+      >{{ pulse_type }}&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
     >
     <canvas
       id="cmpD1bd9abe7f57064ecc21010fe87aa8e0a"
@@ -26,14 +26,15 @@
     <div id="cmpD830cdea88a8752e1fdd278dd0215b99d" class="div__stimulationstudio-duration-input-container">
       <span id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt" class="span__stimulationstudio-duration-input">
         <InputWidget
-          :placeholder="'1000 ms'"
+          :placeholder="'10 ms'"
           :dom_id_suffix="'duration'"
           :invalid_text="err_msg.phase_one_duration"
           :input_width="142"
           :initial_value="selected_waveform_settings.phase_one_duration.toString()"
           @update:value="check_validity($event, 'phase_one_duration')"
-        ></InputWidget
-      ></span>
+        />
+        ></span
+      >
     </div>
     <span id="cmpDad40b728ec40e75944b1291803f7785b" class="span__stimulationstudio-current-settings-label-two"
       >Balance&nbsp;<wbr />Charge</span
@@ -46,13 +47,13 @@
     <div id="cmpDf6ba8560cb2fbd91276a29c46743e99a" class="div__stimulationstudio-current-input-container">
       <span id="cmpDf6ba8560cb2fbd91276a29c46743e99a_txt" class="span__stimulationstudio-current-input">
         <InputWidget
-          :placeholder="'500'"
+          :placeholder="'100'"
           :dom_id_suffix="'charge'"
           :invalid_text="err_msg.phase_one_charge"
           :input_width="142"
           :initial_value="selected_waveform_settings.phase_one_charge.toString()"
           @update:value="check_validity($event, 'phase_one_charge')"
-        ></InputWidget>
+        />
       </span>
     </div>
     <span
@@ -68,18 +69,18 @@
     <div id="cmpDf07f8e650ebe6951292aa4edcc603608" class="div__stimulationstudio-voltage-input-container">
       <span id="cmpDf07f8e650ebe6951292aa4edcc603608_txt" class="span__stimulationstudio-voltage-input">
         <InputWidget
-          :initial_value="'250'"
+          :initial_value="'25'"
           :dom_id_suffix="'max_charge'"
           :invalid_text="''"
           :input_width="142"
           :disabled="true"
-        ></InputWidget>
+        />
       </span>
       <span v-popover.hover="popover_message" class="disabled_popover_container">
         <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
       </span>
     </div>
-    <div v-if="waveform_type === 'Biphasic'">
+    <div v-if="pulse_type === 'Biphasic'">
       <canvas
         id="cmpDefb479b0caa166978ebed24ab8c44baf"
         class="canvas__stimulationstudio-horizontal-line-seperator-two"
@@ -99,13 +100,13 @@
           class="span__stimulationstudio-current-settings-interpulse-input-container"
         >
           <InputWidget
-            :placeholder="'1000 ms'"
+            :placeholder="'10 ms'"
             :dom_id_suffix="'interpulse'"
             :invalid_text="err_msg.interpulse_duration"
             :input_width="142"
             :initial_value="selected_waveform_settings.interpulse_duration.toString()"
             @update:value="check_validity($event, 'interpulse_duration')"
-          ></InputWidget>
+          />
         </span>
       </div>
 
@@ -134,13 +135,13 @@
           class="span__stimulationstudio-current-settings-durationtwo-input"
         >
           <InputWidget
-            :placeholder="'1000 ms'"
+            :placeholder="'10 ms'"
             :dom_id_suffix="'durationtwo'"
             :invalid_text="err_msg.phase_two_duration"
             :input_width="142"
             :initial_value="selected_waveform_settings.phase_two_duration.toString()"
             @update:value="check_validity($event, 'phase_two_duration')"
-          ></InputWidget>
+          />
         </span>
       </div>
       <span
@@ -162,13 +163,13 @@
           class="span__stimulationstudio-current-settings-currenttwo-input"
         >
           <InputWidget
-            :placeholder="'-500'"
+            :placeholder="'-100'"
             :dom_id_suffix="'chargetwo'"
             :invalid_text="err_msg.phase_two_charge"
             :input_width="142"
             :initial_value="selected_waveform_settings.phase_two_charge.toString()"
             @update:value="check_validity($event, 'phase_two_charge')"
-          ></InputWidget>
+          />
         </span>
       </div>
       <span
@@ -190,12 +191,12 @@
           class="span__stimulationstudio-current-settings-voltagetwo-input"
         >
           <InputWidget
-            :initial_value="'250'"
+            :initial_value="'25'"
             :dom_id_suffix="'max_chargetwo'"
             :invalid_text="''"
             :input_width="142"
             :disabled="true"
-          ></InputWidget>
+          />
         </span>
         <span v-popover.hover.right="popover_message" class="disabled_popover_container">
           <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
@@ -205,7 +206,7 @@
     <canvas
       id="cmpDce55000ec63e65a2c9161268a4c9977b"
       :class="
-        waveform_type === 'Monophasic'
+        pulse_type === 'Monophasic'
           ? 'canvas__stimulationstudio-horizontal-line-seperator-four-mono'
           : 'canvas__stimulationstudio-horizontal-line-seperator-four'
       "
@@ -214,7 +215,7 @@
     <div
       id="cmpD478c2ccd7e9ce5794863ee3bd3cacb85"
       :class="
-        waveform_type === 'Monophasic'
+        pulse_type === 'Monophasic'
           ? 'div__stimulationstudio-balance-scale-icon-mono'
           : 'div__stimulationstudio-balance-scale-icon'
       "
@@ -224,13 +225,13 @@
     <span
       id="cmpD0f8c9f516e738d930977090bd4d218a8"
       :class="
-        waveform_type === 'Monophasic'
+        pulse_type === 'Monophasic'
           ? 'span__stimulationstudio-current-settings-label-twelve-mono'
           : 'span__stimulationstudio-current-settings-label-twelve'
       "
       >Charge&nbsp;<wbr />Info&nbsp;<wbr />Unavailable</span
     >
-    <div :class="waveform_type === 'Monophasic' ? 'button-container-mono' : 'button-container'">
+    <div :class="pulse_type === 'Monophasic' ? 'button-container-mono' : 'button-container'">
       <ButtonWidget
         :id="'button-widget-id'"
         :button_widget_width="521"
@@ -258,7 +259,7 @@ library.add(faBalanceScale, faQuestionCircle);
 
 /**
  * @vue-props {String} stimulation_type - Current type of stimulation
- * @vue-props {String} waveform_type - Type of pulse for modal
+ * @vue-props {String} pulse_type - Type of pulse for modal
  * @vue-props {Array} button_names - Array of button labels for modal
  * @vue-props {Object} selected_waveform_settings - Settings for modal if it's a reedit
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
@@ -281,7 +282,7 @@ export default {
   },
   props: {
     stimulation_type: { type: String, default: "Voltage (mV)" },
-    waveform_type: { type: String, default: "Monophasic" },
+    pulse_type: { type: String, default: "Biphasic" },
     button_names: {
       type: Array,
       default() {
@@ -307,15 +308,19 @@ export default {
       waveform_settings: {},
       invalid_err_msg: {
         num_err: "Must be a number",
+        min_num_err: "Must be a number > 0",
         required: "Required",
+        max_duration: "Duration must be <= 50ms",
         valid: "",
+        max_current: "Must be within +/- 100",
+        max_voltage: "Must be within +/- 1200",
       },
       err_msg: {
-        phase_one_duration: "Required",
-        phase_one_charge: "Required",
-        interpulse_duration: "Required",
-        phase_two_duration: "Required",
-        phase_two_charge: "Required",
+        phase_one_duration: "",
+        phase_one_charge: "",
+        interpulse_duration: "",
+        phase_two_duration: "",
+        phase_two_charge: "",
       },
       is_enabled_array: [false, true, true],
       all_valid: false,
@@ -323,20 +328,19 @@ export default {
   },
   computed: {
     check_max_type: function () {
-      if (this.stimulation_type === "Current (µA)") return "Voltage (mV)";
-      else return "Current (µA)";
+      if (this.stimulation_type === "Current (mA)") return "Voltage (mV)";
+      else return "Current (mA)";
     },
   },
   watch: {
     all_valid() {
-      if (this.all_valid) this.is_enabled_array = [true, true, true];
-      if (!this.all_valid) this.is_enabled_array = [false, true, true];
+      this.is_enabled_array = [this.all_valid, true, true];
     },
   },
   created() {
     this.waveform_settings = this.selected_waveform_settings;
 
-    if (this.waveform_type === "Monophasic") {
+    if (this.pulse_type === "Monophasic") {
       this.waveform_settings = {
         ...this.waveform_settings,
         interpulse_duration: 0,
@@ -358,16 +362,17 @@ export default {
       this.$emit("close", button_label, this.waveform_settings);
     },
     check_validity(value, label) {
+      this.waveform_settings[label] = value;
       const valid_inputs = [];
-      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"); // accepts positive and negative integers including decimals, decimals need a leading 0 if < 1
 
-      if (!number_regex.test(value) && value !== "") {
-        this.err_msg[label] = this.invalid_err_msg.num_err;
-      } else if (value === "") {
-        this.err_msg[label] = this.invalid_err_msg.required;
-      } else if (number_regex.test(value) && value !== "") {
-        this.err_msg[label] = this.invalid_err_msg.valid;
-        this.waveform_settings[label] = Number(value);
+      if (label.includes("duration")) {
+        this.check_pulse_duration("phase_one_duration");
+        if (this.pulse_type === "Biphasic") {
+          this.check_pulse_duration("phase_two_duration");
+          this.check_pulse_duration("interpulse_duration");
+        }
+      } else if (label.includes("charge")) {
+        this.check_charge_validity(value, label);
       }
 
       for (const input in this.err_msg) {
@@ -375,6 +380,37 @@ export default {
       }
 
       this.all_valid = valid_inputs.length === 5;
+    },
+    check_pulse_duration(label) {
+      const { phase_one_duration, phase_two_duration, interpulse_duration } = this.waveform_settings;
+      const value = this.waveform_settings[label];
+      const number_regex = new RegExp("^[0-9][0-9]*d*$");
+
+      const check_duration =
+        Number(phase_one_duration) + Number(phase_two_duration) + Number(interpulse_duration) <= 50;
+
+      if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
+      else if ((!number_regex.test(value) && value !== "") || value == 0)
+        this.err_msg[label] = this.invalid_err_msg.min_num_err;
+      else if (!check_duration) this.err_msg[label] = this.invalid_err_msg.max_duration;
+      else if (check_duration && number_regex.test(value) && value !== "") {
+        this.err_msg[label] = this.invalid_err_msg.valid;
+        this.waveform_settings[label] = Number(value);
+      }
+    },
+    check_charge_validity(value, label) {
+      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
+
+      if (!number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.num_err;
+      else if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
+      else if (this.stimulation_type.includes("C") && (-100 > value || 100 < value))
+        this.err_msg[label] = this.invalid_err_msg.max_current;
+      else if (this.stimulation_type.includes("V") && (-1200 > value || 1200 < value))
+        this.err_msg[label] = this.invalid_err_msg.max_voltage;
+      else if (number_regex.test(value) && value !== "") {
+        this.err_msg[label] = this.invalid_err_msg.valid;
+        this.waveform_settings[label] = Number(value);
+      }
     },
   },
 };
@@ -419,7 +455,7 @@ export default {
 }
 
 .question_icon {
-  font-size: 20px;
+  font-size: 18px;
   color: #b7b7b7;
 }
 .span__stimulationstudio-current-settings-title {
@@ -681,7 +717,6 @@ export default {
 .div__stimulationstudio-voltage-input-container {
   pointer-events: all;
   transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 190px;
   height: 57px;
@@ -961,7 +996,6 @@ export default {
 .div__stimulationstudio-current-settings-voltagetwo-input-container {
   pointer-events: all;
   transform: rotate(0deg);
-  overflow: hidden;
   position: absolute;
   width: 190px;
   height: 57px;
