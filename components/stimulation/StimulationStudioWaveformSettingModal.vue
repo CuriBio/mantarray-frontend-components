@@ -308,6 +308,7 @@ export default {
       waveform_settings: {},
       invalid_err_msg: {
         num_err: "Must be a number",
+        min_num_err: "Must be a number > 0",
         required: "Required",
         max_duration: "Duration must be <= 50ms",
         valid: "",
@@ -315,11 +316,11 @@ export default {
         max_voltage: "Must be within +/- 1200",
       },
       err_msg: {
-        phase_one_duration: "Required",
-        phase_one_charge: "Required",
-        interpulse_duration: "Required",
-        phase_two_duration: "Required",
-        phase_two_charge: "Required",
+        phase_one_duration: "",
+        phase_one_charge: "",
+        interpulse_duration: "",
+        phase_two_duration: "",
+        phase_two_charge: "",
       },
       is_enabled_array: [false, true, true],
       all_valid: false,
@@ -338,7 +339,7 @@ export default {
   },
   created() {
     this.waveform_settings = this.selected_waveform_settings;
-    console.log(this.selected_waveform_settings);
+
     if (this.waveform_type === "Monophasic") {
       this.waveform_settings = {
         ...this.waveform_settings,
@@ -366,8 +367,10 @@ export default {
 
       if (label.includes("duration")) {
         this.check_pulse_duration("phase_one_duration");
-        this.check_pulse_duration("phase_two_duration");
-        this.check_pulse_duration("interpulse_duration");
+        if (this.waveform_type === "Biphasic") {
+          this.check_pulse_duration("phase_two_duration");
+          this.check_pulse_duration("interpulse_duration");
+        }
       } else if (label.includes("charge")) {
         this.check_charge_validity(value, label);
       }
@@ -381,36 +384,32 @@ export default {
     check_pulse_duration(label) {
       const { phase_one_duration, phase_two_duration, interpulse_duration } = this.waveform_settings;
       const value = this.waveform_settings[label];
-      const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
+      const number_regex = new RegExp("^[0-9][0-9]*d*$");
+
       const check_duration =
         Number(phase_one_duration) + Number(phase_two_duration) + Number(interpulse_duration) <= 50;
 
-      if (!check_duration) this.err_msg[label] = this.invalid_err_msg.max_duration;
-      else if (check_duration) {
-        if (!number_regex.test(value) && value !== "") {
-          this.err_msg[label] = this.invalid_err_msg.num_err;
-        } else if (value === "" || value === "0") this.err_msg[label] = this.invalid_err_msg.required;
-        else if (number_regex.test(value) && value !== "") {
-          this.err_msg[label] = this.invalid_err_msg.valid;
-          this.waveform_settings[label] = Number(value);
-        }
+      if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
+      else if ((!number_regex.test(value) && value !== "") || value == 0)
+        this.err_msg[label] = this.invalid_err_msg.min_num_err;
+      else if (!check_duration) this.err_msg[label] = this.invalid_err_msg.max_duration;
+      else if (check_duration && number_regex.test(value) && value !== "") {
+        this.err_msg[label] = this.invalid_err_msg.valid;
+        this.waveform_settings[label] = Number(value);
       }
     },
     check_charge_validity(value, label) {
       const number_regex = new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
 
-      if (this.stimulation_type.includes("C")) {
-        if (-100 > value || 100 < value) this.err_msg[label] = this.invalid_err_msg.max_current;
-        else if (!number_regex.test(value) && value !== "")
-          this.err_msg[label] = this.invalid_err_msg.num_err;
-        else if (value === "" || value === 0) this.err_msg[label] = this.invalid_err_msg.required;
-        else if (number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.valid;
-      } else if (this.stimulation_type.includes("V")) {
-        if (-1200 > value || 1200 < value) this.err_msg[label] = this.invalid_err_msg.max_voltage;
-        else if (!number_regex.test(value) && value !== "")
-          this.err_msg[label] = this.invalid_err_msg.num_err;
-        else if (value === "" || value === "0") this.err_msg[label] = this.invalid_err_msg.required;
-        else if (number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.valid;
+      if (!number_regex.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.num_err;
+      else if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
+      else if (this.stimulation_type.includes("C") && (-100 > value || 100 < value))
+        this.err_msg[label] = this.invalid_err_msg.max_current;
+      else if (this.stimulation_type.includes("V") && (-1200 > value || 1200 < value))
+        this.err_msg[label] = this.invalid_err_msg.max_voltage;
+      else if (number_regex.test(value) && value !== "") {
+        this.err_msg[label] = this.invalid_err_msg.valid;
+        this.waveform_settings[label] = Number(value);
       }
     },
   },

@@ -62,7 +62,7 @@ export default {
         this.y_min_max = state.y_axis_scale;
         this.x_axis_sample_length = 100;
         state.x_axis_scale = 100;
-        this.dynamic_plot_width = 1150;
+        this.dynamic_plot_width = 1200;
         this.delay_blocks = state.delay_blocks;
       }
       if (mutation.type === "stimulation/set_zoom_out" || mutation.type === "stimulation/set_zoom_in") {

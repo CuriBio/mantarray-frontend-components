@@ -66,7 +66,7 @@ export default {
         }
       }
     });
-
+    console.log(new_pulse_order);
     this.commit("stimulation/set_repeat_color_assignments", color_assignments);
     this.commit("stimulation/set_pulses", { pulses, new_pulse_order });
     this.dispatch("stimulation/handle_rest_duration", {
@@ -163,8 +163,6 @@ export default {
     const { protocol_editor, edit_mode, protocol_list } = this.state.stimulation;
     const { letter, color } = this.state.stimulation.current_assignment;
     const updated_protocol = { color, letter, label: protocol_editor.name, protocol: protocol_editor };
-    console.log(updated_protocol.protocol.detailed_pulses);
-    console.log(updated_protocol.protocol.pulses);
 
     if (!edit_mode.status) {
       this.commit("stimulation/set_new_protocol", updated_protocol);
@@ -179,7 +177,7 @@ export default {
       });
 
       await this.commit("stimulation/set_edit_mode_off");
-      // await this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
+      await this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
     }
   },
 

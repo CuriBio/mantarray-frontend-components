@@ -143,7 +143,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       localVue,
     });
 
-    const expected_delay_values = [[1.6, 6.6]];
+    const expected_delay_values = [[1600, 6600]];
     const test_value = 5;
 
     await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);

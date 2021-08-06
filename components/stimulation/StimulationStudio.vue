@@ -77,7 +77,6 @@ export default {
       if (idx === 0) {
         await this.$store.dispatch("stimulation/add_saved_protocol");
         this.$store.dispatch("stimulation/handle_protocol_editor_reset");
-        this.$store.dispatch("stimulation/create_protocol_message");
 
         this.selected_protocol = { label: "Create New", color: "", letter: "" };
       }

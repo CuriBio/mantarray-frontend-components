@@ -128,7 +128,7 @@ describe("store/stimulation", () => {
     });
 
     test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
-      const voltage = "Voltage (V)";
+      const voltage = "Voltage (mV)";
       const current = "Current (mA)";
 
       const default_type = store.getters["stimulation/get_stimulation_type"];
@@ -325,7 +325,7 @@ describe("store/stimulation", () => {
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
-      const x_values = [0, 0, 0.1, 0.1, 0.2, 0.2, 0.4, 0.4, 0.5];
+      const x_values = [0, 0, 100, 100, 200, 200, 400, 400, 500];
       const y_values = [0, 2, 2, 2, 2, 0, 0, -2, -2];
       const colors = { b7b7b7: [0, 9] };
 
@@ -417,7 +417,7 @@ describe("store/stimulation", () => {
             stimulation_type: "C",
             pulses: [
               {
-                phase_one_duration: 1500,
+                phase_one_duration: 15,
                 phase_one_charge: 500,
                 interpulse_duration: 0,
                 phase_two_charge: 0,
@@ -434,8 +434,8 @@ describe("store/stimulation", () => {
             well_number: "A2",
             pulses: [
               {
-                phase_one_duration: 1500000,
-                phase_one_charge: 500,
+                phase_one_duration: 15000,
+                phase_one_charge: 500000,
                 interpulse_duration: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
@@ -457,7 +457,7 @@ describe("store/stimulation", () => {
 
     test("When a user adds a repeat delay into the input of the settings panel, Then it will appear at the end of the waveform in the graph", async () => {
       const test_delay = 10;
-      const expected_block = [[0, 10]];
+      const expected_block = [[0, 10000]];
       await store.dispatch("stimulation/handle_new_rest_duration", test_delay);
       const { delay_blocks } = store.state.stimulation;
       expect(delay_blocks).toStrictEqual(expected_block);

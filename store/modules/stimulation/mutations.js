@@ -106,7 +106,6 @@ export default {
     pulses.push(delay_pulse_model);
   },
   set_new_protocol({ protocol_list }, protocol) {
-    console.log(protocol);
     protocol_list.push(protocol);
   },
   set_imported_protocol({ protocol_list }, protocol) {
