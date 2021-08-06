@@ -50,7 +50,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       localVue,
       propsData: {
         stimulation_type: "Voltage (mV)",
-        waveform_type: "Biphasic",
+        pulse_type: "Biphasic",
       },
     });
     const title = wrapper.find(".span__stimulationstudio-current-settings-label-three").text();
@@ -65,7 +65,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       localVue,
       propsData: {
         stimulation_type: "Current (mA)",
-        waveform_type: "Monophasic",
+        pulse_type: "Monophasic",
       },
     });
 
@@ -94,7 +94,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       localVue,
       propsData: {
         stimulation_type: "Voltage (mV)",
-        waveform_type: "Monophasic",
+        pulse_type: "Monophasic",
       },
     });
     const target_input_field = wrapper.find("#input-widget-field-duration");
