@@ -2,13 +2,13 @@
   <div
     id="cmpD2f15f130a7c848b6dfa50e77a7bd35ad"
     :class="
-      waveform_type === 'Monophasic'
+      pulse_type === 'Monophasic'
         ? 'div__stimulationstudio-current-settings-background-mono'
         : 'div__stimulationstudio-current-settings-background'
     "
   >
     <span id="cmpD5b2290fff52de686574ddc4481707a03" class="span__stimulationstudio-current-settings-title"
-      >{{ waveform_type }}&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
+      >{{ pulse_type }}&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
     >
     <canvas
       id="cmpD1bd9abe7f57064ecc21010fe87aa8e0a"
@@ -80,7 +80,7 @@
         <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
       </span>
     </div>
-    <div v-if="waveform_type === 'Biphasic'">
+    <div v-if="pulse_type === 'Biphasic'">
       <canvas
         id="cmpDefb479b0caa166978ebed24ab8c44baf"
         class="canvas__stimulationstudio-horizontal-line-seperator-two"
@@ -206,7 +206,7 @@
     <canvas
       id="cmpDce55000ec63e65a2c9161268a4c9977b"
       :class="
-        waveform_type === 'Monophasic'
+        pulse_type === 'Monophasic'
           ? 'canvas__stimulationstudio-horizontal-line-seperator-four-mono'
           : 'canvas__stimulationstudio-horizontal-line-seperator-four'
       "
@@ -215,7 +215,7 @@
     <div
       id="cmpD478c2ccd7e9ce5794863ee3bd3cacb85"
       :class="
-        waveform_type === 'Monophasic'
+        pulse_type === 'Monophasic'
           ? 'div__stimulationstudio-balance-scale-icon-mono'
           : 'div__stimulationstudio-balance-scale-icon'
       "
@@ -225,13 +225,13 @@
     <span
       id="cmpD0f8c9f516e738d930977090bd4d218a8"
       :class="
-        waveform_type === 'Monophasic'
+        pulse_type === 'Monophasic'
           ? 'span__stimulationstudio-current-settings-label-twelve-mono'
           : 'span__stimulationstudio-current-settings-label-twelve'
       "
       >Charge&nbsp;<wbr />Info&nbsp;<wbr />Unavailable</span
     >
-    <div :class="waveform_type === 'Monophasic' ? 'button-container-mono' : 'button-container'">
+    <div :class="pulse_type === 'Monophasic' ? 'button-container-mono' : 'button-container'">
       <ButtonWidget
         :id="'button-widget-id'"
         :button_widget_width="521"
@@ -259,7 +259,7 @@ library.add(faBalanceScale, faQuestionCircle);
 
 /**
  * @vue-props {String} stimulation_type - Current type of stimulation
- * @vue-props {String} waveform_type - Type of pulse for modal
+ * @vue-props {String} pulse_type - Type of pulse for modal
  * @vue-props {Array} button_names - Array of button labels for modal
  * @vue-props {Object} selected_waveform_settings - Settings for modal if it's a reedit
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
@@ -282,7 +282,7 @@ export default {
   },
   props: {
     stimulation_type: { type: String, default: "Voltage (mV)" },
-    waveform_type: { type: String, default: "Biphasic" },
+    pulse_type: { type: String, default: "Biphasic" },
     button_names: {
       type: Array,
       default() {
@@ -340,7 +340,7 @@ export default {
   created() {
     this.waveform_settings = this.selected_waveform_settings;
 
-    if (this.waveform_type === "Monophasic") {
+    if (this.pulse_type === "Monophasic") {
       this.waveform_settings = {
         ...this.waveform_settings,
         interpulse_duration: 0,
@@ -367,7 +367,7 @@ export default {
 
       if (label.includes("duration")) {
         this.check_pulse_duration("phase_one_duration");
-        if (this.waveform_type === "Biphasic") {
+        if (this.pulse_type === "Biphasic") {
           this.check_pulse_duration("phase_two_duration");
           this.check_pulse_duration("interpulse_duration");
         }

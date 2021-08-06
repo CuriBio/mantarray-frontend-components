@@ -82,7 +82,7 @@
     <div v-if="modal_type !== null" class="modal-container">
       <StimulationStudioWaveformSettingModal
         :stimulation_type="stimulation_type"
-        :waveform_type="modal_type"
+        :pulse_type="modal_type"
         :button_names="
           shift_click_img_idx !== null ? button_labels.delete_option : button_labels.no_delete_option
         "
