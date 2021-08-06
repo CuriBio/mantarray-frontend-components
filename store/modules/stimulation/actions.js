@@ -66,7 +66,7 @@ export default {
         }
       }
     });
-    console.log(new_pulse_order);
+
     this.commit("stimulation/set_repeat_color_assignments", color_assignments);
     this.commit("stimulation/set_pulses", { pulses, new_pulse_order });
     this.dispatch("stimulation/handle_rest_duration", {
