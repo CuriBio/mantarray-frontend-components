@@ -61,6 +61,7 @@
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
+                :disabled="true"
                 @change="
                   [types.nested_protocols.length <= 1 ? handle_repeat($event, idx) : handle_internal_repeat()]
                 "
@@ -358,6 +359,7 @@ export default {
 img {
   height: 93px;
   width: 92px;
+  cursor: pointer;
 }
 
 .ghost {
