@@ -350,7 +350,6 @@ export default {
 .repeat_container {
   display: flex;
   align-items: center;
-  /* padding: 4px; */
 }
 .img__icon-container {
   cursor: pointer;
