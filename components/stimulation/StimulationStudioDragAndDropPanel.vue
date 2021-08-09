@@ -350,7 +350,7 @@ export default {
 .repeat_container {
   display: flex;
   align-items: center;
-  padding: 4px;
+  /* padding: 4px; */
 }
 .img__icon-container {
   cursor: pointer;
@@ -365,7 +365,7 @@ img {
 }
 
 .ghost {
-  padding: 0 7px;
+  padding: 0 7px 7px 7px;
 }
 .modal-container {
   left: 26%;
