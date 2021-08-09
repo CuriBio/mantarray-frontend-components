@@ -228,7 +228,7 @@
       ><SmallDropDown
         :input_height="25"
         :input_width="100"
-        :options_text="time_units.delay_interval"
+        :options_text="time_units.repeat_delay_interval"
         :options_idx="delay_interval_idx"
         :dom_id_suffix="'time_units'"
     /></span>
@@ -321,6 +321,9 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
  * @vue-data {Object} err_msg - Object containing all initial error messages for inputs
  * @vue-data {Boolean} all_valid - True if all inputs pass the validation check and allows Save button to become enabled
+ * @vue-data {Object} time_units - Contains option for dropdown components
+ * @vue-data {Integer} delay_interval_idx - Used to input current delay interval setting to dropdown when open for edit
+ * @vue-data {Integer} active_duration_idx - Used to input current active duration setting to dropdown when open for edit
  * @vue-computed {String} check_max_type - Computes last label for disabled input field
  * @vue-method {event} close - emits close of modal and data to parent component
  * @vue-method {event} check_validity - checks if inputs are valid numbers only and not empty
@@ -351,6 +354,8 @@ export default {
           interpulse_duration: "",
           phase_two_duration: "",
           phase_two_charge: "",
+          repeat_delay_interval: "",
+          total_active_duration: "",
         };
       },
     },
@@ -374,10 +379,12 @@ export default {
         interpulse_duration: "",
         phase_two_duration: "",
         phase_two_charge: "",
+        repeat_delay_interval: "",
+        total_active_duration: "",
       },
       time_units: {
         active_duration: ["milliseconds", "seconds", "minutes", "hours"],
-        delay_interval: ["milliseconds", "seconds"],
+        repeat_delay_interval: ["milliseconds", "seconds"],
       },
       is_enabled_array: [false, true, true],
       all_valid: false,
@@ -386,10 +393,10 @@ export default {
     };
   },
   computed: {
-    check_max_type: function () {
-      if (this.stimulation_type === "Current (mA)") return "Voltage (mV)";
-      else return "Current (mA)";
-    },
+    // check_max_type: function() {
+    //   if (this.stimulation_type === "Current (mA)") return "Voltage (mV)";
+    //   else return "Current (mA)";
+    // }
   },
   watch: {
     all_valid() {
@@ -438,7 +445,7 @@ export default {
         if (this.err_msg[input] === "") valid_inputs.push(true);
       }
 
-      this.all_valid = valid_inputs.length === 5;
+      this.all_valid = valid_inputs.length === 7;
     },
     check_pulse_duration(label) {
       const { phase_one_duration, phase_two_duration, interpulse_duration } = this.waveform_settings;
