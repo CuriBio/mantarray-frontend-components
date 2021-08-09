@@ -293,6 +293,8 @@ export default {
           interpulse_duration: "",
           phase_two_duration: "",
           phase_two_charge: "",
+          repeat_delay_interval: "",
+          total_active_duration: "",
         },
       };
     },
@@ -373,7 +375,7 @@ img {
 .dropdown-container {
   position: absolute;
   z-index: 2;
-  top: 372px;
+  top: 412px;
   left: 1188px;
 }
 .circle {

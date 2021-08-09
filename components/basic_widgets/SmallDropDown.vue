@@ -1,7 +1,7 @@
 <template>
   <div
     class="div__small-dropdown-background"
-    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
+    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height + 'px;'"
   >
     <div
       :id="'small_dropdown_' + dom_id_suffix"
@@ -43,6 +43,7 @@ export default {
     input_height: { type: Number, default: 0 },
     options_idx: { type: Number, default: 0 },
     dom_id_suffix: { type: String, default: "" }, // for testing
+    title_label: { type: String, default: "" },
   },
   data() {
     return {
@@ -123,6 +124,7 @@ export default {
   border-radius: 0px;
   box-shadow: none;
   cursor: pointer;
+  z-index: 5;
 }
 .span__small-controls-content-input-txt-widget {
   padding-left: 10px;
@@ -171,6 +173,7 @@ ul {
   position: absolute;
   color: #b7b7b7;
   border-top: 1px solid rgb(17, 17, 17);
+  z-index: 5;
 }
 
 li {

@@ -126,7 +126,7 @@ export default {
       current_letter: "",
       current_color: "",
       stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
-      until_options_array: ["Stimulate Until Stopped", "Repeat"],
+      until_options_array: ["Stimulate Until Stopped", "Stimulate until Complete"],
       protocol_name: "",
       stop_requirement: "Stimulate Until Stopped",
       rest_duration: "",
