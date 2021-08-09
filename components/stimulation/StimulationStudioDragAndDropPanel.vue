@@ -61,6 +61,7 @@
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
+                :disabled="true"
                 @change="
                   [types.nested_protocols.length <= 1 ? handle_repeat($event, idx) : handle_internal_repeat()]
                 "
@@ -292,6 +293,8 @@ export default {
           interpulse_duration: "",
           phase_two_duration: "",
           phase_two_charge: "",
+          repeat_delay_interval: "",
+          total_active_duration: "",
         },
       };
     },
@@ -347,7 +350,6 @@ export default {
 .repeat_container {
   display: flex;
   align-items: center;
-  padding: 4px;
 }
 .img__icon-container {
   cursor: pointer;
@@ -358,10 +360,11 @@ export default {
 img {
   height: 93px;
   width: 92px;
+  cursor: pointer;
 }
 
 .ghost {
-  padding: 0 7px;
+  padding: 0 7px 7px 7px;
 }
 .modal-container {
   left: 26%;
@@ -371,7 +374,7 @@ img {
 .dropdown-container {
   position: absolute;
   z-index: 2;
-  top: 372px;
+  top: 412px;
   left: 1188px;
 }
 .circle {

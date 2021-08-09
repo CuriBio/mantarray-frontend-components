@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StimulationStudio />
+    <StimulationStudio :style="'left: 10px; top: 10px;'" />
     <button class="update-button" @click="update_protocol_list">Update protocol list</button>
   </div>
 </template>
@@ -68,7 +68,7 @@ export default {
 .update-button {
   position: absolute;
   top: 100px;
-  left: 1640px;
+  left: 1840px;
   border: none;
   color: white;
   padding: 15px 32px;

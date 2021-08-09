@@ -53,10 +53,10 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         pulse_type: "Biphasic",
       },
     });
-    const title = wrapper.find(".span__stimulationstudio-current-settings-label-three").text();
+    const title = wrapper.findAll("span").at(5).text();
     expect(title).toBe("Voltage (mV)");
-    const biphasic_label = wrapper.find(".span__stimulationstudio-current-settings-label-twelve");
-    expect(biphasic_label).toBeTruthy();
+    const interpulse_label = wrapper.findAll("span").at(8);
+    expect(interpulse_label).toBeTruthy();
   });
 
   test("When a user opens the pulse settings modal, Then the user can only save the settings if all inputs pass the validity checks", async () => {
@@ -76,6 +76,8 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       interpulse_duration: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
+      repeat_delay_interval: "",
+      total_active_duration: "",
     };
     await wrapper.find("#input-widget-field-duration").setValue("15");
     await wrapper.find("#input-widget-field-charge").setValue("50");
