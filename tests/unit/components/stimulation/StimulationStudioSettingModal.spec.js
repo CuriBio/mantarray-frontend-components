@@ -24,6 +24,25 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     wrapper = mount(dist_StimulationStudioCurrentSettings, {
       store,
       localVue,
+      propsData: {
+        selected_pulse_settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: {
+            duration: "",
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
+        },
+      },
     });
     const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
     expect(target_span).toBeTruthy();
@@ -32,6 +51,25 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     wrapper = shallowMount(StimulationStudioWaveformSettingModal, {
       store,
       localVue,
+      propsData: {
+        selected_pulse_settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: {
+            duration: "",
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
+        },
+      },
     });
     const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
     expect(target_span).toBeTruthy();
@@ -40,6 +78,25 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     const wrapper = mount(StimulationStudioWaveformSettingModal, {
       store,
       localVue,
+      propsData: {
+        selected_pulse_settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: {
+            duration: "",
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
+        },
+      },
     });
     await wrapper.vm.close(0);
     expect(wrapper.emitted("close", "Save")).toBeTruthy();
@@ -51,6 +108,23 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       propsData: {
         stimulation_type: "Voltage (mV)",
         pulse_type: "Biphasic",
+        selected_pulse_settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: {
+            duration: "",
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
+        },
       },
     });
     const title = wrapper.findAll("span").at(5).text();
@@ -66,6 +140,23 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       propsData: {
         stimulation_type: "Current (mA)",
         pulse_type: "Monophasic",
+        selected_pulse_settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: {
+            duration: "",
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
+        },
       },
     });
 
@@ -76,15 +167,15 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       interpulse_duration: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
-      repeat_delay_interval: "",
-      total_active_duration: "",
     };
     await wrapper.find("#input-widget-field-duration").setValue("15");
     await wrapper.find("#input-widget-field-charge").setValue("50");
+    await wrapper.find("#input-widget-field-repeat-delay-interval").setValue("0");
+    await wrapper.find("#input-widget-field-total-active-duration").setValue("16");
 
     expect(wrapper.vm.all_valid).toBe(true);
     expect(wrapper.vm.is_enabled_array).toStrictEqual(expected_enabled_array);
-    expect(wrapper.vm.waveform_settings).toStrictEqual(expected_settings);
+    expect(wrapper.vm.pulse_settings).toStrictEqual(expected_settings);
 
     await wrapper.find("#input-widget-field-charge").setValue("-101");
     expect(wrapper.vm.all_valid).toBe(false);
@@ -97,6 +188,23 @@ describe("StimulationStudioCurrentSettings.vue", () => {
       propsData: {
         stimulation_type: "Voltage (mV)",
         pulse_type: "Monophasic",
+        selected_pulse_settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interpulse_duration: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: {
+            duration: "",
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
+        },
       },
     });
     const target_input_field = wrapper.find("#input-widget-field-duration");
@@ -109,5 +217,46 @@ describe("StimulationStudioCurrentSettings.vue", () => {
 
     await target_input_field.setValue("");
     expect(wrapper.vm.err_msg.phase_one_duration).toBe("Required");
+  });
+
+  test("When a user changes a the unit of time in the setting modal, Then the change will trigger a new validation check and record new selected index", async () => {
+    const wrapper = mount(StimulationStudioWaveformSettingModal, {
+      store,
+      localVue,
+      propsData: {
+        stimulation_type: "Voltage (mV)",
+        pulse_type: "Biphasic",
+        selected_pulse_settings: {
+          phase_one_duration: "2",
+          phase_one_charge: "30",
+          interpulse_duration: "1",
+          phase_two_duration: "2",
+          phase_two_charge: "-10",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: {
+            duration: "2",
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: "3",
+            unit: "seconds",
+          },
+        },
+      },
+    });
+    expect(wrapper.vm.all_valid).toBe(true);
+    wrapper.findAll(".div__small-dropdown-controls-content-widget").at(0).trigger("click");
+
+    await wrapper.findAll("li").at(1).trigger("click");
+
+    expect(wrapper.vm.delay_interval_idx).toBe(1);
+
+    wrapper.findAll(".div__small-dropdown-controls-content-widget").at(1).trigger("click");
+
+    await wrapper.findAll("li").at(1).trigger("click");
+
+    expect(wrapper.vm.all_valid).toBe(false);
+    expect(wrapper.vm.active_duration_idx).toBe(0);
   });
 });

@@ -112,7 +112,7 @@ Vue.component("BPopover", BPopover);
  */
 
 export default {
-  name: "ProtocolBlockViewEditor",
+  name: "StimulationStudioProtocolBlockViewEditor",
   components: {
     SmallDropDown,
     BPopover,

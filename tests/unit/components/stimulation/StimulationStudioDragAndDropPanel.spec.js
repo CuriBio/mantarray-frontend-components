@@ -15,7 +15,7 @@ const test_protocol_order = [
       number_of_repeats: 0,
       color: "fffff",
     },
-    settings: {
+    pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
       interpulse_duration: 500,
@@ -35,7 +35,7 @@ const test_protocol_order = [
           number_of_repeats: 0,
           color: "fffff",
         },
-        settings: {
+        pulse_settings: {
           phase_one_duration: 100,
           phase_one_charge: -2,
         },
@@ -48,7 +48,7 @@ const test_protocol_order = [
           number_of_repeats: 0,
           color: "fffff",
         },
-        settings: {
+        pulse_settings: {
           phase_one_duration: 300,
           phase_one_charge: 6,
         },
@@ -58,9 +58,32 @@ const test_protocol_order = [
       number_of_repeats: 0,
       color: "fffff",
     },
-    settings: {
+    pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
+    },
+  },
+  {
+    type: "Delay",
+    src: "placeholder",
+    nested_protocols: [],
+    repeat: {
+      number_of_repeats: 0,
+      color: "fffff",
+    },
+    pulse_settings: {
+      phase_one_duration: 300,
+      phase_one_charge: 0,
+    },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: "",
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: "",
+        unit: "milliseconds",
+      },
     },
   },
   {
@@ -71,20 +94,7 @@ const test_protocol_order = [
       number_of_repeats: 0,
       color: "fffff",
     },
-    settings: {
-      phase_one_duration: 300,
-      phase_one_charge: 2,
-    },
-  },
-  {
-    type: "Monophasic",
-    src: "placeholder",
-    nested_protocols: [],
-    repeat: {
-      number_of_repeats: 0,
-      color: "fffff",
-    },
-    settings: {
+    pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
     },
@@ -124,7 +134,7 @@ const test_protocol_list = [
           src: "/delay-tile.png",
           nested_protocols: [],
           repeat: { color: "d822f9", number_of_repeats: 0 },
-          settings: {
+          pulse_settings: {
             phase_one_duration: 15000,
             phase_one_charge: 0,
             interpulse_duration: 0,
@@ -193,7 +203,6 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.open_modal_for_edit("Monophasic", 0);
     expect(wrapper.vm.modal_type).toBe("Monophasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(0);
-    expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
     expect(wrapper.find(".modal_overlay")).toBeTruthy();
 
     await wrapper.vm.on_modal_close("Delete");
@@ -203,18 +212,15 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.open_modal_for_edit("Biphasic", 1);
     expect(wrapper.vm.modal_type).toBe("Biphasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(1);
-    expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
 
     await wrapper.vm.on_modal_close("Cancel");
     expect(wrapper.vm.protocol_order).toHaveLength(3);
     expect(wrapper.vm.modal_type).toBeNull();
 
     await wrapper.vm.open_modal_for_edit("Biphasic", 0, 0);
-    expect(wrapper.vm.shift_click_nested_img_idx).toBe(0);
 
     await wrapper.vm.on_modal_close("Delete");
     expect(wrapper.vm.protocol_order).toHaveLength(3);
-    expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
   });
 
   test("When exiting instance, Then instance is effectively destroyed", async () => {
@@ -312,7 +318,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     wrapper.vm.modal_type = "Biphasic";
 
     await wrapper.vm.on_modal_close("Save", test_settings);
-    expect(wrapper.vm.protocol_order[0].settings).toBe(test_settings);
+    expect(wrapper.vm.protocol_order[0].pulse_settings).toBe(test_settings);
   });
 
   test("When a user switch time unit in drop down, Then the x-axis scale should change accordingly", async () => {
@@ -336,25 +342,35 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.protocol_order[1].repeat.number_of_repeats).toBe(0);
   });
 
-  test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
-    const wrapper = mount(StimulationStudioDragAndDropPanel, {
-      store,
-      localVue,
-    });
+  // test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
+  //   const wrapper = mount(StimulationStudioDragAndDropPanel, {
+  //     store,
+  //     localVue
+  //   });
 
-    const idx = 2;
-    const delay_settings = {
-      phase_one_duration: 5,
-      phase_one_charge: 0,
-    };
+  //   const idx = 2;
+  //   const delay_settings = {
+  //     phase_one_duration: 5,
+  //     phase_one_charge: 0
+  //   };
 
-    wrapper.vm.protocol_order = test_protocol_order;
-    await wrapper.vm.open_modal_for_edit("Delay", idx);
-    expect(wrapper.vm.repeat_delay_modal).toBe("Delay");
+  //   const stim_settings = {
+  //     repeat_delay_interval: {
+  //       duration: 0,
+  //       unit: "milliseconds"
+  //     },
+  //     total_active_duration: {
+  //       duration: 5,
+  //       unit: "milliseconds"
+  //     }
+  //   };
+  //   wrapper.vm.protocol_order = test_protocol_order;
+  //   await wrapper.vm.open_modal_for_edit("Delay", idx);
+  //   expect(wrapper.vm.repeat_delay_modal).toBe("Delay");
 
-    await wrapper.vm.on_modal_close("Save", delay_settings);
-    expect(wrapper.vm.protocol_order[idx].settings.phase_one_duration).toBe(
-      delay_settings.phase_one_duration
-    );
-  });
+  //   await wrapper.vm.on_modal_close("Save", delay_settings, stim_settings);
+  //   expect(wrapper.vm.protocol_order[idx].pulse_settings.phase_one_duration).toBe(
+  //     delay_settings.phase_one_duration
+  //   );
+  // });
 });
