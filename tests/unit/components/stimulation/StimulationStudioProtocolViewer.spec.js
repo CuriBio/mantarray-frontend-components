@@ -17,7 +17,7 @@ const test_protocol_order = [
       number_of_repeats: 0,
       color: "fffff",
     },
-    settings: {
+    pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
       interpulse_duration: 500,
@@ -37,7 +37,7 @@ const test_protocol_order = [
           number_of_repeats: 0,
           color: "fffff",
         },
-        settings: {
+        pulse_settings: {
           phase_one_duration: 100,
           phase_one_charge: -2,
         },
@@ -50,7 +50,7 @@ const test_protocol_order = [
           number_of_repeats: 0,
           color: "fffff",
         },
-        settings: {
+        pulse_settings: {
           phase_one_duration: 300,
           phase_one_charge: 6,
         },
@@ -60,7 +60,7 @@ const test_protocol_order = [
       number_of_repeats: 0,
       color: "fffff",
     },
-    settings: {
+    pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
     },

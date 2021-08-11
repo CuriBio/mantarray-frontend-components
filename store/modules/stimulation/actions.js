@@ -44,14 +44,14 @@ export default {
       const number_of_repeats = pulse.repeat.number_of_repeats;
       const repeat_color = pulse.repeat.color;
       const starting_repeat_idx = x_values.length - 1;
-      const setting = pulse.settings;
+      const setting = pulse.pulse_settings;
 
       for (let k = 0; k <= number_of_repeats; k++) {
         const nested_protocols = pulse.nested_protocols;
         helper(setting);
         if (nested_protocols.length > 0) {
           nested_protocols.map((protocol) => {
-            const nested_setting = protocol.settings;
+            const nested_setting = protocol.pulse_settings;
             helper(nested_setting);
           });
         }

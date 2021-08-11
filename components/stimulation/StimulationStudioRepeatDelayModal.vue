@@ -14,7 +14,16 @@
           @update:value="check_validity($event)"
         />
       </span>
-      <span>{{ get_metric_label }}</span>
+      <span>
+        <SmallDropDown
+          :options_text="time_units"
+          :options_idx="time_unit_idx"
+          :input_height="25"
+          :input_width="100"
+          :dom_id_suffix="'delay_block'"
+          @selection-changed="handle_unit_change"
+        />
+      </span>
     </div>
     <div :class="'button-container'">
       <ButtonWidget
@@ -34,6 +43,7 @@
 <script>
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
+import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 
 /**
  * @vue-props {String} current_repeat_delay_input - Current input if modal is open for editing
@@ -48,7 +58,6 @@ import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
  * @vue-computed {String} get_modal_title - Title dependent on if its a repeat or delay modal
  * @vue-computed {String} get_input_description - Subtitle dependent on if its a repeat or delay modal
  * @vue-computed {Array} get_button_array - Button array dependent on if its a reedit or not
- * @vue-computed {String} get_metric_label - Label dependent on if its a repeat or delay modal
  * @vue-method {event} close - emits close of modal and data to parent component
  * @vue-method {event} check_validity - checks if inputs are valid numbers only and not empty
  */
@@ -58,12 +67,19 @@ export default {
   components: {
     InputWidget,
     ButtonWidget,
+    SmallDropDown,
   },
   props: {
     current_repeat_delay_input: {
       type: String,
       default() {
         return null;
+      },
+    },
+    current_repeat_delay_unit: {
+      type: String,
+      default() {
+        return "milliseconds";
       },
     },
     modal_type: {
@@ -85,6 +101,8 @@ export default {
         required: "Required",
         valid: "",
       },
+      time_units: ["milliseconds", "seconds", "minutes", "hours"],
+      time_unit_idx: 0,
       is_enabled_array: [false, true, true],
       is_valid: false,
     };
@@ -108,12 +126,6 @@ export default {
       if (this.delay_open_for_edit === true) button_names = ["Save", "Delete", "Cancel"];
       return button_names;
     },
-    get_metric_label() {
-      let metric_label;
-      if (this.modal_type === "Repeat") metric_label = "";
-      if (this.modal_type === "Delay") metric_label = "milliseconds";
-      return metric_label;
-    },
   },
   watch: {
     is_valid() {
@@ -122,23 +134,45 @@ export default {
   },
   created() {
     this.input_value = this.current_repeat_delay_input;
+    this.time_unit_idx = this.time_units.indexOf(this.current_repeat_delay_unit);
+
     if (this.current_repeat_delay_input !== null) this.check_validity(this.input_value);
     this.button_labels = this.get_button_array;
   },
   methods: {
     close(idx) {
       const button_label = this.button_labels[idx];
+      const unit_converstion = {
+        milliseconds: 1,
+        seconds: 1000,
+        minutes: 60000,
+        hours: 3600000,
+      };
       if (this.modal_type === "Repeat")
         this.$emit("repeat_close", { button_label, number_of_repeats: this.input_value });
       if (this.modal_type === "Delay") {
+        const selected_unit = this.time_units[this.time_unit_idx];
+        const converted_input = Number(this.input_value) * unit_converstion[selected_unit];
         const delay_settings = {
-          phase_one_duration: Number(this.input_value),
+          phase_one_duration: converted_input,
           phase_one_charge: 0,
           interpulse_duration: 0,
           phase_two_duration: 0,
           phase_two_charge: 0,
         };
-        this.$emit("delay_close", button_label, delay_settings);
+
+        const stim_settings = {
+          repeat_delay_interval: {
+            duration: 0,
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: Number(this.input_value),
+            unit: selected_unit,
+          },
+        };
+
+        this.$emit("delay_close", button_label, delay_settings, stim_settings);
       }
     },
     check_validity(value) {
@@ -155,6 +189,9 @@ export default {
         this.input_value = value;
         this.is_valid = true;
       }
+    },
+    handle_unit_change(idx) {
+      this.time_unit_idx = idx;
     },
   },
 };
@@ -235,7 +272,6 @@ export default {
   align-items: center;
   line-height: 100%;
   transform: rotate(0deg);
-  overflow: hidden;
   position: relative;
   width: 100%;
   height: 90px;
@@ -244,5 +280,6 @@ export default {
   font-family: Muli;
   font-size: 17px;
   color: rgb(183, 183, 183);
+  z-index: 5;
 }
 </style>

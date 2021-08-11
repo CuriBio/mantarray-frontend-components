@@ -20,7 +20,7 @@ describe("store/stimulation", () => {
         color: "b7b7b7",
         number_of_repeats: 1,
       },
-      settings: {
+      pulse_settings: {
         phase_one_duration: 100,
         phase_one_charge: 2,
       },
@@ -32,7 +32,7 @@ describe("store/stimulation", () => {
             color: "123456",
             number_of_repeats: 1,
           },
-          settings: {
+          pulse_settings: {
             phase_one_duration: 100,
             phase_one_charge: 2,
             interpulse_duration: 200,
@@ -78,7 +78,7 @@ describe("store/stimulation", () => {
             src: "/delay-tile.png",
             nested_protocols: [],
             repeat: { color: "d822f9", number_of_repeats: 0 },
-            settings: {
+            pulse_settings: {
               phase_one_duration: 15000,
               phase_one_charge: 0,
               interpulse_duration: 0,

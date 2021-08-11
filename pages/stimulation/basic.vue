@@ -47,7 +47,7 @@ export default {
               src: "/delay-tile.png",
               nested_protocols: [],
               repeat: { color: "d822f9", number_of_repeats: 0 },
-              settings: {
+              pulse_settings: {
                 phase_one_duration: 15,
                 phase_one_charge: 0,
                 interpulse_duration: 0,
