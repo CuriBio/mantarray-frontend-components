@@ -94,9 +94,13 @@ export default {
       const last_x_value = x_values[x_values.length - 1];
       const next_x_value = last_x_value + converted_delay;
       delay_block = [last_x_value, next_x_value];
-      this.commit("stimulation/set_delay_axis_values", delay_block);
     }
 
+    if (rest_duration == 0) {
+      delay_block = [NaN, NaN];
+    }
+
+    this.commit("stimulation/set_delay_axis_values", delay_block);
     this.commit("stimulation/set_axis_values", { x_values, y_values });
   },
 

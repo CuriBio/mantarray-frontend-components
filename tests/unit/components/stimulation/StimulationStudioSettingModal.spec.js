@@ -20,7 +20,16 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     store = await NuxtStore.createStore();
   });
 
-  test("When mounting StimulationStudioCurrentSettings from the build dist file, Then it loads successfully  `Biphasic Pulse Details` as defined title text is rendered", () => {
+  test("When mounting StimulationStudioCurrentSettings from the build dist file, Then the title text `Biphasic Pulse Details` loads correctly and initial error messages for each input", () => {
+    const expected_err_msg = {
+      phase_one_duration: "Required",
+      phase_one_charge: "Required",
+      interpulse_duration: "Required",
+      phase_two_duration: "Required",
+      phase_two_charge: "Required",
+      repeat_delay_interval: "Required",
+      total_active_duration: "Required",
+    };
     wrapper = mount(dist_StimulationStudioCurrentSettings, {
       store,
       localVue,
@@ -44,7 +53,10 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         },
       },
     });
+
     const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
+    expect(wrapper.vm.err_msg).toStrictEqual(expected_err_msg);
+
     expect(target_span).toBeTruthy();
   });
   test("When mounting StimulationStudioCurrentSettings from the component file, Then it loads successfully  `Biphasic Pulse Details` as defined title text is rendered", () => {
