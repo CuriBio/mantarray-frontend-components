@@ -204,7 +204,7 @@ export default {
         let total_protocol_duration = 0;
 
         const converted_pulses = pulses.map((pulse) => {
-          total_protocol_duration += pulse.total_active_duration *= 1000;
+          total_protocol_duration += pulse.total_active_duration * 1000;
 
           return {
             phase_one_duration: (pulse.phase_one_duration *= 1000),
@@ -227,7 +227,7 @@ export default {
         message.protocols.push(protocol_model);
       }
     }
-
+    console.log(message);
     try {
       await post_stim_message(message);
       await post_stim_status(status);

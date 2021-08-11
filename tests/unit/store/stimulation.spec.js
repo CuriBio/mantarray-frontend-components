@@ -482,7 +482,7 @@ describe("store/stimulation", () => {
                 phase_two_charge: 0,
                 phase_two_duration: 0,
                 repeat_delay_interval: 3000,
-                total_active_duration: 50000000,
+                total_active_duration: 50000,
               },
             ],
           },

@@ -2,11 +2,12 @@
   <div>
     <StimulationStudio :style="'left: 10px; top: 10px;'" />
     <button class="update-button" @click="update_protocol_list">Update protocol list</button>
+    <button class="update-button" :style="'top: 300px;'" @click="create_message">Create message</button>
   </div>
 </template>
 <script>
 import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 // import { StimulationStudio } from "@/dist/mantarray.common";
 
 export default {
@@ -15,6 +16,7 @@ export default {
   },
   methods: {
     ...mapMutations("stimulation", ["set_new_protocol", "reset_state"]),
+    ...mapActions("stimulation", ["create_protocol_message"]),
     update_protocol_list() {
       const test_protocol = {
         letter: "A",
@@ -61,6 +63,9 @@ export default {
       this.set_new_protocol(test_protocol);
       this.reset_state();
     },
+    create_message() {
+      this.create_protocol_message();
+    },
   },
 };
 </script>
@@ -78,7 +83,7 @@ export default {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-  background-color: #4caf78;
+  background-color: #4ca0af;
   z-index: 999;
 }
 </style>
