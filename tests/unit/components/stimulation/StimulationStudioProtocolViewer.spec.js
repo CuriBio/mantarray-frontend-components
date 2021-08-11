@@ -12,7 +12,7 @@ const test_protocol_order = [
   {
     type: "Biphasic",
     src: "placeholder",
-    nested_protocols: [],
+    nest_protocols: [],
     repeat: {
       number_of_repeats: 0,
       color: "fffff",
@@ -23,6 +23,16 @@ const test_protocol_order = [
       interpulse_duration: 500,
       phase_two_duration: 100,
       phase_two_charge: -5,
+    },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 20,
+        unit: "milliseconds",
+      },
     },
   },
   {
@@ -64,9 +74,67 @@ const test_protocol_order = [
       phase_one_duration: 300,
       phase_one_charge: 2,
     },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+    },
+  },
+  {
+    type: "Delay",
+    src: "placeholder",
+    nested_protocols: [],
+    repeat: {
+      number_of_repeats: 0,
+      color: "fffff",
+    },
+    pulse_settings: {
+      phase_one_duration: 3000,
+      phase_one_charge: 0,
+      interpulse_duration: 0,
+      phase_two_duration: 0,
+      phase_two_charge: 0,
+    },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: "",
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 3,
+        unit: "seconds",
+      },
+    },
+  },
+  {
+    type: "Monophasic",
+    src: "placeholder",
+    nested_protocols: [],
+    repeat: {
+      number_of_repeats: 0,
+      color: "fffff",
+    },
+    pulse_settings: {
+      phase_one_duration: 300,
+      phase_one_charge: 2,
+    },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 20,
+        unit: "milliseconds",
+      },
+    },
   },
 ];
-
 describe("StimulationStudioProtocolViewer.vue", () => {
   beforeAll(async () => {
     const storePath = `${process.env.buildDir}/store.js`;
@@ -143,7 +211,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       localVue,
     });
 
-    const expected_delay_values = [[1600, 6600]];
+    const expected_delay_values = [[3040, 8040]];
     const test_value = 5;
 
     await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);

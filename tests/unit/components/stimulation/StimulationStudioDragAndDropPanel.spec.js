@@ -22,6 +22,16 @@ const test_protocol_order = [
       phase_two_duration: 100,
       phase_two_charge: -5,
     },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 20,
+        unit: "milliseconds",
+      },
+    },
   },
   {
     type: "Monophasic",
@@ -62,6 +72,16 @@ const test_protocol_order = [
       phase_one_duration: 300,
       phase_one_charge: 2,
     },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+    },
   },
   {
     type: "Delay",
@@ -84,7 +104,7 @@ const test_protocol_order = [
         unit: "milliseconds",
       },
       total_active_duration: {
-        duration: "3",
+        duration: 3,
         unit: "seconds",
       },
     },
@@ -100,6 +120,16 @@ const test_protocol_order = [
     pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
+    },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 20,
+        unit: "milliseconds",
+      },
     },
   },
 ];
@@ -117,14 +147,14 @@ const test_protocol_list = [
       time_unit: "milliseconds",
       pulses: [
         {
-          phase_one_duration: 15,
+          phase_one_duration: 15000,
           phase_one_charge: 0,
           interpulse_duration: 0,
           phase_two_duration: 0,
           phase_two_charge: 0,
         },
         {
-          phase_one_duration: 20,
+          phase_one_duration: 20000,
           phase_one_charge: 0,
           interpulse_duration: 0,
           phase_two_duration: 0,
@@ -138,11 +168,21 @@ const test_protocol_list = [
           nested_protocols: [],
           repeat: { color: "d822f9", number_of_repeats: 0 },
           pulse_settings: {
-            phase_one_duration: 15000,
+            phase_one_duration: 15,
             phase_one_charge: 0,
             interpulse_duration: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
+          },
+          stim_settings: {
+            repeat_delay_interval: {
+              duration: 3,
+              unit: "milliseconds",
+            },
+            total_active_duration: {
+              duration: 20,
+              unit: "milliseconds",
+            },
           },
         },
       ],
@@ -305,6 +345,16 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
   test("When a user clicks save on the settings for a waveform, Then the setting should save to the corresponding index depending on if it is a new waveform or an edited", async () => {
     const test_settings = "test";
+    const test_stim_settings = {
+      repeat_delay_interval: {
+        duration: "",
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: "",
+        unit: "milliseconds",
+      },
+    };
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
       store,
       localVue,
@@ -320,7 +370,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     wrapper.vm.new_cloned_idx = 0;
     wrapper.vm.modal_type = "Biphasic";
 
-    await wrapper.vm.on_modal_close("Save", test_settings);
+    await wrapper.vm.on_modal_close("Save", test_settings, test_stim_settings);
     expect(wrapper.vm.protocol_order[0].pulse_settings).toBe(test_settings);
   });
 

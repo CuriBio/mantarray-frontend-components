@@ -76,7 +76,7 @@ export default {
       const ending_repeat_idx = x_values.length;
       color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
     });
-    console.log(pulses);
+
     this.commit("stimulation/set_repeat_color_assignments", color_assignments);
     this.commit("stimulation/set_pulses", { pulses, new_pulse_order });
     this.dispatch("stimulation/handle_rest_duration", {
@@ -205,6 +205,7 @@ export default {
 
         const converted_pulses = pulses.map((pulse) => {
           total_protocol_duration += pulse.total_active_duration *= 1000;
+
           return {
             phase_one_duration: (pulse.phase_one_duration *= 1000),
             phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]),
@@ -223,10 +224,10 @@ export default {
           total_protocol_duration,
           pulses: converted_pulses,
         };
-        message.protocol.push(protocol_model);
+        message.protocols.push(protocol_model);
       }
     }
-    console.log(message);
+
     try {
       await post_stim_message(message);
       await post_stim_status(status);
