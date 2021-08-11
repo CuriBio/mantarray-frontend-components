@@ -72,8 +72,11 @@ const test_protocol_order = [
       color: "fffff",
     },
     pulse_settings: {
-      phase_one_duration: 300,
+      phase_one_duration: 3000,
       phase_one_charge: 0,
+      interpulse_duration: 0,
+      phase_two_duration: 0,
+      phase_two_charge: 0,
     },
     stim_settings: {
       repeat_delay_interval: {
@@ -81,8 +84,8 @@ const test_protocol_order = [
         unit: "milliseconds",
       },
       total_active_duration: {
-        duration: "",
-        unit: "milliseconds",
+        duration: "3",
+        unit: "seconds",
       },
     },
   },
@@ -342,35 +345,40 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.protocol_order[1].repeat.number_of_repeats).toBe(0);
   });
 
-  // test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
-  //   const wrapper = mount(StimulationStudioDragAndDropPanel, {
-  //     store,
-  //     localVue
-  //   });
+  test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
 
-  //   const idx = 2;
-  //   const delay_settings = {
-  //     phase_one_duration: 5,
-  //     phase_one_charge: 0
-  //   };
+    const idx = 1;
 
-  //   const stim_settings = {
-  //     repeat_delay_interval: {
-  //       duration: 0,
-  //       unit: "milliseconds"
-  //     },
-  //     total_active_duration: {
-  //       duration: 5,
-  //       unit: "milliseconds"
-  //     }
-  //   };
-  //   wrapper.vm.protocol_order = test_protocol_order;
-  //   await wrapper.vm.open_modal_for_edit("Delay", idx);
-  //   expect(wrapper.vm.repeat_delay_modal).toBe("Delay");
+    const delay_settings = {
+      phase_one_duration: 5000,
+      phase_one_charge: 0,
+      interpulse_duration: 0,
+      phase_two_duration: 0,
+      phase_two_charge: 0,
+    };
 
-  //   await wrapper.vm.on_modal_close("Save", delay_settings, stim_settings);
-  //   expect(wrapper.vm.protocol_order[idx].pulse_settings.phase_one_duration).toBe(
-  //     delay_settings.phase_one_duration
-  //   );
-  // });
+    const stim_settings = {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 5,
+        unit: "seconds",
+      },
+    };
+
+    wrapper.vm.protocol_order = test_protocol_order;
+    await wrapper.vm.open_modal_for_edit("Delay", idx);
+    expect(wrapper.vm.repeat_delay_modal).toBe("Delay");
+
+    await wrapper.vm.on_modal_close("Save", delay_settings, stim_settings);
+    expect(wrapper.vm.protocol_order[idx].pulse_settings.phase_one_duration).toBe(
+      delay_settings.phase_one_duration
+    );
+  });
 });

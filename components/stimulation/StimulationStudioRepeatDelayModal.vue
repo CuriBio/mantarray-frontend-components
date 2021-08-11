@@ -58,7 +58,6 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
  * @vue-computed {String} get_modal_title - Title dependent on if its a repeat or delay modal
  * @vue-computed {String} get_input_description - Subtitle dependent on if its a repeat or delay modal
  * @vue-computed {Array} get_button_array - Button array dependent on if its a reedit or not
- * @vue-computed {String} get_metric_label - Label dependent on if its a repeat or delay modal
  * @vue-method {event} close - emits close of modal and data to parent component
  * @vue-method {event} check_validity - checks if inputs are valid numbers only and not empty
  */
@@ -126,12 +125,6 @@ export default {
       if (this.delay_open_for_edit === false) button_names = ["Save", "Cancel"];
       if (this.delay_open_for_edit === true) button_names = ["Save", "Delete", "Cancel"];
       return button_names;
-    },
-    get_metric_label() {
-      let metric_label;
-      if (this.modal_type === "Repeat") metric_label = "";
-      if (this.modal_type === "Delay") metric_label = "milliseconds";
-      return metric_label;
     },
   },
   watch: {

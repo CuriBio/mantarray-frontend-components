@@ -244,16 +244,16 @@ export default {
           Object.assign(edited_pulse.pulse_settings, pulse_settings);
           Object.assign(edited_pulse.stim_settings, stim_settings);
         }
-        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null) {
-          Object.assign(
-            edited_pulse.nested_protocols[this.shift_click_nested_img_idx].pulse_settings,
-            pulse_settings
-          );
-          Object.assign(
-            edited_pulse.nested_protocols[this.shift_click_nested_img_idx].stim_settings,
-            stim_settings
-          );
-        }
+        // if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null) {
+        //   Object.assign(
+        //     edited_pulse.nested_protocols[this.shift_click_nested_img_idx].pulse_settings,
+        //     pulse_settings
+        //   );
+        //   Object.assign(
+        //     edited_pulse.nested_protocols[this.shift_click_nested_img_idx].stim_settings,
+        //     stim_settings
+        //   );
+        // }
       }
 
       if (button === "Delete") {
