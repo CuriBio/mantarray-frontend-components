@@ -101,6 +101,8 @@ export default {
       interpulse_duration: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
+      repeat_delay_interval: 0,
+      total_Active_duration: converted_delay_duration,
     };
     state.delay_blocks = [delay];
     pulses.push(delay_pulse_model);
