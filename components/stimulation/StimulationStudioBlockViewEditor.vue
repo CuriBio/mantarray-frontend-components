@@ -40,9 +40,10 @@
             :style="'margin-left: 5%;'"
             :input_height="25"
             :input_width="176"
-            :options_text="until_options_array"
+            :options_text="stop_options_array"
+            :options_idx="stop_option_idx"
             :dom_id_suffix="'stop_options'"
-            @selection-changed="handle_stop_requirement"
+            @selection-changed="handle_stop_setting"
           />
           <span class="span__settings-label">every</span>
           <input
@@ -93,9 +94,9 @@ Vue.component("BPopover", BPopover);
  * @vue-data {String} current_letter - Next available letter in alphabet
  * @vue-data {String} current_color -  Next available color in alphabet
  * @vue-data {Array} stimulation_types_array - Availble options in dropdown
- * @vue-data {Array} until_options_array - Available options in dropdown
+ * @vue-data {Array} stop_options_array - Available options in dropdown
  * @vue-data {String} protocol_name - Inputted new protocol name
- * @vue-data {String} stop_requirement - Selected requirement from dropdown
+ * @vue-data {String} stop_setting - Selected setting from dropdown
  * @vue-data {String} rest_duration - Inputted delay to be set at the end of the protocol between repeats
  * @vue-data {String} name_validity - Corresponding border style after name validity check
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
@@ -106,7 +107,7 @@ Vue.component("BPopover", BPopover);
  * @vue-event {Event} toggle_tab - Toggles which tab is active
  * @vue-event {Event} handle_delete - Confirms and commits the deletion of protocol to state
  * @vue-event {Event} handle_stimulation_type - Commits the new selected stimulation type to state
- * @vue-event {Event} handle_stop_requirement - Currently just assigns the new stop requirement to local state
+ * @vue-event {Event} handle_stop_setting - Currently just assigns the new stop setting to local state
  * @vue-event {Event} handle_rest_duration - Commits the new delay input to state
  * @vue-event {Event} check_name_validity - Checks if the inputted name has already been used
  */
@@ -126,9 +127,9 @@ export default {
       current_letter: "",
       current_color: "",
       stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
-      until_options_array: ["Stimulate Until Stopped", "Stimulate until Complete"],
+      stop_options_array: ["Stimulate Until Stopped", "Stimulate Until Complete"],
       protocol_name: "",
-      stop_requirement: "Stimulate Until Stopped",
+      stop_option_idx: 0,
       rest_duration: "",
       name_validity: "null",
       error_message: "",
@@ -139,6 +140,7 @@ export default {
   computed: {
     ...mapState("stimulation", {
       stimulation_type: (state) => state.protocol_editor.stimulation_type,
+      stop_setting: (state) => state.protocol_editor.stop_setting,
     }),
     ...mapGetters("stimulation", [
       "get_protocol_name",
@@ -170,7 +172,10 @@ export default {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
         this.rest_duration = this.get_rest_duration;
-        this.stimulation_type == "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
+        this.stimulation_type === "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
+        this.stop_setting === "Stimulate Until Complete"
+          ? (this.stop_option_idx = 1)
+          : (this.stop_option_idx = 0);
       }
     });
   },
@@ -179,7 +184,7 @@ export default {
   },
   methods: {
     ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_rest_duration"]),
-    ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name"]),
+    ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name", "set_stop_setting"]),
     update_protocols() {
       this.protocol_list = this.get_protocols;
       const { letter, color } = this.get_next_protocol;
@@ -200,9 +205,10 @@ export default {
       this.stimulation_type_idx = idx;
       this.set_stimulation_type(type);
     },
-    handle_stop_requirement(idx) {
-      const requirement = this.until_options_array[idx];
-      this.stop_requirement = requirement;
+    handle_stop_setting(idx) {
+      const setting = this.stop_options_array[idx];
+      this.stop_option_idx = idx;
+      this.set_stop_setting(setting);
     },
     handle_rest_duration(time) {
       this.rest_duration = time;

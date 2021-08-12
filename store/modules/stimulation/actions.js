@@ -204,7 +204,7 @@ export default {
     };
     for (const well in protocol_assignments) {
       if (protocol_assignments !== {}) {
-        const { stimulation_type, pulses } = protocol_assignments[well].protocol;
+        const { stimulation_type, pulses, stop_setting } = protocol_assignments[well].protocol;
         let total_protocol_duration = 0;
 
         const converted_pulses = pulses.map((pulse) => {
@@ -221,6 +221,8 @@ export default {
           };
         });
 
+        if (stop_setting.includes("Stopped")) total_protocol_duration = -1;
+
         const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well, false);
         const protocol_model = {
           stimulation_type,
@@ -231,7 +233,7 @@ export default {
         message.protocols.push(protocol_model);
       }
     }
-    console.log(message);
+
     try {
       await post_stim_message(message);
       await post_stim_status(status);
@@ -251,7 +253,7 @@ export default {
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {
     const { label, letter, color } = protocol;
-    const { stimulation_type, time_unit, rest_duration, detailed_pulses } = protocol.protocol;
+    const { stimulation_type, time_unit, rest_duration, detailed_pulses, stop_setting } = protocol.protocol;
     this.state.stimulation.current_assignment = { letter, color };
 
     try {
@@ -259,6 +261,7 @@ export default {
       await this.commit("stimulation/set_stimulation_type", stimulation_type);
       await this.commit("stimulation/set_time_unit", time_unit);
       await this.commit("stimulation/set_rest_duration", rest_duration);
+      await this.commit("stimulation/set_stop_setting", stop_setting);
       await this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
     } catch (error) {
       console.log(error);

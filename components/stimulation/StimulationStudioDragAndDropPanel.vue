@@ -276,18 +276,18 @@ export default {
 
       if (nested_idx !== undefined) {
         this.shift_click_nested_img_idx = nested_idx;
-        Object.assign(this.selected_pulse_settings, pulse.nested_protocols[nested_idx].pulse_settings);
-        Object.assign(this.selected_stim_settings, pulse.nested_protocols[nested_idx].stim_settings);
+        this.selected_pulse_settings = pulse.nested_protocols[nested_idx].pulse_settings;
+        this.selected_stim_settings = pulse.nested_protocols[nested_idx].stim_settings;
       } else if (nested_idx === undefined) {
-        Object.assign(this.selected_pulse_settings, pulse.pulse_settings);
-        Object.assign(this.selected_stim_settings, pulse.stim_settings);
+        this.selected_pulse_settings = pulse.pulse_settings;
+        this.selected_stim_settings = pulse.stim_settings;
       }
+
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
         this.current_repeat_delay_input = this.selected_stim_settings.total_active_duration.duration.toString();
         this.current_repeat_delay_unit = this.selected_stim_settings.total_active_duration.unit.toString();
-
         this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
       }
