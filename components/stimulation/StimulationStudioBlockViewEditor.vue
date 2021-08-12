@@ -21,7 +21,7 @@
           v-model="protocol_name"
           class="protocol_name_nput"
           placeholder="Protocol Name"
-          :disabled="disabled === true"
+          :disabled="disabled.name === true"
           :style="name_validity"
           @change="check_name_validity($event.target.value)"
         />
@@ -50,6 +50,7 @@
             v-model="rest_duration"
             class="number_input"
             placeholder=""
+            :disabled="disabled.time === true"
             @change="handle_rest_duration($event.target.value)"
           />
           <FontAwesomeIcon
@@ -122,7 +123,10 @@ export default {
   data() {
     return {
       active_tab: "Basic",
-      disabled: true,
+      disabled: {
+        name: true,
+        time: false,
+      },
       show_confirmation: false,
       current_letter: "",
       current_color: "",
@@ -208,6 +212,10 @@ export default {
     handle_stop_setting(idx) {
       const setting = this.stop_options_array[idx];
       this.stop_option_idx = idx;
+
+      if (idx === 0) this.disabled.time = false;
+      else this.disabled.time = true;
+
       this.set_stop_setting(setting);
     },
     handle_rest_duration(time) {

@@ -454,6 +454,7 @@ describe("store/stimulation", () => {
           label: "test",
           protocol: {
             stimulation_type: "C",
+            stop_setting: "Stimulate Until Stopped",
             pulses: [
               {
                 phase_one_duration: 15,
@@ -473,7 +474,7 @@ describe("store/stimulation", () => {
           {
             stimulation_type: "C",
             well_number: "A2",
-            total_protocol_duration: 50000,
+            total_protocol_duration: -1,
             pulses: [
               {
                 phase_one_duration: 15000,

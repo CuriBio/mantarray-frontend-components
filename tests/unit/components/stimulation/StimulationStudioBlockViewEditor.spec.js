@@ -164,7 +164,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(3).trigger("click");
-    expect(wrapper.vm.stop_requirement).toBe("Stimulate until Complete");
+    expect(wrapper.vm.stop_option_idx).toBe(1);
   });
 
   test("When exiting instance, Then instance is effectively destroyed", async () => {

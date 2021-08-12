@@ -1,6 +1,7 @@
 import Vuex from "vuex";
 import { createLocalVue, mount } from "@vue/test-utils";
 import StimulationStudioControls from "@/components/playback/controls/StimulationStudioControls.vue";
+import { stackOrderDescending } from "d3";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -48,13 +49,26 @@ describe("store/stimulation", () => {
         store,
         localVue,
       });
+      store.state.stimulation.protocol_assignments = { test: "assignment" };
       wrapper.vm.play_state = true;
       await wrapper.find(".span__stimulation-controls-play-stop-button").trigger("click");
       expect(wrapper.vm.play_state).toBe(false);
-      expect(wrapper.vm.current_gradient).toBe(wrapper.vm.inactive_gradient);
+      expect(wrapper.vm.current_gradient).toStrictEqual(wrapper.vm.inactive_gradient);
     });
 
-    test("Given a stimulation is inactive, When a user clicks the button to turn on stimulation, Then the colored icon should change to active color gradient and dispatch signal to BE", async () => {
+    test("Given there are no wells assigned with a protocol, When a user clicks to start a stimulation, Then the colored icon will remain inactive and stopped", async () => {
+      const wrapper = mount(StimulationStudioControls, {
+        store,
+        localVue,
+      });
+
+      wrapper.vm.play_state = false;
+      await wrapper.find(".span__stimulation-controls-play-stop-button").trigger("click");
+      expect(wrapper.vm.play_state).toBe(false);
+      expect(wrapper.vm.current_gradient).toStrictEqual(wrapper.vm.inactive_gradient);
+    });
+
+    test("Given a stimulation is inactive and there are protocol assigned wells, When a user clicks the button to turn on stimulation, Then the colored icon should change to active color gradient and dispatch signal to BE", async () => {
       jest
         .spyOn(store, "dispatch")
         .mockImplementation(async () => await store.commit("stimulation/set_stim_status", true));
@@ -64,9 +78,10 @@ describe("store/stimulation", () => {
         localVue,
       });
 
+      store.state.stimulation.protocol_assignments = { test: "assignment" };
       await wrapper.find(".span__stimulation-controls-play-stop-button").trigger("click");
       expect(wrapper.vm.play_state).toBe(true);
-      expect(wrapper.vm.current_gradient).toBe(wrapper.vm.active_gradient);
+      expect(wrapper.vm.current_gradient).toStrictEqual(wrapper.vm.active_gradient);
     });
   });
 });

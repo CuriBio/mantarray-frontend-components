@@ -24,6 +24,7 @@
           :options_text="time_units_array"
           :options_idx="time_units_idx"
           :dom_id_suffix="'time_units'"
+          :disabled="disable_dropdown"
           @selection-changed="handle_time_unit"
         />
 
@@ -179,11 +180,13 @@ export default {
       new_cloned_idx: null,
       delay_open_for_edit: false, // TODO Luci, clean up state management and constant names
       time_units_idx: 0,
+      disable_dropdown: false,
     };
   },
   computed: {
     ...mapState("stimulation", {
       time_unit: (state) => state.protocol_editor.time_unit,
+      stop_setting: (state) => state.protocol_editor.stop_setting,
     }),
   },
   created() {
@@ -200,6 +203,10 @@ export default {
           JSON.stringify(this.$store.state.stimulation.protocol_editor.detailed_pulses)
         );
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
+      }
+      if (mutation.type === "stimulation/set_stop_setting") {
+        if (this.stop_setting.includes("Complete")) this.disable_dropdown = true;
+        else this.disable_dropdown = false;
       }
     });
   },
