@@ -25,6 +25,7 @@
           :options_idx="time_units_idx"
           :dom_id_suffix="'time_units'"
           :disabled="disable_dropdown"
+          :style="disable_dropdown ? 'cursor: unset;' : null"
           @selection-changed="handle_time_unit"
         />
 
