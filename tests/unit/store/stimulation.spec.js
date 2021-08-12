@@ -14,7 +14,7 @@ describe("store/stimulation", () => {
 
   const test_protocol_order = [
     {
-      type: "Monophasic",
+      type: "Biphasic",
       src: "test",
       repeat: {
         color: "b7b7b7",
@@ -22,7 +22,20 @@ describe("store/stimulation", () => {
       },
       pulse_settings: {
         phase_one_duration: 100,
-        phase_one_charge: 2,
+        phase_one_charge: 200,
+        interpulse_duration: 10,
+        phase_two_duration: 3,
+        phase_two_charge: 200,
+      },
+      stim_settings: {
+        repeat_delay_interval: {
+          duration: 5,
+          unit: "seconds",
+        },
+        total_active_duration: {
+          duration: 500,
+          unit: "milliseconds",
+        },
       },
       nested_protocols: [
         {
@@ -38,6 +51,16 @@ describe("store/stimulation", () => {
             interpulse_duration: 200,
             phase_two_duration: 100,
             phase_two_charge: -2,
+          },
+          stim_settings: {
+            repeat_delay_interval: {
+              duration: 0,
+              unit: "milliseconds",
+            },
+            total_active_duration: {
+              duration: 3,
+              unit: "seconds",
+            },
           },
           nested_protocols: [],
         },
@@ -63,6 +86,8 @@ describe("store/stimulation", () => {
             interpulse_duration: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
+            repeat_delay_interval: 0,
+            total_active_duration: 15,
           },
           {
             phase_one_duration: 20,
@@ -70,6 +95,8 @@ describe("store/stimulation", () => {
             interpulse_duration: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
+            repeat_delay_interval: 0,
+            total_active_duration: 20,
           },
         ],
         detailed_pulses: [
@@ -84,6 +111,18 @@ describe("store/stimulation", () => {
               interpulse_duration: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
+              repeat_delay_interval: 3000,
+              total_active_duration: 15000,
+            },
+            stim_settings: {
+              repeat_delay_interval: {
+                duration: 3,
+                unit: "milliseconds",
+              },
+              total_active_duration: {
+                duration: 15,
+                unit: "milliseconds",
+              },
             },
           },
         ],
@@ -112,6 +151,8 @@ describe("store/stimulation", () => {
 
     test("When requesting the next available protocol assignment(color, letter), Then the protocol recieved should be unused and unique", async () => {
       const { protocol_list } = store.state.stimulation;
+      protocol_list.push({ letter: "B", name: "mock_protocol" });
+
       const { letter, color } = store.getters["stimulation/get_next_protocol"];
 
       let check_color_duplicate = false;
@@ -143,13 +184,10 @@ describe("store/stimulation", () => {
       expect(voltage_selection).toBe(voltage);
     });
 
-    test("When requesting the detailed pulse order, name, and end delay duration to edit existing protocol in the editor, Then it should return specified pulse order", async () => {
+    test("When requesting the name and rest duration to edit existing protocol in the editor, Then it should return specified pulse order", async () => {
       const selected_protocol = store.state.stimulation.protocol_list[1];
-      const { detailed_pulses, name, rest_duration } = selected_protocol.protocol;
+      const { name, rest_duration } = selected_protocol.protocol;
       await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
-
-      const actual_detailed_pulses = store.getters["stimulation/get_detailed_pulse_order"];
-      expect(actual_detailed_pulses).toStrictEqual(detailed_pulses);
 
       const actual_name = store.getters["stimulation/get_protocol_name"];
       expect(actual_name).toBe(name);
@@ -325,12 +363,13 @@ describe("store/stimulation", () => {
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
-      const x_values = [0, 0, 100, 100, 200, 200, 400, 400, 500];
-      const y_values = [0, 2, 2, 2, 2, 0, 0, -2, -2];
+      const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 500];
+      const y_values = [0, 200, 200, 0, 0, 200, 200, 0, 0];
       const colors = { b7b7b7: [0, 9] };
 
       await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
       const { x_axis_values, y_axis_values, repeat_colors } = store.state.stimulation;
+
       expect(x_axis_values).toStrictEqual(x_values);
       expect(y_axis_values).toStrictEqual(y_values);
       expect(repeat_colors).toStrictEqual(colors);
@@ -422,16 +461,19 @@ describe("store/stimulation", () => {
                 interpulse_duration: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
+                repeat_delay_interval: 3,
+                total_active_duration: 50,
               },
             ],
           },
         },
       };
       const expected_message = {
-        protocol: [
+        protocols: [
           {
             stimulation_type: "C",
             well_number: "A2",
+            total_protocol_duration: 50000,
             pulses: [
               {
                 phase_one_duration: 15000,
@@ -439,6 +481,8 @@ describe("store/stimulation", () => {
                 interpulse_duration: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
+                repeat_delay_interval: 3000,
+                total_active_duration: 50000,
               },
             ],
           },

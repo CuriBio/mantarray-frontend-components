@@ -201,7 +201,6 @@ export default {
       this.set_stimulation_type(type);
     },
     handle_stop_requirement(idx) {
-      // eventually handle in state, unsure yet how this is used
       const requirement = this.until_options_array[idx];
       this.stop_requirement = requirement;
     },

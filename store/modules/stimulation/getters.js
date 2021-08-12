@@ -9,7 +9,7 @@ export default {
       const letter = get_protocol_editor_letter(protocol_list);
       let color;
 
-      // for testing
+      // for e2e testing
       if (letter === "A") color = "#4ca0af";
       else if (letter === "B") color = "#578844";
       else color = get_protocol_editor_color(protocol_list);
@@ -25,9 +25,6 @@ export default {
     if (protocol_editor.stimulation_type === "V") return "Voltage (mV)";
   },
 
-  get_detailed_pulse_order({ protocol_editor }) {
-    return protocol_editor.detailed_pulses;
-  },
   get_protocol_name({ protocol_editor }) {
     return protocol_editor.name;
   },

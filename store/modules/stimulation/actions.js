@@ -1,6 +1,14 @@
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
+// import { max } from "d3";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 import { post_stim_message, post_stim_status } from "../../../js_utils/axios_helpers";
+
+const time_conversion = {
+  seconds: 1000,
+  milliseconds: 1,
+  minutes: 60000,
+  hours: 3600,
+};
 
 export default {
   handle_selected_wells({ commit }, wells) {
@@ -14,57 +22,59 @@ export default {
   },
 
   handle_protocol_order({ commit, dispatch }, new_pulse_order) {
-    const x_values = [0];
-    const y_values = [0];
+    let x_values = [0];
+    let y_values = [0];
     const color_assignments = {};
     const pulses = [];
 
-    const helper = (setting) => {
-      pulses.push(setting);
-      x_values.push(
-        x_values[x_values.length - 1],
-        setting.phase_one_duration + x_values[x_values.length - 1]
-      );
+    const get_last = (array) => array[array.length - 1];
+
+    const helper = (setting, max_duration) => {
+      x_values.push(get_last(x_values), setting.phase_one_duration + get_last(x_values));
       y_values.push(setting.phase_one_charge, setting.phase_one_charge);
+
       if (setting.phase_two_duration > 0) {
-        x_values.push(
-          x_values[x_values.length - 1],
-          setting.interpulse_duration + x_values[x_values.length - 1]
-        );
+        x_values.push(get_last(x_values), setting.interpulse_duration + get_last(x_values));
         y_values.push(0, 0);
-        x_values.push(
-          x_values[x_values.length - 1],
-          setting.phase_two_duration + x_values[x_values.length - 1]
-        );
+        x_values.push(get_last(x_values), setting.phase_two_duration + get_last(x_values));
         y_values.push(setting.phase_two_charge, setting.phase_two_charge);
       }
+
+      x_values.push(get_last(x_values), setting.repeat_delay_interval + get_last(x_values));
+      y_values.push(0, 0);
+
+      x_values = x_values.filter((val) => val < max_duration);
+      const sliced_y_values = y_values.slice(0, x_values.length);
+      if (x_values.length === y_values.length) helper(setting, max_duration);
+      else y_values = sliced_y_values;
     };
 
     new_pulse_order.map((pulse) => {
-      const number_of_repeats = pulse.repeat.number_of_repeats;
       const repeat_color = pulse.repeat.color;
       const starting_repeat_idx = x_values.length - 1;
-      const setting = pulse.pulse_settings;
+      let setting = pulse.pulse_settings;
+      const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
 
-      for (let k = 0; k <= number_of_repeats; k++) {
-        const nested_protocols = pulse.nested_protocols;
-        helper(setting);
-        if (nested_protocols.length > 0) {
-          nested_protocols.map((protocol) => {
-            const nested_setting = protocol.pulse_settings;
-            helper(nested_setting);
-          });
-        }
+      const converted_delay = repeat_delay_interval.duration * time_conversion[repeat_delay_interval.unit];
+      const converted_total_active =
+        total_active_duration.duration * time_conversion[total_active_duration.unit];
 
-        const ending_repeat_idx = x_values.length;
+      setting = {
+        ...setting,
+        repeat_delay_interval: converted_delay,
+        total_active_duration: converted_total_active,
+      };
 
-        if (nested_protocols.length > 0)
-          color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
+      const max_duration = get_last(x_values) + converted_total_active;
 
-        if (k === number_of_repeats - 1 && number_of_repeats !== 0) {
-          break;
-        }
-      }
+      pulses.push(setting);
+      helper(setting, max_duration);
+
+      x_values.push(max_duration);
+      y_values.push(get_last(y_values));
+
+      const ending_repeat_idx = x_values.length;
+      color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
     });
 
     this.commit("stimulation/set_repeat_color_assignments", color_assignments);
@@ -79,21 +89,14 @@ export default {
     const { rest_duration, time_unit } = this.state.stimulation.protocol_editor;
     let delay_block;
 
-    const delay_conversion = {
-      seconds: 1000,
-      milliseconds: 1,
-      minutes: 60000,
-      hours: 3600,
-    };
-
     if (rest_duration !== 0) {
-      const converted_delay = rest_duration * delay_conversion[time_unit];
+      const converted_delay = rest_duration * time_conversion[time_unit];
       const last_x_value = x_values[x_values.length - 1];
       const next_x_value = last_x_value + converted_delay;
       delay_block = [last_x_value, next_x_value];
     }
 
-    if (rest_duration === 0) {
+    if (rest_duration == 0) {
       delay_block = [NaN, NaN];
     }
 
@@ -193,34 +196,42 @@ export default {
 
   async create_protocol_message({ commit, state }) {
     const status = true;
-    const message = { protocol: [] };
+    const message = { protocols: [] };
     const { protocol_assignments } = this.state.stimulation;
     const charge_conversion = {
       C: 1000,
       V: 1,
     };
-
     for (const well in protocol_assignments) {
       if (protocol_assignments !== {}) {
         const { stimulation_type, pulses } = protocol_assignments[well].protocol;
-        const converted_pulses = pulses.map((pulse) => ({
-          phase_one_duration: (pulse.phase_one_duration *= 1000),
-          phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]),
-          interpulse_duration: (pulse.interpulse_duration *= 1000),
-          phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]),
-          phase_two_duration: (pulse.phase_two_duration *= 1000),
-        }));
+        let total_protocol_duration = 0;
+
+        const converted_pulses = pulses.map((pulse) => {
+          total_protocol_duration += pulse.total_active_duration * 1000;
+
+          return {
+            phase_one_duration: (pulse.phase_one_duration *= 1000),
+            phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]),
+            interpulse_duration: (pulse.interpulse_duration *= 1000),
+            phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]),
+            phase_two_duration: (pulse.phase_two_duration *= 1000),
+            repeat_delay_interval: (pulse.repeat_delay_interval *= 1000),
+            total_active_duration: (pulse.total_active_duration *= 1000),
+          };
+        });
 
         const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well, false);
         const protocol_model = {
           stimulation_type,
           well_number,
+          total_protocol_duration,
           pulses: converted_pulses,
         };
-        message.protocol.push(protocol_model);
+        message.protocols.push(protocol_model);
       }
     }
-
+    console.log(message);
     try {
       await post_stim_message(message);
       await post_stim_status(status);
@@ -273,3 +284,48 @@ export default {
     this.commit("stimulation/reset_protocol_editor");
   },
 };
+
+// new_pulse_order.map(pulse => {
+// const number_of_repeats = pulse.repeat.number_of_repeats;
+// const repeat_color = pulse.repeat.color;
+// const starting_repeat_idx = x_values.length - 1;
+// let setting = pulse.pulse_settings;
+// const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
+
+// const converted_delay = repeat_delay_interval.duration * time_conversion[repeat_delay_interval.unit];
+// const converted_total_active = total_active_duration.duration * time_conversion[total_active_duration.unit];
+
+// setting = {
+//   ...setting,
+//   repeat_delay_interval: converted_delay,
+//   total_active_duration: converted_total_active
+// };
+
+// for (let k = 0; k <= number_of_repeats; k++) {
+// //   const nested_protocols = pulse.nested_protocols;
+// const max_duration = get_last(x_values) + converted_total_active;
+
+// pulses.push(setting);
+// helper(setting, max_duration);
+
+// x_values.push(max_duration);
+// y_values.push(get_last(y_values));
+
+// if (nested_protocols.length > 0) {
+//   nested_protocols.map(protocol => {
+//     const nested_setting = protocol.pulse_settings;
+//     helper(nested_setting);
+//   });
+// }
+
+// const ending_repeat_idx = x_values.length;
+
+// if (nested_protocols.length > 0)
+// color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
+// if (nested_protocols.length > 0)
+
+// if (k === number_of_repeats - 1 && number_of_repeats !== 0) {
+//   break;
+// }
+// }
+// });
