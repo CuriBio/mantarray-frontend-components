@@ -402,6 +402,22 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.protocol_order[1].repeat.number_of_repeats).toBe(0);
   });
 
+  test("When a selects the Stimulate Until Complete option in the protocol editor, Then the time unit dropdown should become disabled", async () => {
+    const test_settings = {
+      complete: "Stimulate Until Complete",
+      stopped: "Stimulate Until Stopped",
+    };
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await store.commit("stimulation/set_stop_setting", test_settings.complete);
+    expect(wrapper.vm.disable_dropdown).toBe(true);
+    await store.commit("stimulation/set_stop_setting", test_settings.stopped);
+    expect(wrapper.vm.disable_dropdown).toBe(false);
+  });
+
   test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
       store,
