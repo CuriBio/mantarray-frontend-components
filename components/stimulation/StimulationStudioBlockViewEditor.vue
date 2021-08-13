@@ -21,7 +21,7 @@
           v-model="protocol_name"
           class="protocol_name_nput"
           placeholder="Protocol Name"
-          :disabled="disabled.name === true"
+          :disabled="disabled.name"
           :style="name_validity"
           @change="check_name_validity($event.target.value)"
         />
