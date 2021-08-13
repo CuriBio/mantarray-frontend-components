@@ -285,14 +285,14 @@ export default {
       const pulse = this.protocol_order[idx];
       this.shift_click_img_idx = idx;
 
-      if (nested_idx !== undefined) {
-        this.shift_click_nested_img_idx = nested_idx;
-        this.selected_pulse_settings = pulse.nested_protocols[nested_idx].pulse_settings;
-        this.selected_stim_settings = pulse.nested_protocols[nested_idx].stim_settings;
-      } else if (nested_idx === undefined) {
-        this.selected_pulse_settings = pulse.pulse_settings;
-        this.selected_stim_settings = pulse.stim_settings;
-      }
+      // if (nested_idx !== undefined) {
+      //   this.shift_click_nested_img_idx = nested_idx;
+      //   this.selected_pulse_settings = pulse.nested_protocols[nested_idx].pulse_settings;
+      //   this.selected_stim_settings = pulse.nested_protocols[nested_idx].stim_settings;
+      // } else if (nested_idx === undefined) {
+      this.selected_pulse_settings = pulse.pulse_settings;
+      this.selected_stim_settings = pulse.stim_settings;
+      // }
 
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";

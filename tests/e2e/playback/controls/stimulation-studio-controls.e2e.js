@@ -23,9 +23,7 @@ test("testing the StimulationStudioControls layout on initialization", async (t)
 test("testing the StimulationStudioControls layout when stimulation is active", async (t) => {
   const screenshot_path_base = path.join("playback", "controls", "stimulation-studio-controls");
   const screenshot_path = path.join(screenshot_path_base, "basic-active");
-  await t.click(update_button).click("#column_2").click(protocol_dropdown).click(protocol).click(apply_btn);
-
-  await t.click(status_btn);
+  await t.click(update_button).click(status_btn).wait(1000);
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
