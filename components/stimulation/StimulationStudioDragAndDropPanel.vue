@@ -24,6 +24,8 @@
           :options_text="time_units_array"
           :options_idx="time_units_idx"
           :dom_id_suffix="'time_units'"
+          :disabled="disable_dropdown"
+          :style="disable_dropdown ? 'cursor: unset;' : null"
           @selection-changed="handle_time_unit"
         />
 
@@ -129,6 +131,8 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
  * @vue-data {Boolean} cloned - Determines if a placed tile in protocol order is new and needs a modal to open appear to set settings or just an order rearrangement of existing tiles
  * @vue-data {Int} new_cloned_idx - If tile placed in protocol order is new, this index allows settings to be saved to correct index in order
  * @vue-data {Boolean} delay_open_for_edit - Determines if existing delay input should appear in modal for a reedit or if it's a new delay block with blank settings
+ * @vue-data {Int} time_units_idx - Index for selected unit in dropdown, used to reset dropdown when editor is reset
+ * @vue-data {Boolean} disable_dropdown - Determines if the dropdown is disabled or not dependent on the stop stim setting selected
  * @vue-event {Event} check_type - Checks if tile placed is new or existing and opens corresponding modal for settings or commits change in protocol order to state
  * @vue-event {Event} on_modal_close - Handles settings when modal is closed dependent on which button the user selects and which modal type is open, commits change to state
  * @vue-event {Event} open_modal_for_edit - Assigns selected pulse settings to modal for reedit and saves current selected index
@@ -179,11 +183,13 @@ export default {
       new_cloned_idx: null,
       delay_open_for_edit: false, // TODO Luci, clean up state management and constant names
       time_units_idx: 0,
+      disable_dropdown: false,
     };
   },
   computed: {
     ...mapState("stimulation", {
       time_unit: (state) => state.protocol_editor.time_unit,
+      stop_setting: (state) => state.protocol_editor.stop_setting,
     }),
   },
   created() {
@@ -200,6 +206,11 @@ export default {
           JSON.stringify(this.$store.state.stimulation.protocol_editor.detailed_pulses)
         );
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
+      }
+      if (mutation.type === "stimulation/set_stop_setting") {
+        this.stop_setting.includes("Complete")
+          ? (this.disable_dropdown = true)
+          : (this.disable_dropdown = false);
       }
     });
   },
@@ -276,18 +287,18 @@ export default {
 
       if (nested_idx !== undefined) {
         this.shift_click_nested_img_idx = nested_idx;
-        Object.assign(this.selected_pulse_settings, pulse.nested_protocols[nested_idx].pulse_settings);
-        Object.assign(this.selected_stim_settings, pulse.nested_protocols[nested_idx].stim_settings);
+        this.selected_pulse_settings = pulse.nested_protocols[nested_idx].pulse_settings;
+        this.selected_stim_settings = pulse.nested_protocols[nested_idx].stim_settings;
       } else if (nested_idx === undefined) {
-        Object.assign(this.selected_pulse_settings, pulse.pulse_settings);
-        Object.assign(this.selected_stim_settings, pulse.stim_settings);
+        this.selected_pulse_settings = pulse.pulse_settings;
+        this.selected_stim_settings = pulse.stim_settings;
       }
+
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
         this.current_repeat_delay_input = this.selected_stim_settings.total_active_duration.duration.toString();
         this.current_repeat_delay_unit = this.selected_stim_settings.total_active_duration.unit.toString();
-
         this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
       }

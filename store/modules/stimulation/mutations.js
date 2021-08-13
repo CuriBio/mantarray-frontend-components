@@ -45,7 +45,7 @@ export default {
       protocol_editor: {
         name: "",
         stimulation_type: "V",
-        stop_requirement: "Until Stopped",
+        stop_setting: "Stimulate Until Stopped",
         rest_duration: 0,
         time_unit: "seconds",
         pulses: [],
@@ -68,7 +68,7 @@ export default {
       protocol_editor: {
         name: "",
         stimulation_type: "V",
-        stop_requirement: "Until Stopped",
+        stop_setting: "Stimulate Until Stopped",
         rest_duration: 0,
         time_unit: "seconds",
         pulses: [],
@@ -102,10 +102,10 @@ export default {
       phase_two_duration: 0,
       phase_two_charge: 0,
       repeat_delay_interval: 0,
-      total_Active_duration: converted_delay_duration,
+      total_active_duration: converted_delay_duration,
     };
     state.delay_blocks = [delay];
-    pulses.push(delay_pulse_model);
+    if (!isNaN(converted_delay_duration) && converted_delay_duration !== 0) pulses.push(delay_pulse_model);
   },
   set_new_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
@@ -123,5 +123,8 @@ export default {
   },
   set_edit_mode_off({ edit_mode }) {
     edit_mode.status = false;
+  },
+  set_stop_setting({ protocol_editor }, setting) {
+    protocol_editor.stop_setting = setting;
   },
 };

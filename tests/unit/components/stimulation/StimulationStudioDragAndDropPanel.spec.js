@@ -1,5 +1,6 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
+import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -11,6 +12,7 @@ const test_protocol_order = [
     type: "Biphasic",
     src: "placeholder",
     nest_protocols: [],
+    stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 0,
       color: "fffff",
@@ -36,6 +38,7 @@ const test_protocol_order = [
   {
     type: "Monophasic",
     src: "placeholder",
+    stop_setting: "Stimulate Until Complete",
     nested_protocols: [
       {
         type: "Monophasic",
@@ -87,6 +90,7 @@ const test_protocol_order = [
     type: "Delay",
     src: "placeholder",
     nested_protocols: [],
+    stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 0,
       color: "fffff",
@@ -112,6 +116,7 @@ const test_protocol_order = [
   {
     type: "Monophasic",
     src: "placeholder",
+    stop_setting: "Stimulate Until Complete",
     nested_protocols: [],
     repeat: {
       number_of_repeats: 0,
@@ -143,6 +148,7 @@ const test_protocol_list = [
     protocol: {
       name: "Tester",
       stimulation_type: "V",
+      stop_setting: "Stimulate Until Complete",
       rest_duration: 20,
       time_unit: "milliseconds",
       pulses: [
@@ -165,6 +171,7 @@ const test_protocol_list = [
         {
           type: "Delay",
           src: "/delay-tile.png",
+          stop_setting: "Stimulate Until Complete",
           nested_protocols: [],
           repeat: { color: "d822f9", number_of_repeats: 0 },
           pulse_settings: {
@@ -393,6 +400,22 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.handle_repeat({ removed: "test" }, 1);
     expect(wrapper.vm.protocol_order[1].repeat.number_of_repeats).toBe(0);
+  });
+
+  test("When a selects the Stimulate Until Complete option in the protocol editor, Then the time unit dropdown should become disabled", async () => {
+    const test_settings = {
+      complete: "Stimulate Until Complete",
+      stopped: "Stimulate Until Stopped",
+    };
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await store.commit("stimulation/set_stop_setting", test_settings.complete);
+    expect(wrapper.vm.disable_dropdown).toBe(true);
+    await store.commit("stimulation/set_stop_setting", test_settings.stopped);
+    expect(wrapper.vm.disable_dropdown).toBe(false);
   });
 
   test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {

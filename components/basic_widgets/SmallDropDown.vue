@@ -9,7 +9,7 @@
       :style="
         'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;' + 'height:' + input_height + 'px;'
       "
-      @click="toggle()"
+      @click="!disabled ? toggle() : null"
     >
       <div
         class="span__small-dropdown-controls-content-input-txt-widget"
@@ -44,6 +44,7 @@ export default {
     options_idx: { type: Number, default: 0 },
     dom_id_suffix: { type: String, default: "" }, // for testing
     title_label: { type: String, default: "" },
+    disabled: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -65,9 +66,6 @@ export default {
       }
       return list;
     },
-    input_height_background: function () {
-      return this.title_label !== "" ? 100 : 60;
-    },
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
     },
@@ -80,6 +78,9 @@ export default {
     },
     options_idx: function () {
       this.get_preselected_option();
+    },
+    disabled: function () {
+      if (this.disabled) this.visible = false;
     },
   },
   created() {

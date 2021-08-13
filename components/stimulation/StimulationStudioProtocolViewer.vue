@@ -25,6 +25,7 @@ import { convert_x_y_arrays_to_d3_array } from "@/js_utils/waveform_data_formatt
  * @vue-data {Object} repeat_colors - Corresponding color assignments from repeat blocks in pulse order to be assigned to color of line in graph
  * @vue-data {Int} x_axis_sample_length - x-axis max value
  * @vue-data {Array} delay_blocks - Delay block to appear at end of graph to show in between repeats
+ * @vue-data {String} x_axis_label - X axis label passed down to graph
  */
 
 export default {

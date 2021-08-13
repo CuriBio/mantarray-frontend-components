@@ -205,4 +205,22 @@ describe("InputDropDown.vue", () => {
     wrapper.destroy();
     expect(destroyed_spy).toHaveBeenCalledWith();
   });
+
+  test("When the SmallDropDown becomes disabled, Then the list visibility should become false and toggle should become disabled", async () => {
+    const toggle_spy = jest.spyOn(SmallDropDown.methods, "toggle");
+    const wrapper = mount(SmallDropDown, {
+      store,
+      localVue,
+      propsData: {
+        options_text: ["test"],
+        disabled: false,
+      },
+    });
+
+    await wrapper.setProps({ disabled: true });
+    expect(wrapper.vm.visible).toBe(false);
+
+    wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
+    expect(toggle_spy).toHaveBeenCalledTimes(0);
+  });
 });
