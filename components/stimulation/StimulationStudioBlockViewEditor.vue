@@ -90,7 +90,7 @@ Vue.component("BPopover", BPopover);
 
 /**
  * @vue-data {String} active_tab - Shows current selected tab
- * @vue-data {Boolean} disabled - Disables the name input field
+ * @vue-data {Boolean} disabled - Disables the name and time input fields
  * @vue-data {Boolean} show_confirmation - Determines if delete popover is visible
  * @vue-data {String} current_letter - Next available letter in alphabet
  * @vue-data {String} current_color -  Next available color in alphabet

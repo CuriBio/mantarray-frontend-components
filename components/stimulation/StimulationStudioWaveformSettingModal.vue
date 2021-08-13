@@ -316,11 +316,14 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-props {String} stimulation_type - Current type of stimulation
  * @vue-props {String} pulse_type - Type of pulse for modal
  * @vue-props {Array} button_names - Array of button labels for modal
- * @vue-props {Object} selected_pulse_settings - Settings for modal if it's a reedit
+ * @vue-props {Object} selected_pulse_settings - Settings passed to modal if it's selected to edit
+ * @vue-props {Object} selected_stim_settings - Stim block settings passed to modal if it's selected to edit
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
- * @vue-data {Object} pulse_setting - Model for new inputs to be assigned
+ * @vue-data {Object} pulse_settings - Model for new inputs to be assigned
+ * @vue-data {Object} stim_settings - Model for new inputs to be assigned
  * @vue-data {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
  * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
+ * @vue-data {Object} regex - Contains regex for various validity checks
  * @vue-data {Object} err_msg - Object containing all initial error messages for inputs
  * @vue-data {Boolean} all_valid - True if all inputs pass the validation check and allows Save button to become enabled
  * @vue-data {Object} time_units - Contains option for dropdown components
@@ -328,7 +331,14 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-data {Integer} active_duration_idx - Used to input current active duration setting to dropdown when open for edit
  * @vue-computed {String} check_max_type - Computes last label for disabled input field
  * @vue-method {event} close - emits close of modal and data to parent component
- * @vue-method {event} check_validity - checks if inputs are valid numbers only and not empty
+ * @vue-method {event} check_validity - calls appropriate validation checks based on changes to inputs
+ * @vue-method {event} handle_all_valid - checks if all inputs are valid numbers only and not empty
+ * @vue-method {event} check_pulse_duration - checks if the pulse durations are all positive integers and less than 50ms
+ * @vue-method {event} check_active_duration - checks if total duration is greater than entire pulse duration and a positive integer
+ * @vue-method {event} check_delay_interval - checks if delay interval is a positive integer
+ * @vue-method {event} check_charge_validity - checks if charge is greater than or less than set range for voltage(1200) and current(100)
+ * @vue-method {event} handle_total_duration_unit_change - handles change to unit dropdown for total active duration input
+ * @vue-method {event} handle_delay_unit_change - handles change to unit dropdown for delay interval input
  */
 
 export default {

@@ -66,9 +66,6 @@ export default {
       }
       return list;
     },
-    input_height_background: function () {
-      return this.title_label !== "" ? 100 : 60;
-    },
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
     },

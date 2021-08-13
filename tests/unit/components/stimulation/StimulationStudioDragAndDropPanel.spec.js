@@ -298,20 +298,6 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.protocol_order).toStrictEqual(expected_pulse_order);
   });
 
-  test("When a user selects the Stimulate Until Complete option in the settings panel, Then the time unit dropdown will become disabled", async () => {
-    const wrapper = mount(StimulationStudioDragAndDropPanel, {
-      store,
-      localVue,
-    });
-    const toggle_spy = jest.spyOn(SmallDropDown.methods, "toggle");
-    const selected_protocol = store.state.stimulation.protocol_list[1];
-    await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
-
-    expect(wrapper.vm.disable_dropdown).toBe(true);
-    wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
-    expect(toggle_spy).toHaveBeenCalledTimes(0);
-  });
-
   test("When an order changes inside of a nested loop, Then the new order should be dispatched", async () => {
     const action_spy = jest.spyOn(store, "dispatch");
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
