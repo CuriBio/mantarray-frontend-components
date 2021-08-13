@@ -30,6 +30,29 @@ describe("CheckBoxWidget.vue", () => {
     expect(target_span.at(2).text()).toStrictEqual("B27 (-insulin)");
     expect(target_span.at(3).text()).toStrictEqual("Lab-Exp-1");
   });
+
+  test("When a user wants to reset the checkbox, Then the reset prop will be passed and will reset any selected", async () => {
+    const watch_spy = jest.spyOn(ComponentToTest.watch, "reset");
+    const propsData = {
+      checkbox_options: [{ text: "", value: "Auto Scale" }],
+      reset: false,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      localVue,
+    });
+
+    const target_checkbox_btn = wrapper.findAll('input[type="checkbox"]');
+    await target_checkbox_btn.at(0).setChecked(true);
+    await target_checkbox_btn.at(0).trigger("change");
+
+    expect(wrapper.vm.selected).toStrictEqual(["Auto Scale"]);
+
+    await wrapper.setProps({ reset: true });
+    expect(watch_spy).toHaveBeenCalledTimes(1);
+    expect(wrapper.vm.selected).toStrictEqual([]);
+  });
+
   test("When mounting from the component, Then it loads successfully and the props defined checkbox button  and the text is <empty>", () => {
     const propsData = {
       checkbox_options: [
