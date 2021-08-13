@@ -11,6 +11,7 @@ const test_protocol_order = [
     type: "Biphasic",
     src: "placeholder",
     nest_protocols: [],
+    stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 0,
       color: "fffff",
@@ -36,6 +37,7 @@ const test_protocol_order = [
   {
     type: "Monophasic",
     src: "placeholder",
+    stop_setting: "Stimulate Until Complete",
     nested_protocols: [
       {
         type: "Monophasic",
@@ -87,6 +89,7 @@ const test_protocol_order = [
     type: "Delay",
     src: "placeholder",
     nested_protocols: [],
+    stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 0,
       color: "fffff",
@@ -112,6 +115,7 @@ const test_protocol_order = [
   {
     type: "Monophasic",
     src: "placeholder",
+    stop_setting: "Stimulate Until Complete",
     nested_protocols: [],
     repeat: {
       number_of_repeats: 0,
@@ -143,6 +147,7 @@ const test_protocol_list = [
     protocol: {
       name: "Tester",
       stimulation_type: "V",
+      stop_setting: "Stimulate Until Complete",
       rest_duration: 20,
       time_unit: "milliseconds",
       pulses: [
@@ -165,6 +170,7 @@ const test_protocol_list = [
         {
           type: "Delay",
           src: "/delay-tile.png",
+          stop_setting: "Stimulate Until Complete",
           nested_protocols: [],
           repeat: { color: "d822f9", number_of_repeats: 0 },
           pulse_settings: {

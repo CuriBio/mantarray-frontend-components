@@ -206,8 +206,9 @@ export default {
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       }
       if (mutation.type === "stimulation/set_stop_setting") {
-        if (this.stop_setting.includes("Complete")) this.disable_dropdown = true;
-        else this.disable_dropdown = false;
+        this.stop_setting.includes("Complete")
+          ? (this.disable_dropdown = true)
+          : (this.disable_dropdown = false);
       }
     });
   },

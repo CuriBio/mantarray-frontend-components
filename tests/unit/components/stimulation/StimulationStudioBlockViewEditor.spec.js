@@ -19,6 +19,7 @@ const test_protocol_list = [
       stimulation_type: "V",
       rest_duration: 20,
       time_unit: "milliseconds",
+      stop_setting: "Stimulate Until Stopped",
       pulses: [
         {
           phase_one_duration: 15,
@@ -82,8 +83,8 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    const v_test_param = store.state.stimulation.protocol_list[1];
-    const c_test_param = {
+    const test_param_1 = store.state.stimulation.protocol_list[1];
+    const test_param_2 = {
       // for testing and building other fxns
       letter: "B",
       color: "#118075",
@@ -91,6 +92,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       protocol: {
         name: "mock_tester",
         stimulation_type: "C",
+        stop_setting: "Stimulate Until Complete",
         rest_duration: 40,
         time_unit: "milliseconds",
         pulses: [],
@@ -98,15 +100,19 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       },
     };
 
-    await store.dispatch("stimulation/edit_selected_protocol", v_test_param);
+    await store.dispatch("stimulation/edit_selected_protocol", test_param_1);
     expect(wrapper.vm.stimulation_type_idx).toBe(0);
-    expect(wrapper.vm.current_letter).toBe(v_test_param.letter);
+    expect(wrapper.vm.current_letter).toBe(test_param_1.letter);
     expect(wrapper.vm.rest_duration).toBe(20);
+    expect(wrapper.vm.stop_option_idx).toBe(0);
+    expect(wrapper.vm.disabled.time).toBe(false);
 
-    await store.dispatch("stimulation/edit_selected_protocol", c_test_param);
+    await store.dispatch("stimulation/edit_selected_protocol", test_param_2);
     expect(wrapper.vm.stimulation_type_idx).toBe(1);
-    expect(wrapper.vm.current_letter).toBe(c_test_param.letter);
+    expect(wrapper.vm.current_letter).toBe(test_param_2.letter);
     expect(wrapper.vm.rest_duration).toBe(40);
+    expect(wrapper.vm.stop_option_idx).toBe(1);
+    expect(wrapper.vm.disabled.time).toBe(true);
   });
 
   test("When a user adds input to frequency input, Then the change will be recorded in data", async () => {

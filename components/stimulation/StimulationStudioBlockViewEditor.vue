@@ -49,8 +49,8 @@
           <input
             v-model="rest_duration"
             class="number_input"
-            placeholder=""
-            :disabled="disabled.time === true"
+            placeholder="0"
+            :disabled="disabled.time"
             @change="handle_rest_duration($event.target.value)"
           />
           <FontAwesomeIcon
@@ -177,9 +177,10 @@ export default {
         this.protocol_name = this.get_protocol_name;
         this.rest_duration = this.get_rest_duration;
         this.stimulation_type === "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
-        this.stop_setting === "Stimulate Until Complete"
-          ? (this.stop_option_idx = 1)
-          : (this.stop_option_idx = 0);
+        if (this.stop_setting === "Stimulate Until Complete") {
+          this.stop_option_idx = 1;
+          this.disabled.time = true;
+        } else this.stop_option_idx = 0;
       }
     });
   },
@@ -214,7 +215,10 @@ export default {
       this.stop_option_idx = idx;
 
       if (idx === 0) this.disabled.time = false;
-      else this.disabled.time = true;
+      else {
+        this.disabled.time = true;
+        this.handle_rest_duration(0);
+      }
 
       this.set_stop_setting(setting);
     },
