@@ -33,7 +33,7 @@ export default {
     };
   },
   watch: {
-    reset: function (state) {
+    reset: function () {
       if (this.reset) this.selected = [];
     },
   },
