@@ -80,13 +80,13 @@ describe("HeatMap.vue", () => {
     await wrapper.find("#column_1").trigger("click");
 
     // test default metric selection (Twitch Force)
-    expect(mean_text.text()).toEqual("Mean of 4 Wells (µN):");
-    expect(mean_value.text()).toEqual("3.000");
+    expect(mean_text.text()).toBe("Mean of 4 Wells (µN):");
+    expect(mean_value.text()).toBe("3.000");
     // switch to Twitch Frequency
     await wrapper.findAll("li").at(0).trigger("click");
     // test new values
-    expect(mean_text.text()).toEqual("Mean of 4 Wells (Hz):");
-    expect(mean_value.text()).toEqual("10.000");
+    expect(mean_text.text()).toBe("Mean of 4 Wells (Hz):");
+    expect(mean_value.text()).toBe("10.000");
   });
   test("When new max and min values are entered for scale bar and apply button is pressed, Then gradient bar labels update", async () => {
     const wrapper = mount(HeatMap, {
@@ -101,8 +101,8 @@ describe("HeatMap.vue", () => {
     await wrapper.find("#input-widget-field-heatmap-min").setValue("1");
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
 
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toEqual("10 µN");
-    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toEqual("1 µN");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("10 µN");
+    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("1 µN");
   });
   test("Given a single well has a single data entry, When new max and min values are entered for scale bar and apply button is pressed, Then the color for this well updates", async () => {
     // - plate colors update
@@ -133,11 +133,11 @@ describe("HeatMap.vue", () => {
     });
 
     const selected_option = wrapper.find(".span__input-controls-content-dropdown-widget");
-    expect(selected_option.text()).toEqual("Twitch Force");
+    expect(selected_option.text()).toBe("Twitch Force");
 
     const unselected_options = wrapper.findAll("li");
-    expect(unselected_options.at(0).text()).toEqual("Twitch Frequency");
-    expect(unselected_options.at(1).text()).toEqual("Twitch Period");
+    expect(unselected_options.at(0).text()).toBe("Twitch Frequency");
+    expect(unselected_options.at(1).text()).toBe("Twitch Period");
   });
   test("Given a single well has a different data value for two metrics, When display option is changed, Then the color for this well updates", async () => {
     const wrapper = mount(HeatMap, {
@@ -170,7 +170,7 @@ describe("HeatMap.vue", () => {
     // switch to freq
     await wrapper.findAll("li").at(0).trigger("click");
 
-    expect(wrapper.find(".div__heatmap-layout-twitch-metric-label").text()).toEqual("Twitch Frequency (Hz)");
+    expect(wrapper.find(".div__heatmap-layout-twitch-metric-label").text()).toBe("Twitch Frequency (Hz)");
     expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toContain("Hz");
     expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toContain("Hz");
     expect(wrapper.find(".div__heatmap-layout-heatmap-mean-well-label").text()).toContain("Hz");
@@ -225,38 +225,91 @@ describe("HeatMap.vue", () => {
     // make assertion on labels before resetting to confirm precondition
     const mean_text = wrapper.find(".div__heatmap-layout-heatmap-mean-well-label");
     const mean_value = wrapper.find(".div__heatmap-layout-heatmap-mean-value-well-label");
-    expect(mean_text.text()).toEqual("Mean of 1 Wells (Hz):");
-    expect(mean_value.text()).toEqual("100.000");
+    expect(mean_text.text()).toBe("Mean of 1 Wells (Hz):");
+    expect(mean_value.text()).toBe("100.000");
     expect(mean_text.isVisible()).toBe(true);
     expect(mean_value.isVisible()).toBe(true);
     // click reset btn
     await wrapper.find(".span__heatmap-settings-reset-btn-label").trigger("click");
 
     // test selected metric is set back to force and labels are still visible
-    expect(mean_text.text()).toEqual("Mean of 1 Wells (µN):");
-    expect(mean_value.text()).toEqual("0.000");
+    expect(mean_text.text()).toBe("Mean of 1 Wells (µN):");
+    expect(mean_value.text()).toBe("0.000");
     expect(mean_text.isVisible()).toBe(true);
     expect(mean_value.isVisible()).toBe(true);
     // test dropdown is reset
     const selected_option = wrapper.find(".span__input-controls-content-dropdown-widget");
-    expect(selected_option.text()).toEqual("Twitch Force");
+    expect(selected_option.text()).toBe("Twitch Force");
     const unselected_options = wrapper.findAll("li");
-    expect(unselected_options.at(0).text()).toEqual("Twitch Frequency");
+    expect(unselected_options.at(0).text()).toBe("Twitch Frequency");
     // test min and max are reset
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toEqual("100 µN");
-    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toEqual("0 µN");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("100 µN");
+    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("0 µN");
     // test gradient theme is reset to Warm
     expect(test_well.attributes("fill")).toStrictEqual(min_warm_rgb);
   });
 
-  test("Given all settings are changed from default and a well selection is set, When page is rerendered, Then all settings and the well selection persist", async () => {
+  test("When user selects autoscale, Then the max/min input fields will become disabled and valid", async () => {
     const wrapper = mount(HeatMap, {
       store,
       localVue,
     });
-    store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [[0]] },
-      "Twitch Frequency": { data: [[100]] },
+    const autoscale_box = wrapper.find('input[type="checkbox"]');
+    await autoscale_box.setChecked(true);
+
+    expect(wrapper.vm.autoscale).toBe(true);
+    expect(wrapper.vm.max_value_error_msg).toBe("");
+    expect(wrapper.vm.min_value_error_msg).toBe("");
+
+    await autoscale_box.setChecked(false);
+    expect(wrapper.vm.autoscale).toBe(false);
+  });
+
+  test("When a user updates the max/min values, Then the correct error messages will be displayed when necessary", async () => {
+    const wrapper = mount(HeatMap, {
+      store,
+      localVue,
     });
+    const max_input = wrapper.find("#input-widget-field-heatmap-max");
+    const min_input = wrapper.find("#input-widget-field-heatmap-min");
+
+    const max_error_msg = wrapper.find("#input-widget-feedback-heatmap-max");
+    const min_error_msg = wrapper.find("#input-widget-feedback-heatmap-min");
+
+    await max_input.setValue("-100");
+    expect(max_error_msg.text()).toBe("cannot be negative");
+
+    await max_input.setValue("1001");
+    expect(max_error_msg.text()).toBe("larger than 1000");
+
+    await min_input.setValue("100");
+    await max_input.setValue("99");
+    expect(max_error_msg.text()).toBe("min is more than max");
+
+    await min_input.setValue("100");
+    await max_input.setValue("100");
+    expect(max_error_msg.text()).toBe("max is equal to min");
+
+    await min_input.setValue("-100");
+    expect(min_error_msg.text()).toBe("cannot be negative");
+
+    await min_input.setValue("1001");
+    expect(min_error_msg.text()).toBe("larger than 1000");
+
+    await max_input.setValue("100");
+    await min_input.setValue("100");
+    expect(min_error_msg.text()).toBe("min is equal to max");
+
+    await max_input.setValue("100");
+    await min_input.setValue("100");
+    expect(min_error_msg.text()).toBe("min is equal to max");
+    await max_input.setValue("101");
+    expect(min_error_msg.text()).toBe("");
+
+    await max_input.setValue("100");
+    await min_input.setValue("100");
+    expect(max_error_msg.text()).toBe("max is equal to min");
+    await min_input.setValue("99");
+    expect(max_error_msg.text()).toBe("");
   });
 });

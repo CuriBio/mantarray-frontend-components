@@ -296,15 +296,10 @@ export default {
         this.min_value_error_msg = "";
         this.autoscale = true;
         this.checkbox_reset = false;
-        // this.heatmap_option = this.display_option = this.nicknames_list[0];
-        // this.$store.commit("heatmap/heatmap_autoscale", true);
       } else {
         this.on_update_maximum(this.upper);
         this.on_update_minimum(this.lower);
         this.autoscale = false;
-
-        // this.heatmap_option = this.display_option = "";
-        // this.$store.commit("heatmap/heatmap_autoscale", false);
       }
     },
 
@@ -386,7 +381,7 @@ export default {
       this.$store.commit("gradient/reset_gradient_theme_idx");
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range");
-
+      // reset autoscale check box
       this.checkbox_reset = true;
     },
   },
