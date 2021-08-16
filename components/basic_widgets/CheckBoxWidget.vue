@@ -22,11 +22,20 @@ export default {
       type: Array,
       required: true,
     },
+    reset: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       selected: [],
     };
+  },
+  watch: {
+    reset: function () {
+      if (this.reset) this.selected = [];
+    },
   },
   methods: {
     change_method() {
