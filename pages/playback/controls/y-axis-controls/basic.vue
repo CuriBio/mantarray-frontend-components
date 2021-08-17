@@ -10,6 +10,7 @@
 
 <script>
 import { YAxisControls } from "@/dist/mantarray.common";
+// import YAxisControls from "@/components/playback/controls/YAxisControls.vue";
 
 export default {
   components: {
@@ -31,7 +32,7 @@ export default {
 .update-button {
   position: absolute;
   top: 100px;
-  left: 2000px;
+  left: 3000px;
   border: none;
   color: white;
   padding: 15px 32px;
