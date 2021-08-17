@@ -157,7 +157,7 @@ export default {
         this.max_value_error_msg = "min greater than max";
         this.min_value_error_msg = "min greater than max";
         this.enable_list_y_axis_widget = [false, true];
-      } else if (this.max_value_error_msg === "very large") {
+      } else if (this.max_value_error_msg === "must be <= 100000") {
         this.enable_list_y_axis_widget = [false, true];
         this.min_value_error_msg = "";
       } else {

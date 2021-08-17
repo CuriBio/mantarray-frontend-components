@@ -28,7 +28,7 @@
         <YAxisControlsSettings
           @y-axis-new-range="y_axis_controls_commit"
           @y-axis-no-change="y_axis_controls_cancel"
-        ></YAxisControlsSettings>
+        />
       </b-modal>
     </span>
     <span
@@ -153,17 +153,12 @@ export default {
       tooltips_delay: "tooltips_delay",
     }),
     min_window_size: function () {
-      return (
-        Math.round(
-          this.y_axis_scale + this.y_axis_range.midpoint - (this.y_axis_range.midpoint - this.y_axis_scale)
-        ) <= 2
-      );
+      return Math.round(this.y_axis_scale) <= 1;
     },
     max_window_size: function () {
-      return (
-        this.y_axis_scale + this.y_axis_range.midpoint > 100000 &&
-        this.y_axis_range.midpoint - this.y_axis_scale < -200
-      );
+      const y_max = this.y_axis_scale + this.y_axis_range.midpoint;
+      const y_min = this.y_axis_range.midpoint - this.y_axis_scale;
+      return y_max > 100000 && y_min < -200;
     },
     span__y_axis_controls_zoom_out_button__dynamic_class: function () {
       this.tooltip_y_out();
@@ -216,7 +211,6 @@ export default {
       const new_range = { min: y_min, max: y_max, midpoint };
 
       this.$store.commit("waveform/set_y_axis", new_range);
-
       this.controls = !this.controls;
     },
     y_axis_controls_cancel: function () {

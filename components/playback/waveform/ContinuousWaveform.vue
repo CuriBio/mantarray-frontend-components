@@ -145,9 +145,6 @@ export default {
   mounted: function () {
     this.calculate_data_to_plot();
   },
-  created() {
-    console.log(this.y_min, this.y_max);
-  },
   methods: {
     calculate_data_to_plot: function () {
       const data_for_this_waveform_in_vuex = this.plate_waveforms[
