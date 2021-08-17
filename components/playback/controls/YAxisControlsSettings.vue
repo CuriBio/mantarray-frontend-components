@@ -128,7 +128,7 @@ export default {
         this.max_value_error_msg = "cannot be negative";
         this.enable_list_y_axis_widget = [false, true];
       } else if (max_value > 1000000) {
-        this.max_value_error_msg = "very large";
+        this.max_value_error_msg = "must be <= 100000";
         this.enable_list_y_axis_widget = [false, true];
       } else if (new_value == "" || new_value == "-") {
         this.max_value_error_msg = "invalid";
@@ -150,8 +150,8 @@ export default {
     },
     on_update_min_value: function (new_value) {
       const min_value = parseInt(new_value);
-      if (min_value < 0) {
-        this.min_value_error_msg = "cannot be negative";
+      if (min_value < -200) {
+        this.min_value_error_msg = "must be >= -200";
         this.enable_list_y_axis_widget = [false, true];
       } else if (min_value >= this.maximum || isNaN(this.maximum)) {
         this.max_value_error_msg = "min greater than max";
