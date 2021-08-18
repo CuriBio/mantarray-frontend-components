@@ -1,6 +1,8 @@
 <template>
   <div>
-    <YAxisControls />
+    <div :style="'width: 1920px; height: 930px;'">
+      <YAxisControls />
+    </div>
     <button id="min_button" class="update-button" @click="update_y_zoom_min">Update min</button>
     <button id="max_button" class="update-button" :style="'top: 200px;'" @click="update_y_zoom_max">
       Update max
