@@ -77,7 +77,7 @@ test("y-axis controls have both buttons enabled enabled and reached max and veri
 
 test("clicking on zoom in to bring to max zoom level causes zoom in button to render as disabled", async (t) => {
   const screenshot_path = path.join("playback", "controls", "y-axis-controls", "basic-max-zoom-in");
-  await t.click(set_min_window);
+  await t.click(set_min_window).click(zoom_in_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   // restore to initial state
   await t.click(zoom_out_button);
@@ -85,7 +85,7 @@ test("clicking on zoom in to bring to max zoom level causes zoom in button to re
 
 test("clicking on zoom out to bring to min zoom level causes zoom out button to render as disabled", async (t) => {
   const screenshot_path = path.join("playback", "controls", "y-axis-controls", "basic-max-zoom-out");
-  await t.click(set_max_window);
+  await t.click(set_max_window).click(zoom_out_button);
   await testcafe_page_visual_regression(t, screenshot_path);
   await t.click(zoom_in_button);
 });
