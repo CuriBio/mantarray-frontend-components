@@ -33,17 +33,4 @@ describe("store/waveform", () => {
     expect(store.getters["waveform/x_zoom_level_idx"]).toStrictEqual(default_x_axis_zoom_idx);
     expect(store.getters["waveform/x_zoom_levels"]).toStrictEqual(x_zoom_levels);
   });
-  test("When the y-zoom levels and y-zoom-idx are updated in Vuex, Then assert that the values are retained", async () => {
-    const y_zoom_levels = [
-      { y_min: -10000000, y_max: 10000000 },
-      { y_min: -100000, y_max: 100000 },
-      { y_min: -1000, y_max: 1000 },
-    ];
-    const default_y_axis_zoom_idx = 0;
-    store.commit("waveform/set_y_axis_zoom_levels", y_zoom_levels);
-    store.commit("waveform/set_y_axis_zoom_idx", default_y_axis_zoom_idx);
-
-    expect(store.getters["waveform/y_axis_zoom_idx"]).toStrictEqual(default_y_axis_zoom_idx);
-    expect(store.getters["waveform/y_axis_zoom_levels"]).toStrictEqual(y_zoom_levels);
-  });
 });
