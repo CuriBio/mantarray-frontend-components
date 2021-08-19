@@ -45,6 +45,7 @@ export default {
       dynamic_plot_width: 1200,
       delay_blocks: [],
       x_axis_label: "Time (ms)",
+      last_x_value: 0,
     };
   },
   created: function () {
@@ -54,6 +55,8 @@ export default {
         this.datapoints = await convert_x_y_arrays_to_d3_array(state.x_axis_values, state.y_axis_values);
         this.repeat_colors = state.repeat_colors;
         this.delay_blocks = state.delay_blocks;
+        this.get_dynamic_plot_width(state.x_axis_scale);
+        state.x_axis_scale = this.x_axis_sample_length;
       }
       if (
         mutation.type === "stimulation/reset_state" ||
@@ -66,28 +69,27 @@ export default {
         this.dynamic_plot_width = 1200;
         this.delay_blocks = state.delay_blocks;
       }
-      if (mutation.type === "stimulation/set_zoom_out" || mutation.type === "stimulation/set_zoom_in") {
-        this.x_axis_sample_length = state.x_axis_scale;
+      if (mutation.type === "stimulation/set_zoom_out") {
         this.y_min_max = state.y_axis_scale;
-        state.x_axis_scale = this.x_axis_sample_length;
+        this.dynamic_plot_width /= 1.5;
       }
-      // this.get_dynamic_plot_width(state.x_axis_scale);
+      if (mutation.type === "stimulation/set_zoom_in") {
+        // this.x_axis_sample_length /= 1.5;
+        this.y_min_max = state.y_axis_scale;
+        this.dynamic_plot_width *= 1.5;
+      }
     });
   },
   beforeDestroy() {
     this.unsubscribe();
   },
   methods: {
-    // get_dynamic_plot_width(scale) {
-    //   return;
-    //   // console.log(scale);
-    //   // const last_time_point = this.datapoints[this.datapoints.length - 1][0];
-    //   // if (last_time_point >= this.x_axis_sample_length) {
-    //   //   this.x_axis_sample_length += scale;
-    //   //   this.dynamic_plot_width *= 2;
-    //   //   console.log(this.x_axis_sample_length, this.dynamic_plot_width);
-    //   // }
-    // },
+    get_dynamic_plot_width(scale) {
+      if (isNaN(this.delay_blocks[0][1])) this.last_x_value = this.datapoints[this.datapoints.length - 1][0];
+      else this.last_x_value = this.delay_blocks[0][1];
+
+      if (this.last_x_value >= scale) this.x_axis_sample_length = this.last_x_value + 50;
+    },
   },
 };
 </script>
@@ -96,7 +98,7 @@ export default {
   background: rgb(0, 0, 0);
   position: absolute;
   height: 50%;
-  width: 1322px;
+  width: 1315px;
   height: 200px;
 }
 </style>

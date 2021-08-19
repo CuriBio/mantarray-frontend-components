@@ -21,12 +21,16 @@
           v-model="protocol_name"
           class="protocol_name_nput"
           placeholder="Protocol Name"
-          :disabled="disabled.name"
+          :disabled="disabled_name"
           :style="name_validity"
           @change="check_name_validity($event.target.value)"
         />
         <span class="error-message">{{ error_message }}</span>
-        <FontAwesomeIcon class="pencil-icon" :icon="['fa', 'pencil-alt']" @click="disabled = !disabled" />
+        <FontAwesomeIcon
+          class="pencil-icon"
+          :icon="['fa', 'pencil-alt']"
+          @click="disabled_name = !disabled_name"
+        />
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
@@ -50,7 +54,7 @@
             v-model="rest_duration"
             class="number_input"
             placeholder="0"
-            :disabled="disabled.time"
+            :disabled="disabled_time"
             @change="handle_rest_duration($event.target.value)"
           />
           <FontAwesomeIcon
@@ -123,10 +127,8 @@ export default {
   data() {
     return {
       active_tab: "Basic",
-      disabled: {
-        name: true,
-        time: false,
-      },
+      disabled_name: true,
+      disabled_time: false,
       show_confirmation: false,
       current_letter: "",
       current_color: "",
@@ -179,7 +181,7 @@ export default {
         this.stimulation_type === "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
         if (this.stop_setting === "Stimulate Until Complete") {
           this.stop_option_idx = 1;
-          this.disabled.time = true;
+          this.disabled_time = true;
         } else this.stop_option_idx = 0;
       }
     });
@@ -214,9 +216,9 @@ export default {
       const setting = this.stop_options_array[idx];
       this.stop_option_idx = idx;
 
-      if (idx === 0) this.disabled.time = false;
-      else {
-        this.disabled.time = true;
+      if (idx === 0) this.disabled_time = false;
+      else if (idx === 1) {
+        this.disabled_time = true;
         this.handle_rest_duration(0);
       }
 
@@ -401,7 +403,7 @@ button:hover {
   transform: rotate(0deg);
   background: rgb(17, 17, 17);
   width: 1322px;
-  height: 175px;
+  height: 166px;
 }
 .div__Tabs-panel {
   background: rgb(17, 17, 17);

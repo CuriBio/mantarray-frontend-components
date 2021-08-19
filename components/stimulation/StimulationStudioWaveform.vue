@@ -1,6 +1,6 @@
 <template>
   <div class="div__waveform">
-    <div class="div__waveform-graph" :style="div__waveform_graph__dynamic_style"></div>
+    <div class="div__waveform-graph" />
     <div class="div__waveform-y-axis-title">
       <StimulationStudioZoomControls :axis="'y-axis'" />
       <span>{{ y_axis_label }}</span>
@@ -72,7 +72,7 @@ export default {
     },
     plot_area_pixel_width: {
       type: Number,
-      default: 406,
+      default: 1200,
     },
     repeat_colors: {
       type: Object,
@@ -95,11 +95,14 @@ export default {
       y_axis_node: null,
       y_axis_scale: null,
       waveform_line_node: null,
-      div__waveform_graph__dynamic_style: {
-        width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
-      },
-      frequency_of_ticks: 5,
+      frequency_of_y_ticks: 5,
+      frequency_of_x_ticks: 5,
     };
+  },
+  computed: {
+    div__waveform_graph__dynamic_style: function () {
+      return { width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px" };
+    },
   },
   watch: {
     x_axis_min() {
@@ -108,6 +111,7 @@ export default {
     x_axis_sample_length() {
       this.render_plot();
     },
+
     y_min() {
       this.render_plot();
     },
@@ -117,33 +121,39 @@ export default {
     data_points() {
       this.render_plot();
     },
+
+    plot_area_pixel_width: function () {
+      this.the_svg = d3_select(this.$el)
+        .select(".div__waveform-graph")
+        .append("svg")
+        .attr("width", this.plot_area_pixel_width + this.margin.left + this.margin.right);
+      this.render_plot();
+    },
   },
   mounted: function () {
     // Eli (2/2/2020): having the svg be appended in the `data` function didn't work, so moved it to here
-    let the_svg = this.the_svg;
-    the_svg = d3_select(this.$el)
+    this.the_svg = d3_select(this.$el)
       .select(".div__waveform-graph")
       .append("svg")
       .attr("width", this.plot_area_pixel_width + this.margin.left + this.margin.right)
       .attr("height", this.plot_area_pixel_height + this.margin.top + this.margin.bottom)
-      .attr("style", "background-color: black;")
+      .attr("style", "background-color: black; overflow: visible;")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
       .attr("id", "svg_of_waveform")
       .attr("font-family", "Muli");
 
-    this.waveform_line_node = the_svg
+    this.waveform_line_node = this.the_svg
       .append("g")
       .attr("id", "waveform_line_node")
       .attr("class", "waveform_path_node");
 
-    this.line = the_svg.append("g").attr("x", 40);
+    this.line = this.the_svg.append("g").attr("x", 40);
     // Draw black rectangles over the margins so that any excess waveform line is not visible to use
     const blocker_color = "#000000";
-    const margin_blockers_node = the_svg.append("g").attr("id", "margin_blockers_node");
+    const margin_blockers_node = this.the_svg.append("g").attr("id", "margin_blockers_node");
 
     const margin = this.margin;
-
     // Left Side
     margin_blockers_node
       .append("rect")
@@ -154,14 +164,14 @@ export default {
       .attr("height", this.plot_area_pixel_height + margin.top + margin.bottom)
       .attr("fill", blocker_color);
     // Right Side
-    margin_blockers_node
-      .append("rect")
-      .attr("id", "margin_blocker_right")
-      .attr("x", this.plot_area_pixel_width + 1)
-      .attr("y", -margin.top)
-      .attr("width", margin.right)
-      .attr("height", this.plot_area_pixel_height + margin.top + margin.bottom)
-      .attr("fill", blocker_color);
+    // margin_blockers_node
+    //   .append("rect")
+    //   .attr("id", "margin_blocker_right")
+    //   .attr("x", this.plot_area_pixel_width + 1)
+    //   .attr("y", -margin.top)
+    //   .attr("width", margin.right)
+    //   .attr("height", this.plot_area_pixel_height + margin.top + margin.bottom)
+    //   .attr("fill", blocker_color);
     // Top
     margin_blockers_node
       .append("rect")
@@ -182,14 +192,14 @@ export default {
       .attr("height", margin.bottom)
       .attr("fill", blocker_color);
 
-    this.x_axis_node = the_svg
+    this.x_axis_node = this.the_svg
       .append("g")
       .attr("transform", "translate(0," + this.plot_area_pixel_height + ")")
       .attr("id", "x_axis_node")
       .attr("stroke", "#b7b7b7")
       .attr("class", "g__waveform-x-axis");
 
-    this.y_axis_node = the_svg
+    this.y_axis_node = this.the_svg
       .append("g")
       .attr("id", "y_axis_node")
       .attr("stroke", "#b7b7b7")
@@ -206,7 +216,6 @@ export default {
       this.display_y_axis();
       this.plot_data();
     },
-
     create_x_axis_scale: function () {
       this.x_axis_scale = scaleLinear()
         .domain([this.x_axis_min, this.x_axis_min + this.x_axis_sample_length])
@@ -218,10 +227,10 @@ export default {
         .range([this.plot_area_pixel_height, 0]);
     },
     display_x_axis: function () {
-      this.x_axis_node.call(axisBottom(this.x_axis_scale));
+      this.x_axis_node.call(axisBottom(this.x_axis_scale).ticks(this.frequency_of_x_ticks));
     },
     display_y_axis: function () {
-      this.y_axis_node.call(axisLeft(this.y_axis_scale).ticks(this.frequency_of_ticks));
+      this.y_axis_node.call(axisLeft(this.y_axis_scale).ticks(this.frequency_of_y_ticks));
     },
     plot_data: function () {
       const data_to_plot = this.data_points;
