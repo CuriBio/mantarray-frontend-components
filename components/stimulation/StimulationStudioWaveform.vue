@@ -63,7 +63,7 @@ export default {
     margin: {
       type: Object,
       default: function () {
-        return { top: 10, right: 20, bottom: 20, left: 60 };
+        return { top: 0, right: 20, bottom: 20, left: 60 };
       },
     },
     plot_area_pixel_height: {
@@ -357,7 +357,7 @@ export default {
   font-family: Muli;
   font-weight: bold;
   position: absolute;
-  top: 110px;
+  top: 100px;
   left: -170px;
   width: 379px;
   height: 28px;
@@ -379,7 +379,7 @@ export default {
   font-family: Muli;
   font-weight: bold;
   position: sticky;
-  top: 212px;
+  top: 200px;
   left: 450px;
   width: 430px;
   height: 29px;

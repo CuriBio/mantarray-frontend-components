@@ -104,6 +104,7 @@ export default {
   position: absolute;
   height: 50%;
   width: 1315px;
-  height: 200px;
+  height: 220px;
+  overflow: hidden;
 }
 </style>
