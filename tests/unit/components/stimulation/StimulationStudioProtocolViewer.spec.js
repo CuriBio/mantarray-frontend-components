@@ -203,6 +203,35 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     expect(wrapper.vm.x_axis_sample_length).toBe(200);
   });
 
+  test("When pulses are added to the protocol, Then the x_axis_sample_length will automatically update to be +50 unless all pulses are removed", async () => {
+    const wrapper = mount(StimulationStudioProtocolViewer, {
+      store,
+      localVue,
+    });
+
+    expect(wrapper.vm.x_axis_sample_length).toBe(100);
+
+    await wrapper.setData({
+      last_x_value: 200,
+      datapoints: [
+        [0, 0],
+        [0, 300],
+        [200, 300],
+      ],
+      delay_blocks: [[NaN, NaN]],
+    });
+    await wrapper.vm.get_dynamic_sample_length();
+    expect(wrapper.vm.x_axis_sample_length).toBe(250);
+
+    await wrapper.setData({
+      last_x_value: 0,
+      datapoints: [[0, 0]],
+      delay_blocks: [[NaN, NaN]],
+    });
+    await wrapper.vm.get_dynamic_sample_length();
+    expect(wrapper.vm.x_axis_sample_length).toBe(100);
+  });
+
   test("When a user deletes the protocol, Then all datapoints should be deleted", async () => {
     const wrapper = mount(StimulationStudioProtocolViewer, {
       store,
