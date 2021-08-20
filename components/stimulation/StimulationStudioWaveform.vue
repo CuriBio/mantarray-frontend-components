@@ -1,6 +1,6 @@
 <template>
   <div class="div__waveform">
-    <div class="div__waveform-graph" />
+    <div class="div__waveform-graph" :style="div__waveform_graph__dynamic_style" />
     <div class="div__waveform-y-axis-title">
       <StimulationStudioZoomControls :axis="'y-axis'" />
       <span>{{ y_axis_label }}</span>
@@ -96,12 +96,14 @@ export default {
       y_axis_scale: null,
       waveform_line_node: null,
       frequency_of_y_ticks: 5,
-      frequency_of_x_ticks: 5,
     };
   },
   computed: {
     div__waveform_graph__dynamic_style: function () {
       return { width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px" };
+    },
+    frequency_of_x_ticks: function () {
+      return (this.plot_area_pixel_width / 1200) * 10;
     },
   },
   watch: {
@@ -111,7 +113,6 @@ export default {
     x_axis_sample_length() {
       this.render_plot();
     },
-
     y_min() {
       this.render_plot();
     },
