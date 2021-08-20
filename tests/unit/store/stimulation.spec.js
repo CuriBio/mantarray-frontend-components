@@ -342,21 +342,13 @@ describe("store/stimulation", () => {
       expect(store.state.stimulation.protocol_editor.time_unit).toBe("milliseconds");
     });
 
-    test("When a user wants to zoom in on an axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
-      expect(store.state.stimulation.x_axis_scale).toBe(100);
-      await store.commit("stimulation/set_zoom_in", "x-axis");
-      expect(store.state.stimulation.x_axis_scale).toBe(66.66666666666667);
-
+    test("When a user wants to zoom in on a the y-axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
       expect(store.state.stimulation.y_axis_scale).toBe(500);
       await store.commit("stimulation/set_zoom_in", "y-axis");
       expect(store.state.stimulation.y_axis_scale).toBe(333.3333333333333);
     });
 
-    test("When a user wants to zoom out on an axis, Then the scale will multiple by a power of 10", async () => {
-      expect(store.state.stimulation.x_axis_scale).toBe(100);
-      await store.commit("stimulation/set_zoom_out", "x-axis");
-      expect(store.state.stimulation.x_axis_scale).toBe(150);
-
+    test("When a user wants to zoom out on the y-axis, Then the scale will multiple by a power of 10", async () => {
       expect(store.state.stimulation.y_axis_scale).toBe(500);
       await store.commit("stimulation/set_zoom_out", "y-axis");
       expect(store.state.stimulation.y_axis_scale).toBe(750);

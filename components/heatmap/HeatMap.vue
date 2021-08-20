@@ -381,8 +381,9 @@ export default {
       this.$store.commit("gradient/reset_gradient_theme_idx");
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range");
-      // reset autoscale check box
+      // reset autoscale check box and disable setting for inputs
       this.checkbox_reset = true;
+      this.autoscale = false;
     },
   },
 };
