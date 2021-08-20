@@ -23,23 +23,23 @@ jobs:
         node-version:
           - 14
         e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
-          - "tests/e2e/playback"
-          - "tests/e2e/status"
-          - "tests/e2e/waveforms"
-          - "tests/e2e/settings"
-          - "tests/e2e/basic_widgets"
-          - "tests/e2e/plate_based_widgets"
+          # - "tests/e2e/playback"
+          # - "tests/e2e/status"
+          # - "tests/e2e/waveforms"
+          # - "tests/e2e/settings"
+          # - "tests/e2e/basic_widgets"
+          # - "tests/e2e/plate_based_widgets"
           # - "tests/e2e/heatmap"
-          # - "tests/e2e/stimulation"
+          - "tests/e2e/stimulation"
 
-        include:
-          # only enable coverage on the fastest job
-          - os: "ubuntu-20.04"
-            node-version: "14"
-            e2e-tests: "tests/e2e/status"
-            IS_FASTEST_JOB: true
-          - e2e-tests: "tests/e2e/status"
-            IS_FASTEST_E2E_SUITE: true
+        # include:
+        #   # only enable coverage on the fastest job
+        #   - os: "ubuntu-20.04"
+        #     node-version: "14"
+        #     e2e-tests: "tests/e2e/status"
+        #     IS_FASTEST_JOB: true
+        #   - e2e-tests: "tests/e2e/status"
+        #     IS_FASTEST_E2E_SUITE: true
     name: Node.js ${{ matrix.node-version }} on ${{ matrix.os }} for E2E test suite ${{ matrix.e2e-tests }}
     runs-on: ${{ matrix.os }}
     steps:
