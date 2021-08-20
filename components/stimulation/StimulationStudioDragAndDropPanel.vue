@@ -159,9 +159,9 @@ export default {
   data() {
     return {
       icon_types: [
-        { type: "Monophasic", src: "/monophasic-tile.png" },
-        { type: "Biphasic", src: "/biphasic-tile.png" },
-        { type: "Delay", src: "/delay-tile.png" },
+        { type: "Monophasic", src: require("/monophasic-tile.png") },
+        { type: "Biphasic", src: require("/biphasic-tile.png") },
+        { type: "Delay", src: require("/delay-tile.png") },
       ],
       button_labels: {
         no_delete_option: ["Save", "Cancel"],
