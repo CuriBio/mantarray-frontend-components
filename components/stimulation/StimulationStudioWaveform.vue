@@ -346,8 +346,6 @@ export default {
   box-sizing: content-box;
   overflow: hidden;
   overflow-x: scroll;
-  scrollbar-track-color: cornflowerblue;
-  scrollbar-base-color: darkgreen;
 }
 
 .div__waveform-y-axis-title {
