@@ -13,7 +13,7 @@
             :clone="clone"
           >
             <div v-for="(types, idx) in icon_types" :id="types.type" :key="idx">
-              <img :src="require(`~/assets/${types.type}.png`)" />
+              <img :src="`/${types.type}.png`" />
             </div>
           </draggable>
         </div>
@@ -54,10 +54,7 @@
                   </span>
                 </div>
               </div>
-              <img
-                :src="require(`~/assets/${types.type}.png`)"
-                @click.shift.exact="open_modal_for_edit(types.type, idx)"
-              />
+              <img :src="`/${types.type}.png`" @click.shift.exact="open_modal_for_edit(types.type, idx)" />
 
               <draggable
                 v-model="types.nested_protocols"
@@ -77,7 +74,7 @@
                   :style="'position: relative;'"
                   @click.shift.exact="open_modal_for_edit(nested_types.type, idx, nested_idx)"
                 >
-                  <img :src="require(`~/assets/${nested_types.type}.png`)" :style="'margin-top: 4px;'" />
+                  <img :src="`/${nested_types.type}.png`" :style="'margin-top: 4px;'" />
                 </div>
               </draggable>
             </div>
