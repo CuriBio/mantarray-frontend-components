@@ -346,14 +346,10 @@ export default {
   box-sizing: content-box;
   overflow: hidden;
   overflow-x: scroll;
+  scrollbar-track-color: cornflowerblue;
+  scrollbar-base-color: darkgreen;
 }
 
-::-webkit-scrollbar-track {
-  background: #0040ca;
-}
-::-webkit-scrollbar-thumb {
-  background: rgb(22, 170, 47);
-}
 .div__waveform-y-axis-title {
   line-height: 1;
   transform: rotate(270deg);
