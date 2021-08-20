@@ -13,7 +13,7 @@
             :clone="clone"
           >
             <div v-for="(types, idx) in icon_types" :id="types.type" :key="idx">
-              <img :src="types.src" />
+              <img :src="`/${types.type}.png`" />
             </div>
           </draggable>
         </div>
@@ -54,7 +54,7 @@
                   </span>
                 </div>
               </div>
-              <img :src="types.src" @click.shift.exact="open_modal_for_edit(types.type, idx)" />
+              <img :src="`/${types.type}.png`" @click.shift.exact="open_modal_for_edit(types.type, idx)" />
 
               <draggable
                 v-model="types.nested_protocols"
@@ -74,7 +74,7 @@
                   :style="'position: relative;'"
                   @click.shift.exact="open_modal_for_edit(nested_types.type, idx, nested_idx)"
                 >
-                  <img :src="nested_types.src" :style="'margin-top: 4px;'" />
+                  <img :src="`/${nested_types.type}.png`" :style="'margin-top: 4px;'" />
                 </div>
               </draggable>
             </div>
@@ -159,9 +159,9 @@ export default {
   data() {
     return {
       icon_types: [
-        { type: "Monophasic", src: "/monophasic-tile.png" },
-        { type: "Biphasic", src: "/biphasic-tile.png" },
-        { type: "Delay", src: "/delay-tile.png" },
+        { type: "Monophasic", src: "/Monophasic.png" },
+        { type: "Biphasic", src: "/Biphasic.png" },
+        { type: "Delay", src: "/Delay.png" },
       ],
       button_labels: {
         no_delete_option: ["Save", "Cancel"],
