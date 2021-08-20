@@ -347,6 +347,13 @@ export default {
   overflow: hidden;
   overflow-x: scroll;
 }
+
+::-webkit-scrollbar-track {
+  background: #0040ca;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(22, 170, 47);
+}
 .div__waveform-y-axis-title {
   line-height: 1;
   transform: rotate(270deg);

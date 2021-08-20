@@ -105,6 +105,6 @@ export default {
   height: 50%;
   width: 1315px;
   height: 220px;
-  overflow: hidden;
+  overflow: visible;
 }
 </style>
