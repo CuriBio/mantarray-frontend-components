@@ -1,6 +1,12 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.4.5 (2021-08-23)
+------------------
+
+- Added autoscale feature to heatmap
+- Fixed issue with +/- buttons of y-zoom widget not updating zoom window correctly
+
 
 0.4.4 (2021-08-02)
 ------------------
@@ -18,7 +24,7 @@ Changelog for Mantarray Frontend Components
 0.4.2 (2021-07-26)
 ------------------
 
-- Fixed issue with min y zoom value of 0 being marked invalid after updating max value
+- Fixed issue with min y-zoom value of 0 being marked invalid after updating max value
 
 
 0.4.1 (2021-07-22)
