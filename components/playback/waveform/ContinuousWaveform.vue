@@ -13,7 +13,7 @@
     :margin="margin"
     :plot_area_pixel_height="plot_area_pixel_height"
     :plot_area_pixel_width="plot_area_pixel_width"
-  ></Waveform>
+  />
 </template>
 <script>
 import { get_array_slice_to_display } from "@/js_utils/waveform_data_formatter.js";
@@ -89,16 +89,10 @@ export default {
       plate_waveforms: "plate_waveforms",
     }),
     ...mapState("waveform", {
-      y_zoom_levels: "y_zoom_levels",
-    }),
-    ...mapState("waveform", {
-      y_zoom_level_idx: "y_zoom_level_idx",
-    }),
-    ...mapState("waveform", {
       x_zoom_levels: "x_zoom_levels",
-    }),
-    ...mapState("waveform", {
       x_zoom_level_idx: "x_zoom_level_idx",
+      y_axis_scale: "y_axis_scale",
+      y_axis_range: "y_axis_range",
     }),
 
     x_axis_min: function () {
@@ -115,11 +109,19 @@ export default {
         true
       );
     },
-    y_min: function () {
-      return this.y_zoom_levels[this.y_zoom_level_idx].y_min;
-    },
     y_max: function () {
-      return this.y_zoom_levels[this.y_zoom_level_idx].y_max;
+      const y_max = Math.round(this.y_axis_range.midpoint + this.y_axis_scale);
+
+      if (y_max > 100000) return 100000;
+
+      return y_max;
+    },
+    y_min: function () {
+      const y_min = Math.round(this.y_axis_range.midpoint - this.y_axis_scale);
+
+      if (y_min < -200) return -200;
+
+      return y_min;
     },
     x_axis_sample_length: function () {
       return this.x_zoom_levels[this.x_zoom_level_idx].x_scale;
@@ -143,7 +145,6 @@ export default {
   mounted: function () {
     this.calculate_data_to_plot();
   },
-
   methods: {
     calculate_data_to_plot: function () {
       const data_for_this_waveform_in_vuex = this.plate_waveforms[

@@ -8,6 +8,53 @@ localVue.use(Vuex);
 let NuxtStore;
 let store;
 
+const test_protocol_list = [
+  { letter: "", color: "", label: "Create New" },
+  {
+    letter: "A",
+    color: "#118075",
+    label: "Tester",
+    protocol: {
+      name: "Tester",
+      stimulation_type: "V",
+      rest_duration: 20,
+      time_unit: "milliseconds",
+      stop_setting: "Stimulate Until Stopped",
+      pulses: [
+        {
+          phase_one_duration: 15,
+          phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
+        },
+        {
+          phase_one_duration: 20,
+          phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
+        },
+      ],
+      detailed_pulses: [
+        {
+          type: "Delay",
+          src: "/delay-tile.png",
+          nested_protocols: [],
+          repeat: { color: "d822f9", number_of_repeats: 0 },
+          settings: {
+            phase_one_duration: 15000,
+            phase_one_charge: 0,
+            interpulse_duration: 0,
+            phase_two_duration: 0,
+            phase_two_charge: 0,
+          },
+        },
+      ],
+    },
+  },
+];
+
 describe("StimulationStudioDragAndDropPanel.vue", () => {
   beforeAll(async () => {
     const storePath = `${process.env.buildDir}/store.js`;
@@ -16,6 +63,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
   });
 
   test("When mounting StimulationStudioDragAndDropPanel from the component file, Then default tab displayed should be basic, but can toggle with clicking each tab", async () => {
@@ -35,8 +83,8 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    const v_test_param = store.state.stimulation.protocol_list[1];
-    const c_test_param = {
+    const test_param_1 = store.state.stimulation.protocol_list[1];
+    const test_param_2 = {
       // for testing and building other fxns
       letter: "B",
       color: "#118075",
@@ -44,22 +92,27 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       protocol: {
         name: "mock_tester",
         stimulation_type: "C",
-        end_delay_duration: 40,
+        stop_setting: "Stimulate Until Complete",
+        rest_duration: 40,
         time_unit: "milliseconds",
         pulses: [],
         detailed_pulses: [],
       },
     };
 
-    await store.dispatch("stimulation/edit_selected_protocol", v_test_param);
+    await store.dispatch("stimulation/edit_selected_protocol", test_param_1);
     expect(wrapper.vm.stimulation_type_idx).toBe(0);
-    expect(wrapper.vm.current_letter).toBe(v_test_param.letter);
-    expect(wrapper.vm.end_delay_duration).toBe(20);
+    expect(wrapper.vm.current_letter).toBe(test_param_1.letter);
+    expect(wrapper.vm.rest_duration).toBe(20);
+    expect(wrapper.vm.stop_option_idx).toBe(0);
+    expect(wrapper.vm.disabled_time).toBe(false);
 
-    await store.dispatch("stimulation/edit_selected_protocol", c_test_param);
+    await store.dispatch("stimulation/edit_selected_protocol", test_param_2);
     expect(wrapper.vm.stimulation_type_idx).toBe(1);
-    expect(wrapper.vm.current_letter).toBe(c_test_param.letter);
-    expect(wrapper.vm.end_delay_duration).toBe(40);
+    expect(wrapper.vm.current_letter).toBe(test_param_2.letter);
+    expect(wrapper.vm.rest_duration).toBe(40);
+    expect(wrapper.vm.stop_option_idx).toBe(1);
+    expect(wrapper.vm.disabled_time).toBe(true);
   });
 
   test("When a user adds input to frequency input, Then the change will be recorded in data", async () => {
@@ -70,7 +123,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     const input = wrapper.find(".number_input");
     input.element.value = "5";
     await input.trigger("change");
-    expect(wrapper.vm.end_delay_duration).toBe("5");
+    expect(wrapper.vm.rest_duration).toBe("5");
   });
 
   test("When a user adds new protocol name, Then it will be checked if it is a unique name or if it already exists", async () => {
@@ -117,7 +170,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(3).trigger("click");
-    expect(wrapper.vm.stop_requirement).toBe("Repeat");
+    expect(wrapper.vm.stop_option_idx).toBe(1);
   });
 
   test("When exiting instance, Then instance is effectively destroyed", async () => {

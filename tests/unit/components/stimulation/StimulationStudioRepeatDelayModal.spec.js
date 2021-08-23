@@ -101,4 +101,18 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
     await wrapper.find("#input-widget-field-repeat_delay").setValue("test");
     expect(wrapper.vm.is_valid).toBe(false);
   });
+  test("When a user selects a different time unit from the dropdown, Then the index will be saved to state", async () => {
+    const wrapper = mount(StimulationStudioRepeatDelayModal, {
+      store,
+      localVue,
+      propsData: {
+        modal_type: "Delay",
+      },
+    });
+
+    await wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
+    await wrapper.findAll("li").at(2).trigger("click");
+
+    expect(wrapper.vm.time_unit_idx).toBe(3);
+  });
 });

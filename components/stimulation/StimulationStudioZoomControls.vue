@@ -59,26 +59,25 @@ export default {
   margin: 0px auto;
 }
 .span__axis-controls-zoom-out-button {
-  overflow: hidden;
   text-align: center;
   font-weight: normal;
   position: relative;
   padding-right: 11px;
-  font-size: 18px;
   left: 160px;
+  height: 24px;
+  width: 24px;
 }
 .span__axis-controls-zoom-in-button {
-  overflow: hidden;
-  text-align: center;
   font-weight: normal;
   position: relative;
-  font-size: 18px;
   left: 155px;
+  height: 24px;
+  width: 24px;
 }
 * {
   -webkit-font-smoothing: antialiased;
 }
 span:hover {
-  opacity: 80%;
+  opacity: 0.8;
 }
 </style>

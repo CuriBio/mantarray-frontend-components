@@ -1,20 +1,21 @@
 <template>
   <div
-    class="div__input-dropdown-background"
-    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
+    class="div__small-dropdown-background"
+    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height + 'px;'"
   >
     <div
-      class="div__input-dropdown-controls-content-widget"
+      :id="'small_dropdown_' + dom_id_suffix"
+      class="div__small-dropdown-controls-content-widget"
       :style="
         'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;' + 'height:' + input_height + 'px;'
       "
-      @click="toggle()"
+      @click="!disabled ? toggle() : null"
     >
       <div
-        class="span__input-dropdown-controls-content-input-txt-widget"
+        class="span__small-dropdown-controls-content-input-txt-widget"
         :style="'width: ' + input_width + 'px;'"
       >
-        <span class="span__input-controls-content-input-txt-widget">{{ chosen_option.name }}</span>
+        <span class="span__small-controls-content-input-txt-widget">{{ chosen_option.name }}</span>
       </div>
       <div class="arrow" :class="{ expanded: visible }" />
       <div :class="{ hidden: !visible, visible }">
@@ -41,6 +42,9 @@ export default {
     input_width: { type: Number, default: 210 },
     input_height: { type: Number, default: 0 },
     options_idx: { type: Number, default: 0 },
+    dom_id_suffix: { type: String, default: "" }, // for testing
+    title_label: { type: String, default: "" },
+    disabled: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -62,9 +66,6 @@ export default {
       }
       return list;
     },
-    input_height_background: function () {
-      return this.title_label !== "" ? 100 : 60;
-    },
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
     },
@@ -77,6 +78,9 @@ export default {
     },
     options_idx: function () {
       this.get_preselected_option();
+    },
+    disabled: function () {
+      if (this.disabled) this.visible = false;
     },
   },
   created() {
@@ -111,7 +115,7 @@ export default {
 };
 </script>
 <style scoped>
-.div__input-dropdown-background {
+.div__small-dropdown-background {
   transform: rotate(0deg);
   margin: 0px;
   position: relative;
@@ -121,8 +125,9 @@ export default {
   border-radius: 0px;
   box-shadow: none;
   cursor: pointer;
+  z-index: 5;
 }
-.span__input-controls-content-input-txt-widget {
+.span__small-controls-content-input-txt-widget {
   padding-left: 10px;
   padding-right: 10px;
   white-space: nowrap;
@@ -138,7 +143,7 @@ export default {
   color: #b7b7b7;
   background-color: #1c1c1c;
 }
-.div__input-dropdown-controls-content-widget {
+.div__small-dropdown-controls-content-widget {
   transform: rotate(0deg);
   position: absolute;
   background-color: #1c1c1c;
@@ -169,6 +174,7 @@ ul {
   position: absolute;
   color: #b7b7b7;
   border-top: 1px solid rgb(17, 17, 17);
+  z-index: 5;
 }
 
 li {

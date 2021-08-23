@@ -19,37 +19,50 @@
         <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
         <input
           v-model="protocol_name"
-          class="protocol_input"
+          class="protocol_name_nput"
           placeholder="Protocol Name"
-          :disabled="disabled === true"
+          :disabled="disabled_name"
           :style="name_validity"
           @change="check_name_validity($event.target.value)"
         />
         <span class="error-message">{{ error_message }}</span>
-        <img class="img__pencil-icon" src="/pencil-icon.png" @click="disabled = !disabled" />
+        <FontAwesomeIcon
+          class="pencil-icon"
+          :icon="['fa', 'pencil-alt']"
+          @click="disabled_name = !disabled_name"
+        />
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
-            :input_width="190"
+            :input_width="196"
             :options_text="stimulation_types_array"
             :options_idx="stimulation_type_idx"
+            :dom_id_suffix="'stimulation_type'"
             @selection-changed="handle_stimulation_type"
           />
           <SmallDropDown
             :style="'margin-left: 5%;'"
             :input_height="25"
-            :input_width="155"
-            :options_text="until_options_array"
-            @selection-changed="handle_stop_requirement"
+            :input_width="176"
+            :options_text="stop_options_array"
+            :options_idx="stop_option_idx"
+            :dom_id_suffix="'stop_options'"
+            @selection-changed="handle_stop_setting"
           />
           <span class="span__settings-label">every</span>
           <input
-            v-model="end_delay_duration"
+            v-model="rest_duration"
             class="number_input"
-            placeholder=""
-            @change="handle_repeat_frequency($event.target.value)"
+            placeholder="0"
+            :disabled="disabled_time"
+            @change="handle_rest_duration($event.target.value)"
           />
-          <img id="trash_icon" class="img__trash-icon" src="/trash-icon.png" @click="handle_trash_modal" />
+          <FontAwesomeIcon
+            id="trash_icon"
+            class="trash-icon"
+            :icon="['fa', 'trash-alt']"
+            @click="handle_trash_modal"
+          />
           <BPopover
             target="trash_icon"
             trigger="click"
@@ -72,50 +85,58 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vue from "vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { BPopover } from "bootstrap-vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faPencilAlt, faTrashAlt);
 Vue.component("BPopover", BPopover);
 
 /**
  * @vue-data {String} active_tab - Shows current selected tab
- * @vue-data {Boolean} disabled - Disables the name input field
+ * @vue-data {Boolean} disabled - Disables the name and time input fields
  * @vue-data {Boolean} show_confirmation - Determines if delete popover is visible
  * @vue-data {String} current_letter - Next available letter in alphabet
  * @vue-data {String} current_color -  Next available color in alphabet
  * @vue-data {Array} stimulation_types_array - Availble options in dropdown
- * @vue-data {Array} until_options_array - Available options in dropdown
+ * @vue-data {Array} stop_options_array - Available options in dropdown
  * @vue-data {String} protocol_name - Inputted new protocol name
- * @vue-data {String} stop_requirement - Selected requirement from dropdown
- * @vue-data {String} end_delay_duration - Inputted delay to be set at the end of the protocol between repeats
+ * @vue-data {String} stop_setting - Selected setting from dropdown
+ * @vue-data {String} rest_duration - Inputted delay to be set at the end of the protocol between repeats
  * @vue-data {String} name_validity - Corresponding border style after name validity check
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
+ * @vue-data {Int} stimulation_type_idx - Used to change preselected index in the dropdown when user wants to edit existing protocols
  * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
  * @vue-event {Event} handle_trash_modal - Toggle view of delete popover on trash icon
  * @vue-event {Event} toggle_tab - Toggles which tab is active
  * @vue-event {Event} handle_delete - Confirms and commits the deletion of protocol to state
  * @vue-event {Event} handle_stimulation_type - Commits the new selected stimulation type to state
- * @vue-event {Event} handle_stop_requirement - Currently just assigns the new stop requirement to local state
- * @vue-event {Event} handle_repeat_frequency - Commits the new delay input to state
+ * @vue-event {Event} handle_stop_setting - Currently just assigns the new stop setting to local state
+ * @vue-event {Event} handle_rest_duration - Commits the new delay input to state
  * @vue-event {Event} check_name_validity - Checks if the inputted name has already been used
  */
 
 export default {
-  name: "ProtocolBlockViewEditor",
+  name: "StimulationStudioProtocolBlockViewEditor",
   components: {
     SmallDropDown,
     BPopover,
+    FontAwesomeIcon,
   },
   data() {
     return {
       active_tab: "Basic",
-      disabled: true,
+      disabled_name: true,
+      disabled_time: false,
       show_confirmation: false,
       current_letter: "",
       current_color: "",
       stimulation_types_array: ["Voltage Controlled Stimulation", "Current Controlled Stimulation"],
-      until_options_array: ["Stimulate Until Stopped", "Repeat"],
+      stop_options_array: ["Stimulate Until Stopped", "Stimulate Until Complete"],
       protocol_name: "",
-      stop_requirement: "Stimulate Until Stopped",
-      end_delay_duration: "",
+      stop_option_idx: 0,
+      rest_duration: "",
       name_validity: "null",
       error_message: "",
       protocol_list: [],
@@ -125,10 +146,11 @@ export default {
   computed: {
     ...mapState("stimulation", {
       stimulation_type: (state) => state.protocol_editor.stimulation_type,
+      stop_setting: (state) => state.protocol_editor.stop_setting,
     }),
     ...mapGetters("stimulation", [
       "get_protocol_name",
-      "get_end_delay_duration",
+      "get_rest_duration",
       "get_protocols",
       "get_next_protocol",
     ]),
@@ -143,7 +165,7 @@ export default {
         this.update_protocols();
         this.show_confirmation = false;
         this.protocol_name = "";
-        this.end_delay_duration = "";
+        this.rest_duration = "";
         this.name_validity = "";
       }
       if (
@@ -155,8 +177,12 @@ export default {
       if (mutation.type === "stimulation/set_edit_mode") {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
-        this.end_delay_duration = this.get_end_delay_duration;
-        this.stimulation_type == "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
+        this.rest_duration = this.get_rest_duration;
+        this.stimulation_type === "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
+        if (this.stop_setting === "Stimulate Until Complete") {
+          this.stop_option_idx = 1;
+          this.disabled_time = true;
+        } else this.stop_option_idx = 0;
       }
     });
   },
@@ -164,8 +190,8 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_repeat_frequency"]),
-    ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name"]),
+    ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_rest_duration"]),
+    ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name", "set_stop_setting"]),
     update_protocols() {
       this.protocol_list = this.get_protocols;
       const { letter, color } = this.get_next_protocol;
@@ -186,14 +212,21 @@ export default {
       this.stimulation_type_idx = idx;
       this.set_stimulation_type(type);
     },
-    handle_stop_requirement(idx) {
-      // eventually handle in state, unsure yet how this is used
-      const requirement = this.until_options_array[idx];
-      this.stop_requirement = requirement;
+    handle_stop_setting(idx) {
+      const setting = this.stop_options_array[idx];
+      this.stop_option_idx = idx;
+
+      if (idx === 0) this.disabled_time = false;
+      else if (idx === 1) {
+        this.disabled_time = true;
+        this.handle_rest_duration(0);
+      }
+
+      this.set_stop_setting(setting);
     },
-    handle_repeat_frequency(time) {
-      this.end_delay_duration = time;
-      this.handle_new_repeat_frequency(time);
+    handle_rest_duration(time) {
+      this.rest_duration = time;
+      this.handle_new_rest_duration(time);
     },
     check_name_validity(input) {
       const matched_names = this.protocol_list.filter((protocol) => {
@@ -217,11 +250,9 @@ export default {
 <style scoped>
 .div__BlockViewEditor-background {
   background: rgb(0, 0, 0);
-  position: relative;
+  position: absolute;
   border-radius: 10px;
-  width: 90%;
-  height: 100%;
-  left: 35px;
+  width: 1322px;
   font-family: muli;
 }
 .error-message {
@@ -291,7 +322,7 @@ button:hover {
   width: 100%;
   height: 40px;
   display: flex;
-  top: 2%;
+  top: 1%;
   align-items: center;
 }
 
@@ -299,22 +330,30 @@ button:hover {
   position: relative;
   left: 2%;
   font-weight: bold;
-  font-size: 22px;
+  font-size: 25px;
 }
-.img__pencil-icon {
+.pencil-icon {
   left: 4%;
+  color: #b7b7b7;
   position: relative;
 }
-img:hover {
+.trash-icon {
+  margin-left: 11%;
+  margin-right: 1%;
+  color: #4c4c4c;
+  padding-top: 2px;
+  font-size: 20px;
+}
+
+.pencil-icon:hover,
+.trash-icon:hover {
   cursor: pointer;
   opacity: 0.6;
 }
-.img__trash-icon {
-  margin-left: 11%;
-  padding-top: 4px;
-}
+
 .div__right-settings-panel {
-  width: 80%;
+  left: 1000px;
+  width: 90%;
   display: flex;
   justify-self: flex-end;
   justify-content: flex-end;
@@ -323,18 +362,18 @@ img:hover {
 }
 .number_input {
   background: #1c1c1c;
-  height: 25.5px;
-  width: 40px;
+  height: 25px;
+  width: 50px;
   border: none;
   color: #b7b7b7;
   font-size: 12px;
   margin-right: 1%;
   text-align: center;
 }
-.protocol_input {
+.protocol_name_nput {
   background: rgb(0, 0, 0);
-  height: 30px;
-  width: 250px;
+  height: 25px;
+  width: 300px;
   left: 3%;
   position: relative;
   border: none;
@@ -345,7 +384,7 @@ img:hover {
   background: rgb(8, 8, 8);
   border: 2px solid rgb(17, 17, 17);
   width: 50%;
-  height: 90%;
+  height: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -363,13 +402,13 @@ img:hover {
 .div__Editor-background {
   transform: rotate(0deg);
   background: rgb(17, 17, 17);
-  width: 110%;
-  height: 92%;
+  width: 1322px;
+  height: 166px;
 }
 .div__Tabs-panel {
   background: rgb(17, 17, 17);
-  width: 20%;
-  height: 13%;
+  width: 200px;
+  height: 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;

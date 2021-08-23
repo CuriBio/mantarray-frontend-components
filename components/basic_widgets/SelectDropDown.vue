@@ -40,7 +40,7 @@
 </template>
 <script>
 export default {
-  name: "NewSelectDropDown",
+  name: "SelectDropDown",
   props: {
     title_label: { type: String, default: "" }, // title_text (str) (optional, defaults to empty string "")
     value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")

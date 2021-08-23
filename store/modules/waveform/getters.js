@@ -7,10 +7,4 @@ export default {
   x_zoom_level_idx(state) {
     return state.x_zoom_level_idx;
   },
-  y_axis_zoom_levels(state) {
-    return state.y_zoom_levels;
-  },
-  y_axis_zoom_idx(state) {
-    return state.y_zoom_level_idx;
-  },
 };

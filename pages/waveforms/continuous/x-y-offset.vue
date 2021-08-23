@@ -3,8 +3,6 @@
     <ContinuousWaveform
       :display_waveform_idx="1"
       :x_axis_sample_length="100000"
-      :y_min="0"
-      :y_max="400"
       :y_label="'My Y'"
       :x_label="'Their X'"
       :line_color="'#FFFF00'"
@@ -33,15 +31,6 @@ export default {
       { x_data_points: x_values, y_data_points: y_values },
     ];
     this.$store.commit("data/set_plate_waveforms", this.temp_datapoints);
-    const y_zoom_levels = [
-      { y_min: 0, y_max: 500 },
-      { y_min: 100, y_max: 400 },
-      { y_min: 200, y_max: 300 },
-    ];
-    const default_zoom_level_idx = 0;
-    this.$store.commit("waveform/set_y_axis_zoom_levels", y_zoom_levels);
-    this.$store.commit("waveform/set_y_axis_zoom_idx", default_zoom_level_idx);
-
     const x_zoom_levels = [
       { x_scale: 30 * 100000 },
       { x_scale: 15 * 100000 },

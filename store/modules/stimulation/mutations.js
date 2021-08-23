@@ -24,19 +24,17 @@ export default {
     protocol_editor.pulses = pulses;
     protocol_editor.detailed_pulses = new_pulse_order;
   },
-  set_axis_values(state, { converted_x_values, y_values }) {
-    state.x_axis_values = converted_x_values;
+  set_axis_values(state, { x_values, y_values }) {
+    state.x_axis_values = x_values;
     state.y_axis_values = y_values;
   },
   set_repeat_color_assignments(state, assignments) {
     state.repeat_colors = assignments;
   },
   set_zoom_in(state, axis) {
-    if (axis === "x-axis") state.x_axis_scale /= 1.5;
     if (axis === "y-axis") state.y_axis_scale /= 1.5;
   },
   set_zoom_out(state, axis) {
-    if (axis === "x-axis") state.x_axis_scale *= 1.5;
     if (axis === "y-axis") state.y_axis_scale *= 1.5;
   },
   reset_protocol_editor(state) {
@@ -45,15 +43,14 @@ export default {
       protocol_editor: {
         name: "",
         stimulation_type: "V",
-        stop_requirement: "Until Stopped",
-        end_delay_duration: 0,
+        stop_setting: "Stimulate Until Stopped",
+        rest_duration: 0,
         time_unit: "seconds",
         pulses: [],
       },
       x_axis_values: [],
       y_axis_values: [],
       repeat_colors: {},
-      x_axis_scale: 100,
       y_axis_scale: 500,
       delay_blocks: [],
       edit_mode: { status: false, letter: "", label: "" },
@@ -68,42 +65,43 @@ export default {
       protocol_editor: {
         name: "",
         stimulation_type: "V",
-        stop_requirement: "Until Stopped",
-        end_delay_duration: 0,
+        stop_setting: "Stimulate Until Stopped",
+        rest_duration: 0,
         time_unit: "seconds",
         pulses: [],
       },
       x_axis_values: [],
       y_axis_values: [],
       repeat_colors: {},
-      x_axis_scale: 100,
       y_axis_scale: 500,
       delay_blocks: [],
       edit_mode: { status: false, letter: "", label: "" },
     };
     Object.assign(state, replace_state);
   },
-  set_repeat_frequency({ protocol_editor }, time) {
-    protocol_editor.end_delay_duration = Number(time);
+  set_rest_duration({ protocol_editor }, time) {
+    protocol_editor.rest_duration = Number(time);
   },
   set_delay_axis_values(state, delay) {
-    const { end_delay_duration, pulses, time_unit } = state.protocol_editor;
+    const { rest_duration, pulses, time_unit } = state.protocol_editor;
     const delay_conversion = {
       seconds: 1000,
       milliseconds: 1,
       minutes: 60000,
       hours: 3600000,
     };
-    const converted_delay_duration = end_delay_duration * delay_conversion[time_unit];
+    const converted_delay_duration = rest_duration * delay_conversion[time_unit];
     const delay_pulse_model = {
       phase_one_duration: converted_delay_duration,
       phase_one_charge: 0,
       interpulse_duration: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
+      repeat_delay_interval: 0,
+      total_active_duration: converted_delay_duration,
     };
     state.delay_blocks = [delay];
-    pulses.push(delay_pulse_model);
+    if (!isNaN(converted_delay_duration) && converted_delay_duration !== 0) pulses.push(delay_pulse_model);
   },
   set_new_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
@@ -121,5 +119,8 @@ export default {
   },
   set_edit_mode_off({ edit_mode }) {
     edit_mode.status = false;
+  },
+  set_stop_setting({ protocol_editor }, setting) {
+    protocol_editor.stop_setting = setting;
   },
 };

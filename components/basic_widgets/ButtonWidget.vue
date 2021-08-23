@@ -158,7 +158,7 @@ export default {
   font-size: 17px;
   color: #3f3f3f;
   text-align: center;
-  z-index: 19;
+  z-index: 3;
 }
 
 .canvas__vertical-line {
@@ -170,7 +170,7 @@ export default {
   top: 0px;
   left: 0px;
   visibility: visible;
-  z-index: 15;
+  z-index: 3;
   background-color: #3f3f3f;
   opacity: 0.5;
 }
@@ -183,7 +183,7 @@ export default {
   top: 0px;
   left: 5px;
   visibility: visible;
-  z-index: 22;
+  z-index: 3;
   background-color: #3f3f3f;
   opacity: 0.5;
 }

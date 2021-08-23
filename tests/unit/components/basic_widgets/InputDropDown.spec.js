@@ -3,7 +3,7 @@ import ComponentToTest from "@/components/basic_widgets/InputDropDown.vue";
 import { InputDropDown as DistComponentToTest } from "@/dist/mantarray.common";
 import { shallowMount } from "@vue/test-utils";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
-import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
@@ -193,9 +193,9 @@ describe("InputDropDown.vue", () => {
     expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
-  test("When exiting the NewSelectDropDown instance, Then instance is effectively destroyed", async () => {
-    const destroyed_spy = jest.spyOn(NewSelectDropDown, "beforeDestroy");
-    const wrapper = mount(NewSelectDropDown, {
+  test("When exiting the SelectDropDown instance, Then instance is effectively destroyed", async () => {
+    const destroyed_spy = jest.spyOn(SelectDropDown, "beforeDestroy");
+    const wrapper = mount(SelectDropDown, {
       store,
       localVue,
       propsData: {
@@ -204,5 +204,23 @@ describe("InputDropDown.vue", () => {
     });
     wrapper.destroy();
     expect(destroyed_spy).toHaveBeenCalledWith();
+  });
+
+  test("When the SmallDropDown becomes disabled, Then the list visibility should become false and toggle should become disabled", async () => {
+    const toggle_spy = jest.spyOn(SmallDropDown.methods, "toggle");
+    const wrapper = mount(SmallDropDown, {
+      store,
+      localVue,
+      propsData: {
+        options_text: ["test"],
+        disabled: false,
+      },
+    });
+
+    await wrapper.setProps({ disabled: true });
+    expect(wrapper.vm.visible).toBe(false);
+
+    wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
+    expect(toggle_spy).toHaveBeenCalledTimes(0);
   });
 });

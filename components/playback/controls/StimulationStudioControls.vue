@@ -32,6 +32,7 @@
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { mapState } from "vuex";
 import {
   faPlayCircle as fa_play_circle,
   faStopCircle as fa_stop_circle,
@@ -56,10 +57,15 @@ export default {
   data() {
     return {
       play_state: false,
-      active_gradient: ["lightgreen", "rgb(0, 88, 0)"],
+      active_gradient: ["#19ac8a", "#24524b"],
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
     };
+  },
+  computed: {
+    ...mapState("stimulation", {
+      protocol_assignments: (state) => state.protocol_assignments,
+    }),
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
@@ -75,9 +81,11 @@ export default {
   },
   methods: {
     async handle_play_stop() {
-      this.play_state = !this.play_state;
-      if (this.play_state) await this.$store.dispatch("stimulation/create_protocol_message");
-      if (!this.play_state) await this.$store.dispatch("stimulation/stop_stim_status");
+      if (Object.keys(this.protocol_assignments).length !== 0) {
+        this.play_state = !this.play_state;
+        if (this.play_state) await this.$store.dispatch("stimulation/create_protocol_message");
+        if (!this.play_state) await this.$store.dispatch("stimulation/stop_stim_status");
+      }
     },
   },
 };

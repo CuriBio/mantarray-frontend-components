@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="modal_type !== null || repeat_delay_modal !== null ? 'modal_overlay' : null">
-      <div class="div__background-container">
+      <div>
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
           <canvas class="canvas__stimulationstudio-header-separator" />
@@ -12,17 +12,20 @@
             :group="{ name: 'order', pull: 'clone', put: false }"
             :clone="clone"
           >
-            <div v-for="(types, idx) in icon_types" :key="idx">
-              <img :src="types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+            <div v-for="(types, idx) in icon_types" :id="types.type" :key="idx">
+              <img :src="`/${types.type}.png`" />
             </div>
           </draggable>
         </div>
         <SmallDropDown
           class="dropdown-container"
           :input_height="25"
-          :input_width="95"
+          :input_width="100"
           :options_text="time_units_array"
           :options_idx="time_units_idx"
+          :dom_id_suffix="'time_units'"
+          :disabled="disable_dropdown"
+          :style="disable_dropdown ? 'cursor: unset;' : null"
           @selection-changed="handle_time_unit"
         />
 
@@ -30,7 +33,7 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
-            style="height: 118px; display: flex"
+            style="height: 100px; display: flex"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
@@ -51,19 +54,16 @@
                   </span>
                 </div>
               </div>
-              <img
-                :src="types.src"
-                :style="'cursor: pointer;'"
-                @click.shift.exact="open_modal_for_edit(types.type, idx)"
-              />
+              <img :src="`/${types.type}.png`" @click.shift.exact="open_modal_for_edit(types.type, idx)" />
 
               <draggable
                 v-model="types.nested_protocols"
                 class="dropzone"
-                style="height: 120px; display: flex"
+                style="height: 100px; display: flex"
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :emptyInsertThreshold="40"
+                :disabled="true"
                 @change="
                   [types.nested_protocols.length <= 1 ? handle_repeat($event, idx) : handle_internal_repeat()]
                 "
@@ -74,7 +74,7 @@
                   :style="'position: relative;'"
                   @click.shift.exact="open_modal_for_edit(nested_types.type, idx, nested_idx)"
                 >
-                  <img :src="nested_types.src" :style="'margin-top: 8px; cursor: pointer;'" />
+                  <img :src="`/${nested_types.type}.png`" :style="'margin-top: 4px;'" />
                 </div>
               </draggable>
             </div>
@@ -85,20 +85,22 @@
     <div v-if="modal_type !== null" class="modal-container">
       <StimulationStudioWaveformSettingModal
         :stimulation_type="stimulation_type"
-        :waveform_type="modal_type"
+        :pulse_type="modal_type"
         :button_names="
           shift_click_img_idx !== null ? button_labels.delete_option : button_labels.no_delete_option
         "
-        :selected_waveform_settings="selected_waveform_settings"
+        :selected_pulse_settings="selected_pulse_settings"
+        :selected_stim_settings="selected_stim_settings"
         @close="on_modal_close"
       />
     </div>
-    <div v-if="repeat_delay_modal !== null" class="modal-container" :style="'top: 200px;'">
+    <div v-if="repeat_delay_modal !== null" class="modal-container">
       <StimulationStudioRepeatDelayModal
         :delay_open_for_edit="delay_open_for_edit"
         :repeat_idx="repeat_idx"
         :modal_type="repeat_delay_modal"
         :current_repeat_delay_input="current_repeat_delay_input"
+        :current_repeat_delay_unit="current_repeat_delay_unit"
         @repeat_close="on_repeat_modal_close"
         @delay_close="on_modal_close"
       />
@@ -117,18 +119,20 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
  * @vue-data {Array} icon_type - The source for the draggable pulse tiles
  * @vue-data {Object} button_labels - Available button labels for modals
  * @vue-data {Array} time_units_array - Available units of time for drop down in settings panel
- * @vue-data {Object} selected_waveform_settings - This is the saved setting for a pulse that changes when a user opens a modal to edit a pulse
+ * @vue-data {Object} selected_pulse_settings - This is the saved setting for a pulse that changes when a user opens a modal to edit a pulse
  * @vue-data {Array} protocol_order -  This is the complete order of pulses/delays/repeats in the entire new protocol
  * @vue-data {String} modal_type - Tracks which modal should open based on pulse type
  * @vue-data {String} setting_type - This is the stimulation type that user selects from drop down in settings panel
- * @vue-data {Int} shift_click_img_idx - Index of selected waveform to edit in order to save new settings to correct pulse
- * @vue-data {Int} shift_click_nested_img_idx - Index of selected nested waveform to edit in order to save new settings to correct pulse
+ * @vue-data {Int} shift_click_img_idx - Index of selected pulse to edit in order to save new settings to correct pulse
+ * @vue-data {Int} shift_click_nested_img_idx - Index of selected nested pulse to edit in order to save new settings to correct pulse
  * @vue-data {String} repeat_delay_modal - Tracks which modal should open based on if it is a repeat or delay
  * @vue-data {Int} repeat_idx - Index of new repeat block to add settings to correct pulse
  * @vue-data {String} current_repeat_delay_input - Saved input for a delay block that changes depending on which delay block is opened for edit
  * @vue-data {Boolean} cloned - Determines if a placed tile in protocol order is new and needs a modal to open appear to set settings or just an order rearrangement of existing tiles
  * @vue-data {Int} new_cloned_idx - If tile placed in protocol order is new, this index allows settings to be saved to correct index in order
  * @vue-data {Boolean} delay_open_for_edit - Determines if existing delay input should appear in modal for a reedit or if it's a new delay block with blank settings
+ * @vue-data {Int} time_units_idx - Index for selected unit in dropdown, used to reset dropdown when editor is reset
+ * @vue-data {Boolean} disable_dropdown - Determines if the dropdown is disabled or not dependent on the stop stim setting selected
  * @vue-event {Event} check_type - Checks if tile placed is new or existing and opens corresponding modal for settings or commits change in protocol order to state
  * @vue-event {Event} on_modal_close - Handles settings when modal is closed dependent on which button the user selects and which modal type is open, commits change to state
  * @vue-event {Event} open_modal_for_edit - Assigns selected pulse settings to modal for reedit and saves current selected index
@@ -142,7 +146,7 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
  */
 
 export default {
-  name: "DragAndDropPanel",
+  name: "StimulationStudioDragAndDropPanel",
   components: {
     draggable,
     StimulationStudioWaveformSettingModal,
@@ -155,16 +159,17 @@ export default {
   data() {
     return {
       icon_types: [
-        { type: "Monophasic", src: "/monophasic-tile.png" },
-        { type: "Biphasic", src: "/biphasic-tile.png" },
-        { type: "Delay", src: "/delay-tile.png" },
+        { type: "Monophasic", src: "/Monophasic.png" },
+        { type: "Biphasic", src: "/Biphasic.png" },
+        { type: "Delay", src: "/Delay.png" },
       ],
       button_labels: {
         no_delete_option: ["Save", "Cancel"],
         delete_option: ["Save", "Delete", "Cancel"],
       },
       time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
-      selected_waveform_settings: {},
+      selected_pulse_settings: {},
+      selected_stim_settings: {},
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
@@ -173,15 +178,18 @@ export default {
       repeat_delay_modal: null,
       repeat_idx: null,
       current_repeat_delay_input: null,
+      current_repeat_delay_unit: "milliseconds",
       cloned: false,
       new_cloned_idx: null,
       delay_open_for_edit: false, // TODO Luci, clean up state management and constant names
       time_units_idx: 0,
+      disable_dropdown: false,
     };
   },
   computed: {
     ...mapState("stimulation", {
       time_unit: (state) => state.protocol_editor.time_unit,
+      stop_setting: (state) => state.protocol_editor.stop_setting,
     }),
   },
   created() {
@@ -194,11 +202,15 @@ export default {
       }
 
       if (mutation.type === "stimulation/set_edit_mode") {
-        // mapState or mapGetter was not updating correctly, only directly acessing state
         this.protocol_order = JSON.parse(
           JSON.stringify(this.$store.state.stimulation.protocol_editor.detailed_pulses)
         );
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
+      }
+      if (mutation.type === "stimulation/set_stop_setting") {
+        this.stop_setting.includes("Complete")
+          ? (this.disable_dropdown = true)
+          : (this.disable_dropdown = false);
       }
     });
   },
@@ -213,7 +225,8 @@ export default {
       if (e.added && this.cloned) {
         const { element, newIndex } = e.added;
         this.new_cloned_idx = newIndex;
-        this.selected_waveform_settings = element.settings;
+        this.selected_pulse_settings = element.pulse_settings;
+        this.selected_stim_settings = element.stim_settings;
 
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
@@ -223,20 +236,35 @@ export default {
       if ((e.added && !this.cloned) || e.moved || e.removed) this.handle_protocol_order(this.protocol_order);
       this.cloned = false;
     },
-    on_modal_close(button, settings) {
+    on_modal_close(button, pulse_settings, stim_settings) {
       this.modal_type = null;
       this.repeat_delay_modal = null;
       this.delay_open_for_edit = false;
       this.current_repeat_delay_input = null;
+      this.current_repeat_delay_unit = "milliseconds";
+
       const new_pulse = this.protocol_order[this.new_cloned_idx];
       const edited_pulse = this.protocol_order[this.shift_click_img_idx];
 
       if (button === "Save") {
-        if (this.new_cloned_idx !== null) new_pulse.settings = settings;
-        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null)
-          Object.assign(edited_pulse.settings, settings);
-        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null)
-          Object.assign(edited_pulse.nested_protocols[this.shift_click_nested_img_idx].settings, settings);
+        if (this.new_cloned_idx !== null) {
+          new_pulse.pulse_settings = pulse_settings;
+          new_pulse.stim_settings = stim_settings;
+        }
+        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null) {
+          Object.assign(edited_pulse.pulse_settings, pulse_settings);
+          Object.assign(edited_pulse.stim_settings, stim_settings);
+        }
+        // if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null) {
+        //   Object.assign(
+        //     edited_pulse.nested_protocols[this.shift_click_nested_img_idx].pulse_settings,
+        //     pulse_settings
+        //   );
+        //   Object.assign(
+        //     edited_pulse.nested_protocols[this.shift_click_nested_img_idx].stim_settings,
+        //     stim_settings
+        //   );
+        // }
       }
 
       if (button === "Delete") {
@@ -259,15 +287,18 @@ export default {
 
       if (nested_idx !== undefined) {
         this.shift_click_nested_img_idx = nested_idx;
-        Object.assign(this.selected_waveform_settings, pulse.nested_protocols[nested_idx].settings);
+        this.selected_pulse_settings = pulse.nested_protocols[nested_idx].pulse_settings;
+        this.selected_stim_settings = pulse.nested_protocols[nested_idx].stim_settings;
       } else if (nested_idx === undefined) {
-        Object.assign(this.selected_waveform_settings, pulse.settings);
+        this.selected_pulse_settings = pulse.pulse_settings;
+        this.selected_stim_settings = pulse.stim_settings;
       }
 
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
-        this.current_repeat_delay_input = this.selected_waveform_settings.phase_one_duration.toString();
+        this.current_repeat_delay_input = this.selected_stim_settings.total_active_duration.duration.toString();
+        this.current_repeat_delay_unit = this.selected_stim_settings.total_active_duration.unit.toString();
         this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
       }
@@ -289,12 +320,22 @@ export default {
         src: type.src,
         nested_protocols: [],
         repeat: { color: random_color, number_of_repeats: 0 },
-        settings: {
+        pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
           interpulse_duration: "",
           phase_two_duration: "",
           phase_two_charge: "",
+        },
+        stim_settings: {
+          repeat_delay_interval: {
+            duration: "",
+            unit: "milliseconds",
+          },
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
         },
       };
     },
@@ -339,9 +380,10 @@ export default {
 .div__DragAndDdrop-panel {
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 85%;
-  height: 100%;
+  width: 300px;
+  height: 885px;
   bottom: 0;
+  left: 1329px;
   display: flex;
   justify-content: center;
   justify-self: flex-end;
@@ -349,28 +391,31 @@ export default {
 .repeat_container {
   display: flex;
   align-items: center;
-  padding: 6px;
 }
-.div__icon-container {
-  margin-top: 80px;
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  border: 2px solid white;
+.img__icon-container {
+  cursor: pointer;
+  height: 93px;
+  width: 92px;
 }
+
+img {
+  height: 93px;
+  width: 92px;
+  cursor: pointer;
+}
+
 .ghost {
-  padding: 0 8px 0 8px;
+  padding: 0 7px 7px 7px;
 }
 .modal-container {
-  left: 33%;
+  left: 26%;
   position: absolute;
-  top: 8%;
 }
 .dropdown-container {
   position: absolute;
   z-index: 2;
-  top: 350px;
-  left: -115px;
+  top: 412px;
+  left: 1184px;
 }
 .circle {
   width: 30px;
@@ -405,37 +450,28 @@ export default {
   font-family: Muli;
   color: rgb(17, 17, 17);
 }
-.div__background-container {
-  position: absolute;
-  width: 365px;
-  height: 100%;
-  bottom: 0;
-  display: flex;
-  justify-content: flex-end;
-}
+
 .modal_overlay {
   width: 1629px;
   height: 885px;
   position: absolute;
-  left: 0;
+  top: 0;
   background: rgb(0, 0, 0);
   z-index: 5;
   opacity: 0.6;
-  display: flex;
-  justify-content: flex-end;
 }
 .div__scroll-container {
   position: absolute;
-  top: 440px;
-  width: 336%;
-  height: 120px;
-  right: 353px;
+  top: 460px;
+  width: 1301px;
+  height: 100px;
+  right: 312px;
   overflow-x: scroll;
-  background: rgb(27, 27, 27);
+  background: rgb(17, 17, 17);
+  overflow: visible;
   z-index: 1;
   white-space: nowrap;
   overflow: visible;
-  border: 1px solid rgb(17, 17, 17);
 }
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;
@@ -460,5 +496,9 @@ export default {
   visibility: visible;
   background-color: #3f3f3f;
   opacity: 0.5;
+}
+
+.dropzone {
+  visibility: visible;
 }
 </style>

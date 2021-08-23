@@ -28,7 +28,7 @@
         <YAxisControlsSettings
           @y-axis-new-range="y_axis_controls_commit"
           @y-axis-no-change="y_axis_controls_cancel"
-        ></YAxisControlsSettings>
+        />
       </b-modal>
     </span>
     <span
@@ -66,7 +66,7 @@ import playback_module from "@/store/modules/playback";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import YAxisControlsSettings from "@/components/playback/controls/YAxisControlsSettings";
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
@@ -146,50 +146,45 @@ export default {
   },
   computed: {
     ...mapState("waveform", {
-      y_zoom_levels: "y_zoom_levels",
-    }),
-    ...mapState("waveform", {
-      zoom_level_idx: "y_zoom_level_idx",
+      y_axis_scale: "y_axis_scale",
+      y_axis_range: "y_axis_range",
     }),
     ...mapState("playback", {
       tooltips_delay: "tooltips_delay",
     }),
-    ...mapGetters({
-      y_axis_zoom_levels: "waveform/y_axis_zoom_levels",
-    }),
-    max_zoom_index: function () {
-      return this.y_zoom_levels.length - 1;
+    min_window_size: function () {
+      return Math.round(this.y_axis_scale) <= 1;
     },
-
+    max_window_size: function () {
+      const y_max = this.y_axis_scale + this.y_axis_range.midpoint;
+      const y_min = this.y_axis_range.midpoint - this.y_axis_scale;
+      return y_max > 100000 && y_min < -200;
+    },
     span__y_axis_controls_zoom_out_button__dynamic_class: function () {
       this.tooltip_y_out();
       return {
-        "div__playback-y-axis-controls--disabled": this.zoom_level_idx == 0,
-        "div__playback-y-axis-controls--enabled": this.zoom_level_idx > 0,
+        "div__playback-y-axis-controls--disabled": this.max_window_size,
+        "div__playback-y-axis-controls--enabled": !this.max_window_size,
       };
     },
     span__y_axis_controls_zoom_in_button__dynamic_class: function () {
       this.tooltip_y_in();
       return {
-        "div__playback-y-axis-controls--disabled": this.zoom_level_idx == this.max_zoom_index,
-        "div__playback-y-axis-controls--enabled": this.zoom_level_idx < this.max_zoom_index,
+        "div__playback-y-axis-controls--disabled": this.min_window_size,
+        "div__playback-y-axis-controls--enabled": !this.min_window_size,
       };
     },
   },
 
   methods: {
     zoom_y_in: function () {
-      if (this.zoom_level_idx < this.y_zoom_levels.length - 1) {
-        this.$store.commit("waveform/set_y_axis_zoom_idx", this.zoom_level_idx + 1);
-      }
+      if (!this.min_window_size) this.$store.commit("waveform/set_y_axis_zoom_in");
     },
     zoom_y_out: function () {
-      if (this.zoom_level_idx > 0) {
-        this.$store.commit("waveform/set_y_axis_zoom_idx", this.zoom_level_idx - 1);
-      }
+      if (!this.max_window_size) this.$store.commit("waveform/set_y_axis_zoom_out");
     },
     tooltip_y_out: function () {
-      if (this.zoom_level_idx == 0) {
+      if (this.max_window_size) {
         this.y_title_out = "Y-Axis Zoom-Out";
         this.y_axis_zoom_out = "Minimum Zoom Reached";
       } else {
@@ -198,7 +193,7 @@ export default {
       }
     },
     tooltip_y_in: function () {
-      if (this.zoom_level_idx == this.max_zoom_index) {
+      if (this.min_window_size) {
         this.y_title_in = "Y-Axis Zoom-In";
         this.y_axis_zoom_in = "Maximum Zoom Reached";
       } else {
@@ -210,48 +205,12 @@ export default {
       this.$bvModal.show("y-axis-controls-settings");
       this.controls = !this.controls;
     },
-    y_axis_controls_commit: function (new_range) {
+    y_axis_controls_commit: function ({ y_max, y_min }) {
       this.$bvModal.hide("y-axis-controls-settings");
-      let duplicate_idx = null;
-      let updated_default_idx = 0;
+      const midpoint = (y_max + y_min) / 2;
+      const new_range = { min: y_min, max: y_max, midpoint };
 
-      const new_element = { y_min: new_range.y_min, y_max: new_range.y_max };
-
-      this.y_axis_zoom_levels.splice(0, 0, new_element); // insert the new element
-
-      this.y_axis_zoom_levels.sort(function (a, b) {
-        return a.y_min - b.y_min;
-      });
-      this.y_axis_zoom_levels.sort(function (a, b) {
-        return b.y_max - a.y_max;
-      });
-      // sort the min max ranges.
-      for (let i = 0; i < this.y_axis_zoom_levels.length - 1; i++) {
-        if (
-          this.y_axis_zoom_levels[i].y_min == this.y_axis_zoom_levels[i + 1].y_min &&
-          this.y_axis_zoom_levels[i].y_max == this.y_axis_zoom_levels[i + 1].y_max
-        ) {
-          // check for duplicates.
-          duplicate_idx = i + 1;
-        }
-        if (
-          new_element.y_min == this.y_axis_zoom_levels[i + 1].y_min &&
-          new_element.y_max == this.y_axis_zoom_levels[i + 1].y_max
-        ) {
-          // now check if any duplicate occured ?
-          if (duplicate_idx != null) {
-            // any duplicate then the updated_default_idx is (i)
-            updated_default_idx = i;
-          } else {
-            updated_default_idx = i + 1;
-          }
-        }
-      }
-      if (duplicate_idx != null) {
-        this.y_axis_zoom_levels.splice(duplicate_idx, 1); // remove if duplicate.
-      }
-      this.$store.commit("waveform/set_y_axis_zoom_idx", updated_default_idx);
-      this.$store.commit("waveform/set_y_axis_zoom_levels", this.y_axis_zoom_levels);
+      this.$store.commit("waveform/set_y_axis", new_range);
       this.controls = !this.controls;
     },
     y_axis_controls_cancel: function () {

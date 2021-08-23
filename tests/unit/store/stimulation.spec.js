@@ -14,15 +14,28 @@ describe("store/stimulation", () => {
 
   const test_protocol_order = [
     {
-      type: "Monophasic",
+      type: "Biphasic",
       src: "test",
       repeat: {
         color: "b7b7b7",
         number_of_repeats: 1,
       },
-      settings: {
+      pulse_settings: {
         phase_one_duration: 100,
-        phase_one_charge: 2,
+        phase_one_charge: 200,
+        interpulse_duration: 10,
+        phase_two_duration: 3,
+        phase_two_charge: 200,
+      },
+      stim_settings: {
+        repeat_delay_interval: {
+          duration: 5,
+          unit: "seconds",
+        },
+        total_active_duration: {
+          duration: 500,
+          unit: "milliseconds",
+        },
       },
       nested_protocols: [
         {
@@ -32,12 +45,22 @@ describe("store/stimulation", () => {
             color: "123456",
             number_of_repeats: 1,
           },
-          settings: {
+          pulse_settings: {
             phase_one_duration: 100,
             phase_one_charge: 2,
             interpulse_duration: 200,
             phase_two_duration: 100,
             phase_two_charge: -2,
+          },
+          stim_settings: {
+            repeat_delay_interval: {
+              duration: 0,
+              unit: "milliseconds",
+            },
+            total_active_duration: {
+              duration: 3,
+              unit: "seconds",
+            },
           },
           nested_protocols: [],
         },
@@ -45,16 +68,79 @@ describe("store/stimulation", () => {
     },
   ];
 
-  beforeAll(async () => {
-    const storePath = `${process.env.buildDir}/store.js`;
-    NuxtStore = await import(storePath);
-  });
-
-  beforeEach(async () => {
-    store = await NuxtStore.createStore();
-  });
+  const test_protocol_list = [
+    { letter: "", color: "", label: "Create New" },
+    {
+      letter: "A",
+      color: "#118075",
+      label: "Tester",
+      protocol: {
+        name: "Tester",
+        stimulation_type: "V",
+        rest_duration: 20,
+        time_unit: "milliseconds",
+        pulses: [
+          {
+            phase_one_duration: 15,
+            phase_one_charge: 0,
+            interpulse_duration: 0,
+            phase_two_duration: 0,
+            phase_two_charge: 0,
+            repeat_delay_interval: 0,
+            total_active_duration: 15,
+          },
+          {
+            phase_one_duration: 20,
+            phase_one_charge: 0,
+            interpulse_duration: 0,
+            phase_two_duration: 0,
+            phase_two_charge: 0,
+            repeat_delay_interval: 0,
+            total_active_duration: 20,
+          },
+        ],
+        detailed_pulses: [
+          {
+            type: "Delay",
+            src: "/delay-tile.png",
+            nested_protocols: [],
+            repeat: { color: "d822f9", number_of_repeats: 0 },
+            pulse_settings: {
+              phase_one_duration: 15000,
+              phase_one_charge: 0,
+              interpulse_duration: 0,
+              phase_two_duration: 0,
+              phase_two_charge: 0,
+              repeat_delay_interval: 3000,
+              total_active_duration: 15000,
+            },
+            stim_settings: {
+              repeat_delay_interval: {
+                duration: 3,
+                unit: "milliseconds",
+              },
+              total_active_duration: {
+                duration: 15,
+                unit: "milliseconds",
+              },
+            },
+          },
+        ],
+      },
+    },
+  ];
 
   describe("stimulation/getters", () => {
+    beforeAll(async () => {
+      const storePath = `${process.env.buildDir}/store.js`;
+      NuxtStore = await import(storePath);
+    });
+
+    beforeEach(async () => {
+      store = await NuxtStore.createStore();
+      store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
+    });
+
     test("When the protocol dropdown displays available protocols, Then only only protocols with defined label should return", async () => {
       const protocols = store.getters["stimulation/get_protocols"];
       const labeled_protocols = store.state.stimulation.protocol_list.filter(
@@ -65,6 +151,8 @@ describe("store/stimulation", () => {
 
     test("When requesting the next available protocol assignment(color, letter), Then the protocol recieved should be unused and unique", async () => {
       const { protocol_list } = store.state.stimulation;
+      protocol_list.push({ letter: "B", name: "mock_protocol" });
+
       const { letter, color } = store.getters["stimulation/get_next_protocol"];
 
       let check_color_duplicate = false;
@@ -82,7 +170,7 @@ describe("store/stimulation", () => {
 
     test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
       const voltage = "Voltage (mV)";
-      const current = "Current (µA)";
+      const current = "Current (mA)";
 
       const default_type = store.getters["stimulation/get_stimulation_type"];
       expect(default_type).toBe(voltage);
@@ -96,19 +184,16 @@ describe("store/stimulation", () => {
       expect(voltage_selection).toBe(voltage);
     });
 
-    test("When requesting the detailed pulse order, name, and end delay duration to edit existing protocol in the editor, Then it should return specified pulse order", async () => {
+    test("When requesting the name and rest duration to edit existing protocol in the editor, Then it should return specified pulse order", async () => {
       const selected_protocol = store.state.stimulation.protocol_list[1];
-      const { detailed_pulses, name, end_delay_duration } = selected_protocol.protocol;
+      const { name, rest_duration } = selected_protocol.protocol;
       await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
-
-      const actual_detailed_pulses = store.getters["stimulation/get_detailed_pulse_order"];
-      expect(actual_detailed_pulses).toStrictEqual(detailed_pulses);
 
       const actual_name = store.getters["stimulation/get_protocol_name"];
       expect(actual_name).toBe(name);
 
-      const actual_delay = store.getters["stimulation/get_end_delay_duration"];
-      expect(actual_delay).toBe(end_delay_duration);
+      const actual_delay = store.getters["stimulation/get_rest_duration"];
+      expect(actual_delay).toBe(rest_duration);
     });
 
     test("Given a protocol has been selected for edit, When requesting the protocol assignment in the protocol editor, Then it should return the assignment of the selected protocol for edit", async () => {
@@ -121,6 +206,16 @@ describe("store/stimulation", () => {
     });
   });
   describe("stimulation/mutations/actions", () => {
+    beforeAll(async () => {
+      const storePath = `${process.env.buildDir}/store.js`;
+      NuxtStore = await import(storePath);
+    });
+
+    beforeEach(async () => {
+      store = await NuxtStore.createStore();
+      store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
+    });
+
     test("When stimulation store is initialized, Then default selected wells should be an empty array", () => {
       const { selected_wells } = store.state.stimulation;
       expect(selected_wells).toStrictEqual([]);
@@ -143,8 +238,8 @@ describe("store/stimulation", () => {
     test("When stimulation store is mutated with a new delay frequency, Then said frequency should update in state", () => {
       const delay = "10";
       const int_delay = 10;
-      store.commit("stimulation/set_repeat_frequency", delay);
-      expect(store.state.stimulation.protocol_editor.end_delay_duration).toBe(int_delay);
+      store.commit("stimulation/set_rest_duration", delay);
+      expect(store.state.stimulation.protocol_editor.rest_duration).toBe(int_delay);
     });
 
     test("When a user adds a protocol to selected wells, Then the selected wells should be added to protocol assignments with specified protocol", async () => {
@@ -247,33 +342,26 @@ describe("store/stimulation", () => {
       expect(store.state.stimulation.protocol_editor.time_unit).toBe("milliseconds");
     });
 
-    test("When a user wants to zoom in on an axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
-      expect(store.state.stimulation.x_axis_scale).toBe(100);
-      await store.commit("stimulation/set_zoom_in", "x-axis");
-      expect(store.state.stimulation.x_axis_scale).toBe(66.66666666666667);
-
+    test("When a user wants to zoom in on a the y-axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
       expect(store.state.stimulation.y_axis_scale).toBe(500);
       await store.commit("stimulation/set_zoom_in", "y-axis");
       expect(store.state.stimulation.y_axis_scale).toBe(333.3333333333333);
     });
 
-    test("When a user wants to zoom out on an axis, Then the scale will multiple by a power of 10", async () => {
-      expect(store.state.stimulation.x_axis_scale).toBe(100);
-      await store.commit("stimulation/set_zoom_out", "x-axis");
-      expect(store.state.stimulation.x_axis_scale).toBe(150);
-
+    test("When a user wants to zoom out on the y-axis, Then the scale will multiple by a power of 10", async () => {
       expect(store.state.stimulation.y_axis_scale).toBe(500);
       await store.commit("stimulation/set_zoom_out", "y-axis");
       expect(store.state.stimulation.y_axis_scale).toBe(750);
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
-      const x_values = [0, 0, 0.1, 0.1, 0.2, 0.2, 0.4, 0.4, 0.5];
-      const y_values = [0, 2, 2, 2, 2, 0, 0, -2, -2];
+      const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 500];
+      const y_values = [0, 200, 200, 0, 0, 200, 200, 0, 0];
       const colors = { b7b7b7: [0, 9] };
 
       await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
       const { x_axis_values, y_axis_values, repeat_colors } = store.state.stimulation;
+
       expect(x_axis_values).toStrictEqual(x_values);
       expect(y_axis_values).toStrictEqual(y_values);
       expect(repeat_colors).toStrictEqual(colors);
@@ -291,12 +379,14 @@ describe("store/stimulation", () => {
         label: "mock_protocol",
         protocol: protocol_editor,
       };
+
       await store.dispatch("stimulation/add_saved_protocol");
       expect(store.state.stimulation.protocol_list[2]).toStrictEqual(expected_protocol);
     });
 
     test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the updated protocol will be commited to state in the available protocol list", async () => {
       const { protocol_list, protocol_editor, edit_mode } = store.state.stimulation;
+
       const selected_protocol = protocol_list[1];
       const { protocol } = protocol_list[1];
       const old_name = "Tester";
@@ -308,8 +398,10 @@ describe("store/stimulation", () => {
       expect(edit_mode.status).toBe(true);
       await store.commit("stimulation/set_protocol_name", new_name);
       await store.dispatch("stimulation/add_saved_protocol");
+
       const test = protocol_list[1].protocol.name;
       expect(test).toBe(new_name);
+
       expect(edit_mode.status).toBe(false);
     });
 
@@ -354,30 +446,36 @@ describe("store/stimulation", () => {
           label: "test",
           protocol: {
             stimulation_type: "C",
+            stop_setting: "Stimulate Until Stopped",
             pulses: [
               {
-                phase_one_duration: 1500,
+                phase_one_duration: 15,
                 phase_one_charge: 500,
                 interpulse_duration: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
+                repeat_delay_interval: 3,
+                total_active_duration: 50,
               },
             ],
           },
         },
       };
       const expected_message = {
-        protocol: [
+        protocols: [
           {
             stimulation_type: "C",
             well_number: "A2",
+            total_protocol_duration: -1,
             pulses: [
               {
-                phase_one_duration: 1500000,
-                phase_one_charge: 500,
+                phase_one_duration: 15000,
+                phase_one_charge: 500000,
                 interpulse_duration: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
+                repeat_delay_interval: 3000,
+                total_active_duration: 50000,
               },
             ],
           },
@@ -396,8 +494,8 @@ describe("store/stimulation", () => {
 
     test("When a user adds a repeat delay into the input of the settings panel, Then it will appear at the end of the waveform in the graph", async () => {
       const test_delay = 10;
-      const expected_block = [[0, 10]];
-      await store.dispatch("stimulation/handle_new_repeat_frequency", test_delay);
+      const expected_block = [[0, 10000]];
+      await store.dispatch("stimulation/handle_new_rest_duration", test_delay);
       const { delay_blocks } = store.state.stimulation;
       expect(delay_blocks).toStrictEqual(expected_block);
     });

@@ -47,7 +47,7 @@
 
     <!-- original mockflow ID:  cmpD5cceb38a3af00a6bd7589d883fa87688 -->
     <div class="div__heatmap-layout-checkbox-container">
-      <CheckBoxWidget :checkbox_options="option" @checkbox-selected="auto_scale" />
+      <CheckBoxWidget :checkbox_options="option" :reset="checkbox_reset" @checkbox-selected="auto_scale" />
     </div>
 
     <!-- original mockflow ID:  cmpD8a25d29c92a6f84cc071bcf466ca36ce -->
@@ -62,6 +62,7 @@
         :invalid_text="max_value_error_msg"
         :input_width="105"
         :dom_id_suffix="'heatmap-max'"
+        :disabled="autoscale"
         @update:value="on_update_maximum($event)"
       />
     </div>
@@ -76,6 +77,7 @@
         :invalid_text="min_value_error_msg"
         :input_width="105"
         :dom_id_suffix="'heatmap-min'"
+        :disabled="autoscale"
         @update:value="on_update_minimum($event)"
       />
     </div>
@@ -88,7 +90,7 @@
 
     <!-- original mockflow ID: cmpDa1c3ce66a0c6d38c39ace76539269b2f  -->
     <div class="div__heatmap-layout-display-input-dropdown-container">
-      <NewSelectDropDown
+      <SelectDropDown
         :title_label="label"
         :value.sync="display_option"
         :options_text="metric_names"
@@ -157,7 +159,7 @@
 import { mapState, mapGetters } from "vuex";
 import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
-import NewSelectDropDown from "@/components/basic_widgets/NewSelectDropDown.vue";
+import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
 import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
@@ -169,7 +171,7 @@ export default {
     PlateHeatMap,
     GradientBar,
     InputWidget,
-    NewSelectDropDown,
+    SelectDropDown,
     CheckBoxWidget,
     RadioButtonWidget,
   },
@@ -188,9 +190,11 @@ export default {
       input_height: 45,
       max_value_error_msg: "invalid",
       min_value_error_msg: "invalid",
+      autoscale: false,
       // selected_wells: [],
-      upper: 100,
-      lower: 0,
+      upper: "",
+      lower: "",
+      checkbox_reset: false,
     };
   },
 
@@ -226,6 +230,7 @@ export default {
         }
       });
     },
+
     is_mean_value_active: function () {
       return this.selected_wells.length > 0;
     },
@@ -246,43 +251,61 @@ export default {
         this.display_option in this.well_values
       );
     },
+    auto_max_min: function () {
+      const max_value_array = this.well_values[this.display_option].data.map((well) => {
+        if (well.length <= 1) return Math.max(well);
+        else return Math.max(...well.slice(-100));
+      });
+      const min_value_array = this.well_values[this.display_option].data.map((well) => {
+        if (well.length <= 1) return Math.min(well);
+        else return Math.min(...well.slice(-100));
+      });
+      const range = {
+        max: Math.max(...max_value_array).toFixed(3),
+        min: Math.min(...min_value_array).toFixed(3),
+      };
+      if (range.max === range.min) range.min -= 0.001; // guard against edge case where the max/min are the same
+      return range;
+    },
   },
 
-  // watch: {
-  //   display_option: function () {
-  //     if (this.display_option != "") {
-  //       this.error_text = "Choose an option";
-  //     } else {
-  //       this.on_empty_flag = true;
-  //       this.error_text = "An ID is required";
-  //     }
-  //     if (this.display_option in this.well_values) {
-  //       this.on_empty_flag = false;
-  //       // Tanner (7/27/21): not sure what these following two lines are attempting to do or if they're needed at all. Could probably refactor this whole function
-  //       this.lower = this.well_values[this.display_option].range_min;
-  //       this.upper = this.well_values[this.display_option].range_max;
-  //     } else {
-  //       this.lower = null;
-  //       this.upper = null;
-  //       this.error_text = "Choose an option";
-  //       this.on_empty_flag = true;
-  //     }
-  //   },
-  // },
+  watch: {
+    auto_max_min: function (new_value) {
+      if (this.autoscale) this.$store.commit("gradient/set_gradient_range", new_value);
+    },
+    //   display_option: function () {
+    //     if (this.display_option != "") {
+    //       this.error_text = "Choose an option";
+    //     } else {
+    //       this.on_empty_flag = true;
+    //       this.error_text = "An ID is required";
+    //     }
+    //     if (this.display_option in this.well_values) {
+    //       this.on_empty_flag = false;
+    //       // Tanner (7/27/21): not sure what these following two lines are attempting to do or if they're needed at all. Could probably refactor this whole function
+    //       this.lower = this.well_values[this.display_option].range_min;
+    //       this.upper = this.well_values[this.display_option].range_max;
+    //     } else {
+    //       this.lower = null;
+    //       this.upper = null;
+    //       this.error_text = "Choose an option";
+    //       this.on_empty_flag = true;
+    //     }
+    //   },
+  },
 
   methods: {
     auto_scale: function (new_value) {
-      // if (new_value == "Auto-Scale") {
-      //   // this.max_value_error_msg = "";
-      //   // this.min_value_error_msg = "";
-      //   this.heatmap_option = this.display_option = this.nicknames_list[0];
-      //   this.$store.commit("heatmap/heatmap_autoscale", true);
-      // } else {
-      //   // this.max_value_error_msg = "invalid";
-      //   // this.min_value_error_msg = "invalid";
-      //   this.heatmap_option = this.display_option = "";
-      //   this.$store.commit("heatmap/heatmap_autoscale", false);
-      // }
+      if (new_value == "Auto-Scale") {
+        this.max_value_error_msg = "";
+        this.min_value_error_msg = "";
+        this.autoscale = true;
+        this.checkbox_reset = false;
+      } else {
+        this.on_update_maximum(this.upper);
+        this.on_update_minimum(this.lower);
+        this.autoscale = false;
+      }
     },
 
     metric_selection_changed: function (index) {
@@ -291,9 +314,9 @@ export default {
     },
 
     radio_option_selected: function (option_value) {
-      const grandient_option_idx = option_value.index;
-      if (this.gradient_theme_names[grandient_option_idx]) {
-        this.$store.commit("gradient/set_gradient_theme_idx", grandient_option_idx);
+      const gradient_option_idx = option_value.index;
+      if (this.gradient_theme_names[gradient_option_idx]) {
+        this.$store.commit("gradient/set_gradient_theme_idx", gradient_option_idx);
       }
     },
 
@@ -348,12 +371,12 @@ export default {
     },
 
     apply_heatmap_settings: function () {
-      if (this.is_apply_set) {
+      if (this.is_apply_set && !this.autoscale) {
         this.$store.commit("gradient/set_gradient_range", {
           min: this.lower,
           max: this.upper,
         });
-      }
+      } else if (this.autoscale) this.$store.commit("gradient/set_gradient_range", this.auto_max_min);
     },
 
     reset_heatmap_settings: function () {
@@ -363,6 +386,9 @@ export default {
       this.$store.commit("gradient/reset_gradient_theme_idx");
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range");
+      // reset autoscale check box and disable setting for inputs
+      this.checkbox_reset = true;
+      this.autoscale = false;
     },
   },
 };

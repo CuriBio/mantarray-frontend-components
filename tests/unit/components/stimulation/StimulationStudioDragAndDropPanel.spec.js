@@ -1,5 +1,6 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
+import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -11,21 +12,33 @@ const test_protocol_order = [
     type: "Biphasic",
     src: "placeholder",
     nest_protocols: [],
+    stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 0,
       color: "fffff",
     },
-    settings: {
+    pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
       interpulse_duration: 500,
       phase_two_duration: 100,
       phase_two_charge: -5,
     },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 20,
+        unit: "milliseconds",
+      },
+    },
   },
   {
     type: "Monophasic",
     src: "placeholder",
+    stop_setting: "Stimulate Until Complete",
     nested_protocols: [
       {
         type: "Monophasic",
@@ -35,7 +48,7 @@ const test_protocol_order = [
           number_of_repeats: 0,
           color: "fffff",
         },
-        settings: {
+        pulse_settings: {
           phase_one_duration: 100,
           phase_one_charge: -2,
         },
@@ -48,7 +61,7 @@ const test_protocol_order = [
           number_of_repeats: 0,
           color: "fffff",
         },
-        settings: {
+        pulse_settings: {
           phase_one_duration: 300,
           phase_one_charge: 6,
         },
@@ -58,35 +71,128 @@ const test_protocol_order = [
       number_of_repeats: 0,
       color: "fffff",
     },
-    settings: {
+    pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
+    },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+    },
+  },
+  {
+    type: "Delay",
+    src: "placeholder",
+    nested_protocols: [],
+    stop_setting: "Stimulate Until Complete",
+    repeat: {
+      number_of_repeats: 0,
+      color: "fffff",
+    },
+    pulse_settings: {
+      phase_one_duration: 3000,
+      phase_one_charge: 0,
+      interpulse_duration: 0,
+      phase_two_duration: 0,
+      phase_two_charge: 0,
+    },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: "",
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 3,
+        unit: "seconds",
+      },
     },
   },
   {
     type: "Monophasic",
     src: "placeholder",
+    stop_setting: "Stimulate Until Complete",
     nested_protocols: [],
     repeat: {
       number_of_repeats: 0,
       color: "fffff",
     },
-    settings: {
+    pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
+    },
+    stim_settings: {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 20,
+        unit: "milliseconds",
+      },
     },
   },
+];
+
+const test_protocol_list = [
+  { letter: "", color: "", label: "Create New" },
   {
-    type: "Monophasic",
-    src: "placeholder",
-    nested_protocols: [],
-    repeat: {
-      number_of_repeats: 0,
-      color: "fffff",
-    },
-    settings: {
-      phase_one_duration: 300,
-      phase_one_charge: 2,
+    letter: "A",
+    color: "#118075",
+    label: "Tester",
+    protocol: {
+      name: "Tester",
+      stimulation_type: "V",
+      stop_setting: "Stimulate Until Complete",
+      rest_duration: 20,
+      time_unit: "milliseconds",
+      pulses: [
+        {
+          phase_one_duration: 15000,
+          phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
+        },
+        {
+          phase_one_duration: 20000,
+          phase_one_charge: 0,
+          interpulse_duration: 0,
+          phase_two_duration: 0,
+          phase_two_charge: 0,
+        },
+      ],
+      detailed_pulses: [
+        {
+          type: "Delay",
+          src: "/delay-tile.png",
+          stop_setting: "Stimulate Until Complete",
+          nested_protocols: [],
+          repeat: { color: "d822f9", number_of_repeats: 0 },
+          pulse_settings: {
+            phase_one_duration: 15,
+            phase_one_charge: 0,
+            interpulse_duration: 0,
+            phase_two_duration: 0,
+            phase_two_charge: 0,
+          },
+          stim_settings: {
+            repeat_delay_interval: {
+              duration: 3,
+              unit: "milliseconds",
+            },
+            total_active_duration: {
+              duration: 20,
+              unit: "milliseconds",
+            },
+          },
+        },
+      ],
     },
   },
 ];
@@ -99,6 +205,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
   });
 
   test("When mounting StimulationStudioDragAndDropPanel from the component file, Then there should be no waveforms in the new protocol container", () => {
@@ -146,7 +253,6 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.open_modal_for_edit("Monophasic", 0);
     expect(wrapper.vm.modal_type).toBe("Monophasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(0);
-    expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
     expect(wrapper.find(".modal_overlay")).toBeTruthy();
 
     await wrapper.vm.on_modal_close("Delete");
@@ -156,18 +262,15 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.open_modal_for_edit("Biphasic", 1);
     expect(wrapper.vm.modal_type).toBe("Biphasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(1);
-    expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
 
     await wrapper.vm.on_modal_close("Cancel");
     expect(wrapper.vm.protocol_order).toHaveLength(3);
     expect(wrapper.vm.modal_type).toBeNull();
 
     await wrapper.vm.open_modal_for_edit("Biphasic", 0, 0);
-    expect(wrapper.vm.shift_click_nested_img_idx).toBe(0);
 
     await wrapper.vm.on_modal_close("Delete");
     expect(wrapper.vm.protocol_order).toHaveLength(3);
-    expect(wrapper.vm.shift_click_nested_img_idx).toBeNull();
   });
 
   test("When exiting instance, Then instance is effectively destroyed", async () => {
@@ -249,6 +352,16 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
   test("When a user clicks save on the settings for a waveform, Then the setting should save to the corresponding index depending on if it is a new waveform or an edited", async () => {
     const test_settings = "test";
+    const test_stim_settings = {
+      repeat_delay_interval: {
+        duration: "",
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: "",
+        unit: "milliseconds",
+      },
+    };
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
       store,
       localVue,
@@ -264,8 +377,8 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     wrapper.vm.new_cloned_idx = 0;
     wrapper.vm.modal_type = "Biphasic";
 
-    await wrapper.vm.on_modal_close("Save", test_settings);
-    expect(wrapper.vm.protocol_order[0].settings).toBe(test_settings);
+    await wrapper.vm.on_modal_close("Save", test_settings, test_stim_settings);
+    expect(wrapper.vm.protocol_order[0].pulse_settings).toBe(test_settings);
   });
 
   test("When a user switch time unit in drop down, Then the x-axis scale should change accordingly", async () => {
@@ -289,24 +402,55 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.protocol_order[1].repeat.number_of_repeats).toBe(0);
   });
 
+  test("When a selects the Stimulate Until Complete option in the protocol editor, Then the time unit dropdown should become disabled", async () => {
+    const test_settings = {
+      complete: "Stimulate Until Complete",
+      stopped: "Stimulate Until Stopped",
+    };
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await store.commit("stimulation/set_stop_setting", test_settings.complete);
+    expect(wrapper.vm.disable_dropdown).toBe(true);
+    await store.commit("stimulation/set_stop_setting", test_settings.stopped);
+    expect(wrapper.vm.disable_dropdown).toBe(false);
+  });
+
   test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
       store,
       localVue,
     });
 
-    const idx = 2;
+    const idx = 1;
+
     const delay_settings = {
-      phase_one_duration: 5,
+      phase_one_duration: 5000,
       phase_one_charge: 0,
+      interpulse_duration: 0,
+      phase_two_duration: 0,
+      phase_two_charge: 0,
+    };
+
+    const stim_settings = {
+      repeat_delay_interval: {
+        duration: 0,
+        unit: "milliseconds",
+      },
+      total_active_duration: {
+        duration: 5,
+        unit: "seconds",
+      },
     };
 
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.open_modal_for_edit("Delay", idx);
     expect(wrapper.vm.repeat_delay_modal).toBe("Delay");
 
-    await wrapper.vm.on_modal_close("Save", delay_settings);
-    expect(wrapper.vm.protocol_order[idx].settings.phase_one_duration).toBe(
+    await wrapper.vm.on_modal_close("Save", delay_settings, stim_settings);
+    expect(wrapper.vm.protocol_order[idx].pulse_settings.phase_one_duration).toBe(
       delay_settings.phase_one_duration
     );
   });
