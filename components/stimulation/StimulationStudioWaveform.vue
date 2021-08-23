@@ -414,8 +414,9 @@ export default {
   font-family: Muli;
 }
 .g__waveform-x-axis {
-  stroke: #4c4c4c;
+  stroke: #b7b7b7;
   font-family: Muli;
+  font-size: 11px;
 }
 .g__waveform-x-axis path {
   stroke: #4c4c4c;
@@ -424,9 +425,9 @@ export default {
   stroke: #4c4c4c;
 }
 .g__waveform-y-axis {
-  stroke: #4c4c4c;
+  stroke: #b7b7b7;
   font-family: Muli;
-  font-size: 13px;
+  font-size: 11px;
 }
 .g__waveform-y-axis path {
   stroke: #4c4c4c;
