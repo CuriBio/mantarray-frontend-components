@@ -414,24 +414,24 @@ export default {
   font-family: Muli;
 }
 .g__waveform-x-axis {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
   font-family: Muli;
 }
 .g__waveform-x-axis path {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
 }
 .g__waveform-x-axis .tick line {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
 }
 .g__waveform-y-axis {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
   font-family: Muli;
   font-size: 13px;
 }
 .g__waveform-y-axis path {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
 }
 .g__waveform-y-axis .tick line {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
 }
 </style>
