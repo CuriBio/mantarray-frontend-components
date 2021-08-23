@@ -103,7 +103,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 68px;
+  width: 92px;
   height: 22px;
   left: 42px;
   padding: 5px;
