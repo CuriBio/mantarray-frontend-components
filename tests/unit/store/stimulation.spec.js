@@ -336,10 +336,10 @@ describe("store/stimulation", () => {
       expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("V");
     });
 
-    test("When a user changes the time unit to milliseconds, Then it should mutate state to milliseconds", async () => {
-      expect(store.state.stimulation.protocol_editor.time_unit).toBe("seconds");
-      await store.commit("stimulation/set_time_unit", "milliseconds");
+    test("When a user changes the time unit to seconds, Then it should mutate state to seconds", async () => {
       expect(store.state.stimulation.protocol_editor.time_unit).toBe("milliseconds");
+      await store.commit("stimulation/set_time_unit", "seconds");
+      expect(store.state.stimulation.protocol_editor.time_unit).toBe("seconds");
     });
 
     test("When a user wants to zoom in on a the y-axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
@@ -494,7 +494,7 @@ describe("store/stimulation", () => {
 
     test("When a user adds a repeat delay into the input of the settings panel, Then it will appear at the end of the waveform in the graph", async () => {
       const test_delay = 10;
-      const expected_block = [[0, 10000]];
+      const expected_block = [[0, 10]];
       await store.dispatch("stimulation/handle_new_rest_duration", test_delay);
       const { delay_blocks } = store.state.stimulation;
       expect(delay_blocks).toStrictEqual(expected_block);

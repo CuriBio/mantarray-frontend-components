@@ -111,8 +111,8 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
     });
 
     await wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
-    await wrapper.findAll("li").at(2).trigger("click");
+    await wrapper.findAll("li").at(0).trigger("click");
 
-    expect(wrapper.vm.time_unit_idx).toBe(3);
+    expect(wrapper.vm.time_unit_idx).toBe(1);
   });
 });

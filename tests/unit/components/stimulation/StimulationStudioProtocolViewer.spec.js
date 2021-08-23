@@ -285,13 +285,13 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     expect(wrapper.vm.div__waveform_graph__dynamic_style).toStrictEqual({ width: "1880px" });
   });
 
-  test("When a user adds a delay repeat to the end of the protocol, Then it will mutation to state will automatically update in the waveform graph", async () => {
+  test("When a user adds a delay repeat to the end of the protocol, Then it will mutation to state and will automatically update in the waveform graph", async () => {
     const wrapper = mount(StimulationStudioProtocolViewer, {
       store,
       localVue,
     });
 
-    const expected_delay_values = [[3040, 8040]];
+    const expected_delay_values = [[3040, 8045]];
     const test_value = 5;
 
     await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);

@@ -1,6 +1,5 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
-import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -289,7 +288,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    const expected_idx = 1;
+    const expected_idx = 0;
     const selected_protocol = store.state.stimulation.protocol_list[1];
     const expected_pulse_order = store.state.stimulation.protocol_list[1].protocol.detailed_pulses;
     await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
