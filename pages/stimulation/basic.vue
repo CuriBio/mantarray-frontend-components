@@ -17,9 +17,9 @@ export default {
   methods: {
     ...mapMutations("stimulation", ["set_new_protocol", "reset_state"]),
     ...mapActions("stimulation", ["create_protocol_message"]),
-    update_protocol_list() {
+    async update_protocol_list() {
       const test_protocol = {
-        label: "mock",
+        label: "mock_protocol",
         letter: "A",
         color: "#4ca0af",
         protocol: {
@@ -112,7 +112,60 @@ export default {
           ],
         },
       };
+      const test_protocol_2 = {
+        label: "mock_protocol_2",
+        letter: "B",
+        color: "#578844",
+        protocol: {
+          name: "mock_protocol_2",
+          stimulation_type: "V",
+          stop_setting: "Stimulate Until Stopped",
+          rest_duration: 1,
+          time_unit: "seconds",
+          pulses: [
+            {
+              phase_one_duration: 5,
+              phase_one_charge: 200,
+              interpulse_duration: 0,
+              phase_two_duration: 5,
+              phase_two_charge: -200,
+              repeat_delay_interval: 0,
+              total_active_duration: 1000,
+            },
+            {
+              phase_one_duration: 1000,
+              phase_one_charge: 0,
+              interpulse_duration: 0,
+              phase_two_duration: 0,
+              phase_two_charge: 0,
+              repeat_delay_interval: 0,
+              total_active_duration: 1000,
+            },
+          ],
+          detailed_pulses: [
+            {
+              type: "Biphasic",
+              src: "/Biphasic.png",
+              nested_protocols: [],
+              repeat: { color: "5391fa", number_of_repeats: 0 },
+              pulse_settings: {
+                phase_one_duration: 5,
+                phase_one_charge: 200,
+                interpulse_duration: 0,
+                phase_two_duration: 5,
+                phase_two_charge: -200,
+              },
+              stim_settings: {
+                repeat_delay_interval: { duration: 0, unit: "milliseconds" },
+                total_active_duration: { duration: 1, unit: "seconds" },
+              },
+            },
+          ],
+        },
+      };
       this.set_new_protocol(test_protocol);
+      this.set_new_protocol(test_protocol_2);
+
       this.reset_state();
     },
     create_message() {

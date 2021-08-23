@@ -63,7 +63,7 @@ export default {
     margin: {
       type: Object,
       default: function () {
-        return { top: 0, right: 20, bottom: 20, left: 60 };
+        return { top: 0, right: 20, bottom: 50, left: 60 };
       },
     },
     plot_area_pixel_height: {
@@ -128,6 +128,7 @@ export default {
         .select(".div__waveform-graph")
         .append("svg")
         .attr("width", this.plot_area_pixel_width + this.margin.left + this.margin.right);
+
       this.render_plot();
     },
   },
@@ -153,7 +154,6 @@ export default {
     // Draw black rectangles over the margins so that any excess waveform line is not visible to use
     const blocker_color = "#000000";
     const margin_blockers_node = this.the_svg.append("g").attr("id", "margin_blockers_node");
-
     const margin = this.margin;
     // Left Side
     margin_blockers_node
@@ -357,7 +357,6 @@ export default {
 ::-webkit-scrollbar-track {
   background-color: #1c1c1c;
 }
-
 .div__waveform-y-axis-title {
   line-height: 1;
   transform: rotate(270deg);

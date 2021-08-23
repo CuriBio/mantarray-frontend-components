@@ -390,7 +390,7 @@ export default {
         total_active_duration: "",
       },
       time_units: {
-        total_active_duration: ["milliseconds", "seconds", "minutes", "hours"],
+        total_active_duration: ["milliseconds", "seconds"],
         repeat_delay_interval: ["milliseconds", "seconds"],
       },
       regex: {

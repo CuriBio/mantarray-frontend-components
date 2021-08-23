@@ -167,7 +167,7 @@ export default {
         no_delete_option: ["Save", "Cancel"],
         delete_option: ["Save", "Delete", "Cancel"],
       },
-      time_units_array: ["seconds", "milliseconds", "minutes", "hours"],
+      time_units_array: ["milliseconds", "seconds"],
       selected_pulse_settings: {},
       selected_stim_settings: {},
       protocol_order: [],
