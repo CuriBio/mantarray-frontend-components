@@ -33,7 +33,7 @@ jobs:
           # - "tests/e2e/stimulation"
 
         include:
-          # only enable coverage on the fastest jobm
+          # only enable coverage on the fastest job
           - os: "ubuntu-20.04"
             node-version: "14"
             e2e-tests: "tests/e2e/status"
