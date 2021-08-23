@@ -105,7 +105,7 @@ export default {
         required: "Required",
         valid: "",
       },
-      time_units: ["milliseconds", "seconds", "minutes", "hours"],
+      time_units: ["milliseconds", "seconds"],
       time_unit_idx: 0,
       is_enabled_array: [false, true, true],
       is_valid: false,
