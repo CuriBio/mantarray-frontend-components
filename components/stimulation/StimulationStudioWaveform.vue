@@ -347,6 +347,16 @@ export default {
   overflow: hidden;
   overflow-x: scroll;
 }
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 15px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #2f2f2f;
+}
+::-webkit-scrollbar-track {
+  background-color: #1c1c1c;
+}
 
 .div__waveform-y-axis-title {
   line-height: 1;
