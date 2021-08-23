@@ -163,6 +163,24 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     const expected_scale = 333.3333333333333;
     await store.commit("stimulation/set_zoom_in", "y-axis");
     expect(wrapper.vm.y_min_max).toBe(expected_scale);
+
+    // should be unchanged
+    expect(wrapper.vm.dynamic_plot_width).toBe(1200);
+    expect(wrapper.vm.x_axis_sample_length).toBe(100);
+  });
+
+  test("When user wants to zoom out on an axis in the Protocol Viewer, Then the scale will be divided by 1.5", async () => {
+    const wrapper = mount(StimulationStudioProtocolViewer, {
+      store,
+      localVue,
+    });
+    const expected_scale = 750;
+    await store.commit("stimulation/set_zoom_out", "y-axis");
+    expect(wrapper.vm.y_min_max).toBe(expected_scale);
+
+    // should be unchanged
+    expect(wrapper.vm.dynamic_plot_width).toBe(1200);
+    expect(wrapper.vm.x_axis_sample_length).toBe(100);
   });
 
   test("When user wants to zoom out on the x-axis in the Protocol Viewer, Then the scale will change depending on the existing plot width", async () => {
