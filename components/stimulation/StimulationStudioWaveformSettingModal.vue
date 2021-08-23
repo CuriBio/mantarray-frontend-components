@@ -93,7 +93,7 @@
         id="cmpD1258ad074a6b3eb7b8a869173413256d"
         class="span__stimulationstudio-current-settings-label-left"
         :style="'top: 279.5px;'"
-        >Interpulse&nbsp;<wbr />Interval</span
+        >Interphase&nbsp;<wbr />Interval</span
       >
       <div
         id="cmpD948f417edcd29d68f5801d54232d9431"
@@ -373,7 +373,7 @@ export default {
       stim_settings: {},
       invalid_err_msg: {
         num_err: "Must be a number",
-        min_num_err: "Must be a number > 0",
+        min_num_err: "Must be a positive number",
         required: "Required",
         max_duration: "Duration must be <= 50ms",
         valid: "",
@@ -486,7 +486,7 @@ export default {
       const check_pulse_duration = total_pulse_duration <= 50;
 
       if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      else if ((!this.regex.duration.test(value) && value !== "") || value == 0)
+      else if (!this.regex.duration.test(value) && value !== "")
         this.err_msg[label] = this.invalid_err_msg.min_num_err;
       else if (!check_pulse_duration) this.err_msg[label] = this.invalid_err_msg.max_duration;
       else if (check_pulse_duration && this.regex.duration.test(value) && value !== "") {
@@ -633,7 +633,7 @@ canvas {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
-  overflow: hidden;
+  overflow: visible;
   position: absolute;
   width: 156px;
   height: 30px;

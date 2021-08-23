@@ -347,6 +347,16 @@ export default {
   overflow: hidden;
   overflow-x: scroll;
 }
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 15px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #2f2f2f;
+}
+::-webkit-scrollbar-track {
+  background-color: #1c1c1c;
+}
 
 .div__waveform-y-axis-title {
   line-height: 1;
@@ -406,22 +416,23 @@ export default {
 .g__waveform-x-axis {
   stroke: #b7b7b7;
   font-family: Muli;
+  font-size: 11px;
 }
 .g__waveform-x-axis path {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
 }
 .g__waveform-x-axis .tick line {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
 }
 .g__waveform-y-axis {
   stroke: #b7b7b7;
   font-family: Muli;
-  font-size: 13px;
+  font-size: 11px;
 }
 .g__waveform-y-axis path {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
 }
 .g__waveform-y-axis .tick line {
-  stroke: #b7b7b7;
+  stroke: #4c4c4c;
 }
 </style>
