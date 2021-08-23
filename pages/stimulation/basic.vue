@@ -6,9 +6,9 @@
   </div>
 </template>
 <script>
-// import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
+import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
 import { mapMutations, mapActions } from "vuex";
-import { StimulationStudio } from "@/dist/mantarray.common";
+// import { StimulationStudio } from "@/dist/mantarray.common";
 
 export default {
   components: {
@@ -19,42 +19,94 @@ export default {
     ...mapActions("stimulation", ["create_protocol_message"]),
     update_protocol_list() {
       const test_protocol = {
+        label: "mock",
         letter: "A",
         color: "#4ca0af",
-        label: "Tester",
         protocol: {
-          name: "Tester",
-          stimulation_type: "V",
-          rest_duration: 1,
-          time_unit: "milliseconds",
+          name: "mock",
+          stimulation_type: "C",
+          stop_setting: "Stimulate Until Complete",
+          rest_duration: 0,
+          time_unit: "seconds",
           pulses: [
             {
-              phase_one_duration: 15,
-              phase_one_charge: 0,
-              interpulse_duration: 0,
-              phase_two_duration: 0,
-              phase_two_charge: 0,
+              phase_one_duration: 3,
+              phase_one_charge: 40,
+              interpulse_duration: 1,
+              phase_two_duration: 3,
+              phase_two_charge: -40,
+              repeat_delay_interval: 1,
+              total_active_duration: 50,
             },
             {
-              phase_one_duration: 20,
+              phase_one_duration: 50,
               phase_one_charge: 0,
               interpulse_duration: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
+              repeat_delay_interval: 0,
+              total_active_duration: 50,
+            },
+            {
+              phase_one_duration: 4,
+              phase_one_charge: 10,
+              interpulse_duration: 1,
+              phase_two_duration: 4,
+              phase_two_charge: -10,
+              repeat_delay_interval: 1,
+              total_active_duration: 50,
             },
           ],
           detailed_pulses: [
             {
-              type: "Delay",
-              src: "/delay-tile.png",
+              type: "Biphasic",
+              src: "/Biphasic.png",
               nested_protocols: [],
-              repeat: { color: "d822f9", number_of_repeats: 0 },
+              repeat: { color: "bb9e69", number_of_repeats: 0 },
               pulse_settings: {
-                phase_one_duration: 15,
+                phase_one_duration: 3,
+                phase_one_charge: 40,
+                interpulse_duration: 1,
+                phase_two_duration: 3,
+                phase_two_charge: -40,
+              },
+              stim_settings: {
+                repeat_delay_interval: { duration: 1, unit: "milliseconds" },
+                total_active_duration: { duration: 50, unit: "milliseconds" },
+              },
+            },
+            {
+              type: "Delay",
+              src: "/Delay.png",
+              nested_protocols: [],
+              repeat: { color: "70f30", number_of_repeats: 0 },
+              pulse_settings: {
+                phase_one_duration: 50,
                 phase_one_charge: 0,
                 interpulse_duration: 0,
                 phase_two_duration: 0,
                 phase_two_charge: 0,
+              },
+              stim_settings: {
+                repeat_delay_interval: { duration: 0, unit: "milliseconds" },
+                total_active_duration: { duration: 50, unit: "milliseconds" },
+              },
+            },
+            {
+              type: "Biphasic",
+              src: "/Biphasic.png",
+              nested_protocols: [],
+              repeat: { color: "e9584b", number_of_repeats: 0 },
+              pulse_settings: {
+                phase_one_duration: 4,
+                phase_one_charge: 10,
+                interpulse_duration: 1,
+                phase_two_duration: 4,
+                phase_two_charge: -10,
+              },
+              stim_settings: {
+                repeat_delay_interval: { duration: 1, unit: "milliseconds" },
+                total_active_duration: { duration: 50, unit: "milliseconds" },
               },
             },
           ],
