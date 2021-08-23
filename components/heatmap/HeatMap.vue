@@ -260,7 +260,12 @@ export default {
         if (well.length <= 1) return Math.min(well);
         else return Math.min(...well.slice(-100));
       });
-      return { max: Math.max(...max_value_array), min: Math.min(...min_value_array) };
+      const range = {
+        max: Math.max(...max_value_array).toFixed(3),
+        min: Math.min(...min_value_array).toFixed(3),
+      };
+      if (range.max === range.min) range.min -= 0.001; // guard against edge case where the max/min are the same
+      return range;
     },
   },
 
@@ -309,9 +314,9 @@ export default {
     },
 
     radio_option_selected: function (option_value) {
-      const grandient_option_idx = option_value.index;
-      if (this.gradient_theme_names[grandient_option_idx]) {
-        this.$store.commit("gradient/set_gradient_theme_idx", grandient_option_idx);
+      const gradient_option_idx = option_value.index;
+      if (this.gradient_theme_names[gradient_option_idx]) {
+        this.$store.commit("gradient/set_gradient_theme_idx", gradient_option_idx);
       }
     },
 
