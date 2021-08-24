@@ -7,7 +7,6 @@ const time_conversion = {
   seconds: 1000,
   milliseconds: 1,
   minutes: 60000,
-  hours: 3600000,
 };
 
 export default {
