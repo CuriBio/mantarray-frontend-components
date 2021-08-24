@@ -374,13 +374,13 @@ export default {
         max_voltage: "Must be within +/- 1200",
       },
       err_msg: {
-        phase_one_duration: "Required",
-        phase_one_charge: "Required",
-        interphase_interval: "Required",
-        phase_two_duration: "Required",
-        phase_two_charge: "Required",
-        pulse_frequency: "Required",
-        total_active_duration: "Required",
+        phase_one_duration: "",
+        phase_one_charge: "",
+        interphase_interval: "",
+        phase_two_duration: "",
+        phase_two_charge: "",
+        pulse_frequency: "",
+        total_active_duration: "",
       },
       time_units: ["milliseconds", "seconds", "minutes", "hours"],
       regex: {
@@ -401,14 +401,6 @@ export default {
     total_pulse_duration_on_open: function () {
       const { phase_one_duration, phase_two_duration, interphase_interval } = this.selected_pulse_settings;
       return Number(phase_one_duration) + Number(phase_two_duration) + Number(interphase_interval);
-    },
-    time_conversion: function () {
-      return {
-        milliseconds: 1,
-        seconds: 1000,
-        minutes: 60000,
-        hours: 3600000,
-      };
     },
     calculated_delay_on_close: function () {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
@@ -493,7 +485,7 @@ export default {
       for (const input in this.err_msg) {
         if (this.err_msg[input] === "") valid_inputs.push(true);
       }
-
+      console.log(valid_inputs);
       this.all_valid = valid_inputs.length === 7;
     },
     check_pulse_duration(label) {
