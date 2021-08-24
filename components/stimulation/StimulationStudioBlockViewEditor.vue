@@ -63,18 +63,13 @@
             :icon="['fa', 'trash-alt']"
             @click="handle_trash_modal"
           />
-          <BPopover
-            target="trash_icon"
-            trigger="click"
-            :show.sync="show_confirmation"
-            custom-class="delete_popover_class"
-          >
+          <div v-show="show_confirmation" class="delete_popover_class">
             <div class="delete_popover_label">Are you sure?</div>
             <div class="popover_button_container">
               <button class="delete_button_container" @click="handle_delete">Delete</button>
               <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
             </div>
-          </BPopover>
+          </div>
         </div>
       </div>
     </div>
@@ -82,15 +77,12 @@
 </template>
 <script>
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
-import Vue from "vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { BPopover } from "bootstrap-vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faPencilAlt, faTrashAlt);
-Vue.component("BPopover", BPopover);
 
 /**
  * @vue-data {String} active_tab - Shows current selected tab
@@ -121,7 +113,6 @@ export default {
   name: "StimulationStudioProtocolBlockViewEditor",
   components: {
     SmallDropDown,
-    BPopover,
     FontAwesomeIcon,
   },
   data() {
@@ -140,7 +131,6 @@ export default {
       name_validity: "null",
       error_message: "",
       protocol_list: [],
-      stimulation_type_idx: 0,
     };
   },
   computed: {
@@ -154,6 +144,10 @@ export default {
       "get_protocols",
       "get_next_protocol",
     ]),
+    stimulation_type_idx: function () {
+      if (this.stimulation_type === "C") return 1;
+      else return 0;
+    },
   },
   created() {
     this.update_protocols();
@@ -178,7 +172,6 @@ export default {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
         this.rest_duration = this.get_rest_duration;
-        this.stimulation_type === "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
         if (this.stop_setting === "Stimulate Until Complete") {
           this.stop_option_idx = 1;
           this.disabled_time = true;
@@ -265,25 +258,36 @@ export default {
 }
 
 .delete_popover_class {
-  height: 85px;
-  width: 170px;
+  position: fixed;
+  height: 80px;
+  width: 200px;
   font-family: Muli;
   padding: 4px;
   display: flex;
+  z-index: 100;
+  left: 1340px;
   justify-content: center;
   background: rgb(17, 17, 17);
   border: 1px solid #b7b7b7;
+  border-radius: 4px;
 }
 
 .delete_popover_label {
   font-weight: bold;
-  padding: 2px 0 10px 37px;
+  padding-top: 8px;
   color: #b7b7b7;
+  height: 50px;
+  width: 200px;
+  position: absolute;
+  left: 50px;
 }
 
 .popover_button_container {
   display: flex;
   justify-content: space-evenly;
+  bottom: 0px;
+  position: absolute;
+  width: 197px;
 }
 
 .delete_button_container {
@@ -295,7 +299,7 @@ export default {
 }
 
 button {
-  width: 84px;
+  width: 100px;
   height: 35px;
   background: rgb(17, 17, 17);
   border-color: #3f3f3f;
