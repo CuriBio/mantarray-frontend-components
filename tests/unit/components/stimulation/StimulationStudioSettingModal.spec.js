@@ -222,7 +222,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     const target_input_field = wrapper.find("#input-widget-field-duration");
 
     await target_input_field.setValue("test");
-    expect(wrapper.vm.err_msg.phase_one_duration).toBe("Must be a number > 0");
+    expect(wrapper.vm.err_msg.phase_one_duration).toBe("Must be a positive number");
 
     await target_input_field.setValue("1500");
     expect(wrapper.vm.err_msg.phase_one_duration).toBe("Duration must be <= 50ms");

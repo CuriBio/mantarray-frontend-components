@@ -70,17 +70,19 @@ export default {
         this.delay_blocks = state.delay_blocks;
       }
       if (mutation.type === "stimulation/set_zoom_out") {
-        this.y_min_max = state.y_axis_scale;
-
-        if (this.dynamic_plot_width === 1200) this.x_axis_sample_length *= 1.5;
-        else if (this.dynamic_plot_width > 1200) this.dynamic_plot_width /= 1.5;
+        if (state.y_axis_scale !== this.y_min_max) this.y_min_max = state.y_axis_scale;
+        else {
+          if (this.dynamic_plot_width === 1200) this.x_axis_sample_length *= 1.5;
+          else if (this.dynamic_plot_width > 1200) this.dynamic_plot_width /= 1.5;
+        }
       }
       if (mutation.type === "stimulation/set_zoom_in") {
-        this.y_min_max = state.y_axis_scale;
-
-        if (this.x_axis_sample_length > this.last_x_value + 50 || this.datapoints.length === 0)
-          this.x_axis_sample_length /= 1.5;
-        else this.dynamic_plot_width *= 1.5;
+        if (state.y_axis_scale !== this.y_min_max) this.y_min_max = state.y_axis_scale;
+        else {
+          if (this.x_axis_sample_length > this.last_x_value + 50 || this.datapoints.length === 0)
+            this.x_axis_sample_length /= 1.5;
+          else this.dynamic_plot_width *= 1.5;
+        }
       }
     });
   },
@@ -105,6 +107,6 @@ export default {
   height: 50%;
   width: 1315px;
   height: 220px;
-  overflow: hidden;
+  overflow: visible;
 }
 </style>

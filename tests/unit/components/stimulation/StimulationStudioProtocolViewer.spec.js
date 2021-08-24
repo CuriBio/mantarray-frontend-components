@@ -163,6 +163,24 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     const expected_scale = 333.3333333333333;
     await store.commit("stimulation/set_zoom_in", "y-axis");
     expect(wrapper.vm.y_min_max).toBe(expected_scale);
+
+    // should be unchanged
+    expect(wrapper.vm.dynamic_plot_width).toBe(1200);
+    expect(wrapper.vm.x_axis_sample_length).toBe(100);
+  });
+
+  test("When user wants to zoom out on an axis in the Protocol Viewer, Then the scale will be divided by 1.5", async () => {
+    const wrapper = mount(StimulationStudioProtocolViewer, {
+      store,
+      localVue,
+    });
+    const expected_scale = 750;
+    await store.commit("stimulation/set_zoom_out", "y-axis");
+    expect(wrapper.vm.y_min_max).toBe(expected_scale);
+
+    // should be unchanged
+    expect(wrapper.vm.dynamic_plot_width).toBe(1200);
+    expect(wrapper.vm.x_axis_sample_length).toBe(100);
   });
 
   test("When user wants to zoom out on the x-axis in the Protocol Viewer, Then the scale will change depending on the existing plot width", async () => {
@@ -285,13 +303,13 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     expect(wrapper.vm.div__waveform_graph__dynamic_style).toStrictEqual({ width: "1880px" });
   });
 
-  test("When a user adds a delay repeat to the end of the protocol, Then it will mutation to state will automatically update in the waveform graph", async () => {
+  test("When a user adds a delay repeat to the end of the protocol, Then it will mutation to state and will automatically update in the waveform graph", async () => {
     const wrapper = mount(StimulationStudioProtocolViewer, {
       store,
       localVue,
     });
 
-    const expected_delay_values = [[3040, 8040]];
+    const expected_delay_values = [[3040, 3045]];
     const test_value = 5;
 
     await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
