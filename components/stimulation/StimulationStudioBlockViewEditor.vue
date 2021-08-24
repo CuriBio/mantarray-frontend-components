@@ -127,6 +127,7 @@ export default {
       stop_options_array: ["Stimulate Until Stopped", "Stimulate Until Complete"],
       protocol_name: "",
       stop_option_idx: 0,
+      stimulation_type_idx: 0,
       rest_duration: "",
       name_validity: "null",
       error_message: "",
@@ -144,10 +145,6 @@ export default {
       "get_protocols",
       "get_next_protocol",
     ]),
-    stimulation_type_idx: function () {
-      if (this.stimulation_type === "C") return 1;
-      else return 0;
-    },
   },
   created() {
     this.update_protocols();
@@ -172,6 +169,7 @@ export default {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
         this.rest_duration = this.get_rest_duration;
+        this.stimulation_type === "C" ? (this.stimulation_type_idx = 1) : (this.stimulation_type_idx = 0);
         if (this.stop_setting === "Stimulate Until Complete") {
           this.stop_option_idx = 1;
           this.disabled_time = true;
