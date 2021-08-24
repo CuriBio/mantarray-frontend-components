@@ -217,7 +217,7 @@
           :dom_id_suffix="'pulse-frequency'"
           :invalid_text="err_msg.pulse_frequency"
           :input_width="142"
-          :initial_value="calculated_delay_on_open.toString()"
+          :initial_value="calculated_frequency_on_open.toString()"
           @update:value="check_validity($event, 'pulse_frequency')"
         />
       </span>
@@ -406,7 +406,7 @@ export default {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
       return total_delay / this.input_pulse_frequency;
     },
-    calculated_delay_on_open: function () {
+    calculated_frequency_on_open: function () {
       const { repeat_delay_interval } = this.selected_stim_settings;
       const one_cycle = repeat_delay_interval + this.total_pulse_duration_on_open;
       let calculated_duration = 0;
@@ -430,7 +430,7 @@ export default {
   created() {
     this.pulse_settings = this.selected_pulse_settings;
     this.stim_settings = this.selected_stim_settings;
-    this.input_pulse_frequency = this.calculated_delay_on_open;
+    this.input_pulse_frequency = this.calculated_frequency_on_open;
 
     const { unit, duration } = this.stim_settings.total_active_duration;
     this.active_duration_idx = this.time_units.indexOf(unit);
@@ -473,7 +473,7 @@ export default {
         this.check_active_duration("total_active_duration");
       } else if (label.includes("charge")) {
         this.check_charge_validity(value, label);
-      } else if (label.includes("frequency") || label.includes("delay")) {
+      } else if (label.includes("frequency")) {
         this.check_pulse_frequency(value, "pulse_frequency");
       }
 
@@ -485,7 +485,7 @@ export default {
       for (const input in this.err_msg) {
         if (this.err_msg[input] === "") valid_inputs.push(true);
       }
-      console.log(valid_inputs);
+
       this.all_valid = valid_inputs.length === 7;
     },
     check_pulse_duration(label) {
@@ -520,7 +520,7 @@ export default {
     },
     check_pulse_frequency(value, label) {
       if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      else if (!this.regex.duration.test(value) && value !== "")
+      else if ((!this.regex.duration.test(value) && value !== "") || value == 0)
         this.err_msg[label] = this.invalid_err_msg.min_num_err;
       else if (this.regex.duration.test(value) && value !== "") {
         this.err_msg[label] = this.invalid_err_msg.valid;

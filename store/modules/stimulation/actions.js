@@ -21,7 +21,7 @@ export default {
     this.commit("stimulation/set_selected_wells", well_values);
   },
 
-  handle_protocol_order({ commit, dispatch }, new_pulse_order) {
+  async handle_protocol_order({ commit, dispatch }, new_pulse_order) {
     let x_values = [0];
     let y_values = [0];
     const color_assignments = {};
@@ -49,7 +49,7 @@ export default {
       else y_values = sliced_y_values;
     };
 
-    new_pulse_order.map((pulse) => {
+    await new_pulse_order.map(async (pulse) => {
       const repeat_color = pulse.repeat.color;
       const starting_repeat_idx = x_values.length - 1;
       let setting = pulse.pulse_settings;

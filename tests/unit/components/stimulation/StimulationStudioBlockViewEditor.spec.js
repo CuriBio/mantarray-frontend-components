@@ -49,6 +49,13 @@ const test_protocol_list = [
             phase_two_duration: 0,
             phase_two_charge: 0,
           },
+          stim_settings: {
+            repeat_delay_interval: 0,
+            total_active_duration: {
+              unit: "milliseconds",
+              duration: 15000,
+            },
+          },
         },
       ],
     },
