@@ -23,7 +23,7 @@ describe("store/stimulation", () => {
       pulse_settings: {
         phase_one_duration: 100,
         phase_one_charge: 200,
-        interpulse_duration: 10,
+        interphase_interval: 10,
         phase_two_duration: 3,
         phase_two_charge: 200,
       },
@@ -48,7 +48,7 @@ describe("store/stimulation", () => {
           pulse_settings: {
             phase_one_duration: 100,
             phase_one_charge: 2,
-            interpulse_duration: 200,
+            interphase_interval: 200,
             phase_two_duration: 100,
             phase_two_charge: -2,
           },
@@ -83,7 +83,7 @@ describe("store/stimulation", () => {
           {
             phase_one_duration: 15,
             phase_one_charge: 0,
-            interpulse_duration: 0,
+            interphase_interval: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
             repeat_delay_interval: 0,
@@ -92,7 +92,7 @@ describe("store/stimulation", () => {
           {
             phase_one_duration: 20,
             phase_one_charge: 0,
-            interpulse_duration: 0,
+            interphase_interval: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
             repeat_delay_interval: 0,
@@ -108,7 +108,7 @@ describe("store/stimulation", () => {
             pulse_settings: {
               phase_one_duration: 15000,
               phase_one_charge: 0,
-              interpulse_duration: 0,
+              interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
               repeat_delay_interval: 3000,
@@ -451,7 +451,7 @@ describe("store/stimulation", () => {
               {
                 phase_one_duration: 15,
                 phase_one_charge: 500,
-                interpulse_duration: 0,
+                interphase_interval: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
                 repeat_delay_interval: 3,
@@ -471,7 +471,7 @@ describe("store/stimulation", () => {
               {
                 phase_one_duration: 15000,
                 phase_one_charge: 500000,
-                interpulse_duration: 0,
+                interphase_interval: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
                 repeat_delay_interval: 3000,

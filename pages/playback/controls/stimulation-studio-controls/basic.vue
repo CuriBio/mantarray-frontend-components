@@ -30,14 +30,14 @@ export default {
               {
                 phase_one_duration: 15,
                 phase_one_charge: 0,
-                interpulse_duration: 0,
+                interphase_interval: 0,
                 phase_two_duration: 0,
                 phase_two_charge: 0,
               },
               {
                 phase_one_duration: 20,
                 phase_one_charge: 0,
-                interpulse_duration: 0,
+                interphase_interval: 0,
                 phase_two_duration: 0,
                 phase_two_charge: 0,
               },
@@ -51,7 +51,7 @@ export default {
                 pulse_settings: {
                   phase_one_duration: 15,
                   phase_one_charge: 0,
-                  interpulse_duration: 0,
+                  interphase_interval: 0,
                   phase_two_duration: 0,
                   phase_two_charge: 0,
                 },

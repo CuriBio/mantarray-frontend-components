@@ -160,7 +160,7 @@ export default {
         const delay_settings = {
           phase_one_duration: converted_input,
           phase_one_charge: 0,
-          interpulse_duration: 0,
+          interphase_interval: 0,
           phase_two_duration: 0,
           phase_two_charge: 0,
         };

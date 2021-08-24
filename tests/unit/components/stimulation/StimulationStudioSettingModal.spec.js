@@ -24,7 +24,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     const expected_err_msg = {
       phase_one_duration: "Required",
       phase_one_charge: "Required",
-      interpulse_duration: "Required",
+      interphase_interval: "Required",
       phase_two_duration: "Required",
       phase_two_charge: "Required",
       repeat_delay_interval: "Required",
@@ -37,7 +37,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         selected_pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
-          interpulse_duration: "",
+          interphase_interval: "",
           phase_two_duration: "",
           phase_two_charge: "",
         },
@@ -67,7 +67,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         selected_pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
-          interpulse_duration: "",
+          interphase_interval: "",
           phase_two_duration: "",
           phase_two_charge: "",
         },
@@ -94,7 +94,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         selected_pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
-          interpulse_duration: "",
+          interphase_interval: "",
           phase_two_duration: "",
           phase_two_charge: "",
         },
@@ -123,7 +123,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         selected_pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
-          interpulse_duration: "",
+          interphase_interval: "",
           phase_two_duration: "",
           phase_two_charge: "",
         },
@@ -141,8 +141,8 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     });
     const title = wrapper.findAll("span").at(5).text();
     expect(title).toBe("Voltage (mV)");
-    const interpulse_label = wrapper.findAll("span").at(8);
-    expect(interpulse_label).toBeTruthy();
+    const interphase_label = wrapper.findAll("span").at(8);
+    expect(interphase_label).toBeTruthy();
   });
 
   test("When a user opens the pulse settings modal, Then the user can only save the settings if all inputs pass the validity checks", async () => {
@@ -155,7 +155,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         selected_pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
-          interpulse_duration: "",
+          interphase_interval: "",
           phase_two_duration: "",
           phase_two_charge: "",
         },
@@ -176,7 +176,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
     const expected_settings = {
       phase_one_duration: 15,
       phase_one_charge: 50,
-      interpulse_duration: 0,
+      interphase_interval: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
     };
@@ -203,7 +203,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         selected_pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
-          interpulse_duration: "",
+          interphase_interval: "",
           phase_two_duration: "",
           phase_two_charge: "",
         },
@@ -241,7 +241,7 @@ describe("StimulationStudioCurrentSettings.vue", () => {
         selected_pulse_settings: {
           phase_one_duration: "2",
           phase_one_charge: "30",
-          interpulse_duration: "1",
+          interphase_interval: "1",
           phase_two_duration: "2",
           phase_two_charge: "-10",
         },

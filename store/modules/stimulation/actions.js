@@ -7,7 +7,7 @@ const time_conversion = {
   seconds: 1000,
   milliseconds: 1,
   minutes: 60000,
-  hours: 3600,
+  hours: 3600000,
 };
 
 export default {
@@ -34,7 +34,7 @@ export default {
       y_values.push(setting.phase_one_charge, setting.phase_one_charge);
 
       if (setting.phase_two_duration > 0) {
-        x_values.push(get_last(x_values), setting.interpulse_duration + get_last(x_values));
+        x_values.push(get_last(x_values), setting.interphase_interval + get_last(x_values));
         y_values.push(0, 0);
         x_values.push(get_last(x_values), setting.phase_two_duration + get_last(x_values));
         y_values.push(setting.phase_two_charge, setting.phase_two_charge);
@@ -55,13 +55,12 @@ export default {
       let setting = pulse.pulse_settings;
       const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
 
-      const converted_delay = repeat_delay_interval.duration * time_conversion[repeat_delay_interval.unit];
       const converted_total_active =
         total_active_duration.duration * time_conversion[total_active_duration.unit];
 
       setting = {
         ...setting,
-        repeat_delay_interval: converted_delay,
+        repeat_delay_interval,
         total_active_duration: converted_total_active,
       };
 
@@ -213,7 +212,7 @@ export default {
           return {
             phase_one_duration: (pulse.phase_one_duration *= 1000),
             phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]),
-            interpulse_duration: (pulse.interpulse_duration *= 1000),
+            interphase_interval: (pulse.interphase_interval *= 1000),
             phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]),
             phase_two_duration: (pulse.phase_two_duration *= 1000),
             repeat_delay_interval: (pulse.repeat_delay_interval *= 1000),

@@ -103,11 +103,11 @@
         <span id="cmpD948f417edcd29d68f5801d54232d9431_txt" class="span__stimulationstudio-input">
           <InputWidget
             :placeholder="'10 ms'"
-            :dom_id_suffix="'interpulse'"
-            :invalid_text="err_msg.interpulse_duration"
+            :dom_id_suffix="'interphase'"
+            :invalid_text="err_msg.interphase_interval"
             :input_width="142"
-            :initial_value="selected_pulse_settings.interpulse_duration.toString()"
-            @update:value="check_validity($event, 'interpulse_duration')"
+            :initial_value="selected_pulse_settings.interphase_interval.toString()"
+            @update:value="check_validity($event, 'interphase_interval')"
           />
         </span>
       </div>
@@ -205,7 +205,7 @@
     <span
       class="span__stimulationstudio-current-settings-label-left"
       :style="pulse_type === 'Monophasic' ? 'top: 267.5px;' : 'top: 566.5px;'"
-      >Delay Interval</span
+      >Pulse Frequency</span
     >
     <div
       class="div__stimulationstudio-input-container"
@@ -213,26 +213,20 @@
     >
       <span class="span__stimulationstudio-input">
         <InputWidget
-          :placeholder="'1000'"
-          :dom_id_suffix="'repeat-delay-interval'"
-          :invalid_text="err_msg.repeat_delay_interval"
+          :placeholder="'5'"
+          :dom_id_suffix="'pulse-frequency'"
+          :invalid_text="err_msg.pulse_frequency"
           :input_width="142"
-          :initial_value="selected_stim_settings.repeat_delay_interval.duration.toString()"
-          @update:value="check_validity($event, 'repeat_delay_interval')"
+          :initial_value="calculated_delay_on_open.toString()"
+          @update:value="check_validity($event, 'pulse_frequency')"
         />
       </span>
     </div>
     <span
       class="span__stimulationstudio-current-settings-label-right"
       :style="pulse_type === 'Monophasic' ? 'top: 267.5px;' : 'top: 566.5px;'"
-      ><SmallDropDown
-        :input_height="25"
-        :input_width="100"
-        :options_text="time_units.repeat_delay_interval"
-        :options_idx="delay_interval_idx"
-        :dom_id_suffix="'time_units'"
-        @selection-changed="handle_delay_unit_change"
-    /></span>
+      >Hz</span
+    >
     <span
       class="span__stimulationstudio-current-settings-label-left"
       :style="pulse_type === 'Monophasic' ? 'top: 337.5px;' : 'top: 636.5px;'"
@@ -260,7 +254,7 @@
       <SmallDropDown
         :input_height="25"
         :input_width="100"
-        :options_text="time_units.total_active_duration"
+        :options_text="time_units"
         :options_idx="active_duration_idx"
         :dom_id_suffix="'time_units'"
         @selection-changed="handle_total_duration_unit_change"
@@ -307,7 +301,6 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { VBPopover } from "bootstrap-vue";
 Vue.directive("popover", VBPopover);
 library.add(faBalanceScale, faQuestionCircle);
@@ -381,33 +374,61 @@ export default {
         max_voltage: "Must be within +/- 1200",
       },
       err_msg: {
-        phase_one_duration: "",
-        phase_one_charge: "",
-        interpulse_duration: "",
-        phase_two_duration: "",
-        phase_two_charge: "",
-        repeat_delay_interval: "",
-        total_active_duration: "",
+        phase_one_duration: "Required",
+        phase_one_charge: "Required",
+        interphase_interval: "Required",
+        phase_two_duration: "Required",
+        phase_two_charge: "Required",
+        pulse_frequency: "Required",
+        total_active_duration: "Required",
       },
-      time_units: {
-        total_active_duration: ["milliseconds", "seconds"],
-        repeat_delay_interval: ["milliseconds", "seconds"],
-      },
+      time_units: ["milliseconds", "seconds", "minutes", "hours"],
       regex: {
         charge: new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"),
         duration: new RegExp("^[0-9][0-9]*d*$"),
       },
       is_enabled_array: [false, true, true],
       all_valid: false,
-      delay_interval_idx: 0,
       active_duration_idx: 0,
+      input_pulse_frequency: 0,
     };
   },
   computed: {
-    // check_max_type: function() {
-    //   if (this.stimulation_type === "Current (mA)") return "Voltage (mV)";
-    //   else return "Current (mA)";
-    // }
+    total_pulse_duration: function () {
+      const { phase_one_duration, phase_two_duration, interphase_interval } = this.pulse_settings;
+      return Number(phase_one_duration) + Number(phase_two_duration) + Number(interphase_interval);
+    },
+    total_pulse_duration_on_open: function () {
+      const { phase_one_duration, phase_two_duration, interphase_interval } = this.selected_pulse_settings;
+      return Number(phase_one_duration) + Number(phase_two_duration) + Number(interphase_interval);
+    },
+    time_conversion: function () {
+      return {
+        milliseconds: 1,
+        seconds: 1000,
+        minutes: 60000,
+        hours: 3600000,
+      };
+    },
+    calculated_delay_on_close: function () {
+      const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
+      return total_delay / this.input_pulse_frequency;
+    },
+    calculated_delay_on_open: function () {
+      const { repeat_delay_interval } = this.selected_stim_settings;
+      const one_cycle = repeat_delay_interval + this.total_pulse_duration_on_open;
+      let calculated_duration = 0;
+      let cycles = 0;
+
+      if (one_cycle == 0) return "";
+      else {
+        while (calculated_duration + one_cycle <= 1000) {
+          calculated_duration += one_cycle;
+          cycles++;
+        }
+        return cycles;
+      }
+    },
   },
   watch: {
     all_valid() {
@@ -417,16 +438,15 @@ export default {
   created() {
     this.pulse_settings = this.selected_pulse_settings;
     this.stim_settings = this.selected_stim_settings;
+    this.input_pulse_frequency = this.calculated_delay_on_open;
 
-    const selected_delay_unit = this.stim_settings.repeat_delay_interval.unit;
-    const selected_active_duration_unit = this.stim_settings.total_active_duration.unit;
-    this.delay_interval_idx = this.time_units.repeat_delay_interval.indexOf(selected_delay_unit);
-    this.active_duration_idx = this.time_units.total_active_duration.indexOf(selected_active_duration_unit);
+    const { unit, duration } = this.stim_settings.total_active_duration;
+    this.active_duration_idx = this.time_units.indexOf(unit);
 
     if (this.pulse_type === "Monophasic") {
       this.pulse_settings = {
         ...this.pulse_settings,
-        interpulse_duration: 0,
+        interphase_interval: 0,
         phase_two_duration: 0,
         phase_two_charge: 0,
       };
@@ -438,33 +458,31 @@ export default {
         this.check_validity(value, input);
       }
     }
-    for (const input in this.stim_settings) {
-      if (this.stim_settings !== {}) {
-        const value = this.stim_settings[input].duration;
-        this.check_validity(value, input);
-      }
-    }
+
+    this.check_validity(this.input_pulse_frequency, "pulse_frequency");
+    this.check_validity(duration, "total_active_duration");
   },
   methods: {
     close(idx) {
       const button_label = this.button_names[idx];
+      this.stim_settings.repeat_delay_interval = this.calculated_delay_on_close;
       this.$emit("close", button_label, this.pulse_settings, this.stim_settings);
     },
     check_validity(value, label) {
-      if (label.includes("phase") || label.includes("interpulse")) this.pulse_settings[label] = value;
+      if (label.includes("phase")) this.pulse_settings[label] = value;
       else if (label.includes("active")) this.stim_settings.total_active_duration.duration = value;
 
-      if (label.includes("duration")) {
+      if (label.includes("duration") || label.includes("interval")) {
         this.check_pulse_duration("phase_one_duration");
         if (this.pulse_type === "Biphasic") {
           this.check_pulse_duration("phase_two_duration");
-          this.check_pulse_duration("interpulse_duration");
+          this.check_pulse_duration("interphase_interval");
         }
         this.check_active_duration("total_active_duration");
       } else if (label.includes("charge")) {
         this.check_charge_validity(value, label);
-      } else if (label.includes("delay")) {
-        this.check_delay_interval(value, label);
+      } else if (label.includes("frequency") || label.includes("delay")) {
+        this.check_pulse_frequency(value, "pulse_frequency");
       }
 
       this.handle_all_valid();
@@ -479,11 +497,8 @@ export default {
       this.all_valid = valid_inputs.length === 7;
     },
     check_pulse_duration(label) {
-      const { phase_one_duration, phase_two_duration, interpulse_duration } = this.pulse_settings;
       const value = this.pulse_settings[label];
-      const total_pulse_duration =
-        Number(phase_one_duration) + Number(phase_two_duration) + Number(interpulse_duration);
-      const check_pulse_duration = total_pulse_duration <= 50;
+      const check_pulse_duration = this.total_pulse_duration <= 50;
 
       if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
       else if (!this.regex.duration.test(value) && value !== "")
@@ -495,33 +510,29 @@ export default {
       }
     },
     check_active_duration(label) {
-      const { phase_one_duration, phase_two_duration, interpulse_duration } = this.pulse_settings;
       const value = this.stim_settings.total_active_duration.duration;
-      const total_pulse_duration =
-        Number(phase_one_duration) + Number(phase_two_duration) + Number(interpulse_duration);
-      const check_total_duration = value >= total_pulse_duration;
-      const check_time_unit =
-        this.time_units.total_active_duration[this.active_duration_idx] === "milliseconds";
+      const check_total_duration = value >= this.total_pulse_duration;
+      const check_time_unit = this.time_units[this.active_duration_idx] === "milliseconds";
 
       if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
       else if (
         (!this.regex.duration.test(value) && value !== "") ||
         (!check_total_duration && check_time_unit)
       )
-        this.err_msg[label] = `Must be a number >= ${total_pulse_duration}ms`;
+        this.err_msg[label] = `Must be a number >= ${this.total_pulse_duration}ms`;
       else {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.stim_settings[label].duration = Number(value);
-        this.stim_settings[label].unit = this.time_units.total_active_duration[this.active_duration_idx];
+        this.stim_settings[label].unit = this.time_units[this.active_duration_idx];
       }
     },
-    check_delay_interval(value, label) {
+    check_pulse_frequency(value, label) {
       if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
       else if (!this.regex.duration.test(value) && value !== "")
         this.err_msg[label] = this.invalid_err_msg.min_num_err;
       else if (this.regex.duration.test(value) && value !== "") {
         this.err_msg[label] = this.invalid_err_msg.valid;
-        this.stim_settings[label].duration = Number(value);
+        this.input_pulse_frequency = Number(value);
       }
     },
     check_charge_validity(value, label) {
@@ -540,10 +551,6 @@ export default {
       this.active_duration_idx = idx;
       this.check_active_duration("total_active_duration");
       this.handle_all_valid();
-    },
-    handle_delay_unit_change(idx) {
-      this.delay_interval_idx = idx;
-      this.stim_settings.repeat_delay_interval.unit = this.time_units.repeat_delay_interval[idx];
     },
   },
 };

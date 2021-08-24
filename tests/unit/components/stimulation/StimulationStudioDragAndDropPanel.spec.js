@@ -19,7 +19,7 @@ const test_protocol_order = [
     pulse_settings: {
       phase_one_duration: 300,
       phase_one_charge: 2,
-      interpulse_duration: 500,
+      interphase_interval: 500,
       phase_two_duration: 100,
       phase_two_charge: -5,
     },
@@ -97,7 +97,7 @@ const test_protocol_order = [
     pulse_settings: {
       phase_one_duration: 3000,
       phase_one_charge: 0,
-      interpulse_duration: 0,
+      interphase_interval: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
     },
@@ -154,14 +154,14 @@ const test_protocol_list = [
         {
           phase_one_duration: 15000,
           phase_one_charge: 0,
-          interpulse_duration: 0,
+          interphase_interval: 0,
           phase_two_duration: 0,
           phase_two_charge: 0,
         },
         {
           phase_one_duration: 20000,
           phase_one_charge: 0,
-          interpulse_duration: 0,
+          interphase_interval: 0,
           phase_two_duration: 0,
           phase_two_charge: 0,
         },
@@ -176,7 +176,7 @@ const test_protocol_list = [
           pulse_settings: {
             phase_one_duration: 15,
             phase_one_charge: 0,
-            interpulse_duration: 0,
+            interphase_interval: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
           },
@@ -428,7 +428,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     const delay_settings = {
       phase_one_duration: 5000,
       phase_one_charge: 0,
-      interpulse_duration: 0,
+      interphase_interval: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
     };

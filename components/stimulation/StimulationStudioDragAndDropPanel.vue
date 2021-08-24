@@ -323,15 +323,12 @@ export default {
         pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
-          interpulse_duration: "",
+          interphase_interval: "",
           phase_two_duration: "",
           phase_two_charge: "",
         },
         stim_settings: {
-          repeat_delay_interval: {
-            duration: "",
-            unit: "milliseconds",
-          },
+          repeat_delay_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
