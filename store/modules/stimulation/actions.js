@@ -21,14 +21,14 @@ export default {
   },
 
   async handle_protocol_order({ commit, dispatch }, new_pulse_order) {
-    let x_values = [0];
-    let y_values = [0];
+    const x_values = [0];
+    const y_values = [0];
     const color_assignments = {};
     const pulses = [];
 
     const get_last = (array) => array[array.length - 1];
 
-    const helper = (setting, max_duration) => {
+    const helper = (setting) => {
       x_values.push(get_last(x_values), setting.phase_one_duration + get_last(x_values));
       y_values.push(setting.phase_one_charge, setting.phase_one_charge);
 
@@ -42,20 +42,22 @@ export default {
       x_values.push(get_last(x_values), setting.repeat_delay_interval + get_last(x_values));
       y_values.push(0, 0);
 
-      x_values = x_values.filter((val) => val < max_duration);
-      const sliced_y_values = y_values.slice(0, x_values.length);
-      if (x_values.length === y_values.length) helper(setting, max_duration);
-      else y_values = sliced_y_values;
+      // x_values = x_values.filter(val => val < max_duration);
+      // if (x_values.length === y_values.length) helper(setting, max_duration);
+      // else y_values = y_values.slice(0, x_values.length);
     };
 
     await new_pulse_order.map(async (pulse) => {
       const repeat_color = pulse.repeat.color;
-      const starting_repeat_idx = x_values.length - 1;
-      let setting = pulse.pulse_settings;
       const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
+      const frequency = pulse.repeat.number_of_repeats;
+      let setting = pulse.pulse_settings;
 
+      const starting_repeat_idx = x_values.length - 1;
       const converted_total_active =
         total_active_duration.duration * time_conversion[total_active_duration.unit];
+
+      let repeats = frequency * (converted_total_active / 1000);
 
       setting = {
         ...setting,
@@ -64,9 +66,12 @@ export default {
       };
 
       const max_duration = get_last(x_values) + converted_total_active;
-
       pulses.push(setting);
-      helper(setting, max_duration);
+
+      while (repeats > 0) {
+        helper(setting);
+        repeats--;
+      }
 
       x_values.push(max_duration);
       y_values.push(get_last(y_values));

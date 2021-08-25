@@ -91,6 +91,7 @@
         "
         :selected_pulse_settings="selected_pulse_settings"
         :selected_stim_settings="selected_stim_settings"
+        :frequency="selected_frequency"
         @close="on_modal_close"
       />
     </div>
@@ -184,6 +185,7 @@ export default {
       delay_open_for_edit: false, // TODO Luci, clean up state management and constant names
       time_units_idx: 0,
       disable_dropdown: false,
+      selected_frequency: null,
     };
   },
   computed: {
@@ -227,6 +229,7 @@ export default {
         this.new_cloned_idx = newIndex;
         this.selected_pulse_settings = element.pulse_settings;
         this.selected_stim_settings = element.stim_settings;
+        this.selected_frequency = element.repeat.number_of_repeats;
 
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
@@ -236,13 +239,13 @@ export default {
       if ((e.added && !this.cloned) || e.moved || e.removed) this.handle_protocol_order(this.protocol_order);
       this.cloned = false;
     },
-    on_modal_close(button, pulse_settings, stim_settings) {
+    on_modal_close(button, pulse_settings, stim_settings, frequency) {
       this.modal_type = null;
       this.repeat_delay_modal = null;
       this.delay_open_for_edit = false;
+      this.selected_frequency = null;
       this.current_repeat_delay_input = null;
       this.current_repeat_delay_unit = "milliseconds";
-
       const new_pulse = this.protocol_order[this.new_cloned_idx];
       const edited_pulse = this.protocol_order[this.shift_click_img_idx];
 
@@ -250,10 +253,12 @@ export default {
         if (this.new_cloned_idx !== null) {
           new_pulse.pulse_settings = pulse_settings;
           new_pulse.stim_settings = stim_settings;
+          new_pulse.repeat.number_of_repeats = frequency;
         }
         if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null) {
           Object.assign(edited_pulse.pulse_settings, pulse_settings);
           Object.assign(edited_pulse.stim_settings, stim_settings);
+          edited_pulse.repeat.number_of_repeats = frequency;
         }
         // if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null) {
         //   Object.assign(
@@ -289,9 +294,11 @@ export default {
         this.shift_click_nested_img_idx = nested_idx;
         this.selected_pulse_settings = pulse.nested_protocols[nested_idx].pulse_settings;
         this.selected_stim_settings = pulse.nested_protocols[nested_idx].stim_settings;
+        this.selected_frequency = pulse.nested_protocols[nested_idx].repeat.number_of_repeats;
       } else if (nested_idx === undefined) {
         this.selected_pulse_settings = pulse.pulse_settings;
         this.selected_stim_settings = pulse.stim_settings;
+        this.selected_frequency = pulse.repeat.number_of_repeats;
       }
 
       if (type === "Monophasic") this.modal_type = "Monophasic";

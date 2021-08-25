@@ -217,7 +217,7 @@
           :dom_id_suffix="'pulse-frequency'"
           :invalid_text="err_msg.pulse_frequency"
           :input_width="142"
-          :initial_value="calculated_frequency_on_open.toString()"
+          :initial_value="input_pulse_frequency.toString()"
           @update:value="check_validity($event, 'pulse_frequency')"
         />
       </span>
@@ -358,6 +358,10 @@ export default {
       type: Object,
       required: true,
     },
+    frequency: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -390,7 +394,7 @@ export default {
       is_enabled_array: [false, true, true],
       all_valid: false,
       active_duration_idx: 0,
-      input_pulse_frequency: 0,
+      input_pulse_frequency: "",
     };
   },
   computed: {
@@ -406,21 +410,21 @@ export default {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
       return total_delay / this.input_pulse_frequency;
     },
-    calculated_frequency_on_open: function () {
-      const { repeat_delay_interval } = this.selected_stim_settings;
-      const one_cycle = repeat_delay_interval + this.total_pulse_duration_on_open;
-      let calculated_duration = 0;
-      let cycles = 0;
+    // calculated_frequency_on_open: function() {
+    //   const { repeat_delay_interval } = this.selected_stim_settings;
+    //   const one_cycle = repeat_delay_interval + this.total_pulse_duration_on_open;
+    //   let calculated_duration = 0;
+    //   let cycles = 0;
 
-      if (one_cycle == 0) return "";
-      else {
-        while (calculated_duration + one_cycle <= 1000) {
-          calculated_duration += one_cycle;
-          cycles++;
-        }
-        return cycles;
-      }
-    },
+    //   if (one_cycle == 0) return "";
+    //   else {
+    //     while (calculated_duration + one_cycle <= 1000) {
+    //       calculated_duration += one_cycle;
+    //       cycles++;
+    //     }
+    //     return cycles;
+    //   }
+    // }
   },
   watch: {
     all_valid() {
@@ -430,7 +434,7 @@ export default {
   created() {
     this.pulse_settings = this.selected_pulse_settings;
     this.stim_settings = this.selected_stim_settings;
-    this.input_pulse_frequency = this.calculated_frequency_on_open;
+    if (this.frequency !== 0) this.input_pulse_frequency = this.frequency;
 
     const { unit, duration } = this.stim_settings.total_active_duration;
     this.active_duration_idx = this.time_units.indexOf(unit);
@@ -458,7 +462,7 @@ export default {
     close(idx) {
       const button_label = this.button_names[idx];
       this.stim_settings.repeat_delay_interval = this.calculated_delay_on_close;
-      this.$emit("close", button_label, this.pulse_settings, this.stim_settings);
+      this.$emit("close", button_label, this.pulse_settings, this.stim_settings, this.input_pulse_frequency);
     },
     check_validity(value, label) {
       if (label.includes("phase")) this.pulse_settings[label] = value;

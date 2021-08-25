@@ -6,9 +6,9 @@
   </div>
 </template>
 <script>
-// import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
+import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
 import { mapMutations, mapActions } from "vuex";
-import { StimulationStudio } from "@/dist/mantarray.common";
+// import { StimulationStudio } from "@/dist/mantarray.common";
 
 export default {
   components: {
