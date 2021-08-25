@@ -41,7 +41,7 @@ const test_protocol_list = [
           type: "Delay",
           src: "/delay-tile.png",
           nested_protocols: [],
-          repeat: { color: "d822f9", number_of_repeats: 0 },
+          repeat: { color: "d822f9", number_of_repeats: 1 },
           settings: {
             phase_one_duration: 15000,
             phase_one_charge: 0,

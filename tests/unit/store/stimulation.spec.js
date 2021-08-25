@@ -28,10 +28,7 @@ describe("store/stimulation", () => {
         phase_two_charge: 200,
       },
       stim_settings: {
-        repeat_delay_interval: {
-          duration: 5,
-          unit: "seconds",
-        },
+        repeat_delay_interval: 5,
         total_active_duration: {
           duration: 500,
           unit: "milliseconds",
@@ -53,10 +50,7 @@ describe("store/stimulation", () => {
             phase_two_charge: -2,
           },
           stim_settings: {
-            repeat_delay_interval: {
-              duration: 0,
-              unit: "milliseconds",
-            },
+            repeat_delay_interval: 0,
             total_active_duration: {
               duration: 3,
               unit: "seconds",
@@ -104,7 +98,7 @@ describe("store/stimulation", () => {
             type: "Delay",
             src: "/delay-tile.png",
             nested_protocols: [],
-            repeat: { color: "d822f9", number_of_repeats: 0 },
+            repeat: { color: "d822f9", number_of_repeats: 1 },
             pulse_settings: {
               phase_one_duration: 15000,
               phase_one_charge: 0,
@@ -115,10 +109,7 @@ describe("store/stimulation", () => {
               total_active_duration: 15000,
             },
             stim_settings: {
-              repeat_delay_interval: {
-                duration: 3,
-                unit: "milliseconds",
-              },
+              repeat_delay_interval: 3,
               total_active_duration: {
                 duration: 15,
                 unit: "milliseconds",
@@ -355,9 +346,9 @@ describe("store/stimulation", () => {
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
-      const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 500];
-      const y_values = [0, 200, 200, 0, 0, 200, 200, 0, 0];
-      const colors = { b7b7b7: [0, 9] };
+      const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 118, 500];
+      const y_values = [0, 200, 200, 0, 0, 200, 200, 0, 0, 0];
+      const colors = { b7b7b7: [0, 10] };
 
       await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
       const { x_axis_values, y_axis_values, repeat_colors } = store.state.stimulation;

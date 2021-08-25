@@ -41,23 +41,18 @@ export default {
 
       x_values.push(get_last(x_values), setting.repeat_delay_interval + get_last(x_values));
       y_values.push(0, 0);
-
-      // x_values = x_values.filter(val => val < max_duration);
-      // if (x_values.length === y_values.length) helper(setting, max_duration);
-      // else y_values = y_values.slice(0, x_values.length);
     };
 
     await new_pulse_order.map(async (pulse) => {
-      const repeat_color = pulse.repeat.color;
+      const { color, number_of_repeats } = pulse.repeat;
       const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
-      const frequency = pulse.repeat.number_of_repeats;
       let setting = pulse.pulse_settings;
 
       const starting_repeat_idx = x_values.length - 1;
       const converted_total_active =
         total_active_duration.duration * time_conversion[total_active_duration.unit];
 
-      let repeats = frequency * (converted_total_active / 1000);
+      let repeats = number_of_repeats * (converted_total_active / 1000);
 
       setting = {
         ...setting,
@@ -77,7 +72,7 @@ export default {
       y_values.push(get_last(y_values));
 
       const ending_repeat_idx = x_values.length;
-      color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
+      color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
     });
 
     this.commit("stimulation/set_repeat_color_assignments", color_assignments);

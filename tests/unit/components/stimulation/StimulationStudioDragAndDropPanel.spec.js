@@ -13,7 +13,7 @@ const test_protocol_order = [
     nest_protocols: [],
     stop_setting: "Stimulate Until Complete",
     repeat: {
-      number_of_repeats: 0,
+      number_of_repeats: 1,
       color: "fffff",
     },
     pulse_settings: {
@@ -24,10 +24,7 @@ const test_protocol_order = [
       phase_two_charge: -5,
     },
     stim_settings: {
-      repeat_delay_interval: {
-        duration: 0,
-        unit: "milliseconds",
-      },
+      repeat_delay_interval: 0,
       total_active_duration: {
         duration: 20,
         unit: "milliseconds",
@@ -44,7 +41,7 @@ const test_protocol_order = [
         src: "placeholder",
         nested_protocols: [],
         repeat: {
-          number_of_repeats: 0,
+          number_of_repeats: 1,
           color: "fffff",
         },
         pulse_settings: {
@@ -57,7 +54,7 @@ const test_protocol_order = [
         src: "placeholder",
         nested_protocols: [],
         repeat: {
-          number_of_repeats: 0,
+          number_of_repeats: 1,
           color: "fffff",
         },
         pulse_settings: {
@@ -67,7 +64,7 @@ const test_protocol_order = [
       },
     ],
     repeat: {
-      number_of_repeats: 0,
+      number_of_repeats: 1,
       color: "fffff",
     },
     pulse_settings: {
@@ -75,10 +72,7 @@ const test_protocol_order = [
       phase_one_charge: 2,
     },
     stim_settings: {
-      repeat_delay_interval: {
-        duration: 0,
-        unit: "milliseconds",
-      },
+      repeat_delay_interval: 0,
       total_active_duration: {
         duration: 0,
         unit: "milliseconds",
@@ -91,7 +85,7 @@ const test_protocol_order = [
     nested_protocols: [],
     stop_setting: "Stimulate Until Complete",
     repeat: {
-      number_of_repeats: 0,
+      number_of_repeats: 1,
       color: "fffff",
     },
     pulse_settings: {
@@ -102,10 +96,7 @@ const test_protocol_order = [
       phase_two_charge: 0,
     },
     stim_settings: {
-      repeat_delay_interval: {
-        duration: "",
-        unit: "milliseconds",
-      },
+      repeat_delay_interval: 0,
       total_active_duration: {
         duration: 3,
         unit: "seconds",
@@ -118,7 +109,7 @@ const test_protocol_order = [
     stop_setting: "Stimulate Until Complete",
     nested_protocols: [],
     repeat: {
-      number_of_repeats: 0,
+      number_of_repeats: 1,
       color: "fffff",
     },
     pulse_settings: {
@@ -126,10 +117,7 @@ const test_protocol_order = [
       phase_one_charge: 2,
     },
     stim_settings: {
-      repeat_delay_interval: {
-        duration: 0,
-        unit: "milliseconds",
-      },
+      repeat_delay_interval: 0,
       total_active_duration: {
         duration: 20,
         unit: "milliseconds",
@@ -172,7 +160,7 @@ const test_protocol_list = [
           src: "/delay-tile.png",
           stop_setting: "Stimulate Until Complete",
           nested_protocols: [],
-          repeat: { color: "d822f9", number_of_repeats: 0 },
+          repeat: { color: "d822f9", number_of_repeats: 1 },
           pulse_settings: {
             phase_one_duration: 15,
             phase_one_charge: 0,
@@ -181,10 +169,7 @@ const test_protocol_list = [
             phase_two_charge: 0,
           },
           stim_settings: {
-            repeat_delay_interval: {
-              duration: 3,
-              unit: "milliseconds",
-            },
+            repeat_delay_interval: 3,
             total_active_duration: {
               duration: 20,
               unit: "milliseconds",
@@ -233,12 +218,16 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
     const modal_container = wrapper.find(".modal-container");
     await wrapper.vm.clone({ type: "Monophasic", src: "test" });
-    await wrapper.vm.check_type({ added: { element: { type: "Monophasic" } } });
+    await wrapper.vm.check_type({
+      added: { element: { type: "Monophasic", repeat: { color: "", number_of_repeats: 0 } } },
+    });
     expect(wrapper.vm.modal_type).toBe("Monophasic");
     expect(modal_container).toBeTruthy();
 
     await wrapper.vm.clone({ type: "Biphasic", src: "test" });
-    await wrapper.vm.check_type({ added: { element: { type: "Biphasic" } } });
+    await wrapper.vm.check_type({
+      added: { element: { type: "Biphasic", repeat: { color: "", number_of_repeats: 0 } } },
+    });
     expect(wrapper.vm.modal_type).toBe("Biphasic");
     expect(modal_container).toBeTruthy();
   });
@@ -315,12 +304,16 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.clone({ type: "Monophasic", src: "test" });
     expect(wrapper.vm.cloned).toBe(true);
-    await wrapper.vm.check_type({ added: { element: { type: "Monophasic" }, newIndex: 3 } });
+    await wrapper.vm.check_type({
+      added: { element: { type: "Monophasic", repeat: { color: "", number_of_repeats: 0 } }, newIndex: 3 },
+    });
 
     await wrapper.vm.on_modal_close("Cancel");
     expect(wrapper.vm.protocol_order).toHaveLength(3);
 
-    await wrapper.vm.check_type({ added: { element: { type: "Biphasic" }, newIndex: 1 } });
+    await wrapper.vm.check_type({
+      added: { element: { type: "Biphasic", repeat: { color: "", number_of_repeats: 0 } }, newIndex: 1 },
+    });
     expect(wrapper.vm.modal_type).toBeNull();
   });
 
@@ -352,10 +345,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
   test("When a user clicks save on the settings for a waveform, Then the setting should save to the corresponding index depending on if it is a new waveform or an edited", async () => {
     const test_settings = "test";
     const test_stim_settings = {
-      repeat_delay_interval: {
-        duration: "",
-        unit: "milliseconds",
-      },
+      repeat_delay_interval: "",
       total_active_duration: {
         duration: "",
         unit: "milliseconds",

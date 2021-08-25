@@ -48,6 +48,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "milliseconds",
           },
         },
+        frequency: 0,
       },
     });
 
@@ -75,6 +76,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "milliseconds",
           },
         },
+        frequency: 0,
       },
     });
     const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
@@ -99,6 +101,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "milliseconds",
           },
         },
+        frequency: 0,
       },
     });
     await wrapper.vm.close(0);
@@ -125,6 +128,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "milliseconds",
           },
         },
+        frequency: 0,
       },
     });
     const title = wrapper.findAll("span").at(5).text();
@@ -154,6 +158,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "milliseconds",
           },
         },
+        frequency: 0,
       },
     });
 
@@ -199,6 +204,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "milliseconds",
           },
         },
+        frequency: 0,
       },
     });
     const target_input_field = wrapper.find("#input-widget-field-duration");
@@ -234,6 +240,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "milliseconds",
           },
         },
+        frequency: 5,
       },
     });
     const target_input_field = wrapper.find("#input-widget-field-total-active-duration");
@@ -272,6 +279,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "seconds",
           },
         },
+        frequency: 2,
       },
     });
     expect(wrapper.vm.all_valid).toBe(true);
@@ -305,6 +313,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
             unit: "milliseconds",
           },
         },
+        frequency: 0,
       },
     });
     wrapper.setData({

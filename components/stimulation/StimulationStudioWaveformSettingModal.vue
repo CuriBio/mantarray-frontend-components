@@ -402,29 +402,10 @@ export default {
       const { phase_one_duration, phase_two_duration, interphase_interval } = this.pulse_settings;
       return Number(phase_one_duration) + Number(phase_two_duration) + Number(interphase_interval);
     },
-    total_pulse_duration_on_open: function () {
-      const { phase_one_duration, phase_two_duration, interphase_interval } = this.selected_pulse_settings;
-      return Number(phase_one_duration) + Number(phase_two_duration) + Number(interphase_interval);
-    },
-    calculated_delay_on_close: function () {
+    calculated_delay: function () {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
       return total_delay / this.input_pulse_frequency;
     },
-    // calculated_frequency_on_open: function() {
-    //   const { repeat_delay_interval } = this.selected_stim_settings;
-    //   const one_cycle = repeat_delay_interval + this.total_pulse_duration_on_open;
-    //   let calculated_duration = 0;
-    //   let cycles = 0;
-
-    //   if (one_cycle == 0) return "";
-    //   else {
-    //     while (calculated_duration + one_cycle <= 1000) {
-    //       calculated_duration += one_cycle;
-    //       cycles++;
-    //     }
-    //     return cycles;
-    //   }
-    // }
   },
   watch: {
     all_valid() {
@@ -461,7 +442,7 @@ export default {
   methods: {
     close(idx) {
       const button_label = this.button_names[idx];
-      this.stim_settings.repeat_delay_interval = this.calculated_delay_on_close;
+      this.stim_settings.repeat_delay_interval = this.calculated_delay;
       this.$emit("close", button_label, this.pulse_settings, this.stim_settings, this.input_pulse_frequency);
     },
     check_validity(value, label) {
