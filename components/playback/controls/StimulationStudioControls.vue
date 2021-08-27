@@ -124,7 +124,7 @@ export default {
   font-size: 9px;
   background: black;
   font-weight: lighter;
-  top: 30px;
+  top: 26px;
   z-index: 1;
   left: 115px;
   letter-spacing: 1px;
@@ -154,9 +154,9 @@ export default {
 }
 .img__waveform-icon {
   position: absolute;
-  top: 24px;
-  height: 65px;
-  left: 50px;
+  top: 29px;
+  height: 56px;
+  left: 55px;
 }
 .fontawesome_icon_class {
   height: 20px;

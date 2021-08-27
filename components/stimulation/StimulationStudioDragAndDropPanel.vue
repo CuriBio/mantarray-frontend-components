@@ -33,7 +33,6 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
-            style="height: 100px; display: flex"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
@@ -418,6 +417,11 @@ img {
   z-index: 2;
   top: 412px;
   left: 1184px;
+}
+.dragArea {
+  height: 100px;
+  display: flex;
+  padding-top: 4px;
 }
 .circle {
   width: 30px;
