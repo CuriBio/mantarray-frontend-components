@@ -11,7 +11,7 @@ const state = () => ({
     stop_setting: "Stimulate Until Stopped",
     stimulation_type: "V",
     rest_duration: 0,
-    time_unit: "seconds",
+    time_unit: "milliseconds",
     pulses: [],
     detailed_pulses: [],
   },

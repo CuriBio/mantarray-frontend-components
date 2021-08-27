@@ -130,7 +130,7 @@ test("testing the StimulationStudio layout on initialization", async (t) => {
 //   const screenshot_path = path.join(screenshot_path_base, "basic-biphasic-modal-with-valid-inputs");
 //   const phase_one_duration = Selector("#input-widget-field-duration");
 //   const phase_one_charge = Selector("#input-widget-field-charge");
-//   const interpulse_duration = Selector("#input-widget-field-interpulse");
+//   const interphase_interval = Selector("#input-widget-field-interphase");
 //   const phase_two_duration = Selector("#input-widget-field-durationtwo");
 //   const phase_two_charge = Selector("#input-widget-field-chargetwo");
 
@@ -138,7 +138,7 @@ test("testing the StimulationStudio layout on initialization", async (t) => {
 //     .dragToElement(biphasic_tile, ".dragArea")
 //     .typeText(phase_one_duration, "1000")
 //     .typeText(phase_one_charge, "500")
-//     .typeText(interpulse_duration, "1500")
+//     .typeText(interphase_interval, "1500")
 //     .typeText(phase_two_duration, "500")
 //     .typeText(phase_two_charge, "-500");
 

@@ -63,18 +63,13 @@
             :icon="['fa', 'trash-alt']"
             @click="handle_trash_modal"
           />
-          <BPopover
-            target="trash_icon"
-            trigger="click"
-            :show.sync="show_confirmation"
-            custom-class="delete_popover_class"
-          >
+          <div v-show="show_confirmation" class="delete_popover_class">
             <div class="delete_popover_label">Are you sure?</div>
             <div class="popover_button_container">
               <button class="delete_button_container" @click="handle_delete">Delete</button>
               <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
             </div>
-          </BPopover>
+          </div>
         </div>
       </div>
     </div>
@@ -82,15 +77,12 @@
 </template>
 <script>
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
-import Vue from "vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { BPopover } from "bootstrap-vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faPencilAlt, faTrashAlt);
-Vue.component("BPopover", BPopover);
 
 /**
  * @vue-data {String} active_tab - Shows current selected tab
@@ -121,7 +113,6 @@ export default {
   name: "StimulationStudioProtocolBlockViewEditor",
   components: {
     SmallDropDown,
-    BPopover,
     FontAwesomeIcon,
   },
   data() {
@@ -136,11 +127,11 @@ export default {
       stop_options_array: ["Stimulate Until Stopped", "Stimulate Until Complete"],
       protocol_name: "",
       stop_option_idx: 0,
+      stimulation_type_idx: 0,
       rest_duration: "",
       name_validity: "null",
       error_message: "",
       protocol_list: [],
-      stimulation_type_idx: 0,
     };
   },
   computed: {
@@ -252,7 +243,7 @@ export default {
   background: rgb(0, 0, 0);
   position: absolute;
   border-radius: 10px;
-  width: 1322px;
+  width: 1315px;
   font-family: muli;
 }
 .error-message {
@@ -265,25 +256,36 @@ export default {
 }
 
 .delete_popover_class {
-  height: 85px;
-  width: 170px;
+  position: fixed;
+  height: 80px;
+  width: 201px;
   font-family: Muli;
   padding: 4px;
   display: flex;
+  z-index: 100;
+  left: 1340px;
   justify-content: center;
   background: rgb(17, 17, 17);
   border: 1px solid #b7b7b7;
+  border-radius: 4px;
 }
 
 .delete_popover_label {
   font-weight: bold;
-  padding: 2px 0 10px 37px;
+  padding-top: 5px;
   color: #b7b7b7;
+  height: 50px;
+  width: 200px;
+  position: absolute;
+  left: 50px;
 }
 
 .popover_button_container {
   display: flex;
   justify-content: space-evenly;
+  bottom: 0px;
+  position: absolute;
+  width: 197px;
 }
 
 .delete_button_container {
@@ -295,7 +297,7 @@ export default {
 }
 
 button {
-  width: 84px;
+  width: 100px;
   height: 35px;
   background: rgb(17, 17, 17);
   border-color: #3f3f3f;
@@ -339,9 +341,9 @@ button:hover {
 }
 .trash-icon {
   margin-left: 11%;
-  margin-right: 1%;
+  margin-right: 4px;
   color: #4c4c4c;
-  padding-top: 2px;
+  padding-top: 1px;
   font-size: 20px;
 }
 
@@ -402,7 +404,7 @@ button:hover {
 .div__Editor-background {
   transform: rotate(0deg);
   background: rgb(17, 17, 17);
-  width: 1322px;
+  width: 1315px;
   height: 166px;
 }
 .div__Tabs-panel {

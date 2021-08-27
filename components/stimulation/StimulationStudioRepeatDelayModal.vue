@@ -105,7 +105,7 @@ export default {
         required: "Required",
         valid: "",
       },
-      time_units: ["milliseconds", "seconds", "minutes", "hours"],
+      time_units: ["milliseconds", "seconds"],
       time_unit_idx: 0,
       is_enabled_array: [false, true, true],
       is_valid: false,
@@ -160,23 +160,22 @@ export default {
         const delay_settings = {
           phase_one_duration: converted_input,
           phase_one_charge: 0,
-          interpulse_duration: 0,
+          interphase_interval: 0,
           phase_two_duration: 0,
           phase_two_charge: 0,
         };
 
         const stim_settings = {
-          repeat_delay_interval: {
-            duration: 0,
-            unit: "milliseconds",
-          },
+          repeat_delay_interval: 0,
           total_active_duration: {
             duration: Number(this.input_value),
             unit: selected_unit,
           },
         };
 
-        this.$emit("delay_close", button_label, delay_settings, stim_settings);
+        const frequency = 1;
+
+        this.$emit("delay_close", button_label, delay_settings, stim_settings, frequency);
       }
     },
     check_validity(value) {

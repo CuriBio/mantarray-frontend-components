@@ -70,17 +70,19 @@ export default {
         this.delay_blocks = state.delay_blocks;
       }
       if (mutation.type === "stimulation/set_zoom_out") {
-        this.y_min_max = state.y_axis_scale;
-
-        if (this.dynamic_plot_width === 1200) this.x_axis_sample_length *= 1.5;
-        else if (this.dynamic_plot_width > 1200) this.dynamic_plot_width /= 1.5;
+        if (state.y_axis_scale !== this.y_min_max) this.y_min_max = state.y_axis_scale;
+        else {
+          if (this.dynamic_plot_width === 1200) this.x_axis_sample_length *= 1.5;
+          else if (this.dynamic_plot_width > 1200) this.dynamic_plot_width /= 1.5;
+        }
       }
       if (mutation.type === "stimulation/set_zoom_in") {
-        this.y_min_max = state.y_axis_scale;
-
-        if (this.x_axis_sample_length > this.last_x_value + 50 || this.datapoints.length === 0)
-          this.x_axis_sample_length /= 1.5;
-        else this.dynamic_plot_width *= 1.5;
+        if (state.y_axis_scale !== this.y_min_max) this.y_min_max = state.y_axis_scale;
+        else {
+          if (this.x_axis_sample_length > this.last_x_value + 50 || this.datapoints.length === 0)
+            this.x_axis_sample_length /= 1.5;
+          else this.dynamic_plot_width *= 1.5;
+        }
       }
     });
   },
@@ -88,12 +90,15 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    get_dynamic_sample_length(scale) {
+    get_dynamic_sample_length() {
       if (isNaN(this.delay_blocks[0][1])) this.last_x_value = this.datapoints[this.datapoints.length - 1][0];
       else this.last_x_value = this.delay_blocks[0][1];
 
       if (this.last_x_value === 0) this.x_axis_sample_length = 100;
       else this.x_axis_sample_length = this.last_x_value + 50;
+
+      if (this.x_axis_sample_length > 10000 && this.dynamic_plot_width === 1200)
+        this.dynamic_plot_width *= 25;
     },
   },
 };
@@ -105,6 +110,6 @@ export default {
   height: 50%;
   width: 1315px;
   height: 220px;
-  overflow: hidden;
+  overflow: visible;
 }
 </style>

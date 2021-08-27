@@ -24,14 +24,14 @@ const test_protocol_list = [
         {
           phase_one_duration: 15,
           phase_one_charge: 0,
-          interpulse_duration: 0,
+          interphase_interval: 0,
           phase_two_duration: 0,
           phase_two_charge: 0,
         },
         {
           phase_one_duration: 20,
           phase_one_charge: 0,
-          interpulse_duration: 0,
+          interphase_interval: 0,
           phase_two_duration: 0,
           phase_two_charge: 0,
         },
@@ -45,9 +45,16 @@ const test_protocol_list = [
           settings: {
             phase_one_duration: 15000,
             phase_one_charge: 0,
-            interpulse_duration: 0,
+            interphase_interval: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
+          },
+          stim_settings: {
+            repeat_delay_interval: 0,
+            total_active_duration: {
+              unit: "milliseconds",
+              duration: 15000,
+            },
           },
         },
       ],
