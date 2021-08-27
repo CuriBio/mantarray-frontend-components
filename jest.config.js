@@ -31,9 +31,8 @@ module.exports = {
     // process js files with jest
     "^.+\\.js$": "babel-jest",
     ".+\\.(css|styl|less|sass|scss)$": "jest-transform-css",
-    // // process assets with transform stub
-    // ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$":
-    //   "jest-transform-stub",
+    // process assets with transform stub
+    ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
   },
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.ubuntu_codebuild_cache/"],
   // we will use this to create snapshot tests

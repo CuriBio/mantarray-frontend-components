@@ -25,8 +25,7 @@
         <FontAwesomeIcon v-if="play_state" class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
       </span>
     </div>
-    <img class="img__additional-controls-icon" src="/additional-controls-icon.png" />
-    <img class="img__waveform-icon" src="/waveform-icon.png" />
+    <img class="img__waveform-icon" src="@/assets/img/waveform-icon.png" />
   </div>
 </template>
 <script>
@@ -96,24 +95,23 @@ export default {
   background: black;
   height: 85px;
   width: 287px;
-  padding: 5px;
   font-family: Muli;
   padding-left: 20px;
-  font-weight: lighter;
   top: 0px;
   left: 0px;
 }
 .span__additional-controls-header {
   color: rgb(255, 255, 255);
-  position: relative;
+  position: absolute;
+  font-size: 16px;
 }
 .div__border-container {
-  position: relative;
+  position: absolute;
   border: 3px solid rgb(17, 17, 17);
-  height: 55%;
-  width: 45%;
-  top: 8%;
-  left: 30%;
+  height: 40px;
+  width: 110px;
+  top: 35px;
+  left: 100px;
   display: grid;
   grid-template-columns: repeat(25%, 4);
   align-items: center;
@@ -121,13 +119,14 @@ export default {
   padding: 5px;
 }
 .span__stimulation-label {
-  position: relative;
+  position: absolute;
   color: rgb(255, 255, 255);
   font-size: 9px;
   background: black;
-  top: 23%;
+  font-weight: lighter;
+  top: 30px;
   z-index: 1;
-  right: 40px;
+  left: 115px;
   letter-spacing: 1px;
 }
 .span__stimulation-controls-play-stop-button {
@@ -154,20 +153,13 @@ export default {
   grid-column: 2/3;
 }
 .img__waveform-icon {
-  position: relative;
-  bottom: 40px;
-  height: 57px;
-  right: 28px;
+  position: absolute;
+  top: 24px;
+  height: 65px;
+  left: 50px;
 }
 .fontawesome_icon_class {
   height: 20px;
   width: 20px;
-}
-.img__additional-controls-icon {
-  position: relative;
-  bottom: 40px;
-  height: 57px;
-  right: 10px;
-  opacity: 0.3;
 }
 </style>

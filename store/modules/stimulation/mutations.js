@@ -94,7 +94,7 @@ export default {
     const delay_pulse_model = {
       phase_one_duration: converted_delay_duration,
       phase_one_charge: 0,
-      interpulse_duration: 0,
+      interphase_interval: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
       repeat_delay_interval: 0,

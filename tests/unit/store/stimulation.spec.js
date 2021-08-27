@@ -23,15 +23,12 @@ describe("store/stimulation", () => {
       pulse_settings: {
         phase_one_duration: 100,
         phase_one_charge: 200,
-        interpulse_duration: 10,
+        interphase_interval: 10,
         phase_two_duration: 3,
         phase_two_charge: 200,
       },
       stim_settings: {
-        repeat_delay_interval: {
-          duration: 5,
-          unit: "seconds",
-        },
+        repeat_delay_interval: 5,
         total_active_duration: {
           duration: 500,
           unit: "milliseconds",
@@ -48,15 +45,12 @@ describe("store/stimulation", () => {
           pulse_settings: {
             phase_one_duration: 100,
             phase_one_charge: 2,
-            interpulse_duration: 200,
+            interphase_interval: 200,
             phase_two_duration: 100,
             phase_two_charge: -2,
           },
           stim_settings: {
-            repeat_delay_interval: {
-              duration: 0,
-              unit: "milliseconds",
-            },
+            repeat_delay_interval: 0,
             total_active_duration: {
               duration: 3,
               unit: "seconds",
@@ -83,7 +77,7 @@ describe("store/stimulation", () => {
           {
             phase_one_duration: 15,
             phase_one_charge: 0,
-            interpulse_duration: 0,
+            interphase_interval: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
             repeat_delay_interval: 0,
@@ -92,7 +86,7 @@ describe("store/stimulation", () => {
           {
             phase_one_duration: 20,
             phase_one_charge: 0,
-            interpulse_duration: 0,
+            interphase_interval: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
             repeat_delay_interval: 0,
@@ -104,21 +98,18 @@ describe("store/stimulation", () => {
             type: "Delay",
             src: "/delay-tile.png",
             nested_protocols: [],
-            repeat: { color: "d822f9", number_of_repeats: 0 },
+            repeat: { color: "d822f9", number_of_repeats: 1 },
             pulse_settings: {
               phase_one_duration: 15000,
               phase_one_charge: 0,
-              interpulse_duration: 0,
+              interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
               repeat_delay_interval: 3000,
               total_active_duration: 15000,
             },
             stim_settings: {
-              repeat_delay_interval: {
-                duration: 3,
-                unit: "milliseconds",
-              },
+              repeat_delay_interval: 3,
               total_active_duration: {
                 duration: 15,
                 unit: "milliseconds",
@@ -166,6 +157,24 @@ describe("store/stimulation", () => {
 
       expect(check_color_duplicate).toBe(false);
       expect(check_letter_duplicate).toBe(false);
+    });
+
+    test("When there are no saved protocols, Then the first color and letter assigned to new protocol will be A and #4ca0af", async () => {
+      store.state.stimulation.protocol_list = [{ letter: "", color: "", label: "Create New" }];
+      const { letter, color } = store.getters["stimulation/get_next_protocol"];
+
+      expect(letter).toBe("A");
+      expect(color).toBe("#4ca0af");
+    });
+
+    test("When a protocol is selected to be editted, Then the letter and color assignment should be that of the selected protocol", async () => {
+      const selected_protocol = store.state.stimulation.protocol_list[1];
+      await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+
+      const { letter, color } = store.getters["stimulation/get_next_protocol"];
+
+      expect(letter).toBe("A");
+      expect(color).toBe("#118075");
     });
 
     test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
@@ -355,9 +364,9 @@ describe("store/stimulation", () => {
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
-      const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 500];
-      const y_values = [0, 200, 200, 0, 0, 200, 200, 0, 0];
-      const colors = { b7b7b7: [0, 9] };
+      const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 118, 500];
+      const y_values = [0, 200, 200, 0, 0, 200, 200, 0, 0, 0];
+      const colors = { b7b7b7: [0, 10] };
 
       await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
       const { x_axis_values, y_axis_values, repeat_colors } = store.state.stimulation;
@@ -451,7 +460,7 @@ describe("store/stimulation", () => {
               {
                 phase_one_duration: 15,
                 phase_one_charge: 500,
-                interpulse_duration: 0,
+                interphase_interval: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
                 repeat_delay_interval: 3,
@@ -471,7 +480,7 @@ describe("store/stimulation", () => {
               {
                 phase_one_duration: 15000,
                 phase_one_charge: 500000,
-                interpulse_duration: 0,
+                interphase_interval: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
                 repeat_delay_interval: 3000,

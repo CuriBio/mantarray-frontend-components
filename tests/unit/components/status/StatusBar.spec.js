@@ -22,23 +22,23 @@ let mocked_axios;
 
 const text_selector = ".span__status-bar-text";
 
-beforeAll(async () => {
-  // note the store will mutate across tests, so make sure to re-create it in beforeEach
-  const storePath = `${process.env.buildDir}/store.js`;
-  NuxtStore = await import(storePath);
-});
-
-beforeEach(async () => {
-  store = await NuxtStore.createStore();
-  mocked_axios = new MockAxiosAdapter(axios);
-});
-
-afterEach(() => {
-  wrapper.destroy();
-  mocked_axios.restore();
-});
-
 describe("StatusWidget.vue", () => {
+  beforeAll(async () => {
+    // note the store will mutate across tests, so make sure to re-create it in beforeEach
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+
+  beforeEach(async () => {
+    store = await NuxtStore.createStore();
+    mocked_axios = new MockAxiosAdapter(axios);
+  });
+
+  afterEach(() => {
+    wrapper.destroy();
+    mocked_axios.restore();
+  });
+
   test.each([
     ["SERVER_STILL_INITIALIZING", "Status: Connecting..."],
     ["SERVER_READY", "Status: Connecting..."],
@@ -64,7 +64,7 @@ describe("StatusWidget.vue", () => {
       store.commit("flask/set_status_uuid", STATUS.MESSAGE[vuex_state]);
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(wrapper.find(text_selector).text()).toEqual(expected_text);
+      expect(wrapper.find(text_selector).text()).toBe(expected_text);
     }
   );
   test("When initially mounted, Then the status text matches the Vuex state", () => {
@@ -76,7 +76,7 @@ describe("StatusWidget.vue", () => {
       localVue,
     });
 
-    expect(wrapper.find(text_selector).text()).toEqual("Status: Calibrating...");
+    expect(wrapper.find(text_selector).text()).toBe("Status: Calibrating...");
   });
 
   test("When Vuex is mutated to an unknown UUID, Then the status text should update to include that UUID", async () => {
@@ -89,9 +89,9 @@ describe("StatusWidget.vue", () => {
 
     store.commit("flask/set_status_uuid", "3dbb8814-09f1-44db-b7d5-7a9f702beac4");
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toEqual("Status:3dbb8814-09f1-44db-b7d5-7a9f702beac4");
+    expect(wrapper.find(text_selector).text()).toBe("Status:3dbb8814-09f1-44db-b7d5-7a9f702beac4");
   });
-  test("Given that the http response is 404 for api request /shutdown, When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' and the the dialog of ErrorCatchWidget is visible ", async () => {
+  test("Given that the http response is 404 for api request /shutdown, When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' and the the dialog of ErrorCatchWidget is visible", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
     mocked_axios.onGet(shutdown_url).reply(404);
     const propsData = {};
@@ -108,13 +108,13 @@ describe("StatusWidget.vue", () => {
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
     await wrapper.vm.$nextTick(); // wait for update
     expect(mocked_axios.history.get[0].url).toStrictEqual(shutdown_url);
-    expect(wrapper.find(text_selector).text()).toEqual("Status: Error Occurred");
+    expect(wrapper.find(text_selector).text()).toBe("Status: Error Occurred");
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(true);
       done();
     });
   });
-  test("When Vuex is mutated to an SHUTDOWN UUID, Then the status text should update as 'Shutting Down' ", async () => {
+  test("When Vuex is mutated to an SHUTDOWN UUID, Then the status text should update as 'Shutting Down'", async () => {
     const propsData = {};
     wrapper = mount(StatusWidget, {
       propsData,
@@ -124,10 +124,10 @@ describe("StatusWidget.vue", () => {
 
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toEqual("Status: Shutting Down");
+    expect(wrapper.find(text_selector).text()).toBe("Status: Shutting Down");
     await wrapper.vm.$nextTick(); // wait for update
   });
-  test("Given that the http response is 200 for api request /shutdown,  When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden and Status is changed to 'Shutting Down", async () => {
+  test("Given that the http response is 200 for api request /shutdown, When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden and Status is changed to 'Shutting Down", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
     mocked_axios.onGet(shutdown_url).reply(200, {});
     const propsData = {};
@@ -143,7 +143,7 @@ describe("StatusWidget.vue", () => {
 
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toEqual("Status: Error Occurred");
+    expect(wrapper.find(text_selector).text()).toBe("Status: Error Occurred");
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(true);
       done();
@@ -152,11 +152,51 @@ describe("StatusWidget.vue", () => {
     wrapper.vm.remove_error_catch(); // the event of ok-clicked got invoked.
 
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toEqual("Status: Shutting Down");
+    expect(wrapper.find(text_selector).text()).toBe("Status: Shutting Down");
 
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(false);
       done();
     });
   });
+
+  test.each([
+    "SERVER_STILL_INITIALIZING",
+    "SERVER_READY",
+    "INITIALIZING_INSTRUMEN",
+    "CALIBRATION_NEEDED",
+    "CALIBRATING",
+    "CALIBRATED",
+    "BUFFERING",
+    "ERROR",
+  ])(
+    "When a user wants to exit the desktop app, Then the closure warning modal should not appear if there are no active processes",
+    async (vuex_state) => {
+      const confirmation_spy = jest.spyOn(StatusWidget.methods, "handle_confirmation");
+      wrapper = mount(StatusWidget, {
+        store,
+        localVue,
+      });
+
+      await store.commit("flask/set_status_uuid", STATUS.MESSAGE.vuex_state);
+      await wrapper.setProps({ confirmation_request: true });
+      expect(confirmation_spy).toHaveBeenCalledWith(1);
+    }
+  );
+
+  test.each(["LIVE_VIEW_ACTIVE", "RECORDING"])(
+    "When a user wants to exit the desktop app, Then the closure warning modal should appear if there are active processes",
+    async (vuex_state) => {
+      wrapper = mount(StatusWidget, {
+        store,
+        localVue,
+      });
+
+      await store.commit("flask/set_status_uuid", STATUS.MESSAGE.vuex_state);
+      await wrapper.setProps({ confirmation_request: true });
+      Vue.nextTick(() => {
+        expect(wrapper.find("#closure").isVisible()).toBe(true);
+      });
+    }
+  );
 });

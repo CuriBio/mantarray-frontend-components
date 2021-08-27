@@ -7,7 +7,6 @@ const time_conversion = {
   seconds: 1000,
   milliseconds: 1,
   minutes: 60000,
-  hours: 3600,
 };
 
 export default {
@@ -21,20 +20,20 @@ export default {
     this.commit("stimulation/set_selected_wells", well_values);
   },
 
-  handle_protocol_order({ commit, dispatch }, new_pulse_order) {
-    let x_values = [0];
-    let y_values = [0];
+  async handle_protocol_order({ commit, dispatch }, new_pulse_order) {
+    const x_values = [0];
+    const y_values = [0];
     const color_assignments = {};
     const pulses = [];
 
     const get_last = (array) => array[array.length - 1];
 
-    const helper = (setting, max_duration) => {
+    const helper = (setting) => {
       x_values.push(get_last(x_values), setting.phase_one_duration + get_last(x_values));
       y_values.push(setting.phase_one_charge, setting.phase_one_charge);
 
       if (setting.phase_two_duration > 0) {
-        x_values.push(get_last(x_values), setting.interpulse_duration + get_last(x_values));
+        x_values.push(get_last(x_values), setting.interphase_interval + get_last(x_values));
         y_values.push(0, 0);
         x_values.push(get_last(x_values), setting.phase_two_duration + get_last(x_values));
         y_values.push(setting.phase_two_charge, setting.phase_two_charge);
@@ -42,39 +41,38 @@ export default {
 
       x_values.push(get_last(x_values), setting.repeat_delay_interval + get_last(x_values));
       y_values.push(0, 0);
-
-      x_values = x_values.filter((val) => val < max_duration);
-      const sliced_y_values = y_values.slice(0, x_values.length);
-      if (x_values.length === y_values.length) helper(setting, max_duration);
-      else y_values = sliced_y_values;
     };
 
-    new_pulse_order.map((pulse) => {
-      const repeat_color = pulse.repeat.color;
-      const starting_repeat_idx = x_values.length - 1;
-      let setting = pulse.pulse_settings;
+    await new_pulse_order.map(async (pulse) => {
+      const { color, number_of_repeats } = pulse.repeat;
       const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
+      let setting = pulse.pulse_settings;
 
-      const converted_delay = repeat_delay_interval.duration * time_conversion[repeat_delay_interval.unit];
+      const starting_repeat_idx = x_values.length - 1;
       const converted_total_active =
         total_active_duration.duration * time_conversion[total_active_duration.unit];
 
+      let repeats = number_of_repeats * (converted_total_active / 1000);
+
       setting = {
         ...setting,
-        repeat_delay_interval: converted_delay,
+        repeat_delay_interval,
         total_active_duration: converted_total_active,
       };
 
       const max_duration = get_last(x_values) + converted_total_active;
-
       pulses.push(setting);
-      helper(setting, max_duration);
+
+      while (repeats > 0) {
+        helper(setting);
+        repeats--;
+      }
 
       x_values.push(max_duration);
       y_values.push(get_last(y_values));
 
       const ending_repeat_idx = x_values.length;
-      color_assignments[repeat_color] = [starting_repeat_idx, ending_repeat_idx];
+      color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
     });
 
     this.commit("stimulation/set_repeat_color_assignments", color_assignments);
@@ -213,7 +211,7 @@ export default {
           return {
             phase_one_duration: (pulse.phase_one_duration *= 1000),
             phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]),
-            interpulse_duration: (pulse.interpulse_duration *= 1000),
+            interphase_interval: (pulse.interphase_interval *= 1000),
             phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]),
             phase_two_duration: (pulse.phase_two_duration *= 1000),
             repeat_delay_interval: (pulse.repeat_delay_interval *= 1000),

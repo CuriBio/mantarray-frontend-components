@@ -6,9 +6,9 @@
   </div>
 </template>
 <script>
-import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
+// import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
 import { mapMutations, mapActions } from "vuex";
-// import { StimulationStudio } from "@/dist/mantarray.common";
+import { StimulationStudio } from "@/dist/mantarray.common";
 
 export default {
   components: {
@@ -32,7 +32,7 @@ export default {
             {
               phase_one_duration: 3,
               phase_one_charge: 40,
-              interpulse_duration: 1,
+              interphase_interval: 1,
               phase_two_duration: 3,
               phase_two_charge: -40,
               repeat_delay_interval: 1,
@@ -41,7 +41,7 @@ export default {
             {
               phase_one_duration: 50,
               phase_one_charge: 0,
-              interpulse_duration: 0,
+              interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
               repeat_delay_interval: 0,
@@ -50,7 +50,7 @@ export default {
             {
               phase_one_duration: 4,
               phase_one_charge: 10,
-              interpulse_duration: 1,
+              interphase_interval: 1,
               phase_two_duration: 4,
               phase_two_charge: -10,
               repeat_delay_interval: 1,
@@ -66,7 +66,7 @@ export default {
               pulse_settings: {
                 phase_one_duration: 3,
                 phase_one_charge: 40,
-                interpulse_duration: 1,
+                interphase_interval: 1,
                 phase_two_duration: 3,
                 phase_two_charge: -40,
               },
@@ -83,7 +83,7 @@ export default {
               pulse_settings: {
                 phase_one_duration: 50,
                 phase_one_charge: 0,
-                interpulse_duration: 0,
+                interphase_interval: 0,
                 phase_two_duration: 0,
                 phase_two_charge: 0,
               },
@@ -100,7 +100,7 @@ export default {
               pulse_settings: {
                 phase_one_duration: 4,
                 phase_one_charge: 10,
-                interpulse_duration: 1,
+                interphase_interval: 1,
                 phase_two_duration: 4,
                 phase_two_charge: -10,
               },
@@ -126,7 +126,7 @@ export default {
             {
               phase_one_duration: 5,
               phase_one_charge: 200,
-              interpulse_duration: 0,
+              interphase_interval: 0,
               phase_two_duration: 5,
               phase_two_charge: -200,
               repeat_delay_interval: 0,
@@ -135,7 +135,7 @@ export default {
             {
               phase_one_duration: 1000,
               phase_one_charge: 0,
-              interpulse_duration: 0,
+              interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
               repeat_delay_interval: 0,
@@ -151,7 +151,7 @@ export default {
               pulse_settings: {
                 phase_one_duration: 5,
                 phase_one_charge: 200,
-                interpulse_duration: 0,
+                interphase_interval: 0,
                 phase_two_duration: 5,
                 phase_two_charge: -200,
               },
