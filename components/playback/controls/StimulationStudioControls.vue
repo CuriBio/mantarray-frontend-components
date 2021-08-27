@@ -96,10 +96,8 @@ export default {
   background: black;
   height: 85px;
   width: 287px;
-  padding: 5px;
   font-family: Muli;
   padding-left: 20px;
-  font-weight: lighter;
   top: 0px;
   left: 0px;
 }
@@ -121,13 +119,14 @@ export default {
   padding: 5px;
 }
 .span__stimulation-label {
-  position: relative;
+  position: absolute;
   color: rgb(255, 255, 255);
   font-size: 9px;
   background: black;
-  top: 23%;
+  font-weight: lighter;
+  top: 31%;
   z-index: 1;
-  right: 40px;
+  left: 110px;
   letter-spacing: 1px;
 }
 .span__stimulation-controls-play-stop-button {

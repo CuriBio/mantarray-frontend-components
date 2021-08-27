@@ -81,6 +81,7 @@ export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidge
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
 export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
 export { default as GradientBar } from "./components/status/GradientBar.vue";
+export { default as ClosureWarning } from "./components/status/ClosureWarning.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";

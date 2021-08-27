@@ -243,7 +243,7 @@ export default {
   background: rgb(0, 0, 0);
   position: absolute;
   border-radius: 10px;
-  width: 1322px;
+  width: 1320px;
   font-family: muli;
 }
 .error-message {
@@ -404,7 +404,7 @@ button:hover {
 .div__Editor-background {
   transform: rotate(0deg);
   background: rgb(17, 17, 17);
-  width: 1322px;
+  width: 1318px;
   height: 166px;
 }
 .div__Tabs-panel {

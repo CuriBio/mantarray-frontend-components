@@ -9,6 +9,9 @@
           @ok-clicked="remove_error_catch"
         ></ErrorCatchWidget>
       </b-modal>
+      <b-modal id="closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+        <ClosureWarning id="closure" @handle_confirmation="handle_confirmation" />
+      </b-modal>
     </span>
   </div>
 </template>
@@ -20,6 +23,7 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import ErrorCatchWidget from "@/components/status/ErrorCatchWidget.vue";
+import ClosureWarning from "@/components/status/ClosureWarning.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -33,6 +37,13 @@ export default {
   name: "StatusBar",
   components: {
     ErrorCatchWidget,
+    ClosureWarning,
+  },
+  props: {
+    confirmation_request: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -50,6 +61,12 @@ export default {
   watch: {
     status_uuid: function (newValue) {
       this.set_text_from_state(newValue);
+    },
+    confirmation_request: function () {
+      const check_status =
+        this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE || this.status_uuid === STATUS.MESSAGE.RECORDING;
+      if (this.confirmation_request && check_status) this.$bvModal.show("closure-warning");
+      else if (this.confirmation_request && !check_status) this.handle_confirmation(1);
     },
   },
   created() {
@@ -103,6 +120,10 @@ export default {
       this.$bvModal.hide("error-catch");
       this.$store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
     },
+    handle_confirmation: function (idx) {
+      this.$bvModal.hide("closure-warning");
+      this.$emit("send_confirmation", idx);
+    },
     shutdown_request: async function () {
       const shutdown_url = "http://localhost:4567/shutdown";
       try {
@@ -148,7 +169,8 @@ export default {
 }
 
 /* Center the error-catch pop-up dialog within the viewport */
-#error-catch {
+#error-catch,
+#closure-warning {
   position: fixed;
   margin: 5% auto;
   top: 15%;

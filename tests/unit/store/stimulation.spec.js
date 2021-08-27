@@ -159,6 +159,24 @@ describe("store/stimulation", () => {
       expect(check_letter_duplicate).toBe(false);
     });
 
+    test("When there are no saved protocols, Then the first color and letter assigned to new protocol will be A and #4ca0af", async () => {
+      store.state.stimulation.protocol_list = [{ letter: "", color: "", label: "Create New" }];
+      const { letter, color } = store.getters["stimulation/get_next_protocol"];
+
+      expect(letter).toBe("A");
+      expect(color).toBe("#4ca0af");
+    });
+
+    test("When a protocol is selected to be editted, Then the letter and color assignment should be that of the selected protocol", async () => {
+      const selected_protocol = store.state.stimulation.protocol_list[1];
+      await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+
+      const { letter, color } = store.getters["stimulation/get_next_protocol"];
+
+      expect(letter).toBe("A");
+      expect(color).toBe("#118075");
+    });
+
     test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
       const voltage = "Voltage (mV)";
       const current = "Current (mA)";
