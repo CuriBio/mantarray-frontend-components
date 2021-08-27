@@ -1,6 +1,15 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+
+0.4.6 (2021-08-27)
+------------------
+
+- Added initial Gen 1 stimulation studio
+- Added warning confirmation on window close if processes (live view and recording) are still running
+- Added stimulation additional controls component
+
+
 0.4.5 (2021-08-23)
 ------------------
 
