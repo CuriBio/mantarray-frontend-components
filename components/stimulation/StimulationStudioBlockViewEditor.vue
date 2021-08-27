@@ -243,7 +243,7 @@ export default {
   background: rgb(0, 0, 0);
   position: absolute;
   border-radius: 10px;
-  width: 1320px;
+  width: 1315px;
   font-family: muli;
 }
 .error-message {
@@ -258,7 +258,7 @@ export default {
 .delete_popover_class {
   position: fixed;
   height: 80px;
-  width: 200px;
+  width: 201px;
   font-family: Muli;
   padding: 4px;
   display: flex;
@@ -272,7 +272,7 @@ export default {
 
 .delete_popover_label {
   font-weight: bold;
-  padding-top: 8px;
+  padding-top: 5px;
   color: #b7b7b7;
   height: 50px;
   width: 200px;
@@ -341,9 +341,9 @@ button:hover {
 }
 .trash-icon {
   margin-left: 11%;
-  margin-right: 1%;
+  margin-right: 4px;
   color: #4c4c4c;
-  padding-top: 2px;
+  padding-top: 1px;
   font-size: 20px;
 }
 
@@ -404,7 +404,7 @@ button:hover {
 .div__Editor-background {
   transform: rotate(0deg);
   background: rgb(17, 17, 17);
-  width: 1318px;
+  width: 1315px;
   height: 166px;
 }
 .div__Tabs-panel {
