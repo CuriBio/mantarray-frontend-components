@@ -12,8 +12,8 @@
             :group="{ name: 'order', pull: 'clone', put: false }"
             :clone="clone"
           >
-            <div v-for="(types, idx) in icon_types" :id="types.type" :key="idx">
-              <img :src="`/${types.type}.png`" />
+            <div v-for="(type, idx) in icon_types" :id="type" :key="idx">
+              <img :src="require(`@/assets/img/${type}.png`)" />
             </div>
           </draggable>
         </div>
@@ -54,7 +54,10 @@
                   </span>
                 </div>
               </div>
-              <img :src="`/${types.type}.png`" @click.shift.exact="open_modal_for_edit(types.type, idx)" />
+              <img
+                :src="require(`@/assets/img/${types.type}.png`)"
+                @click.shift.exact="open_modal_for_edit(types.type, idx)"
+              />
 
               <draggable
                 v-model="types.nested_protocols"
@@ -74,7 +77,7 @@
                   :style="'position: relative;'"
                   @click.shift.exact="open_modal_for_edit(nested_types.type, idx, nested_idx)"
                 >
-                  <img :src="`/${nested_types.type}.png`" :style="'margin-top: 4px;'" />
+                  <img :src="require(`@/assets/img/${nested_types.type}.png`)" :style="'margin-top: 4px;'" />
                 </div>
               </draggable>
             </div>
@@ -159,11 +162,7 @@ export default {
   },
   data() {
     return {
-      icon_types: [
-        { type: "Monophasic", src: "/Monophasic.png" },
-        { type: "Biphasic", src: "/Biphasic.png" },
-        { type: "Delay", src: "/Delay.png" },
-      ],
+      icon_types: ["Monophasic", "Biphasic", "Delay"],
       button_labels: {
         no_delete_option: ["Save", "Cancel"],
         delete_option: ["Save", "Delete", "Cancel"],
@@ -323,8 +322,7 @@ export default {
       const random_color = Math.floor(Math.random() * 16777215).toString(16);
 
       return {
-        type: type.type,
-        src: type.src,
+        type,
         nested_protocols: [],
         repeat: { color: random_color, number_of_repeats: 0 },
         pulse_settings: {
