@@ -27,11 +27,7 @@ describe("ClosureWarning.vue", () => {
     const target_message_span = wrapper.find(".span__closure-warning-message");
     const target_message_span_p = target_message_span.findAll("p");
     expect(target_message_span_p.at(0).text()).toStrictEqual("Operations are still in progress.");
-    expect(target_message_span_p.at(1)).toMatchInlineSnapshot(`
-      <p>
-        Are you sure you want to exit?
-      </p>
-    `);
+    expect(target_message_span_p.at(1).text()).toStrictEqual("Are you sure you want to exit?");
   });
   test("Given that ClosureWarning is mounted, When the ClosureWarning is visible, Then click on 'Yes' or 'Cancel' results in an event 'handle_warning_closure' to be emitted", async () => {
     wrapper = mount(ComponentToTest, {
