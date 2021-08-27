@@ -215,7 +215,6 @@ export default {
   position: absolute;
   left: 0px;
   height: 13px;
-  overflow: hidden;
   visibility: visible;
   user-select: none;
   text-align: left;

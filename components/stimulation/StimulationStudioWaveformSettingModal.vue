@@ -376,6 +376,7 @@ export default {
         valid: "",
         max_current: "Must be within +/- 100",
         max_voltage: "Must be within +/- 1200",
+        max_frequency: "Must be a positive number <= 10",
       },
       err_msg: {
         phase_one_duration: "",
@@ -505,8 +506,8 @@ export default {
     },
     check_pulse_frequency(value, label) {
       if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      else if ((!this.regex.duration.test(value) && value !== "") || value == 0)
-        this.err_msg[label] = this.invalid_err_msg.min_num_err;
+      else if ((!this.regex.duration.test(value) && value !== "") || value == 0 || value > 10)
+        this.err_msg[label] = this.invalid_err_msg.max_frequency;
       else if (this.regex.duration.test(value) && value !== "") {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.input_pulse_frequency = Number(value);
@@ -654,7 +655,6 @@ canvas {
   z-index: 4;
 }
 .span__stimulationstudio-input {
-  overflow: hidden;
   white-space: nowrap;
   text-align: left;
   font-weight: normal;
