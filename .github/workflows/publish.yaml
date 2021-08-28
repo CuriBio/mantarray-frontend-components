@@ -7,7 +7,7 @@ on:
       publish_package:
         description: "Publish to NPM"
         required: false
-        default: "0"
+        default: "1"
 
 jobs:
   test:
