@@ -233,7 +233,7 @@ export class TextValidation {
       }
     } else {
       if (apikey_len == 0) {
-        feedback_text = "";
+        feedback_text = "This field is required";
       } else {
         if (apikey_len > 36) {
           feedback_text = this.apikey_errorfinder("error");

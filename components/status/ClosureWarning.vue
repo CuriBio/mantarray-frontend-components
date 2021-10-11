@@ -16,8 +16,7 @@
           :enabled_color="'#B7B7B7'"
           :hover_color="['#bd4932', '#19ac8a']"
           @btn-click="handle_click"
-        >
-        </ButtonWidget>
+        />
       </div>
     </div>
   </div>
@@ -28,13 +27,13 @@ import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 export default {
   name: "ClosureWarning",
   components: {
-    ButtonWidget,
+    ButtonWidget
   },
   methods: {
-    handle_click: function (idx) {
+    handle_click: function(idx) {
       this.$emit("handle_confirmation", idx);
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>

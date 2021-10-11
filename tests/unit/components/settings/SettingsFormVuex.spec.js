@@ -79,7 +79,7 @@ describe("SettingsForm.vue", () => {
     });
     test("Given a customer and user account selected in Vuex and the textbox for Customer Account is changed to an account different than the one in Vuex and a user account is selected in thet textbox, When the Save Changes button is clicked, Then the selected indices in Vuex for Customer and User accounts are updated to reflect the chosen options in the textboxes", async () => {
       store.commit("settings/set_customer_index", 0);
-      store.commit("settings/set_user_index", 0);
+      // store.commit("settings/set_user_index", 0);
 
       wrapper = mount(ComponentToTest, {
         store,
@@ -88,8 +88,8 @@ describe("SettingsForm.vue", () => {
 
       await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
       await wrapper.vm.$nextTick(); // wait for update
-      await wrapper.find("#input-dropdown-widget-user-").setValue("Lab User  -1");
-      await wrapper.vm.$nextTick(); // wait for update
+      // await wrapper.find("#input-dropdown-widget-user-").setValue("Lab User  -1");
+      // await wrapper.vm.$nextTick(); // wait for update
 
       const save_changes = wrapper.find(".span__settings-tool-tip-save-btn-txt-enable");
       await save_changes.trigger("click");
@@ -97,7 +97,7 @@ describe("SettingsForm.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
 
       expect(store.state.settings.customer_index).toStrictEqual(1); // this is the real data due to savechanges function Vuex stored data of customer_index
-      expect(store.state.settings.user_index).toStrictEqual(0); // this is the real data due to savechanges function Vuex stored data of user_index
+      // expect(store.state.settings.user_index).toStrictEqual(0); // this is the real data due to savechanges function Vuex stored data of user_index
     });
   });
   test("Given that no data are in the Vuex store, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", () => {
@@ -106,7 +106,7 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
     expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");
-    expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
+    // expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
   });
   test("Given that badly formed data with missing user_ids are in the Vuex store, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", () => {
     store.commit("settings/set_customer_account_ids", array_of_customer_ids_missing_user_ids);
@@ -115,7 +115,7 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
     expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");
-    expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
+    // expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
   });
   test("Given that badly formed data with empty customer account nickname with missing user_ids in the Vuex, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", async () => {
     store.commit("settings/set_customer_account_ids", array_of_customerid_null_missing_user_ids);
@@ -126,7 +126,7 @@ describe("SettingsForm.vue", () => {
     });
 
     expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");
-    expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
+    // expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
   });
   // Eli (11/25/20): commenting out this test until we are ready to implement the feature
   // test("Given that the SettingsForm is loaded with Vuex, When the 'Key Icon' decoder is invoked, Then validate if the decoder string converts UNICODE value to key icon", async () => {

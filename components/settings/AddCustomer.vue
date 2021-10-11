@@ -97,7 +97,6 @@ export default {
     },
     on_update_api: function (new_value) {
       this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
-      if (new_value === "") this.error_text_api = "This field is required";
       this.api_key = new_value;
       this.enable_save_button();
     },

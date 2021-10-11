@@ -25,7 +25,7 @@ export {
   system_status_when_server_ready_regexp,
   system_status_when_initializing_instrument_regexp,
   system_status_when_server_initializing_regexp,
-  all_mantarray_commands_regexp,
+  all_mantarray_commands_regexp
 } from "./store/modules/flask/url_regex";
 export { default as stimulation_store_module } from "./store/modules/stimulation";
 export { default as heatmap_store_module } from "./store/modules/heatmap";
@@ -67,6 +67,7 @@ export { default as SelectDropDown } from "./components/basic_widgets/SelectDrop
 export { default as CheckBoxWidget } from "./components/basic_widgets/CheckBoxWidget.vue";
 export { default as RadioButtonWidget } from "./components/basic_widgets/RadioButtonWidget.vue";
 export { default as StimulationStudioPlateWell } from "./components/basic_widgets/StimulationStudioPlateWell.vue";
+export { default as ToggleWidget } from "./components/basic_widgets/ToggleWidget.vue";
 
 // Plate Based
 export { default as PlateNavigator } from "./components/plate_based_widgets/navigator/PlateNavigator.vue";

@@ -212,7 +212,7 @@
       :class="[
         on_empty_flag_customer
           ? 'div__settings-tool-tip-reset-btn-disable'
-          : 'div__settings-tool-tip-reset-btn-enable',
+          : 'div__settings-tool-tip-reset-btn-enable'
       ]"
       width="180"
       height="55"
@@ -223,7 +223,7 @@
         :class="[
           on_empty_flag_customer
             ? 'span__settings-tool-tip-reset-btn-txt-disable'
-            : 'span__settings-tool-tip-reset-btn-txt-enable',
+            : 'span__settings-tool-tip-reset-btn-txt-enable'
         ]"
         @click="reset_changes()"
         >Reset&nbsp;<wbr />to&nbsp;<wbr />Defaults</span
@@ -235,7 +235,7 @@
       :class="[
         on_empty_flag_customer
           ? 'div__settings-tool-tip-save-btn-disable'
-          : 'div__settings-tool-tip-save-btn-enable',
+          : 'div__settings-tool-tip-save-btn-enable'
       ]"
       width="180"
       height="55"
@@ -248,7 +248,7 @@
         :class="[
           on_empty_flag_customer
             ? 'span__settings-tool-tip-save-btn-txt-disable'
-            : 'span__settings-tool-tip-save-btn-txt-enable',
+            : 'span__settings-tool-tip-save-btn-txt-enable'
         ]"
         @click="save_changes()"
         >Save&nbsp;<wbr />Changes</span
@@ -289,7 +289,7 @@ export default {
     // AddUser,
     // EditUser,
     InputDropDown,
-    ToggleWidget,
+    ToggleWidget
   },
   data() {
     return {
@@ -319,20 +319,20 @@ export default {
       on_empty_flag_user: true,
 
       auto_upload: true,
-      auto_delete: false,
+      auto_delete: false
     };
   },
   computed: {
     ...mapState("settings", {
-      customer_account_ids: "customer_account_ids",
+      customer_account_ids: "customer_account_ids"
     }),
     ...mapState("settings", {
-      customer_index: "customer_index",
+      customer_index: "customer_index"
     }),
     ...mapState("settings", {
-      user_index: "user_index",
+      user_index: "user_index"
     }),
-    customers_options: function () {
+    customers_options: function() {
       if (this.customer_account_ids.length == 0) {
         return [];
       } else {
@@ -344,7 +344,7 @@ export default {
         return list;
       }
     },
-    users_options: function () {
+    users_options: function() {
       if (this.entrykey_customer != "") {
         if (this.customer_account_ids.length != 0) {
           if (this.customer_account_ids[this.customer_focus_id].user_ids !== undefined) {
@@ -362,14 +362,14 @@ export default {
       }
       return [];
     },
-    addcustomerid: function () {
+    addcustomerid: function() {
       if (this.customer_account_ids.length == 0) {
         return 0;
       } else {
         return this.customer_account_ids.length;
       }
     },
-    add_user_id: function () {
+    add_user_id: function() {
       if (this.customer_account_ids.length == 0) {
         return 0;
       } else {
@@ -379,10 +379,10 @@ export default {
           return 0;
         }
       }
-    },
+    }
   },
   watch: {
-    entrykey_customer: function () {
+    entrykey_customer: function() {
       if (this.entrykey_customer == "") {
         this.on_empty_flag_customer = true;
       } else {
@@ -395,7 +395,7 @@ export default {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_customer = false;
           const customer_focus = this.customer_account_ids.find(
-            (customer) => customer.nickname === this.entrykey_customer
+            customer => customer.nickname === this.entrykey_customer
           );
           this.valid_customer_focus = false;
           this.valid_user_focus = false;
@@ -421,7 +421,7 @@ export default {
       }
       this.modify_btn_states();
     },
-    entrykey_user: function () {
+    entrykey_user: function() {
       if (this.entrykey_customer == "") {
         this.on_empty_flag_user = true;
       } else {
@@ -436,9 +436,9 @@ export default {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_user = false;
           const customer_focus = this.customer_account_ids.find(
-            (customer) => customer.nickname === this.entrykey_customer
+            customer => customer.nickname === this.entrykey_customer
           );
-          const user_focus = customer_focus.user_ids.find((user) => user.nickname === this.entrykey_user);
+          const user_focus = customer_focus.user_ids.find(user => user.nickname === this.entrykey_user);
           this.valid_user_focus = false;
           if (user_focus != null) {
             if (this.entrykey_user != "") {
@@ -455,9 +455,9 @@ export default {
           this.modify_btn_states();
         }
       }
-    },
+    }
   },
-  created: function () {
+  created: function() {
     this.nicknames_list_customer = this.customers_options;
     this.nicknames_list_user = this.users_options;
     if (this.customer_index != null) {
@@ -487,7 +487,7 @@ export default {
     //   return textArea.value;
     // },
     save_changes() {
-      this.$store.commit("settings/set_customer_details", this.current_customerids);
+      // this.$store.commit("settings/set_customer_details", this.current_customerids);
       this.$store.commit("settings/set_customer_index", this.customer_focus_id);
       this.$store.commit("settings/set_user_index", this.user_focus_id);
       this.$store.commit("settings/set_auto_upload", this.auto_upload);
@@ -627,10 +627,10 @@ export default {
       // }
       this.disable_edit_customer = this.on_empty_flag_customer;
     },
-    handle_toggle_state: function (state, label) {
+    handle_toggle_state: function(state, label) {
       label === "auto_upload" ? (this.auto_upload = state) : (this.auto_delete = state);
-    },
-  },
+    }
+  }
 };
 </script>
 <style type="text/css">

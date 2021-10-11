@@ -18,7 +18,7 @@ import {
   system_status_when_calibrating_regexp,
   system_status_when_recording_regexp,
   system_status_when_live_view_active_regexp,
-  all_mantarray_commands_regexp,
+  all_mantarray_commands_regexp
 } from "@/store/modules/flask/url_regex";
 let wrapper = null;
 
@@ -51,7 +51,7 @@ describe("DesktopPlayerControls.vue", () => {
     wrapper = shallowMount(dist_component_to_test, {
       propsData,
       store,
-      localVue,
+      localVue
     });
     const target_span = wrapper.find(".span__playback-desktop-player-controls-text");
 
@@ -66,7 +66,7 @@ describe("DesktopPlayerControls.vue", () => {
     wrapper = shallowMount(component_to_test, {
       propsData,
       store,
-      localVue,
+      localVue
     });
 
     const target_button = wrapper.find(".svg__playback-desktop-player-controls-live-view-button");
@@ -99,7 +99,7 @@ describe("DesktopPlayerControls.vue", () => {
       ["RECORDING", ".svg__playback-desktop-player-controls-live-view-button"],
       ["NEEDS_CALIBRATION", ".svg__playback-desktop-player-controls-live-view-button"],
       ["LIVE_VIEW_ACTIVE", ".svg__playback-desktop-player-controls-calibrate-button"],
-      ["NOT_CONNECTED_TO_INSTRUMENT", ".svg__playback-desktop-player-controls-calibrate-button"],
+      ["NOT_CONNECTED_TO_INSTRUMENT", ".svg__playback-desktop-player-controls-calibrate-button"]
     ])(
       "Given Vuex is in state %s, Then clicking button %s does not transition playback state",
       async (playback_state_enum_str, selector_str) => {
@@ -107,7 +107,7 @@ describe("DesktopPlayerControls.vue", () => {
         wrapper = shallowMount(component_to_test, {
           propsData,
           store,
-          localVue,
+          localVue
         });
         const target_button = wrapper.find(selector_str);
 
@@ -167,7 +167,7 @@ describe("DesktopPlayerControls.vue", () => {
         wrapper = shallowMount(component_to_test, {
           propsData,
           store,
-          localVue,
+          localVue
         });
 
         const target_button = wrapper.find(".svg__playback-desktop-player-controls-live-view-button");
@@ -184,7 +184,7 @@ describe("DesktopPlayerControls.vue", () => {
         ["RECORDING", ".svg__playback-desktop-player-controls-record-button--active", "LIVE_VIEW_ACTIVE"],
         ["NEEDS_CALIBRATION", ".svg__playback-desktop-player-controls-calibrate-button", "CALIBRATING"],
         ["CALIBRATED", ".svg__playback-desktop-player-controls-calibrate-button", "CALIBRATING"],
-        ["CALIBRATED", ".svg__playback-desktop-player-controls-live-view-button", "BUFFERING"],
+        ["CALIBRATED", ".svg__playback-desktop-player-controls-live-view-button", "BUFFERING"]
       ])(
         "Given Vuex in playback state %s, When button matching %s is clicked, Then Vuex transitions playback state to %s",
         async (starting_playback_state_enum, selector_str, ending_playback_state_enum) => {
@@ -192,10 +192,10 @@ describe("DesktopPlayerControls.vue", () => {
           wrapper = shallowMount(component_to_test, {
             propsData,
             store,
-            localVue,
+            localVue
           });
           const target_button = wrapper.find(selector_str);
-
+          await store.commit("settings/set_customer_index", 0);
           // set initial state
           store.commit(
             "playback/set_playback_state",
@@ -220,7 +220,7 @@ describe("DesktopPlayerControls.vue", () => {
         ".svg__playback-desktop-player-controls-record-button--inactive",
         true,
         false,
-        false,
+        false
       ],
       [
         "LIVE_VIEW_ACTIVE",
@@ -228,7 +228,7 @@ describe("DesktopPlayerControls.vue", () => {
 
         true,
         true,
-        false,
+        false
       ],
       ["RECORDING", ".svg__playback-desktop-player-controls-record-button--inactive", false, false, false],
       [
@@ -237,7 +237,7 @@ describe("DesktopPlayerControls.vue", () => {
 
         false,
         false,
-        false,
+        false
       ],
       ["RECORDING", ".svg__playback-desktop-player-controls-record-button--active", true, false, true],
       ["NEEDS_CALIBRATION", ".svg__playback-desktop-player-controls-live-view-button", true, false, false],
@@ -251,14 +251,14 @@ describe("DesktopPlayerControls.vue", () => {
         ".ellipse__playback-desktop-player-controls-calibrate-button-indicator",
         false,
         false,
-        false,
+        false
       ],
       [
         "CALIBRATING",
         ".ellipse__playback-desktop-player-controls-calibrate-button-indicator",
         false,
         false,
-        false,
+        false
       ],
 
       [
@@ -266,21 +266,21 @@ describe("DesktopPlayerControls.vue", () => {
         ".ellipse__playback-desktop-player-controls-calibrate-button-indicator",
         true,
         false,
-        false,
+        false
       ],
       [
         "NOT_CONNECTED_TO_INSTRUMENT",
         ".svg__playback-desktop-player-controls-calibrate-button",
         true,
         false,
-        false,
+        false
       ],
       [
         "NOT_CONNECTED_TO_INSTRUMENT",
         ".ellipse__playback-desktop-player-controls-calibrate-button-indicator",
         false,
         false,
-        false,
+        false
       ],
       ["NEEDS_CALIBRATION", ".svg__playback-desktop-player-controls-calibrate-button", true, true, false],
       ["CALIBRATING", ".svg__playback-desktop-player-controls-calibrate-button", true, false, false],
@@ -289,7 +289,7 @@ describe("DesktopPlayerControls.vue", () => {
       ["CALIBRATED", ".svg__playback-desktop-player-controls-calibrate-button", true, true, false],
       ["BUFFERING", ".svg__playback-desktop-player-controls-calibrate-button", true, false, false],
       ["BUFFERING", ".span__playback-desktop-player-controls-buffering", true, false, true],
-      ["LIVE_VIEW_ACTIVE", ".span__playback-desktop-player-controls-buffering", false, false, true],
+      ["LIVE_VIEW_ACTIVE", ".span__playback-desktop-player-controls-buffering", false, false, true]
     ])(
       "When playback state in Vuex changes to %s, Then display of button matching %s changes so that visible is %s, available is %s and active is %s",
       async (playback_state_enum, selector_str, expected_visible, expected_available, expected_active) => {
@@ -297,7 +297,7 @@ describe("DesktopPlayerControls.vue", () => {
         wrapper = shallowMount(component_to_test, {
           propsData,
           store,
-          localVue,
+          localVue
         });
         const target_button = wrapper.find(selector_str);
 
@@ -328,7 +328,7 @@ describe("DesktopPlayerControls.vue", () => {
     );
     test.each([
       ["LIVE_VIEW_ACTIVE", ".svg__playback-desktop-player-controls-live-view-button", false],
-      ["RECORDING", ".svg__playback-desktop-player-controls-live-view-button", true],
+      ["RECORDING", ".svg__playback-desktop-player-controls-live-view-button", true]
     ])(
       "When playback state in Vuex changes to %s, Then the display of button matching %s updates so that running-in-background class is %s",
       async (
@@ -341,7 +341,7 @@ describe("DesktopPlayerControls.vue", () => {
         wrapper = shallowMount(component_to_test, {
           propsData,
           store,
-          localVue,
+          localVue
         });
         const target_button = wrapper.find(selector_str);
 
@@ -370,7 +370,7 @@ describe("DesktopPlayerControls.vue", () => {
       wrapper = shallowMount(component_to_test, {
         propsData,
         store,
-        localVue,
+        localVue
       });
       store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING);
       await wrapper.vm.$nextTick(); // wait for update
@@ -386,7 +386,7 @@ describe("DesktopPlayerControls.vue", () => {
       wrapper = shallowMount(component_to_test, {
         propsData,
         store,
-        localVue,
+        localVue
       });
       store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.BUFFERING);
       await wrapper.vm.$nextTick(); // wait for update

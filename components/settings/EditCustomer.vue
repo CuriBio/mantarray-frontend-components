@@ -76,11 +76,11 @@ export default {
   name: "EditCustomer",
   components: {
     InputWidget,
-    ButtonWidget,
+    ButtonWidget
   },
   props: {
     dialogdata: { type: Object, default: null },
-    dataindex: { type: Number, default: 0 },
+    dataindex: { type: Number, default: 0 }
   },
   data() {
     return {
@@ -91,28 +91,26 @@ export default {
       error_text_uuid: "",
       error_text_api: "",
       error_text_nickname: "",
-      enablelist_edit_customer: [true, true, true],
+      enablelist_edit_customer: [true, true, true]
     };
   },
   methods: {
-    on_update_uuid: function (new_value) {
+    on_update_uuid: function(new_value) {
       this.error_text_uuid = TextValidation_UUIDBase57.validate(new_value);
       this.uuid = new_value;
       this.enable_save_button();
     },
-    on_update_api: function (new_value) {
+    on_update_api: function(new_value) {
       this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
-      if (new_value === "") this.error_text_api = "This field is required";
-
       this.api_key = new_value;
       this.enable_save_button();
     },
-    on_update_nickname: function (new_value) {
+    on_update_nickname: function(new_value) {
       this.error_text_nickname = TextValidation_Nickname.validate(new_value);
       this.nickname = new_value;
       this.enable_save_button();
     },
-    clicked_button: function (choice) {
+    clicked_button: function(choice) {
       switch (choice) {
         case 0:
           this.cancel_editcustomer();
@@ -134,7 +132,7 @@ export default {
         uuid: this.uuid,
         api_key: this.api_key,
         nickname: this.nickname,
-        user_ids: this.user_ids,
+        user_ids: this.user_ids
       };
       this.$emit("delete-id", edit_customer);
     },
@@ -144,7 +142,7 @@ export default {
         uuid: this.uuid,
         api_key: this.api_key,
         nickname: this.nickname,
-        user_ids: this.user_ids,
+        user_ids: this.user_ids
       };
       this.$emit("save-id", edit_customer);
     },
@@ -158,8 +156,8 @@ export default {
         }
       }
       this.enablelist_edit_customer = [true, true, false];
-    },
-  },
+    }
+  }
 };
 </script>
 <style type="text/css">
