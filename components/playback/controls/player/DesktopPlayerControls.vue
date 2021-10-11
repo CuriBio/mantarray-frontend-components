@@ -4,13 +4,12 @@
     <div
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
     >
-      <div class="text-center">
+      <div class="text-center" @click="open_settings_form">
         <PlayerControlsSettingsButton
           id="settings"
           v-b-popover.hover.bottomright="settings_tooltip_text"
           :title="settings_title"
-          ><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"--></PlayerControlsSettingsButton
-        >
+        /><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
       </div>
     </div>
 
@@ -136,6 +135,9 @@
         <!-- inner rectangle-->
       </rect>
     </svg>
+    <b-modal id="settings-form" hide-footer hide-header hide-header-close :static="true">
+      <SettingsForm id="settings" @close_modal="close_modal" />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -145,16 +147,17 @@ import PlayerControlsSettingsButton from "./PlayerControlsSettingsButton.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlayCircle as fa_play_circle, faSpinner as fa_spinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import SettingsForm from "@/components/settings/SettingsForm.vue";
 
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 
-import { BButton } from "bootstrap-vue";
-Vue.component("BButton", BButton);
-
+import { BButton, BModal } from "bootstrap-vue";
 import { VBPopover } from "bootstrap-vue";
 // Note: Vue automatically prefixes the directive name with 'v-'
 Vue.directive("b-popover", VBPopover);
+Vue.component("BModal", BModal);
+Vue.component("BButton", BButton);
 
 const stateObj = playback_module.state();
 const vuex_delay = stateObj.tooltips_delay;
@@ -199,7 +202,7 @@ library.add(fa_spinner);
  */
 export default {
   name: "DesktopPlayerControls",
-  components: { PlayerControlsSettingsButton, FontAwesomeIcon },
+  components: { PlayerControlsSettingsButton, FontAwesomeIcon, SettingsForm },
   data: function () {
     return {
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES, // Eli (5/8/20): (this seems) needed to give access to the imported playback_module the v-show directives
@@ -208,7 +211,7 @@ export default {
       calibrate_title: "Calibration",
       liveview_title: "Live View",
       record_title: "Record",
-      settings_tooltip_text: "(Not Yet Available)",
+      settings_tooltip_text: "Edit customer account",
       schedule_tooltip_text: "(Not Yet Available)",
     };
   },
@@ -221,6 +224,9 @@ export default {
     }),
     ...mapState("playback", {
       tooltips_delay: "tooltips_delay",
+    }),
+    ...mapState("settings", {
+      customer_index: "customer_index",
     }),
     calibrate_tooltip_text: function () {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
@@ -303,7 +309,11 @@ export default {
   },
   methods: {
     on_activate_record_click: function () {
-      if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
+      if (this.customer_index === null) this.open_settings_form();
+      else if (
+        this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE &&
+        this.customer_index !== null
+      ) {
         this.$store.dispatch("playback/start_recording");
       }
     },
@@ -327,6 +337,12 @@ export default {
       ) {
         this.$store.dispatch("playback/start_calibration");
       }
+    },
+    open_settings_form: function () {
+      this.$bvModal.show("settings-form");
+    },
+    close_modal: function () {
+      this.$bvModal.hide("settings-form");
     },
   },
 };

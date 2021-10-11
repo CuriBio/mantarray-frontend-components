@@ -19,7 +19,7 @@
 
     <div id="apikey" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
-        :title_label="'API Key (Optional)'"
+        :title_label="'API Key'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
         :invalid_text="error_text_api"
         :initial_value="api_key"
@@ -102,6 +102,8 @@ export default {
     },
     on_update_api: function (new_value) {
       this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
+      if (new_value === "") this.error_text_api = "This field is required";
+
       this.api_key = new_value;
       this.enable_save_button();
     },

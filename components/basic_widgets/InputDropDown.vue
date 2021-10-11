@@ -136,14 +136,13 @@ export default {
 
 .span__input-dropdown-content-label {
   pointer-events: all;
-  align: center;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
   height: 30px;
   top: 0px;
-  left: 0px;
+  left: -15px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -153,7 +152,6 @@ export default {
   text-decoration: none;
   font-size: 19px;
   color: rgb(255, 255, 255);
-  text-align: center;
   z-index: 25;
 }
 

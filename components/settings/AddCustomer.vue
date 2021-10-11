@@ -16,9 +16,9 @@
       ></InputWidget>
     </div>
 
-    <div id="apikey" style="top: 145px; left: 50px; position: absolute; z-index: 23">
+    <div id="api-key" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
-        :title_label="'Enter API Key (Optional)'"
+        :title_label="'Enter API key'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
         :invalid_text="error_text_api"
         :spellcheck="false"
@@ -84,7 +84,7 @@ export default {
       api_key: "",
       nickname: "",
       error_text_uuid: "This field is required",
-      error_text_api: "",
+      error_text_api: "This field is required",
       error_text_nickname: "This field is required",
       enablelist_add_customer: [true, false],
     };
@@ -97,6 +97,7 @@ export default {
     },
     on_update_api: function (new_value) {
       this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
+      if (new_value === "") this.error_text_api = "This field is required";
       this.api_key = new_value;
       this.enable_save_button();
     },
