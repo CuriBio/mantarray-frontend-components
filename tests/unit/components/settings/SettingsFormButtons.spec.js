@@ -371,31 +371,6 @@ describe("SettingsForm.vue", () => {
       expect(close_event[0]).toStrictEqual([]);
     });
 
-    test("When the component is mounted, a Customer account is selected, and a user clicks reset, Then modal will default to no customer selected and will reset in Vuex", async () => {
-      store.commit("settings/set_customer_index", 0);
-      const commit_spy = jest.spyOn(store, "commit");
-      wrapper = mount(ComponentToTest, {
-        store,
-        localVue
-      });
-
-      const expected_state = {
-        entrykey_customer: "",
-        auto_delete: false,
-        auto_upload: true
-      };
-
-      const settings_buttons = await get_settings_button_enabled(wrapper);
-
-      expect(settings_buttons.reset_btn.isVisible()).toBe(true);
-      await settings_buttons.reset_btn.trigger("click");
-
-      expect(wrapper.vm.entrykey_customer).toBe(expected_state.entrykey_customer);
-      expect(wrapper.vm.auto_delete).toBe(expected_state.auto_delete);
-      expect(wrapper.vm.auto_upload).toBe(expected_state.auto_upload);
-
-      expect(commit_spy).toHaveBeenCalledTimes(1);
-    });
 
     test("When the component is mounted and a user toggles the auto upload and auto delete switches, Then the new state will be handled in component state", async () => {
       const toggle_spy = jest.spyOn(ComponentToTest.methods, "handle_toggle_state");

@@ -5,12 +5,12 @@
 </template>
 
 <script>
-import { PlayerControlsSettingsButton } from "@/dist/mantarray.common";
-// import PlayerControlsSettingsButton from "@/components/playback/controls/player/PlayerControlsSettingsButton.vue";
+// import { PlayerControlsSettingsButton } from "@/dist/mantarray.common";
+import PlayerControlsSettingsButton from "@/components/playback/controls/player/PlayerControlsSettingsButton.vue";
 
 export default {
   components: {
-    PlayerControlsSettingsButton,
-  },
+    PlayerControlsSettingsButton
+  }
 };
 </script>

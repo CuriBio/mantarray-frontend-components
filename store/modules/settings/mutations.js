@@ -31,7 +31,7 @@ export default {
       ...state,
       auto_upload: true,
       auto_delete: false,
-      customer_index: null,
+      customer_index: null
     };
-  },
+  }
 };

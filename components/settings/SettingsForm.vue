@@ -488,14 +488,16 @@ export default {
     //   textArea.innerHTML = str;
     //   return textArea.value;
     // },
-    save_changes() {
-      // this.$store.commit("settings/set_customer_details", this.current_customerids);
-      this.$store.commit("settings/set_customer_index", this.customer_focus_id);
+    async save_changes() {
       // this.$store.commit("settings/set_user_index", this.user_focus_id);
+
+      this.$store.commit("settings/set_customer_index", this.customer_focus_id);
       this.$store.commit("settings/set_auto_upload", this.auto_upload);
       this.$store.commit("settings/set_auto_delete", this.auto_delete);
 
-      this.$emit("close_modal");
+      const { status } = await this.$store.dispatch("settings/update_settings");
+      if (status == 200) this.$emit("close_modal");
+      else this.reset_changes();
     },
     reset_changes() {
       this.entrykey_customer = "";
@@ -503,6 +505,7 @@ export default {
       this.auto_upload = true;
 
       this.$store.commit("settings/reset_to_default");
+      console.log(this.$store.state.settings);
     },
     cancel_changes() {
       this.$emit("close_modal");

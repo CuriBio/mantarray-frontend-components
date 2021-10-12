@@ -44,11 +44,11 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     // }
 
     action_context.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR, {
-      root: true,
+      root: true
     });
     action_context.commit("flask/stop_status_pinging", null, { root: true }); // Error reported clear the ping_system_status
     action_context.commit("playback/stop_playback_progression", null, {
-      root: true,
+      root: true
     });
     if (error.response) {
       return error.response;
