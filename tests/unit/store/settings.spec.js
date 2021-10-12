@@ -544,14 +544,18 @@ describe("store/settings", () => {
         user_ids: []
       }
     ];
+
     store.commit("settings/set_customer_account_ids", array_of_customerids);
     expect(store.state.settings.customer_account_ids).toHaveLength(1);
     store.commit("settings/set_customer_index", 0);
+    console.log(store.state.settings.auto_upload);
 
     store.commit("settings/set_auto_upload", false);
     store.commit("settings/set_auto_delete", true);
+    console.log(store.state.settings.auto_upload);
 
     await store.commit("settings/reset_to_default");
+    console.log(store.state.settings.auto_upload);
 
     expect(store.state.settings.customer_account_ids).toHaveLength(1);
     expect(store.state.settings.auto_delete).toBe(false);

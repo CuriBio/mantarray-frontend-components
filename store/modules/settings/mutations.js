@@ -27,11 +27,8 @@ export default {
     state.auto_delete = new_value;
   },
   reset_to_default(state) {
-    state = {
-      ...state,
-      auto_upload: true,
-      auto_delete: false,
-      customer_index: null
-    };
+    state.auto_upload = true;
+    state.customer_index = null;
+    state.auto_delete = false;
   }
 };
