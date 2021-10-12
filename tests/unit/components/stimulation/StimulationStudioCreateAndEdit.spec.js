@@ -147,14 +147,6 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
   });
 
   test("When a user selects Create New in the protocol dropdown, Then the protocol editor will reset to be empty", async () => {
-    // const reset_protocol_editor = {
-    //   rest_duration: 0,
-    //   name: "",
-    //   pulses: [],
-    //   stimulation_type: "V",
-    //   stop_requirement: "Until Stopped",
-    //   time_unit: "seconds"
-    // };
     const reset_spy = jest.spyOn(StimulationStudioCreateAndEdit.methods, "reset_protocol_editor");
     const edit_spy = jest.spyOn(StimulationStudioCreateAndEdit.methods, "edit_selected_protocol");
 
