@@ -19,7 +19,7 @@ export default {
     const { auto_delete, auto_upload, baseurl, endpoint, customer_account_uuid } = payload;
     const whole_url = `${baseurl}/${endpoint}?customer_account_uuid=${customer_account_uuid}&auto_upload=${auto_upload}&auto_delete=${auto_delete}`;
     const response = await call_axios_get_from_vuex(whole_url, context);
-
+    console.log(response);
     return response;
   }
 };
