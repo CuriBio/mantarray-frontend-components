@@ -204,7 +204,6 @@ export default {
 
     const unique_protocol_ids = new Set();
     for (const well in protocol_assignments) {
-      // TODO
       if (protocol_assignments !== {}) {
         // add protocol to list of unique protocols if it has not been entered yet
         const { letter } = protocol_assignments[well];
@@ -214,13 +213,13 @@ export default {
           const { stimulation_type, pulses, stop_setting } = protocol_assignments[well].protocol;
           const converted_pulses = pulses.map((pulse) => {
             return {
-              phase_one_duration: (pulse.phase_one_duration *= 1000),
-              phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]),
-              interphase_interval: (pulse.interphase_interval *= 1000),
-              phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]),
-              phase_two_duration: (pulse.phase_two_duration *= 1000),
-              repeat_delay_interval: (pulse.repeat_delay_interval *= 1000),
-              total_active_duration: (pulse.total_active_duration *= 1000),
+              phase_one_duration: (pulse.phase_one_duration *= 1000), // sent in µs
+              phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]), // sent in mV or µA
+              interphase_interval: (pulse.interphase_interval *= 1000), // sent in µs
+              phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]), // sent in mV or µA
+              phase_two_duration: (pulse.phase_two_duration *= 1000), // sent in µs
+              repeat_delay_interval: Math.round((pulse.repeat_delay_interval *= 1000)), // sent in µs, also needs to be an integer value
+              total_active_duration: pulse.total_active_duration, // sent in ms
             };
           });
           const protocol_model = {
