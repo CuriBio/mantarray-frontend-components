@@ -25,7 +25,7 @@ export {
   system_status_when_server_ready_regexp,
   system_status_when_initializing_instrument_regexp,
   system_status_when_server_initializing_regexp,
-  all_mantarray_commands_regexp
+  all_mantarray_commands_regexp,
 } from "./store/modules/flask/url_regex";
 export { default as stimulation_store_module } from "./store/modules/stimulation";
 export { default as heatmap_store_module } from "./store/modules/heatmap";

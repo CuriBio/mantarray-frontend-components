@@ -35,16 +35,16 @@ describe("SettingsForm.vue", () => {
       cust_id: 0,
       uuid: "4vqyd62oARXqj9nRUNhtLQ",
       api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-      nickname: "Customer account -1"
-    }
+      nickname: "Customer account -1",
+    },
   ];
   const array_of_customerid_null_missing_user_ids = [
     {
       cust_id: 0,
       uuid: "4vqyd62oARXqj9nRUNhtLQ",
       api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-      nickname: ""
-    }
+      nickname: "",
+    },
   ];
 
   test("When mounting SettingsForm from the build dist file, Then verify that it loads successfully", () => {
@@ -52,7 +52,7 @@ describe("SettingsForm.vue", () => {
     wrapper = mount(DistComponentToTest, {
       propsData,
       store,
-      localVue
+      localVue,
     });
 
     const target_span = wrapper.find(".span__settingsform-title");
@@ -71,13 +71,13 @@ describe("SettingsForm.vue", () => {
 
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
 
       const expected_state = {
         entrykey_customer: "",
         auto_delete: false,
-        auto_upload: true
+        auto_upload: true,
       };
 
       await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
@@ -97,7 +97,7 @@ describe("SettingsForm.vue", () => {
 
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
 
       wrapper.vm.onCancelCustomerId();
@@ -111,7 +111,7 @@ describe("SettingsForm.vue", () => {
 
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
       jest.spyOn(store, "dispatch").mockImplementation(() => {
         return { status: 400 };
@@ -128,7 +128,7 @@ describe("SettingsForm.vue", () => {
       // store.commit("settings/set_user_index", 0);
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
 
       await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
@@ -146,7 +146,7 @@ describe("SettingsForm.vue", () => {
   test("Given that no data are in the Vuex store, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", () => {
     wrapper = mount(ComponentToTest, {
       store,
-      localVue
+      localVue,
     });
     expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");
     // expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
@@ -155,7 +155,7 @@ describe("SettingsForm.vue", () => {
     store.commit("settings/set_customer_account_ids", array_of_customer_ids_missing_user_ids);
     wrapper = mount(ComponentToTest, {
       store,
-      localVue
+      localVue,
     });
     expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");
     // expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
@@ -165,7 +165,7 @@ describe("SettingsForm.vue", () => {
     store.commit("settings/set_customer_index", 0);
     wrapper = mount(ComponentToTest, {
       store,
-      localVue
+      localVue,
     });
 
     expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");

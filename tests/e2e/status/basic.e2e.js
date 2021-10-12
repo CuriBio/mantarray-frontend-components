@@ -19,7 +19,8 @@ const mocked_shutdown_commands = RequestMock()
 import VueSelector from "testcafe-vue-selectors";
 
 // the fixture declares what we are testing
-fixture`status/status-bar/basic`.page // declare the fixture
+fixture`status/status-bar/basic`
+  .page // declare the fixture
 `http://localhost:8080/status/status-bar/basic`; // specify the start page
 
 test("status widget looks as expected with default values", async (t) => {
@@ -45,7 +46,8 @@ test("status widget captures an ERROR Catch Widget and ShutDown", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path_shutdown);
 });
 
-fixture`status/status-bar/x-y-offset`.page // declare the fixture
+fixture`status/status-bar/x-y-offset`
+  .page // declare the fixture
 `http://localhost:8080/status/status-bar/x-y-offset`; // specify the start page
 
 test("status widget looks as expected when anchored at an offset from top left", async (t) => {

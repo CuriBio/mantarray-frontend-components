@@ -10,7 +10,7 @@ export default {
       endpoint: "update_settings",
       customer_account_uuid,
       auto_upload,
-      auto_delete
+      auto_delete,
     };
     const response = await this.dispatch("settings/call_update_axios_request", payload);
     return response;
@@ -21,5 +21,5 @@ export default {
     const response = await call_axios_get_from_vuex(whole_url, context);
     console.log(response);
     return response;
-  }
+  },
 };

@@ -2,7 +2,8 @@ import { Selector } from "testcafe";
 const path = require("path");
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-fixture`stimulation/basic`.page // declare the fixture
+fixture`stimulation/basic`
+  .page // declare the fixture
 `http://localhost:8080/stimulation/basic`; // specify the start page
 
 const protocol = Selector("li").withText("A Tester");

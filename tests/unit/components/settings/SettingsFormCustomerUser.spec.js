@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {
   array_of_customer_ids,
   array_of_user_ids_1,
-  array_of_user_ids_2
+  array_of_user_ids_2,
 } from "./SettingsFormCustomerData.js";
 
 let wrapper = null;
@@ -43,7 +43,7 @@ describe("SettingsForm.vue", () => {
       beforeEach(() => {
         wrapper = mount(ComponentToTest, {
           store,
-          localVue
+          localVue,
         });
       });
       describe("Given that the SettingsForm has been populated with a new Customer account through invoking the methods handling the 'save-id' event for Add Customer", () => {
@@ -53,7 +53,7 @@ describe("SettingsForm.vue", () => {
             uuid: "5FY8KwTsQaUJ2KzHJGetfE",
             api_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
             nickname: "Customer account -3",
-            user_ids: []
+            user_ids: [],
           };
 
           /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
@@ -189,7 +189,7 @@ describe("SettingsForm.vue", () => {
             uuid: "6cBaidlJ84Ggc5JA7IYCgv",
             api_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
             nickname: "Renamed Account -1",
-            user_ids: array_of_user_ids_2
+            user_ids: array_of_user_ids_2,
           };
           wrapper.vm.onUpdateCustomerId(edit_customer);
 
@@ -204,7 +204,7 @@ describe("SettingsForm.vue", () => {
             uuid: "4vqyd62oARXqj9nRUNhtLQ",
             api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
             nickname: "Customer account -1",
-            user_ids: array_of_user_ids_1
+            user_ids: array_of_user_ids_1,
           };
 
           wrapper.vm.onDeleteCustomerId(delete_customer);
@@ -222,7 +222,7 @@ describe("SettingsForm.vue", () => {
           uuid: "5FY8KwTsQaUJ2KzHJGetfE",
           api_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
           nickname: "Customer account -3",
-          user_ids: []
+          user_ids: [],
         };
         /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
         /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
@@ -240,7 +240,7 @@ describe("SettingsForm.vue", () => {
         store.commit("settings/set_customer_index", 0);
         wrapper = mount(ComponentToTest, {
           store,
-          localVue
+          localVue,
         });
       });
       test("When the SettingsForm method that handles receiving the 'cancel-id' event is invoked, Then the Customer ID text input does not change", async () => {

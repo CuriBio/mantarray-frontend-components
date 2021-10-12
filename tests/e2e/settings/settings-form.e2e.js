@@ -10,7 +10,8 @@ const add_user_btn = Selector("#add-a-user");
 const edit_user_btn = Selector("#edit-a-user");
 
 // the fixture declares what we are testing
-fixture`settings/settings-form-vuex`.page // declare the fixture
+fixture`settings/settings-form-vuex`
+  .page // declare the fixture
 `http://localhost:8080/settings/settings-form-vuex`; // specify the start page
 
 test("testing the settings page should display as designed in the mockflow", async (t) => {
@@ -19,7 +20,8 @@ test("testing the settings page should display as designed in the mockflow", asy
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`settings/settings-form-vuex`.page // declare the fixture
+fixture`settings/settings-form-vuex`
+  .page // declare the fixture
 `http://localhost:8080/settings/settings-form-vuex`; // specify the start page
 
 test("testing the settings page and add-customer should overlap display as designed in the mockflow", async (t) => {
@@ -29,7 +31,8 @@ test("testing the settings page and add-customer should overlap display as desig
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`settings/settings-form-vuex`.page // declare the fixture
+fixture`settings/settings-form-vuex`
+  .page // declare the fixture
 `http://localhost:8080/settings/settings-form-vuex`; // specify the start page
 
 test("testing the settings page and edit-customer should overlap display as designed in the mockflow", async (t) => {
@@ -39,7 +42,8 @@ test("testing the settings page and edit-customer should overlap display as desi
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`settings/settings-form-vuex`.page // declare the fixture
+fixture`settings/settings-form-vuex`
+  .page // declare the fixture
 `http://localhost:8080/settings/settings-form-vuex`; // specify the start page
 
 test("testing the settings page and add-user should overlap display as designed in the mockflow", async (t) => {
@@ -49,7 +53,8 @@ test("testing the settings page and add-user should overlap display as designed 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-fixture`settings/settings-form-vuex`.page // declare the fixture
+fixture`settings/settings-form-vuex`
+  .page // declare the fixture
 `http://localhost:8080/settings/settings-form-vuex`; // specify the start page
 
 test("testing the settings page and edit-user should overlap display as designed in the mockflow", async (t) => {
@@ -60,7 +65,8 @@ test("testing the settings page and edit-user should overlap display as designed
 });
 
 // the fixture declares what we are testing
-fixture`settings/settings-form-no-vuex`.page // declare the fixture
+fixture`settings/settings-form-no-vuex`
+  .page // declare the fixture
 `http://localhost:8080/settings/settings-form-no-vuex`; // specify the start page
 
 test("testing the settings page should display as designed in the mockflow", async (t) => {

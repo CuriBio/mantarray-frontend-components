@@ -34,7 +34,7 @@ describe("SettingsForm.vue", () => {
   function get_buttons(wrap) {
     const buttons = {
       add_customer_btn: wrap.find(".span__settingsform-customer-add-btn_txt"),
-      edit_customer_btn: wrap.find(".span__settingsform-customer-edit-btn-txt")
+      edit_customer_btn: wrap.find(".span__settingsform-customer-edit-btn-txt"),
       // add_user_btn: wrap.find(".span__settingsform_user-input-editor"),
       // edit_user_btn: wrap.find(".span__settingsform-user-input-edit-btn-txt"),
     };
@@ -62,7 +62,7 @@ describe("SettingsForm.vue", () => {
       reset_btn: wrap.find(".span__settings-tool-tip-reset-btn-txt-enable"),
       save_btn: wrap.find(".span__settings-tool-tip-save-btn-txt-enable"),
       save_btn_container: wrap.find(".div__settings-tool-tip-save-btn-enable"),
-      cancel_btn: wrap.find(".div__settings-tool-tip-cancel-btn")
+      cancel_btn: wrap.find(".div__settings-tool-tip-cancel-btn"),
     };
     return valid_buttons;
   }
@@ -75,7 +75,7 @@ describe("SettingsForm.vue", () => {
     const valid_buttons = {
       reset_btn: wrap.find(".span__settings-tool-tip-reset-btn-txt-disable"),
       save_btn: wrap.find(".span__settings-tool-tip-save-btn-txt-disable"),
-      save_btn_container: wrap.find(".div__settings-tool-tip-save-btn-disable")
+      save_btn_container: wrap.find(".div__settings-tool-tip-save-btn-disable"),
     };
     return valid_buttons;
   }
@@ -87,7 +87,7 @@ describe("SettingsForm.vue", () => {
   function get_invalid_boxes(wrap) {
     const boxes = wrap.findAll(".div__input-dropdown-controls-content-widget--invalid");
     const invalid_boxes = {
-      customer: boxes.at(0)
+      customer: boxes.at(0),
       // user: boxes.at(1),
     };
     return invalid_boxes;
@@ -100,7 +100,7 @@ describe("SettingsForm.vue", () => {
   function get_valid_boxes(wrap) {
     const boxes = wrapper.findAll(".div__input-dropdown-controls-content-widget--valid");
     const valid_boxes = {
-      customer: boxes.at(0)
+      customer: boxes.at(0),
       // user: boxes.at(1),
     };
     return valid_boxes;
@@ -127,7 +127,7 @@ describe("SettingsForm.vue", () => {
       beforeEach(() => {
         wrapper = mount(ComponentToTest, {
           store,
-          localVue
+          localVue,
         });
       });
       // test("When the value of Customer ID is set to 'Customer account -1' by an entry into the input, Then 'Add New Customer ID' 'Edit ID'(of customer) is disabled", async () => {
@@ -204,7 +204,7 @@ describe("SettingsForm.vue", () => {
     test("When the component is mounted, Then 'Add New Customer ID' is enabled and 'Edit ID'(of customer) is disabled", async () => {
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
       await wrapper.vm.$nextTick(); // wait for update
       const all_buttons = get_buttons(wrapper);
@@ -217,7 +217,7 @@ describe("SettingsForm.vue", () => {
     test("When the component is mounted, Then visually the Reset and Save Buttons are disabled", async () => {
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
 
       const settings_buttons = get_settings_button_disable(wrapper);
@@ -231,7 +231,7 @@ describe("SettingsForm.vue", () => {
 
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
       const settings_buttons = get_settings_button_enabled(wrapper);
       expect(settings_buttons.reset_btn.isVisible()).toBe(true);
@@ -243,7 +243,7 @@ describe("SettingsForm.vue", () => {
       store.commit("settings/set_customer_account_ids", array_of_empty_customer_ids);
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
       const invalid_box = get_invalid_boxes(wrapper);
       expect(invalid_box.customer.isVisible()).toBe(true);
@@ -255,7 +255,7 @@ describe("SettingsForm.vue", () => {
 
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
       const valid_boxes = get_valid_boxes(wrapper);
       expect(valid_boxes.customer.isVisible()).toBe(true);
@@ -267,7 +267,7 @@ describe("SettingsForm.vue", () => {
 
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
 
       const valid_boxes = get_valid_boxes(wrapper);
@@ -332,11 +332,11 @@ describe("SettingsForm.vue", () => {
           return {
             valid_customer_focus: false,
             // valid_user_focus: false,
-            disable_edit_customer: true
+            disable_edit_customer: true,
             // disable_add_user: true,
             // disable_edit_user: true
           };
-        }
+        },
       });
 
       await wrapper.vm.$nextTick(); // wait for update
@@ -360,7 +360,7 @@ describe("SettingsForm.vue", () => {
     test("When the component is mounted and Customer account is/is not selected, Then the cancel button is visible and will close modal on click", async () => {
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
       const settings_buttons = await get_settings_button_enabled(wrapper);
 
@@ -371,20 +371,19 @@ describe("SettingsForm.vue", () => {
       expect(close_event[0]).toStrictEqual([]);
     });
 
-
     test("When the component is mounted and a user toggles the auto upload and auto delete switches, Then the new state will be handled in component state", async () => {
       const toggle_spy = jest.spyOn(ComponentToTest.methods, "handle_toggle_state");
       wrapper = mount(ComponentToTest, {
         store,
-        localVue
+        localVue,
       });
       const default_state = {
         auto_delete: false,
-        auto_upload: true
+        auto_upload: true,
       };
       const expected_state = {
         auto_delete: true,
-        auto_upload: false
+        auto_upload: false,
       };
       expect(wrapper.vm.auto_delete).toBe(default_state.auto_delete);
       expect(wrapper.vm.auto_upload).toBe(default_state.auto_upload);

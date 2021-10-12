@@ -12,7 +12,8 @@ const span__button_label = Selector(".span__button_label");
 const add_customer_cancel_btn = span__button_label.nth(0);
 const customer_save_btn = span__button_label.nth(1);
 
-fixture`settings/add-customer`.page // declare the fixture
+fixture`settings/add-customer`
+  .page // declare the fixture
 `http://localhost:8080/settings/add-customer`; // specify the start page
 
 test("testing for the add customer INVALID State", async (t) => {

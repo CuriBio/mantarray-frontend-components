@@ -30,5 +30,5 @@ export default {
     state.auto_upload = true;
     state.customer_index = null;
     state.auto_delete = false;
-  }
+  },
 };

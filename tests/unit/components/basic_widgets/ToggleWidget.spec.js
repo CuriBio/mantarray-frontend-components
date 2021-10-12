@@ -29,12 +29,12 @@ describe("ToggleWidget.vue", () => {
   test("When mounting ToggleWidget from the build dist file, Then it loads successfully and the slider is displayed and takes the default state passed down", () => {
     const propsData = {
       checked_state: true,
-      label: "test_label"
+      label: "test_label",
     };
     wrapper = shallowMount(DistComponentToTest, {
       propsData,
       store,
-      localVue
+      localVue,
     });
     const target_switch_div = wrapper.find(".switch");
     expect(target_switch_div.isVisible()).toBe(true);
@@ -43,13 +43,13 @@ describe("ToggleWidget.vue", () => {
 
   test("When a user toggles the slider, Then the new boolean value should be emitted to parent component with label and value", async () => {
     const propsData = {
-      label: "test_label"
+      label: "test_label",
     };
 
     wrapper = mount(ToggleWidget, {
       propsData,
       store,
-      localVue
+      localVue,
     });
 
     await wrapper.find("input").trigger("click");
@@ -62,13 +62,13 @@ describe("ToggleWidget.vue", () => {
 
     const propsData = {
       label: "test_label",
-      checked_state: false
+      checked_state: false,
     };
 
     wrapper = mount(ToggleWidget, {
       propsData,
       store,
-      localVue
+      localVue,
     });
 
     await wrapper.setProps({ checked_state: true });
