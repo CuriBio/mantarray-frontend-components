@@ -242,7 +242,7 @@ describe("axios_helper.stim_studio", () => {
   });
 
   test("Given axios is mocked to return status code 500 when posting new protocol message, When the function is called, Then it returns the status code of the axios request and logs", async () => {
-    const whole_url = "http://localhost:4567/set_protocol";
+    const whole_url = "http://localhost:4567/set_protocols";
     const status_code = 500;
     mocked_axios.onPost(whole_url).reply(status_code);
     const error = await post_stim_message(sample_message);
@@ -250,7 +250,7 @@ describe("axios_helper.stim_studio", () => {
   });
 
   test("Given axios is mocked to return status code 200 when posting new protocol message, When the function is called, Then it returns the status code of the axios request and logs", async () => {
-    const whole_url = "http://localhost:4567/set_protocol";
+    const whole_url = "http://localhost:4567/set_protocols";
     const status_code = 200;
     mocked_axios.onPost(whole_url).reply(status_code);
     const response = await post_stim_message(sample_message);

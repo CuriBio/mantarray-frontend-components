@@ -2,6 +2,12 @@ Changelog for Mantarray Frontend Components
 ===========================================
 
 
+0.4.7 (unreleased)
+------------------
+
+- Updated create_protocol_message for new ``/set_protocols`` format
+
+
 0.4.6 (2021-08-27)
 ------------------
 

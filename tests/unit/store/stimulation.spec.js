@@ -1,6 +1,8 @@
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import * as axios_helpers from "../../../js_utils/axios_helpers.js";
+import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
+const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -448,35 +450,69 @@ describe("store/stimulation", () => {
     test("When a user starts a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
       const axios_message_spy = jest.spyOn(axios_helpers, "post_stim_message").mockImplementation(() => null);
       const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
-      const test_assignment = {
-        4: {
-          letter: "C",
-          color: "#000000",
-          label: "test",
-          protocol: {
-            stimulation_type: "C",
-            stop_setting: "Stimulate Until Stopped",
-            pulses: [
-              {
-                phase_one_duration: 15,
-                phase_one_charge: 500,
-                interphase_interval: 0,
-                phase_two_charge: 0,
-                phase_two_duration: 0,
-                repeat_delay_interval: 3,
-                total_active_duration: 50,
-              },
-            ],
-          },
+
+      const test_well_protocol_pairs = {};
+      for (let well_idx = 0; well_idx < 24; well_idx++) {
+        let well_name = twenty_four_well_plate_definition.get_well_name_from_well_index(well_idx, false);
+        test_well_protocol_pairs[well_name] = null;
+      }
+      test_well_protocol_pairs["A2"] = "B";
+      test_well_protocol_pairs["C2"] = "D";
+      test_well_protocol_pairs["D3"] = "D";
+
+      const test_protocol_B = {
+        letter: "B",
+        color: "#000000",
+        label: "test_1",
+        protocol: {
+          stimulation_type: "C",
+          stop_setting: "Stimulate Until Stopped",
+          pulses: [
+            {
+              phase_one_duration: 15,
+              phase_one_charge: 500,
+              interphase_interval: 0,
+              phase_two_charge: 0,
+              phase_two_duration: 0,
+              repeat_delay_interval: 3,
+              total_active_duration: 50,
+            },
+          ],
         },
       };
+      const test_protocol_D = {
+        letter: "D",
+        color: "#000001",
+        label: "test_2",
+        protocol: {
+          stimulation_type: "V",
+          stop_setting: "Stimulate Until Complete",
+          pulses: [
+            {
+              phase_one_duration: 20,
+              phase_one_charge: 400,
+              interphase_interval: 10,
+              phase_two_charge: -400,
+              phase_two_duration: 20,
+              repeat_delay_interval: 0,
+              total_active_duration: 100,
+            },
+          ],
+        },
+      };
+      const test_assignment = {
+        4: test_protocol_B,
+        6: test_protocol_D,
+        11: test_protocol_D,
+      };
+
       const expected_message = {
         protocols: [
           {
+            protocol_id: "B",
             stimulation_type: "C",
-            well_number: "A2",
-            total_protocol_duration: -1,
-            pulses: [
+            run_until_stopped: true,
+            subprotocols: [
               {
                 phase_one_duration: 15000,
                 phase_one_charge: 500000,
@@ -484,12 +520,30 @@ describe("store/stimulation", () => {
                 phase_two_charge: 0,
                 phase_two_duration: 0,
                 repeat_delay_interval: 3000,
-                total_active_duration: 50000,
+                total_active_duration: 50,
+              },
+            ],
+          },
+          {
+            protocol_id: "D",
+            stimulation_type: "V",
+            run_until_stopped: false,
+            subprotocols: [
+              {
+                phase_one_duration: 20000,
+                phase_one_charge: 400,
+                interphase_interval: 10000,
+                phase_two_charge: -400,
+                phase_two_duration: 20000,
+                repeat_delay_interval: 0,
+                total_active_duration: 100,
               },
             ],
           },
         ],
+        protocol_assignments: test_well_protocol_pairs,
       };
+
       store.state.stimulation.protocol_assignments = test_assignment;
       await store.dispatch("stimulation/create_protocol_message");
       expect(axios_message_spy).toHaveBeenCalledWith(expected_message);

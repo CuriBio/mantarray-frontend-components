@@ -67,7 +67,7 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
  */
 export async function post_stim_message(message) {
   const baseURL = "http://localhost:4567";
-  const URL = "/set_protocol";
+  const URL = "/set_protocols";
   const body = { data: JSON.stringify(message) };
   try {
     await Vue.axios.post(`${baseURL}${URL}`, body);
