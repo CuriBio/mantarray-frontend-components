@@ -33,7 +33,7 @@ describe("SettingsForm.vue", () => {
   afterEach(() => {
     wrapper.destroy();
   });
-  describe("Given Vuex has valid customer and user accounts but no customer index or user index selected", () => {
+  describe("Given Vuex has valid customer but no customer index", () => {
     beforeEach(() => {
       // commit a deep copy of the template object to the Vuex store using JSON stringify/parse, as it may be modified during tests. https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
       store.commit("settings/set_customer_account_ids", JSON.parse(JSON.stringify(array_of_customer_ids)));
@@ -183,7 +183,7 @@ describe("SettingsForm.vue", () => {
         //   await wrapper.vm.$nextTick();
         //   expect(wrapper.find("#user-0").text()).toStrictEqual("Intern -1");
         // });
-        test("When the method handling the 'save-id' event for the Edit Customer button is invoked with an existing not-selected user to change the nickname, Then the Customer ID dropdown list gets updated to change to the new nickname", async () => {
+        test("When the method handling the 'save-id' event for the Edit Customer button is invoked to change the nickname, Then the Customer ID dropdown list gets updated to change to the new nickname", async () => {
           const edit_customer = {
             cust_id: 1,
             uuid: "6cBaidlJ84Ggc5JA7IYCgv",
@@ -216,7 +216,7 @@ describe("SettingsForm.vue", () => {
       });
       // });
 
-      test("When the SettingsForm method that handles receiving the add customer 'save-id' event is invoked with a new customer account, Then the Customer ID text input is updated with nickname value of the newly added account and the User ID text input is blank", async () => {
+      test("When the SettingsForm method that handles receiving the add customer 'save-id' event is invoked with a new customer account, Then the Customer ID text input is updated with nickname value of the newly added account", async () => {
         const add_customer = {
           cust_id: 2,
           uuid: "5FY8KwTsQaUJ2KzHJGetfE",
@@ -243,7 +243,7 @@ describe("SettingsForm.vue", () => {
           localVue
         });
       });
-      test("When the SettingsForm method that handles receiving the 'cancel-id' event is invoked, Then the Customer ID text input and User ID input do not change", async () => {
+      test("When the SettingsForm method that handles receiving the 'cancel-id' event is invoked, Then the Customer ID text input does not change", async () => {
         expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual(
           "Customer account -1"
         );

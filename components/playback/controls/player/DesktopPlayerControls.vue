@@ -51,8 +51,8 @@
       <ellipse
         v-show="
           playback_state !== playback_state_enums.NEEDS_CALIBRATION &&
-          playback_state !== playback_state_enums.CALIBRATING &&
-          playback_state !== playback_state_enums.NOT_CONNECTED_TO_INSTRUMENT
+            playback_state !== playback_state_enums.CALIBRATING &&
+            playback_state !== playback_state_enums.NOT_CONNECTED_TO_INSTRUMENT
         "
         class="ellipse__playback-desktop-player-controls-calibrate-button-indicator"
         cx="24.55"
@@ -135,7 +135,14 @@
         <!-- inner rectangle-->
       </rect>
     </svg>
-    <b-modal id="settings-form" hide-footer hide-header hide-header-close :static="true">
+    <b-modal
+      id="settings-form"
+      hide-footer
+      hide-header
+      hide-header-close
+      :no-close-on-backdrop="true"
+      :static="true"
+    >
       <SettingsForm id="settings" @close_modal="close_modal" />
     </b-modal>
   </div>
@@ -166,15 +173,15 @@ const options = {
   BTooltip: {
     delay: {
       show: 400,
-      hide: 100,
-    },
+      hide: 100
+    }
   },
   BPopover: {
     delay: {
       show: vuex_delay,
-      hide: 50,
-    },
-  },
+      hide: 50
+    }
+  }
 };
 
 Vue.use(BootstrapVue, { ...options });
@@ -203,7 +210,7 @@ library.add(fa_spinner);
 export default {
   name: "DesktopPlayerControls",
   components: { PlayerControlsSettingsButton, FontAwesomeIcon, SettingsForm },
-  data: function () {
+  data: function() {
     return {
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES, // Eli (5/8/20): (this seems) needed to give access to the imported playback_module the v-show directives
       settings_title: "Settings",
@@ -212,23 +219,23 @@ export default {
       liveview_title: "Live View",
       record_title: "Record",
       settings_tooltip_text: "Edit customer account",
-      schedule_tooltip_text: "(Not Yet Available)",
+      schedule_tooltip_text: "(Not Yet Available)"
     };
   },
   computed: {
     ...mapState("playback", {
-      playback_state: "playback_state",
+      playback_state: "playback_state"
     }),
     ...mapState("playback", {
-      is_valid_barcode: "is_valid_barcode",
+      is_valid_barcode: "is_valid_barcode"
     }),
     ...mapState("playback", {
-      tooltips_delay: "tooltips_delay",
+      tooltips_delay: "tooltips_delay"
     }),
     ...mapState("settings", {
-      customer_index: "customer_index",
+      customer_index: "customer_index"
     }),
-    calibrate_tooltip_text: function () {
+    calibrate_tooltip_text: function() {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Calibration needed. Click to calibrate.";
       }
@@ -243,7 +250,7 @@ export default {
       }
       return "Cannot calibrate while Mantarray initializing.";
     },
-    liveview_tooltip_text: function () {
+    liveview_tooltip_text: function() {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
         return "Click to stop viewing Mantarray data.";
       }
@@ -258,7 +265,7 @@ export default {
       }
       return "Must initialize before activating.";
     },
-    record_tooltip_text: function () {
+    record_tooltip_text: function() {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
         return "Click to begin recording data to file.";
       }
@@ -277,38 +284,38 @@ export default {
       return "Must initialize before recording.";
     },
 
-    svg__playback_desktop_player_controls_record_button__inactive__dynamic_class: function () {
+    svg__playback_desktop_player_controls_record_button__inactive__dynamic_class: function() {
       return {
         "span__playback-desktop-player-controls--available":
-          this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE,
+          this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE
       };
     },
-    svg__playback_desktop_player_controls_record_button__active__dynamic_class: function () {
+    svg__playback_desktop_player_controls_record_button__active__dynamic_class: function() {
       return {
         "span__playback-desktop-player-controls--active":
-          this.playback_state === this.playback_state_enums.RECORDING,
+          this.playback_state === this.playback_state_enums.RECORDING
       };
     },
-    svg__playback_desktop_player_controls_live_view_button__dynamic_class: function () {
+    svg__playback_desktop_player_controls_live_view_button__dynamic_class: function() {
       return {
         "span__playback-desktop-player-controls--available":
           this.playback_state === this.playback_state_enums.CALIBRATED && this.is_valid_barcode != false,
         "span__playback-desktop-player-controls--active":
           this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE,
         "span__playback-desktop-player-controls--running-in-background":
-          this.playback_state === this.playback_state_enums.RECORDING,
+          this.playback_state === this.playback_state_enums.RECORDING
       };
     },
-    svg__playback_desktop_player_controls_calibrate_button__dynamic_class: function () {
+    svg__playback_desktop_player_controls_calibrate_button__dynamic_class: function() {
       return {
         "span__playback-desktop-player-controls--available":
           this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
-          this.playback_state === this.playback_state_enums.CALIBRATED,
+          this.playback_state === this.playback_state_enums.CALIBRATED
       };
-    },
+    }
   },
   methods: {
-    on_activate_record_click: function () {
+    on_activate_record_click: function() {
       if (this.customer_index === null) this.open_settings_form();
       else if (
         this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE &&
@@ -317,10 +324,10 @@ export default {
         this.$store.dispatch("playback/start_recording");
       }
     },
-    on_stop_record_click: function () {
+    on_stop_record_click: function() {
       this.$store.dispatch("playback/stop_recording");
     },
-    on_live_view_click: function () {
+    on_live_view_click: function() {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
         this.$store.dispatch("playback/stop_live_view");
       } else if (
@@ -330,7 +337,7 @@ export default {
         this.$store.dispatch("playback/start_live_view");
       }
     },
-    on_calibrate_click: function () {
+    on_calibrate_click: function() {
       if (
         this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
         this.playback_state === this.playback_state_enums.CALIBRATED
@@ -338,13 +345,13 @@ export default {
         this.$store.dispatch("playback/start_calibration");
       }
     },
-    open_settings_form: function () {
+    open_settings_form: function() {
       this.$bvModal.show("settings-form");
     },
-    close_modal: function () {
+    close_modal: function() {
       this.$bvModal.hide("settings-form");
-    },
-  },
+    }
+  }
 };
 </script>
 <style type="text/css">
