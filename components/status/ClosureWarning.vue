@@ -27,13 +27,13 @@ import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 export default {
   name: "ClosureWarning",
   components: {
-    ButtonWidget
+    ButtonWidget,
   },
   methods: {
-    handle_click: function(idx) {
+    handle_click: function (idx) {
       this.$emit("handle_confirmation", idx);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -13,8 +13,7 @@ const radio_group = Selector(".custom-control-input");
 
 const input_display = Selector("#input-dropdown-widget-display");
 
-fixture`heatmap/basic`
-  .page // declare the fixture
+fixture`heatmap/basic`.page // declare the fixture
 `http://localhost:8080/heatmap/basic`; // specify the start page
 
 test("testing the HeatMap Layout NO option selected", async (t) => {

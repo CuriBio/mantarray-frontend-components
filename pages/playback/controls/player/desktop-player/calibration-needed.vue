@@ -11,9 +11,9 @@ import DesktopPlayerControls from "@/components/playback/controls/player/Desktop
 import playback_module from "@/store/modules/playback";
 export default {
   components: {
-    DesktopPlayerControls
+    DesktopPlayerControls,
   },
-  created: function() {
+  created: function () {
     this.$store.commit(
       "playback/set_playback_state",
       playback_module.ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED
@@ -21,7 +21,7 @@ export default {
 
     window.addEventListener(
       "keypress",
-      function(e) {
+      function (e) {
         this.$store.commit("flask/stop_status_pinging");
       }.bind(this)
     );
@@ -29,10 +29,10 @@ export default {
     this.$store.commit("playback/set_barcode_number", "MA200440004");
   },
   methods: {
-    update_customer_idx: function() {
+    update_customer_idx: function () {
       this.$store.commit("settings/set_customer_index", 0);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

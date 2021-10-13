@@ -13,7 +13,7 @@ const edit_customer_btn = Selector("#edit-a-customer");
 fixture`settings/settings-form-vuex`.page // declare the fixture
 `http://localhost:8080/settings/settings-form-vuex`; // specify the start page
 
-test("testing the settings page should display as designed in the mockflow", async t => {
+test("testing the settings page should display as designed in the mockflow", async (t) => {
   const screenshot_path_base = path.join("settings", "settings-form");
   const screenshot_path = path.join(screenshot_path_base, "basic-settings-form-vuex");
   await testcafe_page_visual_regression(t, screenshot_path);
@@ -22,7 +22,7 @@ test("testing the settings page should display as designed in the mockflow", asy
 fixture`settings/settings-form-vuex`.page // declare the fixture
 `http://localhost:8080/settings/settings-form-vuex`; // specify the start page
 
-test("testing the settings page and add-customer should overlap display as designed in the mockflow", async t => {
+test("testing the settings page and add-customer should overlap display as designed in the mockflow", async (t) => {
   const screenshot_path_base = path.join("settings", "settings-form");
   const screenshot_path = path.join(screenshot_path_base, "settings-form-with-add-customer");
   await t.click(add_customer_btn);
@@ -32,7 +32,7 @@ test("testing the settings page and add-customer should overlap display as desig
 fixture`settings/settings-form-vuex`.page // declare the fixture
 `http://localhost:8080/settings/settings-form-vuex`; // specify the start page
 
-test("testing the settings page and edit-customer should overlap display as designed in the mockflow", async t => {
+test("testing the settings page and edit-customer should overlap display as designed in the mockflow", async (t) => {
   const screenshot_path_base = path.join("settings", "settings-form");
   const screenshot_path = path.join(screenshot_path_base, "settings-form-with-edit-customer");
   await t.click(edit_customer_btn);
@@ -65,7 +65,7 @@ test("testing the settings page and edit-customer should overlap display as desi
 fixture`settings/settings-form-no-vuex`.page // declare the fixture
 `http://localhost:8080/settings/settings-form-no-vuex`; // specify the start page
 
-test("testing the settings page should display as designed in the mockflow", async t => {
+test("testing the settings page should display as designed in the mockflow", async (t) => {
   const screenshot_path_base = path.join("settings", "settings-form");
   const screenshot_path = path.join(screenshot_path_base, "basic-settings-form-no-vuex");
   await testcafe_page_visual_regression(t, screenshot_path);

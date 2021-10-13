@@ -12,8 +12,7 @@ const span__button_label = Selector(".span__button_label");
 const add_user_cancel_btn = span__button_label.nth(0);
 const add_user_save_btn = span__button_label.nth(1);
 
-fixture`settings/add-user`
-  .page // declare the fixture
+fixture`settings/add-user`.page // declare the fixture
 `http://localhost:8080/settings/add-user`; // specify the start page
 
 test("testing the add user INVALID State", async (t) => {

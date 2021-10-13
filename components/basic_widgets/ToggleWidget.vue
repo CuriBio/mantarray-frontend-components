@@ -9,17 +9,17 @@ export default {
   name: "ToggleWidget",
   props: {
     checked_state: { type: Boolean, default: false },
-    label: { type: String, required: true }
+    label: { type: String, required: true },
   },
   data() {
     return {
-      checked: false
+      checked: false,
     };
   },
   watch: {
-    checked_state: function() {
+    checked_state: function () {
       this.checked = this.checked_state;
-    }
+    },
   },
   created() {
     this.checked = this.checked_state;
@@ -28,8 +28,8 @@ export default {
     toggle_checkbox() {
       this.checked = !this.checked;
       this.$emit("handle_toggle_state", this.checked, this.label);
-    }
-  }
+    },
+  },
 };
 </script>
 <style type="text/css">

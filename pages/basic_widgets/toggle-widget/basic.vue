@@ -10,7 +10,7 @@ import ToggleWidget from "@/components/basic_widgets/ToggleWidget.vue";
 
 export default {
   components: {
-    ToggleWidget
-  }
+    ToggleWidget,
+  },
 };
 </script>

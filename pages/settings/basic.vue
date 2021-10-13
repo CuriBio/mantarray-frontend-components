@@ -10,7 +10,7 @@ import PlayerControlsSettingsButton from "@/components/playback/controls/player/
 
 export default {
   components: {
-    PlayerControlsSettingsButton
-  }
+    PlayerControlsSettingsButton,
+  },
 };
 </script>

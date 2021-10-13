@@ -14,8 +14,7 @@ const edit_user_cancel_btn = span__button_label.nth(0);
 const edit_user_delete_btn = span__button_label.nth(1);
 const edit_user_save_btn = span__button_label.nth(2);
 
-fixture`settings/edit-user`
-  .page // declare the fixture
+fixture`settings/edit-user`.page // declare the fixture
 `http://localhost:8080/settings/edit-user`; // specify the start page
 
 test("testing for the edit user Valid State", async (t) => {
