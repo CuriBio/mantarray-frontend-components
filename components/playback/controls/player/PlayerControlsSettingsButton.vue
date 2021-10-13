@@ -1,12 +1,13 @@
 <template>
-  <span class="span__playback-player-controls-settings-button">
-    <!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
-    <FontAwesomeIcon :icon="['fa', 'cog']" />
-  </span>
+  <div>
+    <span class="span__playback-player-controls-settings-button">
+      <!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
+      <FontAwesomeIcon :icon="['fa', 'cog']" />
+    </span>
+  </div>
 </template>
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-
 import { faCog as fa_cog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -36,5 +37,13 @@ export default {
 /* Added as a part of the task */
 .span__playback-player-controls-settings-button_modified:hover {
   color: #ececed;
+}
+
+#settings-form {
+  position: fixed;
+  margin: 5% auto;
+  top: 10%;
+  left: 0;
+  right: 0;
 }
 </style>

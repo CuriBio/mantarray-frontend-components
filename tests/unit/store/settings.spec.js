@@ -1,6 +1,9 @@
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import { settings_store_module } from "@/dist/mantarray.common";
+import * as axios_helpers from "../../../js_utils/axios_helpers.js";
+import actions from "../../../store/modules/settings/actions";
+
 describe("store/settings", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -532,6 +535,36 @@ describe("store/settings", () => {
     expect(modified_userids.nickname).toStrictEqual("Updated Account -1");
     expect(updated_list_of_user_ids).toHaveLength(2);
   });
+
+  test("When a user resets the settings form, Then the mutation will only reset current selection and toggle switches and will not reset existing IDs", async () => {
+    const array_of_customerids = [
+      {
+        cust_id: 0,
+        uuid: "4vqyd62oARXqj9nRUNhtLQ",
+        api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+        nickname: "Customer account -1",
+        user_ids: [],
+      },
+    ];
+
+    store.commit("settings/set_customer_account_ids", array_of_customerids);
+    expect(store.state.settings.customer_account_ids).toHaveLength(1);
+    store.commit("settings/set_customer_index", 0);
+    console.log(store.state.settings.auto_upload);
+
+    store.commit("settings/set_auto_upload", false);
+    store.commit("settings/set_auto_delete", true);
+    console.log(store.state.settings.auto_upload);
+
+    await store.commit("settings/reset_to_default");
+    console.log(store.state.settings.auto_upload);
+
+    expect(store.state.settings.customer_account_ids).toHaveLength(1);
+    expect(store.state.settings.auto_delete).toBe(false);
+    expect(store.state.settings.auto_upload).toBe(true);
+    expect(store.state.settings.customer_index).toBeNull();
+  });
+
   test("Given the Vuex has customer details with multiple user id, When the mutation deletes one of the User ID details, Then validate that the number of user ids is reduced by one in the Vuex", () => {
     /* ========================== */
     /* |  Settings.vue          | */
@@ -583,5 +616,30 @@ describe("store/settings", () => {
     store.commit("settings/set_customer_account_ids", current_customerids);
     const modified_userids = store.state.settings.customer_account_ids[0].user_ids;
     expect(modified_userids).toHaveLength(1);
+  });
+  describe("settings/actions", () => {
+    test("When a user wants to save user credentials in settings, Then the vuex action to update settings will send axios request", async () => {
+      jest.spyOn(axios_helpers, "call_axios_get_from_vuex").mockImplementation(() => {
+        return {
+          status: 200,
+        };
+      });
+
+      const array_of_customerids = [
+        {
+          cust_id: 0,
+          uuid: "4vqyd62oARXqj9nRUNhtLQ",
+          api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+          nickname: "Customer account -1",
+          user_ids: [],
+        },
+      ];
+
+      store.commit("settings/set_customer_account_ids", array_of_customerids);
+      store.commit("settings/set_customer_index", 0);
+
+      const { status } = await store.dispatch("settings/update_settings");
+      expect(status).toBe(200);
+    });
   });
 });

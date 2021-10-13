@@ -108,6 +108,7 @@ const inactive_record_button = Selector(".svg__playback-desktop-player-controls-
 const active_record_button = Selector(".svg__playback-desktop-player-controls-record-button--active");
 const whole_component = Selector(".div__play-desktop-player-controls");
 const title_text = Selector(".span__playback-desktop-player-controls-text");
+const update_customer_idx_button = Selector(".update-idx-button");
 
 fixture`playback/controls/player/desktop-player/basic`.page(
   // declare the fixture
@@ -137,6 +138,8 @@ fixture`playback/controls/player/desktop-player/calibration-needed`
 test("DesktopPlayerControls UI updates transitioning through 'needs calibration'-->'stopped'-->'playing'-->'recording'-->'playing'-->'recording'-->'playing'-->'stopped'-->'playing'-->'stopped'-->['stopped' after clicking calibrate again]", async (t) => {
   // since the buttons have different hover behavior, making sure to move the mouse back off of the button (onto the generic text span) to deactivate the hover state of a button after clicking it
   const this_base_screenshot_path = path.join(base_screenshot_path, "basic");
+
+  await t.click(update_customer_idx_button);
 
   let screenshot_path = path.join(this_base_screenshot_path, "calibration-needed");
   await testcafe_page_visual_regression(t, screenshot_path);

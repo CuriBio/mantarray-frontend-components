@@ -26,6 +26,8 @@ const default_state = {
     nickname: null,
     user_ids: [] /* This contains objects of user_details */,
   },
+  auto_upload: true,
+  auto_delete: false,
   customer_account_ids: [],
   customer_index: null,
   user_index: null,

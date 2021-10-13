@@ -19,7 +19,7 @@
 
     <div id="apikey" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
-        :title_label="'API Key (Optional)'"
+        :title_label="'API Key'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
         :invalid_text="error_text_api"
         :initial_value="api_key"

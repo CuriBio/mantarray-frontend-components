@@ -116,7 +116,7 @@ describe("EditCustomer test", () => {
       ["06ad547f fe02-477b-9473-f7977e4d5e17", "missing hypen", "apikey-id", "validate_alphanumeric"],
       ["06ad547f-fe02-477b-9473-f7977e4d5e1", "less than 36", "apikey-id", "validate_alphanumeric"],
       ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "more than 36", "apikey-id", "validate_alphanumeric"],
-      ["", "<empty>", "apikey-id", "validate_alphanumeric"],
+      ["", "", "apikey-id", "validate_alphanumeric"],
       ["Experiment anemia -1", "valid input", "nickname-id", "validate_nickname"],
       ["Cat * lab", "contains asterisk *", "nickname-id", "validate_nickname"],
       ["Cat lab`", "contains left quote `", "nickname-id", "validate_nickname"],
@@ -163,7 +163,7 @@ describe("EditCustomer test", () => {
     );
     test.each([
       ["alphanumeric-id", "This field is required"],
-      ["apikey-id", ""],
+      ["apikey-id", "This field is required"],
       ["nickname-id", "This field is required"],
     ])(
       "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
@@ -224,7 +224,12 @@ describe("EditCustomer test", () => {
         "Experiment anemia -1",
         "color: rgb(255, 255, 255);",
       ],
-      ["5FY8KwTsQaUJ2KzHJGetfE", "", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
+      [
+        "5FY8KwTsQaUJ2KzHJGetfE",
+        "06ad547f-fe02-477b-9473-f7977e4d5e17",
+        "Experiment anemia -1",
+        "color: rgb(255, 255, 255);",
+      ],
     ])(
       "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
       async (uuid, apikey, nickname, save_btn_css) => {

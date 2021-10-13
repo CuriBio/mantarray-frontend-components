@@ -178,7 +178,7 @@ export default {
 .update-button {
   position: absolute;
   top: 100px;
-  left: 1840px;
+  left: 840px;
   border: none;
   color: white;
   padding: 15px 32px;

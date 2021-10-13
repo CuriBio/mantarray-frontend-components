@@ -141,7 +141,7 @@ describe("AddCustomer tests", () => {
     );
     test.each([
       ["alphanumeric-id", "This field is required"],
-      ["apikey-id", ""],
+      ["apikey-id", "This field is required"],
       ["nickname-id", "This field is required"],
     ])(
       "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
@@ -198,7 +198,12 @@ describe("AddCustomer tests", () => {
         "Experiment anemia -1",
         "color: rgb(255, 255, 255);",
       ],
-      ["5FY8KwTsQaUJ2KzHJGetfE", "", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
+      [
+        "5FY8KwTsQaUJ2KzHJGetfE",
+        "06ad547f-fe02-477b-9473-f7977e4d5e17",
+        "Experiment anemia -1",
+        "color: rgb(255, 255, 255);",
+      ],
     ])(
       "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
       async (uuid, apikey, nickname, save_btn_css) => {

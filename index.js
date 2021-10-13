@@ -67,6 +67,7 @@ export { default as SelectDropDown } from "./components/basic_widgets/SelectDrop
 export { default as CheckBoxWidget } from "./components/basic_widgets/CheckBoxWidget.vue";
 export { default as RadioButtonWidget } from "./components/basic_widgets/RadioButtonWidget.vue";
 export { default as StimulationStudioPlateWell } from "./components/basic_widgets/StimulationStudioPlateWell.vue";
+export { default as ToggleWidget } from "./components/basic_widgets/ToggleWidget.vue";
 
 // Plate Based
 export { default as PlateNavigator } from "./components/plate_based_widgets/navigator/PlateNavigator.vue";

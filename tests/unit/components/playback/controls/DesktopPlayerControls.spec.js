@@ -11,6 +11,7 @@ import axios from "axios";
 import VueAxios from "vue-axios";
 import { createLocalVue } from "@vue/test-utils";
 const MockAxiosAdapter = require("axios-mock-adapter");
+import SettingsForm from "@/components/settings/SettingsForm.vue";
 import { STATUS } from "@/store/modules/flask/enums";
 import {
   system_status_when_buffering_regexp,
@@ -84,6 +85,20 @@ describe("DesktopPlayerControls.vue", () => {
     await wrapper.vm.$nextTick(); // wait for update
     the_classes = target_button.classes();
     expect(the_classes).not.toContain("span__playback-desktop-player-controls--available");
+  });
+
+  test("When a user selects the settings control button, Then the modal will appear and will emit a close event when closed", async () => {
+    const close_spy = jest.spyOn(component_to_test.methods, "close_modal");
+    wrapper = mount(component_to_test, {
+      store,
+      localVue,
+    });
+
+    await wrapper.find(".div__playback-desktop-player-controls-settings-button").trigger("click");
+    expect(wrapper.find("#settings-form")).toBeTruthy();
+
+    await wrapper.find(SettingsForm).vm.$emit("close_modal");
+    expect(close_spy).toHaveBeenCalledWith();
   });
 
   describe("Given a valid barcode has been committed to Vuex", () => {
@@ -195,7 +210,7 @@ describe("DesktopPlayerControls.vue", () => {
             localVue,
           });
           const target_button = wrapper.find(selector_str);
-
+          await store.commit("settings/set_customer_index", 0);
           // set initial state
           store.commit(
             "playback/set_playback_state",

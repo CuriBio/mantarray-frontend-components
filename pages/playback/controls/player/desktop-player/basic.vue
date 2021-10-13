@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DesktopPlayerControls></DesktopPlayerControls>
+    <DesktopPlayerControls />
   </div>
 </template>
 
