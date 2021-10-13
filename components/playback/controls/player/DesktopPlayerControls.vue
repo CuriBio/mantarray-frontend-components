@@ -2,15 +2,14 @@
   <div class="div__playback-desktop-player-controls">
     <span class="span__playback-desktop-player-controls-text">Record Options</span>
     <div
+      v-b-popover.hover.bottomright="settings_tooltip_text"
+      :title="settings_title"
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
+      @click="open_settings_form()"
     >
-      <div class="text-center" @click="open_settings_form">
-        <PlayerControlsSettingsButton
-          id="settings"
-          v-b-popover.hover.bottomright="settings_tooltip_text"
-          :title="settings_title"
-        /><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
-      </div>
+      <PlayerControlsSettingsButton
+        id="settings"
+      /><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
     </div>
 
     <svg
@@ -143,7 +142,7 @@
       :no-close-on-backdrop="true"
       :static="true"
     >
-      <SettingsForm id="settings" @close_modal="close_modal" />
+      <SettingsForm @close_modal="close_modal" />
     </b-modal>
   </div>
 </template>
