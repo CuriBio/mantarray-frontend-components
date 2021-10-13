@@ -1,7 +1,7 @@
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import { settings_store_module } from "@/dist/mantarray.common";
-import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
+import * as axios_helpers from "../../../js_utils/axios_helpers.js";
 import actions from "../../../store/modules/settings/actions";
 
 describe("store/settings", () => {
@@ -618,11 +618,12 @@ describe("store/settings", () => {
   });
   describe("settings/actions", () => {
     test("When a user wants to save user credentials in settings, Then the vuex action to update settings will send axios request", async () => {
-      jest.spyOn(actions, "call_update_axios_request").mockImplementation(() => {
+      jest.spyOn(axios_helpers, "call_axios_get_from_vuex").mockImplementation(() => {
         return {
           status: 200
         };
       });
+
       const array_of_customerids = [
         {
           cust_id: 0,
