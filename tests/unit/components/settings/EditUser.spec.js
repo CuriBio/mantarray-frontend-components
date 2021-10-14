@@ -20,7 +20,7 @@ localVue.use(Vuex);
 let NuxtStore;
 let store;
 
-describe("EditUser test", () => {
+describe("EditUser", () => {
   beforeAll(async () => {
     const storePath = `${process.env.buildDir}/store.js`;
     NuxtStore = await import(storePath);
@@ -114,12 +114,6 @@ describe("EditUser test", () => {
         "alphanumeric-id",
         "validate_uuidBase_fiftyseven_encode",
       ],
-      ["Experiment anemia -1", "valid input", "nickname-id", "validate_nickname"],
-      ["Cat * lab", "contains asterisk *", "nickname-id", "validate_nickname"],
-      ["Cat lab`", "contains left quote `", "nickname-id", "validate_nickname"],
-      ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_nickname"],
-      ["Experiment anemia alpha cells -1", "more than 20 characters", "nickname-id", "validate_nickname"],
-      ["C", "minimum one character C", "nickname-id", "validate_nickname", ""],
     ])(
       "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
       async (entry, test_description, selector_id_suffix, text_validation_type) => {
@@ -150,6 +144,44 @@ describe("EditUser test", () => {
 
         await Vue.nextTick();
         expect(spied_text_validator).toHaveBeenCalledWith(entry);
+
+        expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
+      }
+    );
+    test.each([
+      ["Experiment anemia -1", "valid input", "nickname-id", "validate_customer_account_input"],
+      ["Cat * lab", "contains asterisk *", "nickname-id", "validate_customer_account_input"],
+      ["Cat lab`", "contains left quote `", "nickname-id", "validate_customer_account_input"],
+      ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_customer_account_input"],
+      [
+        "Experiment anemia alpha cells -1",
+        "more than 20 characters",
+        "nickname-id",
+        "validate_customer_account_input",
+      ],
+      ["C", "minimum one character C", "nickname-id", "validate_customer_account_input"],
+    ])(
+      "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
+      async (entry, test_description, selector_id_suffix, text_validation_type) => {
+        edituser.nickname = entry;
+
+        const propsData = {
+          dialogdata: edituser,
+          dataindex: 0,
+        };
+        wrapper = mount(ComponentToTest, {
+          store,
+          propsData,
+          localVue,
+        });
+        const spied_text_validator = jest.spyOn(TextValidation.prototype, text_validation_type);
+        const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
+        const target_error_message = wrapper.find("#input-widget-feedback-" + selector_id_suffix);
+
+        target_input_field.setValue(entry);
+
+        await Vue.nextTick();
+        expect(spied_text_validator).toHaveBeenCalledWith(entry, "nickname");
 
         expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
       }

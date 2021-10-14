@@ -32,17 +32,17 @@ describe("SettingsForm.vue", () => {
 
   const array_of_customer_ids_missing_user_ids = [
     {
-      cust_id: 0,
-      uuid: "4vqyd62oARXqj9nRUNhtLQ",
-      api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+      cust_idx: 0,
+      cust_id: "4vqyd62oARXqj9nRUNhtLQ",
+      pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
       nickname: "Customer account -1",
     },
   ];
   const array_of_customerid_null_missing_user_ids = [
     {
-      cust_id: 0,
-      uuid: "4vqyd62oARXqj9nRUNhtLQ",
-      api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+      cust_idx: 0,
+      cust_id: "4vqyd62oARXqj9nRUNhtLQ",
+      pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
       nickname: "",
     },
   ];

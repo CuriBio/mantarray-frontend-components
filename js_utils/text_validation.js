@@ -91,9 +91,11 @@ export class TextValidation {
    * Returns the feedback text with either value of "" or text with reason for failure
    *
    * @param  {string}  text The text on which the validation rules are verified
+   * @param  {string}  type The type of value being checked: ID, passkey, or nickname
+
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
-  validate(text) {
+  validate(text, type) {
     let feedback = "";
     const obj = {};
     try {
@@ -107,8 +109,8 @@ export class TextValidation {
         case "alphanumeric":
           feedback = this.validate_alphanumeric(text);
           break;
-        case "nickname":
-          feedback = this.validate_nickname(text);
+        case "customer_account_input":
+          feedback = this.validate_customer_account_input(text, type);
           break;
         default:
           obj.err = "rule error";
@@ -119,6 +121,111 @@ export class TextValidation {
       throw exception;
     }
     return feedback;
+  }
+  /**
+   * Returns the feedback text with either value of "" or text with reason for failure
+   *
+   * @param  {text}  text The text on which the validation rules are verified
+   * @param  {string}  type The type of value being checked: ID, passkey, or nickname
+
+   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
+   */
+  validate_customer_account_input(text, type) {
+    let feedback = "";
+    if (text != null) {
+      const val_length = text.length;
+      if (val_length >= 1 && val_length <= 20) {
+        feedback = this.input_errorfinder(true, text, type, val_length);
+      } else {
+        feedback = this.input_errorfinder(false, text, type, val_length);
+      }
+    } else {
+      feedback = this.input_errorfinder(false, text, type, 0);
+    }
+    return feedback;
+  }
+  /**
+   * Returns the feedback text with either value of "" or text with reason for failure
+   *
+   * @param  {stats} stats The stats on the value of the name lenght verification (true) is proper length else (false)
+   * @param  {text}  text The value on which the validation rules are verified
+   * @param  {string}  type The type of value being checked: ID, passkey, or nickname
+   * @param  {len}  len The len the total length of the input
+   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
+   */
+  input_errorfinder(stats, text, type, len) {
+    let invalid_text = "";
+    switch (stats) {
+      case true:
+        invalid_text = "";
+        break;
+      case false:
+        if (len == 0) {
+          invalid_text = "This field is required";
+        } else {
+          invalid_text = `The valid ${type} is min 1 charcter and max 20 charcters`;
+        }
+        if (len > 20) {
+          invalid_text = "Invalid as its more than 20 charcters";
+        }
+        break;
+    }
+    if (stats == true) {
+      if (len > 0 && len < 21) {
+        invalid_text = this.input_parser(stats, text, type, len);
+      }
+    }
+    return invalid_text;
+  }
+  /**
+   * Returns the feedback text this is a real parser which identfies the proper error reason failure
+   *
+   * @param  {stats}     stats The stats on the value of the name length verification (true) is proper length else (false)
+   * @param  {text}  text The name on which the validation rules are verified
+   * @param  {string}  type The type of value being checked: ID, passkey, or nickname
+   * @param  {len}  len The len the total length of the name
+   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
+   */
+  input_parser(stats, text, type, len) {
+    let parse_error = "";
+    for (let i = 0; i < len; i++) {
+      let scan_ascii = 0;
+      scan_ascii = text.charCodeAt(i);
+      switch (true) {
+        case scan_ascii == 32 && type !== "nickname" /* space          */:
+          parse_error = "This field is required. No spaces allowed";
+          break;
+        case scan_ascii == 35: /* hash       #   */
+        case scan_ascii == 38: /* ampersand     & */
+        case scan_ascii == 40: /* parantheses (  */
+        case scan_ascii == 41: /* parantheses )  */
+        case scan_ascii == 45: /* hypen     -    */
+        case scan_ascii == 46: /*  period     .   */
+        case scan_ascii == 47: /*  forward slash / */
+        case scan_ascii >= 48 &&
+          scan_ascii <= 57: /* 0, 1, 2, 3, 4, 5, 6, 7, 8, 9  ascii of '0' is 48 and '9' is 57*/
+        case scan_ascii >= 65 && scan_ascii <= 90: /* A ascii of 'A' is 65  Z ascii of 'Z' is 90 */
+        case scan_ascii == 95: /* underscore _   */
+        case scan_ascii >= 97 && scan_ascii <= 122:
+          parse_error = "";
+          break;
+        case scan_ascii <= 31:
+        case scan_ascii == 33:
+        case scan_ascii == 34:
+        case scan_ascii == 36:
+        case scan_ascii == 37:
+        case scan_ascii == 39:
+        case scan_ascii >= 42 && scan_ascii <= 44:
+        case scan_ascii >= 58 && scan_ascii <= 64:
+        case scan_ascii >= 91 && scan_ascii <= 94:
+        case scan_ascii == 96:
+        case scan_ascii >= 123:
+          parse_error = "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /";
+          i = len + 1;
+          break;
+      }
+    }
+    return parse_error;
   }
 
   /**
@@ -151,6 +258,7 @@ export class TextValidation {
       try {
         // decode the the value provided
         decode_uuid = uuidBase62.decode(uuidtext);
+
         encode_uuid = uuidBase62.encode(decode_uuid);
         if (encode_uuid === uuidtext) {
           invalid_text = this.uuid_errorfinder(len_uuidBase57encode, "valid", uuidtext);
@@ -211,35 +319,35 @@ export class TextValidation {
   /**
    * Returns the feedback text with either value of "" or text with reason for failure
    *
-   * @param  {apikey}  apikey The apikey on which the validation rules are verified
+   * @param  {passkey}  passkey The passkey on which the validation rules are verified
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
-  validate_alphanumeric(apikey) {
+  validate_alphanumeric(passkey) {
     let feedback_text = "";
-    const apikey_len = apikey.length;
+    const passkey_len = passkey.length;
     let encode_uuid = "";
     let decode_uuid = "";
-    if (apikey_len == 36) {
+    if (passkey_len == 36) {
       // encode the the value provided
       try {
-        encode_uuid = uuidBase62.encode(apikey);
+        encode_uuid = uuidBase62.encode(passkey);
         decode_uuid = uuidBase62.decode(encode_uuid);
 
-        if (decode_uuid === apikey) {
-          feedback_text = this.apikey_errorfinder("valid");
+        if (decode_uuid === passkey) {
+          feedback_text = this.passkey_errorfinder("valid");
         }
       } catch (err) {
-        feedback_text = this.apikey_errorfinder("error");
+        feedback_text = this.passkey_errorfinder("error");
       }
     } else {
-      if (apikey_len == 0) {
+      if (passkey_len == 0) {
         feedback_text = "This field is required";
       } else {
-        if (apikey_len > 36) {
-          feedback_text = this.apikey_errorfinder("error");
+        if (passkey_len > 36) {
+          feedback_text = this.passkey_errorfinder("error");
         }
-        if (apikey_len <= 35) {
-          feedback_text = this.apikey_errorfinder("error");
+        if (passkey_len <= 35) {
+          feedback_text = this.passkey_errorfinder("error");
         }
       }
     }
@@ -251,115 +359,16 @@ export class TextValidation {
    * @param  {stats}  stats The stats on which the validation status
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
-  apikey_errorfinder(stats) {
+  passkey_errorfinder(stats) {
     let invalid_text = "";
     switch (stats) {
       case "valid":
         invalid_text = "";
         break;
       case "error":
-        invalid_text = "Wrong Format of API Key";
+        invalid_text = "Wrong Format of pass Key";
         break;
     }
     return invalid_text;
-  }
-  /**
-   * Returns the feedback text with either value of "" or text with reason for failure
-   *
-   * @param  {text}  text The text on which the validation rules are verified
-   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
-   */
-  validate_nickname(text) {
-    let feedback = "";
-    if (text != null) {
-      const len_nickname = text.length;
-      if (len_nickname >= 1 && len_nickname <= 20) {
-        feedback = this.nickname_errorfinder(true, text, len_nickname);
-      } else {
-        feedback = this.nickname_errorfinder(false, text, len_nickname);
-      }
-    } else {
-      feedback = this.nickname_errorfinder(false, text, 0);
-    }
-    return feedback;
-  }
-  /**
-   * Returns the feedback text with either value of "" or text with reason for failure
-   *
-   * @param  {stats}     stats The stats on the value of the name lenght verification (true) is proper length else (false)
-   * @param  {nickname}  nickname The nickname on which the validation rules are verified
-   * @param  {len}  len The len the total length of the nickname
-   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
-   */
-  nickname_errorfinder(stats, nickname, len) {
-    let invalid_text = "";
-    switch (stats) {
-      case true:
-        invalid_text = "";
-        break;
-      case false:
-        if (len == 0) {
-          invalid_text = "This field is required";
-        } else {
-          invalid_text = "The valid nickname is min 1 charcter and max 20 charcters";
-        }
-        if (len > 20) {
-          invalid_text = "Invalid as its more than 20 charcters";
-        }
-        break;
-    }
-    if (stats == true) {
-      if (len > 0 && len < 21) {
-        invalid_text = this.nickname_parser(stats, nickname, len);
-      }
-    }
-    return invalid_text;
-  }
-  /**
-   * Returns the feedback text this is a real parser which identfies the proper error reason failure
-   *
-   * @param  {stats}     stats The stats on the value of the name length verification (true) is proper length else (false)
-   * @param  {name}  name The name on which the validation rules are verified
-   * @param  {len}  len The len the total length of the name
-   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
-   */
-  nickname_parser(stats, name, len) {
-    let parse_error = "";
-    for (let i = 0; i < len; i++) {
-      let scan_ascii = 0;
-      scan_ascii = name.charCodeAt(i);
-      switch (true) {
-        case scan_ascii == 32: /* space          */
-        case scan_ascii == 35: /* hash       #   */
-        case scan_ascii == 38: /* ampersand     & */
-        case scan_ascii == 40: /* parantheses (  */
-        case scan_ascii == 41: /* parantheses )  */
-        case scan_ascii == 45: /* hypen     -    */
-        case scan_ascii == 46: /*  period     .   */
-        case scan_ascii == 47: /*  forward slash / */
-        case scan_ascii >= 48 &&
-          scan_ascii <= 57: /* 0, 1, 2, 3, 4, 5, 6, 7, 8, 9  ascii of '0' is 48 and '9' is 57*/
-        case scan_ascii >= 65 && scan_ascii <= 90: /* A ascii of 'A' is 65  Z ascii of 'Z' is 90 */
-        case scan_ascii == 95: /* underscore _   */
-        case scan_ascii >= 97 && scan_ascii <= 122:
-          parse_error = "";
-          break;
-        case scan_ascii <= 31:
-        case scan_ascii == 33:
-        case scan_ascii == 34:
-        case scan_ascii == 36:
-        case scan_ascii == 37:
-        case scan_ascii == 39:
-        case scan_ascii >= 42 && scan_ascii <= 44:
-        case scan_ascii >= 58 && scan_ascii <= 64:
-        case scan_ascii >= 91 && scan_ascii <= 94:
-        case scan_ascii == 96:
-        case scan_ascii >= 123:
-          parse_error = "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /";
-          i = len + 1;
-          break;
-      }
-    }
-    return parse_error;
   }
 }

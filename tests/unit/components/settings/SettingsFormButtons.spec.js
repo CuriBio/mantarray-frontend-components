@@ -21,7 +21,7 @@ describe("SettingsForm.vue", () => {
   //   {
   //     cust_id: 0,
   //     uuid: "4vqyd62oARXqj9nRUNhtLQ",
-  //     api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+  //     pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
   //     nickname: "Customer account -1",
   //     user_ids: []
   //   }
@@ -48,7 +48,7 @@ describe("SettingsForm.vue", () => {
   // const delete_customer = {
   //   cust_id: 0,
   //   uuid: "4vqyd62oARXqj9nRUNhtLQ",
-  //   api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+  //   pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
   //   nickname: "Customer account -1",
   //   user_ids: []
   // };
