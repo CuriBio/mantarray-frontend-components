@@ -212,12 +212,13 @@ export default {
           const { stimulation_type, pulses, stop_setting } = protocol_assignments[well].protocol;
           const converted_pulses = pulses.map((pulse) => {
             return {
-              phase_one_duration: (pulse.phase_one_duration *= 1000), // sent in µs
-              phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]), // sent in mV or µA
-              interphase_interval: (pulse.interphase_interval *= 1000), // sent in µs
-              phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]), // sent in mV or µA
-              phase_two_duration: (pulse.phase_two_duration *= 1000), // sent in µs
-              repeat_delay_interval: Math.round((pulse.repeat_delay_interval *= 1000)), // sent in µs, also needs to be an integer value
+              // TODO unit test that pulses aren't changed after sending message
+              phase_one_duration: pulse.phase_one_duration * 1000, // sent in µs
+              phase_one_charge: pulse.phase_one_charge * charge_conversion[stimulation_type], // sent in mV or µA
+              interphase_interval: pulse.interphase_interval * 1000, // sent in µs
+              phase_two_charge: pulse.phase_two_charge * charge_conversion[stimulation_type], // sent in mV or µA
+              phase_two_duration: pulse.phase_two_duration * 1000, // sent in µs
+              repeat_delay_interval: Math.round(pulse.repeat_delay_interval * 1000), // sent in µs, also needs to be an integer value
               total_active_duration: pulse.total_active_duration, // sent in ms
             };
           });
