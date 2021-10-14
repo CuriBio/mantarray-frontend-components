@@ -90,43 +90,4 @@ input:checked + .slider:before {
 .round:before {
   border-radius: 50%;
 }
-
-.slider_checked {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #a7a8a9;
-  -webkit-transition: 0.6s;
-  transition: 0.6s;
-}
-
-.slider_checked:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 30px;
-  bottom: 4px;
-  background-color: #ececed;
-  -webkit-transition: 0.6s;
-  transition: 0.6s;
-}
-
-input:checked + .slider_checked {
-  background-color: #4c4c4c;
-}
-
-input:focus + .slider_checked {
-  box-shadow: 0 0 1px #4c4c4c;
-}
-
-input:checked + .slider_checked:before {
-  -webkit-transform: translateX(-26px);
-  -ms-transform: translateX(-26px);
-  transform: translateX(-26px);
-  background-color: #6e6f72;
-}
 </style>
