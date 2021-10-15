@@ -106,9 +106,9 @@ export class TextValidation {
         case "uuidBase57encode":
           feedback = this.validate_uuidBase_fiftyseven_encode(text);
           break;
-        case "alphanumeric":
-          feedback = this.validate_alphanumeric(text);
-          break;
+        // case "alphanumeric":
+        //   feedback = this.validate_alphanumeric(text);
+        //   break;
         case "customer_account_input":
           feedback = this.validate_customer_account_input(text, type);
           break;
@@ -322,53 +322,53 @@ export class TextValidation {
    * @param  {passkey}  passkey The passkey on which the validation rules are verified
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
-  validate_alphanumeric(passkey) {
-    let feedback_text = "";
-    const passkey_len = passkey.length;
-    let encode_uuid = "";
-    let decode_uuid = "";
-    if (passkey_len == 36) {
-      // encode the the value provided
-      try {
-        encode_uuid = uuidBase62.encode(passkey);
-        decode_uuid = uuidBase62.decode(encode_uuid);
+  // validate_alphanumeric(passkey) {
+  //   let feedback_text = "";
+  //   const passkey_len = passkey.length;
+  //   let encode_uuid = "";
+  //   let decode_uuid = "";
+  //   if (passkey_len == 36) {
+  //     // encode the the value provided
+  //     try {
+  //       encode_uuid = uuidBase62.encode(passkey);
+  //       decode_uuid = uuidBase62.decode(encode_uuid);
 
-        if (decode_uuid === passkey) {
-          feedback_text = this.passkey_errorfinder("valid");
-        }
-      } catch (err) {
-        feedback_text = this.passkey_errorfinder("error");
-      }
-    } else {
-      if (passkey_len == 0) {
-        feedback_text = "This field is required";
-      } else {
-        if (passkey_len > 36) {
-          feedback_text = this.passkey_errorfinder("error");
-        }
-        if (passkey_len <= 35) {
-          feedback_text = this.passkey_errorfinder("error");
-        }
-      }
-    }
-    return feedback_text;
-  }
-  /**
-   * Returns the feedback text with either value of "" or text with reason for failure
-   *
-   * @param  {stats}  stats The stats on which the validation status
-   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
-   */
-  passkey_errorfinder(stats) {
-    let invalid_text = "";
-    switch (stats) {
-      case "valid":
-        invalid_text = "";
-        break;
-      case "error":
-        invalid_text = "Wrong Format of pass Key";
-        break;
-    }
-    return invalid_text;
-  }
+  //       if (decode_uuid === passkey) {
+  //         feedback_text = this.passkey_errorfinder("valid");
+  //       }
+  //     } catch (err) {
+  //       feedback_text = this.passkey_errorfinder("error");
+  //     }
+  //   } else {
+  //     if (passkey_len == 0) {
+  //       feedback_text = "This field is required";
+  //     } else {
+  //       if (passkey_len > 36) {
+  //         feedback_text = this.passkey_errorfinder("error");
+  //       }
+  //       if (passkey_len <= 35) {
+  //         feedback_text = this.passkey_errorfinder("error");
+  //       }
+  //     }
+  //   }
+  //   return feedback_text;
+  // }
+  // /**
+  //  * Returns the feedback text with either value of "" or text with reason for failure
+  //  *
+  //  * @param  {stats}  stats The stats on which the validation status
+  //  * @return {string} The string is either empty on valid and <space> or <invalid meessage>
+  //  */
+  // passkey_errorfinder(stats) {
+  //   let invalid_text = "";
+  //   switch (stats) {
+  //     case "valid":
+  //       invalid_text = "";
+  //       break;
+  //     case "error":
+  //       invalid_text = "Wrong Format of pass Key";
+  //       break;
+  //   }
+  //   return invalid_text;
+  // }
 }

@@ -210,21 +210,21 @@ describe("TextValidation.validate_uuidBase_fiftyseven_encode", () => {
     }
   );
 });
-describe("TextValidation.validate_alphanumeric", () => {
-  test.each([
-    ["06ad547f fe02-477b-9473-f7977e4d5e17", "Wrong Format of pass Key"],
-    ["06ad547f-fe02-477b-9473-f7977e4d5e1", "Wrong Format of pass Key"],
-    ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "Wrong Format of pass Key"],
-    ["06ad547f-fe02-477b-9473-f7977e4d5e17", ""], // need to investigate
-  ])(
-    "Given the UUID %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
-    (alphanumeric, message) => {
-      const text = message;
-      const TestAlphanumericCode = TextValidation_Alphanumeric;
-      expect(TestAlphanumericCode.validate(alphanumeric)).toStrictEqual(text);
-    }
-  );
-});
+// describe("TextValidation.validate_alphanumeric", () => {
+//   test.each([
+//     ["06ad547f fe02-477b-9473-f7977e4d5e17", "Wrong Format of pass Key"],
+//     ["06ad547f-fe02-477b-9473-f7977e4d5e1", "Wrong Format of pass Key"],
+//     ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "Wrong Format of pass Key"],
+//     ["06ad547f-fe02-477b-9473-f7977e4d5e17", ""], // need to investigate
+//   ])(
+//     "Given the UUID %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
+//     (alphanumeric, message) => {
+//       const text = message;
+//       const TestAlphanumericCode = TextValidation_Alphanumeric;
+//       expect(TestAlphanumericCode.validate(alphanumeric)).toStrictEqual(text);
+//     }
+//   );
+// });
 describe("TextValidation.validate_customer_account_input", () => {
   test.each([
     ["C", ""],
