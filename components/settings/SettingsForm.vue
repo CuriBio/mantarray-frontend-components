@@ -498,7 +498,7 @@ export default {
       const { status } = await this.$store.dispatch("settings/update_settings");
 
       // Currently, error-handling by resetting inputs to force customer to try again if axios request fails
-      if (status == 200) this.$emit("close_modal");
+      if (status === 200) this.$emit("close_modal");
       else this.reset_changes();
     },
     reset_changes() {
