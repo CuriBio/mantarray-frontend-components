@@ -8,23 +8,23 @@
       <InputWidget
         :title_label="'Enter Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
-        :invalid_text="error_text_uuid"
+        :invalid_text="error_text_id"
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
-        @update:value="on_update_uuid($event)"
+        @update:value="on_update_id($event)"
       ></InputWidget>
     </div>
 
-    <div id="api-key" style="top: 145px; left: 50px; position: absolute; z-index: 23">
+    <div id="pass-key" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
-        :title_label="'Enter API key'"
+        :title_label="'Enter Pass-Key'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
-        :invalid_text="error_text_api"
+        :invalid_text="error_text_pass"
         :spellcheck="false"
         :input_width="400"
-        :dom_id_suffix="'apikey-id'"
-        @update:value="on_update_api($event)"
+        :dom_id_suffix="'passkey-id'"
+        @update:value="on_update_pass($event)"
       ></InputWidget>
     </div>
     <div id="nickname" style="top: 241px; left: 50px; position: absolute; z-index: 22">
@@ -54,7 +54,7 @@
 </template>
 <script>
 import Vue from "vue";
-import uuid from "@tofandel/uuid-base62";
+// import uuid from "@tofandel/uuid-base62";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
@@ -65,10 +65,9 @@ Vue.use(BootstrapVue);
 Vue.component("BFormInput", BFormInput);
 Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
-Vue.use(uuid);
-const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
-const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
-const TextValidation_Nickname = new TextValidation("nickname");
+// Vue.use(uuid);
+const TextValidation_Customer = new TextValidation("customer_account_input");
+
 export default {
   name: "AddCustomer",
   components: {
@@ -80,28 +79,28 @@ export default {
   },
   data() {
     return {
-      uuid: "",
-      api_key: "",
+      cust_id: "",
+      pass_key: "",
       nickname: "",
-      error_text_uuid: "This field is required",
-      error_text_api: "This field is required",
+      error_text_id: "This field is required",
+      error_text_pass: "This field is required",
       error_text_nickname: "This field is required",
       enablelist_add_customer: [true, false],
     };
   },
   methods: {
-    on_update_uuid: function (new_value) {
-      this.error_text_uuid = TextValidation_UUIDBase57.validate(new_value);
-      this.uuid = new_value;
+    on_update_id: function (new_value) {
+      this.error_text_id = TextValidation_Customer.validate(new_value, "ID");
+      this.cust_id = new_value;
       this.enable_save_button();
     },
-    on_update_api: function (new_value) {
-      this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
-      this.api_key = new_value;
+    on_update_pass: function (new_value) {
+      this.error_text_pass = TextValidation_Customer.validate(new_value, "passkey");
+      this.pass_key = new_value;
       this.enable_save_button();
     },
     on_update_nickname: function (new_value) {
-      this.error_text_nickname = TextValidation_Nickname.validate(new_value);
+      this.error_text_nickname = TextValidation_Customer.validate(new_value, "nickname");
       this.nickname = new_value;
       this.enable_save_button();
     },
@@ -120,17 +119,17 @@ export default {
     },
     save_newcustomer() {
       const add_customer = {
-        cust_id: this.dataindex,
-        uuid: this.uuid,
-        api_key: this.api_key,
+        cust_idx: this.dataindex,
+        cust_id: this.cust_id,
+        pass_key: this.pass_key,
         nickname: this.nickname,
         user_ids: [],
       };
       this.$emit("save-id", add_customer);
     },
     enable_save_button() {
-      if (this.error_text_uuid === "") {
-        if (this.error_text_api === "") {
+      if (this.error_text_id === "") {
+        if (this.error_text_pass === "") {
           if (this.error_text_nickname === "") {
             this.enablelist_add_customer = [true, true];
             return;

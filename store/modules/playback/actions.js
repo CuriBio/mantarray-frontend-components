@@ -214,7 +214,7 @@ export default {
     } else {
       whole_url = `${baseurl}/${endpoint}?time_index=${time_index}&barcode=${barcode}&is_hardware_test_recording=${payload.is_hardware_test_recording}`;
     }
-    result = call_axios_get_from_vuex(whole_url, context);
+    result = await call_axios_get_from_vuex(whole_url, context);
     return result;
   },
   async start_stop_axios_request(context, payload) {
@@ -222,7 +222,7 @@ export default {
     const baseurl = payload.baseurl;
     const endpoint = payload.endpoint;
     const whole_url = `${baseurl}/${endpoint}`;
-    result = call_axios_get_from_vuex(whole_url, context);
+    result = await call_axios_get_from_vuex(whole_url, context);
     return result;
   },
 };

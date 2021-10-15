@@ -32,17 +32,17 @@ describe("SettingsForm.vue", () => {
 
   const array_of_customer_ids_missing_user_ids = [
     {
-      cust_id: 0,
-      uuid: "4vqyd62oARXqj9nRUNhtLQ",
-      api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+      cust_idx: 0,
+      cust_id: "4vqyd62oARXqj9nRUNhtLQ",
+      pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
       nickname: "Customer account -1",
     },
   ];
   const array_of_customerid_null_missing_user_ids = [
     {
-      cust_id: 0,
-      uuid: "4vqyd62oARXqj9nRUNhtLQ",
-      api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+      cust_idx: 0,
+      cust_id: "4vqyd62oARXqj9nRUNhtLQ",
+      pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
       nickname: "",
     },
   ];
@@ -65,6 +65,11 @@ describe("SettingsForm.vue", () => {
       // commit a deep copy of the template object to the Vuex store using JSON stringify/parse, as it may be modified during tests. https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
       store.commit("settings/set_customer_account_ids", JSON.parse(JSON.stringify(array_of_customer_ids)));
     });
+    afterEach(() => {
+      jest.restoreAllMocks();
+      jest.clearAllMocks();
+    });
+
     test("When the component is mounted, a Customer account is selected, and a user clicks reset, Then modal will default to no customer selected and will reset in Vuex", async () => {
       const commit_spy = jest.spyOn(store, "commit");
       store.commit("settings/set_customer_index", 0);
@@ -114,13 +119,36 @@ describe("SettingsForm.vue", () => {
         localVue,
       });
       jest.spyOn(store, "dispatch").mockImplementation(() => {
-        return { status: 400 };
+        return {
+          status: 400,
+        };
       });
 
       const save_changes = wrapper.find(".span__settings-tool-tip-save-btn-txt-enable");
       await save_changes.trigger("click");
 
       expect(reset_spy).toHaveBeenCalledTimes(1);
+    });
+
+    test("When a user wants to save customer credentials and there is no error sending request, Then the modal will close", async () => {
+      await store.commit("settings/set_customer_index", 1);
+
+      wrapper = mount(ComponentToTest, {
+        store,
+        localVue,
+      });
+
+      jest.spyOn(store, "dispatch").mockImplementation(() => {
+        return {
+          status: 200,
+        };
+      });
+
+      const save_changes = wrapper.find(".span__settings-tool-tip-save-btn-txt-enable");
+      await save_changes.trigger("click");
+      const emit_close = wrapper.emitted("close_modal");
+
+      expect(emit_close).toBeTruthy();
     });
 
     test("Given a customer and user account selected in Vuex and the textbox for Customer Account is changed to an account different than the one in Vuex and a user account is selected in thet textbox, When the Save Changes button is clicked, Then the selected indices in Vuex for Customer and User accounts are updated to reflect the chosen options in the textboxes", async () => {

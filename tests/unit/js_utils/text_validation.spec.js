@@ -4,7 +4,7 @@ import { TextValidation as DistTextValidation } from "@/dist/mantarray.common";
 const TextValidation_PlateBarcode = new TextValidation("plate_barcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
-const TextValidation_Nickname = new TextValidation("nickname");
+const TextValidation_Nickname = new TextValidation("customer_account_input");
 const TextValidation_MyRule = new TextValidation("myrule");
 
 describe("DistTextValidation", () => {
@@ -28,7 +28,7 @@ describe("TextValidation", () => {
   });
   test("Given a text validation is for nickname, When called toString(), Then return would match the text rule of 'nickname' applied", () => {
     const validation = TextValidation_Nickname;
-    expect(validation.toString()).toStrictEqual("TextValidation.nickname");
+    expect(validation.toString()).toStrictEqual("TextValidation.customer_account_input");
   });
   test("Given a text validation is for Myrule, When called for validate, Then return would thow an error", () => {
     const validation = TextValidation_MyRule;
@@ -210,22 +210,22 @@ describe("TextValidation.validate_uuidBase_fiftyseven_encode", () => {
     }
   );
 });
-describe("TextValidation.validate_alphanumeric", () => {
-  test.each([
-    ["06ad547f fe02-477b-9473-f7977e4d5e17", "Wrong Format of API Key"],
-    ["06ad547f-fe02-477b-9473-f7977e4d5e1", "Wrong Format of API Key"],
-    ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "Wrong Format of API Key"],
-    ["06ad547f-fe02-477b-9473-f7977e4d5e17", ""], // need to investigate
-  ])(
-    "Given the UUID %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
-    (alphanumeric, message) => {
-      const text = message;
-      const TestAlphanumericCode = TextValidation_Alphanumeric;
-      expect(TestAlphanumericCode.validate(alphanumeric)).toStrictEqual(text);
-    }
-  );
-});
-describe("TextValidation.validate_nickname", () => {
+// describe("TextValidation.validate_alphanumeric", () => {
+//   test.each([
+//     ["06ad547f fe02-477b-9473-f7977e4d5e17", "Wrong Format of pass Key"],
+//     ["06ad547f-fe02-477b-9473-f7977e4d5e1", "Wrong Format of pass Key"],
+//     ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "Wrong Format of pass Key"],
+//     ["06ad547f-fe02-477b-9473-f7977e4d5e17", ""], // need to investigate
+//   ])(
+//     "Given the UUID %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
+//     (alphanumeric, message) => {
+//       const text = message;
+//       const TestAlphanumericCode = TextValidation_Alphanumeric;
+//       expect(TestAlphanumericCode.validate(alphanumeric)).toStrictEqual(text);
+//     }
+//   );
+// });
+describe("TextValidation.validate_customer_account_input", () => {
   test.each([
     ["C", ""],
     ["Experiment anemia -1", ""],
@@ -238,8 +238,8 @@ describe("TextValidation.validate_nickname", () => {
     "Given the Nickname %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
     (nickname_id, message) => {
       const text = message;
-      const TesttValidationNickname = TextValidation_Nickname;
-      expect(TesttValidationNickname.validate(nickname_id)).toStrictEqual(text);
+      const TestValidationNickname = TextValidation_Nickname;
+      expect(TestValidationNickname.validate(nickname_id, "nickname")).toStrictEqual(text);
     }
   );
 });
