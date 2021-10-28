@@ -39,16 +39,16 @@ export default {
     ];
     const array_of_customerids = [
       {
-        cust_id: 0,
-        uuid: "4vqyd62oARXqj9nRUNhtLQ",
-        api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+        cust_idx: 0,
+        cust_id: "4vqyd62oARXqj9nRUNhtLQ",
+        pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
         nickname: "Customer account -1",
         user_ids: array_of_userid_1,
       },
       {
-        cust_id: 1,
-        uuid: "6cBaidlJ84Ggc5JA7IYCgv",
-        api_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
+        cust_idx: 1,
+        cust_id: "6cBaidlJ84Ggc5JA7IYCgv",
+        pass_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
         nickname: "Customer account -2",
         user_ids: array_of_userid_2,
       },

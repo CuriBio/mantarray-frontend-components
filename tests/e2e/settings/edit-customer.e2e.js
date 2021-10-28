@@ -7,7 +7,7 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 const span__button_label = Selector(".span__button_label");
 
 const customer_alphanumeric_input_field = Selector("#input-widget-field-alphanumeric-id");
-const customer_apikey_input_field = Selector("#input-widget-field-apikey-id");
+const customer_passkey_input_field = Selector("#input-widget-field-passkey-id");
 const customer_id_nickname_input_field = Selector("#input-widget-field-nickname-id");
 
 const edit_customer_cancel_btn = span__button_label.nth(0);
@@ -48,7 +48,7 @@ test("testing for the edit customer INVALID State", async (t) => {
   const screenshot_path_base = path.join("settings", "edit-customer");
   const screenshot_path = path.join(screenshot_path_base, "edit-customer-invalid");
   await t.click(customer_alphanumeric_input_field).pressKey("ctrl+a delete");
-  await t.click(customer_apikey_input_field).pressKey("ctrl+a delete");
+  await t.click(customer_passkey_input_field).pressKey("ctrl+a delete");
   await t.click(customer_id_nickname_input_field).pressKey("ctrl+a delete");
   await testcafe_page_visual_regression(t, screenshot_path);
 });

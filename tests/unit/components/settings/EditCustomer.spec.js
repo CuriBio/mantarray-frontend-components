@@ -20,7 +20,7 @@ localVue.use(Vuex);
 let NuxtStore;
 let store;
 
-describe("EditCustomer test", () => {
+describe("EditCustomer", () => {
   beforeAll(async () => {
     const storePath = `${process.env.buildDir}/store.js`;
     NuxtStore = await import(storePath);
@@ -33,7 +33,7 @@ describe("EditCustomer test", () => {
   describe("EditCustomer.vue", () => {
     const editcustomer = {
       uuid: "",
-      apikey: "",
+      passkey: "",
       nickname: "",
     };
     const propsData = {
@@ -62,78 +62,34 @@ describe("EditCustomer test", () => {
   describe("EditCustomer.enter_uuidbase57", () => {
     const editcustomer = {
       uuid: "",
-      apikey: "",
+      passkey: "",
       nickname: "",
     };
     afterEach(() => {
       wrapper.destroy();
       jest.restoreAllMocks();
     });
+
     test.each([
-      ["2VSckkBYr2An3dqHEyfRRE", "valid input", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      [
-        "0VSckkBYH2An3dqHEyfRRE",
-        "contains zero (0)",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      [
-        "2VSckkBY2An3dqHEyfRRE",
-        "is less than 22 characters",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      ["2VSckkBY2An3dqHEyfRREab", "23 characters", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      ["2VSckkBY12An3dqHEyfRRE", "contains  (1)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      [
-        "2VSIkkBYH2An3dqHEyfRRE",
-        "contains capital (I)",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      ["2VSskkBYH2An3dqHElfRRE", "contains  (l)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      ["2VSskkBYH2An3dqHEyfRRO", "contains  (O)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      [
-        "4vqyd62oARXqj9nRUNhtLQ",
-        "error in encoding",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      [
-        "2VSckkBY-2An3dqHEyfRRE",
-        "contains hypen (-)",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      [
-        "2VSckkBYº2An3dqHEyfRRE",
-        "contains symbols (º)",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      ["", "<empty>", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      ["06ad547f-fe02-477b-9473-f7977e4d5e17", "valid input", "apikey-id", "validate_alphanumeric"],
-      ["06ad547f fe02-477b-9473-f7977e4d5e17", "missing hypen", "apikey-id", "validate_alphanumeric"],
-      ["06ad547f-fe02-477b-9473-f7977e4d5e1", "less than 36", "apikey-id", "validate_alphanumeric"],
-      ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "more than 36", "apikey-id", "validate_alphanumeric"],
-      ["", "", "apikey-id", "validate_alphanumeric"],
-      ["Experiment anemia -1", "valid input", "nickname-id", "validate_nickname"],
-      ["Cat * lab", "contains asterisk *", "nickname-id", "validate_nickname"],
-      ["Cat lab`", "contains left quote `", "nickname-id", "validate_nickname"],
-      ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_nickname"],
-      ["Experiment anemia alpha cells -1", "more than 20 characters", "nickname-id", "validate_nickname"],
-      ["C", "minimum one character C", "nickname-id", "validate_nickname", ""],
-      ["", "<empty>", "nickname-id", "validate_nickname"],
+      ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "ID", "alphanumeric-id", "validate_customer_account_input"],
+      ["Cat lab;", "ID", "alphanumeric-id", "validate_customer_account_input"],
+      ["Experiment anemia -1", "ID", "alphanumeric-id", "validate_customer_account_input"],
+      ["Cat * lab", "passkey", "passkey-id", "validate_customer_account_input"],
+      ["Valid", "passkey", "passkey-id", "validate_customer_account_input"],
+      ["Cat lab", "passkey", "passkey-id", "validate_customer_account_input"],
+      ["Experiment anemia alpha cells -1", "nickname", "nickname-id", "validate_customer_account_input"],
+      ["C", "nickname", "nickname-id", "validate_customer_account_input"],
+      ["", "nickname", "nickname-id", "validate_customer_account_input"],
     ])(
       "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
-      async (entry, test_description, selector_id_suffix, text_validation_type) => {
-        if (text_validation_type === "validate_uuidBase_fiftyseven_encode") {
-          editcustomer.uuid = entry;
+      async (entry, text_id, selector_id_suffix, text_validation_type) => {
+        if (selector_id_suffix === "alphanumeric-id") {
+          editcustomer.cust_id = entry;
         }
-        if (text_validation_type === "validate_alphanumeric") {
-          editcustomer.apikey = entry;
+        if (selector_id_suffix === "passkey-id") {
+          editcustomer.passkey = entry;
         }
-        if (text_validation_type === "validate_nickname") {
+        if (selector_id_suffix === "nickname-id") {
           editcustomer.nickname = entry;
         }
 
@@ -156,14 +112,14 @@ describe("EditCustomer test", () => {
         target_input_field.setValue(entry);
 
         await Vue.nextTick();
-        expect(spied_text_validator).toHaveBeenCalledWith(entry);
+        expect(spied_text_validator).toHaveBeenCalledWith(entry, text_id);
 
         expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
       }
     );
     test.each([
       ["alphanumeric-id", "This field is required"],
-      ["apikey-id", "This field is required"],
+      ["passkey-id", "This field is required"],
       ["nickname-id", "This field is required"],
     ])(
       "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
@@ -195,50 +151,25 @@ describe("EditCustomer test", () => {
   describe("EditCustomer.enable_save_button", () => {
     const editcustomer = {
       uuid: "",
-      apikey: "",
+      passkey: "",
       nickname: "",
     };
     afterEach(() => wrapper.destroy());
     test.each([
-      [
-        "0VSckkBYH2An3dqHEyfRRE",
-        "06ad547f-fe02-477b-9473-f7977e4d5e17",
-        "Experiment anemia -1",
-        "color: rgb(63, 63, 63);",
-      ],
-      [
-        "5FY8KwTsQaUJ2KzHJGetfE",
-        "06ad547f fe02-477b-9473-f7977e4d5e17",
-        "Experiment anemia -1",
-        "color: rgb(63, 63, 63);",
-      ],
-      [
-        "5FY8KwTsQaUJ2KzHJGetfE",
-        "06ad547f-fe02-477b-9473-f7977e4d5e17",
-        "Cat * lab",
-        "color: rgb(63, 63, 63);",
-      ],
-      [
-        "5FY8KwTsQaUJ2KzHJGetfE",
-        "06ad547f-fe02-477b-9473-f7977e4d5e17",
-        "Experiment anemia -1",
-        "color: rgb(255, 255, 255);",
-      ],
-      [
-        "5FY8KwTsQaUJ2KzHJGetfE",
-        "06ad547f-fe02-477b-9473-f7977e4d5e17",
-        "Experiment anemia -1",
-        "color: rgb(255, 255, 255);",
-      ],
+      ["0VSckkBYH2An3dqHEyfRRE", "06ad547f", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
+      ["5FY8KwTsQaUJ2KzHJGetfE", "06ad547f", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
+      ["5FY8KwTsQaUJ2KzHJGetfE", "06ad547f", "Cat * lab", "color: rgb(63, 63, 63);"],
+      ["fasd44", "06ad54", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
+      ["", "", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
     ])(
-      "Given an UUID (%s), API Key (%s), Nickname (%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
-      async (uuid, apikey, nickname, save_btn_css) => {
+      "Given an UUID (%s), pass Key (%s), Nickname (%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
+      async (uuid, passkey, nickname, save_btn_css) => {
         const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
-        const selector_id_suffix_apikey_id = "apikey-id";
+        const selector_id_suffix_passkey_id = "passkey-id";
         const selector_id_suffix_nickname_id = "nickname-id";
 
         editcustomer.uuid = uuid;
-        editcustomer.apikey = apikey;
+        editcustomer.passkey = passkey;
         editcustomer.nickname = nickname;
 
         const propsData = {
@@ -256,8 +187,10 @@ describe("EditCustomer test", () => {
         );
         target_input_field_uuid.setValue(uuid);
         await Vue.nextTick();
-        const target_input_field_apikey = wrapper.find("#input-widget-field-" + selector_id_suffix_apikey_id);
-        target_input_field_apikey.setValue(apikey);
+        const target_input_field_passkey = wrapper.find(
+          "#input-widget-field-" + selector_id_suffix_passkey_id
+        );
+        target_input_field_passkey.setValue(passkey);
         await Vue.nextTick();
 
         const target_input_field_nickname = wrapper.find(
@@ -279,16 +212,16 @@ describe("EditCustomer test", () => {
 
   describe("EditCustomer.clicked_button", () => {
     const editcustomer = {
-      uuid: "",
-      apikey: "",
+      cust_id: "",
+      passkey: "",
       nickname: "",
       user_ids: [],
     };
     afterEach(() => wrapper.destroy());
     test.each([
       [
-        "5FY8KwTsQaUJ2KzHJGetfE",
-        "06ad547f-fe02-477b-9473-f7977e4d5e17",
+        "5FY8KwTsQaUJ2KzHJ",
+        "06ad547f-fe02",
         "Experiment anemia -1",
         "",
         "",
@@ -296,22 +229,22 @@ describe("EditCustomer test", () => {
         "color: rgb(255, 255, 255);",
       ],
     ])(
-      "Given an UUID(%s) , API Key(%s), Nickname(%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, an event 'cancel-id' is emmited to the parent, click on Delete an event 'delete-id' is emmited to the parent, and click on Save an event 'save-id' is emmited to parent",
+      "Given an UUID(%s) , pass Key(%s), Nickname(%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, an event 'cancel-id' is emmited to the parent, click on Delete an event 'delete-id' is emmited to the parent, and click on Save an event 'save-id' is emmited to parent",
       async (
         uuid_test,
-        apikey_test,
+        passkey_test,
         nickname_test,
-        invalid_apikey,
+        invalid_passkey,
         invalid_uuid,
         invalid_nickname,
         save_btn_css
       ) => {
         const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
-        const selector_id_suffix_apikey_id = "apikey-id";
+        const selector_id_suffix_passkey_id = "passkey-id";
         const selector_id_suffix_nickname_id = "nickname-id";
 
-        editcustomer.uuid = uuid_test;
-        editcustomer.apikey = apikey_test;
+        editcustomer.cust_id = uuid_test;
+        editcustomer.passkey = passkey_test;
         editcustomer.nickname = nickname_test;
 
         const propsData = {
@@ -335,14 +268,16 @@ describe("EditCustomer test", () => {
 
         expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
 
-        const target_input_field_apikey = wrapper.find("#input-widget-field-" + selector_id_suffix_apikey_id);
-        const target_error_message_apikey = wrapper.find(
-          "#input-widget-feedback-" + selector_id_suffix_apikey_id
+        const target_input_field_passkey = wrapper.find(
+          "#input-widget-field-" + selector_id_suffix_passkey_id
         );
-        target_input_field_apikey.setValue(apikey_test);
+        const target_error_message_passkey = wrapper.find(
+          "#input-widget-feedback-" + selector_id_suffix_passkey_id
+        );
+        target_input_field_passkey.setValue(passkey_test);
         await Vue.nextTick();
 
-        expect(target_error_message_apikey.text()).toStrictEqual(invalid_apikey);
+        expect(target_error_message_passkey.text()).toStrictEqual(invalid_passkey);
 
         const target_input_field_nickname = wrapper.find(
           "#input-widget-field-" + selector_id_suffix_nickname_id
@@ -376,9 +311,9 @@ describe("EditCustomer test", () => {
         expect(delete_id_events).toHaveLength(1);
         expect(delete_id_events[0]).toStrictEqual([
           {
-            cust_id: 0,
-            uuid: uuid_test,
-            api_key: apikey_test,
+            cust_idx: 0,
+            cust_id: uuid_test,
+            pass_key: passkey_test,
             nickname: nickname_test,
             user_ids: [],
           },
@@ -391,9 +326,9 @@ describe("EditCustomer test", () => {
         expect(save_id_events).toHaveLength(1);
         expect(save_id_events[0]).toStrictEqual([
           {
-            cust_id: 0,
-            uuid: uuid_test,
-            api_key: apikey_test,
+            cust_idx: 0,
+            cust_id: uuid_test,
+            pass_key: passkey_test,
             nickname: nickname_test,
             user_ids: [],
           },
