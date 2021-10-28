@@ -409,7 +409,7 @@ img {
   padding: 0 7px 7px 7px;
 }
 .modal-container {
-  left: 26%;
+  left: 22%;
   position: absolute;
 }
 .dropdown-container {
