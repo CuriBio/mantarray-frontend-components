@@ -402,7 +402,7 @@ export default {
           this.valid_customer_focus = false;
           // this.valid_user_focus = false;
           if (customer_focus != null) {
-            this.customer_focus_id = customer_focus.cust_id;
+            this.customer_focus_id = customer_focus.cust_idx;
             this.valid_customer_focus = true;
             // if (this.nicknames_list_user !== undefined) {
             //   this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
@@ -496,7 +496,9 @@ export default {
       this.$store.commit("settings/set_auto_delete", this.auto_delete);
 
       const { status } = await this.$store.dispatch("settings/update_settings");
-      if (status == 200) this.$emit("close_modal");
+
+      // Currently, error-handling by resetting inputs to force customer to try again if axios request fails
+      if (status === 200) this.$emit("close_modal");
       else this.reset_changes();
     },
     reset_changes() {
@@ -505,7 +507,6 @@ export default {
       this.auto_upload = true;
 
       this.$store.commit("settings/reset_to_default");
-      console.log(this.$store.state.settings);
     },
     cancel_changes() {
       this.$emit("close_modal");
@@ -525,11 +526,11 @@ export default {
     },
     onUpdateCustomerId(edit_customer) {
       this.$bvModal.hide("edit-customer");
-      this.customer_account_ids[edit_customer.cust_id].cust_id = edit_customer.cust_id;
-      this.customer_account_ids[edit_customer.cust_id].uuid = edit_customer.uuid;
-      this.customer_account_ids[edit_customer.cust_id].api_key = edit_customer.api_key;
-      this.customer_account_ids[edit_customer.cust_id].nickname = edit_customer.nickname;
-      this.customer_account_ids[edit_customer.cust_id].user_ids = edit_customer.user_ids;
+      this.customer_account_ids[edit_customer.cust_idx].cust_idx = edit_customer.cust_idx;
+      this.customer_account_ids[edit_customer.cust_idx].cust_id = edit_customer.cust_id;
+      this.customer_account_ids[edit_customer.cust_idx].pass_key = edit_customer.pass_key;
+      this.customer_account_ids[edit_customer.cust_idx].nickname = edit_customer.nickname;
+      this.customer_account_ids[edit_customer.cust_idx].user_ids = edit_customer.user_ids;
       this.nicknames_list_customer.splice(0, this.nicknames_list_customer.length);
       this.nicknames_list_customer = this.customers_options;
       this.entrykey_customer = edit_customer.nickname;
@@ -537,13 +538,13 @@ export default {
     onDeleteCustomerId(delete_customer) {
       this.$bvModal.hide("edit-customer");
       /* Received delete_customer remove from the array */
-      this.customer_account_ids.splice(delete_customer.cust_id, 1);
+      this.customer_account_ids.splice(delete_customer.cust_idx, 1);
       /* Inside the SettingsVue page the index value has to be reset to startup value of 0 */
       this.customer_focus_id = 0;
       // this.user_focus_id = 0;
       /* Now that customer id element is deleted we need to update all the right side customer cust_id index starting from 0 */
       for (let i = 0; i < this.customer_account_ids.length; i++) {
-        this.customer_account_ids[i].cust_id = i;
+        this.customer_account_ids[i].cust_idx = i;
       }
       this.nicknames_list_customer.splice(0, this.nicknames_list_customer.length);
       // this.nicknames_list_user.splice(0, this.nicknames_list_user.length);

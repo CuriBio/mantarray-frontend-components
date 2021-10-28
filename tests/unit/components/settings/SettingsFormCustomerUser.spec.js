@@ -49,9 +49,9 @@ describe("SettingsForm.vue", () => {
       describe("Given that the SettingsForm has been populated with a new Customer account through invoking the methods handling the 'save-id' event for Add Customer", () => {
         beforeEach(async () => {
           const add_customer = {
-            cust_id: 2,
-            uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-            api_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
+            cust_idx: 2,
+            cust_id: "5FY8KwTsQaUJ2KzHJGetfE",
+            pass_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
             nickname: "Customer account -3",
             user_ids: [],
           };
@@ -91,7 +91,7 @@ describe("SettingsForm.vue", () => {
         // test("When the method is invoked that handles the user 'save-id' event with a new user account, Then the User ID input is updated with nickname value of 'New User -1'", async () => {
         //   const add_user = {
         //     user_id: 0,
-        //     uuid: "5FY8ghtsQaUJ2KzHJGetfE",
+        //     cust_id: "5FY8ghtsQaUJ2KzHJGetfE",
         //     nickname: "New User -1",
         //   };
         //   /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
@@ -185,9 +185,9 @@ describe("SettingsForm.vue", () => {
         // });
         test("When the method handling the 'save-id' event for the Edit Customer button is invoked to change the nickname, Then the Customer ID dropdown list gets updated to change to the new nickname", async () => {
           const edit_customer = {
-            cust_id: 1,
-            uuid: "6cBaidlJ84Ggc5JA7IYCgv",
-            api_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
+            cust_idx: 1,
+            cust_id: "6cBaidlJ84Ggc5JA7IYCgv",
+            pass_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
             nickname: "Renamed Account -1",
             user_ids: array_of_user_ids_2,
           };
@@ -200,9 +200,9 @@ describe("SettingsForm.vue", () => {
         });
         test("When the method handling the customer event 'delete-id' is invoked with a customer not currently selected, Then the deleted customer account is removed from the Customer ID dropdown", async () => {
           const delete_customer = {
-            cust_id: 0,
-            uuid: "4vqyd62oARXqj9nRUNhtLQ",
-            api_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+            cust_idx: 0,
+            cust_id: "4vqyd62oARXqj9nRUNhtLQ",
+            pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
             nickname: "Customer account -1",
             user_ids: array_of_user_ids_1,
           };
@@ -218,9 +218,9 @@ describe("SettingsForm.vue", () => {
 
       test("When the SettingsForm method that handles receiving the add customer 'save-id' event is invoked with a new customer account, Then the Customer ID text input is updated with nickname value of the newly added account", async () => {
         const add_customer = {
-          cust_id: 2,
-          uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-          api_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
+          cust_idx: 2,
+          cust_id: "5FY8KwTsQaUJ2KzHJGetfE",
+          pass_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
           nickname: "Customer account -3",
           user_ids: [],
         };

@@ -57,7 +57,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 Vue.use(uuid);
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 
-const TextValidation_Nickname = new TextValidation("nickname");
+const TextValidation_Nickname = new TextValidation("customer_account_input");
 export default {
   name: "AddUser",
   components: {
@@ -84,7 +84,7 @@ export default {
     },
 
     on_update_nickname: function (new_value) {
-      this.error_text_nickname = TextValidation_Nickname.validate(new_value);
+      this.error_text_nickname = TextValidation_Nickname.validate(new_value, "nickname");
       this.nickname = new_value;
       this.enable_save_button();
     },
