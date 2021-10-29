@@ -266,7 +266,7 @@ describe("store/playback", () => {
       });
       describe("Given playback_progression is active", () => {
         let playback_update_time_interval;
-        const micros_per_milli = 100;
+        const micros_per_milli = 1000;
         beforeEach(async () => {
           await store.dispatch("playback/start_playback_progression");
           playback_update_time_interval = store.state.playback.playback_progression_time_interval;

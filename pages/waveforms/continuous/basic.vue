@@ -1,7 +1,7 @@
 <template>
   <ContinuousWaveform
     :display_waveform_idx="0"
-    :x_axis_sample_length="100000"
+    :x_axis_sample_length="1e6"
     :y_label="'Kelvin'"
     :x_label="'Time (hours)'"
   >
@@ -30,11 +30,11 @@ export default {
     this.$store.commit("data/set_plate_waveforms", this.temp_datapoints);
 
     const x_zoom_levels = [
-      { x_scale: 30 * 100000 },
-      { x_scale: 15 * 100000 },
-      { x_scale: 5 * 100000 },
-      { x_scale: 2 * 100000 },
-      { x_scale: 1 * 100000 },
+      { x_scale: 30 * 1e6 },
+      { x_scale: 15 * 1e6 },
+      { x_scale: 5 * 1e6 },
+      { x_scale: 2 * 1e6 },
+      { x_scale: 1 * 1e6 },
     ];
     const default_x_zoom_level_idx = 2;
     this.$store.commit("waveform/set_x_axis_zoom_levels", x_zoom_levels);

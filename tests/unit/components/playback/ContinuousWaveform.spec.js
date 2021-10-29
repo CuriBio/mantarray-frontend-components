@@ -47,11 +47,11 @@ describe("ContinuousWaveform.vue", () => {
   beforeEach(async () => {
     store = await NuxtStore.createStore();
     const x_zoom_levels = [
-      { x_scale: 30 * 100000 },
-      { x_scale: 15 * 100000 },
-      { x_scale: 5 * 100000 },
-      { x_scale: 2 * 100000 },
-      { x_scale: 1 * 100000 },
+      { x_scale: 30 * 1e6 },
+      { x_scale: 15 * 1e6 },
+      { x_scale: 5 * 1e6 },
+      { x_scale: 2 * 1e6 },
+      { x_scale: 1 * 1e6 },
     ];
     const default_x_zoom_level_idx = 1;
     store.commit("waveform/set_x_axis_zoom_levels", x_zoom_levels);
@@ -79,7 +79,7 @@ describe("ContinuousWaveform.vue", () => {
       display_waveform_idx: 0 /* the value of C01 is in the quadrant 3 [2, 3, 6, 7, 10, 11] */,
     };
     test("When first mounted, Then the x_axis_min prop passed to the child Waveform is negative", () => {
-      const expected_value = -1500000;
+      const expected_value = -15000000;
       const quadrant = [2, 3, 6, 7, 10, 11];
       store.commit("twentyfourcontrols/set_is_quadrant", quadrant);
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
@@ -87,7 +87,7 @@ describe("ContinuousWaveform.vue", () => {
       expect(waveform_wrapper.props("x_axis_min")).toBe(expected_value);
     });
     test("When x_time_index updates in Vuex, Then the x_axis_min prop passed to the child Waveform is the x_time_index minus the x_axis_sample_length", async () => {
-      const expected_value = -1500000;
+      const expected_value = -15000000;
       const x_axis_sample_length = -1 * expected_value;
 
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
@@ -311,7 +311,7 @@ describe("ContinuousWaveform.vue", () => {
       display_waveform_idx: 0 /* pointing to A01 */,
     };
     test("When initially mounted, Then the value of x_time_index in Vuex is passed to the x_min prop in the child Waveform", () => {
-      const expected_value = 5 * 100000;
+      const expected_value = 5 * 1e6;
       store.commit("playback/set_x_time_index", expected_value);
 
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
@@ -330,7 +330,7 @@ describe("ContinuousWaveform.vue", () => {
       // confirm initial state
       expect(waveform_wrapper.props("x_axis_min")).toBe(0);
 
-      const expected_value = 10 * 100000;
+      const expected_value = 10 * 1e6;
       store.commit("playback/set_x_time_index", expected_value);
 
       await wrapper.vm.$nextTick(); // wait for update
@@ -339,7 +339,7 @@ describe("ContinuousWaveform.vue", () => {
     });
 
     test("When initially mounted, Then the x_axis_sample_length from Vuex is passed as a prop to the child Waveform", () => {
-      const expected_value = 2 * 100000;
+      const expected_value = 2 * 1e6;
       const propsData = {
         display_waveform_idx: 0 /* pointing to A01 */,
       };
@@ -353,7 +353,7 @@ describe("ContinuousWaveform.vue", () => {
     });
 
     test("When the x_axis_sample_length from Vuex is updated, Then the x_axis_sample_length prop of the child Waveform is updated", async () => {
-      const expected_value = 1 * 100000;
+      const expected_value = 1 * 1e6;
       const propsData = {
         display_waveform_idx: 0 /* pointing to A01 */,
       };
@@ -365,7 +365,7 @@ describe("ContinuousWaveform.vue", () => {
       const waveform_wrapper = wrapper.findComponent(Waveform);
       // confirm initial state
       expect(waveform_wrapper.props("x_axis_sample_length")).toBe(expected_value);
-      const new_expected_value = 2 * 100000;
+      const new_expected_value = 2 * 1e6;
 
       default_x_zoom_level_idx = 3;
       store.commit("waveform/set_x_axis_zoom_idx", default_x_zoom_level_idx);

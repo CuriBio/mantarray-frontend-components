@@ -231,7 +231,7 @@ export default {
           "d",
           d3_line()
             .x(function (d) {
-              return x_axis_scale(d[0] / 100000);
+              return x_axis_scale(d[0] / 1e6);
             })
             .y(function (d) {
               return y_axis_scale(d[1]);

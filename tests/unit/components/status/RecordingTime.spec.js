@@ -68,7 +68,7 @@ describe("RecordingTime.vue", () => {
     const mocked_axios_get = jest.spyOn(Vue.axios, "get");
     mocked_axios_get.mockReturnValue(Promise.resolve({ status: 200 }));
 
-    store.commit("playback/set_x_time_index", 1234500);
+    store.commit("playback/set_x_time_index", 12345000);
     await store.dispatch("playback/start_recording");
     await wrapper.vm.$nextTick(); // wait for update
 
@@ -76,7 +76,7 @@ describe("RecordingTime.vue", () => {
     expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:00.000");
     await wrapper.vm.$nextTick(); // wait for update
 
-    store.commit("playback/set_x_time_index", 6736300);
+    store.commit("playback/set_x_time_index", 67363000);
     await wrapper.vm.$nextTick(); // wait for update
 
     expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:55.018");
@@ -93,14 +93,14 @@ describe("RecordingTime.vue", () => {
     mocked_axios_get.mockReturnValue(Promise.resolve({ status: 200 }));
 
     expect(wrapper.find(".span__time-text").text()).toStrictEqual("");
-    store.commit("playback/set_x_time_index", 1234500);
+    store.commit("playback/set_x_time_index", 12345000);
     await store.dispatch("playback/start_recording");
     await wrapper.vm.$nextTick(); // wait for update
 
     expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:00.000");
     await wrapper.vm.$nextTick(); // wait for update
 
-    store.commit("playback/set_x_time_index", 6736300);
+    store.commit("playback/set_x_time_index", 67363000);
     await wrapper.vm.$nextTick(); // wait for update
 
     expect(wrapper.find(".span__time-text").text()).toStrictEqual("00:00:55.018");
