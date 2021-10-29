@@ -6,9 +6,9 @@
   </div>
 </template>
 <script>
-// import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
+import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
 import { mapMutations, mapActions } from "vuex";
-import { StimulationStudio } from "@/dist/mantarray.common";
+// import { StimulationStudio } from "@/dist/mantarray.common";
 
 export default {
   components: {
@@ -178,7 +178,7 @@ export default {
 .update-button {
   position: absolute;
   top: 100px;
-  left: 840px;
+  left: 1740px;
   border: none;
   color: white;
   padding: 15px 32px;
