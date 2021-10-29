@@ -51,7 +51,7 @@ export default {
     Waveform,
   },
   props: {
-    samples_per_second: { type: Number, default: 100000 },
+    samples_per_second: { type: Number, default: 1e6 },
     y_label: { type: String, default: null },
     x_label: { type: String, default: null },
     display_waveform_idx: { type: Number, default: 0 },

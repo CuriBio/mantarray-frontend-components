@@ -48,8 +48,8 @@ export default {
   components: {},
   props: {
     title: { type: String, required: true },
-    samples_per_second: { type: Number, default: 100000 },
-    x_axis_sample_length: { type: Number, default: 100000 },
+    samples_per_second: { type: Number, default: 1e6 },
+    x_axis_sample_length: { type: Number, default: 1e6 },
     x_axis_min: { type: Number, default: 0 },
     y_min: { type: Number, default: 0 },
     y_max: { type: Number, default: 400 },

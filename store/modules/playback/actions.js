@@ -20,7 +20,7 @@ import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 // |        to have config.ini allowing App/UI to discover api's           |
 // =========================================================================
 
-export const centimilliseconds_per_millisecond = 100;
+export const micros_per_milli = 1000;
 
 /**
  * Function to progress the time_index
@@ -29,14 +29,13 @@ export const centimilliseconds_per_millisecond = 100;
 export function advance_playback_progression() {
   const delay_threshold_milliseconds = this.rootState.playback.num_milliseconds_to_fast_forward_if_delayed;
   const starting_timestamp = this.rootState.playback.timestamp_of_beginning_of_progression;
-  const expected_display_time =
-    starting_timestamp + this.rootState.playback.x_time_index / centimilliseconds_per_millisecond;
+  const expected_display_time = starting_timestamp + this.rootState.playback.x_time_index / micros_per_milli;
   const current_timestamp = performance.now();
   let milliseconds_to_increment = this.rootState.playback.playback_progression_time_interval;
   if (current_timestamp - expected_display_time >= delay_threshold_milliseconds) {
     milliseconds_to_increment = delay_threshold_milliseconds;
   }
-  this.commit("increment_x_time_index", milliseconds_to_increment * centimilliseconds_per_millisecond);
+  this.commit("increment_x_time_index", milliseconds_to_increment * micros_per_milli);
 }
 
 export default {
