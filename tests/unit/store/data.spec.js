@@ -262,6 +262,40 @@ describe("store/data", () => {
       expect(stored_waveform).toHaveLength(24);
       expect(stored_waveform[0].x_data_points).toHaveLength(8);
     });
+    test("When backend emits stimulation message, Then ws client updates stim_waveforms", async () => {
+      store.commit("data/set_stim_waveforms", [
+        { x_data_points: [1], y_data_points: [4] },
+        { x_data_points: [7], y_data_points: [9] },
+      ]);
+
+      const stored_stim_data = store.getters["data/stim_waveforms"];
+      expect(stored_stim_data).toHaveLength(2);
+      expect(stored_stim_data[0].x_data_points).toHaveLength(1);
+
+      const new_stim_data = {
+        0: [
+          [2, 3],
+          [5, 6],
+        ],
+        1: [[8], [10]],
+      };
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("stimulation", JSON.stringify(new_stim_data), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      expect(stored_stim_data).toHaveLength(2);
+      expect(stored_stim_data[0]).toStrictEqual({
+        x_data_points: [1, 2, 3],
+        y_data_points: [4, 5, 6],
+      });
+      expect(stored_stim_data[1]).toStrictEqual({
+        x_data_points: [7, 8],
+        y_data_points: [9, 10],
+      });
+    });
   });
 
   // TODO move these to another test file
