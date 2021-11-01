@@ -113,6 +113,61 @@ describe("store/data", () => {
     });
   });
 
+  test("Given some values in stim_waveforms, When the clear_stim_waveforms mutation is committed, Then stim_waveforms becomes empty x/y data points array", () => {
+    store.commit("data/set_stim_waveforms", [
+      { x_data_points: [1], y_data_points: [2] },
+      { x_data_points: [1], y_data_points: [2] },
+    ]);
+    expect(store.state.data.stim_waveforms).toHaveLength(2);
+    expect(store.state.data.stim_waveforms).toHaveLength(2);
+    expect(store.state.data.stim_waveforms[0].x_data_points).toHaveLength(1);
+    expect(store.state.data.stim_waveforms[0].y_data_points).toHaveLength(1);
+    expect(store.state.data.stim_waveforms[1].x_data_points).toHaveLength(1);
+    expect(store.state.data.stim_waveforms[1].y_data_points).toHaveLength(1);
+
+    store.commit("data/clear_stim_waveforms");
+    expect(store.state.data.stim_waveforms).toHaveLength(2);
+    expect(store.state.data.stim_waveforms[0].x_data_points).toHaveLength(0);
+    expect(store.state.data.stim_waveforms[0].y_data_points).toHaveLength(0);
+    expect(store.state.data.stim_waveforms[1].x_data_points).toHaveLength(0);
+    expect(store.state.data.stim_waveforms[1].y_data_points).toHaveLength(0);
+  });
+
+  test("When waveforms is initially mutated with few data points, Then subsequent mutations append data points to the existing stim_waveforms", async () => {
+    store.commit("data/set_stim_waveforms", [
+      { x_data_points: [11], y_data_points: [21] },
+      { x_data_points: [111], y_data_points: [121] },
+      { x_data_points: [], y_data_points: [] },
+    ]);
+
+    const stored_waveform = store.getters["data/stim_waveforms"];
+
+    store.commit("data/append_stim_waveforms", {
+      0: [
+        [12, 13],
+        [22, 23],
+      ],
+      2: [
+        [211, 212],
+        [221, 222],
+      ],
+    });
+
+    expect(stored_waveform).toHaveLength(3);
+    expect(stored_waveform[0]).toStrictEqual({
+      x_data_points: [11, 12, 13],
+      y_data_points: [21, 22, 23],
+    });
+    expect(stored_waveform[1]).toStrictEqual({
+      x_data_points: [111],
+      y_data_points: [121],
+    });
+    expect(stored_waveform[2]).toStrictEqual({
+      x_data_points: [211, 212],
+      y_data_points: [221, 222],
+    });
+  });
+
   describe("websocket", () => {
     // windows CI is having issues
     if (process.platform == "win32") {

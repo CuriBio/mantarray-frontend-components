@@ -48,4 +48,22 @@ export default {
       }
     }
   },
+
+  set_stim_waveforms(state, new_value) {
+    state.stim_waveforms = new_value;
+  },
+  clear_stim_waveforms(state) {
+    for (let i = 0; i < state.stim_waveforms.length; i++) {
+      state.stim_waveforms[i] = { x_data_points: [], y_data_points: [] };
+    }
+  },
+  append_stim_waveforms(state, new_values) {
+    for (const well_idx in new_values) {
+      if (new_values[well_idx] !== undefined) {
+        const new_well_values = new_values[well_idx];
+        state.stim_waveforms[well_idx].x_data_points.push(...new_well_values[0]);
+        state.stim_waveforms[well_idx].y_data_points.push(...new_well_values[1]);
+      }
+    }
+  },
 };

@@ -28,7 +28,14 @@ export default function create_web_socket_plugin(socket) {
       store.commit("data/append_metric_data", new_metric_data);
       if (cb !== null) {
         // this callback is only used for testing. The backend will not send a callback
-        cb("commits done");
+        cb("commit done");
+      }
+    });
+    socket.on("stimulation", function (metrics_json, cb = null) {
+      // TODO
+      if (cb !== null) {
+        // this callback is only used for testing. The backend will not send a callback
+        cb("commit done");
       }
     });
   };
