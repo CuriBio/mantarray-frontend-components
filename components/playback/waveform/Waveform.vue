@@ -24,9 +24,10 @@ import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear
  * @vue-prop {Int} y_max - Current Maximum scale position on Y Axis
  * @vue-prop {String} y_axis_label - Current Y Axis Label String value.
  * @vue-prop {String} x_axis_label - Current X Axis Label String value.
- * @vue-prop {Object} data_points  - Currently contains the array of 2D waveform data points[[x1,y1],[x2,y2]...]
- * @vue-prop {String} line_color   - Color of the line graph
- * @vue-prop {Object} margin       - An Object which determines a closing boundry margin
+ * @vue-prop {Object} tissue_data_points  - Currently contains the array of 2D waveform data points[[x1,y1],[x2,y2]...]
+ * @vue-prop {Object} stim_data_points  - Currently contains the array of 2D waveform data points[[x1,y1],[x2,y2]...]
+ * @vue-prop {String} tissue_line_color   - Color of the line graph
+ * @vue-prop {Object} margin              - An Object which determines a closing boundry margin
  * @vue-prop {Int} plot_area_pixel_height - Graph height definition
  * @vue-prop {Int} plot_area_pixel_width  - Graph widht definition
  * @vue-data {Object} the_svg             - An Object which is used to create SVG element via D3 library
@@ -34,13 +35,14 @@ import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear
  * @vue-data {Object} x_axis_scale        - An Object which is used to process the X Axis scale
  * @vue-data {Object} y_axis_node         - An Object which is used to create Y Axis node
  * @vue-data {Object} y_axis_scale        - An Object which is used to process the Y Axis scale
- * @vue-data {Object} waveform_line_node  - An Object which is used to plot the line graph
+ * @vue-data {Object} tissue_waveform_line_node  - An Object which is used to plot the tissue line graph
+ * @vue-data {Object} stim_waveform_line_node  - An Object which is used to plot the stim line graph
  * @vue-data {Object} div__waveform_graph__dynamic_style - An CSS property to hold the dynamic value
  * @vue-event {Event} x_axis_min           - A Function  is invoked when x_axis_min prop is modified
  * @vue-event {Event} x_axis_sample_length - A Function  is invoked when x_axis_sample_length prop is modified
  * @vue-event {Event} y_min                - A Function  is invoked when y_min prop is modified
  * @vue-event {Event} y_max                - A Function  is invoked when y_max prop is modified
- * @vue-event {Event} data_points          - A Function  is invoked when data_points prop is modified
+ * @vue-event {Event} stim_data_points     - A Function  is invoked when stim_data_points prop is modified
  * @vue-event {Event} render_plot          - An Important function which plots the waveform svg in realtime.
  */
 export default {
@@ -55,13 +57,20 @@ export default {
     y_max: { type: Number, default: 400 },
     y_axis_label: { type: String, default: "Absolute Force (μN)" },
     x_axis_label: { type: String, default: "Time (seconds)" },
-    data_points: {
+    tissue_data_points: {
       type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]
       default: function () {
         return [];
       },
     },
-    line_color: { type: String, default: "#00c465" },
+    stim_data_points: {
+      type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]
+      default: function () {
+        return [];
+      },
+    },
+    tissue_line_color: { type: String, default: "#00c465" },
+    stim_line_color: { type: String, default: "#d000ff" },
     margin: {
       type: Object,
       default: function () {
@@ -84,7 +93,8 @@ export default {
       x_axis_scale: null,
       y_axis_node: null,
       y_axis_scale: null,
-      waveform_line_node: null,
+      tissue_waveform_line_node: null,
+      stim_waveform_line_node: null,
       div__waveform_graph__dynamic_style: {
         width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
       },
@@ -103,7 +113,10 @@ export default {
     y_max() {
       this.render_plot();
     },
-    data_points() {
+    tissue_data_points() {
+      this.render_plot();
+    },
+    stim_data_points() {
       this.render_plot();
     },
   },
@@ -121,10 +134,15 @@ export default {
       .attr("id", "svg_of_waveform")
       .attr("font-family", "Muli");
 
-    this.waveform_line_node = the_svg
+    this.tissue_waveform_line_node = the_svg
       .append("g")
-      .attr("id", "waveform_line_node")
+      .attr("id", "tissue_waveform_line_node")
       .attr("class", "waveform_path_node");
+
+    this.stim_waveform_line_node = the_svg
+      .append("g")
+      .attr("id", "stim_waveform_line_node")
+      .attr("class", "stim_path_node");
 
     // Draw black rectangles over the margins so that any excess waveform line is not visible to user
 
@@ -216,16 +234,38 @@ export default {
       this.y_axis_node.call(axisLeft(this.y_axis_scale));
     },
     plot_data: function () {
-      const data_to_plot = this.data_points;
+      const tissue_data_to_plot = this.tissue_data_points;
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
-      this.waveform_line_node.selectAll("*").remove();
-      this.waveform_line_node
+      // update tissue lines
+      this.tissue_waveform_line_node.selectAll("*").remove();
+      this.tissue_waveform_line_node
         .append("path")
-        .datum(data_to_plot)
+        .datum(tissue_data_to_plot)
         .attr("fill", "none")
-        .attr("stroke", this.line_color)
+        .attr("stroke", this.tissue_line_color)
+        .attr("stroke-width", 1.5)
+        .attr(
+          "d",
+          d3_line()
+            .x(function (d) {
+              return x_axis_scale(d[0] / 1e6);
+            })
+            .y(function (d) {
+              return y_axis_scale(d[1]);
+            })
+        );
+
+      const stim_data_to_plot = this.stim_data_points;
+
+      // update stim lines  TODO
+      this.stim_waveform_line_node.selectAll("*").remove();
+      this.stim_waveform_line_node
+        .append("path")
+        .datum(stim_data_to_plot)
+        .attr("fill", "none")
+        .attr("stroke", this.stim_line_color)
         .attr("stroke-width", 1.5)
         .attr(
           "d",

@@ -302,7 +302,7 @@ export default {
     SmallDropDown,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (mV)" },
+    stimulation_type: { type: String, default: "Current (mA)" },
     pulse_type: { type: String, default: "Biphasic" },
     button_names: {
       type: Array,
