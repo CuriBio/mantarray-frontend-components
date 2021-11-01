@@ -70,7 +70,7 @@ export default {
       },
     },
     tissue_line_color: { type: String, default: "#00c465" },
-    stim_line_color: { type: String, default: "#d000ff" },
+    stim_line_color: { type: String, default: "#fff200" },
     margin: {
       type: Object,
       default: function () {

@@ -44,7 +44,7 @@ library.add(fa_play_circle, fa_stop_circle);
  * @vue-data {Boolean} play_state - Current play state of stimulation
  * @vue-data {Array} active_gradient - Active gradient colors for icon while stimulation is running
  * @vue-data {Array} inactive_gradient - Inactive gradient colors for icon if stimulation is stopped
- * @vue-data {Array} crueent_gradient - Dynamically assigned gradient based on when BE recieves start/stop request
+ * @vue-data {Array} current_gradient - Dynamically assigned gradient based on when BE recieves start/stop request
  * @vue-event {event} handle_play_stop - Commits corresponding request to state depending on play_state
  */
 
@@ -70,8 +70,13 @@ export default {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       // waits for response from BE before turning green
       if (mutation.type === "stimulation/set_stim_status") {
-        if (this.play_state) this.current_gradient = this.active_gradient;
-        if (!this.play_state) this.current_gradient = this.inactive_gradient;
+        console.log("set_stim_status mutation found");
+        if (mutation.payload) {
+          this.current_gradient = this.active_gradient;
+        } else {
+          this.play_state = false; // need to reset play state here since stimulation can complete without pressing the stop button
+          this.current_gradient = this.inactive_gradient;
+        }
       }
     });
   },
@@ -83,7 +88,7 @@ export default {
       if (Object.keys(this.protocol_assignments).length !== 0) {
         this.play_state = !this.play_state;
         if (this.play_state) await this.$store.dispatch("stimulation/create_protocol_message");
-        if (!this.play_state) await this.$store.dispatch("stimulation/stop_stim_status");
+        else await this.$store.dispatch("stimulation/stop_stim_status");
       }
     },
   },

@@ -243,14 +243,14 @@ export default {
       console.log(error);
     }
 
-    this.commit("stimulation/set_stim_status", status);
+    // this.commit("stimulation/set_stim_status", status);
   },
 
   async stop_stim_status() {
     const status = false;
 
     await post_stim_status(status);
-    this.commit("stimulation/set_stim_status", status);
+    // this.commit("stimulation/set_stim_status", status);
   },
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {
