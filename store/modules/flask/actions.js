@@ -67,7 +67,6 @@ export async function ping_system_status() {
         }
       }
     }
-    console.log("is_stimulating:", data.is_stimulating);
     this.commit("stimulation/set_stim_status", data.is_stimulating, { root: true });
   }
   this.commit("flask/ignore_next_system_status_if_matching_status", null, {
