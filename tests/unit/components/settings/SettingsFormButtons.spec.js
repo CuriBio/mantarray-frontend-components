@@ -371,6 +371,20 @@ describe("SettingsForm.vue", () => {
       expect(close_event[0]).toStrictEqual([]);
     });
 
+    test("When the component is mounted and Customer account is/is not selected, Then clicking the save button will be disabled", async () => {
+      const commit_spy = jest.spyOn(store, "commit");
+      wrapper = mount(ComponentToTest, {
+        store,
+        localVue,
+      });
+      const settings_buttons = await get_settings_button_disable(wrapper);
+
+      expect(settings_buttons.save_btn.isVisible()).toBe(true);
+      await settings_buttons.save_btn.trigger("click");
+
+      expect(commit_spy).toHaveBeenCalledTimes(0);
+    });
+
     test("When the component is mounted and a user toggles the auto upload and auto delete switches, Then the new state will be handled in component state", async () => {
       const toggle_spy = jest.spyOn(ComponentToTest.methods, "handle_toggle_state");
       wrapper = mount(ComponentToTest, {

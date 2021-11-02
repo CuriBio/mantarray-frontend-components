@@ -26,7 +26,6 @@ export default {
     const pulses = [];
 
     const get_last = (array) => array[array.length - 1];
-
     const helper = (setting) => {
       x_values.push(get_last(x_values), setting.phase_one_duration + get_last(x_values));
       y_values.push(setting.phase_one_charge, setting.phase_one_charge);
