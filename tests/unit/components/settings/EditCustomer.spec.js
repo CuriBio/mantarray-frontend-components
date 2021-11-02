@@ -59,6 +59,48 @@ describe("EditCustomer", () => {
     });
   });
 
+  describe("EditCustomer.invalid_creds", () => {
+    const propsData = {
+      open_for_invalid_creds: true,
+      dialogdata: {
+        cust_id: "test_id",
+        passkey: "test_pass",
+        nickname: "test_nickname",
+      },
+      dataindex: 0,
+    };
+    beforeEach(async () => {
+      wrapper = mount(ComponentToTest, {
+        store,
+        propsData,
+        localVue,
+      });
+    });
+    afterEach(() => wrapper.destroy());
+    test("When mounting EditCustomer with invalid credentials, Then it loads with 'Invalid ID or Passkey' text, but not for nickname", () => {
+      const id_error_message = wrapper.find("#input-widget-feedback-alphanumeric-id");
+      const pass_error_message = wrapper.find("#input-widget-feedback-passkey-id");
+
+      expect(id_error_message.text()).toStrictEqual("Invalid ID or Passkey");
+      expect(pass_error_message.text()).toStrictEqual("Invalid ID or Passkey");
+    });
+    test.each(["passkey-id", "alphanumeric-id"])(
+      "When EditCustomer has invalid credentials, Then both ID and passkey will mount with invalid text and will both become become valid with any change to %s",
+      async (selector_id_suffix) => {
+        const id_error_message = wrapper.find("#input-widget-feedback-alphanumeric-id");
+        const pass_error_message = wrapper.find("#input-widget-feedback-passkey-id");
+
+        expect(id_error_message.text()).toStrictEqual("Invalid ID or Passkey");
+        expect(pass_error_message.text()).toStrictEqual("Invalid ID or Passkey");
+
+        const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
+        await target_input_field.setValue("new entry");
+
+        expect(id_error_message.text()).toStrictEqual("");
+        expect(pass_error_message.text()).toStrictEqual("");
+      }
+    );
+  });
   describe("EditCustomer.enter_uuidbase57", () => {
     const editcustomer = {
       uuid: "",

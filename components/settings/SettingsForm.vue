@@ -38,6 +38,7 @@
             <EditCustomer
               :dialogdata="customer_account_ids[customer_focus_id]"
               :dataindex="customer_focus_id"
+              :open_for_invalid_creds="open_for_invalid_creds"
               @cancel-id="onCancelCustomerId"
               @save-id="onUpdateCustomerId"
               @delete-id="onDeleteCustomerId"
@@ -311,7 +312,7 @@ export default {
       entry_width_customer: 283,
       disallow_entry_customer: false,
       on_empty_flag_customer: true,
-
+      open_for_invalid_creds: false,
       // label_user: "User Account ID",
       // entrykey_user: "",
       // key_placeholder_user: "Select User",
@@ -490,16 +491,20 @@ export default {
     // },
     async save_changes() {
       // this.$store.commit("settings/set_user_index", this.user_focus_id);
+      if (!this.on_empty_flag_customer) {
+        this.$store.commit("settings/set_customer_index", this.customer_focus_id);
+        this.$store.commit("settings/set_auto_upload", this.auto_upload);
+        this.$store.commit("settings/set_auto_delete", this.auto_delete);
 
-      this.$store.commit("settings/set_customer_index", this.customer_focus_id);
-      this.$store.commit("settings/set_auto_upload", this.auto_upload);
-      this.$store.commit("settings/set_auto_delete", this.auto_delete);
+        const { status } = await this.$store.dispatch("settings/update_settings");
 
-      const { status } = await this.$store.dispatch("settings/update_settings");
-
-      // Currently, error-handling by resetting inputs to force customer to try again if axios request fails
-      if (status === 200) this.$emit("close_modal");
-      else this.reset_changes();
+        // Currently, error-handling by resetting inputs to force customer to try again if axios request fails
+        if (status === 200) this.$emit("close_modal");
+        else if (status == 401) {
+          this.open_for_invalid_creds = true;
+          this.$bvModal.show("edit-customer");
+        } else this.reset_changes();
+      }
     },
     reset_changes() {
       this.entrykey_customer = "";
@@ -526,6 +531,7 @@ export default {
     },
     onUpdateCustomerId(edit_customer) {
       this.$bvModal.hide("edit-customer");
+      this.open_for_invalid_creds = false;
       this.customer_account_ids[edit_customer.cust_idx].cust_idx = edit_customer.cust_idx;
       this.customer_account_ids[edit_customer.cust_idx].cust_id = edit_customer.cust_id;
       this.customer_account_ids[edit_customer.cust_idx].pass_key = edit_customer.pass_key;
@@ -537,6 +543,7 @@ export default {
     },
     onDeleteCustomerId(delete_customer) {
       this.$bvModal.hide("edit-customer");
+      this.open_for_invalid_creds = false;
       /* Received delete_customer remove from the array */
       this.customer_account_ids.splice(delete_customer.cust_idx, 1);
       /* Inside the SettingsVue page the index value has to be reset to startup value of 0 */

@@ -112,6 +112,25 @@ describe("SettingsForm.vue", () => {
 
     test("When a user wants to save customer credentials and there is an error sending request, Then the modal will not not close and the modal will reset to make user re-input creds", async () => {
       await store.commit("settings/set_customer_index", 1);
+
+      wrapper = mount(ComponentToTest, {
+        store,
+        localVue,
+      });
+      jest.spyOn(store, "dispatch").mockImplementation(() => {
+        return {
+          status: 401,
+        };
+      });
+      const edit_cust_modal = wrapper.find(".div__editcustomer-form-controls");
+      const save_changes = wrapper.find(".span__settings-tool-tip-save-btn-txt-enable");
+      await save_changes.trigger("click");
+
+      expect(wrapper.vm.open_for_invalid_creds).toBe(true);
+      expect(edit_cust_modal).toBeTruthy();
+    });
+    test("When a user wants to save customer credentials and the request is returned with invalid credentials, Then the the edit-customer modal will open with open_for_invalid_creds set to true", async () => {
+      await store.commit("settings/set_customer_index", 1);
       const reset_spy = jest.spyOn(ComponentToTest.methods, "reset_changes");
 
       wrapper = mount(ComponentToTest, {
@@ -129,7 +148,6 @@ describe("SettingsForm.vue", () => {
 
       expect(reset_spy).toHaveBeenCalledTimes(1);
     });
-
     test("When a user wants to save customer credentials and there is no error sending request, Then the modal will close", async () => {
       await store.commit("settings/set_customer_index", 1);
 

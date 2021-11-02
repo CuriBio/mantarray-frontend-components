@@ -80,6 +80,7 @@ export default {
   props: {
     dialogdata: { type: Object, default: null },
     dataindex: { type: Number, default: 0 },
+    open_for_invalid_creds: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -93,14 +94,27 @@ export default {
       enablelist_edit_customer: [true, true, true],
     };
   },
+  created() {
+    if (this.open_for_invalid_creds) {
+      this.error_text_id = "Invalid ID or Passkey";
+      this.error_text_pass = "Invalid ID or Passkey";
+      this.enablelist_edit_customer = [true, true, false];
+    }
+  },
   methods: {
     on_update_id: function (new_value) {
       this.error_text_id = TextValidation_Customer.validate(new_value, "ID");
+      if (this.open_for_invalid_creds && this.error_text_id.length === 0) {
+        this.error_text_pass = "";
+      }
       this.cust_id = new_value;
       this.enable_save_button();
     },
     on_update_pass: function (new_value) {
       this.error_text_pass = TextValidation_Customer.validate(new_value, "passkey");
+      if (this.open_for_invalid_creds && this.error_text_pass.length === 0) {
+        this.error_text_id = "";
+      }
       this.pass_key = new_value;
       this.enable_save_button();
     },
