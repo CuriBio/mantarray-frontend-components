@@ -61,7 +61,7 @@ export default {
     };
 
     await new_pulse_order.map(async (pulse) => {
-      const { color /* , number_of_repeats*/ } = pulse.repeat;
+      const { color } = pulse.repeat;
       const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
       let setting = pulse.pulse_settings;
 
@@ -69,24 +69,18 @@ export default {
       const converted_total_active =
         total_active_duration.duration * time_conversion[total_active_duration.unit];
 
-      // let repeats = number_of_repeats * (converted_total_active / 1000);
-
       setting = {
         ...setting,
         repeat_delay_interval,
         total_active_duration: converted_total_active,
       };
-
-      // const max_duration = get_last(x_values) + converted_total_active;
       pulses.push(setting);
 
       let remaining_pulse_dur = setting.total_active_duration;
       while (remaining_pulse_dur > 0) {
+        // Tanner (11/2/21): could move this outer loop into helper so remaining_pulse_dur can be tracked more clearly
         remaining_pulse_dur = helper(setting, remaining_pulse_dur);
       }
-
-      // x_values.push(max_duration);
-      // y_values.push(get_last(y_values));
 
       const ending_repeat_idx = x_values.length;
       color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
