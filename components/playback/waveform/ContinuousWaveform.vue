@@ -1,7 +1,7 @@
 <template>
   <Waveform
     :title="title"
-    :data_points="d3_formatted_data_points"
+    :tissue_data_points="d3_formatted_data_points"
     :samples_per_second="samples_per_second"
     :x_axis_sample_length="x_axis_sample_length"
     :x_axis_min="x_axis_min"
@@ -9,7 +9,7 @@
     :y_max="y_max"
     :y_axis_label="y_label"
     :x_axis_label="x_label"
-    :line_color="line_color"
+    :tissue_line_color="line_color"
     :margin="margin"
     :plot_area_pixel_height="plot_area_pixel_height"
     :plot_area_pixel_width="plot_area_pixel_width"

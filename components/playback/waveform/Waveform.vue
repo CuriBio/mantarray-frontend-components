@@ -35,7 +35,7 @@ import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear
  * @vue-data {Object} x_axis_scale        - An Object which is used to process the X Axis scale
  * @vue-data {Object} y_axis_node         - An Object which is used to create Y Axis node
  * @vue-data {Object} y_axis_scale        - An Object which is used to process the Y Axis scale
- * @vue-data {Object} tissue_waveform_line_node  - An Object which is used to plot the tissue line graph
+ * @vue-data {Object} waveform_line_node  - An Object which is used to plot the tissue line graph
  * @vue-data {Object} stim_waveform_line_node  - An Object which is used to plot the stim line graph
  * @vue-data {Object} div__waveform_graph__dynamic_style - An CSS property to hold the dynamic value
  * @vue-event {Event} x_axis_min           - A Function  is invoked when x_axis_min prop is modified
@@ -93,7 +93,7 @@ export default {
       x_axis_scale: null,
       y_axis_node: null,
       y_axis_scale: null,
-      tissue_waveform_line_node: null,
+      waveform_line_node: null, // TODO rename this waveform_line_node once frontend-test-utils updated
       stim_waveform_line_node: null,
       div__waveform_graph__dynamic_style: {
         width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
@@ -134,9 +134,9 @@ export default {
       .attr("id", "svg_of_waveform")
       .attr("font-family", "Muli");
 
-    this.tissue_waveform_line_node = the_svg
+    this.waveform_line_node = the_svg
       .append("g")
-      .attr("id", "tissue_waveform_line_node")
+      .attr("id", "waveform_line_node")
       .attr("class", "waveform_path_node");
 
     this.stim_waveform_line_node = the_svg
@@ -239,8 +239,8 @@ export default {
       const y_axis_scale = this.y_axis_scale;
 
       // update tissue lines
-      this.tissue_waveform_line_node.selectAll("*").remove();
-      this.tissue_waveform_line_node
+      this.waveform_line_node.selectAll("*").remove();
+      this.waveform_line_node
         .append("path")
         .datum(tissue_data_to_plot)
         .attr("fill", "none")

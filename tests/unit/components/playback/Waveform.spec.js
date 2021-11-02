@@ -128,7 +128,7 @@ describe("Waveform.vue", () => {
       const propsData = {
         title: "C12",
         x_axis_min: 0,
-        data_points: [],
+        tissue_data_points: [],
       };
 
       wrapper = shallowMount(Waveform, { propsData });
@@ -291,7 +291,7 @@ describe("Waveform.vue", () => {
     beforeEach(async () => {
       propsData = {
         title: "C12",
-        data_points: x_y_data,
+        tissue_data_points: x_y_data,
         x_axis_min: 0,
         x_axis_sample_length: 1 * 1e6,
         y_min: 0,
@@ -314,9 +314,10 @@ describe("Waveform.vue", () => {
       const svg_nodes = wrapper.findAll("#svg_of_waveform > g");
 
       expect(svg_nodes.wrappers[0].attributes("id")).toStrictEqual("waveform_line_node");
-      expect(svg_nodes.wrappers[1].attributes("id")).toStrictEqual("margin_blockers_node");
-      expect(svg_nodes.wrappers[2].attributes("id")).toStrictEqual("x_axis_node");
-      expect(svg_nodes.wrappers[3].attributes("id")).toStrictEqual("y_axis_node");
+      expect(svg_nodes.wrappers[1].attributes("id")).toStrictEqual("stim_waveform_line_node");
+      expect(svg_nodes.wrappers[2].attributes("id")).toStrictEqual("margin_blockers_node");
+      expect(svg_nodes.wrappers[3].attributes("id")).toStrictEqual("x_axis_node");
+      expect(svg_nodes.wrappers[4].attributes("id")).toStrictEqual("y_axis_node");
     });
     test("When mounted, Then it creates margin blockers of the appropriate size", async () => {
       expect(pixel_coords).toHaveLength(19);
@@ -391,7 +392,7 @@ describe("Waveform.vue", () => {
       const x_y_data = convert_x_y_arrays_to_d3_array(reduced_array_x_2, reduced_array_y_2);
 
       wrapper.setProps({
-        data_points: x_y_data,
+        tissue_data_points: x_y_data,
       });
 
       await wrapper.vm.$nextTick(); // wait for update

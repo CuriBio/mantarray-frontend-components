@@ -179,20 +179,20 @@ describe("store/stimulation", () => {
       expect(color).toBe("#118075");
     });
 
-    test("When requesting the next current stimulation type, Then it should return what user has selected in dropdown", async () => {
+    test("When requesting the next stimulation type, Then it should return what user has selected in dropdown", async () => {
       const voltage = "Voltage (mV)";
       const current = "Current (mA)";
 
       const default_type = store.getters["stimulation/get_stimulation_type"];
-      expect(default_type).toBe(voltage);
-
-      store.state.stimulation.protocol_editor.stimulation_type = "C";
-      const current_selection = store.getters["stimulation/get_stimulation_type"];
-      expect(current_selection).toBe(current);
+      expect(default_type).toBe(current);
 
       store.state.stimulation.protocol_editor.stimulation_type = "V";
       const voltage_selection = store.getters["stimulation/get_stimulation_type"];
       expect(voltage_selection).toBe(voltage);
+
+      store.state.stimulation.protocol_editor.stimulation_type = "C";
+      const current_selection = store.getters["stimulation/get_stimulation_type"];
+      expect(current_selection).toBe(current);
     });
 
     test("When requesting the name and rest duration to edit existing protocol in the editor, Then it should return specified pulse order", async () => {
@@ -340,11 +340,11 @@ describe("store/stimulation", () => {
     });
 
     test("When a user selects a new stimulation type to Current Stimulation Type, Then it should mutate state Current", async () => {
-      expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("V");
-      await store.commit("stimulation/set_stimulation_type", "Current Controlled Stimulation");
       expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
       await store.commit("stimulation/set_stimulation_type", "Voltage Controlled Stimulation");
       expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("V");
+      await store.commit("stimulation/set_stimulation_type", "Current Controlled Stimulation");
+      expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
     });
 
     test("When a user changes the time unit to seconds, Then it should mutate state to seconds", async () => {
@@ -416,7 +416,7 @@ describe("store/stimulation", () => {
       expect(edit_mode.status).toBe(false);
     });
 
-    test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the editted protocol will be updated in protocol assignments if assigned", async () => {
+    test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the edited protocol will be updated in protocol assignments if assigned", async () => {
       const { protocol_list, protocol_assignments } = store.state.stimulation;
       const selected_protocol = protocol_list[1];
       const old_name = "Tester";

@@ -479,10 +479,7 @@ export default {
 
       if (value === "") {
         this.err_msg[label] = this.invalid_err_msg.required;
-      } else if (
-        (!this.regex.duration.test(value) && value !== "") || // TODO clean up branch logic
-        (!check_total_duration && check_time_unit)
-      ) {
+      } else if (!this.regex.duration.test(value) || (!check_total_duration && check_time_unit)) {
         this.err_msg[label] = `Must be a number >= ${this.total_pulse_duration}ms`;
       } else {
         this.err_msg[label] = this.invalid_err_msg.valid;
@@ -504,13 +501,15 @@ export default {
       }
     },
     check_charge_validity(value, label) {
-      if (!this.regex.charge.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.num_err;
-      else if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      else if (this.stimulation_type.includes("C") && (-100 > value || 100 < value))
+      if (value === "") {
+        this.err_msg[label] = this.invalid_err_msg.required;
+      } else if (!this.regex.charge.test(value)) {
+        this.err_msg[label] = this.invalid_err_msg.num_err;
+      } else if (this.stimulation_type.includes("C") && (-100 > value || 100 < value)) {
         this.err_msg[label] = this.invalid_err_msg.max_current;
-      else if (this.stimulation_type.includes("V") && (-1200 > value || 1200 < value))
+      } else if (this.stimulation_type.includes("V") && (-1200 > value || 1200 < value)) {
         this.err_msg[label] = this.invalid_err_msg.max_voltage;
-      else if (this.regex.charge.test(value) && value !== "") {
+      } else {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.pulse_settings[label] = Number(value);
       }
