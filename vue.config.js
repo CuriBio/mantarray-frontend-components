@@ -53,24 +53,27 @@ module.exports = {
   chainWebpack: (config) => {
     // https://cli.vuejs.org/guide/webpack.html#chaining-advanced
     config.module
+      .rule("images") // -> Custom rule specification
+      .use("url-loader")
+      .loader("url-loader")
+      .tap((options) => {
+        options = {
+          ...options,
+          limit: 13000,
+        };
+        return options;
+      })
+      .end();
+
+    config.module
       .rule("vue")
       .use("vue-loader")
       .loader("vue-loader")
       .tap((options) => {
         // modify the options...
         options = { ...options, cacheIdentifier: "keepconstant" }; // the default hash codes for cacheIdentifier can sometimes cause git dirty issues in CodeBuild, so attempting to disable them.  keepconstant is a random string, but it seems to work
-        //  options = {cacheIdentifier:'keepconstant'};
         return options;
-      });
+      })
+      .end();
   },
-
-  // chainWebpack: config => { // the default hash codes generated can sometimes cause git dirty issues in CodeBuild, so stopping using cache-loader. adapted from https://stackoverflow.com/questions/54927896/disable-cache-loader-in-webpack-4-vue-cli-3
-  //   // disable cache for prod only, remove the if to disable it everywhere
-  //   // if (process.env.NODE_ENV === 'production') {
-  //     config.module.rule('vue').uses.delete('cache-loader');
-  //     config.module.rule('js').uses.delete('cache-loader');
-  //     config.module.rule('ts').uses.delete('cache-loader');
-  //     config.module.rule('tsx').uses.delete('cache-loader');
-  //   // }
-  // },
 };
