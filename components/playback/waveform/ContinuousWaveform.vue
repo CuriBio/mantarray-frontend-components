@@ -1,7 +1,8 @@
 <template>
   <Waveform
     :title="title"
-    :tissue_data_points="d3_formatted_data_points"
+    :tissue_data_points="d3_formatted_data_points.tissue"
+    :stim_data_points="d3_formatted_data_points.stim"
     :samples_per_second="samples_per_second"
     :x_axis_sample_length="x_axis_sample_length"
     :x_axis_min="x_axis_min"
@@ -75,7 +76,10 @@ export default {
 
   data: function () {
     return {
-      d3_formatted_data_points: [],
+      d3_formatted_data_points: {
+        tissue: [],
+        stim: [],
+      },
     };
   },
   computed: {
@@ -87,6 +91,7 @@ export default {
     }),
     ...mapState("data", {
       plate_waveforms: "plate_waveforms",
+      stim_waveforms: "stim_waveforms",
     }),
     ...mapState("waveform", {
       x_zoom_levels: "x_zoom_levels",
@@ -111,17 +116,11 @@ export default {
     },
     y_max: function () {
       const y_max = Math.round(this.y_axis_range.midpoint + this.y_axis_scale);
-
-      if (y_max > 100000) return 100000;
-
-      return y_max;
+      return Math.min(y_max, 100000);
     },
     y_min: function () {
       const y_min = Math.round(this.y_axis_range.midpoint - this.y_axis_scale);
-
-      if (y_min < -200) return -200;
-
-      return y_min;
+      return Math.max(y_min, -200);
     },
     x_axis_sample_length: function () {
       return this.x_zoom_levels[this.x_zoom_level_idx].x_scale;
@@ -130,31 +129,33 @@ export default {
 
   watch: {
     plate_waveforms() {
-      this.calculate_data_to_plot();
+      this.calculate_data_to_plot("tissue");
+    },
+    stim_waveforms() {
+      this.calculate_data_to_plot("stim");
     },
     current_quadrant() {
-      this.calculate_data_to_plot();
+      this.calculate_all_data_to_plot();
     },
     x_time_index() {
-      this.calculate_data_to_plot();
+      this.calculate_all_data_to_plot();
     },
     x_axis_sample_length() {
-      this.calculate_data_to_plot();
+      this.calculate_all_data_to_plot();
     },
   },
   mounted: function () {
-    this.calculate_data_to_plot();
+    this.calculate_all_data_to_plot();
   },
   methods: {
-    calculate_data_to_plot: function () {
-      const data_for_this_waveform_in_vuex = this.plate_waveforms[
-        this.current_quadrant[this.display_waveform_idx]
-      ];
+    calculate_data_to_plot: function (data_type) {
+      const waveforms = data_type === "tissue" ? this.plate_waveforms : this.stim_waveforms;
+      const data_for_this_waveform_in_vuex = waveforms[this.current_quadrant[this.display_waveform_idx]];
       if (
         data_for_this_waveform_in_vuex === undefined ||
         data_for_this_waveform_in_vuex.x_data_points.length == 0
       ) {
-        this.d3_formatted_data_points = [];
+        this.d3_formatted_data_points[data_type] = [];
         return;
       }
       let local_data_points = [];
@@ -169,7 +170,11 @@ export default {
         local_x_min_value,
         this.x_axis_sample_length
       );
-      this.d3_formatted_data_points = local_data_points;
+      this.d3_formatted_data_points[data_type] = local_data_points;
+    },
+    calculate_all_data_to_plot: function () {
+      this.calculate_data_to_plot("tissue");
+      this.calculate_data_to_plot("stim");
     },
   },
 };

@@ -219,6 +219,8 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     expect(wrapper.vm.err_msg.phase_one_duration).toBe("Required");
   });
 
+  // TODO add test for a high frequency creating a max dur less than 50 ms
+
   test("When a user adds a value to the total active duration, Then the value must be a number greater than the sum of the phase durations", async () => {
     const wrapper = mount(StimulationStudioWaveformSettingModal, {
       store,

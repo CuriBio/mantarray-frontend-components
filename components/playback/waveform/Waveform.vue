@@ -234,11 +234,11 @@ export default {
       this.y_axis_node.call(axisLeft(this.y_axis_scale));
     },
     plot_data: function () {
-      const tissue_data_to_plot = this.tissue_data_points;
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
       // update tissue lines
+      const tissue_data_to_plot = this.tissue_data_points;
       this.waveform_line_node.selectAll("*").remove();
       this.waveform_line_node
         .append("path")
@@ -249,17 +249,15 @@ export default {
         .attr(
           "d",
           d3_line()
-            .x(function (d) {
+            .x((d) => {
               return x_axis_scale(d[0] / 1e6);
             })
-            .y(function (d) {
+            .y((d) => {
               return y_axis_scale(d[1]);
             })
         );
-
+      // update stim lines  // TODO add tests for stim waveform drawing
       const stim_data_to_plot = this.stim_data_points;
-
-      // update stim lines  TODO
       this.stim_waveform_line_node.selectAll("*").remove();
       this.stim_waveform_line_node
         .append("path")
@@ -270,10 +268,10 @@ export default {
         .attr(
           "d",
           d3_line()
-            .x(function (d) {
+            .x((d) => {
               return x_axis_scale(d[0] / 1e6);
             })
-            .y(function (d) {
+            .y((d) => {
               return y_axis_scale(d[1]);
             })
         );

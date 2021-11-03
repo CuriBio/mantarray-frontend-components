@@ -45,11 +45,13 @@ describe("store/stimulation", () => {
       jest
         .spyOn(store, "dispatch")
         .mockImplementation(async () => await store.commit("stimulation/set_stim_status", false)); // TODO figure out if this mock implementation is necessary in following tests
+
+      store.state.stimulation.protocol_assignments = { test: "assignment" };
       const wrapper = mount(StimulationStudioControls, {
         store,
         localVue,
       });
-      store.state.stimulation.protocol_assignments = { test: "assignment" };
+
       wrapper.vm.play_state = true;
       await wrapper.find(".span__stimulation-controls-play-stop-button--active").trigger("click");
       expect(wrapper.vm.play_state).toBe(false);
@@ -73,12 +75,12 @@ describe("store/stimulation", () => {
         .spyOn(store, "dispatch")
         .mockImplementation(async () => await store.commit("stimulation/set_stim_status", true));
 
+      store.state.stimulation.protocol_assignments = { test: "assignment" };
       const wrapper = mount(StimulationStudioControls, {
         store,
         localVue,
       });
 
-      store.state.stimulation.protocol_assignments = { test: "assignment" };
       await wrapper.find(".span__stimulation-controls-play-stop-button--active").trigger("click");
       expect(wrapper.vm.play_state).toBe(true);
       // expect(wrapper.vm.current_gradient).toStrictEqual(wrapper.vm.active_gradient);
