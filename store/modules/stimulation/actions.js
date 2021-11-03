@@ -225,7 +225,6 @@ export default {
           const { stimulation_type, pulses, stop_setting } = protocol_assignments[well].protocol;
           const converted_pulses = pulses.map((pulse) => {
             return {
-              // TODO unit test that pulses aren't changed after sending message
               phase_one_duration: pulse.phase_one_duration * 1000, // sent in µs
               phase_one_charge: pulse.phase_one_charge * charge_conversion[stimulation_type], // sent in mV or µA
               interphase_interval: pulse.interphase_interval * 1000, // sent in µs
@@ -255,15 +254,11 @@ export default {
     } catch (error) {
       console.log(error);
     }
-
-    // this.commit("stimulation/set_stim_status", status);
   },
 
   async stop_stim_status() {
     const status = false;
-
     await post_stim_status(status);
-    // this.commit("stimulation/set_stim_status", status);
   },
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {

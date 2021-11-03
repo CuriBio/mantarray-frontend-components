@@ -93,7 +93,7 @@ export default {
       x_axis_scale: null,
       y_axis_node: null,
       y_axis_scale: null,
-      waveform_line_node: null, // TODO rename this waveform_line_node once frontend-test-utils updated
+      waveform_line_node: null, // TODO rename this tissue_waveform_line_node once frontend-test-utils updated
       stim_waveform_line_node: null,
       div__waveform_graph__dynamic_style: {
         width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
@@ -256,7 +256,7 @@ export default {
               return y_axis_scale(d[1]);
             })
         );
-      // update stim lines  // TODO add tests for stim waveform drawing
+      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
       const stim_data_to_plot = this.stim_data_points;
       this.stim_waveform_line_node.selectAll("*").remove();
       this.stim_waveform_line_node

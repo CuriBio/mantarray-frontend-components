@@ -218,8 +218,34 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     await target_input_field.setValue("");
     expect(wrapper.vm.err_msg.phase_one_duration).toBe("Required");
   });
-
-  // TODO add test for a high frequency creating a max dur less than 50 ms
+  test("Given that a high frequency is selected, When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
+    const wrapper = mount(StimulationStudioWaveformSettingModal, {
+      store,
+      localVue,
+      propsData: {
+        stimulation_type: "Voltage (mV)",
+        pulse_type: "Monophasic",
+        selected_pulse_settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interphase_interval: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: "",
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
+        },
+        frequency: 100,
+      },
+    });
+    const target_input_field = wrapper.find("#input-widget-field-duration");
+    await target_input_field.setValue("11");
+    expect(wrapper.vm.err_msg.phase_one_duration).toBe("Duration must be <= 10ms");
+  });
 
   test("When a user adds a value to the total active duration, Then the value must be a number greater than the sum of the phase durations", async () => {
     const wrapper = mount(StimulationStudioWaveformSettingModal, {

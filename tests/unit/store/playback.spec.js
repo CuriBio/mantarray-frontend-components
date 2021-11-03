@@ -511,6 +511,19 @@ describe("store/playback", () => {
         expect(store.state.data.plate_waveforms[1].x_data_points).toHaveLength(0);
         expect(store.state.data.plate_waveforms[1].y_data_points).toHaveLength(0);
       });
+      test("Given the Vuex stim_waveforms state has some values, When stop_live_view is dispatched, Then the stim_waveforms x/y data points are reset to empty arrays", async () => {
+        store.commit("data/set_stim_waveforms", [
+          { x_data_points: [55], y_data_points: [2.3] },
+          { x_data_points: [4], y_data_points: [999] },
+        ]);
+        await store.dispatch("playback/stop_live_view");
+
+        expect(store.state.data.stim_waveforms).toHaveLength(2);
+        expect(store.state.data.stim_waveforms[0].x_data_points).toHaveLength(0);
+        expect(store.state.data.stim_waveforms[0].y_data_points).toHaveLength(0);
+        expect(store.state.data.stim_waveforms[1].x_data_points).toHaveLength(0);
+        expect(store.state.data.stim_waveforms[1].y_data_points).toHaveLength(0);
+      });
       test("Given the Vuex heatmap_values state has some values, When stop_live_view is dispatched, Then the heatmap_values inner arrays are all reset to empty arrays", async () => {
         store.commit("data/set_heatmap_values", {
           "Twitch Force": { data: [[0], [10]] },

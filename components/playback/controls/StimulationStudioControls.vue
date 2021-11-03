@@ -104,11 +104,6 @@ export default {
       }
     },
   },
-  // watch: {
-  //   protocol_assignments: function() {
-
-  //   }
-  // }
 };
 </script>
 <style scoped>

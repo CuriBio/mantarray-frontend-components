@@ -103,7 +103,7 @@ export default {
     };
     await this.dispatch("playback/start_stop_axios_request", payload);
     context.commit("data/clear_plate_waveforms", null, { root: true });
-    context.commit("data/clear_stim_waveforms", null, { root: true }); // TODO unit test this
+    context.commit("data/clear_stim_waveforms", null, { root: true });
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
     context.commit("set_x_time_index", 0);
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {

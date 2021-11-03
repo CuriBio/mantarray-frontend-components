@@ -153,7 +153,7 @@ describe("store/data", () => {
     expect(stored_waveform).toHaveLength(3);
     expect(stored_waveform[0]).toStrictEqual({
       x_data_points: [11, 12, 13, 13, 13],
-      y_data_points: [0, 0, 100001, -201, 100001],
+      y_data_points: [0, 0, 101000, -201, 101000],
     });
     expect(stored_waveform[1]).toStrictEqual({
       x_data_points: [21],
@@ -161,7 +161,7 @@ describe("store/data", () => {
     });
     expect(stored_waveform[2]).toStrictEqual({
       x_data_points: [211, 211, 211, 212, 212, 212],
-      y_data_points: [100001, -201, 100001, 100001, -201, 100001],
+      y_data_points: [101000, -201, 101000, 101000, -201, 101000],
     });
   });
 
@@ -286,11 +286,11 @@ describe("store/data", () => {
       expect(stored_stim_data).toHaveLength(2);
       expect(stored_stim_data[0]).toStrictEqual({
         x_data_points: [1, 2, 2, 2, 3, 3, 3],
-        y_data_points: [2, 100001, -201, 100001, 100001, -201, 100001],
+        y_data_points: [2, 101000, -201, 101000, 101000, -201, 101000],
       });
       expect(stored_stim_data[1]).toStrictEqual({
         x_data_points: [3, 8, 8, 8],
-        y_data_points: [4, 100001, -201, 100001],
+        y_data_points: [4, 101000, -201, 101000],
       });
     });
   });

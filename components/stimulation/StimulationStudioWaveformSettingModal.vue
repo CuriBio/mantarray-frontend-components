@@ -451,16 +451,6 @@ export default {
     },
     check_pulse_duration(label) {
       const value = this.pulse_settings[label];
-
-      // if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      // else if (!this.regex.duration.test(value) && value !== "")
-      //   this.err_msg[label] = this.invalid_err_msg.min_num_err;
-      // else if (!check_pulse_duration) this.err_msg[label] = this.invalid_err_msg.max_duration;
-      // else if (check_pulse_duration && this.regex.duration.test(value) && value !== "") {
-      //   this.err_msg[label] = this.invalid_err_msg.valid;
-      //   this.pulse_settings[label] = Number(value);
-      // }
-
       if (value === "") {
         this.err_msg[label] = this.invalid_err_msg.required;
       } else if (!this.regex.duration.test(value)) {

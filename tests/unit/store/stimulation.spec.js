@@ -545,6 +545,11 @@ describe("store/stimulation", () => {
       };
 
       store.state.stimulation.protocol_assignments = test_assignment;
+      // send message once
+      await store.dispatch("stimulation/create_protocol_message");
+      expect(axios_message_spy).toHaveBeenCalledWith(expected_message);
+      expect(axios_status_spy).toHaveBeenCalledWith(true);
+      // send message again and make sure nothing was modified. Tanner (11/3/21): there was an issue where the protocols were modified inside of create_protocol_message, so sending message twice to catch that issue if present
       await store.dispatch("stimulation/create_protocol_message");
       expect(axios_message_spy).toHaveBeenCalledWith(expected_message);
       expect(axios_status_spy).toHaveBeenCalledWith(true);
