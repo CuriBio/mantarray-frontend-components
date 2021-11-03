@@ -2,9 +2,9 @@
   <div>
     <Waveform
       :title="'B03'"
-      :line_color="'#0000FF'"
+      :tissue_line_color="'#0000FF'"
       :plot_area_pixel_width="300"
-      :data_points="temp_datapoints"
+      :tissue_data_points="temp_datapoints"
     ></Waveform>
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
     Waveform,
   },
   created: function () {
-    const x_values = [-5000, 3000, 7000, 14000, 150000];
+    const x_values = [-50000, 30000, 70000, 140000, 1500000];
     const y_values = [290.429978, 298.5820692, 327.728242, 352.3291106, 370.8505055];
     this.temp_datapoints = convert_x_y_arrays_to_d3_array(x_values, y_values);
   },

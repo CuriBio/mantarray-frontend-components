@@ -10,7 +10,7 @@
     :y_max="y_max"
     :y_axis_label="y_label"
     :x_axis_label="x_label"
-    :tissue_line_color="line_color"
+    :tissue_line_color="tissue_line_color"
     :margin="margin"
     :plot_area_pixel_height="plot_area_pixel_height"
     :plot_area_pixel_width="plot_area_pixel_width"
@@ -29,7 +29,7 @@ const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
  * @vue-prop {String} y_label  - A String to define the Y-Axis label text
  * @vue-prop {String} x_label  - A String to define the X-Axis label text
  * @vue-prop {Int} display_waveform_idx - An index number to the waveform
- * @vue-prop {String} line_color - A String to define the line color
+ * @vue-prop {String} tissue_line_color - A String to define the tissue line color
  * @vue-prop {Object} margin - - An Object which determines a closing boundry margin
  * @vue-prop {Int} plot_area_pixel_height - Graph height definition
  * @vue-prop {Int} plot_area_pixel_width  - Graph widht definition
@@ -56,7 +56,7 @@ export default {
     y_label: { type: String, default: null },
     x_label: { type: String, default: null },
     display_waveform_idx: { type: Number, default: 0 },
-    line_color: { type: String, default: "#00c465" },
+    tissue_line_color: { type: String, default: "#00c465" },
     margin: {
       type: Object,
       default: function () {

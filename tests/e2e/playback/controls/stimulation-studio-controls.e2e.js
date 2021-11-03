@@ -11,7 +11,7 @@ fixture`playback/controls/stimulation-studio-controls/basic`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/stimulation-studio-controls/basic`; // specify the start page
 
-const status_btn = Selector(".span__stimulation-controls-play-stop-button--active");
+const status_btn_active = Selector(".span__stimulation-controls-play-stop-button--active");
 
 test("testing the StimulationStudioControls layout on initialization", async (t) => {
   const screenshot_path_base = path.join("playback", "controls", "stimulation-studio-controls");
@@ -23,7 +23,7 @@ test("testing the StimulationStudioControls layout on initialization", async (t)
 test("testing the StimulationStudioControls layout when stimulation is active", async (t) => {
   const screenshot_path_base = path.join("playback", "controls", "stimulation-studio-controls");
   const screenshot_path = path.join(screenshot_path_base, "basic-active");
-  await t.click(update_button).click(status_btn).wait(1000);
+  await t.click(update_button).click(status_btn_active).wait(1000);
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });

@@ -468,7 +468,6 @@ describe("store/flask", () => {
           in_simulation_mode: false,
           is_stimulating: false,
         });
-        const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
         expect(store.state.stimulation.stim_status).toBe(false);
       });
