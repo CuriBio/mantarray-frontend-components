@@ -20,7 +20,6 @@ describe("store/stimulation", () => {
       src: "test",
       repeat: {
         color: "b7b7b7",
-        number_of_repeats: 1,
       },
       pulse_settings: {
         phase_one_duration: 100,
@@ -32,7 +31,7 @@ describe("store/stimulation", () => {
       stim_settings: {
         repeat_delay_interval: 5,
         total_active_duration: {
-          duration: 500,
+          duration: 118,
           unit: "milliseconds",
         },
       },
@@ -366,7 +365,7 @@ describe("store/stimulation", () => {
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
-      const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 118, 500];
+      const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 118, 118];
       const y_values = [0, 200, 200, 0, 0, 200, 200, 0, 0, 0];
       const colors = { b7b7b7: [0, 10] };
 
@@ -417,7 +416,7 @@ describe("store/stimulation", () => {
     });
 
     test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the edited protocol will be updated in protocol assignments if assigned", async () => {
-      const { protocol_list, protocol_assignments } = store.state.stimulation;
+      const protocol_list = store.state.stimulation.protocol_list;
       const selected_protocol = protocol_list[1];
       const old_name = "Tester";
       const new_name = "New_name";
@@ -425,17 +424,19 @@ describe("store/stimulation", () => {
       await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
       await store.commit("stimulation/apply_selected_protocol", selected_protocol);
 
+      let protocol_assignments = store.state.stimulation.protocol_assignments;
       const pre_assignment_name = protocol_assignments[0].protocol.name;
       expect(pre_assignment_name).toBe(old_name);
       await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
       await store.commit("stimulation/set_protocol_name", new_name);
       await store.dispatch("stimulation/add_saved_protocol");
+      protocol_assignments = store.state.stimulation.protocol_assignments; // have to get this value again since it is reassigned inside the store
       const post_assignment_name = protocol_assignments[0].protocol.name;
       expect(post_assignment_name).toBe(new_name);
     });
 
     test("When a user wants to delete an existing protocol by clicking on trash icon, Then the selected protocol will be removed from the list of available protocols, removed from any assigned wells, and the editor will be reset", async () => {
-      const { protocol_list, protocol_assignments } = store.state.stimulation;
+      const protocol_list = store.state.stimulation.protocol_list;
       const selected_protocol = protocol_list[1];
 
       await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
@@ -443,7 +444,7 @@ describe("store/stimulation", () => {
       await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
       await store.dispatch("stimulation/handle_protocol_editor_reset");
 
-      expect(protocol_assignments).toStrictEqual({});
+      expect(store.state.stimulation.protocol_assignments).toStrictEqual({});
       expect(protocol_list).toHaveLength(1);
     });
 

@@ -6,7 +6,7 @@
       :y_max="y_min_max"
       :plot_area_pixel_height="160"
       :plot_area_pixel_width="dynamic_plot_width"
-      :tissue_data_points="datapoints"
+      :data_points="datapoints"
       :y_axis_label="stimulation_type"
       :x_axis_label="x_axis_label"
       :repeat_colors="repeat_colors"

@@ -227,7 +227,7 @@ describe("ContinuousWaveform.vue", () => {
     const propsData = { display_waveform_idx: 0 };
     test("When initially mounted, Then the line_color is passed as a prop to the child Waveform, Then When prop is updated Then the child prop also updates", async () => {
       const expected_value = "#FF00FF";
-      propsData.line_color = expected_value;
+      propsData.tissue_line_color = expected_value;
 
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
@@ -235,7 +235,7 @@ describe("ContinuousWaveform.vue", () => {
       expect(waveform_wrapper.props("tissue_line_color")).toBe(expected_value);
 
       const new_expected_value = "#F0F0F0";
-      wrapper.setProps({ line_color: new_expected_value });
+      wrapper.setProps({ tissue_line_color: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
       expect(waveform_wrapper.props("tissue_line_color")).toBe(new_expected_value);
     });
