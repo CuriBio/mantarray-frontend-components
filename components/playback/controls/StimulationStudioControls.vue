@@ -87,7 +87,6 @@ export default {
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       // waits for response from BE before turning green
-      console.log(JSON.stringify(mutation));
       if (mutation.type === "stimulation/set_stim_status") {
         this.current_gradient = mutation.payload ? this.active_gradient : this.inactive_gradient;
         this.play_state = mutation.payload;
@@ -101,7 +100,6 @@ export default {
     async handle_play_stop() {
       if (this.is_start_stop_button_enabled) {
         const action = this.play_state ? "stop_stim_status" : "create_protocol_message";
-        console.log(action);
         this.$store.dispatch(`stimulation/${action}`);
       }
     },
