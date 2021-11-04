@@ -108,14 +108,14 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     };
 
     await store.dispatch("stimulation/edit_selected_protocol", test_param_1);
-    expect(wrapper.vm.stimulation_type_idx).toBe(0);
+    expect(wrapper.vm.stimulation_type_idx).toBe(1);
     expect(wrapper.vm.current_letter).toBe(test_param_1.letter);
     expect(wrapper.vm.rest_duration).toBe(20);
     expect(wrapper.vm.stop_option_idx).toBe(0);
     expect(wrapper.vm.disabled_time).toBe(false);
 
     await store.dispatch("stimulation/edit_selected_protocol", test_param_2);
-    expect(wrapper.vm.stimulation_type_idx).toBe(1);
+    expect(wrapper.vm.stimulation_type_idx).toBe(0);
     expect(wrapper.vm.current_letter).toBe(test_param_2.letter);
     expect(wrapper.vm.rest_duration).toBe(40);
     expect(wrapper.vm.stop_option_idx).toBe(1);
@@ -157,7 +157,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(1).trigger("click");
-    expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
+    expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("V");
   });
 
   test("When a user imports a new protocol, Then the the next available protocol letter/color assignment will get updated", async () => {

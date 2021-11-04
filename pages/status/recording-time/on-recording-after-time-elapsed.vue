@@ -15,7 +15,7 @@ export default {
   computed: {},
   created: async function () {
     await this.$store.dispatch("playback/start_recording");
-    this.$store.commit("playback/set_x_time_index", 1234500);
+    this.$store.commit("playback/set_x_time_index", 12345000);
   },
 };
 </script>

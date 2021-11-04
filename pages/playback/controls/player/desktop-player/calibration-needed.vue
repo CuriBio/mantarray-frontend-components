@@ -1,12 +1,13 @@
 <template>
   <div>
-    <DesktopPlayerControls></DesktopPlayerControls>
+    <DesktopPlayerControls />
+    <button class="update-idx-button" @click="update_customer_idx">Update customer idx</button>
   </div>
 </template>
 
 <script>
-import { DesktopPlayerControls } from "@/dist/mantarray.common";
-// import DesktopPlayerControls from "@/components/playback/controls/player/DesktopPlayerControls.vue";
+// import { DesktopPlayerControls } from "@/dist/mantarray.common";
+import DesktopPlayerControls from "@/components/playback/controls/player/DesktopPlayerControls.vue";
 import playback_module from "@/store/modules/playback";
 export default {
   components: {
@@ -27,5 +28,28 @@ export default {
     // set a valid barcode so that live view can be initiated during the tests
     this.$store.commit("playback/set_barcode_number", "MA200440004");
   },
+  methods: {
+    update_customer_idx: function () {
+      this.$store.commit("settings/set_customer_index", 0);
+    },
+  },
 };
 </script>
+<style scoped>
+.update-idx-button {
+  position: absolute;
+  top: 100px;
+  left: 1840px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: #4ca0af;
+  z-index: 999;
+}
+</style>

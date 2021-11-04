@@ -258,16 +258,6 @@ export default {
           Object.assign(edited_pulse.stim_settings, stim_settings);
           edited_pulse.repeat.number_of_repeats = frequency;
         }
-        // if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx !== null) {
-        //   Object.assign(
-        //     edited_pulse.nested_protocols[this.shift_click_nested_img_idx].pulse_settings,
-        //     pulse_settings
-        //   );
-        //   Object.assign(
-        //     edited_pulse.nested_protocols[this.shift_click_nested_img_idx].stim_settings,
-        //     stim_settings
-        //   );
-        // }
       }
 
       if (button === "Delete") {
@@ -409,7 +399,7 @@ img {
   padding: 0 7px 7px 7px;
 }
 .modal-container {
-  left: 26%;
+  left: 22%;
   position: absolute;
 }
 .dropdown-container {

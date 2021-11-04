@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import { StimulationStudioControls } from "@/dist/mantarray.common";
 // import StimulationStudioControls from "@/components/playback/controls/StimulationStudioControls.vue";
 
@@ -13,7 +14,21 @@ export default {
   components: {
     StimulationStudioControls,
   },
+  created() {
+    this.unsubscribe = this.$store.subscribeAction(async (action, state) => {
+      // simulate response from BE when play/stop button is pressed
+      if (action.type === "stimulation/create_protocol_message") {
+        this.set_stim_status(true);
+      } else if (action.type === "stimulation/stop_stim_status") {
+        this.set_stim_status(false);
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
+  },
   methods: {
+    ...mapMutations("stimulation", ["set_stim_status"]),
     update_protocol_assignment() {
       const test_assignment = {
         A2: {

@@ -1,11 +1,26 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.5.0 (2021-11-04)
+------------------
 
-0.4.7 (unreleased)
+- Added websocket handler for stimulation data
+- Added stim subprotocol markers to waveform players
+- Added biphasic and monophasic pulse diagrams
+- Updated Stim Studio to make current controlled stimulation the default
+- Updated Stim play/stop button to be disabled when no protocols are assigned or if a recording is being made
+- Updated all timing to be in µs
+- Fixed Username/Password validations
+- Fixed stim pulses being modified when creating outgoing message
+- Fixed issue with some stim pulses overlapping in protocol viewer
+- Fixed issue with heatmap not updating while recording
+
+
+0.4.7 (2021-10-13)
 ------------------
 
 - Updated create_protocol_message for new ``/set_protocols`` format
+- Added ability to enter customer credentials
 
 
 0.4.6 (2021-08-27)

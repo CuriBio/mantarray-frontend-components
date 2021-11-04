@@ -40,7 +40,7 @@
     <span class="span__heatmap-layout-heatmap-settings-label">Heatmap Settings</span>
 
     <!-- original mockflow ID: cmpD56369ad2e65893ae5ca594f14a64e378 -->
-    <canvas class="canvas__heatmap-settings-title-seperator" />
+    <canvas class="canvas__heatmap-settings-title-separator" />
 
     <!-- original mockflow ID: cmpD9c0a6e873d03a7f83e8a68941610e993 -->
     <span class="span__heatmap-layout-heatmap-scale-label">Scale Bar</span>
@@ -83,7 +83,7 @@
     </div>
 
     <!-- original mockflow ID:  cmpD8d0ef3020c7613af7ae63fa5722de759  -->
-    <canvas class="canvas__heatmap-settings-scale-seperator" width="212" height="2" />
+    <canvas class="canvas__heatmap-settings-scale-separator" width="212" height="2" />
 
     <!-- original mockflow ID: cmpD4146e3d532d7eb0719ee0d6e06485940 -->
     <span class="span__heatmap-layout-display-label">Display</span>
@@ -103,7 +103,7 @@
     </div>
 
     <!-- original mockflow ID: cmpDc08190eb24c68e02c278bde19882becb -->
-    <canvas class="canvas__heatmap-settings-color-scheme-seperator" width="212" height="2" />
+    <canvas class="canvas__heatmap-settings-color-scheme-separator" width="212" height="2" />
 
     <!-- original mockflow ID: cmpD03029ea224291e6817f40d3ac9f24b19 -->
     <span class="span__heatmap-settings-color-scheme-label"> Color Scheme</span>
@@ -614,7 +614,7 @@ export default {
   text-align: center;
 }
 
-.canvas__heatmap-settings-title-seperator {
+.canvas__heatmap-settings-title-separator {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;
@@ -750,7 +750,7 @@ export default {
   visibility: visible;
 }
 
-.canvas__heatmap-settings-scale-seperator {
+.canvas__heatmap-settings-scale-separator {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;
@@ -799,7 +799,7 @@ export default {
   z-index: 10;
 }
 
-.canvas__heatmap-settings-color-scheme-seperator {
+.canvas__heatmap-settings-color-scheme-separator {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;

@@ -6,4 +6,7 @@ export default {
   heatmap_values(state) {
     return state.heatmap_values;
   },
+  stim_waveforms(state) {
+    return state.stim_waveforms;
+  },
 };

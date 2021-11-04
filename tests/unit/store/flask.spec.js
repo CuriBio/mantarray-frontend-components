@@ -451,6 +451,26 @@ describe("store/flask", () => {
         );
         expect(store.state.playback.barcode).toBeNull();
       });
+      test("Given that /system_status is mocked to include an is_stimulating value, When the ping_system_status is active, then stimulation/set_stim_status is called with that value", async () => {
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: "",
+          in_simulation_mode: false,
+          is_stimulating: true,
+        });
+        const bound_ping_system_status = ping_system_status.bind(context);
+        await bound_ping_system_status();
+        expect(store.state.stimulation.stim_status).toBe(true);
+
+        mocked_axios.onGet(system_status_regexp).reply(200, {
+          ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
+          plate_barcode: "",
+          in_simulation_mode: false,
+          is_stimulating: false,
+        });
+        await bound_ping_system_status();
+        expect(store.state.stimulation.stim_status).toBe(false);
+      });
     });
   });
 });

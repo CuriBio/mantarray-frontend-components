@@ -2,7 +2,7 @@
   <div>
     <Waveform
       :title="'C12'"
-      :data_points="temp_datapoints"
+      :tissue_data_points="temp_datapoints"
       :x_axis_label="'Temperature'"
       :y_axis_label="'Distance'"
     ></Waveform>
@@ -17,7 +17,7 @@ export default {
     Waveform,
   },
   created: function () {
-    const x_values = [-5000, 3000, 7000, 14000, 150000];
+    const x_values = [-50000, 30000, 70000, 140000, 1500000];
     const y_values = [290.429978, 298.5820692, 800, -250, 370.8505055];
 
     this.temp_datapoints = convert_x_y_arrays_to_d3_array(x_values, y_values);

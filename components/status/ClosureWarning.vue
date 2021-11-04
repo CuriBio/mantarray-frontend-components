@@ -16,8 +16,7 @@
           :enabled_color="'#B7B7B7'"
           :hover_color="['#bd4932', '#19ac8a']"
           @btn-click="handle_click"
-        >
-        </ButtonWidget>
+        />
       </div>
     </div>
   </div>

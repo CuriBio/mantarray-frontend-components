@@ -13,10 +13,7 @@ import {
   system_status_when_buffering_regexp,
 } from "@/store/modules/flask/url_regex";
 import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
-import {
-  advance_playback_progression,
-  centimilliseconds_per_millisecond,
-} from "@/store/modules/playback/actions";
+import { advance_playback_progression, micros_per_milli } from "@/store/modules/playback/actions";
 const sandbox = sinon.createSandbox();
 const base_url = "http://localhost:4567";
 describe("store/playback", () => {
@@ -67,7 +64,7 @@ describe("store/playback", () => {
       let default_playback_progression_time_interval;
       let bound_advance_playback_progression;
       let spied_performance_now;
-      const initial_x_time_index = 10000 * centimilliseconds_per_millisecond;
+      const initial_x_time_index = 10000 * micros_per_milli;
       beforeEach(async () => {
         context = await store.dispatch("playback/get_playback_action_context");
         bound_advance_playback_progression = advance_playback_progression.bind(context);
@@ -80,7 +77,7 @@ describe("store/playback", () => {
       test("Given performance.now is mocked to return a time interval just below the lag threshold, When advance_playback_progression is invoked, Then the x_time_index is incremented the default amount", () => {
         spied_performance_now.mockReturnValueOnce(
           timestamp_of_beginning_of_progression +
-            initial_x_time_index / centimilliseconds_per_millisecond +
+            initial_x_time_index / micros_per_milli +
             store.state.playback.num_milliseconds_to_fast_forward_if_delayed -
             0.1
         );
@@ -89,13 +86,12 @@ describe("store/playback", () => {
         spied_performance_now.mockReturnValueOnce(timestamp_of_beginning_of_progression + 1);
         bound_advance_playback_progression();
         expect(store.state.playback.x_time_index).toStrictEqual(
-          initial_x_time_index +
-            default_playback_progression_time_interval * centimilliseconds_per_millisecond
+          initial_x_time_index + default_playback_progression_time_interval * micros_per_milli
         );
       });
       test("Given performance.now is mocked to return a time interval of a lag equal to the threshold, When advance_playback_progression is invoked, Then the x_time_index is incremented the designated larger amount to start to catch up", () => {
         spied_performance_now.mockReturnValueOnce(
-          initial_x_time_index / centimilliseconds_per_millisecond +
+          initial_x_time_index / micros_per_milli +
             timestamp_of_beginning_of_progression +
             store.state.playback.num_milliseconds_to_fast_forward_if_delayed
         );
@@ -106,15 +102,14 @@ describe("store/playback", () => {
         // TODO figure out why this check is sporadically failing
         expect(store.state.playback.x_time_index).toStrictEqual(
           initial_x_time_index +
-            store.state.playback.num_milliseconds_to_fast_forward_if_delayed *
-              centimilliseconds_per_millisecond
+            store.state.playback.num_milliseconds_to_fast_forward_if_delayed * micros_per_milli
         );
       });
       test("Given the delay threshold has been changed lower from the default and performance.now is mocked to return a time interval of a lag just larger than the threshold, When advance_playback_progression is invoked, Then the x_time_index is incremented the new designated larger amount to start to catch up", () => {
         const new_delay_threshold = 80;
         store.commit("playback/set_num_milliseconds_to_fast_forward_if_delayed", new_delay_threshold);
         spied_performance_now.mockReturnValueOnce(
-          initial_x_time_index / centimilliseconds_per_millisecond +
+          initial_x_time_index / micros_per_milli +
             timestamp_of_beginning_of_progression +
             new_delay_threshold +
             0.1
@@ -124,7 +119,7 @@ describe("store/playback", () => {
 
         bound_advance_playback_progression();
         expect(store.state.playback.x_time_index).toStrictEqual(
-          initial_x_time_index + new_delay_threshold * centimilliseconds_per_millisecond
+          initial_x_time_index + new_delay_threshold * micros_per_milli
         );
       });
     });
@@ -271,17 +266,17 @@ describe("store/playback", () => {
       });
       describe("Given playback_progression is active", () => {
         let playback_update_time_interval;
-        const centimilliseconds_per_millisecond = 100;
+        const micros_per_milli = 1000;
         beforeEach(async () => {
           await store.dispatch("playback/start_playback_progression");
           playback_update_time_interval = store.state.playback.playback_progression_time_interval;
         });
-        test("Given x_time_index started at 0, When time is advanced 4 updated intervals, Then x_time_index moves the correct number of centimilliseconds", () => {
+        test("Given x_time_index started at 0, When time is advanced 4 updated intervals, Then x_time_index moves the correct number of microseconds", () => {
           // confirm pre-condition
           expect(store.state.playback.x_time_index).toStrictEqual(0);
           sandbox.clock.tick(4 * playback_update_time_interval);
           expect(store.state.playback.x_time_index).toStrictEqual(
-            4 * playback_update_time_interval * centimilliseconds_per_millisecond
+            4 * playback_update_time_interval * micros_per_milli
           );
         });
         test("Given x_time_index started at 0, When time is advanced not quite 1 time interval, Then x_time_index does not change", () => {
@@ -290,26 +285,26 @@ describe("store/playback", () => {
           sandbox.clock.tick(playback_update_time_interval - 1);
           expect(store.state.playback.x_time_index).toStrictEqual(0);
         });
-        test("Given x_time_index started at 0, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of centimilliseconds_per_millisecond", () => {
+        test("Given x_time_index started at 0, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of micros_per_milli", () => {
           // confirm pre-condition
           expect(store.state.playback.x_time_index).toStrictEqual(0);
           sandbox.clock.tick(playback_update_time_interval);
           expect(store.state.playback.x_time_index).toStrictEqual(
-            playback_update_time_interval * centimilliseconds_per_millisecond
+            playback_update_time_interval * micros_per_milli
           );
         });
-        test("Given x_time_index started at 10, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of centimilliseconds_per_millisecond", () => {
+        test("Given x_time_index started at 10, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of micros_per_milli", () => {
           store.commit("playback/set_x_time_index", 10);
           sandbox.clock.tick(playback_update_time_interval);
           expect(store.state.playback.x_time_index).toStrictEqual(
-            playback_update_time_interval * centimilliseconds_per_millisecond + 10
+            playback_update_time_interval * micros_per_milli + 10
           );
         });
-        test("Given x_time_index started at 0, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of centimilliseconds_per_millisecond, When playback_progression is stopped and time is advanced another time interval, Then x_time_index does not change", () => {
+        test("Given x_time_index started at 0, When time is advanced exactly 1 time interval, Then x_time_index moves the correct number of micros_per_milli, When playback_progression is stopped and time is advanced another time interval, Then x_time_index does not change", () => {
           // confirm pre-condition
           expect(store.state.playback.x_time_index).toStrictEqual(0);
           sandbox.clock.tick(playback_update_time_interval);
-          const expected_x_time_index = playback_update_time_interval * centimilliseconds_per_millisecond;
+          const expected_x_time_index = playback_update_time_interval * micros_per_milli;
           expect(store.state.playback.x_time_index).toStrictEqual(expected_x_time_index);
           store.commit("playback/stop_playback_progression");
           sandbox.clock.tick(playback_update_time_interval);
@@ -515,6 +510,19 @@ describe("store/playback", () => {
         expect(store.state.data.plate_waveforms[0].y_data_points).toHaveLength(0);
         expect(store.state.data.plate_waveforms[1].x_data_points).toHaveLength(0);
         expect(store.state.data.plate_waveforms[1].y_data_points).toHaveLength(0);
+      });
+      test("Given the Vuex stim_waveforms state has some values, When stop_live_view is dispatched, Then the stim_waveforms x/y data points are reset to empty arrays", async () => {
+        store.commit("data/set_stim_waveforms", [
+          { x_data_points: [55], y_data_points: [2.3] },
+          { x_data_points: [4], y_data_points: [999] },
+        ]);
+        await store.dispatch("playback/stop_live_view");
+
+        expect(store.state.data.stim_waveforms).toHaveLength(2);
+        expect(store.state.data.stim_waveforms[0].x_data_points).toHaveLength(0);
+        expect(store.state.data.stim_waveforms[0].y_data_points).toHaveLength(0);
+        expect(store.state.data.stim_waveforms[1].x_data_points).toHaveLength(0);
+        expect(store.state.data.stim_waveforms[1].y_data_points).toHaveLength(0);
       });
       test("Given the Vuex heatmap_values state has some values, When stop_live_view is dispatched, Then the heatmap_values inner arrays are all reset to empty arrays", async () => {
         store.commit("data/set_heatmap_values", {

@@ -114,7 +114,7 @@ describe("Waveform.vue", () => {
     test("When the x_axis_min prop is supplied, Then the x-axis label renders the appropriate number", async () => {
       const propsData = {
         title: "C12",
-        x_axis_min: 1.1 * 100000,
+        x_axis_min: 1.1 * 1e6,
       };
 
       wrapper = shallowMount(Waveform, { propsData });
@@ -128,7 +128,7 @@ describe("Waveform.vue", () => {
       const propsData = {
         title: "C12",
         x_axis_min: 0,
-        data_points: [],
+        tissue_data_points: [],
       };
 
       wrapper = shallowMount(Waveform, { propsData });
@@ -137,7 +137,7 @@ describe("Waveform.vue", () => {
       // confirm initial state
       expect(ticks_with_text_before.at(0).text()).toStrictEqual("0.0");
 
-      wrapper.setProps({ x_axis_min: 10 * 100000 });
+      wrapper.setProps({ x_axis_min: 10 * 1e6 });
 
       await wrapper.vm.$nextTick(); // wait for update
       const ticks_with_text_after = get_x_axis_ticks_with_text(wrapper);
@@ -147,7 +147,7 @@ describe("Waveform.vue", () => {
     test("When initially mounted, Then the right label of the x-axis matches the x_axis_sample_length value provided in props", () => {
       const propsData = {
         title: "C12",
-        x_axis_sample_length: 4 * 100000,
+        x_axis_sample_length: 4 * 1e6,
       };
       wrapper = shallowMount(Waveform, { propsData });
 
@@ -159,7 +159,7 @@ describe("Waveform.vue", () => {
     test("When the x_axis_sample_length prop is updated, Then the right label of the x-axis is updated", async () => {
       const propsData = {
         title: "C12",
-        x_axis_sample_length: 1 * 100000,
+        x_axis_sample_length: 1 * 1e6,
       };
       wrapper = shallowMount(Waveform, { propsData });
 
@@ -167,7 +167,7 @@ describe("Waveform.vue", () => {
       // confirm initial state
       expect(ticks_with_text_before.at(ticks_with_text_before.length - 1).text()).toStrictEqual("1.0");
 
-      wrapper.setProps({ x_axis_sample_length: 2 * 100000 });
+      wrapper.setProps({ x_axis_sample_length: 2 * 1e6 });
       await wrapper.vm.$nextTick(); // wait for update
       const ticks_with_text_after = get_x_axis_ticks_with_text(wrapper);
       expect(ticks_with_text_after.at(ticks_with_text_after.length - 1).text()).toStrictEqual("2.0");
@@ -291,9 +291,9 @@ describe("Waveform.vue", () => {
     beforeEach(async () => {
       propsData = {
         title: "C12",
-        data_points: x_y_data,
+        tissue_data_points: x_y_data,
         x_axis_min: 0,
-        x_axis_sample_length: 1 * 100000,
+        x_axis_sample_length: 1 * 1e6,
         y_min: 0,
         y_max: 500,
         plot_area_pixel_height: 360,
@@ -314,9 +314,10 @@ describe("Waveform.vue", () => {
       const svg_nodes = wrapper.findAll("#svg_of_waveform > g");
 
       expect(svg_nodes.wrappers[0].attributes("id")).toStrictEqual("waveform_line_node");
-      expect(svg_nodes.wrappers[1].attributes("id")).toStrictEqual("margin_blockers_node");
-      expect(svg_nodes.wrappers[2].attributes("id")).toStrictEqual("x_axis_node");
-      expect(svg_nodes.wrappers[3].attributes("id")).toStrictEqual("y_axis_node");
+      expect(svg_nodes.wrappers[1].attributes("id")).toStrictEqual("stim_waveform_line_node");
+      expect(svg_nodes.wrappers[2].attributes("id")).toStrictEqual("margin_blockers_node");
+      expect(svg_nodes.wrappers[3].attributes("id")).toStrictEqual("x_axis_node");
+      expect(svg_nodes.wrappers[4].attributes("id")).toStrictEqual("y_axis_node");
     });
     test("When mounted, Then it creates margin blockers of the appropriate size", async () => {
       expect(pixel_coords).toHaveLength(19);
@@ -391,7 +392,7 @@ describe("Waveform.vue", () => {
       const x_y_data = convert_x_y_arrays_to_d3_array(reduced_array_x_2, reduced_array_y_2);
 
       wrapper.setProps({
-        data_points: x_y_data,
+        tissue_data_points: x_y_data,
       });
 
       await wrapper.vm.$nextTick(); // wait for update

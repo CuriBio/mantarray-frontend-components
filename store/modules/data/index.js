@@ -4,7 +4,7 @@ import actions from "./actions";
 import getters from "./getters";
 import mutations from "./mutations";
 
-const plate_waveforms_entry_template = { x_data_points: [], y_data_points: [] };
+const waveforms_entry_template = { x_data_points: [], y_data_points: [] };
 
 const maximum_number_of_wells_in_any_plate = 96;
 
@@ -20,9 +20,13 @@ const default_state = {
     // "Contraction Velocity": { data: [], range_min: 0, range_max: 100 },
     // "Relaxation Velocity": { data: [], range_min: 0, range_max: 100 },
   },
+
+  // Tanner (10/29/21): the data stored here aren't actually waveforms yet, but will be in the future
+  stim_waveforms: [],
 };
 for (let i = 0; i < maximum_number_of_wells_in_any_plate; i++) {
-  default_state.plate_waveforms.push(plate_waveforms_entry_template);
+  default_state.plate_waveforms.push(waveforms_entry_template);
+  default_state.stim_waveforms.push(waveforms_entry_template);
 }
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2

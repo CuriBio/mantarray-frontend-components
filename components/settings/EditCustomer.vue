@@ -8,25 +8,25 @@
       <InputWidget
         :title_label="'Alphanumeric ID'"
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
-        :invalid_text="error_text_uuid"
-        :initial_value="uuid"
+        :invalid_text="error_text_id"
+        :initial_value="cust_id"
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'alphanumeric-id'"
-        @update:value="on_update_uuid($event)"
+        @update:value="on_update_id($event)"
       ></InputWidget>
     </div>
 
-    <div id="apikey" style="top: 145px; left: 50px; position: absolute; z-index: 23">
+    <div id="passkey" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
-        :title_label="'API Key (Optional)'"
+        :title_label="'Enter Pass-Key'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
-        :invalid_text="error_text_api"
-        :initial_value="api_key"
+        :invalid_text="error_text_pass"
+        :initial_value="pass_key"
         :spellcheck="false"
         :input_width="400"
-        :dom_id_suffix="'apikey-id'"
-        @update:value="on_update_api($event)"
+        :dom_id_suffix="'passkey-id'"
+        @update:value="on_update_pass($event)"
       ></InputWidget>
     </div>
     <div id="nickname" style="top: 241px; left: 50px; position: absolute; z-index: 22">
@@ -57,7 +57,7 @@
 </template>
 <script>
 import Vue from "vue";
-import uuid from "@tofandel/uuid-base62";
+// import uuid from "@tofandel/uuid-base62";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
@@ -68,10 +68,9 @@ Vue.use(BootstrapVue);
 Vue.component("BFormInput", BFormInput);
 Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
-Vue.use(uuid);
-const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
-const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
-const TextValidation_Nickname = new TextValidation("nickname");
+// Vue.use(uuid);
+const TextValidation_Customer = new TextValidation("customer_account_input");
+
 export default {
   name: "EditCustomer",
   components: {
@@ -81,32 +80,46 @@ export default {
   props: {
     dialogdata: { type: Object, default: null },
     dataindex: { type: Number, default: 0 },
+    open_for_invalid_creds: { type: Boolean, default: false },
   },
   data() {
     return {
-      uuid: this.dialogdata.uuid,
-      api_key: this.dialogdata.api_key,
+      cust_id: this.dialogdata.cust_id,
+      pass_key: this.dialogdata.pass_key,
       nickname: this.dialogdata.nickname,
       user_ids: this.dialogdata.user_ids,
-      error_text_uuid: "",
-      error_text_api: "",
+      error_text_id: "",
+      error_text_pass: "",
       error_text_nickname: "",
       enablelist_edit_customer: [true, true, true],
     };
   },
+  created() {
+    if (this.open_for_invalid_creds) {
+      this.error_text_id = "Invalid ID or Passkey";
+      this.error_text_pass = "Invalid ID or Passkey";
+      this.enablelist_edit_customer = [true, true, false];
+    }
+  },
   methods: {
-    on_update_uuid: function (new_value) {
-      this.error_text_uuid = TextValidation_UUIDBase57.validate(new_value);
-      this.uuid = new_value;
+    on_update_id: function (new_value) {
+      this.error_text_id = TextValidation_Customer.validate(new_value, "ID");
+      if (this.open_for_invalid_creds && this.error_text_id.length === 0) {
+        this.error_text_pass = "";
+      }
+      this.cust_id = new_value;
       this.enable_save_button();
     },
-    on_update_api: function (new_value) {
-      this.error_text_api = TextValidation_Alphanumeric.validate(new_value);
-      this.api_key = new_value;
+    on_update_pass: function (new_value) {
+      this.error_text_pass = TextValidation_Customer.validate(new_value, "passkey");
+      if (this.open_for_invalid_creds && this.error_text_pass.length === 0) {
+        this.error_text_id = "";
+      }
+      this.pass_key = new_value;
       this.enable_save_button();
     },
     on_update_nickname: function (new_value) {
-      this.error_text_nickname = TextValidation_Nickname.validate(new_value);
+      this.error_text_nickname = TextValidation_Customer.validate(new_value, "nickname");
       this.nickname = new_value;
       this.enable_save_button();
     },
@@ -128,9 +141,9 @@ export default {
     },
     delete_customer() {
       const edit_customer = {
-        cust_id: this.dataindex,
-        uuid: this.uuid,
-        api_key: this.api_key,
+        cust_idx: this.dataindex,
+        cust_id: this.cust_id,
+        pass_key: this.pass_key,
         nickname: this.nickname,
         user_ids: this.user_ids,
       };
@@ -138,17 +151,17 @@ export default {
     },
     save_customer() {
       const edit_customer = {
-        cust_id: this.dataindex,
-        uuid: this.uuid,
-        api_key: this.api_key,
+        cust_idx: this.dataindex,
+        cust_id: this.cust_id,
+        pass_key: this.pass_key,
         nickname: this.nickname,
         user_ids: this.user_ids,
       };
       this.$emit("save-id", edit_customer);
     },
     enable_save_button() {
-      if (this.error_text_uuid === "") {
-        if (this.error_text_api === "") {
+      if (this.error_text_id === "") {
+        if (this.error_text_pass === "") {
           if (this.error_text_nickname === "") {
             this.enablelist_edit_customer = [true, true, true];
             return;

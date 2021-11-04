@@ -2,12 +2,12 @@
   <div
     id="cmpD2f15f130a7c848b6dfa50e77a7bd35ad"
     class="div__stimulationstudio-current-settings-background"
-    :style="pulse_type === 'Monophasic' ? 'height: 420px; margin-top: 100px;' : 'height: 710px;'"
+    :style="pulse_type === 'Monophasic' ? 'height: 550px; margin-top: 100px;' : 'height: 710px;'"
   >
     <span id="cmpD5b2290fff52de686574ddc4481707a03" class="span__stimulationstudio-current-settings-title"
       >{{ pulse_type }}&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
     >
-    <canvas id="cmpD1bd9abe7f57064ecc21010fe87aa8e0a" :style="'top: 59px;'" />
+    <canvas id="cmpD1bd9abe7f57064ecc21010fe87aa8e0a" :style="'top: 59px; width: 900px'" />
     <span id="cmpD334cd34b00ad111c21b729fee2b1def2" class="span__stimulationstudio-current-settings-sub-title"
       >Phase&nbsp;<wbr />1</span
     >
@@ -68,25 +68,6 @@
       :style="'top: 179.5px;'"
       >Balance&nbsp;<wbr />Charge</span
     >
-    <!-- <span
-      id="cmpDf06bba2c8f09795a23af83170e2275a8"
-      class="span__stimulationstudio-current-settings-label-five"
-      >Max&nbsp;<wbr />{{ check_max_type }}</span
-    > -->
-    <!-- <div id="cmpDf07f8e650ebe6951292aa4edcc603608" class="div__stimulationstudio-voltage-input-container">
-      <span id="cmpDf07f8e650ebe6951292aa4edcc603608_txt" class="span__stimulationstudio-voltage-input">
-        <InputWidget
-          :initial_value="'25'"
-          :dom_id_suffix="'max_charge'"
-          :invalid_text="''"
-          :input_width="142"
-          :disabled="true"
-        />
-      </span>
-      <span v-popover.hover="popover_message" class="disabled_popover_container">
-        <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
-      </span>
-    </div> -->
     <div v-if="pulse_type === 'Biphasic'">
       <canvas id="cmpDefb479b0caa166978ebed24ab8c44baf" :style="'top: 246px;'" />
       <span
@@ -175,31 +156,6 @@
         :style="'top: 466.5px;'"
         >Balance&nbsp;<wbr />Charge</span
       >
-      <!-- <span
-        id="cmpD865c91d150a0c2f32f987466a39edc6e"
-        class="span__stimulationstudio-current-settings-label-eleven"
-        >Max&nbsp;<wbr />{{ check_max_type }}</span
-      >
-      <div
-        id="cmpDef68ed4233a43cc387c949c403ef9260"
-        class="div__stimulationstudio-current-settings-voltagetwo-input-container"
-      >
-        <span
-          id="cmpDef68ed4233a43cc387c949c403ef9260_txt"
-          class="span__stimulationstudio-current-settings-voltagetwo-input"
-        >
-          <InputWidget
-            :initial_value="'25'"
-            :dom_id_suffix="'max_chargetwo'"
-            :invalid_text="''"
-            :input_width="142"
-            :disabled="true"
-          />
-        </span>
-        <span v-popover.hover.right="popover_message" class="disabled_popover_container">
-          <FontAwesomeIcon :icon="['fas', 'question-circle']" :class="'question_icon'" />
-        </span>
-      </div> -->
     </div>
     <canvas :style="pulse_type === 'Monophasic' ? 'top: 240px;' : 'top: 533px;'" />
     <span
@@ -260,29 +216,33 @@
         @selection-changed="handle_total_duration_unit_change"
       />
     </span>
-    <!-- <div
-      id="cmpD478c2ccd7e9ce5794863ee3bd3cacb85"
+    <canvas
       :class="
         pulse_type === 'Monophasic'
-          ? 'div__stimulationstudio-balance-scale-icon-mono'
-          : 'div__stimulationstudio-balance-scale-icon'
+          ? 'canvas__monophasic-vertical-divider'
+          : 'canvas__biphasic-vertical-divider'
       "
-    >
-      <FontAwesomeIcon :icon="['fas', 'balance-scale']" />
+    />
+    <div class="div__waveform-preview-title">Waveform Preview</div>
+    <div class="div__pulse-diagram-container">
+      <img
+        :src="require(`@/assets/img/${pulse_type}-diagram.png`)"
+        :class="pulse_type === 'Monophasic' ? 'img__mononphasic-diagram' : 'None'"
+      />
     </div>
-    <span
-      id="cmpD0f8c9f516e738d930977090bd4d218a8"
-      :class="
-        pulse_type === 'Monophasic'
-          ? 'span__stimulationstudio-current-settings-label-twelve-mono'
-          : 'span__stimulationstudio-current-settings-label-twelve'
-      "
-      >Charge&nbsp;<wbr />Info&nbsp;<wbr />Unavailable</span
-    > -->
-    <div class="button-container" :style="pulse_type === 'Monophasic' ? 'top: 403px;' : 'top: 703px;'">
+    <div
+      class="div__waveform-diagram-descriptors"
+      :class="pulse_type === 'Monophasic' ? 'div__mononphasic-diagram-descriptors' : 'None'"
+    >
+      <span :style="'font-size: 19px; padding-bottom:15px;'">Waveform Key</span>
+      <ol id="ul__waveform_list_items" :style="'list-style-type: none; padding: 0px;'">
+        <li v-for="key in diagram_keys[pulse_type]" :key="key">{{ key }}</li>
+      </ol>
+    </div>
+    <div class="button-container" :style="pulse_type === 'Monophasic' ? 'top: 543px;' : 'top: 703px;'">
       <ButtonWidget
         :id="'button-widget-id'"
-        :button_widget_width="521"
+        :button_widget_width="950"
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
@@ -342,7 +302,7 @@ export default {
     SmallDropDown,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (mV)" },
+    stimulation_type: { type: String, default: "Current (mA)" },
     pulse_type: { type: String, default: "Biphasic" },
     button_names: {
       type: Array,
@@ -376,7 +336,7 @@ export default {
         valid: "",
         max_current: "Must be within +/- 100",
         max_voltage: "Must be within +/- 1200",
-        max_frequency: "Must be a positive number <= 10",
+        frequency: "Must be a non-zero value <= 100",
       },
       err_msg: {
         phase_one_duration: "",
@@ -396,6 +356,18 @@ export default {
       all_valid: false,
       active_duration_idx: 0,
       input_pulse_frequency: "",
+      max_pulse_duration_for_freq: 50,
+      diagram_keys: {
+        Monophasic: ["A. Phase Duration", `B. Phase ${this.stimulation_type}`, "C. Total Active Duration"],
+        Biphasic: [
+          `A. Phase 1 ${this.stimulation_type}`,
+          "B. Phase 1 Duration",
+          "C. Interphase Interval",
+          `D. Phase 2 ${this.stimulation_type}`,
+          "E. Phase 2 Duration",
+          "F. Total Active Duration",
+        ],
+      },
     };
   },
   computed: {
@@ -451,11 +423,7 @@ export default {
       else if (label.includes("active")) this.stim_settings.total_active_duration.duration = value;
 
       if (label.includes("duration") || label.includes("interval")) {
-        this.check_pulse_duration("phase_one_duration");
-        if (this.pulse_type === "Biphasic") {
-          this.check_pulse_duration("phase_two_duration");
-          this.check_pulse_duration("interphase_interval");
-        }
+        this.check_pulse_duration_validity();
         this.check_active_duration("total_active_duration");
       } else if (label.includes("charge")) {
         this.check_charge_validity(value, label);
@@ -464,6 +432,13 @@ export default {
       }
 
       this.handle_all_valid();
+    },
+    check_pulse_duration_validity() {
+      this.check_pulse_duration("phase_one_duration");
+      if (this.pulse_type === "Biphasic") {
+        this.check_pulse_duration("phase_two_duration");
+        this.check_pulse_duration("interphase_interval");
+      }
     },
     handle_all_valid() {
       const valid_inputs = [];
@@ -476,13 +451,13 @@ export default {
     },
     check_pulse_duration(label) {
       const value = this.pulse_settings[label];
-      const check_pulse_duration = this.total_pulse_duration <= 50;
-
-      if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      else if (!this.regex.duration.test(value) && value !== "")
+      if (value === "") {
+        this.err_msg[label] = this.invalid_err_msg.required;
+      } else if (!this.regex.duration.test(value)) {
         this.err_msg[label] = this.invalid_err_msg.min_num_err;
-      else if (!check_pulse_duration) this.err_msg[label] = this.invalid_err_msg.max_duration;
-      else if (check_pulse_duration && this.regex.duration.test(value) && value !== "") {
+      } else if (this.total_pulse_duration > this.max_pulse_duration_for_freq) {
+        this.err_msg[label] = this.invalid_err_msg.max_duration;
+      } else {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.pulse_settings[label] = Number(value);
       }
@@ -492,35 +467,39 @@ export default {
       const check_total_duration = value >= this.total_pulse_duration;
       const check_time_unit = this.time_units[this.active_duration_idx] === "milliseconds";
 
-      if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      else if (
-        (!this.regex.duration.test(value) && value !== "") ||
-        (!check_total_duration && check_time_unit)
-      )
+      if (value === "") {
+        this.err_msg[label] = this.invalid_err_msg.required;
+      } else if (!this.regex.duration.test(value) || (!check_total_duration && check_time_unit)) {
         this.err_msg[label] = `Must be a number >= ${this.total_pulse_duration}ms`;
-      else {
+      } else {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.stim_settings[label].duration = Number(value);
         this.stim_settings[label].unit = this.time_units[this.active_duration_idx];
       }
     },
     check_pulse_frequency(value, label) {
-      if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      else if ((!this.regex.duration.test(value) && value !== "") || value == 0 || value > 10)
-        this.err_msg[label] = this.invalid_err_msg.max_frequency;
-      else if (this.regex.duration.test(value) && value !== "") {
+      if (value === "") {
+        this.err_msg[label] = this.invalid_err_msg.required;
+      } else if (!this.regex.duration.test(value) || value == 0 || value > 100) {
+        this.err_msg[label] = this.invalid_err_msg.frequency;
+      } else {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.input_pulse_frequency = Number(value);
+        this.max_pulse_duration_for_freq = Math.min(50, Math.trunc(1000 / this.input_pulse_frequency));
+        this.invalid_err_msg.max_duration = `Duration must be <= ${this.max_pulse_duration_for_freq}ms`;
+        this.check_pulse_duration_validity(); // Need to recheck pulse dur after a new valid frequency is entered
       }
     },
     check_charge_validity(value, label) {
-      if (!this.regex.charge.test(value) && value !== "") this.err_msg[label] = this.invalid_err_msg.num_err;
-      else if (value === "") this.err_msg[label] = this.invalid_err_msg.required;
-      else if (this.stimulation_type.includes("C") && (-100 > value || 100 < value))
+      if (value === "") {
+        this.err_msg[label] = this.invalid_err_msg.required;
+      } else if (!this.regex.charge.test(value)) {
+        this.err_msg[label] = this.invalid_err_msg.num_err;
+      } else if (this.stimulation_type.includes("C") && (-100 > value || 100 < value)) {
         this.err_msg[label] = this.invalid_err_msg.max_current;
-      else if (this.stimulation_type.includes("V") && (-1200 > value || 1200 < value))
+      } else if (this.stimulation_type.includes("V") && (-1200 > value || 1200 < value)) {
         this.err_msg[label] = this.invalid_err_msg.max_voltage;
-      else if (this.regex.charge.test(value) && value !== "") {
+      } else {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.pulse_settings[label] = Number(value);
       }
@@ -541,9 +520,7 @@ export default {
   margin: 0px;
   background: rgb(17, 17, 17);
   position: absolute;
-  width: 522px;
-  top: calc(55px - 55px);
-  left: calc(852px - 852px);
+  width: 950px;
   visibility: visible;
   border: 2px solid rgb(0, 0, 0);
   border-radius: 0px;
@@ -678,48 +655,62 @@ canvas {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 190px;
+  width: 200px;
   height: 90px;
   left: calc(1031px - 852px);
   visibility: visible;
 }
 
-/* .div__stimulationstudio-balance-scale-icon-mono {
-  transform: rotate(0deg);
-  position: absolute;
-  text-align: center;
-  width: 22px;
-  height: 22px;
-  top: 350px;
-  left: calc(1102px - 852px);
-  color: #b7b7b7;
-  visibility: visible;
-  filter: none;
-} */
+.canvas__biphasic-vertical-divider {
+  transform: rotate(90deg);
+  left: 220px;
+  top: 375px;
+  width: 600px;
+}
 
-/* .div__stimulationstudio-balance-scale-icon {
-  transform: rotate(0deg);
-  position: absolute;
-  text-align: center;
-  width: 22px;
-  height: 22px;
-  top: calc(743px - 55px);
-  left: calc(1102px - 852px);
-  color: #b7b7b7;
-  visibility: visible;
-  filter: none;
-} */
+.canvas__monophasic-vertical-divider {
+  transform: rotate(90deg);
+  left: 300px;
+  top: 300px;
+  width: 440px;
+}
 
-/* .question_icon {
-  font-size: 18px;
-  color: #b7b7b7;
-} */
-/*
-.disabled_popover_container {
-  position: relative;
+.div__pulse-diagram-container {
+  position: absolute;
+  left: 540px;
+  top: 110px;
+}
+.div__waveform-preview-title {
+  position: absolute;
+  user-select: none;
   font-family: Muli;
-  font-size: 10px;
-  left: 170px;
-  top: 20px;
-} */
+  font-weight: normal;
+  font-style: normal;
+  font-size: 19px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  left: 650px;
+  top: calc(122.5px - 50px);
+}
+
+.div__waveform-diagram-descriptors {
+  position: absolute;
+  height: 150px;
+  left: 560px;
+  top: 470px;
+  width: 370px;
+  font-size: 15px;
+  color: rgb(183, 183, 183);
+  text-align: left;
+}
+
+.img__mononphasic-diagram {
+  width: 350px;
+  margin-left: 10px;
+}
+
+.div__mononphasic-diagram-descriptors {
+  top: 430px;
+  font-size: 14px;
+}
 </style>

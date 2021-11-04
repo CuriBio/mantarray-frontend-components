@@ -20,4 +20,15 @@ export default {
   set_max_file_count(state, new_value) {
     state.max_file_count = new_value;
   },
+  set_auto_upload(state, new_value) {
+    state.auto_upload = new_value;
+  },
+  set_auto_delete(state, new_value) {
+    state.auto_delete = new_value;
+  },
+  reset_to_default(state) {
+    state.auto_upload = true;
+    state.customer_index = null;
+    state.auto_delete = false;
+  },
 };

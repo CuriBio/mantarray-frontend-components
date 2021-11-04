@@ -6,9 +6,13 @@ export default {
     state.selected_wells.map((well) => {
       state.protocol_assignments[well] = protocol;
     });
+    // Tanner (11/1/21): For some reason the whole object needs to be reassigned for Vuex to recognize that an update occurred
+    state.protocol_assignments = { ...state.protocol_assignments };
   },
   clear_selected_protocol(state) {
     state.selected_wells.map((well) => delete state.protocol_assignments[well]);
+    // Tanner (11/1/21): For some reason the whole object needs to be reassigned for Vuex to recognize that an update occurred
+    state.protocol_assignments = { ...state.protocol_assignments };
   },
   set_protocol_name({ protocol_editor }, name) {
     protocol_editor.name = name;
@@ -42,7 +46,7 @@ export default {
       ...state,
       protocol_editor: {
         name: "",
-        stimulation_type: "V",
+        stimulation_type: "C",
         stop_setting: "Stimulate Until Stopped",
         rest_duration: 0,
         time_unit: "seconds",
@@ -64,7 +68,7 @@ export default {
       protocol_assignments: {},
       protocol_editor: {
         name: "",
-        stimulation_type: "V",
+        stimulation_type: "C",
         stop_setting: "Stimulate Until Stopped",
         rest_duration: 0,
         time_unit: "seconds",
