@@ -13,6 +13,7 @@ Changelog for Mantarray Frontend Components
 - Fixed Username/Password validations
 - Fixed stim pulses being modified when creating outgoing message
 - Fixed issue with some stim pulses overlapping in protocol viewer
+- Fixed issue with heatmap not updating while recording
 
 
 0.4.7 (2021-10-13)
