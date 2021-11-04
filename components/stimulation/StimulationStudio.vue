@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
-      stimulation_type: "Voltage (mV)",
+      stimulation_type: "Current (mA)",
       selected_protocol: { label: "Create New", color: "", letter: "" },
     };
   },
@@ -65,7 +65,7 @@ export default {
         mutation.type === "stimulation/reset_state" ||
         mutation.type === "stimulation/reset_protocol_editor"
       ) {
-        this.stimulation_type = "Voltage (mV)";
+        this.stimulation_type = "Current (mA)";
       }
     });
   },

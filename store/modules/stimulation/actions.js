@@ -26,23 +26,42 @@ export default {
     const pulses = [];
 
     const get_last = (array) => array[array.length - 1];
-    const helper = (setting) => {
-      x_values.push(get_last(x_values), setting.phase_one_duration + get_last(x_values));
-      y_values.push(setting.phase_one_charge, setting.phase_one_charge);
-
+    const helper = (setting, remaining_pulse_dur) => {
+      // Add values for phase 1
+      const components_to_add = {
+        x: [setting.phase_one_duration],
+        y: [setting.phase_one_charge],
+      };
+      // If biphasic, handle remaining pulse components
       if (setting.phase_two_duration > 0) {
-        x_values.push(get_last(x_values), setting.interphase_interval + get_last(x_values));
-        y_values.push(0, 0);
-        x_values.push(get_last(x_values), setting.phase_two_duration + get_last(x_values));
-        y_values.push(setting.phase_two_charge, setting.phase_two_charge);
+        // Add values for interphase interval
+        components_to_add.x.push(setting.interphase_interval);
+        components_to_add.y.push(0);
+        // Add values for phase 2
+        components_to_add.x.push(setting.phase_two_duration);
+        components_to_add.y.push(setting.phase_two_charge);
       }
+      // Add values for delay
+      components_to_add.x.push(setting.repeat_delay_interval);
+      components_to_add.y.push(0);
 
-      x_values.push(get_last(x_values), setting.repeat_delay_interval + get_last(x_values));
-      y_values.push(0, 0);
+      const num_components_to_add = components_to_add.x.length;
+      // add components until all are added or the total active duration is reached
+      for (let i = 0; i < num_components_to_add; i++) {
+        const component_duration = Math.min(components_to_add.x[i], remaining_pulse_dur);
+        x_values.push(get_last(x_values), component_duration + get_last(x_values));
+        y_values.push(components_to_add.y[i], components_to_add.y[i]);
+        remaining_pulse_dur -= component_duration;
+        if (remaining_pulse_dur == 0) break;
+      }
+      // set final value to zero in case the pulse was cut off in the middle of either phase
+      x_values.push(get_last(x_values));
+      y_values.push(0);
+      return remaining_pulse_dur;
     };
 
     await new_pulse_order.map(async (pulse) => {
-      const { color, number_of_repeats } = pulse.repeat;
+      const { color } = pulse.repeat;
       const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
       let setting = pulse.pulse_settings;
 
@@ -50,24 +69,18 @@ export default {
       const converted_total_active =
         total_active_duration.duration * time_conversion[total_active_duration.unit];
 
-      let repeats = number_of_repeats * (converted_total_active / 1000);
-
       setting = {
         ...setting,
         repeat_delay_interval,
         total_active_duration: converted_total_active,
       };
-
-      const max_duration = get_last(x_values) + converted_total_active;
       pulses.push(setting);
 
-      while (repeats > 0) {
-        helper(setting);
-        repeats--;
+      let remaining_pulse_dur = setting.total_active_duration;
+      while (remaining_pulse_dur > 0) {
+        // Tanner (11/2/21): could move this outer loop into helper so remaining_pulse_dur can be tracked more clearly
+        remaining_pulse_dur = helper(setting, remaining_pulse_dur);
       }
-
-      x_values.push(max_duration);
-      y_values.push(get_last(y_values));
 
       const ending_repeat_idx = x_values.length;
       color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
@@ -212,12 +225,12 @@ export default {
           const { stimulation_type, pulses, stop_setting } = protocol_assignments[well].protocol;
           const converted_pulses = pulses.map((pulse) => {
             return {
-              phase_one_duration: (pulse.phase_one_duration *= 1000), // sent in µs
-              phase_one_charge: (pulse.phase_one_charge *= charge_conversion[stimulation_type]), // sent in mV or µA
-              interphase_interval: (pulse.interphase_interval *= 1000), // sent in µs
-              phase_two_charge: (pulse.phase_two_charge *= charge_conversion[stimulation_type]), // sent in mV or µA
-              phase_two_duration: (pulse.phase_two_duration *= 1000), // sent in µs
-              repeat_delay_interval: Math.round((pulse.repeat_delay_interval *= 1000)), // sent in µs, also needs to be an integer value
+              phase_one_duration: pulse.phase_one_duration * 1000, // sent in µs
+              phase_one_charge: pulse.phase_one_charge * charge_conversion[stimulation_type], // sent in mV or µA
+              interphase_interval: pulse.interphase_interval * 1000, // sent in µs
+              phase_two_charge: pulse.phase_two_charge * charge_conversion[stimulation_type], // sent in mV or µA
+              phase_two_duration: pulse.phase_two_duration * 1000, // sent in µs
+              repeat_delay_interval: Math.round(pulse.repeat_delay_interval * 1000), // sent in µs, also needs to be an integer value
               total_active_duration: pulse.total_active_duration, // sent in ms
             };
           });
@@ -241,15 +254,11 @@ export default {
     } catch (error) {
       console.log(error);
     }
-
-    this.commit("stimulation/set_stim_status", status);
   },
 
   async stop_stim_status() {
     const status = false;
-
     await post_stim_status(status);
-    this.commit("stimulation/set_stim_status", status);
   },
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {

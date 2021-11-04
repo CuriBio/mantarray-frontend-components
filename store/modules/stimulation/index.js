@@ -9,7 +9,7 @@ const state = () => ({
   protocol_editor: {
     name: "",
     stop_setting: "Stimulate Until Stopped",
-    stimulation_type: "V",
+    stimulation_type: "C",
     rest_duration: 0,
     time_unit: "milliseconds",
     pulses: [],

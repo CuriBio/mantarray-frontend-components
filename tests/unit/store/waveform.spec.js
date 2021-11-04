@@ -18,7 +18,7 @@ describe("store/waveform", () => {
   });
 
   test("When the x-zoom levels and x-zoom-idx are updated in Vuex, Then assert that the values are retained", async () => {
-    const samples_per_second = 100000;
+    const samples_per_second = 1e6;
     const x_zoom_levels = [
       { x_scale: 30 * samples_per_second },
       { x_scale: 15 * samples_per_second },

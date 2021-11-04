@@ -47,11 +47,11 @@ describe("ContinuousWaveform.vue", () => {
   beforeEach(async () => {
     store = await NuxtStore.createStore();
     const x_zoom_levels = [
-      { x_scale: 30 * 100000 },
-      { x_scale: 15 * 100000 },
-      { x_scale: 5 * 100000 },
-      { x_scale: 2 * 100000 },
-      { x_scale: 1 * 100000 },
+      { x_scale: 30 * 1e6 },
+      { x_scale: 15 * 1e6 },
+      { x_scale: 5 * 1e6 },
+      { x_scale: 2 * 1e6 },
+      { x_scale: 1 * 1e6 },
     ];
     const default_x_zoom_level_idx = 1;
     store.commit("waveform/set_x_axis_zoom_levels", x_zoom_levels);
@@ -79,7 +79,7 @@ describe("ContinuousWaveform.vue", () => {
       display_waveform_idx: 0 /* the value of C01 is in the quadrant 3 [2, 3, 6, 7, 10, 11] */,
     };
     test("When first mounted, Then the x_axis_min prop passed to the child Waveform is negative", () => {
-      const expected_value = -1500000;
+      const expected_value = -15000000;
       const quadrant = [2, 3, 6, 7, 10, 11];
       store.commit("twentyfourcontrols/set_is_quadrant", quadrant);
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
@@ -87,7 +87,7 @@ describe("ContinuousWaveform.vue", () => {
       expect(waveform_wrapper.props("x_axis_min")).toBe(expected_value);
     });
     test("When x_time_index updates in Vuex, Then the x_axis_min prop passed to the child Waveform is the x_time_index minus the x_axis_sample_length", async () => {
-      const expected_value = -1500000;
+      const expected_value = -15000000;
       const x_axis_sample_length = -1 * expected_value;
 
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
@@ -115,7 +115,7 @@ describe("ContinuousWaveform.vue", () => {
       store.commit("data/set_plate_waveforms", temp_datapoints);
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([
         [0, 55],
         [30, 75],
         [50000, 95],
@@ -140,7 +140,7 @@ describe("ContinuousWaveform.vue", () => {
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
       // confirm pre-condition
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([
         [0, 55],
         [30, 75],
         [500, 95],
@@ -153,7 +153,7 @@ describe("ContinuousWaveform.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       // confirm the values updated in Vuex
 
-      const waveform_data_points = waveform_wrapper.props("data_points");
+      const waveform_data_points = waveform_wrapper.props("tissue_data_points");
 
       expect(waveform_data_points).toStrictEqual([
         [0, 55],
@@ -181,7 +181,7 @@ describe("ContinuousWaveform.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([[0, 54]]);
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([[0, 54]]);
     });
   });
   test("When well title is supplied as a internal well_title function using display_waveform_idx value, Then the child Waveform displays it", async () => {
@@ -227,17 +227,17 @@ describe("ContinuousWaveform.vue", () => {
     const propsData = { display_waveform_idx: 0 };
     test("When initially mounted, Then the line_color is passed as a prop to the child Waveform, Then When prop is updated Then the child prop also updates", async () => {
       const expected_value = "#FF00FF";
-      propsData.line_color = expected_value;
+      propsData.tissue_line_color = expected_value;
 
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
-      expect(waveform_wrapper.props("line_color")).toBe(expected_value);
+      expect(waveform_wrapper.props("tissue_line_color")).toBe(expected_value);
 
       const new_expected_value = "#F0F0F0";
-      wrapper.setProps({ line_color: new_expected_value });
+      wrapper.setProps({ tissue_line_color: new_expected_value });
       await wrapper.vm.$nextTick(); // wait for update
-      expect(waveform_wrapper.props("line_color")).toBe(new_expected_value);
+      expect(waveform_wrapper.props("tissue_line_color")).toBe(new_expected_value);
     });
     test("When initially mounted, Then the plot_area_pixel_height is passed as a prop to the child Waveform, Then When prop is updated Then the child prop also updates", async () => {
       const expected_value = 351;
@@ -311,7 +311,7 @@ describe("ContinuousWaveform.vue", () => {
       display_waveform_idx: 0 /* pointing to A01 */,
     };
     test("When initially mounted, Then the value of x_time_index in Vuex is passed to the x_min prop in the child Waveform", () => {
-      const expected_value = 5 * 100000;
+      const expected_value = 5 * 1e6;
       store.commit("playback/set_x_time_index", expected_value);
 
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
@@ -330,7 +330,7 @@ describe("ContinuousWaveform.vue", () => {
       // confirm initial state
       expect(waveform_wrapper.props("x_axis_min")).toBe(0);
 
-      const expected_value = 10 * 100000;
+      const expected_value = 10 * 1e6;
       store.commit("playback/set_x_time_index", expected_value);
 
       await wrapper.vm.$nextTick(); // wait for update
@@ -339,7 +339,7 @@ describe("ContinuousWaveform.vue", () => {
     });
 
     test("When initially mounted, Then the x_axis_sample_length from Vuex is passed as a prop to the child Waveform", () => {
-      const expected_value = 2 * 100000;
+      const expected_value = 2 * 1e6;
       const propsData = {
         display_waveform_idx: 0 /* pointing to A01 */,
       };
@@ -353,7 +353,7 @@ describe("ContinuousWaveform.vue", () => {
     });
 
     test("When the x_axis_sample_length from Vuex is updated, Then the x_axis_sample_length prop of the child Waveform is updated", async () => {
-      const expected_value = 1 * 100000;
+      const expected_value = 1 * 1e6;
       const propsData = {
         display_waveform_idx: 0 /* pointing to A01 */,
       };
@@ -365,7 +365,7 @@ describe("ContinuousWaveform.vue", () => {
       const waveform_wrapper = wrapper.findComponent(Waveform);
       // confirm initial state
       expect(waveform_wrapper.props("x_axis_sample_length")).toBe(expected_value);
-      const new_expected_value = 2 * 100000;
+      const new_expected_value = 2 * 1e6;
 
       default_x_zoom_level_idx = 3;
       store.commit("waveform/set_x_axis_zoom_idx", default_x_zoom_level_idx);
@@ -539,7 +539,7 @@ describe("ContinuousWaveform.vue", () => {
 
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([]);
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([]);
     });
 
     test("When Vuex updates to have data, Then that data is passed to the data_points prop of the child Waveform", async () => {
@@ -550,7 +550,7 @@ describe("ContinuousWaveform.vue", () => {
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
       // confirm pre-condition
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([]);
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([]);
 
       const temp_datapoints = new Array(6);
 
@@ -562,7 +562,7 @@ describe("ContinuousWaveform.vue", () => {
       store.commit("data/set_plate_waveforms", temp_datapoints);
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([
         [0, 55],
         [30, 75],
         [40, 95],
@@ -584,7 +584,7 @@ describe("ContinuousWaveform.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       const waveform_wrapper = wrapper.findComponent(Waveform);
       // confirm pre-condition
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([
         [0, 55],
         [30, 75],
         [40, 95],
@@ -599,7 +599,7 @@ describe("ContinuousWaveform.vue", () => {
       store.commit("data/set_plate_waveforms", temp_datapoints);
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([]);
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([]);
     });
     test("When Vuex has data for that waveform and the waveform index is not 0, Then that data is passed to the data_points prop of the child Waveform", async () => {
       const propsData = {
@@ -619,7 +619,7 @@ describe("ContinuousWaveform.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([
         [0, 60],
         [25, 22],
         [90, 44],
@@ -644,13 +644,13 @@ describe("ContinuousWaveform.vue", () => {
       const waveform_wrapper = wrapper.findComponent(Waveform);
 
       // confirm pre-condition
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([]);
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([]);
 
       const new_quadrant = [1, 5, 3, 2, 4, 0];
       store.commit("twentyfourcontrols/set_is_quadrant", new_quadrant);
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([
         [0, 61],
         [22, 29],
         [95, 102],
@@ -678,7 +678,7 @@ describe("ContinuousWaveform.vue", () => {
       store.commit("playback/set_x_time_index", 25);
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([
         [22, 29],
         [95, 102],
       ]);
@@ -704,7 +704,7 @@ describe("ContinuousWaveform.vue", () => {
       wrapper.setProps({ x_axis_sample_length: 20 });
       await wrapper.vm.$nextTick(); // wait for update
 
-      expect(waveform_wrapper.props("data_points")).toStrictEqual([
+      expect(waveform_wrapper.props("tissue_data_points")).toStrictEqual([
         [0, 61],
         [22, 29],
         [95, 102],

@@ -20,7 +20,7 @@
           d="M71.2,29.2a.5.5,0,0,0,0-.5A35.8,35.8,0,0,0,36.1.2,35.7,35.7,0,0,0,16.7,5.9L11.3,2.1A1.4,1.4,0,0,0,9.1,3.2L7,28.6A1.4,1.4,0,0,0,9,30L32.1,19.2a1.5,1.5,0,0,0,.2-2.5l-4.1-2.9a23.9,23.9,0,0,1,27.2,8.7A23.5,23.5,0,0,1,59.7,35a1.3,1.3,0,0,0,1.4,1.3h9.4a1.5,1.5,0,0,0,1.4-1.5A27.8,27.8,0,0,0,71.2,29.2Z"
         ></path>
       </svg>
-      <span class="span__stimulation-controls-play-stop-button" @click="handle_play_stop">
+      <span :class="svg__stimulation_controls_play_stop_button__dynamic_class" @click="handle_play_stop">
         <FontAwesomeIcon v-if="!play_state" class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
         <FontAwesomeIcon v-if="play_state" class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
       </span>
@@ -32,6 +32,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { mapState } from "vuex";
+import playback_module from "@/store/modules/playback";
 import {
   faPlayCircle as fa_play_circle,
   faStopCircle as fa_stop_circle,
@@ -44,7 +45,7 @@ library.add(fa_play_circle, fa_stop_circle);
  * @vue-data {Boolean} play_state - Current play state of stimulation
  * @vue-data {Array} active_gradient - Active gradient colors for icon while stimulation is running
  * @vue-data {Array} inactive_gradient - Inactive gradient colors for icon if stimulation is stopped
- * @vue-data {Array} crueent_gradient - Dynamically assigned gradient based on when BE recieves start/stop request
+ * @vue-data {Array} current_gradient - Dynamically assigned gradient based on when BE recieves start/stop request
  * @vue-event {event} handle_play_stop - Commits corresponding request to state depending on play_state
  */
 
@@ -63,15 +64,32 @@ export default {
   },
   computed: {
     ...mapState("stimulation", {
-      protocol_assignments: (state) => state.protocol_assignments,
+      protocol_assignments: "protocol_assignments",
     }),
+    ...mapState("playback", {
+      playback_state: "playback_state",
+    }),
+    is_start_stop_button_enabled: function () {
+      // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
+      let value = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
+      if (!this.play_state) {
+        // only need to take this condition into account when not stimulating
+        value = value && Object.keys(this.protocol_assignments).length !== 0;
+      }
+      return value;
+    },
+    svg__stimulation_controls_play_stop_button__dynamic_class: function () {
+      return this.is_start_stop_button_enabled
+        ? "span__stimulation-controls-play-stop-button--active"
+        : "span__stimulation-controls-play-stop-button--inactive";
+    },
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       // waits for response from BE before turning green
       if (mutation.type === "stimulation/set_stim_status") {
-        if (this.play_state) this.current_gradient = this.active_gradient;
-        if (!this.play_state) this.current_gradient = this.inactive_gradient;
+        this.current_gradient = mutation.payload ? this.active_gradient : this.inactive_gradient;
+        this.play_state = mutation.payload;
       }
     });
   },
@@ -80,10 +98,9 @@ export default {
   },
   methods: {
     async handle_play_stop() {
-      if (Object.keys(this.protocol_assignments).length !== 0) {
-        this.play_state = !this.play_state;
-        if (this.play_state) await this.$store.dispatch("stimulation/create_protocol_message");
-        if (!this.play_state) await this.$store.dispatch("stimulation/stop_stim_status");
+      if (this.is_start_stop_button_enabled) {
+        const action = this.play_state ? "stop_stim_status" : "create_protocol_message";
+        this.$store.dispatch(`stimulation/${action}`);
       }
     },
   },
@@ -129,14 +146,21 @@ export default {
   left: 115px;
   letter-spacing: 1px;
 }
-.span__stimulation-controls-play-stop-button {
+.span__stimulation-controls-play-stop-button--inactive {
+  position: relative;
+  color: #2f2f2f;
+  grid-column: 4;
+  height: 20px;
+  width: 20px;
+}
+.span__stimulation-controls-play-stop-button--active {
   position: relative;
   color: #b7b7b7;
   grid-column: 4;
   height: 20px;
   width: 20px;
 }
-.span__stimulation-controls-play-stop-button:hover {
+.span__stimulation-controls-play-stop-button--active:hover {
   color: #b7b7b7c9;
   cursor: pointer;
 }

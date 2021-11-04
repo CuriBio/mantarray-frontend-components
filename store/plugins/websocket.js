@@ -24,11 +24,17 @@ export default function create_web_socket_plugin(socket) {
       if (store.state.playback.playback_state !== ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE) {
         return;
       }
-      const new_metric_data = JSON.parse(metrics_json);
-      store.commit("data/append_metric_data", new_metric_data);
+      store.commit("data/append_metric_data", JSON.parse(metrics_json));
       if (cb !== null) {
         // this callback is only used for testing. The backend will not send a callback
-        cb("commits done");
+        cb("commit done");
+      }
+    });
+    socket.on("stimulation", function (stim_json, cb = null) {
+      store.commit("data/append_stim_waveforms", JSON.parse(stim_json));
+      if (cb !== null) {
+        // this callback is only used for testing. The backend will not send a callback
+        cb("commit done");
       }
     });
   };

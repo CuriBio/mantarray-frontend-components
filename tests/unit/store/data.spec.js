@@ -71,7 +71,7 @@ describe("store/data", () => {
       expect(store.state.data.plate_waveforms[1].y_data_points).toHaveLength(0);
     });
 
-    test("When waveforms is initially mutated with few data points, Then subsequent mutations append data points to the existing plate_waveforms", async () => {
+    test("When plate_waveforms is initially mutated with few data points, Then subsequent mutations append data points to the existing plate_waveforms", async () => {
       store.commit("data/set_plate_waveforms", ar);
 
       const stored_waveform = store.getters["data/plate_waveforms"];
@@ -110,6 +110,58 @@ describe("store/data", () => {
       store.state.data.heatmap_values["Twitch Force"].data.map((well) => {
         expect(well).toHaveLength(1);
       });
+    });
+  });
+
+  test("Given some values in stim_waveforms, When the clear_stim_waveforms mutation is committed, Then stim_waveforms becomes empty x/y data points array", () => {
+    store.commit("data/set_stim_waveforms", [
+      { x_data_points: [1], y_data_points: [2] },
+      { x_data_points: [1], y_data_points: [2] },
+    ]);
+    expect(store.state.data.stim_waveforms).toHaveLength(2);
+    expect(store.state.data.stim_waveforms).toHaveLength(2);
+    expect(store.state.data.stim_waveforms[0].x_data_points).toHaveLength(1);
+    expect(store.state.data.stim_waveforms[0].y_data_points).toHaveLength(1);
+    expect(store.state.data.stim_waveforms[1].x_data_points).toHaveLength(1);
+    expect(store.state.data.stim_waveforms[1].y_data_points).toHaveLength(1);
+
+    store.commit("data/clear_stim_waveforms");
+    expect(store.state.data.stim_waveforms).toHaveLength(2);
+    expect(store.state.data.stim_waveforms[0].x_data_points).toHaveLength(0);
+    expect(store.state.data.stim_waveforms[0].y_data_points).toHaveLength(0);
+    expect(store.state.data.stim_waveforms[1].x_data_points).toHaveLength(0);
+    expect(store.state.data.stim_waveforms[1].y_data_points).toHaveLength(0);
+  });
+
+  test("When stim_waveforms is initially mutated with few data points, Then subsequent mutations append data points to the existing stim_waveforms", async () => {
+    store.commit("data/set_stim_waveforms", [
+      { x_data_points: [11, 12], y_data_points: [0, 0] },
+      { x_data_points: [21], y_data_points: [0] },
+      { x_data_points: [], y_data_points: [] },
+    ]);
+
+    const stored_waveform = store.getters["data/stim_waveforms"];
+
+    store.commit("data/append_stim_waveforms", {
+      0: [[13], [99]],
+      2: [
+        [211, 212],
+        [999, 999],
+      ],
+    });
+
+    expect(stored_waveform).toHaveLength(3);
+    expect(stored_waveform[0]).toStrictEqual({
+      x_data_points: [11, 12, 13, 13, 13],
+      y_data_points: [0, 0, 101000, -201, 101000],
+    });
+    expect(stored_waveform[1]).toStrictEqual({
+      x_data_points: [21],
+      y_data_points: [0],
+    });
+    expect(stored_waveform[2]).toStrictEqual({
+      x_data_points: [211, 211, 211, 212, 212, 212],
+      y_data_points: [101000, -201, 101000, 101000, -201, 101000],
     });
   });
 
@@ -206,6 +258,40 @@ describe("store/data", () => {
 
       expect(stored_waveform).toHaveLength(24);
       expect(stored_waveform[0].x_data_points).toHaveLength(8);
+    });
+    test("When backend emits stimulation message, Then ws client updates stim_waveforms", async () => {
+      store.commit("data/set_stim_waveforms", [
+        { x_data_points: [1], y_data_points: [2] },
+        { x_data_points: [3], y_data_points: [4] },
+      ]);
+
+      const stored_stim_data = store.getters["data/stim_waveforms"];
+      expect(stored_stim_data).toHaveLength(2);
+      expect(stored_stim_data[0].x_data_points).toHaveLength(1);
+
+      const new_stim_data = {
+        0: [
+          [2, 3],
+          [5, 6],
+        ],
+        1: [[8], [10]],
+      };
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("stimulation", JSON.stringify(new_stim_data), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      expect(stored_stim_data).toHaveLength(2);
+      expect(stored_stim_data[0]).toStrictEqual({
+        x_data_points: [1, 2, 2, 2, 3, 3, 3],
+        y_data_points: [2, 101000, -201, 101000, 101000, -201, 101000],
+      });
+      expect(stored_stim_data[1]).toStrictEqual({
+        x_data_points: [3, 8, 8, 8],
+        y_data_points: [4, 101000, -201, 101000],
+      });
     });
   });
 

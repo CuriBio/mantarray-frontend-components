@@ -1,7 +1,7 @@
 <template>
   <ContinuousWaveform
     :display_waveform_idx="0"
-    :x_axis_sample_length="100000"
+    :x_axis_sample_length="1e6"
     :y_label="'Kelvin'"
     :x_label="'Time (hours)'"
   >
@@ -17,7 +17,7 @@ export default {
     ContinuousWaveform,
   },
   created: function () {
-    const x_values = [0, 3000, 7000, 14000, 23000];
+    const x_values = [0, 30000, 70000, 140000, 230000];
     const y_values = [290.429978, 298.5820692, 327.728242, 352.3291106, 370.8505055];
     this.temp_datapoints = [
       { x_data_points: x_values, y_data_points: y_values },
@@ -30,11 +30,11 @@ export default {
     this.$store.commit("data/set_plate_waveforms", this.temp_datapoints);
 
     const x_zoom_levels = [
-      { x_scale: 30 * 100000 },
-      { x_scale: 15 * 100000 },
-      { x_scale: 5 * 100000 },
-      { x_scale: 2 * 100000 },
-      { x_scale: 1 * 100000 },
+      { x_scale: 30 * 1e6 },
+      { x_scale: 15 * 1e6 },
+      { x_scale: 5 * 1e6 },
+      { x_scale: 2 * 1e6 },
+      { x_scale: 1 * 1e6 },
     ];
     const default_x_zoom_level_idx = 2;
     this.$store.commit("waveform/set_x_axis_zoom_levels", x_zoom_levels);
