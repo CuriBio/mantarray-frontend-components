@@ -1,6 +1,13 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+
+0.5.1 (unreleased)
+------------------
+
+- Updated Y-axis zoom and heatmap range entries to allow decimal values.
+
+
 0.5.0 (2021-11-04)
 ------------------
 
