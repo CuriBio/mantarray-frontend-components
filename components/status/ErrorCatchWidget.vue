@@ -6,9 +6,10 @@
     <span class="div_status-error-catch-title-label">An&nbsp;<wbr />error&nbsp;<wbr />occurred. </span>
     <!-- original mockflow ID: id="cmpD7504e31fab5b6799a0bbf3fe2514622e" -->
     <div class="div_status-error-catch-alert-txt">
-      <p>Mantarray software is about to shut down.</p>
+      <p>{{ shutdown_error_message }}</p>
       <p>
-        Please send this log file to
+        Please send the 3 most recent log files in the folder <br />
+        shown below to
         <a id="error_contact" href="mailto:contact@curibio.com ? subject = Mantarray Error log"
           >contact@curibio.com</a
         >
@@ -53,6 +54,7 @@ export default {
   },
   props: {
     log_filepath: { type: String, default: "" },
+    shutdown_error_message: { type: String, default: "" },
   },
   computed: {
     compute_number_of_rows: function () {
@@ -135,7 +137,7 @@ a:hover {
   top: 57.6407px;
   left: 0px;
   width: 450px;
-  height: 66px;
+  height: 90px;
   overflow: hidden;
   visibility: visible;
   user-select: none;
@@ -159,7 +161,7 @@ a:hover {
   color: rgb(183, 183, 183);
   font-family: Courier New;
   position: absolute;
-  top: 137.6407px;
+  top: 148px;
   left: 56px;
   width: 338px;
   background: rgb(17, 17, 17);
@@ -190,7 +192,7 @@ a:hover {
   color: rgb(183, 183, 183);
   font-family: Muli;
   position: absolute;
-  top: 190px;
+  top: 195px;
   left: 0px;
   width: 450px;
   height: 66px;

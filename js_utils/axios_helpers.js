@@ -25,23 +25,25 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     );
     if (error.response) {
       // Request made and server responded
-      console.log(error.response.data); // allow-log
-      console.log(error.response.status); // allow-log
-      console.log(error.response.headers); // allow-log
+      console.log("data:", error.response.data); // allow-log
+      console.log("status:", error.response.status); // allow-log
+      console.log("headers:", error.response.headers); // allow-log
     } else if (error.request) {
       // The request was made but no response was received
-      console.log(error.request); // allow-log
+      console.log("No response was received to request:", error.request); // allow-log
     } else {
       // Something happened in setting up the request that triggered an Error
       console.log("Error", error.message); // allow-log
     }
-    // if (error.response) {
-    // if (error.response.status === 404) {
-    if (action_context.rootState.flask.status_uuid === STATUS.MESSAGE.SERVER_STILL_INITIALIZING) {
+    if (error.response && error.response.status === 520) {
+      action_context.commit(
+        "settings/set_shutdown_error_message",
+        "Error during install. Please reinstall the Mantarray software after restarting this computer",
+        { root: true }
+      );
+    } else if (action_context.rootState.flask.status_uuid === STATUS.MESSAGE.SERVER_STILL_INITIALIZING) {
       return error;
-      // return error.response;
     }
-    // }
 
     action_context.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR, {
       root: true,
@@ -54,8 +56,6 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
       return error.response;
     }
     return;
-    // return error.response;
-    // }
   }
   return result;
 }
