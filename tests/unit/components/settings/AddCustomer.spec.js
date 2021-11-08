@@ -130,8 +130,13 @@ describe("AddCustomer", () => {
     });
     afterEach(() => wrapper.destroy());
     test.each([
-      ["0VSckkBYH2An3dqHEyfRRE", "06ad547f", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
-      ["5FY8KwTsQaUJ2KzHJGetfE", "06ad547f", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
+      ["0VSckkBYH2An3dqHEyfRRE", "06ad547f", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
+      [
+        "5FY8KwTsQaUJ2KzHJGetfE123456asdfghDDDedsD74r",
+        "06ad547f",
+        "Experiment anemia -1 ",
+        "color: rgb(63, 63, 63);",
+      ],
       ["5FY8KwTsQaUJ2KzHJGetfE", "06ad547f", "Cat * lab", "color: rgb(63, 63, 63);"],
       ["fasd44", "06ad54", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
       ["", "", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
