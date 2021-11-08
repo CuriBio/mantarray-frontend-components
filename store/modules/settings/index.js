@@ -31,7 +31,7 @@ const default_state = {
   customer_account_ids: [],
   customer_index: null,
   user_index: null,
-  log_path: "C:\\Users\\<username>\\AppData\\Roaming\\MantarrayController\\logs_flask",
+  log_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\logs_flask",
   file_count: 0,
   max_file_count: 0,
   shutdown_error_message: "Mantarray software is about to shut down.",
