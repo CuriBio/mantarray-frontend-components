@@ -273,25 +273,6 @@ export default {
     auto_max_min: function (new_value) {
       if (this.autoscale) this.$store.commit("gradient/set_gradient_range", new_value);
     },
-    //   display_option: function () {
-    //     if (this.display_option != "") {
-    //       this.error_text = "Choose an option";
-    //     } else {
-    //       this.on_empty_flag = true;
-    //       this.error_text = "An ID is required";
-    //     }
-    //     if (this.display_option in this.well_values) {
-    //       this.on_empty_flag = false;
-    //       // Tanner (7/27/21): not sure what these following two lines are attempting to do or if they're needed at all. Could probably refactor this whole function
-    //       this.lower = this.well_values[this.display_option].range_min;
-    //       this.upper = this.well_values[this.display_option].range_max;
-    //     } else {
-    //       this.lower = null;
-    //       this.upper = null;
-    //       this.error_text = "Choose an option";
-    //       this.on_empty_flag = true;
-    //     }
-    //   },
   },
 
   methods: {
@@ -321,7 +302,7 @@ export default {
     },
 
     on_update_maximum: function (new_value) {
-      this.upper = parseInt(new_value);
+      this.upper = parseFloat(new_value);
       if (isNaN(this.upper)) {
         this.max_value_error_msg = "invalid";
       } else if (this.upper < 0 || new_value[0] == "-") {
@@ -346,7 +327,7 @@ export default {
     },
 
     on_update_minimum: function (new_value) {
-      this.lower = parseInt(new_value);
+      this.lower = parseFloat(new_value);
       if (isNaN(this.lower)) {
         this.min_value_error_msg = "invalid";
       } else if (this.lower < 0 || new_value[0] == "-") {
