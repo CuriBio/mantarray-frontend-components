@@ -19,7 +19,7 @@ export default {
   },
   async call_update_axios_request(context, payload) {
     const { auto_delete, auto_upload, baseurl, endpoint, customer_account_id, customer_pass_key } = payload;
-    const whole_url = `${baseurl}/${endpoint}?customer_account_id=${customer_account_id}&customer_pass_key=${customer_pass_key}&auto_upload=${auto_upload}&auto_delete=${auto_delete}`;
+    const whole_url = `${baseurl}/${endpoint}?customer_account_uuid=${customer_account_id}&customer_pass_key=${customer_pass_key}&auto_upload=${auto_upload}&auto_delete=${auto_delete}`;
     const response = await call_axios_get_from_vuex(whole_url, context);
 
     return response;
