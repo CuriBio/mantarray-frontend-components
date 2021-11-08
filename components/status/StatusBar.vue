@@ -6,6 +6,7 @@
         <ErrorCatchWidget
           id="error"
           :log_filepath="log_path"
+          :shutdown_error_message="shutdown_error_message"
           @ok-clicked="remove_error_catch"
         ></ErrorCatchWidget>
       </b-modal>
@@ -56,6 +57,7 @@ export default {
     }),
     ...mapState("settings", {
       log_path: "log_path",
+      shutdown_error_message: "shutdown_error_message",
     }),
   },
   watch: {
@@ -65,8 +67,10 @@ export default {
     confirmation_request: function () {
       const check_status =
         this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE || this.status_uuid === STATUS.MESSAGE.RECORDING;
-      if (this.confirmation_request && check_status) this.$bvModal.show("closure-warning");
-      else if (this.confirmation_request && !check_status) this.handle_confirmation(1);
+      if (this.confirmation_request) {
+        if (check_status) this.$bvModal.show("closure-warning");
+        else this.handle_confirmation(1);
+      }
     },
   },
   created() {

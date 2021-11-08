@@ -115,11 +115,14 @@ export default {
       );
     },
     y_max: function () {
-      const y_max = Math.round(this.y_axis_range.midpoint + this.y_axis_scale);
+      // round to 2 decimals, based on https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
+      const y_max_unrounded = this.y_axis_range.midpoint + this.y_axis_scale;
+      const y_max = Math.round((y_max_unrounded + Number.EPSILON) * 100) / 100;
       return Math.min(y_max, 100000);
     },
     y_min: function () {
-      const y_min = Math.round(this.y_axis_range.midpoint - this.y_axis_scale);
+      const y_min_unrounded = this.y_axis_range.midpoint - this.y_axis_scale;
+      const y_min = Math.round((y_min_unrounded + Number.EPSILON) * 100) / 100;
       return Math.max(y_min, -200);
     },
     x_axis_sample_length: function () {

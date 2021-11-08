@@ -97,12 +97,12 @@ describe("HeatMap.vue", () => {
       "Twitch Force": { data: [[]] },
     });
 
-    await wrapper.find("#input-widget-field-heatmap-max").setValue("10");
-    await wrapper.find("#input-widget-field-heatmap-min").setValue("1");
+    await wrapper.find("#input-widget-field-heatmap-max").setValue("10.4");
+    await wrapper.find("#input-widget-field-heatmap-min").setValue("10.3");
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
 
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("10 µN");
-    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("1 µN");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("10.4 µN");
+    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("10.3 µN");
   });
   test("Given a single well has a single data entry, When new max and min values are entered for scale bar and apply button is pressed, Then the color for this well updates", async () => {
     // - plate colors update

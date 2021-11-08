@@ -173,8 +173,8 @@ describe("YAxisControlsSettings.vue", () => {
     });
     const target_max_input = wrapper.find("#input-widget-field-max");
     const target_min_input = wrapper.find("#input-widget-field-min");
-    target_max_input.setValue("2");
-    target_min_input.setValue("1");
+    target_max_input.setValue("1.2");
+    target_min_input.setValue("1.1");
     await Vue.nextTick();
     const target_button_label_btn = wrapper.findAll(".span__button_label");
     const apply_btn = target_button_label_btn.at(0);
@@ -184,8 +184,8 @@ describe("YAxisControlsSettings.vue", () => {
     expect(apply_id_btn).toHaveLength(1);
     expect(apply_id_btn[0]).toStrictEqual([
       {
-        y_max: 2,
-        y_min: 1,
+        y_max: 1.2,
+        y_min: 1.1,
       },
     ]);
   });

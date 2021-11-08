@@ -490,6 +490,25 @@ describe("ContinuousWaveform.vue", () => {
       expect(waveform_wrapper.props("y_max")).toBe(100000);
     });
 
+    test("When the y_min and y_max props are update to decimal numbers, Then the axis bounds should update correctly", async () => {
+      const propsData = {
+        display_waveform_idx: 0 /* pointing to A01 */,
+      };
+
+      wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
+      const waveform_wrapper = wrapper.findComponent(Waveform);
+
+      // confirm initial state
+      expect(waveform_wrapper.props("y_min")).toBe(0);
+      expect(waveform_wrapper.props("y_max")).toBe(300);
+
+      const new_range = { min: 10, max: 10.1, midpoint: 10.05 };
+      store.commit("waveform/set_y_axis", new_range);
+      await wrapper.vm.$nextTick(); // wait for update
+      expect(waveform_wrapper.props("y_min")).toBe(new_range.min);
+      expect(waveform_wrapper.props("y_max")).toBe(new_range.max);
+    });
+
     test("When initially mounted, Then the y_label prop is passed to the y_axis_label prop of the child Waveform", () => {
       const expected_value = "Tubular";
       const propsData = {
