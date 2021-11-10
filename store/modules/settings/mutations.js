@@ -1,4 +1,10 @@
 export default {
+  set_log_path(state, new_value) {
+    state.log_path = new_value;
+  },
+  set_shutdown_error_message(state, new_value) {
+    state.shutdown_error_message = new_value;
+  },
   set_customer_account_ids(state, new_value) {
     state.customer_account_ids = new_value;
   },

@@ -230,7 +230,7 @@ describe("TextValidation.validate_customer_account_input", () => {
     ["C", ""],
     ["Experiment anemia -1", ""],
     [null, "This field is required"],
-    ["Experiment anemia alpha cells -1", "Invalid as its more than 20 charcters"],
+    ["Experiment anemia -1234567890-1234567890", "Invalid as its more than 36 charcters"],
     ["Cat * lab", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
     ["Cat lab` ", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
     ["Cat lab;", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],

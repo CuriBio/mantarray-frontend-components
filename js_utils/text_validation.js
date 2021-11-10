@@ -134,7 +134,7 @@ export class TextValidation {
     let feedback = "";
     if (text != null) {
       const val_length = text.length;
-      if (val_length >= 1 && val_length <= 20) {
+      if (val_length >= 1 && val_length <= 36) {
         feedback = this.input_errorfinder(true, text, type, val_length);
       } else {
         feedback = this.input_errorfinder(false, text, type, val_length);
@@ -163,15 +163,15 @@ export class TextValidation {
         if (len == 0) {
           invalid_text = "This field is required";
         } else {
-          invalid_text = `The valid ${type} is min 1 charcter and max 20 charcters`;
+          invalid_text = `The valid ${type} is min 1 charcter and max 36 charcters`;
         }
-        if (len > 20) {
-          invalid_text = "Invalid as its more than 20 charcters";
+        if (len > 36) {
+          invalid_text = "Invalid as its more than 36 charcters";
         }
         break;
     }
     if (stats == true) {
-      if (len > 0 && len < 21) {
+      if (len > 0 && len < 36) {
         invalid_text = this.input_parser(stats, text, type, len);
       }
     }

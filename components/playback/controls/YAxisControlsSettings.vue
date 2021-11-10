@@ -123,7 +123,7 @@ export default {
   },
   methods: {
     on_update_max_value: async function (new_value) {
-      const max_value = parseInt(new_value);
+      const max_value = parseFloat(new_value);
       if (max_value < 0) {
         this.max_value_error_msg = "cannot be negative";
         this.enable_list_y_axis_widget = [false, true];
@@ -149,7 +149,7 @@ export default {
       await this.on_update_min_value(this.minimum);
     },
     on_update_min_value: function (new_value) {
-      const min_value = parseInt(new_value);
+      const min_value = parseFloat(new_value);
       if (min_value < -200) {
         this.min_value_error_msg = "must be >= -200";
         this.enable_list_y_axis_widget = [false, true];

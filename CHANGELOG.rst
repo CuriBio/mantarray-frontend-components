@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+
+0.5.1 (2021-11-08)
+------------------
+
+- Updated Y-axis zoom and heatmap range entries to allow decimal values
+- Updated shutdown error message
+
+
 0.5.0 (2021-11-04)
 ------------------
 
@@ -13,6 +21,7 @@ Changelog for Mantarray Frontend Components
 - Fixed Username/Password validations
 - Fixed stim pulses being modified when creating outgoing message
 - Fixed issue with some stim pulses overlapping in protocol viewer
+- Fixed issue with heatmap not updating while recording
 
 
 0.4.7 (2021-10-13)

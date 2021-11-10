@@ -39,9 +39,10 @@ describe("ErrorCatchWidget.vue", () => {
     const target_background_div = wrapper.find(".div__status-error-catch-background");
     expect(target_background_div.isVisible()).toBe(true);
   });
-  test("Given that ErrorCatchWidget has a props having error file name, When the lifecyle hook mounted is created, Then title, alert text, contact e-mail and error file name is rendered properly", async () => {
+  test("Given that ErrorCatchWidget has a props having error file name and error message, When the lifecyle hook mounted is created, Then title, alert text, contact e-mail and error file name is rendered properly", async () => {
     const propsData = {
       log_filepath: "C:\test_file_log.txt",
+      shutdown_error_message: "Mantarray software is about to shut down.",
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -55,7 +56,8 @@ describe("ErrorCatchWidget.vue", () => {
     expect(target_alert_div_p.at(0).text()).toStrictEqual("Mantarray software is about to shut down.");
     expect(target_alert_div_p.at(1)).toMatchInlineSnapshot(`
       <p>
-        Please send this log file to
+        Please send the 3 most recent log files in the folder <br>
+        shown below to
         <a id="error_contact" href="mailto:contact@curibio.com ? subject = Mantarray Error log">contact@curibio.com</a>
       </p>
     `);
