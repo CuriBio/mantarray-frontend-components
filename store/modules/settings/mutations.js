@@ -17,8 +17,8 @@ export default {
   set_file_count(state, new_value) {
     state.file_count = new_value;
   },
-  set_max_file_count(state, new_value) {
-    state.max_file_count = new_value;
+  set_max_file_count(state) {
+    state.max_file_count += 1;
   },
   set_auto_upload(state, new_value) {
     state.auto_upload = new_value;

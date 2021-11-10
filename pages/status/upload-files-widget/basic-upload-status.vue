@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ComponentToTest></ComponentToTest>
+    <UploadFilesWidget />
     <span id="test-1" style="top: 0px; position: absolute; left: 500px" @click="midpointincrement"
       >mid point</span
     >
@@ -11,18 +11,18 @@
 </template>
 
 <script>
-import { UploadFilesWidget as ComponentToTest } from "@/dist/mantarray.common";
-// import ComponentToTest from "@/components/status/UploadFilesWidget.vue";
+// import { UploadFilesWidget as ComponentToTest } from "@/dist/mantarray.common";
+import UploadFilesWidget from "@/components/status/UploadFilesWidget.vue";
 
 export default {
   components: {
-    ComponentToTest,
+    UploadFilesWidget,
   },
   created: function () {
     this.start = 0;
     this.max = 900;
     this.$store.commit("settings/set_file_count", this.start);
-    this.$store.commit("settings/set_max_file_count", this.max);
+    this.$store.commit("settings/set_max_file_count");
   },
   methods: {
     midpointincrement() {
