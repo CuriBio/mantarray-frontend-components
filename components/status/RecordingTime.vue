@@ -81,7 +81,7 @@ export default {
 </script>
 <style>
 .div__recording-time {
-  position: absolute;
+  position: relative;
   top: 0px;
   left: 0px;
   background-color: #111111;

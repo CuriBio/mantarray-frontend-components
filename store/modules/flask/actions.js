@@ -23,7 +23,9 @@ export async function ping_system_status() {
   let result = 0;
   // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
   result = await call_axios_get_from_vuex(whole_url, this);
-  // console.log("Result from system_status: " + JSON.stringify(result));
+  // const response = JSON.stringify(result);
+  // console.log("Result from system_status: " + result.status);
+
   if (result.status == 200) {
     const data = result.data;
     const status_uuid = data.ui_status_code;

@@ -326,7 +326,7 @@ export default {
     on_stop_record_click: function () {
       this.$store.dispatch("playback/stop_recording");
       if (this.auto_upload) {
-        this.$store.commit("settings/set_max_file_count");
+        this.$store.commit("settings/set_total_file_count");
       }
     },
     on_live_view_click: function () {
