@@ -1,13 +1,13 @@
 <template>
   <div>
     <UploadFilesWidget />
-    <span id="test-1" style="top: 0px; position: absolute; left: 500px" @click="open_failed_status"
+    <span id="test-3" style="top: 0px; position: absolute; left: 500px" @click="open_failed_status"
       >error</span
     >
-    <span id="test-2" style="top: 0px; position: absolute; left: 700px" @click="open_successful_status"
+    <span id="test-4" style="top: 0px; position: absolute; left: 700px" @click="open_successful_status"
       >success</span
     >
-    <span id="test-2" style="top: 0px; position: absolute; left: 900px" @click="set_log_path">set path</span>
+    <span id="test-5" style="top: 0px; position: absolute; left: 900px" @click="set_log_path">set path</span>
   </div>
 </template>
 
