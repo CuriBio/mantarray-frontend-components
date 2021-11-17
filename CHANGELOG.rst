@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.5.2 (2021-11-17)
+------------------
+
+- Added websocket handler for file upload statuses
+- Added failed and successful upload modals
+- Added warning confirmation on window close if files are still uploading
+- Updated UploadFileWidget to increase when a recording stops and when a upload status is received
+
 
 0.5.1 (2021-11-08)
 ------------------
