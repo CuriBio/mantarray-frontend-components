@@ -70,10 +70,8 @@ export default {
       return "top: " + (220 + this.compute_number_of_rows * 12) + "px; left: 0px; position: absolute";
     },
   },
-  watch: {},
-  created() {},
   methods: {
-    process_ok: function (choice) {
+    process_ok: function () {
       this.$emit("ok-clicked");
     },
   },

@@ -11,7 +11,7 @@
         ></ErrorCatchWidget>
       </b-modal>
       <b-modal id="closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
-        <ClosureWarning id="closure" @handle_confirmation="handle_confirmation" />
+        <StatusWarningWidget id="closure" @handle_confirmation="handle_confirmation" />
       </b-modal>
     </span>
   </div>
@@ -24,7 +24,7 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import ErrorCatchWidget from "@/components/status/ErrorCatchWidget.vue";
-import ClosureWarning from "@/components/status/ClosureWarning.vue";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -38,7 +38,7 @@ export default {
   name: "StatusBar",
   components: {
     ErrorCatchWidget,
-    ClosureWarning,
+    StatusWarningWidget,
   },
   props: {
     confirmation_request: {
@@ -58,6 +58,8 @@ export default {
     ...mapState("settings", {
       log_path: "log_path",
       shutdown_error_message: "shutdown_error_message",
+      total_uploaded_files: "total_uploaded_files",
+      total_file_count: "total_file_count",
     }),
   },
   watch: {
@@ -66,7 +68,10 @@ export default {
     },
     confirmation_request: function () {
       const check_status =
-        this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE || this.status_uuid === STATUS.MESSAGE.RECORDING;
+        this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE ||
+        this.status_uuid === STATUS.MESSAGE.RECORDING ||
+        this.total_uploaded_files.length < this.total_file_count;
+
       if (this.confirmation_request) {
         if (check_status) this.$bvModal.show("closure-warning");
         else this.handle_confirmation(1);

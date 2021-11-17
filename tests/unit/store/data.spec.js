@@ -5,6 +5,7 @@ const MockAxiosAdapter = require("axios-mock-adapter");
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
 import { ENUMS } from "@/store/modules/playback/enums";
+import mutations from "@/store/modules/settings/mutations";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
 import { ping_system_status } from "../../../store/modules/flask/actions";
@@ -292,6 +293,42 @@ describe("store/data", () => {
         x_data_points: [3, 8, 8, 8],
         y_data_points: [4, 101000, -201, 101000],
       });
+    });
+    test("When backend emits status update message with no error, Then ws client updates file count", async () => {
+      const new_status_update = {
+        file_name: "test_filename",
+      };
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("upload_status", JSON.stringify(new_status_update), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      const { total_uploaded_files, upload_error, file_count } = store.state.settings;
+
+      expect(total_uploaded_files[0]).toBe(new_status_update.file_name);
+      expect(upload_error).toBe(false);
+      expect(file_count).toBe(1);
+    });
+
+    test("When backend emits status update message with an upload error, Then ws client does not update file count and sets upload_error status to true", async () => {
+      const new_status_update = {
+        file_name: "test_filename",
+        error: "upload_error",
+      };
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("upload_status", JSON.stringify(new_status_update), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      const { total_uploaded_files, upload_error, file_count } = store.state.settings;
+
+      expect(total_uploaded_files[0]).toBe(new_status_update.file_name);
+      expect(upload_error).toBe(true);
+      expect(file_count).toBe(0);
     });
   });
 

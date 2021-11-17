@@ -1,35 +1,35 @@
 import { mount } from "@vue/test-utils";
-import ComponentToTest from "@/components/status/ClosureWarning.vue";
-import { ClosureWarning as DistComponentToTest } from "@/dist/mantarray.common";
+import ComponentToTest from "@/components/status/StatusWarningWidget.vue";
+import { StatusWarningWidget as DistComponentToTest } from "@/dist/mantarray.common";
 
 import { createLocalVue } from "@vue/test-utils";
 let wrapper = null;
 const localVue = createLocalVue();
 
-describe("ClosureWarning.vue", () => {
+describe("StatusWarningWidget.vue", () => {
   beforeEach(async () => {
     wrapper = mount(ComponentToTest, {
       localVue,
     });
   });
   afterEach(() => wrapper.destroy());
-  test("When mounting ClosureWarning from the build dist file, Then it loads successfully and the `Warning!` defined title text is rendered", () => {
+  test("When mounting StatusWarningWidget from the build dist file, Then it loads successfully and the `Warning!` defined title text is rendered", () => {
     wrapper = mount(DistComponentToTest, {
       localVue,
     });
-    const target_span = wrapper.find(".span__closure-warning-label");
+    const target_span = wrapper.find(".span__status-warning-label");
     expect(target_span.text()).toStrictEqual("Warning!");
   });
-  test("Given that ClosureWarning is active, When the lifecyle hook mounted is created, Then it will display a confirmation message that operations are still in progress", async () => {
+  test("Given that StatusWarningWidget is active, When the lifecyle hook mounted is created, Then it will display a confirmation message that operations are still in progress", async () => {
     wrapper = mount(ComponentToTest, {
       localVue,
     });
-    const target_message_span = wrapper.find(".span__closure-warning-message");
+    const target_message_span = wrapper.find(".span__status-warning-message");
     const target_message_span_p = target_message_span.findAll("p");
     expect(target_message_span_p.at(0).text()).toStrictEqual("Operations are still in progress.");
     expect(target_message_span_p.at(1).text()).toStrictEqual("Are you sure you want to exit?");
   });
-  test("Given that ClosureWarning is mounted, When the ClosureWarning is visible, Then click on 'Yes' or 'Cancel' results in an event 'handle_warning_closure' to be emitted", async () => {
+  test("Given that StatusWarningWidget is mounted, When the StatusWarningWidget is visible, Then click on 'Yes' or 'Cancel' results in an event 'handle_warning_closure' to be emitted", async () => {
     wrapper = mount(ComponentToTest, {
       localVue,
     });
