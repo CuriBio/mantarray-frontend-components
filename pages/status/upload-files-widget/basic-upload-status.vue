@@ -1,37 +1,29 @@
 <template>
   <div>
-    <ComponentToTest></ComponentToTest>
-    <span id="test-1" style="top: 0px; position: absolute; left: 500px" @click="midpointincrement"
-      >mid point</span
+    <UploadFilesWidget />
+    <span id="test-1" style="top: 0px; position: absolute; left: 500px" @click="increment_uploaded_files"
+      >uploaded file count</span
     >
-    <span id="test-2" style="top: 0px; position: absolute; left: 700px" @click="lastpointincrement"
-      >last point</span
+    <span id="test-2" style="top: 0px; position: absolute; left: 700px" @click="increment_total_files"
+      >total file count</span
     >
   </div>
 </template>
 
 <script>
-import { UploadFilesWidget as ComponentToTest } from "@/dist/mantarray.common";
-// import ComponentToTest from "@/components/status/UploadFilesWidget.vue";
+import { UploadFilesWidget } from "@/dist/mantarray.common";
+// import UploadFilesWidget from "@/components/status/UploadFilesWidget.vue";
 
 export default {
   components: {
-    ComponentToTest,
-  },
-  created: function () {
-    this.start = 0;
-    this.max = 900;
-    this.$store.commit("settings/set_file_count", this.start);
-    this.$store.commit("settings/set_max_file_count", this.max);
+    UploadFilesWidget,
   },
   methods: {
-    midpointincrement() {
-      this.start = 500;
-      this.$store.commit("settings/set_file_count", this.start);
+    increment_uploaded_files() {
+      this.$store.commit("settings/set_file_count");
     },
-    lastpointincrement() {
-      this.start = 900;
-      this.$store.commit("settings/set_file_count", this.start);
+    increment_total_files() {
+      this.$store.commit("settings/set_total_file_count");
     },
   },
 };

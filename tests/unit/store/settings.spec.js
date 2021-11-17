@@ -2,7 +2,6 @@ import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import { settings_store_module } from "@/dist/mantarray.common";
 import * as axios_helpers from "../../../js_utils/axios_helpers.js";
-import actions from "../../../store/modules/settings/actions";
 
 describe("store/settings", () => {
   const localVue = createLocalVue();
@@ -27,9 +26,9 @@ describe("store/settings", () => {
     const array_of_customerids = settings_store_module.state().customer_account_ids;
     expect(array_of_customerids).toHaveLength(0);
   });
-  test("When initialized, Then the file_count and max_file_count is zero 0 as with no value assigned", () => {
+  test("When initialized, Then the file_count and total_file_count is zero 0 as with no value assigned", () => {
     const value = store.state.settings.file_count;
-    const max = store.state.settings.max_file_count;
+    const max = store.state.settings.total_file_count;
     expect(value).toStrictEqual(0);
     expect(max).toStrictEqual(0);
   });
@@ -613,6 +612,36 @@ describe("store/settings", () => {
     store.commit("settings/set_customer_account_ids", current_customerids);
     const modified_userids = store.state.settings.customer_account_ids[0].user_ids;
     expect(modified_userids).toHaveLength(1);
+  });
+  test("When the app is created and the user's log path is committed, Then the base downloads path also gets updated with username", async () => {
+    const test_win_path = "C:\\Users\\CuriBio\\TestPath";
+    const expected_win_base_path = "C:\\Users\\CuriBio\\Downloads";
+
+    store.commit("settings/set_log_path", test_win_path);
+
+    const { log_path, base_downloads_path } = store.state.settings;
+    expect(log_path).toBe(test_win_path);
+    expect(base_downloads_path).toBe(expected_win_base_path);
+
+    const test_path = "/Users/CuriBio/TestPath";
+    const expected_downloads_base_path = "C:\\Users\\CuriBio\\Downloads";
+
+    store.commit("settings/set_log_path", test_path);
+
+    expect(store.state.settings.log_path).toBe(test_path);
+    expect(store.state.settings.base_downloads_path).toBe(expected_downloads_base_path);
+  });
+
+  test("When an failed upload status gets sent on startup, Then the the file will get added to state and total file count will automatically increase", async () => {
+    const test_filename = "test_file";
+    store.commit("settings/set_file_count");
+    store.commit("settings/set_file_name", test_filename);
+    store.commit("settings/set_upload_error", true);
+
+    const { total_file_count, total_uploaded_files, upload_error } = store.state.settings;
+    expect(total_file_count).toBe(1);
+    expect(total_uploaded_files[0]).toBe(test_filename);
+    expect(upload_error).toBe(true);
   });
   describe("settings/actions", () => {
     test("When a user wants to save user credentials in settings, Then the vuex action to update settings will send axios request", async () => {

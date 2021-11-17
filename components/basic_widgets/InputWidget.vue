@@ -31,7 +31,7 @@
             aria-describedby="input-feedback"
             :placeholder="placeholder"
             :disabled="disabled"
-            :onpaste="input_cut_paste"
+            :onpaste="disable_paste"
             class="w-100 h-100 edit-id"
             style="border-radius: 0; color: rgb(255, 255, 255); background-color: #3f3f3f; border: 0px"
             @input="on_b_form_input"
@@ -97,9 +97,6 @@ export default {
     },
     input_feedback_top: function () {
       return this.title_label !== "" ? 88 : 48;
-    },
-    input_cut_paste: function () {
-      return this.disable_paste == true ? "return false;" : "";
     },
   },
   created() {

@@ -41,5 +41,18 @@ export default function create_web_socket_plugin(socket) {
         cb("commit done");
       }
     });
+    socket.on("upload_status", function (status_json, cb = null) {
+      const status = JSON.parse(status_json);
+
+      if (status.error) store.commit("settings/set_upload_error", true);
+      else store.commit("settings/set_file_count");
+
+      store.commit("settings/set_file_name", status.file_name);
+
+      if (cb !== null) {
+        // this callback is only used for testing. The backend will not send a callback
+        cb("commit done");
+      }
+    });
   };
 }
