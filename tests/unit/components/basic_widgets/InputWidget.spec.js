@@ -258,7 +258,7 @@ describe("InputWidget.vue", () => {
     wrapper.find("#input-widget-field-").trigger("paste", mEvent);
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find("#input-widget-field-").value).toBeUndefined();
-    expect(wrapper.find("#input-widget-field-").html()).toContain('onpaste="return false;"');
+    expect(wrapper.find("#input-widget-field-").html()).toContain('onpaste="true"');
   });
   test("When an the props change to render validate class, Then the corresponding validation class should be returned", async () => {
     const propsData = {

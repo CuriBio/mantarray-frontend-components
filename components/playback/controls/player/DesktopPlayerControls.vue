@@ -232,6 +232,7 @@ export default {
     }),
     ...mapState("settings", {
       customer_index: "customer_index",
+      auto_upload: "auto_upload",
     }),
     calibrate_tooltip_text: function () {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
@@ -324,6 +325,9 @@ export default {
     },
     on_stop_record_click: function () {
       this.$store.dispatch("playback/stop_recording");
+      if (this.auto_upload) {
+        this.$store.commit("settings/set_total_file_count");
+      }
     },
     on_live_view_click: function () {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {

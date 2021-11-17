@@ -24,35 +24,62 @@
     <!--  original mockflow ID: cmpD2eba17f4bc0b8222a44b2a8fffec29f8 -->
     <span class="span__upload-file-label-txt"> Successfully&nbsp;<wbr />Uploaded: </span>
     <!-- original mockflow ID: cmpD58c69d7de8aa0934dca9ef4e8beabbdc -->
-    <span class="span__upload-file-count-container"> {{ value }}/{{ max }} </span>
-    <b-progress id="upload-progress-bar" :value="value" :max="max" variant="success"></b-progress>
+    <span class="span__upload-file-count-container"> {{ value }}/{{ total }} </span>
+    <b-progress id="upload-progress-bar" :value="value" :max="total" variant="success" />
+    <b-modal id="upload-status" size="sm" hide-footer hide-header hide-header-close :static="true">
+      <StatusWarningWidget
+        id="upload-modal"
+        :success_status="status"
+        :modal_labels="modal_labels"
+        @handle_confirmation="handle_confirmation"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
 import Vue from "vue";
 import { mapState } from "vuex";
-import { BProgress } from "bootstrap-vue";
+import { BProgress, BModal } from "bootstrap-vue";
+import BootstrapVue from "bootstrap-vue";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+
+Vue.use(BootstrapVue);
 Vue.component("BProgress", BProgress);
+Vue.component("BModal", BModal);
 
 export default {
   name: "UploadFilesWidget",
+  components: {
+    StatusWarningWidget,
+  },
   data() {
     return {
       tick: false,
+      modal_labels: {
+        header: "",
+        msg_one: "",
+        msg_two: "",
+        button_names: ["close"],
+      },
+      status: false,
     };
   },
   computed: {
     ...mapState("settings", {
       value: "file_count",
+      total: "total_file_count",
+      upload_error: "upload_error",
+      total_uploaded_files: "total_uploaded_files",
+      base_downloads_path: "base_downloads_path",
     }),
-    ...mapState("settings", {
-      max: "max_file_count",
-    }),
+    last_file_name() {
+      return this.total_uploaded_files[this.total_uploaded_files.length - 1];
+    },
   },
   watch: {
-    value() {
+    value: function () {
       if (this.value != 0) {
-        if (this.max == this.value) {
+        if (this.total == this.value) {
           this.tick = true;
           setTimeout(
             function () {
@@ -65,6 +92,32 @@ export default {
         }
       }
     },
+    total_uploaded_files: function () {
+      if (this.upload_error) {
+        this.$store.commit("settings/set_upload_error", false);
+        this.status = false;
+        this.modal_labels = {
+          header: "Error!",
+          msg_one: `There was an error uploading recording: ${this.last_file_name}.`,
+          msg_two: "Will automatically retry next start up.",
+          button_names: ["Close"],
+        };
+      } else {
+        this.status = true;
+        this.modal_labels = {
+          header: "Successful Upload!",
+          msg_one: `The following recording was successfully uploaded: ${this.last_file_name}.`,
+          msg_two: `${this.base_downloads_path}\\${this.last_file_name}.xlsx`,
+          button_names: ["Close"],
+        };
+      }
+      this.$bvModal.show("upload-status");
+    },
+  },
+  methods: {
+    handle_confirmation: function () {
+      this.$bvModal.hide("upload-status");
+    },
   },
 };
 </script>
@@ -75,7 +128,7 @@ export default {
   padding: 0px;
   margin: 0px;
   background: #111111;
-  position: absolute;
+  position: relative;
   width: 400px;
   height: 45px;
   top: 0px;
@@ -115,7 +168,7 @@ export default {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 14px;
   color: rgb(255, 255, 255);
   text-align: right;
   z-index: 3;
@@ -127,7 +180,7 @@ export default {
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 84px;
+  width: 65px;
   height: 30px;
   top: 9.6663px;
   left: 200.909px;
@@ -144,10 +197,6 @@ export default {
   z-index: 9;
 }
 
-.progress {
-  background-color: #4c4c4c;
-}
-
 #upload-progress-bar {
   position: absolute;
   width: 110px;
@@ -158,16 +207,15 @@ export default {
   background-color: #4c4c4c;
   z-index: 7;
 }
-/* Raghu (12/22/20): As the Bootstrap contains the below mentioned CSS property:-
-file path : /mantarray-frontend-components/node_modules/bootstrap/dist/css/bootstrap.css
-.bg-success {
-  background-color: #28a745 !important;
-}
-
-The MockFlowUI provides a different color code and the only way to override is to have !important
-We override the background-color:#00c46f !important */
-
 #upload-progress-bar > .bg-success {
   background-color: #00c46f !important;
+}
+
+#upload-status {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
 }
 </style>
