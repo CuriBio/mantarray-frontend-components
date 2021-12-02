@@ -6,6 +6,7 @@ const state = () => ({
   selected_wells: [],
   protocol_list: [{ letter: "", color: "", label: "Create New" }],
   protocol_assignments: {},
+  stim_fill_colors: {},
   protocol_editor: {
     name: "",
     stop_setting: "Stimulate Until Stopped",

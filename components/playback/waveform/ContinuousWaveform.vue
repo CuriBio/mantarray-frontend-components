@@ -3,6 +3,7 @@
     :title="title"
     :tissue_data_points="d3_formatted_data_points.tissue"
     :stim_data_points="d3_formatted_data_points.stim"
+    :fill_color_assignments="fill_color_assignments"
     :samples_per_second="samples_per_second"
     :x_axis_sample_length="x_axis_sample_length"
     :x_axis_min="x_axis_min"
@@ -80,6 +81,9 @@ export default {
         tissue: [],
         stim: [],
       },
+      fill_colors: [],
+      next_fill_color_idx: 0,
+      fill_color_assignments: [],
     };
   },
   computed: {
@@ -92,6 +96,9 @@ export default {
     ...mapState("data", {
       plate_waveforms: "plate_waveforms",
       stim_waveforms: "stim_waveforms",
+    }),
+    ...mapState("stimulation", {
+      stim_fill_colors: "stim_fill_colors",
     }),
     ...mapState("waveform", {
       x_zoom_levels: "x_zoom_levels",
@@ -174,6 +181,78 @@ export default {
         this.x_axis_sample_length
       );
       this.d3_formatted_data_points[data_type] = local_data_points;
+      if (data_type === "stim") this.retrieve_stim_fill_colors();
+    },
+    retrieve_stim_fill_colors: function () {
+      const stim_data = this.d3_formatted_data_points.stim;
+      const well_idx = this.current_quadrant[this.display_waveform_idx];
+      const fill_colors = this.stim_fill_colors[well_idx];
+      const idx_between_subprotocols = [];
+
+      // Grab indexes of displayed stim data where it changes between subprotocols
+      stim_data.map((sub, idx) => {
+        if (sub[1] == -201) idx_between_subprotocols.push(idx);
+      });
+
+      if (this.fill_color_assignments.length > 1) {
+        // check if first sub protocol is stil in displayed stim data
+        this.fill_color_assignments.map((assignment, idx) => {
+          // console.log(stim_data.includes(assignment.stim_data_array), assignment.stim_data_array, stim_data);
+          if (!stim_data.includes(assignment.stim_data_array) || assignment.stim_data_array[1] != -201)
+            this.fill_color_assignments.splice(idx, 1);
+        });
+
+        // Grab most recent fill color to reset index for next
+        const last_color = this.fill_color_assignments[this.fill_color_assignments.length - 1][0];
+        if (fill_colors.indexOf(last_color) == fill_colors.length - 1) this.next_fill_color_idx = 0;
+        else this.next_fill_color_idx = fill_colors.indexOf(last_color) + 1;
+      }
+
+      // Iterate through new displayed data array and assign subprotocol colors
+      idx_between_subprotocols.map((idx_val, idx) => {
+        let sub_protocol_exists = false;
+
+        this.fill_color_assignments.map((assignment) => {
+          if (JSON.stringify(assignment.stim_data_array) === JSON.stringify(stim_data[idx_val]))
+            sub_protocol_exists = true;
+        });
+
+        if (!sub_protocol_exists) {
+          let next_idx;
+          if (idx_between_subprotocols.length - 1 > idx) next_idx = idx_between_subprotocols[idx + 1];
+          else next_idx = stim_data.length - 1;
+
+          const new_assignment = {
+            fill_color: fill_colors[this.next_fill_color_idx],
+            stim_data_array: JSON.parse(JSON.stringify(stim_data[idx_val])),
+            idx_to_slice: [idx_val, next_idx],
+          };
+
+          this.fill_color_assignments.push(new_assignment);
+
+          if (this.next_fill_color_idx == fill_colors.length - 1) this.next_fill_color_idx = 0;
+          else this.next_fill_color_idx += 1;
+        }
+      });
+
+      // Create color assignment for first index of stim_data to first idx in idx_between_subprotocols if it is not already 0
+      if (this.fill_color_assignments.length > 0) {
+        let previous_color_idx = fill_colors.indexOf(this.fill_color_assignments[0].fill_color);
+
+        if (previous_color_idx === 0) {
+          previous_color_idx = fill_colors.length - 1;
+        } else previous_color_idx = previous_color_idx - 1;
+
+        if (stim_data[0][0] !== this.fill_color_assignments[0].stim_data_array[0]) {
+          const new_assignment = {
+            fill_color: fill_colors[previous_color_idx],
+            stim_data_array: JSON.parse(JSON.stringify(stim_data[0])),
+            idx_to_slice: [0, idx_between_subprotocols[1]],
+          };
+
+          this.fill_color_assignments.unshift(new_assignment);
+        }
+      }
     },
     calculate_all_data_to_plot: function () {
       this.calculate_data_to_plot("tissue");

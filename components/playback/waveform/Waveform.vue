@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear } from "d3";
+import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear, area as d3_area } from "d3";
 /**
  * @vue-prop {String} title - Current title of the waveform
  * @vue-prop {Int} samples_per_second - Current samples per second
@@ -85,6 +85,12 @@ export default {
       type: Number,
       default: 406,
     },
+    fill_color_assignments: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
   },
   data: function () {
     return {
@@ -98,6 +104,7 @@ export default {
       div__waveform_graph__dynamic_style: {
         width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
       },
+      fill_color_idx: 0,
     };
   },
   watch: {
@@ -128,7 +135,7 @@ export default {
       .append("svg")
       .attr("width", this.plot_area_pixel_width + this.margin.left + this.margin.right)
       .attr("height", this.plot_area_pixel_height + this.margin.top + this.margin.bottom)
-      .attr("style", "background-color: black;")
+      .attr("style", "background-color: black")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
       .attr("id", "svg_of_waveform")
@@ -150,7 +157,6 @@ export default {
     const margin_blockers_node = the_svg.append("g").attr("id", "margin_blockers_node");
 
     const margin = this.margin;
-
     // Left Side
     margin_blockers_node
       .append("rect")
@@ -237,6 +243,15 @@ export default {
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
+      const area = d3_area()
+        .x(function (d) {
+          return x_axis_scale(d[0] / 1e6);
+        })
+        .y0(this.plot_area_pixel_height)
+        .y1(function (d) {
+          return y_axis_scale(d[1]);
+        });
+
       // update tissue lines
       const tissue_data_to_plot = this.tissue_data_points;
       this.waveform_line_node.selectAll("*").remove();
@@ -245,7 +260,7 @@ export default {
         .datum(tissue_data_to_plot)
         .attr("fill", "none")
         .attr("stroke", this.tissue_line_color)
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 2.5)
         .attr(
           "d",
           d3_line()
@@ -256,9 +271,27 @@ export default {
               return y_axis_scale(d[1]);
             })
         );
+
       // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
       const stim_data_to_plot = this.stim_data_points;
       this.stim_waveform_line_node.selectAll("*").remove();
+      // console.log("FILL ASSIGNMENTS: ", this.fill_color_assignments);
+
+      this.fill_color_assignments.map((assignment) => {
+        const sliced_stim_data_to_fill = stim_data_to_plot.slice(
+          assignment.idx_to_slice[0],
+          assignment.idx_to_slice[1]
+        );
+        // console.log("sliced_stim_data_to_fill: ", sliced_stim_data_to_fill);
+        this.stim_waveform_line_node
+          .append("path")
+          .datum(sliced_stim_data_to_fill)
+          .attr("fill", assignment.fill_color)
+          .attr("opacity", "0.2")
+          .attr("stroke-width", 0)
+          .attr("d", area);
+      });
+
       this.stim_waveform_line_node
         .append("path")
         .datum(stim_data_to_plot)

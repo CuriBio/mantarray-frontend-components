@@ -313,7 +313,7 @@ export default {
       return {
         type,
         nested_protocols: [],
-        repeat: { color: random_color, number_of_repeats: 0 },
+        repeat: { color: `#${random_color}`, number_of_repeats: 0 },
         pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
@@ -362,7 +362,7 @@ export default {
       this.handle_protocol_order(this.protocol_order);
     },
     get_style(type) {
-      if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
+      if (type.nested_protocols.length > 0) return "border: 2px solid " + type.repeat.color;
     },
   },
 };
