@@ -10,10 +10,10 @@
         height="45px"
         :style="
           'position: absolute; top: ' +
-          (12 + (well_index % 4) * 37.153) +
-          'px; left: ' +
-          (15 + Math.floor(well_index / 4) * 38.0844) +
-          'px; z-index: 76;'
+            (12 + (well_index % 4) * 37.153) +
+            'px; left: ' +
+            (15 + Math.floor(well_index / 4) * 38.0844) +
+            'px; z-index: 76;'
         "
       >
         <svg height="40" width="40">
@@ -24,12 +24,12 @@
             r="15"
             stroke="#FFFFFF"
             stroke-width="0"
-            fill="#b7b7b7"
+            :fill="getProtocolColor(well_index)"
             :class="{
               'circle__plate-navigator-well--selected': selected_quadrant_well_indices.includes(well_index),
               'circle__plate-navigator-well--unselected-hover':
                 !selected_quadrant_well_indices.includes(well_index) &&
-                hovered_quadrant_wells.includes(well_index),
+                hovered_quadrant_wells.includes(well_index)
             }"
             @click="on_click_well(well_index)"
             @mouseenter="on_enter_well(well_index)"
@@ -53,33 +53,36 @@ import { mapState } from "vuex";
  */
 export default {
   name: "PlateNavigator",
-  data: function () {
+  data: function() {
     return {
-      hovered_quadrant_wells: [],
+      hovered_quadrant_wells: []
     };
   },
   computed: {
     ...mapState("twentyfourcontrols", {
-      selected_quadrant_well_indices: "is_quadrant",
+      selected_quadrant_well_indices: "is_quadrant"
     }),
+    ...mapState("stimulation", {
+      protocol_assignments: "protocol_assignments"
+    })
   },
   created() {
     this.quadrant_options = {
       QUADRANT_ONE: [0, 1, 4, 5, 8, 9],
       QUADRANT_TWO: [12, 13, 16, 17, 20, 21],
       QUADRANT_THREE: [2, 3, 6, 7, 10, 11],
-      QUADRANT_FOUR: [14, 15, 18, 19, 22, 23],
+      QUADRANT_FOUR: [14, 15, 18, 19, 22, 23]
     };
 
     this.quadrant_options_api_set = {
-      QUADRANT: "twentyfourcontrols/set_is_quadrant",
+      QUADRANT: "twentyfourcontrols/set_is_quadrant"
     };
     this.quadrant_options_api_get = {
-      QUADRANT: "twentyfourcontrols/is_quadrant",
+      QUADRANT: "twentyfourcontrols/is_quadrant"
     };
   },
   methods: {
-    get_quadrant_from_well_index: function (well_index) {
+    get_quadrant_from_well_index: function(well_index) {
       switch (well_index) {
         case 0:
         case 1:
@@ -117,17 +120,22 @@ export default {
       }
     },
 
-    on_enter_well: function (well_index) {
+    on_enter_well: function(well_index) {
       this.hovered_quadrant_wells = this.get_quadrant_from_well_index(well_index);
     },
-    on_leave_well: function (well_index) {
+    on_leave_well: function(well_index) {
       this.hovered_quadrant_wells = [];
     },
-    on_click_well: function (well_index) {
+    on_click_well: function(well_index) {
       const quadrant_containing_this_well = this.get_quadrant_from_well_index(well_index);
       this.$store.commit(this.quadrant_options_api_set.QUADRANT, quadrant_containing_this_well);
     },
-  },
+    getProtocolColor(well_index) {
+      if (this.protocol_assignments[well_index] !== undefined)
+        return this.protocol_assignments[well_index].color;
+      else return "#B7B7B7";
+    }
+  }
 };
 </script>
 <style>
