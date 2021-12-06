@@ -35,7 +35,7 @@ import { mapState } from "vuex";
 import playback_module from "@/store/modules/playback";
 import {
   faPlayCircle as fa_play_circle,
-  faStopCircle as fa_stop_circle
+  faStopCircle as fa_stop_circle,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(fa_play_circle, fa_stop_circle);
 
@@ -52,25 +52,25 @@ library.add(fa_play_circle, fa_stop_circle);
 export default {
   name: "StimulationStudioControls",
   components: {
-    FontAwesomeIcon
+    FontAwesomeIcon,
   },
   data() {
     return {
       play_state: false,
       active_gradient: ["#19ac8a", "#24524b"],
       inactive_gradient: ["#b7b7b7", "#858585"],
-      current_gradient: ["#b7b7b7", "#858585"]
+      current_gradient: ["#b7b7b7", "#858585"],
     };
   },
   computed: {
     ...mapState("stimulation", {
       protocol_assignments: "protocol_assignments",
-      stim_status: "stim_status"
+      stim_status: "stim_status",
     }),
     ...mapState("playback", {
-      playback_state: "playback_state"
+      playback_state: "playback_state",
     }),
-    is_start_stop_button_enabled: function() {
+    is_start_stop_button_enabled: function () {
       // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
       let value = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
       if (!this.play_state) {
@@ -79,38 +79,26 @@ export default {
       }
       return value;
     },
-    svg__stimulation_controls_play_stop_button__dynamic_class: function() {
+    svg__stimulation_controls_play_stop_button__dynamic_class: function () {
       return this.is_start_stop_button_enabled
         ? "span__stimulation-controls-play-stop-button--active"
         : "span__stimulation-controls-play-stop-button--inactive";
-    }
+    },
   },
   watch: {
-    stim_status: function() {
+    stim_status: function () {
       this.current_gradient = this.stim_status ? this.active_gradient : this.inactive_gradient;
       this.play_state = this.stim_status;
-    }
+    },
   },
-  // created() {
-  //   this.unsubscribe = this.$store.subscribe(async mutation => {
-  //     // waits for response from BE before turning green
-  //     if (mutation.type === "stimulation/set_stim_status") {
-  //       this.current_gradient = mutation.payload ? this.active_gradient : this.inactive_gradient;
-  //       this.play_state = mutation.payload;
-  //     }
-  //   });
-  // },
-  // beforeDestroy() {
-  //   this.unsubscribe();
-  // },
   methods: {
     async handle_play_stop() {
       if (this.is_start_stop_button_enabled) {
         const action = this.play_state ? "stop_stim_status" : "create_protocol_message";
         this.$store.dispatch(`stimulation/${action}`);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

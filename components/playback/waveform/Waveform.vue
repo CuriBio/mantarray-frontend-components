@@ -15,6 +15,7 @@
 </template>
 <script>
 import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear, area as d3_area } from "d3";
+import { mapState } from "vuex";
 /**
  * @vue-prop {String} title - Current title of the waveform
  * @vue-prop {Int} samples_per_second - Current samples per second
@@ -59,40 +60,38 @@ export default {
     x_axis_label: { type: String, default: "Time (seconds)" },
     tissue_data_points: {
       type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     stim_data_points: {
       type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]
-      default: function() {
+      default: function () {
         return [];
-      }
+      },
     },
     tissue_line_color: { type: String, default: "#00c465" },
     stim_line_color: { type: String, default: "#fff200" },
     margin: {
       type: Object,
-      default: function() {
+      default: function () {
         return { top: 10, right: 20, bottom: 30, left: 60 };
-      }
+      },
     },
     plot_area_pixel_height: {
       type: Number,
-      default: 352
+      default: 352,
     },
     plot_area_pixel_width: {
       type: Number,
-      default: 406
+      default: 406,
     },
-    fill_color_assignments: {
-      type: Array,
-      default: function() {
-        return [];
-      }
-    }
+    well_idx: {
+      type: Number,
+      default: 0,
+    },
   },
-  data: function() {
+  data: function () {
     return {
       the_svg: null,
       x_axis_node: null,
@@ -102,10 +101,15 @@ export default {
       waveform_line_node: null, // TODO rename this tissue_waveform_line_node once frontend-test-utils updated
       stim_waveform_line_node: null,
       div__waveform_graph__dynamic_style: {
-        width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px"
+        width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
       },
-      fill_color_idx: 0
     };
+  },
+  computed: {
+    ...mapState("data", {
+      stim_fill_assignments: "stim_fill_assignments",
+      stim_fill_colors: "stim_fill_colors",
+    }),
   },
   watch: {
     x_axis_min() {
@@ -125,9 +129,9 @@ export default {
     },
     stim_data_points() {
       this.render_plot();
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     // Eli (2/2/2020): having the svg be appended in the `data` function didn't work, so moved it to here
     let the_svg = this.the_svg;
     the_svg = d3_select(this.$el)
@@ -211,7 +215,7 @@ export default {
     this.render_plot();
   },
   methods: {
-    render_plot: function() {
+    render_plot: function () {
       this.create_x_axis_scale();
       this.create_y_axis_scale();
 
@@ -220,35 +224,35 @@ export default {
       this.plot_data();
     },
 
-    create_x_axis_scale: function() {
+    create_x_axis_scale: function () {
       this.x_axis_scale = scaleLinear()
         .domain([
           this.x_axis_min / this.samples_per_second,
-          (this.x_axis_min + this.x_axis_sample_length) / this.samples_per_second
+          (this.x_axis_min + this.x_axis_sample_length) / this.samples_per_second,
         ])
         .range([0, this.plot_area_pixel_width]);
     },
-    create_y_axis_scale: function() {
+    create_y_axis_scale: function () {
       this.y_axis_scale = scaleLinear()
         .domain([this.y_min, this.y_max])
         .range([this.plot_area_pixel_height, 0]);
     },
-    display_x_axis: function() {
+    display_x_axis: function () {
       this.x_axis_node.call(axisBottom(this.x_axis_scale));
     },
-    display_y_axis: function() {
+    display_y_axis: function () {
       this.y_axis_node.call(axisLeft(this.y_axis_scale));
     },
-    plot_data: function() {
+    plot_data: function () {
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
       const area = d3_area()
-        .x(function(d) {
+        .x(function (d) {
           return x_axis_scale(d[0] / 1e6);
         })
         .y0(this.plot_area_pixel_height)
-        .y1(function(d) {
+        .y1(function (d) {
           return y_axis_scale(d[1]);
         });
 
@@ -264,45 +268,13 @@ export default {
         .attr(
           "d",
           d3_line()
-            .x(d => {
+            .x((d) => {
               return x_axis_scale(d[0] / 1e6);
             })
-            .y(d => {
+            .y((d) => {
               return y_axis_scale(d[1]);
             })
         );
-
-      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
-      const stim_data_to_plot = this.stim_data_points;
-      this.stim_waveform_line_node.selectAll("*").remove();
-
-      this.fill_color_assignments.map(assignment => {
-        const sliced_stim_data_to_fill = stim_data_to_plot.slice(
-          assignment.idx_to_slice[0],
-          assignment.idx_to_slice[1]
-        );
-
-        // makes sliding transition smoother
-        if (assignment.idx_to_slice[1] === stim_data_to_plot.length - 1) {
-          sliced_stim_data_to_fill[1] = this.x_axis_min + this.x_axis_sample_length;
-        }
-
-        this.stim_waveform_line_node
-          .append("path")
-          .datum(sliced_stim_data_to_fill)
-          .attr("fill", assignment.fill_color)
-          .attr("opacity", "0.2")
-          .attr("stroke-width", 0)
-          .attr("d", area);
-      });
-
-      this.stim_waveform_line_node
-        .append("path")
-        .datum(stim_data_to_plot)
-        .attr("fill", "white")
-        .attr("opacity", "0.2")
-        .attr("stroke-width", 0)
-        .attr("d", area);
 
       this.stim_waveform_line_node
         .append("path")
@@ -313,15 +285,39 @@ export default {
         .attr(
           "d",
           d3_line()
-            .x(d => {
+            .x((d) => {
               return x_axis_scale(d[0] / 1e6);
             })
-            .y(d => {
+            .y((d) => {
               return y_axis_scale(d[1]);
             })
         );
-    }
-  }
+
+      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
+      const stim_data_to_plot = this.stim_data_points;
+      this.stim_waveform_line_node.selectAll("*").remove();
+      const fill_colors = this.stim_fill_colors[this.well_idx];
+
+      if (this.stim_fill_assignments[this.well_idx].length > 0 && fill_colors != undefined) {
+        this.stim_fill_assignments[this.well_idx].map((sub_protocol, idx) => {
+          let color;
+          sub_protocol[0].indexOf(255) !== -1 ? (color = "none") : (color = fill_colors[sub_protocol[0][0]]);
+
+          // makes sliding transition smoother
+          if (idx === this.stim_fill_assignments[this.well_idx].length - 1) {
+            sub_protocol[1][sub_protocol[1].length - 1][0] = this.x_axis_min + this.x_axis_sample_length;
+          }
+
+          this.stim_waveform_line_node
+            .append("path")
+            .datum(sub_protocol[1])
+            .attr("fill", color)
+            .attr("stroke-width", 0)
+            .attr("d", area);
+        });
+      }
+    },
+  },
 };
 </script>
 

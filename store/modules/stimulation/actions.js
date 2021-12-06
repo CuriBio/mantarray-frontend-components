@@ -206,7 +206,10 @@ export default {
   async create_protocol_message({ commit, state }) {
     const status = true;
     const message = { protocols: [], protocol_assignments: {} };
-    const { protocol_assignments, stim_fill_colors } = this.state.stimulation;
+
+    const { protocol_assignments } = this.state.stimulation;
+    const { stim_fill_colors } = this.state.data;
+
     const charge_conversion = { C: 1000, V: 1 };
 
     for (let well_idx = 0; well_idx < 24; well_idx++) {
@@ -221,7 +224,10 @@ export default {
           well
         ].protocol;
 
-        stim_fill_colors[well] = detailed_pulses.map((pulse) => pulse.repeat.color);
+        stim_fill_colors[well] = detailed_pulses.map((pulse) => {
+          const fill_color = pulse.repeat.color.split(", ");
+          return `${fill_color[0]}, 90%, 80%, .2)`;
+        });
         // add protocol to list of unique protocols if it has not been entered yet
         const { letter } = protocol_assignments[well];
         if (!unique_protocol_ids.has(letter)) {
