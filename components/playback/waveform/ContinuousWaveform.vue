@@ -3,7 +3,6 @@
     :title="title"
     :tissue_data_points="d3_formatted_data_points.tissue"
     :stim_data_points="d3_formatted_data_points.stim"
-    :fill_color_assignments="fill_color_assignments"
     :samples_per_second="samples_per_second"
     :x_axis_sample_length="x_axis_sample_length"
     :x_axis_min="x_axis_min"

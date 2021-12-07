@@ -35,9 +35,11 @@ export default {
 
   async append_stim_waveforms({ dispatch, state }, new_values) {
     for (const well_idx in new_values) {
-      if (new_values[well_idx] !== undefined) {
+      if (new_values[well_idx] !== undefined && state.plate_waveforms[well_idx] !== undefined) {
         // real Y values not actually used yet, just need to draw a straight vertical line at each new x value and connect the points at a Y value out of the max zoom window
         const new_well_values = new_values[well_idx];
+        if (new_well_values[0][0] < state.plate_waveforms[well_idx].x_data_points[0])
+          new_well_values[0][0] = state.plate_waveforms[well_idx].x_data_points[0];
 
         new_well_values[0].map((x) => {
           const y_points = [101000, -201, 101000]; // arbitrary values far enough outside of max window that the connection between vertical lines will not be rendered
@@ -47,7 +49,7 @@ export default {
           });
           state.sub_protocol_flags[well_idx].push([new_well_values[1], x]);
         });
-        await dispatch("assign_stim_fill_colors", well_idx);
+        dispatch("assign_stim_fill_colors", well_idx);
       }
     }
   },

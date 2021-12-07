@@ -243,7 +243,7 @@ export default {
     display_y_axis: function () {
       this.y_axis_node.call(axisLeft(this.y_axis_scale));
     },
-    plot_data: function () {
+    plot_data: async function () {
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
@@ -256,32 +256,19 @@ export default {
           return y_axis_scale(d[1]);
         });
 
-      // update tissue lines
+      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
       const tissue_data_to_plot = this.tissue_data_points;
-      this.waveform_line_node.selectAll("*").remove();
-      this.waveform_line_node
-        .append("path")
-        .datum(tissue_data_to_plot)
-        .attr("fill", "none")
-        .attr("stroke", this.tissue_line_color)
-        .attr("stroke-width", 2.5)
-        .attr(
-          "d",
-          d3_line()
-            .x((d) => {
-              return x_axis_scale(d[0] / 1e6);
-            })
-            .y((d) => {
-              return y_axis_scale(d[1]);
-            })
-        );
+
+      const stim_data_to_plot = this.stim_data_points;
+      this.stim_waveform_line_node.selectAll("*").remove();
+      const fill_colors = this.stim_fill_colors[this.well_idx];
 
       this.stim_waveform_line_node
         .append("path")
         .datum(stim_data_to_plot)
         .attr("fill", "none")
-        .attr("stroke", this.stim_line_color)
-        .attr("stroke-width", 1.5)
+        .attr("stroke", "none")
+        .attr("stroke-width", 0)
         .attr(
           "d",
           d3_line()
@@ -293,12 +280,7 @@ export default {
             })
         );
 
-      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
-      const stim_data_to_plot = this.stim_data_points;
-      this.stim_waveform_line_node.selectAll("*").remove();
-      const fill_colors = this.stim_fill_colors[this.well_idx];
-
-      if (this.stim_fill_assignments[this.well_idx].length > 0 && fill_colors != undefined) {
+      if (fill_colors != undefined && tissue_data_to_plot.length > 0) {
         this.stim_fill_assignments[this.well_idx].map((sub_protocol, idx) => {
           let color;
           sub_protocol[0].indexOf(255) !== -1 ? (color = "none") : (color = fill_colors[sub_protocol[0][0]]);
@@ -316,6 +298,25 @@ export default {
             .attr("d", area);
         });
       }
+
+      // Needs to be last so tissue line sits on top of the colored background
+      this.waveform_line_node.selectAll("*").remove();
+      this.waveform_line_node
+        .append("path")
+        .datum(tissue_data_to_plot)
+        .attr("fill", "none")
+        .attr("stroke", this.tissue_line_color)
+        .attr("stroke-width", 2.5)
+        .attr(
+          "d",
+          d3_line()
+            .x((d) => {
+              return x_axis_scale(d[0] / 1e6);
+            })
+            .y((d) => {
+              return y_axis_scale(d[1]);
+            })
+        );
     },
   },
 };
