@@ -206,7 +206,10 @@ export default {
   async create_protocol_message({ commit, state }) {
     const status = true;
     const message = { protocols: [], protocol_assignments: {} };
+
     const { protocol_assignments } = this.state.stimulation;
+    const { stim_fill_colors } = this.state.data;
+
     const charge_conversion = { C: 1000, V: 1 };
 
     for (let well_idx = 0; well_idx < 24; well_idx++) {
@@ -217,12 +220,19 @@ export default {
     const unique_protocol_ids = new Set();
     for (const well in protocol_assignments) {
       if (protocol_assignments !== {}) {
+        const { stimulation_type, pulses, stop_setting, detailed_pulses } = protocol_assignments[
+          well
+        ].protocol;
+
+        stim_fill_colors[well] = detailed_pulses.map((pulse) => {
+          const fill_color = pulse.repeat.color.split(", ");
+          return `${fill_color[0]}, ${fill_color[1]}, 80%, .35)`;
+        });
         // add protocol to list of unique protocols if it has not been entered yet
         const { letter } = protocol_assignments[well];
         if (!unique_protocol_ids.has(letter)) {
           unique_protocol_ids.add(letter);
 
-          const { stimulation_type, pulses, stop_setting } = protocol_assignments[well].protocol;
           const converted_pulses = pulses.map((pulse) => {
             return {
               phase_one_duration: pulse.phase_one_duration * 1000, // sent in µs
@@ -234,6 +244,7 @@ export default {
               total_active_duration: pulse.total_active_duration, // sent in ms
             };
           });
+
           const protocol_model = {
             protocol_id: letter,
             stimulation_type,
@@ -293,7 +304,6 @@ export default {
       }
       await this.commit("stimulation/set_edit_mode_off");
     }
-
     this.commit("stimulation/reset_protocol_editor");
   },
 };

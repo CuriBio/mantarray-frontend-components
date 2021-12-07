@@ -13,7 +13,6 @@
 
 <script>
 import { ContinuousWaveform } from "@/dist/mantarray.common";
-
 export default {
   components: {
     ContinuousWaveform,

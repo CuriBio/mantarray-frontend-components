@@ -1,7 +1,8 @@
 import Waveform from "@/components/playback/waveform/Waveform.vue";
 import { Waveform as dist_Waveform } from "@/dist/mantarray.common";
 
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
 
 import {
   get_x_axis_ticks_with_text,
@@ -29,14 +30,28 @@ const converted_array_y_2 = converted_values_2.values;
 
 let wrapper = null;
 
+const localVue = createLocalVue();
+localVue.use(Vuex);
+let NuxtStore;
+let store;
+
 describe("Waveform.vue", () => {
+  beforeAll(async () => {
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+
+  beforeEach(async () => {
+    store = await NuxtStore.createStore();
+  });
+
   afterEach(() => wrapper.destroy());
   test("When mounted from the built dist file, Then it loads successfully", async () => {
     const propsData = {
       title: "A07",
     };
 
-    wrapper = shallowMount(dist_Waveform, { propsData });
+    wrapper = shallowMount(dist_Waveform, { store, localVue, propsData });
     expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual("A07");
   });
 
@@ -45,7 +60,7 @@ describe("Waveform.vue", () => {
     const propsData = {
       title: expected_value,
     };
-    wrapper = shallowMount(Waveform, { propsData });
+    wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
     expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(expected_value);
   });
@@ -55,7 +70,7 @@ describe("Waveform.vue", () => {
     const propsData = {
       title: expected_value,
     };
-    wrapper = shallowMount(Waveform, { propsData });
+    wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
     // confirm initial condition
     expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(expected_value);
@@ -66,15 +81,6 @@ describe("Waveform.vue", () => {
     expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(new_expected_value);
   });
 
-  // // TODO (Eli 2/3/20): figure out how to unit test prop validators so this can be added
-  // it("should not allow a negative time index as a prop",  () => {
-  //   const propsData = {
-  //     title: "C12", x_time_index:-1
-  //   };
-  //   wrapper = shallowMount(Waveform, { propsData });
-
-  // });
-
   describe("x-axis", () => {
     const propsData = {
       title: "C12",
@@ -83,7 +89,7 @@ describe("Waveform.vue", () => {
     test("When initially mounted, Then the x-axis title matches the value provided in the prop", () => {
       const expected_value = "Lots of Time";
       propsData.x_axis_label = expected_value;
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       expect(wrapper.find(x_axis_title_selector_text).text()).toStrictEqual(expected_value);
     });
@@ -91,7 +97,7 @@ describe("Waveform.vue", () => {
     test("When the x_axis_label prop is updated, Then the x-axis title updates", async () => {
       const expected_value = "Distance";
       propsData.x_axis_label = expected_value;
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       // confirm pre-condition
       expect(wrapper.find(x_axis_title_selector_text).text()).toStrictEqual(expected_value);
@@ -104,7 +110,7 @@ describe("Waveform.vue", () => {
     });
 
     test("When initially mounted, Then the left label of the x-axis should be 0 by default", () => {
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text = get_x_axis_ticks_with_text(wrapper);
 
@@ -117,7 +123,7 @@ describe("Waveform.vue", () => {
         x_axis_min: 1.1 * 1e6,
       };
 
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text = get_x_axis_ticks_with_text(wrapper);
 
@@ -131,7 +137,7 @@ describe("Waveform.vue", () => {
         tissue_data_points: [],
       };
 
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text_before = get_x_axis_ticks_with_text(wrapper);
       // confirm initial state
@@ -149,7 +155,7 @@ describe("Waveform.vue", () => {
         title: "C12",
         x_axis_sample_length: 4 * 1e6,
       };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text = get_x_axis_ticks_with_text(wrapper);
 
@@ -161,7 +167,7 @@ describe("Waveform.vue", () => {
         title: "C12",
         x_axis_sample_length: 1 * 1e6,
       };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text_before = get_x_axis_ticks_with_text(wrapper);
       // confirm initial state
@@ -180,7 +186,7 @@ describe("Waveform.vue", () => {
       const expected_value = "Voltage";
       const propsData = { title: "C05", y_axis_label: expected_value };
 
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       expect(wrapper.find(y_axis_title_selector_text).text()).toStrictEqual(expected_value);
     });
@@ -188,7 +194,7 @@ describe("Waveform.vue", () => {
     test("When the y_axis_label prop is updated, Then the y-axis title updates", async () => {
       const expected_value = "Temperature";
       const propsData = { title: "C04", y_axis_label: expected_value };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       // confirm pre-condition
       expect(wrapper.find(y_axis_title_selector_text).text()).toStrictEqual(expected_value);
@@ -203,7 +209,7 @@ describe("Waveform.vue", () => {
       const propsData = {
         title: "C12",
       };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text = get_y_axis_ticks_with_text(wrapper);
 
@@ -215,7 +221,7 @@ describe("Waveform.vue", () => {
         title: "C12",
         y_min: 1000,
       };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text = get_y_axis_ticks_with_text(wrapper);
 
@@ -227,7 +233,7 @@ describe("Waveform.vue", () => {
         title: "C12",
         y_min: 0,
       };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text_before = get_y_axis_ticks_with_text(wrapper);
       // confirm initial state
@@ -243,7 +249,7 @@ describe("Waveform.vue", () => {
       const propsData = {
         title: "C12",
       };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text = get_y_axis_ticks_with_text(wrapper);
 
@@ -255,7 +261,7 @@ describe("Waveform.vue", () => {
         title: "C12",
         y_max: 160,
       };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text = get_y_axis_ticks_with_text(wrapper);
 
@@ -267,7 +273,7 @@ describe("Waveform.vue", () => {
         title: "C12",
         y_max: 100,
       };
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
 
       const ticks_with_text_before = get_y_axis_ticks_with_text(wrapper);
       // confirm initial state
@@ -292,6 +298,7 @@ describe("Waveform.vue", () => {
       propsData = {
         title: "C12",
         tissue_data_points: x_y_data,
+        stim_data_points: x_y_data,
         x_axis_min: 0,
         x_axis_sample_length: 1 * 1e6,
         y_min: 0,
@@ -299,12 +306,13 @@ describe("Waveform.vue", () => {
         plot_area_pixel_height: 360,
         plot_area_pixel_width: 370,
         margin: { top: 10, right: 30, bottom: 30, left: 60 },
+        well_idx: 3,
       };
 
       attributes_used_to_calculate_coords = propsData;
       attributes_used_to_calculate_coords["x_axis_min"] = 0;
 
-      wrapper = shallowMount(Waveform, { propsData });
+      wrapper = shallowMount(Waveform, { store, localVue, propsData });
       await wrapper.vm.$nextTick(); // wait for update
       pixel_coords = get_waveform_line_pixel_coordinates_from_svg(wrapper);
     });
@@ -370,6 +378,10 @@ describe("Waveform.vue", () => {
       const waveform_line_node = wrapper.find("#waveform_line_node");
       const waveform_line_paths = waveform_line_node.findAll("path");
       expect(waveform_line_paths).toHaveLength(1);
+
+      const stim_waveform_line_node = wrapper.find("#stim_waveform_line_node");
+      const stim_waveform_line_paths = stim_waveform_line_node.findAll("path");
+      expect(stim_waveform_line_paths).toHaveLength(1);
 
       pixel_coords = get_waveform_line_pixel_coordinates_from_svg(wrapper);
       expect(pixel_coords).toHaveLength(19);

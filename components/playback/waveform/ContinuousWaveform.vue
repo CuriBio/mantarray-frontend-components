@@ -14,6 +14,7 @@
     :margin="margin"
     :plot_area_pixel_height="plot_area_pixel_height"
     :plot_area_pixel_width="plot_area_pixel_width"
+    :well_idx="well_idx"
   />
 </template>
 <script>
@@ -99,7 +100,9 @@ export default {
       y_axis_scale: "y_axis_scale",
       y_axis_range: "y_axis_range",
     }),
-
+    well_idx: function () {
+      return this.current_quadrant[this.display_waveform_idx];
+    },
     x_axis_min: function () {
       if (this.display_data_prior_to_current_timepoint) {
         return this.x_time_index - this.x_axis_sample_length;
@@ -107,12 +110,8 @@ export default {
         return this.x_time_index;
       }
     },
-
     title: function () {
-      return twenty_four_well_plate_definition.get_well_name_from_well_index(
-        this.current_quadrant[this.display_waveform_idx],
-        true
-      );
+      return twenty_four_well_plate_definition.get_well_name_from_well_index(this.well_idx, true);
     },
     y_max: function () {
       // round to 2 decimals, based on https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
@@ -129,7 +128,6 @@ export default {
       return this.x_zoom_levels[this.x_zoom_level_idx].x_scale;
     },
   },
-
   watch: {
     plate_waveforms() {
       this.calculate_data_to_plot("tissue");
@@ -151,9 +149,9 @@ export default {
     this.calculate_all_data_to_plot();
   },
   methods: {
-    calculate_data_to_plot: function (data_type) {
+    calculate_data_to_plot: async function (data_type) {
       const waveforms = data_type === "tissue" ? this.plate_waveforms : this.stim_waveforms;
-      const data_for_this_waveform_in_vuex = waveforms[this.current_quadrant[this.display_waveform_idx]];
+      const data_for_this_waveform_in_vuex = waveforms[this.well_idx];
       if (
         data_for_this_waveform_in_vuex === undefined ||
         data_for_this_waveform_in_vuex.x_data_points.length == 0

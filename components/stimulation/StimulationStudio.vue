@@ -81,7 +81,8 @@ export default {
         this.selected_protocol = { label: "Create New", color: "", letter: "" };
       }
 
-      if (idx === 1) this.$store.commit("stimulation/reset_state");
+      // if (idx === 1) this.$store.commit("stimulation/reset_state");
+      if (idx === 1) this.$store.dispatch("stimulation/create_protocol_message");
 
       if (idx === 2 && this.selected_protocol.label !== "Create New") {
         this.$store.dispatch("stimulation/edit_selected_protocol", this.selected_protocol);

@@ -65,6 +65,7 @@ export default {
   computed: {
     ...mapState("stimulation", {
       protocol_assignments: "protocol_assignments",
+      stim_status: "stim_status",
     }),
     ...mapState("playback", {
       playback_state: "playback_state",
@@ -84,17 +85,11 @@ export default {
         : "span__stimulation-controls-play-stop-button--inactive";
     },
   },
-  created() {
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      // waits for response from BE before turning green
-      if (mutation.type === "stimulation/set_stim_status") {
-        this.current_gradient = mutation.payload ? this.active_gradient : this.inactive_gradient;
-        this.play_state = mutation.payload;
-      }
-    });
-  },
-  beforeDestroy() {
-    this.unsubscribe();
+  watch: {
+    stim_status: function () {
+      this.current_gradient = this.stim_status ? this.active_gradient : this.inactive_gradient;
+      this.play_state = this.stim_status;
+    },
   },
   methods: {
     async handle_play_stop() {

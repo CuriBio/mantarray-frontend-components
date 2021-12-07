@@ -184,6 +184,7 @@ export default {
       time_units_idx: 0,
       disable_dropdown: false,
       selected_frequency: null,
+      color_idx: 0,
     };
   },
   computed: {
@@ -308,12 +309,12 @@ export default {
     },
     clone(type) {
       this.cloned = true;
-      const random_color = Math.floor(Math.random() * 16777215).toString(16);
+      const random_color = this.generate_random_color();
 
       return {
         type,
         nested_protocols: [],
-        repeat: { color: random_color, number_of_repeats: 0 },
+        repeat: { color: `${random_color}`, number_of_repeats: 0 },
         pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
@@ -362,7 +363,23 @@ export default {
       this.handle_protocol_order(this.protocol_order);
     },
     get_style(type) {
-      if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
+      if (type.nested_protocols.length > 0) return "border: 2px solid " + type.repeat.color;
+    },
+    generate_random_color() {
+      const non_green_ranges = [
+        [0, 70],
+        [170, 359],
+      ];
+
+      const selected_range = non_green_ranges[this.color_idx];
+      this.color_idx = this.color_idx == 0 ? 1 : 0; // alternate to prevent similar colors next to each other
+
+      const random_hue = Math.random() * (selected_range[1] - selected_range[0]) + selected_range[0];
+      const random_sat = 90 + 10 * Math.random();
+      const random_light = 40 + 20 * Math.random();
+
+      // Random non-green with high saturation, around 50% lightness to remove black and whites, and 100% opacity.
+      return `hsla(${random_hue}, ${random_sat}%, ${random_light}%, 1)`;
     },
   },
 };

@@ -34,7 +34,7 @@
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
-            :input_width="196"
+            :input_width="200"
             :options_text="stimulation_types_array"
             :options_idx="stimulation_type_idx"
             :dom_id_suffix="'stimulation_type'"
