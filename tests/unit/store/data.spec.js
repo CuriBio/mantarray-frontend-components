@@ -164,7 +164,23 @@ describe("store/data", () => {
       y_data_points: [101000, -201, 101000, 101000, -201, 101000],
     });
   });
+  test("When stim_waveforms is dispatched before plate waveforms are mutated, Then the first time index in stim_waveforms will be changed to match the first tissue time index", async () => {
+    const stored_waveform = store.getters["data/stim_waveforms"];
 
+    store.commit("data/set_plate_waveforms", [
+      { x_data_points: [15], y_data_points: [0] },
+      { x_data_points: [1], y_data_points: [2] },
+    ]);
+
+    store.dispatch("data/append_stim_waveforms", {
+      0: [[13], [99]],
+    });
+
+    expect(stored_waveform[0]).toStrictEqual({
+      x_data_points: [15, 15, 15],
+      y_data_points: [101000, -201, 101000],
+    });
+  });
   describe("websocket", () => {
     // windows CI is having issues
     if (process.platform == "win32") {
@@ -194,7 +210,7 @@ describe("store/data", () => {
 
     test("Given ws client has a 'message' event handler, When ws server emits a 'message' event, Then client receives message", async () => {
       // Sanity test for websockets
-      let expected_message = "Test Message";
+      const expected_message = "Test Message";
 
       await new Promise((resolve) => {
         socket_client_side.on("message", (message) => {

@@ -5,23 +5,22 @@
       :x_axis_sample_length="1e6"
       :y_label="'My Y'"
       :x_label="'Their X'"
+      :tissue_line_color="'#FFFF00'"
     >
     </ContinuousWaveform>
   </div>
 </template>
 
 <script>
-// import { ContinuousWaveform } from "@/dist/mantarray.common";
-import ContinuousWaveform from "@/components/playback/waveform/ContinuousWaveform.vue";
-
+import { ContinuousWaveform } from "@/dist/mantarray.common";
 export default {
   components: {
     ContinuousWaveform,
   },
   computed: {},
   created: function () {
-    const x_values = [0, 300000, 700000, 1400000, 2300000];
-    const y_values = [90.429978, 98.5820692, 27.728242, 52.3291106, 70.8505055];
+    const x_values = [0, 30000, 70000, 140000, 230000];
+    const y_values = [290.429978, 298.5820692, 327.728242, 352.3291106, 370.8505055];
     this.temp_datapoints = [
       { x_data_points: x_values, y_data_points: y_values },
       { x_data_points: x_values, y_data_points: y_values },

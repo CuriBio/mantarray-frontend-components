@@ -106,6 +106,17 @@ describe("ContinuousWaveform.vue", () => {
       wrapper = mount(ContinuousWaveform, { propsData, store, localVue });
       const waveform_wrapper = wrapper.findComponent(Waveform);
       const temp_datapoints = new Array(6);
+      store.state.data.stim_fill_colors[0] = ["hsla(100, 80%, 80%, .5)"];
+
+      const temp_stim_data = {
+        0: [[50000], [0]],
+      };
+      await store.dispatch("data/append_stim_waveforms", temp_stim_data);
+
+      const temp_stim_data_2 = {
+        0: [[150000], [0]],
+      };
+      await store.dispatch("data/append_stim_waveforms", temp_stim_data_2);
 
       temp_datapoints[0] = {
         x_data_points: [0, 30, 50000, 100000, 125000, 150000],

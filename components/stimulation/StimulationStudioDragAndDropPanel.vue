@@ -373,7 +373,7 @@ export default {
 
       const selected_range = non_green_ranges[this.color_idx];
       const random_hue = Math.random() * (selected_range[1] - selected_range[0]) + selected_range[0];
-      this.color_idx == 0 ? (this.color_idx = 1) : (this.color_idx = 0); // alternate to prevent similar colors next to each other
+      this.color_idx = this.color_idx == 0 ? 1 : 0; // alternate to prevent similar colors next to each other
 
       // Random non-green with high saturation, around 50% lightness to remove black and whites, and 100% opacity.
       return `hsla(${random_hue}, ${90 + 10 * Math.random()}%, ${40 + 20 * Math.random()}%, 1)`;
