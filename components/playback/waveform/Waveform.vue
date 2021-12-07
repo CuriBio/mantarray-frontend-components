@@ -258,7 +258,6 @@ export default {
 
       // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
       const tissue_data_to_plot = this.tissue_data_points;
-
       const stim_data_to_plot = this.stim_data_points;
       this.stim_waveform_line_node.selectAll("*").remove();
       const fill_colors = this.stim_fill_colors[this.well_idx];
@@ -267,8 +266,8 @@ export default {
         .append("path")
         .datum(stim_data_to_plot)
         .attr("fill", "none")
-        .attr("stroke", "none")
-        .attr("stroke-width", 0)
+        .attr("stroke", "#b7b7b7")
+        .attr("stroke-width", 2.5)
         .attr(
           "d",
           d3_line()
@@ -280,12 +279,13 @@ export default {
             })
         );
 
-      if (fill_colors != undefined && tissue_data_to_plot.length > 0) {
+      if (fill_colors != undefined) {
         this.stim_fill_assignments[this.well_idx].map((sub_protocol, idx) => {
+          // 255 is sent when a user stops a stim
           let color;
           sub_protocol[0].indexOf(255) !== -1 ? (color = "none") : (color = fill_colors[sub_protocol[0][0]]);
 
-          // makes sliding transition smoother
+          // makes sliding transition smoother and brings color to end of graph
           if (idx === this.stim_fill_assignments[this.well_idx].length - 1) {
             sub_protocol[1][sub_protocol[1].length - 1][0] = this.x_axis_min + this.x_axis_sample_length;
           }

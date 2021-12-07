@@ -226,7 +226,8 @@ export default {
 
         stim_fill_colors[well] = detailed_pulses.map((pulse) => {
           const fill_color = pulse.repeat.color.split(", ");
-          return `${fill_color[0]}, 90%, 90%, .25)`;
+          console.log("FILL COLOR: ", fill_color);
+          return `${fill_color[0]}, 90%, 80%, .35)`;
         });
         // add protocol to list of unique protocols if it has not been entered yet
         const { letter } = protocol_assignments[well];

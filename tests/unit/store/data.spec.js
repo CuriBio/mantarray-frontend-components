@@ -5,7 +5,6 @@ const MockAxiosAdapter = require("axios-mock-adapter");
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
 import { ENUMS } from "@/store/modules/playback/enums";
-import mutations from "@/store/modules/settings/mutations";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
 import { ping_system_status } from "../../../store/modules/flask/actions";
@@ -143,7 +142,7 @@ describe("store/data", () => {
 
     const stored_waveform = store.getters["data/stim_waveforms"];
 
-    store.commit("data/append_stim_waveforms", {
+    store.dispatch("data/append_stim_waveforms", {
       0: [[13], [99]],
       2: [
         [211, 212],

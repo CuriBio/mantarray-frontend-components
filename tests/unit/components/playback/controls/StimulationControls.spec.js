@@ -31,17 +31,8 @@ describe("store/stimulation", () => {
       expect(wrapper.vm.play_state).toBe(false);
     });
 
-    test("When exiting instance, Then instance is effectively destroyed", async () => {
-      const destroyed_spy = jest.spyOn(StimulationStudioControls, "beforeDestroy");
-      const wrapper = mount(StimulationStudioControls, {
-        store,
-        localVue,
-      });
-      wrapper.destroy();
-      expect(destroyed_spy).toHaveBeenCalledWith();
-    });
     test("Given a stimulation is active, When a user clicks the button to turn off stimulation, Then a signal should be dispatched to BE", async () => {
-      let dispatch_spy = jest.spyOn(store, "dispatch");
+      const dispatch_spy = jest.spyOn(store, "dispatch");
       dispatch_spy.mockImplementation(async () => await store.commit("stimulation/set_stim_status", false));
 
       store.state.stimulation.protocol_assignments = { test: "assignment" };
@@ -52,7 +43,6 @@ describe("store/stimulation", () => {
 
       wrapper.vm.play_state = true;
       await wrapper.find(".span__stimulation-controls-play-stop-button--active").trigger("click");
-      expect(wrapper.vm.play_state).toBe(false);
       expect(dispatch_spy).toHaveBeenCalledWith("stimulation/stop_stim_status");
     });
 
@@ -68,7 +58,7 @@ describe("store/stimulation", () => {
     });
 
     test("Given a stimulation is inactive and there are protocol assigned wells, When a user clicks the button to turn on stimulation, Then a signal should be dispatched to BE", async () => {
-      let dispatch_spy = jest.spyOn(store, "dispatch");
+      const dispatch_spy = jest.spyOn(store, "dispatch");
       dispatch_spy.mockImplementation(async () => await store.commit("stimulation/set_stim_status", true));
 
       store.state.stimulation.protocol_assignments = { test: "assignment" };
