@@ -1,0 +1,8 @@
+# sudo apt-get install python3-venv
+# python3 -m venv venv
+
+# pip install -r requirements-dev.txt
+
+
+pre-commit>=2.7.1 # run 'pre-commit install' initially to install the git hooks
+sphinx-js>=3.0.1
