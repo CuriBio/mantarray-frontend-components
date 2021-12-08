@@ -106,10 +106,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("data", {
-      stim_fill_assignments: "stim_fill_assignments",
-      stim_fill_colors: "stim_fill_colors",
-    }),
+    ...mapState("data", ["stim_fill_assignments", "stim_fill_colors"]),
   },
   watch: {
     x_axis_min() {

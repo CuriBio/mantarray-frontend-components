@@ -135,10 +135,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("stimulation", {
-      stimulation_type: (state) => state.protocol_editor.stimulation_type,
-      stop_setting: (state) => state.protocol_editor.stop_setting,
-    }),
+    ...mapState("stimulation", ["stimulation_type", "stop_setting"]),
     ...mapGetters("stimulation", [
       "get_protocol_name",
       "get_rest_duration",

@@ -9,6 +9,7 @@ const default_state = {
   display_option: "Twitch Force",
   display_option_idx: 0,
   heatmap_autoscale: false,
+  auto_scale: false,
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2

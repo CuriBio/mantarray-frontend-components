@@ -28,6 +28,7 @@
             v-model="input_value"
             :spellcheck="spellcheck"
             :state="input_is_valid"
+            :initial_value="initial_value"
             aria-describedby="input-feedback"
             :placeholder="placeholder"
             :disabled="disabled"
@@ -99,19 +100,11 @@ export default {
       return this.title_label !== "" ? 88 : 48;
     },
   },
-  created() {
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (
-        (this.dom_id_suffix === "heatmap-max" || this.dom_id_suffix === "heatmap-min") &&
-        mutation.type === "gradient/reset_gradient_range"
-      ) {
-        this.input_value = this.initial_value;
-        this.$emit("update:value", this.input_value);
-      }
-    });
-  },
-  beforeDestroy() {
-    this.unsubscribe();
+  watch: {
+    initial_value: function () {
+      this.input_value = isNaN(this.initial_value) ? "" : this.initial_value;
+      this.$emit("update:value", this.initial_value);
+    },
   },
   methods: {
     on_b_form_input: function () {

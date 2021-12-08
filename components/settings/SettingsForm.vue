@@ -326,12 +326,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", {
-      customer_account_ids: "customer_account_ids",
-    }),
-    ...mapState("settings", {
-      customer_index: "customer_index",
-    }),
+    ...mapState("settings", ["customer_account_ids", "customer_index"]),
     // ...mapState("settings", {
     //   user_index: "user_index"
     // }),

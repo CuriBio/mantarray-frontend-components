@@ -188,10 +188,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("stimulation", {
-      time_unit: (state) => state.protocol_editor.time_unit,
-      stop_setting: (state) => state.protocol_editor.stop_setting,
-    }),
+    ...mapState("stimulation", ["time_unit", "stop_setting"]),
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {

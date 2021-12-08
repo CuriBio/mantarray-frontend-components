@@ -39,13 +39,8 @@ export default {
   },
 
   computed: {
-    ...mapState("gradient", {
-      gradient: "gradient",
-    }),
-
-    ...mapGetters("gradient", {
-      gradient_range: "gradient_range",
-    }),
+    ...mapState("gradient", ["gradient"]),
+    ...mapGetters("gradient", ["gradient_range"]),
     top_shift() {
       return "top: " + (this.gradient_height - 16).toString() + "px;";
     },
