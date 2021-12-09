@@ -221,7 +221,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("playback", ["playback_state", "playback_state", "tooltips_delay"]),
+    ...mapState("playback", ["playback_state", "is_valid_barcode", "tooltips_delay"]),
     ...mapState("settings", ["customer_index", "auto_upload"]),
     calibrate_tooltip_text: function () {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {

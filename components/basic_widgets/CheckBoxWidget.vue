@@ -6,7 +6,7 @@
         :options="checkbox_options"
         value-field="value"
         stacked
-        @change="change_method"
+        @input="change_method"
       ></b-form-checkbox-group>
     </div>
   </div>

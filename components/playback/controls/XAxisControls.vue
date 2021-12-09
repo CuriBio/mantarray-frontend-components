@@ -103,7 +103,10 @@ export default {
     };
   },
   computed: {
-    ...mapState("waveform", ["x_zoom_levels", "x_zoom_level_idx"]),
+    ...mapState("waveform", {
+      x_zoom_levels: "x_zoom_levels",
+      zoom_level_idx: "x_zoom_level_idx",
+    }),
     ...mapState("playback", ["tooltips_delay"]),
     max_zoom_index: function () {
       return this.x_zoom_levels.length - 1;

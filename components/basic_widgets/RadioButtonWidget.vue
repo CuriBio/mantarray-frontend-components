@@ -32,24 +32,16 @@ export default {
 
   data: function () {
     return {
-      selected: this.pre_selected != undefined,
+      selected: null,
     };
   },
   watch: {
-    pre_selected() {
+    pre_selected: function () {
       this.preselect();
     },
   },
   created: function () {
     this.preselect();
-    this.unsubscribe = this.$store.subscribe((mutation) => {
-      if (mutation.type === "gradient/reset_gradient_theme_idx") {
-        this.preselect();
-      }
-    });
-  },
-  beforeDestroy() {
-    this.unsubscribe();
   },
   methods: {
     preselect: function () {

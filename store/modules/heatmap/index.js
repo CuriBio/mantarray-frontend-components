@@ -2,6 +2,7 @@
 
 import getters from "./getters";
 import mutations from "./mutations";
+import { METRIC_UNITS } from "./enums";
 
 const default_state = {
   selected_wells: [],
@@ -20,4 +21,5 @@ export default {
   state,
   mutations,
   getters,
+  METRIC_UNITS,
 };
