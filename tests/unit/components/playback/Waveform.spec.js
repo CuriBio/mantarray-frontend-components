@@ -298,7 +298,6 @@ describe("Waveform.vue", () => {
       propsData = {
         title: "C12",
         tissue_data_points: x_y_data,
-        stim_data_points: x_y_data,
         x_axis_min: 0,
         x_axis_sample_length: 1 * 1e6,
         y_min: 0,
@@ -321,8 +320,8 @@ describe("Waveform.vue", () => {
       expect(pixel_coords).toHaveLength(19);
       const svg_nodes = wrapper.findAll("#svg_of_waveform > g");
 
-      expect(svg_nodes.wrappers[0].attributes("id")).toStrictEqual("waveform_line_node");
-      expect(svg_nodes.wrappers[1].attributes("id")).toStrictEqual("stim_waveform_line_node");
+      expect(svg_nodes.wrappers[0].attributes("id")).toStrictEqual("stim_waveform_line_node");
+      expect(svg_nodes.wrappers[1].attributes("id")).toStrictEqual("waveform_line_node");
       expect(svg_nodes.wrappers[2].attributes("id")).toStrictEqual("margin_blockers_node");
       expect(svg_nodes.wrappers[3].attributes("id")).toStrictEqual("x_axis_node");
       expect(svg_nodes.wrappers[4].attributes("id")).toStrictEqual("y_axis_node");
@@ -378,10 +377,6 @@ describe("Waveform.vue", () => {
       const waveform_line_node = wrapper.find("#waveform_line_node");
       const waveform_line_paths = waveform_line_node.findAll("path");
       expect(waveform_line_paths).toHaveLength(1);
-
-      const stim_waveform_line_node = wrapper.find("#stim_waveform_line_node");
-      const stim_waveform_line_paths = stim_waveform_line_node.findAll("path");
-      expect(stim_waveform_line_paths).toHaveLength(1);
 
       pixel_coords = get_waveform_line_pixel_coordinates_from_svg(wrapper);
       expect(pixel_coords).toHaveLength(19);
