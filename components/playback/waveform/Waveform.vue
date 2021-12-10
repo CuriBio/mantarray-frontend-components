@@ -263,8 +263,8 @@ export default {
         .append("path")
         .datum(stim_data_to_plot)
         .attr("fill", "none")
-        .attr("stroke", "#b7b7b7")
-        .attr("stroke-width", 2.5)
+        .attr("stroke", "black")
+        .attr("stroke-width", 1.5)
         .attr(
           "d",
           d3_line()

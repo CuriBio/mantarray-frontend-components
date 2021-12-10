@@ -5,7 +5,7 @@ import { createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 
 const max_warm_rgb = "rgb(74.118% 20.784% 19.608%)";
-const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
+// const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
 const max_cool_rgb = "rgb(6.275% 39.216% 54.902%)";
 
 const localVue = createLocalVue();
@@ -31,12 +31,17 @@ describe("HeatMap.vue", () => {
     });
     expect(wrapper.find(".div__heatmap-layout-background")).toBeTruthy();
   });
+
   test("When mounting HeatMap, Then it loads successfully", async () => {
     const wrapper = mount(HeatMap, {
       store,
       localVue,
     });
     expect(wrapper.find(".div__heatmap-layout-background")).toBeTruthy();
+    expect(wrapper.vm.upper).toBe("");
+    expect(wrapper.vm.lower).toBe("");
+    expect(wrapper.vm.autoscale).toBe(false);
+    expect(wrapper.vm.color_theme_idx).toBe(0);
   });
 
   test("When a single well is selected, Then the mean text display visibilities are updated", async () => {
@@ -329,5 +334,44 @@ describe("HeatMap.vue", () => {
     expect(max_error_msg.text()).toBe("max is equal to min");
     await min_input.setValue("99");
     expect(max_error_msg.text()).toBe("");
+  });
+  test("When autoscale is only selected and true, Then max min range values will change as new data comes in", async () => {
+    const wrapper = mount(HeatMap, {
+      store,
+      localVue,
+    });
+    const store_spy = jest.spyOn(store, "commit");
+
+    const autoscale_box = wrapper.find('input[type="checkbox"]');
+    await autoscale_box.setChecked(true);
+    await autoscale_box.trigger("change");
+
+    expect(wrapper.vm.autoscale).toBe(true);
+    await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
+    expect(store_spy.mock.calls).toHaveLength(2);
+    expect(store_spy.mock.calls).toContainEqual([
+      "gradient/set_gradient_range",
+      { max: "0.001", min: "0.000" },
+    ]);
+
+    await store.commit("data/set_heatmap_values", {
+      "Twitch Force": { data: [[0, 10]] },
+    });
+    expect(store_spy.mock.calls).toHaveLength(4);
+    expect(store_spy.mock.calls).toContainEqual([
+      "gradient/set_gradient_range",
+      { max: "10.000", min: "0.000" },
+    ]);
+
+    await autoscale_box.setChecked(false);
+    await autoscale_box.trigger("change");
+
+    expect(wrapper.vm.autoscale).toBe(false);
+
+    await store.commit("data/set_heatmap_values", {
+      "Twitch Force": { data: [[10, 15, 20]] },
+    });
+
+    expect(store_spy.mock.calls).toHaveLength(5);
   });
 });

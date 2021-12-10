@@ -268,7 +268,7 @@ export default {
         max: Math.max(...max_value_array).toFixed(3),
         min: Math.min(...min_value_array).toFixed(3),
       };
-      if (range.max === range.min) range.max += 0.001; // guard against edge case where the max/min are the same
+      if (range.max === range.min) range.max = (Number(range.max) + 0.001).toString(); // guard against edge case where the max/min are the same
       return range;
     },
   },
@@ -283,8 +283,8 @@ export default {
     this.checkbox_state = this.autoscale;
     this.color_theme_idx = this.gradient_theme_idx;
 
-    this.lower = this.gradient_range.min;
-    this.upper = this.gradient_range.max;
+    this.lower = isNaN(this.gradient_range.min) ? "" : this.gradient_range.min;
+    this.upper = isNaN(this.gradient_range.max) ? "" : this.gradient_range.max;
   },
   methods: {
     set_auto_scale: function (new_value) {
@@ -309,10 +309,7 @@ export default {
 
     radio_option_selected: function (option_value) {
       this.color_theme_idx = option_value.index;
-
-      if (this.gradient_theme_names[this.color_theme_idx]) {
-        this.$store.commit("gradient/set_gradient_theme_idx", this.color_theme_idx);
-      }
+      this.$store.commit("gradient/set_gradient_theme_idx", this.color_theme_idx);
     },
     on_update_maximum: function (new_value) {
       this.upper = parseFloat(new_value);
