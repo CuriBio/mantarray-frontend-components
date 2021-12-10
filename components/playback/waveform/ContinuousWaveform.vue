@@ -84,22 +84,10 @@ export default {
     };
   },
   computed: {
-    ...mapState("playback", {
-      x_time_index: "x_time_index",
-    }),
-    ...mapState("twentyfourcontrols", {
-      current_quadrant: "is_quadrant",
-    }),
-    ...mapState("data", {
-      plate_waveforms: "plate_waveforms",
-      stim_waveforms: "stim_waveforms",
-    }),
-    ...mapState("waveform", {
-      x_zoom_levels: "x_zoom_levels",
-      x_zoom_level_idx: "x_zoom_level_idx",
-      y_axis_scale: "y_axis_scale",
-      y_axis_range: "y_axis_range",
-    }),
+    ...mapState("playback", ["x_time_index"]),
+    ...mapState("twentyfourcontrols", { current_quadrant: "is_quadrant" }),
+    ...mapState("data", ["plate_waveforms", "stim_waveforms"]),
+    ...mapState("waveform", ["x_zoom_levels", "x_zoom_level_idx", "y_axis_scale", "y_axis_range"]),
     well_idx: function () {
       return this.current_quadrant[this.display_waveform_idx];
     },
@@ -110,6 +98,7 @@ export default {
         return this.x_time_index;
       }
     },
+
     title: function () {
       return twenty_four_well_plate_definition.get_well_name_from_well_index(this.well_idx, true);
     },

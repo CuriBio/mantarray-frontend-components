@@ -29,13 +29,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      x_time_index: "playback/x_time_index",
-      recording_start_time: "playback/recording_start_time",
-    }),
-    ...mapState("playback", {
-      playback_state: "playback_state",
-    }),
+    ...mapGetters("playback", ["x_time_index", "recording_start_time"]),
+    ...mapState("playback", ["playback_state"]),
   },
   watch: {
     playback_state: function () {

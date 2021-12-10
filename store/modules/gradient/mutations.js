@@ -13,7 +13,7 @@ export default {
     state.gradient = state.gradients[state.gradient_theme_idx];
   },
   reset_gradient_range(state) {
-    state.gradient_range_min = 0;
-    state.gradient_range_max = 100;
+    state.gradient_range_min = "";
+    state.gradient_range_max = "";
   },
 };

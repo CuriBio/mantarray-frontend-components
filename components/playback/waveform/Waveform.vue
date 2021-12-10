@@ -106,10 +106,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("data", {
-      stim_fill_assignments: "stim_fill_assignments",
-      stim_fill_colors: "stim_fill_colors",
-    }),
+    ...mapState("data", ["stim_fill_assignments", "stim_fill_colors"]),
   },
   watch: {
     x_axis_min() {
@@ -261,13 +258,12 @@ export default {
       const stim_data_to_plot = this.stim_data_points;
       this.stim_waveform_line_node.selectAll("*").remove();
       const fill_colors = this.stim_fill_colors[this.well_idx];
-
       this.stim_waveform_line_node
         .append("path")
         .datum(stim_data_to_plot)
         .attr("fill", "none")
-        .attr("stroke", "#b7b7b7")
-        .attr("stroke-width", 2.5)
+        .attr("stroke", "none")
+        .attr("stroke-width", 0)
         .attr(
           "d",
           d3_line()
@@ -282,7 +278,6 @@ export default {
       this.stim_fill_assignments[this.well_idx].map((sub_protocol, idx) => {
         // 255 is sent when a user stops a stim
         const color = sub_protocol[0].indexOf(255) !== -1 ? "none" : fill_colors[sub_protocol[0][0]];
-
         // makes sliding transition smoother and brings color to end of graph
         sub_protocol[1][sub_protocol[1].length - 1][0] =
           idx === this.stim_fill_assignments[this.well_idx].length - 1

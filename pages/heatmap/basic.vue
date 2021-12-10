@@ -29,9 +29,9 @@ export default {
     ];
 
     const heatmap_values = {
-      "Twitch Force": { data: data[0] },
+      "Twitch Force": { data: [[0]] },
       "Twitch Period": { data: data[1] },
-      "Twitch Frequency": { data: data[2] },
+      "Twitch Frequency": { data: [[100]] },
       "Twitch Width 80": { data: data[3] },
       "Contraction Velocity": { data: data[4] },
       "Relaxation Velocity": { data: data[5] },

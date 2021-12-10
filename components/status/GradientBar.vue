@@ -1,12 +1,10 @@
 <template>
   <div>
     <!-- prettier-ignore -->
-    <span class="span__heatmap-scale-higher-value" >{{ gradient_range.max }} {{ units }}</span>
-
+    <span class="span__heatmap-scale-higher-value" >{{ gradient_range_max }} {{ units }}</span>
     <div class="div__heatmap-gradient-holder" :style="cssProps"></div>
-
     <!-- prettier-ignore -->
-    <span class="span__heatmap-scale-lower-value" :style="top_shift" > {{ gradient_range.min }} {{ units }}</span>
+    <span class="span__heatmap-scale-lower-value" :style="top_shift" > {{ gradient_range_min }} {{ units }}</span>
   </div>
 </template>
 
@@ -39,13 +37,8 @@ export default {
   },
 
   computed: {
-    ...mapState("gradient", {
-      gradient: "gradient",
-    }),
-
-    ...mapGetters("gradient", {
-      gradient_range: "gradient_range",
-    }),
+    ...mapState("gradient", ["gradient", "gradient_range_max", "gradient_range_min"]),
+    ...mapGetters("gradient", ["gradient_range"]),
     top_shift() {
       return "top: " + (this.gradient_height - 16).toString() + "px;";
     },

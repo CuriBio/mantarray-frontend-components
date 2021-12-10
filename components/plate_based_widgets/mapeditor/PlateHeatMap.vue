@@ -121,9 +121,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("heatmap", {
-      well_selection_statuses: "well_selection_statuses",
-    }),
+    ...mapState("heatmap", ["well_selection_statuses"]),
   },
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);

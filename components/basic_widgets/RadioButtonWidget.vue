@@ -4,6 +4,8 @@
       v-model="selected"
       :options="radio_buttons"
       name="radios-stacked"
+      value-field="value"
+      text-field="value"
       stacked
       @input="radio_toggle"
     ></b-form-radio-group>
@@ -30,32 +32,28 @@ export default {
 
   data: function () {
     return {
-      selected: this.pre_selected != undefined,
+      selected: null,
     };
   },
-
+  watch: {
+    pre_selected: function () {
+      this.preselect();
+    },
+  },
   created: function () {
     this.preselect();
-    this.unsubscribe = this.$store.subscribe((mutation) => {
-      if (mutation.type === "gradient/reset_gradient_theme_idx") {
-        this.preselect();
-      }
-    });
   },
-  beforeDestroy() {
-    this.unsubscribe();
-  },
-
   methods: {
     preselect: function () {
       if (this.pre_selected != undefined) {
         this.selected = this.radio_buttons[this.pre_selected].value;
       }
     },
-    radio_toggle: function (ev) {
+    radio_toggle: function (name) {
+      const theme_name_array = this.radio_buttons.map((opt) => opt.value);
       const btn_info = {
         name: this.selected,
-        index: this.radio_buttons.indexOf(this.selected),
+        index: theme_name_array.indexOf(name),
       };
       this.$emit("radio-btn-selected", btn_info);
     },

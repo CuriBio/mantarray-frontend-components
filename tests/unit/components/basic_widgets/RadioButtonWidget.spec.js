@@ -25,7 +25,8 @@ describe("RadioButtonWidget.vue", () => {
   afterEach(() => wrapper.destroy());
   test("When mounting from the built dist file, Then it loads successfully and the props defined radio button text is rendered", () => {
     const propsData = {
-      radio_buttons: ["warm"],
+      radio_buttons: [{ value: "warm" }],
+      pre_selected: 0,
     };
     wrapper = mount(DistComponentToTest, {
       propsData,
@@ -34,11 +35,12 @@ describe("RadioButtonWidget.vue", () => {
     });
     const target_span = wrapper.find(".custom-control-label > span");
 
+    expect(wrapper.vm.selected).toBe("warm");
     expect(target_span.text()).toStrictEqual("warm");
   });
   test("When mounted, Then it loads successfully multiple defined in props as array rendered in the sequence", () => {
     const propsData = {
-      radio_buttons: ["warm", "cool", "blue/red", "purple/green"],
+      radio_buttons: [{ value: "warm" }, { value: "cool" }, { value: "blue/red" }, { value: "purple/green" }],
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -54,7 +56,7 @@ describe("RadioButtonWidget.vue", () => {
   });
   test("Given that the radio buttons are rendered in a sequence, When a click-select of radio button occurs, Then an event 'radio-btn-selected' with index and name of the radio button is emitted", async () => {
     const propsData = {
-      radio_buttons: ["warm", "cold"],
+      radio_buttons: [{ value: "warm" }, { value: "cold" }],
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -75,5 +77,27 @@ describe("RadioButtonWidget.vue", () => {
         },
       ],
     ]);
+  });
+  test("When parent component resets to a pre-selected idx of 0, Then preselect functions gets called and selects radio button at index 0", async () => {
+    const pre_select_spy = jest.spyOn(ComponentToTest.methods, "preselect");
+
+    const propsData = {
+      radio_buttons: [{ value: "warm" }, { value: "cool" }, { value: "blue/red" }, { value: "purple/green" }],
+      pre_selected: 2,
+    };
+    wrapper = mount(ComponentToTest, {
+      propsData,
+      store,
+      localVue,
+    });
+
+    expect(wrapper.vm.selected).toBe("blue/red");
+    expect(pre_select_spy).toHaveBeenCalledTimes(1);
+
+    wrapper.setProps({ pre_selected: 0 });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.selected).toBe("warm");
+    expect(pre_select_spy).toHaveBeenCalledTimes(2);
   });
 });

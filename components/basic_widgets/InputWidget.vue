@@ -99,6 +99,12 @@ export default {
       return this.title_label !== "" ? 88 : 48;
     },
   },
+  watch: {
+    initial_value() {
+      this.input_value = this.initial_value;
+      this.$emit("update:value", this.input_value);
+    },
+  },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (

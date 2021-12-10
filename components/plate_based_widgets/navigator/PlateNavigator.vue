@@ -62,9 +62,7 @@ export default {
     ...mapState("twentyfourcontrols", {
       selected_quadrant_well_indices: "is_quadrant",
     }),
-    ...mapState("stimulation", {
-      protocol_assignments: "protocol_assignments",
-    }),
+    ...mapState("stimulation", ["protocol_assignments"]),
   },
   created() {
     this.quadrant_options = {

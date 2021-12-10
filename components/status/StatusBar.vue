@@ -55,12 +55,12 @@ export default {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
-    ...mapState("settings", {
-      log_path: "log_path",
-      shutdown_error_message: "shutdown_error_message",
-      total_uploaded_files: "total_uploaded_files",
-      total_file_count: "total_file_count",
-    }),
+    ...mapState("settings", [
+      "log_path",
+      "shutdown_error_message",
+      "total_uploaded_files",
+      "total_file_count",
+    ]),
   },
   watch: {
     status_uuid: function (newValue) {

@@ -164,12 +164,7 @@
     <div class="div__settingsform-toggle-icon-2" width="62" height="34">
       <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_cvs -->
       <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_txt -->
-      <ToggleWidget
-        id="auto_delete_switch"
-        :checked_state="auto_delete"
-        :label="'auto_delete'"
-        @handle_toggle_state="handle_toggle_state"
-      />
+      <ToggleWidget id="auto_delete_switch" :checked_state="auto_delete" :label="'auto_delete'" />
     </div>
     <!-- origonal MockFlow ID : cmpD4873e2fa8d693fa244b11bc36eaee8e1 -->
     <canvas class="canvas__settings-file-upload-separator" width="512" height="22"> </canvas>
@@ -326,12 +321,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", {
-      customer_account_ids: "customer_account_ids",
-    }),
-    ...mapState("settings", {
-      customer_index: "customer_index",
-    }),
+    ...mapState("settings", ["customer_account_ids", "customer_index"]),
     // ...mapState("settings", {
     //   user_index: "user_index"
     // }),

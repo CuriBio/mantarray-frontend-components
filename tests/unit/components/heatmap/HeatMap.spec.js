@@ -5,7 +5,7 @@ import { createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 
 const max_warm_rgb = "rgb(74.118% 20.784% 19.608%)";
-const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
+// const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
 const max_cool_rgb = "rgb(6.275% 39.216% 54.902%)";
 
 const localVue = createLocalVue();
@@ -29,12 +29,19 @@ describe("HeatMap.vue", () => {
       store,
       localVue,
     });
+    expect(wrapper.find(".div__heatmap-layout-background")).toBeTruthy();
   });
+
   test("When mounting HeatMap, Then it loads successfully", async () => {
     const wrapper = mount(HeatMap, {
       store,
       localVue,
     });
+    expect(wrapper.find(".div__heatmap-layout-background")).toBeTruthy();
+    expect(wrapper.vm.upper).toBe("");
+    expect(wrapper.vm.lower).toBe("");
+    expect(wrapper.vm.autoscale).toBe(false);
+    expect(wrapper.vm.color_theme_idx).toBe(0);
   });
 
   test("When a single well is selected, Then the mean text display visibilities are updated", async () => {
@@ -93,6 +100,7 @@ describe("HeatMap.vue", () => {
       store,
       localVue,
     });
+    const store_spy = jest.spyOn(store, "commit");
     store.commit("data/set_heatmap_values", {
       "Twitch Force": { data: [[]] },
     });
@@ -101,15 +109,23 @@ describe("HeatMap.vue", () => {
     await wrapper.find("#input-widget-field-heatmap-min").setValue("10.3");
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
 
+    expect(store_spy.mock.calls).toContainEqual(["gradient/set_gradient_range", { max: 10.4, min: 10.3 }]);
+
+    expect(wrapper.vm.lower).toBe(10.3);
+    expect(wrapper.vm.upper).toBe(10.4);
+    expect(wrapper.vm.autoscale).toBe(false);
+
     expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("10.4 µN");
     expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("10.3 µN");
   });
+
   test("Given a single well has a single data entry, When new max and min values are entered for scale bar and apply button is pressed, Then the color for this well updates", async () => {
     // - plate colors update
     const wrapper = mount(HeatMap, {
       store,
       localVue,
     });
+
     store.commit("data/set_heatmap_values", {
       "Twitch Force": { data: [[15]] },
     });
@@ -117,6 +133,7 @@ describe("HeatMap.vue", () => {
     await wrapper.find("#input-widget-field-heatmap-max").setValue("15");
     await wrapper.find("#input-widget-field-heatmap-min").setValue("0");
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
+
     expect(wrapper.findAll("circle").at(0).attributes("fill")).toStrictEqual(max_warm_rgb);
   });
 
@@ -139,6 +156,7 @@ describe("HeatMap.vue", () => {
     expect(unselected_options.at(0).text()).toBe("Twitch Frequency");
     expect(unselected_options.at(1).text()).toBe("Twitch Period");
   });
+
   test("Given a single well has a different data value for two metrics, When display option is changed, Then the color for this well updates", async () => {
     const wrapper = mount(HeatMap, {
       store,
@@ -155,8 +173,9 @@ describe("HeatMap.vue", () => {
 
     // switch back to force
     await wrapper.findAll("li").at(0).trigger("click");
-    expect(wrapper.findAll("circle").at(0).attributes("fill")).toStrictEqual(min_warm_rgb);
+    expect(wrapper.findAll("circle").at(0).attributes("fill")).toStrictEqual("#b7b7b7");
   });
+
   test("Given two metrics are present in data store, When display option is changed, Then the plateheatmap title and unit in all labels are updated", async () => {
     const wrapper = mount(HeatMap, {
       store,
@@ -243,10 +262,10 @@ describe("HeatMap.vue", () => {
     const unselected_options = wrapper.findAll("li");
     expect(unselected_options.at(0).text()).toBe("Twitch Frequency");
     // test min and max are reset
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("100 µN");
-    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("0 µN");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("µN");
+    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("µN");
     // test gradient theme is reset to Warm
-    expect(test_well.attributes("fill")).toStrictEqual(min_warm_rgb);
+    expect(test_well.attributes("fill")).toStrictEqual("#b7b7b7");
   });
 
   test("When user selects autoscale, Then the max/min input fields will become disabled and valid", async () => {
@@ -254,14 +273,18 @@ describe("HeatMap.vue", () => {
       store,
       localVue,
     });
+
     const autoscale_box = wrapper.find('input[type="checkbox"]');
     await autoscale_box.setChecked(true);
+    await autoscale_box.trigger("change");
 
     expect(wrapper.vm.autoscale).toBe(true);
     expect(wrapper.vm.max_value_error_msg).toBe("");
     expect(wrapper.vm.min_value_error_msg).toBe("");
 
     await autoscale_box.setChecked(false);
+    await autoscale_box.trigger("change");
+
     expect(wrapper.vm.autoscale).toBe(false);
   });
 
@@ -311,5 +334,44 @@ describe("HeatMap.vue", () => {
     expect(max_error_msg.text()).toBe("max is equal to min");
     await min_input.setValue("99");
     expect(max_error_msg.text()).toBe("");
+  });
+  test("When autoscale is only selected and true, Then max min range values will change as new data comes in", async () => {
+    const wrapper = mount(HeatMap, {
+      store,
+      localVue,
+    });
+    const store_spy = jest.spyOn(store, "commit");
+
+    const autoscale_box = wrapper.find('input[type="checkbox"]');
+    await autoscale_box.setChecked(true);
+    await autoscale_box.trigger("change");
+
+    expect(wrapper.vm.autoscale).toBe(true);
+    await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
+    expect(store_spy.mock.calls).toHaveLength(2);
+    expect(store_spy.mock.calls).toContainEqual([
+      "gradient/set_gradient_range",
+      { max: "0.001", min: "0.000" },
+    ]);
+
+    await store.commit("data/set_heatmap_values", {
+      "Twitch Force": { data: [[0, 10]] },
+    });
+    expect(store_spy.mock.calls).toHaveLength(4);
+    expect(store_spy.mock.calls).toContainEqual([
+      "gradient/set_gradient_range",
+      { max: "10.000", min: "0.000" },
+    ]);
+
+    await autoscale_box.setChecked(false);
+    await autoscale_box.trigger("change");
+
+    expect(wrapper.vm.autoscale).toBe(false);
+
+    await store.commit("data/set_heatmap_values", {
+      "Twitch Force": { data: [[10, 15, 20]] },
+    });
+
+    expect(store_spy.mock.calls).toHaveLength(5);
   });
 });

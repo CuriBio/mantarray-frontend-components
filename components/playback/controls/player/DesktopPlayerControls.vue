@@ -221,19 +221,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("playback", {
-      playback_state: "playback_state",
-    }),
-    ...mapState("playback", {
-      is_valid_barcode: "is_valid_barcode",
-    }),
-    ...mapState("playback", {
-      tooltips_delay: "tooltips_delay",
-    }),
-    ...mapState("settings", {
-      customer_index: "customer_index",
-      auto_upload: "auto_upload",
-    }),
+    ...mapState("playback", ["playback_state", "is_valid_barcode", "tooltips_delay"]),
+    ...mapState("settings", ["customer_index", "auto_upload"]),
     calibrate_tooltip_text: function () {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Calibration needed. Click to calibrate.";

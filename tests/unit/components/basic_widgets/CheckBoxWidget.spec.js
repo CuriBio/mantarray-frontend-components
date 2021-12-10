@@ -82,18 +82,24 @@ describe("CheckBoxWidget.vue", () => {
         { text: "Lab-Exp-1", value: "Lab-Exp-1" },
       ],
     };
+
     wrapper = mount(ComponentToTest, {
       propsData,
       localVue,
     });
+
+    await wrapper.setProps({ initial_selected: true });
+
+    expect(wrapper.vm.selected).toStrictEqual(["Ascorbic Acid"]);
+
     const target_checkbox_btn = wrapper.findAll('input[type="checkbox"]');
     target_checkbox_btn.at(1).setChecked(true);
-
-    await target_checkbox_btn.at(1).trigger("change");
     // manually force Vue to update
+    await target_checkbox_btn.at(1).trigger("change");
     const parent_id_events = wrapper.emitted("checkbox-selected");
+
     expect(parent_id_events).toHaveLength(2);
-    expect(parent_id_events).toStrictEqual([[["B27"]], [["B27"]]]);
+    expect(parent_id_events).toStrictEqual([[["Ascorbic Acid"]], [["Ascorbic Acid", "B27"]]]);
   });
 
   test("Given that the checkbox are rendered with <empty text> in a sequence, When a click-select of checkbox occurs multiple times, Then an event 'checkbox-selected' with the value of the 'checkbox text' is emitted", async () => {
@@ -105,10 +111,12 @@ describe("CheckBoxWidget.vue", () => {
         { text: "", value: "Lab-Exp-1" },
       ],
     };
+
     wrapper = mount(ComponentToTest, {
       propsData,
       localVue,
     });
+
     const target_checkbox_btn = wrapper.findAll('input[type="checkbox"]');
     target_checkbox_btn.at(1).setChecked(true);
 
@@ -118,13 +126,9 @@ describe("CheckBoxWidget.vue", () => {
 
     await target_checkbox_btn.at(3).trigger("change");
     // manually force Vue to update
+
     const parent_id_events = wrapper.emitted("checkbox-selected");
-    expect(parent_id_events).toHaveLength(4);
-    expect(parent_id_events).toStrictEqual([
-      [["B27"]],
-      [["B27"]],
-      [["B27", "Lab-Exp-1"]],
-      [["B27", "Lab-Exp-1"]],
-    ]);
+    expect(parent_id_events).toHaveLength(2);
+    expect(parent_id_events).toStrictEqual([[["B27"]], [["B27", "Lab-Exp-1"]]]);
   });
 });

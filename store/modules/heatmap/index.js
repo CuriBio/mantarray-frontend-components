@@ -2,6 +2,7 @@
 
 import getters from "./getters";
 import mutations from "./mutations";
+import { METRIC_UNITS } from "./enums";
 
 const default_state = {
   selected_wells: [],
@@ -9,6 +10,7 @@ const default_state = {
   display_option: "Twitch Force",
   display_option_idx: 0,
   heatmap_autoscale: false,
+  auto_scale: false,
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2
@@ -19,4 +21,5 @@ export default {
   state,
   mutations,
   getters,
+  METRIC_UNITS,
 };

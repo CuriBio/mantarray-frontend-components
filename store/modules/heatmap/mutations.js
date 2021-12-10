@@ -15,4 +15,7 @@ export default {
   set_display_option_idx(state, new_value) {
     state.display_option_idx = new_value;
   },
+  set_auto_scale(state, bool) {
+    state.auto_scale = bool;
+  },
 };
