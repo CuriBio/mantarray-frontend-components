@@ -34,7 +34,7 @@ describe("EditCustomer", () => {
     const editcustomer = {
       uuid: "",
       passkey: "",
-      nickname: "",
+      username: "",
     };
     const propsData = {
       dialogdata: editcustomer,
@@ -65,7 +65,7 @@ describe("EditCustomer", () => {
       dialogdata: {
         cust_id: "test_id",
         passkey: "test_pass",
-        nickname: "test_nickname",
+        username: "test_username",
       },
       dataindex: 0,
     };
@@ -77,27 +77,35 @@ describe("EditCustomer", () => {
       });
     });
     afterEach(() => wrapper.destroy());
-    test("When mounting EditCustomer with invalid credentials, Then it loads with 'Invalid ID or Passkey' text, but not for nickname", () => {
+    test("When mounting EditCustomer with invalid credentials, Then it loads with 'Invalid ID, Passkey, or Username' text, but not for username", () => {
       const id_error_message = wrapper.find("#input-widget-feedback-alphanumeric-id");
       const pass_error_message = wrapper.find("#input-widget-feedback-passkey-id");
+      const username_error_message = wrapper.find("#input-widget-feedback-username-id");
 
-      expect(id_error_message.text()).toStrictEqual("Invalid ID or Passkey");
-      expect(pass_error_message.text()).toStrictEqual("Invalid ID or Passkey");
+      const invalid_text = "Invalid ID, Passkey, or Username";
+
+      expect(id_error_message.text()).toStrictEqual(invalid_text);
+      expect(pass_error_message.text()).toStrictEqual(invalid_text);
+      expect(username_error_message.text()).toStrictEqual(invalid_text);
     });
-    test.each(["passkey-id", "alphanumeric-id"])(
+    test.each(["passkey-id", "alphanumeric-id", "username-id"])(
       "When EditCustomer has invalid credentials, Then both ID and passkey will mount with invalid text and will both become become valid with any change to %s",
       async (selector_id_suffix) => {
         const id_error_message = wrapper.find("#input-widget-feedback-alphanumeric-id");
         const pass_error_message = wrapper.find("#input-widget-feedback-passkey-id");
+        const username_error_message = wrapper.find("#input-widget-feedback-username-id");
+        const invalid_text = "Invalid ID, Passkey, or Username";
 
-        expect(id_error_message.text()).toStrictEqual("Invalid ID or Passkey");
-        expect(pass_error_message.text()).toStrictEqual("Invalid ID or Passkey");
+        expect(id_error_message.text()).toStrictEqual(invalid_text);
+        expect(pass_error_message.text()).toStrictEqual(invalid_text);
+        expect(username_error_message.text()).toStrictEqual(invalid_text);
 
         const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
         await target_input_field.setValue("new entry");
 
         expect(id_error_message.text()).toStrictEqual("");
         expect(pass_error_message.text()).toStrictEqual("");
+        expect(username_error_message.text()).toStrictEqual("");
       }
     );
   });
@@ -105,7 +113,7 @@ describe("EditCustomer", () => {
     const editcustomer = {
       uuid: "",
       passkey: "",
-      nickname: "",
+      username: "",
     };
     afterEach(() => {
       wrapper.destroy();
@@ -119,9 +127,9 @@ describe("EditCustomer", () => {
       ["Cat * lab", "passkey", "passkey-id", "validate_customer_account_input"],
       ["Valid", "passkey", "passkey-id", "validate_customer_account_input"],
       ["Cat lab", "passkey", "passkey-id", "validate_customer_account_input"],
-      ["Experiment anemia alpha cells -1", "nickname", "nickname-id", "validate_customer_account_input"],
-      ["C", "nickname", "nickname-id", "validate_customer_account_input"],
-      ["", "nickname", "nickname-id", "validate_customer_account_input"],
+      ["Experiment anemia alpha cells -1", "username", "username-id", "validate_customer_account_input"],
+      ["C", "username", "username-id", "validate_customer_account_input"],
+      ["", "username", "username-id", "validate_customer_account_input"],
     ])(
       "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
       async (entry, text_id, selector_id_suffix, text_validation_type) => {
@@ -131,8 +139,8 @@ describe("EditCustomer", () => {
         if (selector_id_suffix === "passkey-id") {
           editcustomer.passkey = entry;
         }
-        if (selector_id_suffix === "nickname-id") {
-          editcustomer.nickname = entry;
+        if (selector_id_suffix === "username-id") {
+          editcustomer.username = entry;
         }
 
         const propsData = {
@@ -162,7 +170,7 @@ describe("EditCustomer", () => {
     test.each([
       ["alphanumeric-id", "This field is required"],
       ["passkey-id", "This field is required"],
-      ["nickname-id", "This field is required"],
+      ["username-id", "This field is required"],
     ])(
       "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
       async (selector_id_suffix, expected_message) => {
@@ -194,7 +202,7 @@ describe("EditCustomer", () => {
     const editcustomer = {
       uuid: "",
       passkey: "",
-      nickname: "",
+      username: "",
     };
     afterEach(() => wrapper.destroy());
     test.each([
@@ -209,15 +217,15 @@ describe("EditCustomer", () => {
       ["fasd44", "06ad54", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
       ["", "", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
     ])(
-      "Given an UUID (%s), pass Key (%s), Nickname (%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
-      async (uuid, passkey, nickname, save_btn_css) => {
+      "Given an UUID (%s), pass Key (%s), username (%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
+      async (uuid, passkey, username, save_btn_css) => {
         const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
         const selector_id_suffix_passkey_id = "passkey-id";
-        const selector_id_suffix_nickname_id = "nickname-id";
+        const selector_id_suffix_username_id = "username-id";
 
         editcustomer.uuid = uuid;
         editcustomer.passkey = passkey;
-        editcustomer.nickname = nickname;
+        editcustomer.username = username;
 
         const propsData = {
           dialogdata: editcustomer,
@@ -240,10 +248,10 @@ describe("EditCustomer", () => {
         target_input_field_passkey.setValue(passkey);
         await Vue.nextTick();
 
-        const target_input_field_nickname = wrapper.find(
-          "#input-widget-field-" + selector_id_suffix_nickname_id
+        const target_input_field_username = wrapper.find(
+          "#input-widget-field-" + selector_id_suffix_username_id
         );
-        target_input_field_nickname.setValue(nickname);
+        target_input_field_username.setValue(username);
         await Vue.nextTick();
 
         const target_button_label_btn = wrapper.findAll(".span__button_label");
@@ -261,7 +269,7 @@ describe("EditCustomer", () => {
     const editcustomer = {
       cust_id: "",
       passkey: "",
-      nickname: "",
+      username: "",
       user_ids: [],
     };
     afterEach(() => wrapper.destroy());
@@ -276,23 +284,23 @@ describe("EditCustomer", () => {
         "color: rgb(255, 255, 255);",
       ],
     ])(
-      "Given an UUID(%s) , pass Key(%s), Nickname(%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, an event 'cancel-id' is emmited to the parent, click on Delete an event 'delete-id' is emmited to the parent, and click on Save an event 'save-id' is emmited to parent",
+      "Given an UUID(%s) , pass Key(%s), username(%s) for 'Edit Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, an event 'cancel-id' is emmited to the parent, click on Delete an event 'delete-id' is emmited to the parent, and click on Save an event 'save-id' is emmited to parent",
       async (
         uuid_test,
         passkey_test,
-        nickname_test,
+        username_test,
         invalid_passkey,
         invalid_uuid,
-        invalid_nickname,
+        invalid_username,
         save_btn_css
       ) => {
         const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
         const selector_id_suffix_passkey_id = "passkey-id";
-        const selector_id_suffix_nickname_id = "nickname-id";
+        const selector_id_suffix_username_id = "username-id";
 
         editcustomer.cust_id = uuid_test;
         editcustomer.passkey = passkey_test;
-        editcustomer.nickname = nickname_test;
+        editcustomer.username = username_test;
 
         const propsData = {
           dialogdata: editcustomer,
@@ -326,16 +334,16 @@ describe("EditCustomer", () => {
 
         expect(target_error_message_passkey.text()).toStrictEqual(invalid_passkey);
 
-        const target_input_field_nickname = wrapper.find(
-          "#input-widget-field-" + selector_id_suffix_nickname_id
+        const target_input_field_username = wrapper.find(
+          "#input-widget-field-" + selector_id_suffix_username_id
         );
-        const target_error_message_nickname = wrapper.find(
-          "#input-widget-feedback-" + selector_id_suffix_nickname_id
+        const target_error_message_username = wrapper.find(
+          "#input-widget-feedback-" + selector_id_suffix_username_id
         );
-        target_input_field_nickname.setValue(nickname_test);
+        target_input_field_username.setValue(username_test);
         await Vue.nextTick();
 
-        expect(target_error_message_nickname.text()).toStrictEqual(invalid_nickname);
+        expect(target_error_message_username.text()).toStrictEqual(invalid_username);
 
         const target_button_label_btn = wrapper.findAll(".span__button_label");
         const cancel_btn = target_button_label_btn.at(0);
@@ -361,7 +369,7 @@ describe("EditCustomer", () => {
             cust_idx: 0,
             cust_id: uuid_test,
             pass_key: passkey_test,
-            nickname: nickname_test,
+            username: username_test,
             user_ids: [],
           },
         ]);
@@ -376,7 +384,7 @@ describe("EditCustomer", () => {
             cust_idx: 0,
             cust_id: uuid_test,
             pass_key: passkey_test,
-            nickname: nickname_test,
+            username: username_test,
             user_ids: [],
           },
         ]);

@@ -32,27 +32,27 @@ describe("store/settings", () => {
     expect(value).toStrictEqual(0);
     expect(max).toStrictEqual(0);
   });
-  test("When initialized user_details of UUID, Nickname is empty, Then commit user_details which have valid user_id UUID and nickname assert the values in Vuex for user_id, UUID and nickname", () => {
+  test("When initialized user_details of UUID, username is empty, Then commit user_details which have valid user_id UUID and username assert the values in Vuex for user_id, UUID and username", () => {
     const array_of_userid = [
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
     ];
     expect(store.state.settings.user_details.uuid).toBeNull();
-    expect(store.state.settings.user_details.nickname).toBeNull();
+    expect(store.state.settings.user_details.username).toBeNull();
     store.commit("settings/set_user_details", array_of_userid);
     expect(store.state.settings.user_details[0].user_id).toStrictEqual(0);
     expect(store.state.settings.user_details[0].uuid).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
-    expect(store.state.settings.user_details[0].nickname).toStrictEqual("User account -1");
+    expect(store.state.settings.user_details[0].username).toStrictEqual("User account -1");
   });
-  test("When initialized customer_details UUID, pass-key, customer name and user_details UUID, nickname is empty, Then commit customer_details with valid cust_idx, UUID, pass-key, customer name and user_details of user_id, UUID, nickname to the Vuex and assert the same", () => {
+  test("When initialized customer_details UUID, pass-key, customer name and user_details UUID, username is empty, Then commit customer_details with valid cust_idx, UUID, pass-key, customer name and user_details of user_id, UUID, username to the Vuex and assert the same", () => {
     const array_of_userid = [
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
     ];
     const array_of_customerids = [
@@ -60,14 +60,14 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid,
       },
     ];
     expect(store.state.settings.customer_details.cust_idx).toBeNull();
     expect(store.state.settings.customer_details.cust_id).toBeNull();
     expect(store.state.settings.customer_details.pass_key).toBeNull();
-    expect(store.state.settings.customer_details.nickname).toBeNull();
+    expect(store.state.settings.customer_details.username).toBeNull();
     expect(store.state.settings.customer_details.user_ids).toHaveLength(0);
     store.commit("settings/set_customer_details", array_of_customerids);
     expect(store.state.settings.customer_details[0].cust_idx).toStrictEqual(0);
@@ -75,18 +75,18 @@ describe("store/settings", () => {
     expect(store.state.settings.customer_details[0].pass_key).toStrictEqual(
       "941532a0-6be1-443a-a9d5-d57bdf180a52"
     );
-    expect(store.state.settings.customer_details[0].nickname).toStrictEqual("Customer account -1");
+    expect(store.state.settings.customer_details[0].username).toStrictEqual("Customer account -1");
     expect(store.state.settings.customer_details[0].user_ids).toHaveLength(1);
     expect(store.state.settings.customer_details[0].user_ids[0].user_id).toStrictEqual(0);
     expect(store.state.settings.customer_details[0].user_ids[0].uuid).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
-    expect(store.state.settings.customer_details[0].user_ids[0].nickname).toStrictEqual("User account -1");
+    expect(store.state.settings.customer_details[0].user_ids[0].username).toStrictEqual("User account -1");
   });
   test("When initialized the array of customer_account_ids is empty and size 0, Then commit a single valid record of customer_details as the first record in customer_account_ids, customer_index/user_index and assert the same", () => {
     const array_of_userid = [
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
     ];
     const array_of_customerids = [
@@ -94,7 +94,7 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid,
       },
     ];
@@ -109,7 +109,7 @@ describe("store/settings", () => {
       store.state.settings.customer_account_ids[store.state.settings.customer_index].pass_key
     ).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
     expect(
-      store.state.settings.customer_account_ids[store.state.settings.customer_index].nickname
+      store.state.settings.customer_account_ids[store.state.settings.customer_index].username
     ).toStrictEqual("Customer account -1");
     expect(
       store.state.settings.customer_account_ids[store.state.settings.customer_index].user_ids
@@ -122,7 +122,7 @@ describe("store/settings", () => {
     expect(
       store.state.settings.customer_account_ids[store.state.settings.customer_index].user_ids[
         store.state.settings.user_index
-      ].nickname
+      ].username
     ).toStrictEqual("User account -1");
   });
   test("When initialized the array of customer_account_ids is empty and size 0, Then commit customer_details with multiple user_ids in customer_account_ids and assert the number of user_ids to match the number of user_ids", () => {
@@ -130,16 +130,16 @@ describe("store/settings", () => {
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
       {
         user_id: 1,
         uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-        nickname: "User account -2",
+        username: "User account -2",
       },
       {
         uuid: "7N42dgm5tFLK9N8MT7fHC7",
-        nickname: "User account -3",
+        username: "User account -3",
       },
     ];
     const array_of_customerids = [
@@ -147,7 +147,7 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid,
       },
     ];
@@ -162,34 +162,34 @@ describe("store/settings", () => {
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
       {
         user_id: 1,
         uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-        nickname: "User account -2",
+        username: "User account -2",
       },
       {
         user_id: 2,
         uuid: "7N42dgm5tFLK9N8MT7fHC7",
-        nickname: "User account -3",
+        username: "User account -3",
       },
     ];
     const array_of_userid_2 = [
       {
         user_id: 0,
         uuid: "2VSckkkkk2An3dqHEyfRRE",
-        nickname: "Lab User  -1",
+        username: "Lab User  -1",
       },
       {
         user_id: 1,
         uuid: "5FY8ghtsQaUJ2KzHJGetfE",
-        nickname: "Intern -1",
+        username: "Intern -1",
       },
       {
         user_id: 3,
         uuid: "7N42dnnntFLK9N8MT7fHC7",
-        nickname: "Envio test -1",
+        username: "Envio test -1",
       },
     ];
     const array_of_customerids = [
@@ -197,14 +197,14 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid_1,
       },
       {
         cust_idx: 1,
         cust_id: "6cBaidlJ84Ggc5JA7IYCgv",
         pass_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid_2,
       },
     ];
@@ -224,24 +224,24 @@ describe("store/settings", () => {
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
       {
         user_id: 1,
         uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-        nickname: "User account -2",
+        username: "User account -2",
       },
     ];
     const array_of_userid_2 = [
       {
         user_id: 0,
         uuid: "2VSckkkkk2An3dqHEyfRRE",
-        nickname: "Lab User  -1",
+        username: "Lab User  -1",
       },
       {
         user_id: 1,
         uuid: "5FY8ghtsQaUJ2KzHJGetfE",
-        nickname: "Intern -1",
+        username: "Intern -1",
       },
     ];
     const array_of_customerids = [
@@ -249,14 +249,14 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid_1,
       },
       {
         cust_idx: 1,
         cust_id: "6cBaidlJ84Ggc5JA7IYCgv",
         pass_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
-        nickname: "Customer account -2",
+        username: "Customer account -2",
         user_ids: array_of_userid_2,
       },
     ];
@@ -269,7 +269,7 @@ describe("store/settings", () => {
         cust_idx: 2,
         cust_id: "5FY8KwTsQaUJ2KzHJGetfE",
         pass_key: "941532a0-6be1-443a-ssds-d57bdf180a52",
-        nickname: "Customer account -3",
+        username: "Customer account -3",
         user_ids: [],
       },
     ];
@@ -293,24 +293,24 @@ describe("store/settings", () => {
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
       {
         user_id: 1,
         uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-        nickname: "User account -2",
+        username: "User account -2",
       },
     ];
     const array_of_userid_2 = [
       {
         user_id: 0,
         uuid: "2VSckkkkk2An3dqHEyfRRE",
-        nickname: "Lab User  -1",
+        username: "Lab User  -1",
       },
       {
         user_id: 1,
         uuid: "5FY8ghtsQaUJ2KzHJGetfE",
-        nickname: "Intern -1",
+        username: "Intern -1",
       },
     ];
     const array_of_customerids = [
@@ -318,14 +318,14 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid_1,
       },
       {
         cust_idx: 1,
         cust_id: "6cBaidlJ84Ggc5JA7IYCgv",
         pass_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
-        nickname: "Customer account -2",
+        username: "Customer account -2",
         user_ids: array_of_userid_2,
       },
     ];
@@ -335,9 +335,9 @@ describe("store/settings", () => {
     /* User now does Edit Customer Click on the "Customer account - 2*/
     store.commit("settings/set_customer_index", 1);
     const current_focus_customerid = store.state.settings.customer_account_ids[1];
-    expect(current_focus_customerid.nickname).toStrictEqual("Customer account -2");
+    expect(current_focus_customerid.username).toStrictEqual("Customer account -2");
     current_focus_customerid.cust_id = "7N42dgm5tFLK9N8MT7fHC7"; /* cust_id modified */
-    current_focus_customerid.nickname = "Updated account -2"; /* Nickname modified */
+    current_focus_customerid.username = "Updated account -2"; /* username modified */
     store.commit("settings/set_customer_details", current_focus_customerid); /*  (Save ID) selected */
 
     const current_customerids = store.state.settings.customer_account_ids;
@@ -346,8 +346,8 @@ describe("store/settings", () => {
     /* Javascript array provides an internal api array.find(v => v.id === match.id).data = new.data  so we update object in array and store in Vuex*/
     current_customerids.find((customer) => customer.cust_idx === current_focus_customerid.cust_idx).cust_id =
       modified_customerids.cust_id;
-    current_customerids.find((customer) => customer.cust_idx === current_focus_customerid.cust_idx).nickname =
-      modified_customerids.nickname;
+    current_customerids.find((customer) => customer.cust_idx === current_focus_customerid.cust_idx).username =
+      modified_customerids.username;
     current_customerids.find((customer) => customer.cust_idx === current_focus_customerid.cust_idx).pass_key =
       modified_customerids.pass_key;
     current_customerids.find((customer) => customer.cust_idx === current_focus_customerid.cust_idx).user_ids =
@@ -355,10 +355,10 @@ describe("store/settings", () => {
     /*  (SaveChanges) selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
 
-    /*  assert the cust_id and nickname from settings store is updated */
+    /*  assert the cust_id and username from settings store is updated */
     const updated_focus_customerid = store.state.settings.customer_account_ids[1];
     expect(updated_focus_customerid.cust_id).toStrictEqual("7N42dgm5tFLK9N8MT7fHC7");
-    expect(updated_focus_customerid.nickname).toStrictEqual("Updated account -2");
+    expect(updated_focus_customerid.username).toStrictEqual("Updated account -2");
   });
   test("Given the store has multiple customer details, When the mutation deletes one Customer details, Then validate the number of the customer decrements by one", () => {
     /* ========================== */
@@ -372,24 +372,24 @@ describe("store/settings", () => {
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
       {
         user_id: 1,
         uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-        nickname: "User account -2",
+        username: "User account -2",
       },
     ];
     const array_of_userid_2 = [
       {
         user_id: 0,
         uuid: "2VSckkkkk2An3dqHEyfRRE",
-        nickname: "Lab User  -1",
+        username: "Lab User  -1",
       },
       {
         user_id: 1,
         uuid: "5FY8ghtsQaUJ2KzHJGetfE",
-        nickname: "Intern -1",
+        username: "Intern -1",
       },
     ];
     const array_of_customerids = [
@@ -397,14 +397,14 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid_1,
       },
       {
         cust_idx: 1,
         cust_id: "6cBaidlJ84Ggc5JA7IYCgv",
         pass_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
-        nickname: "Customer account -2",
+        username: "Customer account -2",
         user_ids: array_of_userid_2,
       },
     ];
@@ -414,7 +414,7 @@ describe("store/settings", () => {
     /* User now does Edit Customer Click on the "Customer account - 1*/
     store.commit("settings/set_customer_index", 0);
     const current_focus_customerid = store.state.settings.customer_account_ids[0];
-    expect(current_focus_customerid.nickname).toStrictEqual("Customer account -1");
+    expect(current_focus_customerid.username).toStrictEqual("Customer account -1");
     expect(current_focus_customerid.cust_id).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
     expect(current_focus_customerid.pass_key).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
     /*  (Delete ID) selected */
@@ -427,7 +427,7 @@ describe("store/settings", () => {
     const updated_focus_customerid = store.state.settings.customer_account_ids[0];
     expect(updated_focus_customerid.cust_id).toStrictEqual("6cBaidlJ84Ggc5JA7IYCgv");
     expect(updated_focus_customerid.pass_key).toStrictEqual("941532a0-6be1-443a-cdee-d57bdf180a52");
-    expect(updated_focus_customerid.nickname).toStrictEqual("Customer account -2");
+    expect(updated_focus_customerid.username).toStrictEqual("Customer account -2");
     expect(store.state.settings.customer_account_ids).toHaveLength(1);
   });
   test("Given the Vuex has customer details with single user id, When mutation adds user details, Then the number of user details increments by one", () => {
@@ -442,7 +442,7 @@ describe("store/settings", () => {
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
     ];
     const array_of_customerids = [
@@ -450,7 +450,7 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid_1,
       },
     ];
@@ -465,7 +465,7 @@ describe("store/settings", () => {
     const add_new_user = {
       user_id: 1,
       uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-      nickname: "User account -2",
+      username: "User account -2",
     };
     /*  (Save ID) user selected */
     current_list_of_user_ids.push(add_new_user);
@@ -489,12 +489,12 @@ describe("store/settings", () => {
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
       {
         user_id: 1,
         uuid: "5FY8ghtsQaUJ2KzHJGetfE",
-        nickname: "Intern -1",
+        username: "Intern -1",
       },
     ];
     const array_of_customerids = [
@@ -502,7 +502,7 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid_1,
       },
     ];
@@ -519,19 +519,19 @@ describe("store/settings", () => {
     const focused_user_id = store.state.settings.user_index;
 
     focused_user_details.uuid = "6cBaidlJ84Ggc5JA7IYCgv";
-    focused_user_details.nickname = "Updated Account -1";
+    focused_user_details.username = "Updated Account -1";
     /*  (Save ID) user selected */
     current_list_of_user_ids.find((user) => user.user_id === focused_user_id).uuid =
       focused_user_details.uuid;
-    current_list_of_user_ids.find((user) => user.user_id === focused_user_id).nickname =
-      focused_user_details.nickname;
+    current_list_of_user_ids.find((user) => user.user_id === focused_user_id).username =
+      focused_user_details.username;
     current_customerids.user_ids = current_list_of_user_ids;
     /* SaveChanges selected */
     store.commit("settings/set_customer_account_ids", current_customerids);
     const updated_list_of_user_ids = store.state.settings.customer_account_ids[0].user_ids;
     const modified_userids = store.state.settings.customer_account_ids[0].user_ids[1];
     expect(modified_userids.uuid).toStrictEqual("6cBaidlJ84Ggc5JA7IYCgv");
-    expect(modified_userids.nickname).toStrictEqual("Updated Account -1");
+    expect(modified_userids.username).toStrictEqual("Updated Account -1");
     expect(updated_list_of_user_ids).toHaveLength(2);
   });
 
@@ -541,7 +541,7 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: [],
       },
     ];
@@ -573,12 +573,12 @@ describe("store/settings", () => {
       {
         user_id: 0,
         uuid: "2VSckkBYr2An3dqHEyfRRE",
-        nickname: "User account -1",
+        username: "User account -1",
       },
       {
         user_id: 1,
         uuid: "5FY8ghtsQaUJ2KzHJGetfE",
-        nickname: "Intern -1",
+        username: "Intern -1",
       },
     ];
     const array_of_customerids = [
@@ -586,7 +586,7 @@ describe("store/settings", () => {
         cust_idx: 0,
         cust_id: "4vqyd62oARXqj9nRUNhtLQ",
         pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        nickname: "Customer account -1",
+        username: "Customer account -1",
         user_ids: array_of_userid_1,
       },
     ];
@@ -601,7 +601,7 @@ describe("store/settings", () => {
 
     const focused_user_details = store.state.settings.customer_account_ids[0].user_ids[0];
     expect(focused_user_details.uuid).toStrictEqual("2VSckkBYr2An3dqHEyfRRE");
-    expect(focused_user_details.nickname).toStrictEqual("User account -1");
+    expect(focused_user_details.username).toStrictEqual("User account -1");
 
     const focused_user_id = store.state.settings.user_index;
     /* Delete ID selected */
@@ -656,7 +656,7 @@ describe("store/settings", () => {
           cust_idx: 0,
           cust_id: "4vqyd62oARXqj9nRUNhtLQ",
           pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-          nickname: "Customer account -1",
+          username: "Customer account -1",
           user_ids: [],
         },
       ];

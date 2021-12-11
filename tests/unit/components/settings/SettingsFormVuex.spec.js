@@ -35,7 +35,7 @@ describe("SettingsForm.vue", () => {
       cust_idx: 0,
       cust_id: "4vqyd62oARXqj9nRUNhtLQ",
       pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-      nickname: "Customer account -1",
+      username: "Customer account -1",
     },
   ];
   const array_of_customerid_null_missing_user_ids = [
@@ -43,7 +43,7 @@ describe("SettingsForm.vue", () => {
       cust_idx: 0,
       cust_id: "4vqyd62oARXqj9nRUNhtLQ",
       pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-      nickname: "",
+      username: "",
     },
   ];
 
@@ -206,7 +206,7 @@ describe("SettingsForm.vue", () => {
     expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");
     // expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
   });
-  test("Given that badly formed data with empty customer account nickname with missing user_ids in the Vuex, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", async () => {
+  test("Given that badly formed data with empty customer account username with missing user_ids in the Vuex, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", async () => {
     store.commit("settings/set_customer_account_ids", array_of_customerid_null_missing_user_ids);
     store.commit("settings/set_customer_index", 0);
     wrapper = mount(ComponentToTest, {

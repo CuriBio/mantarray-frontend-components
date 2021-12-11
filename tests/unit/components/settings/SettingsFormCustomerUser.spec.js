@@ -52,7 +52,7 @@ describe("SettingsForm.vue", () => {
             cust_idx: 2,
             cust_id: "5FY8KwTsQaUJ2KzHJGetfE",
             pass_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
-            nickname: "Customer account -3",
+            username: "Customer account -3",
             user_ids: [],
           };
 
@@ -88,11 +88,11 @@ describe("SettingsForm.vue", () => {
         //   );
         //   expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
         // });
-        // test("When the method is invoked that handles the user 'save-id' event with a new user account, Then the User ID input is updated with nickname value of 'New User -1'", async () => {
+        // test("When the method is invoked that handles the user 'save-id' event with a new user account, Then the User ID input is updated with username value of 'New User -1'", async () => {
         //   const add_user = {
         //     user_id: 0,
         //     cust_id: "5FY8ghtsQaUJ2KzHJGetfE",
-        //     nickname: "New User -1",
+        //     username: "New User -1",
         //   };
         //   /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
         //   /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
@@ -109,7 +109,7 @@ describe("SettingsForm.vue", () => {
         //     const add_user = {
         //       user_id: 0,
         //       uuid: "5FY8ghtsQaUJ2KzHJGetfE",
-        //       nickname: "New User -1",
+        //       username: "New User -1",
         //     };
 
         //     wrapper.vm.onSaveUserId(add_user);
@@ -134,16 +134,16 @@ describe("SettingsForm.vue", () => {
         //   expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
         // });
 
-        // test("Given that a customer account and user account are selected, When the method handling the 'save-id' event for Edit User is invoked to update the nickname of the selected user, Then the nickname is updated in the dropdown choices for select user", async () => {
+        // test("Given that a customer account and user account are selected, When the method handling the 'save-id' event for Edit User is invoked to update the username of the selected user, Then the username is updated in the dropdown choices for select user", async () => {
         //   const update_user = {
         //     user_id: 0,
         //     uuid: "2VSckkkkk2An3dqHEyfRRE",
-        //     nickname: "Renamed User -1",
+        //     username: "Renamed User -1",
         //   };
 
         //   await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
         //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#user-0").text()).not.toStrictEqual(update_user.nickname);
+        //   expect(wrapper.find("#user-0").text()).not.toStrictEqual(update_user.username);
         //   expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
 
         //   /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
@@ -153,7 +153,7 @@ describe("SettingsForm.vue", () => {
         //   wrapper.vm.onUpdateUserId(update_user);
 
         //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#user-0").text()).toStrictEqual(update_user.nickname);
+        //   expect(wrapper.find("#user-0").text()).toStrictEqual(update_user.username);
         //   expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
         // });
 
@@ -167,7 +167,7 @@ describe("SettingsForm.vue", () => {
         //   const delete_user = {
         //     user_id: 0,
         //     uuid: "2VSckkkkk2An3dqHEyfRRE",
-        //     nickname: "Lab User -1",
+        //     username: "Lab User -1",
         //   };
 
         //   await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
@@ -183,12 +183,12 @@ describe("SettingsForm.vue", () => {
         //   await wrapper.vm.$nextTick();
         //   expect(wrapper.find("#user-0").text()).toStrictEqual("Intern -1");
         // });
-        test("When the method handling the 'save-id' event for the Edit Customer button is invoked to change the nickname, Then the Customer ID dropdown list gets updated to change to the new nickname", async () => {
+        test("When the method handling the 'save-id' event for the Edit Customer button is invoked to change the username, Then the Customer ID dropdown list gets updated to change to the new username", async () => {
           const edit_customer = {
             cust_idx: 1,
             cust_id: "6cBaidlJ84Ggc5JA7IYCgv",
             pass_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
-            nickname: "Renamed Account -1",
+            username: "Renamed Account -1",
             user_ids: array_of_user_ids_2,
           };
           wrapper.vm.onUpdateCustomerId(edit_customer);
@@ -203,7 +203,7 @@ describe("SettingsForm.vue", () => {
             cust_idx: 0,
             cust_id: "4vqyd62oARXqj9nRUNhtLQ",
             pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-            nickname: "Customer account -1",
+            username: "Customer account -1",
             user_ids: array_of_user_ids_1,
           };
 
@@ -216,12 +216,12 @@ describe("SettingsForm.vue", () => {
       });
       // });
 
-      test("When the SettingsForm method that handles receiving the add customer 'save-id' event is invoked with a new customer account, Then the Customer ID text input is updated with nickname value of the newly added account", async () => {
+      test("When the SettingsForm method that handles receiving the add customer 'save-id' event is invoked with a new customer account, Then the Customer ID text input is updated with username value of the newly added account", async () => {
         const add_customer = {
           cust_idx: 2,
           cust_id: "5FY8KwTsQaUJ2KzHJGetfE",
           pass_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
-          nickname: "Customer account -3",
+          username: "Customer account -3",
           user_ids: [],
         };
         /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */

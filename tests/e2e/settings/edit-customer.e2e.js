@@ -8,7 +8,7 @@ const span__button_label = Selector(".span__button_label");
 
 const customer_alphanumeric_input_field = Selector("#input-widget-field-alphanumeric-id");
 const customer_passkey_input_field = Selector("#input-widget-field-passkey-id");
-const customer_id_nickname_input_field = Selector("#input-widget-field-nickname-id");
+const customer_id_username_input_field = Selector("#input-widget-field-username-id");
 
 const edit_customer_cancel_btn = span__button_label.nth(0);
 const edit_customer_delete_btn = span__button_label.nth(1);
@@ -49,6 +49,6 @@ test("testing for the edit customer INVALID State", async (t) => {
   const screenshot_path = path.join(screenshot_path_base, "edit-customer-invalid");
   await t.click(customer_alphanumeric_input_field).pressKey("ctrl+a delete");
   await t.click(customer_passkey_input_field).pressKey("ctrl+a delete");
-  await t.click(customer_id_nickname_input_field).pressKey("ctrl+a delete");
+  await t.click(customer_id_username_input_field).pressKey("ctrl+a delete");
   await testcafe_page_visual_regression(t, screenshot_path);
 });

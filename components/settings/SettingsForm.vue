@@ -19,7 +19,7 @@
           :value.sync="entrykey_customer"
           :input_width="entry_width_customer"
           :disabled="disallow_entry_customer"
-          :options_text="nicknames_list_customer"
+          :options_text="usernames_list_customer"
           :message_if_blank="on_empty_flag_customer"
           :options_id="'cust-'"
         />
@@ -87,7 +87,7 @@
         :value.sync="entrykey_user"
         :input_width="entry_width_user"
         :disabled="disallow_entry_user"
-        :options_text="nicknames_list_user"
+        :options_text="usernames_list_user"
         :message_if_blank="on_empty_flag_user"
         :options_id="'user-'"
       ></InputDropDown>
@@ -322,9 +322,6 @@ export default {
   },
   computed: {
     ...mapState("settings", ["customer_account_ids", "customer_index"]),
-    // ...mapState("settings", {
-    //   user_index: "user_index"
-    // }),
     customers_options: function () {
       if (this.customer_account_ids.length == 0) {
         return [];
@@ -332,7 +329,7 @@ export default {
         const list = [];
 
         for (let i = 0; i < this.customer_account_ids.length; i++) {
-          list.push(this.customer_account_ids[i].nickname);
+          list.push(this.customer_account_ids[i].username);
         }
         return list;
       }
@@ -346,7 +343,7 @@ export default {
     //         } else {
     //           const user_list = [];
     //           for (let i = 0; i < this.customer_account_ids[this.customer_focus_id].user_ids.length; i++) {
-    //             user_list.push(this.customer_account_ids[this.customer_focus_id].user_ids[i].nickname);
+    //             user_list.push(this.customer_account_ids[this.customer_focus_id].user_ids[i].username);
     //           }
     //           return user_list;
     //         }
@@ -379,8 +376,8 @@ export default {
       if (this.entrykey_customer == "") {
         this.on_empty_flag_customer = true;
       } else {
-        const nickname_focus = this.nicknames_list_customer.indexOf(this.entrykey_customer);
-        if (nickname_focus == -1) {
+        const username_focus = this.usernames_list_customer.indexOf(this.entrykey_customer);
+        if (username_focus == -1) {
           // logic of "Add New Customer ID" in Settings
           this.on_empty_flag_customer = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
           // this.entrykey_user = "";
@@ -388,26 +385,26 @@ export default {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_customer = false;
           const customer_focus = this.customer_account_ids.find(
-            (customer) => customer.nickname === this.entrykey_customer
+            (customer) => customer.username === this.entrykey_customer
           );
           this.valid_customer_focus = false;
           // this.valid_user_focus = false;
           if (customer_focus != null) {
             this.customer_focus_id = customer_focus.cust_idx;
             this.valid_customer_focus = true;
-            // if (this.nicknames_list_user !== undefined) {
-            //   this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
-            //   this.nicknames_list_user = this.users_options;
+            // if (this.usernames_list_user !== undefined) {
+            //   this.usernames_list_user.splice(0, this.usernames_list_user.length);
+            //   this.usernames_list_user = this.users_options;
             // }
             // this.entrykey_user = "";
-            // this.nicknames_list_user = this.users_options;
+            // this.usernames_list_user = this.users_options;
           }
           // this.entrykey_user = "";
           // if (this.created_flag == true) {
           //   this.created_flag = false;
           // this.entrykey_user = this.customer_account_ids[this.customer_index].user_ids[
           // this.user_index
-          // ].nickname;
+          // ].username;
           // }
           this.modify_btn_states();
         }
@@ -418,20 +415,20 @@ export default {
     //   if (this.entrykey_customer == "") {
     //     this.on_empty_flag_user = true;
     //   } else {
-    //     const nickname_focus = this.nicknames_list_customer.indexOf(this.entrykey_customer);
-    //     if (nickname_focus == -1) {
+    //     const username_focus = this.usernames_list_customer.indexOf(this.entrykey_customer);
+    //     if (username_focus == -1) {
     //       // logic of "Add New Customer ID" in Settings
     //       this.on_empty_flag_user = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
-    //       this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
-    //       this.nicknames_list_user = [];
+    //       this.usernames_list_user.splice(0, this.usernames_list_user.length);
+    //       this.usernames_list_user = [];
     //       this.modify_btn_states();
     //     } else {
     //       // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
     //       this.on_empty_flag_user = false;
     //       const customer_focus = this.customer_account_ids.find(
-    //         customer => customer.nickname === this.entrykey_customer
+    //         customer => customer.username === this.entrykey_customer
     //       );
-    //       const user_focus = customer_focus.user_ids.find(user => user.nickname === this.entrykey_user);
+    //       const user_focus = customer_focus.user_ids.find(user => user.username === this.entrykey_user);
     //       this.valid_user_focus = false;
     //       if (user_focus != null) {
     //         if (this.entrykey_user != "") {
@@ -444,17 +441,17 @@ export default {
     //         this.user_focus_id = null;
     //         this.transient_user_ids = null;
     //       }
-    //       this.nicknames_list_user = this.users_options;
+    //       this.usernames_list_user = this.users_options;
     //       this.modify_btn_states();
     //     }
     //   }
     // }
   },
   created: function () {
-    this.nicknames_list_customer = this.customers_options;
-    // this.nicknames_list_user = this.users_options;
+    this.usernames_list_customer = this.customers_options;
+    // this.usernames_list_user = this.users_options;
     if (this.customer_index != null) {
-      this.entrykey_customer = this.customer_account_ids[this.customer_index].nickname;
+      this.entrykey_customer = this.customer_account_ids[this.customer_index].username;
       this.valid_customer_focus = true;
       this.customer_focus_id = this.customer_index;
       this.disable_edit_customer = false;
@@ -462,7 +459,7 @@ export default {
       // if (this.user_index != null) {
       //   this.entrykey_user = this.customer_account_ids[this.customer_index].user_ids[
       //     this.user_index
-      //   ].nickname;
+      //   ].username;
       //   this.valid_user_focus = true;
       //   this.user_focus_id = this.user_index;
       //   this.disable_edit_user = false;
@@ -512,9 +509,9 @@ export default {
     onSaveCustomerId(add_customer) {
       this.$bvModal.hide("add-customer");
       this.customer_account_ids.push(add_customer);
-      this.nicknames_list_customer.splice(0, this.nicknames_list_customer.length);
-      this.nicknames_list_customer = this.customers_options;
-      this.entrykey_customer = add_customer.nickname;
+      this.usernames_list_customer.splice(0, this.usernames_list_customer.length);
+      this.usernames_list_customer = this.customers_options;
+      this.entrykey_customer = add_customer.username;
     },
     onCancelCustomerId() {
       this.$bvModal.hide("edit-customer");
@@ -525,11 +522,11 @@ export default {
       this.customer_account_ids[edit_customer.cust_idx].cust_idx = edit_customer.cust_idx;
       this.customer_account_ids[edit_customer.cust_idx].cust_id = edit_customer.cust_id;
       this.customer_account_ids[edit_customer.cust_idx].pass_key = edit_customer.pass_key;
-      this.customer_account_ids[edit_customer.cust_idx].nickname = edit_customer.nickname;
+      this.customer_account_ids[edit_customer.cust_idx].username = edit_customer.username;
       this.customer_account_ids[edit_customer.cust_idx].user_ids = edit_customer.user_ids;
-      this.nicknames_list_customer.splice(0, this.nicknames_list_customer.length);
-      this.nicknames_list_customer = this.customers_options;
-      this.entrykey_customer = edit_customer.nickname;
+      this.usernames_list_customer.splice(0, this.usernames_list_customer.length);
+      this.usernames_list_customer = this.customers_options;
+      this.entrykey_customer = edit_customer.username;
     },
     onDeleteCustomerId(delete_customer) {
       this.$bvModal.hide("edit-customer");
@@ -543,10 +540,10 @@ export default {
       for (let i = 0; i < this.customer_account_ids.length; i++) {
         this.customer_account_ids[i].cust_idx = i;
       }
-      this.nicknames_list_customer.splice(0, this.nicknames_list_customer.length);
-      // this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
-      this.nicknames_list_customer = this.customers_options;
-      // this.nicknames_list_user = this.users_options;
+      this.usernames_list_customer.splice(0, this.usernames_list_customer.length);
+      // this.usernames_list_user.splice(0, this.usernames_list_user.length);
+      this.usernames_list_customer = this.customers_options;
+      // this.usernames_list_user = this.users_options;
       this.entrykey_customer = "";
       // this.entrykey_user = "";
     },
@@ -555,23 +552,23 @@ export default {
     // },
     // onSaveUserId(add_user) {
     //   this.$bvModal.hide("add-user");
-    //   this.entrykey_user = add_user.nickname;
+    //   this.entrykey_user = add_user.username;
     //   this.customer_account_ids[this.customer_focus_id].user_ids.push(add_user);
-    //   this.users_options.push(add_user.nickname);
+    //   this.users_options.push(add_user.username);
     // },
     // onCancelUserId() {
     //   this.$bvModal.hide("edit-user");
     // },
     // onUpdateUserId(edit_user) {
     //   this.$bvModal.hide("edit-user");
-    //   this.entrykey_user = edit_user.nickname;
+    //   this.entrykey_user = edit_user.username;
     //   this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].user_id =
     //     edit_user.user_id;
     //   this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].uuid = edit_user.uuid;
-    //   this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].nickname =
-    //     edit_user.nickname;
-    //   this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
-    //   this.nicknames_list_user = this.users_options;
+    //   this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].username =
+    //     edit_user.username;
+    //   this.usernames_list_user.splice(0, this.usernames_list_user.length);
+    //   this.usernames_list_user = this.users_options;
     // },
     // onDeleteUserId(delete_user) {
     //   this.$bvModal.hide("edit-user");
@@ -580,8 +577,8 @@ export default {
     //   for (let i = 0; i < this.customer_account_ids[this.customer_focus_id].user_ids.length; i++) {
     //     this.customer_account_ids[this.customer_focus_id].user_ids[i].user_id = i;
     //   }
-    //   this.nicknames_list_user.splice(0, this.nicknames_list_user.length);
-    //   this.nicknames_list_user = this.users_options;
+    //   this.usernames_list_user.splice(0, this.usernames_list_user.length);
+    //   this.usernames_list_user = this.users_options;
     //   this.transient_user_ids = null;
     //   this.user_focus_id = null;
     //   this.entrykey_user = "";
@@ -593,7 +590,7 @@ export default {
       //   num_of_userids = this.customer_account_ids[this.customer_focus_id].user_ids.length;
       //   if (num_of_userids > 0) {
       //     const customer_focus = this.customer_account_ids.find(
-      //       customer => customer.nickname === this.entrykey_customer
+      //       customer => customer.username === this.entrykey_customer
       //     );
       //     if (customer_focus != null) {
       //       const new_user_ids = customer_focus.user_ids;
@@ -601,7 +598,7 @@ export default {
       //       this.disable_add_user = false;
       //       this.disable_edit_user = true;
       //       if (new_user_ids != undefined) {
-      //         const user_focus = customer_focus.user_ids.find(user => user.nickname === this.entrykey_user);
+      //         const user_focus = customer_focus.user_ids.find(user => user.username === this.entrykey_user);
       //         if (user_focus != null) {
       //           this.disable_edit_customer = false;
       //           this.disable_add_user = false;

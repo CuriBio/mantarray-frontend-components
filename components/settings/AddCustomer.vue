@@ -27,14 +27,14 @@
         @update:value="on_update_pass($event)"
       ></InputWidget>
     </div>
-    <div id="nickname" style="top: 241px; left: 50px; position: absolute; z-index: 22">
+    <div id="username" style="top: 241px; left: 50px; position: absolute; z-index: 22">
       <InputWidget
-        :title_label="'Enter ID Nickname'"
-        :placeholder="'Curi Bio Main Account'"
-        :invalid_text="error_text_nickname"
+        :title_label="'Enter ID Username'"
+        :placeholder="'Curi Bio User'"
+        :invalid_text="error_text_username"
         :input_width="400"
-        :dom_id_suffix="'nickname-id'"
-        @update:value="on_update_nickname($event)"
+        :dom_id_suffix="'username-id'"
+        @update:value="on_update_username($event)"
       ></InputWidget>
     </div>
     <div style="top: 350px; left: 0px; position: absolute">
@@ -81,10 +81,10 @@ export default {
     return {
       cust_id: "",
       pass_key: "",
-      nickname: "",
+      username: "",
       error_text_id: "This field is required",
       error_text_pass: "This field is required",
-      error_text_nickname: "This field is required",
+      error_text_username: "This field is required",
       enablelist_add_customer: [true, false],
     };
   },
@@ -99,9 +99,9 @@ export default {
       this.pass_key = new_value;
       this.enable_save_button();
     },
-    on_update_nickname: function (new_value) {
-      this.error_text_nickname = TextValidation_Customer.validate(new_value, "nickname");
-      this.nickname = new_value;
+    on_update_username: function (new_value) {
+      this.error_text_username = TextValidation_Customer.validate(new_value, "username");
+      this.username = new_value;
       this.enable_save_button();
     },
     clicked_button: function (choice) {
@@ -122,7 +122,7 @@ export default {
         cust_idx: this.dataindex,
         cust_id: this.cust_id,
         pass_key: this.pass_key,
-        nickname: this.nickname,
+        username: this.username,
         user_ids: [],
       };
       this.$emit("save-id", add_customer);
@@ -130,7 +130,7 @@ export default {
     enable_save_button() {
       if (this.error_text_id === "") {
         if (this.error_text_pass === "") {
-          if (this.error_text_nickname === "") {
+          if (this.error_text_username === "") {
             this.enablelist_add_customer = [true, true];
             return;
           }
@@ -182,7 +182,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget > #input-widget-field-nickname-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-username-id {
   font-family: Muli;
 }
 </style>
