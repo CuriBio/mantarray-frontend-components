@@ -6,13 +6,13 @@ const default_state = {
   user_details: {
     user_id: null,
     uuid: null,
-    nickname: null,
+    username: null,
   },
   customer_details: {
     cust_idx: null,
     cust_id: null,
     pass_key: null,
-    nickname: null,
+    username: null,
     user_ids: [] /* This contains objects of user_details */,
   },
   auto_upload: true,

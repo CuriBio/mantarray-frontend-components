@@ -22,7 +22,7 @@ describe("SettingsForm.vue", () => {
   //     cust_id: 0,
   //     uuid: "4vqyd62oARXqj9nRUNhtLQ",
   //     pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-  //     nickname: "Customer account -1",
+  //     username: "Customer account -1",
   //     user_ids: []
   //   }
   // ];
@@ -43,13 +43,13 @@ describe("SettingsForm.vue", () => {
   // const delete_user = {
   //   user_id: 0,
   //   uuid: "2VSckkBYr2An3dqHEyfRRE",
-  //   nickname: "User account -1",
+  //   username: "User account -1",
   // };
   // const delete_customer = {
   //   cust_id: 0,
   //   uuid: "4vqyd62oARXqj9nRUNhtLQ",
   //   pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-  //   nickname: "Customer account -1",
+  //   username: "Customer account -1",
   //   user_ids: []
   // };
   /**
@@ -165,7 +165,7 @@ describe("SettingsForm.vue", () => {
       //   const delete_user = {
       //     user_id: 0,
       //     uuid: "2VSckkBYr2An3dqHEyfRRE",
-      //     nickname: "User account -1",
+      //     username: "User account -1",
       //   };
       //   wrapper.vm.onDeleteUserId(delete_user);
       //   await wrapper.vm.$nextTick(); // wait for update

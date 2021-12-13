@@ -5,7 +5,7 @@ import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { array_of_customer_ids, array_of_customer_ids_one } from "./SettingsFormCustomerData.js";
+import { array_of_customer_ids } from "./SettingsFormCustomerData.js";
 
 let wrapper = null;
 
@@ -33,7 +33,7 @@ describe("SettingsForm.vue", () => {
       // commit a deep copy of the template object to the Vuex store using JSON stringify/parse, as it may be modified during tests. https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
       store.commit("settings/set_customer_account_ids", JSON.parse(JSON.stringify(array_of_customer_ids)));
     });
-    test("When the SettingsForm is mounted, Then the dropDown of customer contains the nicknames from Vuex", () => {
+    test("When the SettingsForm is mounted, Then the dropDown of customer contains the usernames from Vuex", () => {
       wrapper = mount(ComponentToTest, {
         store,
         localVue,
