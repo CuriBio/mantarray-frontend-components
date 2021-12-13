@@ -153,6 +153,7 @@
         id="auto_upload_switch"
         :checked_state="auto_upload"
         :label="'auto_upload'"
+        :disabled="disable_toggle"
         @handle_toggle_state="handle_toggle_state"
       />
     </div>
@@ -164,7 +165,13 @@
     <div class="div__settingsform-toggle-icon-2" width="62" height="34">
       <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_cvs -->
       <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_txt -->
-      <ToggleWidget id="auto_delete_switch" :checked_state="auto_delete" :label="'auto_delete'" />
+      <ToggleWidget
+        id="auto_delete_switch"
+        :checked_state="auto_delete"
+        :label="'auto_delete'"
+        :disabled="!disable_toggle"
+        @handle_toggle_state="handle_toggle_state"
+      />
     </div>
     <!-- origonal MockFlow ID : cmpD4873e2fa8d693fa244b11bc36eaee8e1 -->
     <canvas class="canvas__settings-file-upload-separator" width="512" height="22"> </canvas>
@@ -318,6 +325,7 @@ export default {
 
       auto_upload: true,
       auto_delete: false,
+      disable_toggle: false,
     };
   },
   computed: {
