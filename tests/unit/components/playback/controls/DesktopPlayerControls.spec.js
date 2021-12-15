@@ -88,7 +88,7 @@ describe("DesktopPlayerControls.vue", () => {
   });
 
   test("When a user selects the settings control button, Then the modal will appear and will emit a close event when closed", async () => {
-    const close_spy = jest.spyOn(component_to_test.methods, "close_modal");
+    const close_spy = jest.spyOn(component_to_test.methods, "close_settings_modal");
     wrapper = mount(component_to_test, {
       store,
       localVue,
@@ -380,7 +380,7 @@ describe("DesktopPlayerControls.vue", () => {
         });
       }
     );
-    test("Given Vuex is in the Calibrating state, the calibrating animation matches the DOM snapshot", async () => {
+    test("When Vuex is in the Calibrating state, Then the calibrating animation matches the DOM snapshot", async () => {
       const propsData = {};
       wrapper = shallowMount(component_to_test, {
         propsData,
@@ -396,7 +396,7 @@ describe("DesktopPlayerControls.vue", () => {
         `<span class="svg__playback-desktop-player-controls-button span__playback-desktop-player-controls-calibrating span__playback-desktop-player-controls--active" style=""><fontawesomeicon-stub icon="fa,spinner" pulse="true"></fontawesomeicon-stub></span>`
       );
     });
-    test("Given Vuex is in the Buffering state, the buffering animation matches the DOM snapshot", async () => {
+    test("When Vuex is in the Buffering state, Then the buffering animation matches the DOM snapshot", async () => {
       const propsData = {};
       wrapper = shallowMount(component_to_test, {
         propsData,
@@ -411,6 +411,28 @@ describe("DesktopPlayerControls.vue", () => {
       expect(target_span).toMatchInlineSnapshot(
         `<span class="svg__playback-desktop-player-controls-button span__playback-desktop-player-controls-buffering span__playback-desktop-player-controls--active" style=""><fontawesomeicon-stub icon="fa,spinner" pulse="true"></fontawesomeicon-stub></span>`
       );
+    });
+
+    test("When in beta 2 mode, Then confirmation modal that device is empty will appear before starting calibration", async () => {
+      const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
+
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+      store.commit("settings/set_beta_2_mode", true);
+      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.NEEDS_CALIBRATION);
+      await wrapper.vm.$nextTick(); // wait for update
+
+      await wrapper.find(".svg__playback-desktop-player-controls-calibrate-button").trigger("click");
+
+      Vue.nextTick(() => {
+        expect(wrapper.find("#calibration-modal").isVisible()).toBe(true);
+      });
+
+      await wrapper.findAll(".span__button_label").at(1).trigger("click");
+
+      expect(action_spy).toHaveBeenCalledWith("playback/start_calibration");
     });
   });
 });

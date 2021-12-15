@@ -5,12 +5,9 @@
       <!--  original mockflow ID : cmpD6f871b37d5c9f6c0c0715f4f6ab99523 -->
       <span class="span__settingsform-title">Settings</span>
       <!-- original mockflow ID : cmpD698ee7f9b579fcf64ee501697ea75af9 -->
-
       <!-- original mockflow ID : cmpDd8b22bfae4d2a9945a94972384dacecd -->
       <span class="span__settingsform-customer-sub-title">Select&nbsp;<wbr />Customer&nbsp;<wbr />ID</span>
-
       <!-- original mockflow ID : cmpD5a52d34b430ce573300ed527a7b6a37d -->
-
       <div class="div__settingsform-editor-input">
         <InputDropDown
           :title_label="label_customer"
@@ -73,71 +70,6 @@
     </div>
     <canvas class="canvas__settings-title-separator" width="510" height="20"> </canvas>
     <canvas class="canvas__settings-customer-separator" width="510" height="20"> </canvas>
-    <!-- <canvas class="canvas__settings-user-separator" width="510" height="20"> </canvas> -->
-    <!-- original Mockflow ID : cmpD36f04653a57e9f5f716e9c5a7405b38e -->
-    <!--  original Mockflow ID : cmpDa220fe036f45bb8db289301ce0d9f6cc -->
-    <!-- <span class="span__settingsform-user-account-sub-title">Select&nbsp;<wbr />User&nbsp;<wbr />ID</span> -->
-
-    <!-- original MockFlow ID : cmpD289dc218dd29cfe1f9a4330b16e40c6f -->
-    <!-- <div class="div__settingsform-user-input">
-      <InputDropDown
-        :title_label="label_user"
-        :placeholder="key_placeholder_user"
-        :invalid_text="error_text_user"
-        :value.sync="entrykey_user"
-        :input_width="entry_width_user"
-        :disabled="disallow_entry_user"
-        :options_text="usernames_list_user"
-        :message_if_blank="on_empty_flag_user"
-        :options_id="'user-'"
-      ></InputDropDown>
-    </div> -->
-    <!-- original Mockflow ID : cmpD4c6b34524a3a014988f42e90a7cc071c -->
-    <!-- <div class="div__settingsform-user-input-edit-btn" width="98" height="45"> -->
-    <!-- original Mockflow ID : cmpD4c6b34524a3a014988f42e90a7cc071c_txt -->
-    <!-- <span v-show="!disable_edit_user" class="span__settingsform-user-input-edit-btn-txt"
-        ><b-button
-          id="edit-a-user"
-          v-b-modal.edit-user
-          squared
-          class="w-100 h-100 edit-id"
-          style="background-color: #3f3f3f; border: 0px; color: #ececed"
-          >Edit&nbsp;<wbr />ID</b-button
-        >
-        <b-modal id="edit-user" size="sm" hide-footer hide-header hide-header-close>
-          <EditUser
-            :dialogdata="transient_user_ids"
-            :dataindex="user_focus_id"
-            @cancel-id="onCancelUserId"
-            @save-id="onUpdateUserId"
-            @delete-id="onDeleteUserId"
-          ></EditUser>
-        </b-modal>
-      </span>
-      <span v-show="disable_edit_user" class="span__settingsform-user-input-edit-btn-txt-disable"
-        >Edit&nbsp;<wbr />ID</span
-      >
-    </div> -->
-    <!-- original MockFlow ID : cmpDbf04a9fad9240b4d1ad4fe7252e91af6 -->
-    <!-- <div class="div__settingsform-user-input-btn-pos" width="285" height="45"> -->
-    <!-- original MockFlow ID : cmpDbf04a9fad9240b4d1ad4fe7252e91af6_txt -->
-    <!-- <span v-show="!disable_add_user" class="span__settingsform_user-input-editor"
-        ><b-button
-          id="add-a-user"
-          v-b-modal.add-user
-          squared
-          class="w-100 h-100 edit-id"
-          style="background-color: #3f3f3f; border: 0px; color: #ececed"
-          >Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />Account&nbsp;<wbr />ID</b-button
-        >
-        <b-modal id="add-user" size="sm" hide-footer hide-header hide-header-close>
-          <AddUser :dataindex="add_user_id" @cancel-id="onCancelAddUserId" @save-id="onSaveUserId"></AddUser>
-        </b-modal>
-      </span>
-      <span v-show="disable_add_user" class="span__settingsform_user-input-editor-disable"
-        >Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />Account&nbsp;<wbr />ID
-      </span>
-    </div> -->
     <!-- original MockFlow ID : cmpDf4cc1d0d47ffb031f42612730c3a717c -->
     <span class="span__settingsform-record-file-settings"
       >Recorded&nbsp;<wbr />File&nbsp;<wbr />Settings</span
@@ -176,36 +108,6 @@
     <!-- origonal MockFlow ID : cmpD4873e2fa8d693fa244b11bc36eaee8e1 -->
     <canvas class="canvas__settings-file-upload-separator" width="512" height="22"> </canvas>
     <!-- original Mockflow ID : cmpD1df116abcab5b13231c5616233d6cc30 -->
-    <!-- <span class="span__settings-tool-tip-settings-title">Tool&nbsp;<wbr />Tip&nbsp;<wbr />Settings</span> -->
-    <!-- original MockFlow ID : cmpD5e5aa2f092b95fd325e1f97764dc25ca -->
-    <!-- <span class="span__settings-tool-tip-sub-title"
-      >Delay&nbsp;<wbr />Hover&nbsp;<wbr />Description&nbsp;<wbr />Pop-ups</span
-    > -->
-    <!-- original MockFlow ID : cmpDe38625daffd1c35fa289a74e6dbbe4ff_txt -->
-    <!-- <span class="span__settings_tool-tip_input-editor">
-      <b-form-input
-        class="form-control input-sm pull-right"
-        placeholder="2"
-        style="visibility: visible"
-      ></b-form-input>
-    </span> -->
-    <!-- original Mockflow ID : cmpD54df1dd00a203636810d5c55417e6e97 -->
-    <!-- <span class="span__settings_tool-tip_input-editor-unit">seconds</span> -->
-    <!-- original Mockflow ID : cmpD535921733258bc16fd22894de418d29c -->
-    <!-- <div class="span__settings_tool-tip_input-editor-toogle-icon" width="62" height="34"> -->
-    <!-- original Mockflow ID : cmpD535921733258bc16fd22894de418d29c_cvs -->
-    <!-- <canvas class="canvas__settings-tool-tip-input-editor-toogle-icon" width="62" height="34"> </canvas> -->
-    <!-- original MockFlow ID : cmpD535921733258bc16fd22894de418d29c_txt -->
-    <!-- <span class="span__settings-tool-tip-input-editor-toogle-icon-txt"
-        ><FontAwesomeIcon :icon="['fa', 'toggle-off']"
-      /></span>
-    </div> -->
-    <!-- original MockFlow ID : cmpD77a1b6b0cc2201a81a3d9c0485100bc1 -->
-    <!-- <span class="span__settings-tool-tip_never-show-text"
-      >Never&nbsp;<wbr />Show&nbsp;<wbr />Description&nbsp;<wbr />Pop-ups</span
-    > -->
-    <!-- original MockFlow ID : cmpDf8b694341fb875af1a45ed417cde193b -->
-    <!-- <canvas class="canvas__settings-tool-tip-separator" width="512" height="22"> </canvas> -->
     <!-- original MockFlow ID : cmpD98658345877fb84ac42a8c93722c3fe9 -->
     <div class="div__settings-tool-tip-cancel-btn" width="180" height="55" @click="cancel_changes">
       <!-- original MockFlow ID : cmpD98658345877fb84ac42a8c93722c3fe9_txt -->
@@ -299,14 +201,8 @@ export default {
   data() {
     return {
       valid_customer_focus: false,
-      // valid_user_focus: false,
       customer_focus_id: 0,
-      // user_focus_id: 0,
-      // transient_user_ids: [],
       disable_edit_customer: true,
-      // disable_add_user: true,
-      // disable_edit_user: true,
-
       label_customer: "Customer Account ID",
       entrykey_customer: "",
       key_placeholder_customer: "Select the Customer",
@@ -315,14 +211,6 @@ export default {
       disallow_entry_customer: false,
       on_empty_flag_customer: true,
       open_for_invalid_creds: false,
-      // label_user: "User Account ID",
-      // entrykey_user: "",
-      // key_placeholder_user: "Select User",
-      // error_text_user: "An ID is required",
-      // entry_width_user: 283,
-      // disallow_entry_user: false,
-      // on_empty_flag_user: true,
-
       auto_upload: true,
       auto_delete: false,
       disable_toggle: false,
@@ -342,24 +230,6 @@ export default {
         return list;
       }
     },
-    // users_options: function() {
-    //   if (this.entrykey_customer != "") {
-    //     if (this.customer_account_ids.length != 0) {
-    //       if (this.customer_account_ids[this.customer_focus_id].user_ids !== undefined) {
-    //         if (this.customer_account_ids[this.customer_focus_id].user_ids.length == 0) {
-    //           return [];
-    //         } else {
-    //           const user_list = [];
-    //           for (let i = 0; i < this.customer_account_ids[this.customer_focus_id].user_ids.length; i++) {
-    //             user_list.push(this.customer_account_ids[this.customer_focus_id].user_ids[i].username);
-    //           }
-    //           return user_list;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   return [];
-    // },
     addcustomerid: function () {
       if (this.customer_account_ids.length == 0) {
         return 0;
@@ -367,17 +237,6 @@ export default {
         return this.customer_account_ids.length;
       }
     },
-    // add_user_id: function() {
-    //   if (this.customer_account_ids.length == 0) {
-    //     return 0;
-    //   } else {
-    //     if (this.customer_account_ids[this.customer_focus_id].user_ids != undefined) {
-    //       return this.customer_account_ids[this.customer_focus_id].user_ids.length;
-    //     } else {
-    //       return 0;
-    //     }
-    //   }
-    // }
   },
   watch: {
     entrykey_customer: function () {
@@ -388,7 +247,6 @@ export default {
         if (username_focus == -1) {
           // logic of "Add New Customer ID" in Settings
           this.on_empty_flag_customer = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
-          // this.entrykey_user = "";
         } else {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_customer = false;
@@ -400,60 +258,12 @@ export default {
           if (customer_focus != null) {
             this.customer_focus_id = customer_focus.cust_idx;
             this.valid_customer_focus = true;
-            // if (this.usernames_list_user !== undefined) {
-            //   this.usernames_list_user.splice(0, this.usernames_list_user.length);
-            //   this.usernames_list_user = this.users_options;
-            // }
-            // this.entrykey_user = "";
-            // this.usernames_list_user = this.users_options;
           }
-          // this.entrykey_user = "";
-          // if (this.created_flag == true) {
-          //   this.created_flag = false;
-          // this.entrykey_user = this.customer_account_ids[this.customer_index].user_ids[
-          // this.user_index
-          // ].username;
-          // }
           this.modify_btn_states();
         }
       }
       this.modify_btn_states();
     },
-    // entrykey_user: function() {
-    //   if (this.entrykey_customer == "") {
-    //     this.on_empty_flag_user = true;
-    //   } else {
-    //     const username_focus = this.usernames_list_customer.indexOf(this.entrykey_customer);
-    //     if (username_focus == -1) {
-    //       // logic of "Add New Customer ID" in Settings
-    //       this.on_empty_flag_user = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
-    //       this.usernames_list_user.splice(0, this.usernames_list_user.length);
-    //       this.usernames_list_user = [];
-    //       this.modify_btn_states();
-    //     } else {
-    //       // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
-    //       this.on_empty_flag_user = false;
-    //       const customer_focus = this.customer_account_ids.find(
-    //         customer => customer.username === this.entrykey_customer
-    //       );
-    //       const user_focus = customer_focus.user_ids.find(user => user.username === this.entrykey_user);
-    //       this.valid_user_focus = false;
-    //       if (user_focus != null) {
-    //         if (this.entrykey_user != "") {
-    //           this.valid_user_focus = true;
-    //           this.user_focus_id = user_focus.user_id;
-    //           this.transient_user_ids = user_focus;
-    //         }
-    //       } else {
-    //         this.on_empty_flag_user = true;
-    //         this.user_focus_id = null;
-    //         this.transient_user_ids = null;
-    //       }
-    //       this.usernames_list_user = this.users_options;
-    //       this.modify_btn_states();
-    //     }
-    //   }
-    // }
   },
   created: function () {
     this.usernames_list_customer = this.customers_options;
@@ -463,29 +273,11 @@ export default {
       this.valid_customer_focus = true;
       this.customer_focus_id = this.customer_index;
       this.disable_edit_customer = false;
-      // this.disable_add_user = false;
-      // if (this.user_index != null) {
-      //   this.entrykey_user = this.customer_account_ids[this.customer_index].user_ids[
-      //     this.user_index
-      //   ].username;
-      //   this.valid_user_focus = true;
-      //   this.user_focus_id = this.user_index;
-      //   this.disable_edit_user = false;
-      //   this.created_flag = true;
-      //   this.on_empty_flag_user = false;
-      // }
       this.on_empty_flag_customer = false;
     }
   },
   methods: {
-    // Eli (11/25/20): commenting out this method until we are ready to fully implement the feature
-    // decoder(str) {
-    //   const textArea = document.createElement("textArea");
-    //   textArea.innerHTML = str;
-    //   return textArea.value;
-    // },
     async save_changes() {
-      // this.$store.commit("settings/set_user_index", this.user_focus_id);
       if (!this.on_empty_flag_customer) {
         this.$store.commit("settings/set_customer_index", this.customer_focus_id);
         this.$store.commit("settings/set_auto_upload", this.auto_upload);
@@ -543,95 +335,15 @@ export default {
       this.customer_account_ids.splice(delete_customer.cust_idx, 1);
       /* Inside the SettingsVue page the index value has to be reset to startup value of 0 */
       this.customer_focus_id = 0;
-      // this.user_focus_id = 0;
       /* Now that customer id element is deleted we need to update all the right side customer cust_id index starting from 0 */
       for (let i = 0; i < this.customer_account_ids.length; i++) {
         this.customer_account_ids[i].cust_idx = i;
       }
       this.usernames_list_customer.splice(0, this.usernames_list_customer.length);
-      // this.usernames_list_user.splice(0, this.usernames_list_user.length);
       this.usernames_list_customer = this.customers_options;
-      // this.usernames_list_user = this.users_options;
       this.entrykey_customer = "";
-      // this.entrykey_user = "";
     },
-    // onCancelAddUserId() {
-    //   this.$bvModal.hide("add-user");
-    // },
-    // onSaveUserId(add_user) {
-    //   this.$bvModal.hide("add-user");
-    //   this.entrykey_user = add_user.username;
-    //   this.customer_account_ids[this.customer_focus_id].user_ids.push(add_user);
-    //   this.users_options.push(add_user.username);
-    // },
-    // onCancelUserId() {
-    //   this.$bvModal.hide("edit-user");
-    // },
-    // onUpdateUserId(edit_user) {
-    //   this.$bvModal.hide("edit-user");
-    //   this.entrykey_user = edit_user.username;
-    //   this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].user_id =
-    //     edit_user.user_id;
-    //   this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].uuid = edit_user.uuid;
-    //   this.customer_account_ids[this.customer_focus_id].user_ids[edit_user.user_id].username =
-    //     edit_user.username;
-    //   this.usernames_list_user.splice(0, this.usernames_list_user.length);
-    //   this.usernames_list_user = this.users_options;
-    // },
-    // onDeleteUserId(delete_user) {
-    //   this.$bvModal.hide("edit-user");
-    //   this.customer_account_ids[this.customer_focus_id].user_ids.splice(delete_user.user_id, 1);
-    //   /* Now that user_id element is deleted we need to update all the user ids without holes or starting index 0 */
-    //   for (let i = 0; i < this.customer_account_ids[this.customer_focus_id].user_ids.length; i++) {
-    //     this.customer_account_ids[this.customer_focus_id].user_ids[i].user_id = i;
-    //   }
-    //   this.usernames_list_user.splice(0, this.usernames_list_user.length);
-    //   this.usernames_list_user = this.users_options;
-    //   this.transient_user_ids = null;
-    //   this.user_focus_id = null;
-    //   this.entrykey_user = "";
-    // },
     modify_btn_states() {
-      // const num_of_customers = this.customer_account_ids.length;
-      // let num_of_userids = null;
-      // if (num_of_customers > 0) {
-      //   num_of_userids = this.customer_account_ids[this.customer_focus_id].user_ids.length;
-      //   if (num_of_userids > 0) {
-      //     const customer_focus = this.customer_account_ids.find(
-      //       customer => customer.username === this.entrykey_customer
-      //     );
-      //     if (customer_focus != null) {
-      //       const new_user_ids = customer_focus.user_ids;
-      //       this.disable_edit_customer = false;
-      //       this.disable_add_user = false;
-      //       this.disable_edit_user = true;
-      //       if (new_user_ids != undefined) {
-      //         const user_focus = customer_focus.user_ids.find(user => user.username === this.entrykey_user);
-      //         if (user_focus != null) {
-      //           this.disable_edit_customer = false;
-      //           this.disable_add_user = false;
-      //           this.disable_edit_user = false;
-      //         } else {
-      //           this.disable_edit_customer = false;
-      //           this.disable_add_user = false;
-      //           this.disable_edit_user = true;
-      //         }
-      //       }
-      //     } else {
-      //       this.disable_edit_customer = true;
-      //       this.disable_add_user = true;
-      //       this.disable_edit_user = true;
-      //     }
-      //   } else {
-      //     this.disable_edit_customer = false;
-      //     this.disable_add_user = false;
-      //     this.disable_edit_user = true;
-      //   }
-      // } else {
-      //   this.disable_edit_customer = true;
-      //   this.disable_add_user = true;
-      //   this.disable_edit_user = true;
-      // }
       this.disable_edit_customer = this.on_empty_flag_customer;
     },
     handle_toggle_state: function (state, label) {
