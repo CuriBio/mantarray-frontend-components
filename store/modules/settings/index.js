@@ -7,7 +7,7 @@ const default_state = {
     cust_idx: null,
     cust_id: null,
     pass_key: null,
-    username: null,
+    user_account_id: null,
   },
   auto_upload: true,
   auto_delete: false,

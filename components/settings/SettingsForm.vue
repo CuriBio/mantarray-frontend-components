@@ -16,7 +16,7 @@
           :value.sync="entrykey_customer"
           :input_width="entry_width_customer"
           :disabled="disallow_entry_customer"
-          :options_text="usernames_list_customer"
+          :options_text="customer_user_account_id"
           :message_if_blank="on_empty_flag_customer"
           :options_id="'cust-'"
         />
@@ -178,8 +178,6 @@ import { BModal } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
 import AddCustomer from "@/components/settings/AddCustomer.vue";
 import EditCustomer from "@/components/settings/EditCustomer.vue";
-// import AddUser from "@/components/settings/AddUser.vue";
-// import EditUser from "@/components/settings/EditUser.vue";
 import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 import ToggleWidget from "@/components/basic_widgets/ToggleWidget.vue";
 
@@ -193,8 +191,6 @@ export default {
   components: {
     AddCustomer,
     EditCustomer,
-    // AddUser,
-    // EditUser,
     InputDropDown,
     ToggleWidget,
   },
@@ -225,7 +221,7 @@ export default {
         const list = [];
 
         for (let i = 0; i < this.customer_account_ids.length; i++) {
-          list.push(this.customer_account_ids[i].username);
+          list.push(this.customer_account_ids[i].user_account_id);
         }
         return list;
       }
@@ -243,15 +239,15 @@ export default {
       if (this.entrykey_customer == "") {
         this.on_empty_flag_customer = true;
       } else {
-        const username_focus = this.usernames_list_customer.indexOf(this.entrykey_customer);
-        if (username_focus == -1) {
+        const user_account_id_focus = this.customer_user_account_id.indexOf(this.entrykey_customer);
+        if (user_account_id_focus == -1) {
           // logic of "Add New Customer ID" in Settings
           this.on_empty_flag_customer = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
         } else {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_customer = false;
           const customer_focus = this.customer_account_ids.find(
-            (customer) => customer.username === this.entrykey_customer
+            (customer) => customer.user_account_id === this.entrykey_customer
           );
           this.valid_customer_focus = false;
           // this.valid_user_focus = false;
@@ -266,10 +262,10 @@ export default {
     },
   },
   created: function () {
-    this.usernames_list_customer = this.customers_options;
-    // this.usernames_list_user = this.users_options;
+    this.customer_user_account_id = this.customers_options;
+    // this.user_account_id_list_user = this.users_options;
     if (this.customer_index != null) {
-      this.entrykey_customer = this.customer_account_ids[this.customer_index].username;
+      this.entrykey_customer = this.customer_account_ids[this.customer_index].user_account_id;
       this.valid_customer_focus = true;
       this.customer_focus_id = this.customer_index;
       this.disable_edit_customer = false;
@@ -309,9 +305,9 @@ export default {
     onSaveCustomerId(add_customer) {
       this.$bvModal.hide("add-customer");
       this.customer_account_ids.push(add_customer);
-      this.usernames_list_customer.splice(0, this.usernames_list_customer.length);
-      this.usernames_list_customer = this.customers_options;
-      this.entrykey_customer = add_customer.username;
+      this.customer_user_account_id.splice(0, this.customer_user_account_id.length);
+      this.customer_user_account_id = this.customers_options;
+      this.entrykey_customer = add_customer.user_account_id;
     },
     onCancelCustomerId() {
       this.$bvModal.hide("edit-customer");
@@ -322,11 +318,11 @@ export default {
       this.customer_account_ids[edit_customer.cust_idx].cust_idx = edit_customer.cust_idx;
       this.customer_account_ids[edit_customer.cust_idx].cust_id = edit_customer.cust_id;
       this.customer_account_ids[edit_customer.cust_idx].pass_key = edit_customer.pass_key;
-      this.customer_account_ids[edit_customer.cust_idx].username = edit_customer.username;
+      this.customer_account_ids[edit_customer.cust_idx].user_account_id = edit_customer.user_account_id;
       this.customer_account_ids[edit_customer.cust_idx].user_ids = edit_customer.user_ids;
-      this.usernames_list_customer.splice(0, this.usernames_list_customer.length);
-      this.usernames_list_customer = this.customers_options;
-      this.entrykey_customer = edit_customer.username;
+      this.customer_user_account_id.splice(0, this.customer_user_account_id.length);
+      this.customer_user_account_id = this.customers_options;
+      this.entrykey_customer = edit_customer.user_account_id;
     },
     onDeleteCustomerId(delete_customer) {
       this.$bvModal.hide("edit-customer");
@@ -339,8 +335,8 @@ export default {
       for (let i = 0; i < this.customer_account_ids.length; i++) {
         this.customer_account_ids[i].cust_idx = i;
       }
-      this.usernames_list_customer.splice(0, this.usernames_list_customer.length);
-      this.usernames_list_customer = this.customers_options;
+      this.customer_user_account_id.splice(0, this.customer_user_account_id.length);
+      this.customer_user_account_id = this.customers_options;
       this.entrykey_customer = "";
     },
     modify_btn_states() {
