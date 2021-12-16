@@ -17,15 +17,6 @@ let NuxtStore;
 let store;
 
 describe("SettingsForm.vue", () => {
-  // const array_of_customer_ids_no_user_ids = [
-  //   {
-  //     cust_id: 0,
-  //     uuid: "4vqyd62oARXqj9nRUNhtLQ",
-  //     pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-  //     username: "Customer account -1",
-  //     user_ids: []
-  //   }
-  // ];
   /**
    * Returns an object of DOM span id's
    * @param {Object} wrap - Component reference
@@ -40,18 +31,6 @@ describe("SettingsForm.vue", () => {
     };
     return buttons;
   }
-  // const delete_user = {
-  //   user_id: 0,
-  //   uuid: "2VSckkBYr2An3dqHEyfRRE",
-  //   username: "User account -1",
-  // };
-  // const delete_customer = {
-  //   cust_id: 0,
-  //   uuid: "4vqyd62oARXqj9nRUNhtLQ",
-  //   pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-  //   username: "Customer account -1",
-  //   user_ids: []
-  // };
   /**
    * Returns an object of DOM span id's
    * @param {Object} wrap - Component reference
@@ -130,75 +109,16 @@ describe("SettingsForm.vue", () => {
           localVue,
         });
       });
-      // test("When the value of Customer ID is set to 'Customer account -1' by an entry into the input, Then 'Add New Customer ID' 'Edit ID'(of customer) is disabled", async () => {
-      //   wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
-      //   const all_buttons = get_buttons(wrapper);
-      //   await wrapper.vm.$nextTick(); // wait for update
-      //   expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      //   expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
-      //   // expect(all_buttons.add_user_btn.isVisible()).toBe(true);
-      //   // expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
-      // });
+
       test("When the value of Customer ID is set to 'Customer account -1', Then the buttons 'Add New Customer ID', 'Edit ID'(of customer) are enabled", async () => {
         await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
         await wrapper.vm.$nextTick(); // wait for update
-        // await wrapper.find("#input-dropdown-widget-user-").setValue("User account -1");
-        // await wrapper.vm.$nextTick(); // wait for update
+
         const all_buttons = get_buttons(wrapper);
         await wrapper.vm.$nextTick(); // wait for update
         expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
         expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
-        // expect(all_buttons.add_user_btn.isVisible()).toBe(true);
-        // expect(all_buttons.edit_user_btn.isVisible()).toBe(true);
       });
-      // test("When the value is set as focus User ID('User account -1') is deleted, Then 'Add New Customer' 'Edit ID'(of customer), 'Add New User ID' are enabled and 'Edit ID'(of user) is disabled", async () => {
-      //   await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
-      //   await wrapper.vm.$nextTick(); // wait for update
-      //   // await wrapper.find("#input-dropdown-widget-user-").setValue("User account -1");
-      //   // await wrapper.vm.$nextTick(); // wait for update
-      //   const all_buttons = get_buttons(wrapper);
-      //   await wrapper.vm.$nextTick(); // wait for update
-      //   expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      //   expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
-      //   // expect(all_buttons.add_user_btn.isVisible()).toBe(true);
-      //   // expect(all_buttons.edit_user_btn.isVisible()).toBe(true);
-      //   const delete_user = {
-      //     user_id: 0,
-      //     uuid: "2VSckkBYr2An3dqHEyfRRE",
-      //     username: "User account -1",
-      //   };
-      //   wrapper.vm.onDeleteUserId(delete_user);
-      //   await wrapper.vm.$nextTick(); // wait for update
-      //   expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      //   expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
-      //   expect(all_buttons.add_user_btn.isVisible()).toBe(true);
-      //   expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
-      // });
-      //   test("When the value set as focus User ID 'User account -1' is deleted and followed by 'Customer account -1 deleted, Then 'Add New Customer ID' is enabled 'Edit ID'(of customer), 'Add New User ID' and 'Edit ID'(of user) are disabled", async () => {
-      //     await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
-      //     await wrapper.vm.$nextTick(); // wait for update
-
-      //     await wrapper.find("#input-dropdown-widget-user-").setValue("User account -1");
-      //     await wrapper.vm.$nextTick(); // wait for update
-      //     const all_buttons = get_buttons(wrapper);
-      //     await wrapper.vm.$nextTick(); // wait for update
-      //     expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      //     expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
-      //     expect(all_buttons.add_user_btn.isVisible()).toBe(true);
-      //     expect(all_buttons.edit_user_btn.isVisible()).toBe(true);
-      //     wrapper.vm.onDeleteUserId(delete_user);
-      //     await wrapper.vm.$nextTick(); // wait for update
-      //     expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      //     expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
-      //     expect(all_buttons.add_user_btn.isVisible()).toBe(true);
-      //     expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
-      //     wrapper.vm.onDeleteCustomerId(delete_customer);
-      //     await wrapper.vm.$nextTick(); // wait for update
-      //     expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      //     expect(all_buttons.edit_customer_btn.isVisible()).toBe(false);
-      //     expect(all_buttons.add_user_btn.isVisible()).toBe(false);
-      //     expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
-      //   });
     });
 
     test("When the component is mounted, Then 'Add New Customer ID' is enabled and 'Edit ID'(of customer) is disabled", async () => {
@@ -211,8 +131,6 @@ describe("SettingsForm.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
       expect(all_buttons.edit_customer_btn.isVisible()).toBe(false);
-      // expect(all_buttons.add_user_btn.isVisible()).toBe(false);
-      // expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
     });
     test("When the component is mounted, Then visually the Reset and Save Buttons are disabled", async () => {
       wrapper = mount(ComponentToTest, {
@@ -227,7 +145,6 @@ describe("SettingsForm.vue", () => {
     });
     test("Given the SettingsForm has a valid customer account set as 'Customer account -1', When the Vuex Store data specifies a valid Customer ID, Then visually the Reset and Save Buttons are enabled", async () => {
       store.commit("settings/set_customer_index", 0);
-      // store.commit("settings/set_user_index", 0);
 
       wrapper = mount(ComponentToTest, {
         store,
@@ -247,11 +164,9 @@ describe("SettingsForm.vue", () => {
       });
       const invalid_box = get_invalid_boxes(wrapper);
       expect(invalid_box.customer.isVisible()).toBe(true);
-      // expect(invalid_box.user.isVisible()).toBe(true);
     });
     test("Given the SettingsForm has a valid customer account set as 'Customer account -1', When the 'Customer account -1' is in focus, Then the GREEN Box is enabled around the Customer ID", async () => {
       store.commit("settings/set_customer_index", 0);
-      // store.commit("settings/set_user_index", 0);
 
       wrapper = mount(ComponentToTest, {
         store,
@@ -259,11 +174,9 @@ describe("SettingsForm.vue", () => {
       });
       const valid_boxes = get_valid_boxes(wrapper);
       expect(valid_boxes.customer.isVisible()).toBe(true);
-      // expect(valid_boxes.user.isVisible()).toBe(true);
     });
     test("Given the SettingsForm has a valid customer account set as 'Customer account -1', When the user now modifies to non-existent customer say 'Customer account -', Then validate that Red Boxes are visible around Customer ID 'Add New Customer Button' is enabled", async () => {
       store.commit("settings/set_customer_index", 0);
-      // store.commit("settings/set_user_index", 0);
 
       wrapper = mount(ComponentToTest, {
         store,
@@ -272,7 +185,6 @@ describe("SettingsForm.vue", () => {
 
       const valid_boxes = get_valid_boxes(wrapper);
       expect(valid_boxes.customer.isVisible()).toBe(true);
-      // expect(valid_boxes.user.isVisible()).toBe(true);
 
       await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -"); // customer with this doesn't exist.
 
@@ -280,46 +192,11 @@ describe("SettingsForm.vue", () => {
 
       const invalid_box = get_invalid_boxes(wrapper);
       expect(invalid_box.customer.isVisible()).toBe(true);
-      // expect(invalid_box.user.isVisible()).toBe(true);
       const all_buttons = get_buttons(wrapper);
       await wrapper.vm.$nextTick(); // wait for update
       expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
       expect(all_buttons.edit_customer_btn.isVisible()).toBe(false);
-      // expect(all_buttons.add_user_btn.isVisible()).toBe(false);
-      // expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
     });
-    // test("Given the SettingsForm has a valid customer account set as 'Customer account -1' and 'User account -1', When the user now modifies to non-existant user say 'User account -', Then validate that Red Boxes are visible around User ID and based on rules relevant buttons are enabled", async () => {
-    //   store.commit("settings/set_customer_index", 0);
-    //   // store.commit("settings/set_user_index", 0);
-
-    //   wrapper = mount(ComponentToTest, {
-    //     store,
-    //     localVue,
-    //   });
-
-    //   const valid_box = wrapper.findAll(".div__input-dropdown-controls-content-widget--valid");
-    //   const Customer_ID_Input_Editor_Green_Box = valid_box.at(0);
-    //   const valid_boxes = get_valid_boxes(wrapper);
-    //   expect(valid_boxes.customer.isVisible()).toBe(true);
-    //   // expect(valid_boxes.user.isVisible()).toBe(true);
-
-    //   // await wrapper.find("#input-dropdown-widget-user-").setValue("User account -"); // user  doesn't exist.
-
-    //   await wrapper.vm.$nextTick(); // wait for update
-
-    //   const invalid_box = wrapper.findAll(".div__input-dropdown-controls-content-widget--invalid");
-    //   // const User_ID_Input_Editor_Red_Box = invalid_box.at(0);
-
-    //   expect(Customer_ID_Input_Editor_Green_Box.isVisible()).toBe(true); // customer box is green
-    //   // expect(User_ID_Input_Editor_Red_Box.isVisible()).toBe(true); // user box is red
-
-    //   const all_buttons = get_buttons(wrapper);
-    //   await wrapper.vm.$nextTick(); // wait for update
-    //   expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-    //   expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
-    //   expect(all_buttons.add_user_btn.isVisible()).toBe(true);
-    //   expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
-    // });
 
     test("Given the SettingsForm has a valid customer account set as 'Customer account -1', When the user sets the value on input with same default value 'Customer account -1' , Then validate that Green Box is around the input, and based on rules relevant buttons are enabled", async () => {
       store.commit("settings/set_customer_index", 0);
@@ -331,10 +208,7 @@ describe("SettingsForm.vue", () => {
         data() {
           return {
             valid_customer_focus: false,
-            // valid_user_focus: false,
             disable_edit_customer: true,
-            // disable_add_user: true,
-            // disable_edit_user: true
           };
         },
       });
@@ -343,18 +217,13 @@ describe("SettingsForm.vue", () => {
 
       await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
       await wrapper.vm.$nextTick(); // wait for update
-      // await wrapper.find("#input-dropdown-widget-user-").setValue("User account -1");
-      // await wrapper.vm.$nextTick(); // wait for update
 
       const valid_boxes = get_valid_boxes(wrapper);
       expect(valid_boxes.customer.isVisible()).toBe(true);
-      // expect(valid_boxes.user.isVisible()).toBe(true);
       const all_buttons = get_buttons(wrapper);
       await wrapper.vm.$nextTick(); // wait for update
       expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
       expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
-      // expect(all_buttons.add_user_btn.isVisible()).toBe(true);
-      // expect(all_buttons.edit_user_btn.isVisible()).toBe(true);
     });
 
     test("When the component is mounted and Customer account is/is not selected, Then the cancel button is visible and will close modal on click", async () => {
@@ -411,32 +280,4 @@ describe("SettingsForm.vue", () => {
       expect(wrapper.vm.auto_upload).toBe(expected_state.auto_upload);
     });
   });
-
-  // test("Given the SettingsForm has partial Vuex data on only 'Customer ID', When the value Customer ID is <empty>, Then 'Add New Customer ID' is enabled 'Edit ID'(of customer), 'Add New User ID' and 'Edit ID'(of user) are disabled", async () => {
-  //   store.commit("settings/set_customer_account_ids", array_of_customer_ids_no_user_ids);
-  //   wrapper = mount(ComponentToTest, {
-  //     store,
-  //     localVue
-  //   });
-  //   const all_buttons = get_buttons(wrapper);
-  //   await wrapper.vm.$nextTick(); // wait for update
-  //   expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-  //   expect(all_buttons.edit_customer_btn.isVisible()).toBe(false);
-  //   // expect(all_buttons.add_user_btn.isVisible()).toBe(false);
-  //   // expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
-  // });
-  // test("Given Vuex data of customer account IDs is an empty array, When the component is mounted, Then 'Add New Customer ID' is enabled 'Edit ID'(of customer), 'Add New User ID' and 'Edit ID'(of user) are disabled", async () => {
-  //   const array_of_customer_ids = [];
-  //   store.commit("settings/set_customer_account_ids", array_of_customer_ids);
-  //   wrapper = mount(ComponentToTest, {
-  //     store,
-  //     localVue,
-  //   });
-  //   const all_buttons = get_buttons(wrapper);
-  //   await wrapper.vm.$nextTick(); // wait for update
-  //   expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-  //   expect(all_buttons.edit_customer_btn.isVisible()).toBe(false);
-  //   expect(all_buttons.add_user_btn.isVisible()).toBe(false);
-  //   expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
-  // });
 });

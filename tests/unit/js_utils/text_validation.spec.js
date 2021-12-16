@@ -4,7 +4,7 @@ import { TextValidation as DistTextValidation } from "@/dist/mantarray.common";
 const TextValidation_PlateBarcode = new TextValidation("plate_barcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
-const TextValidation_username = new TextValidation("customer_account_input");
+const TextValidation_user_account_id = new TextValidation("customer_account_input");
 const TextValidation_MyRule = new TextValidation("myrule");
 
 describe("DistTextValidation", () => {
@@ -26,8 +26,8 @@ describe("TextValidation", () => {
     const validation = TextValidation_Alphanumeric;
     expect(validation.toString()).toStrictEqual("TextValidation.alphanumeric");
   });
-  test("Given a text validation is for username, When called toString(), Then return would match the text rule of 'username' applied", () => {
-    const validation = TextValidation_username;
+  test("Given a text validation is for user_account_id, When called toString(), Then return would match the text rule of 'user_account_id' applied", () => {
+    const validation = TextValidation_user_account_id;
     expect(validation.toString()).toStrictEqual("TextValidation.customer_account_input");
   });
   test("Given a text validation is for Myrule, When called for validate, Then return would thow an error", () => {
@@ -235,11 +235,13 @@ describe("TextValidation.validate_customer_account_input", () => {
     ["Cat lab` ", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
     ["Cat lab;", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
   ])(
-    "Given the username %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
-    (username_id, message) => {
+    "Given the user_account_id %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
+    (user_account_id_id, message) => {
       const text = message;
-      const TestValidationusername = TextValidation_username;
-      expect(TestValidationusername.validate(username_id, "username")).toStrictEqual(text);
+      const TestValidationuser_account_id = TextValidation_user_account_id;
+      expect(TestValidationuser_account_id.validate(user_account_id_id, "user_account_id")).toStrictEqual(
+        text
+      );
     }
   );
 });

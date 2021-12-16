@@ -184,19 +184,42 @@ describe("StatusWidget.vue", () => {
     }
   );
 
-  test.each(["LIVE_VIEW_ACTIVE", "RECORDING"])(
+  test.each(["LIVE_VIEW_ACTIVE", "RECORDING", "CALIBRATINž"])(
     "When a user wants to exit the desktop app, Then the closure warning modal should appear if there are active processes",
     async (vuex_state) => {
       wrapper = mount(StatusWidget, {
         store,
         localVue,
       });
-
       await store.commit("flask/set_status_uuid", STATUS.MESSAGE.vuex_state);
+
+      await wrapper.setProps({ confirmation_request: false });
+      Vue.nextTick(() => {
+        expect(wrapper.find("#closure").isVisible()).toBe(false);
+      });
+
       await wrapper.setProps({ confirmation_request: true });
       Vue.nextTick(() => {
         expect(wrapper.find("#closure").isVisible()).toBe(true);
       });
     }
   );
+
+  test("When a user wants to exit the desktop app and a stimulation is active, Then the closure warning modal should appear", async () => {
+    wrapper = mount(StatusWidget, {
+      store,
+      localVue,
+    });
+
+    await store.commit("stimulation/set_stim_status", true);
+    await wrapper.setProps({ confirmation_request: false });
+    Vue.nextTick(() => {
+      expect(wrapper.find("#closure").isVisible()).toBe(false);
+    });
+
+    await wrapper.setProps({ confirmation_request: true });
+    Vue.nextTick(() => {
+      expect(wrapper.find("#closure").isVisible()).toBe(true);
+    });
+  });
 });

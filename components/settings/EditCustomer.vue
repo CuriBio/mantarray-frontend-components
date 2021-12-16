@@ -29,15 +29,15 @@
         @update:value="on_update_pass($event)"
       ></InputWidget>
     </div>
-    <div id="username" style="top: 241px; left: 50px; position: absolute; z-index: 22">
+    <div id="user_account_id" style="top: 241px; left: 50px; position: absolute; z-index: 22">
       <InputWidget
-        :title_label="'Enter ID Username'"
+        :title_label="'Enter User Account ID'"
         :placeholder="'Curi Bio User'"
-        :invalid_text="error_text_username"
-        :initial_value="username"
+        :invalid_text="error_text_user_account_id"
+        :initial_value="user_account_id"
         :input_width="400"
-        :dom_id_suffix="'username-id'"
-        @update:value="on_update_username($event)"
+        :dom_id_suffix="'user-account-id'"
+        @update:value="on_update_user_account_id($event)"
       ></InputWidget>
     </div>
     <div style="top: 350px; left: 0px; position: absolute">
@@ -86,19 +86,19 @@ export default {
     return {
       cust_id: this.dialogdata.cust_id,
       pass_key: this.dialogdata.pass_key,
-      username: this.dialogdata.username,
+      user_account_id: this.dialogdata.user_account_id,
       user_ids: this.dialogdata.user_ids,
       error_text_id: "",
       error_text_pass: "",
-      error_text_username: "",
+      error_text_user_account_id: "",
       enablelist_edit_customer: [true, true, true],
     };
   },
   created() {
     if (this.open_for_invalid_creds) {
-      this.error_text_id = "Invalid ID, Passkey, or Username";
-      this.error_text_pass = "Invalid ID, Passkey, or Username";
-      this.error_text_username = "Invalid ID, Passkey, or Username";
+      this.error_text_id = "Invalid ID, Passkey, or User Account ID";
+      this.error_text_pass = "Invalid ID, Passkey, or User Account ID";
+      this.error_text_user_account_id = "Invalid ID, Passkey, or User Account ID";
       this.enablelist_edit_customer = [true, true, false];
     }
   },
@@ -107,7 +107,7 @@ export default {
       this.error_text_id = TextValidation_Customer.validate(new_value, "ID");
       if (this.open_for_invalid_creds && this.error_text_id.length === 0) {
         this.error_text_pass = "";
-        this.error_text_username = "";
+        this.error_text_user_account_id = "";
       }
       this.cust_id = new_value;
       this.enable_save_button();
@@ -116,18 +116,18 @@ export default {
       this.error_text_pass = TextValidation_Customer.validate(new_value, "passkey");
       if (this.open_for_invalid_creds && this.error_text_pass.length === 0) {
         this.error_text_id = "";
-        this.error_text_username = "";
+        this.error_text_user_account_id = "";
       }
       this.pass_key = new_value;
       this.enable_save_button();
     },
-    on_update_username: function (new_value) {
-      this.error_text_username = TextValidation_Customer.validate(new_value, "username");
-      if (this.open_for_invalid_creds && this.error_text_username.length === 0) {
+    on_update_user_account_id: function (new_value) {
+      this.error_text_user_account_id = TextValidation_Customer.validate(new_value, "user_account_id");
+      if (this.open_for_invalid_creds && this.error_text_user_account_id.length === 0) {
         this.error_text_id = "";
         this.error_text_pass = "";
       }
-      this.username = new_value;
+      this.user_account_id = new_value;
       this.enable_save_button();
     },
     clicked_button: function (choice) {
@@ -151,7 +151,7 @@ export default {
         cust_idx: this.dataindex,
         cust_id: this.cust_id,
         pass_key: this.pass_key,
-        username: this.username,
+        user_account_id: this.user_account_id,
         user_ids: this.user_ids,
       };
       this.$emit("delete-id", edit_customer);
@@ -161,7 +161,7 @@ export default {
         cust_idx: this.dataindex,
         cust_id: this.cust_id,
         pass_key: this.pass_key,
-        username: this.username,
+        user_account_id: this.user_account_id,
         user_ids: this.user_ids,
       };
       this.$emit("save-id", edit_customer);
@@ -169,7 +169,7 @@ export default {
     enable_save_button() {
       if (this.error_text_id === "") {
         if (this.error_text_pass === "") {
-          if (this.error_text_username === "") {
+          if (this.error_text_user_account_id === "") {
             this.enablelist_edit_customer = [true, true, true];
             return;
           }
@@ -221,7 +221,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget > #input-widget-field-username-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-user_account_id-id {
   font-family: Muli;
 }
 </style>
