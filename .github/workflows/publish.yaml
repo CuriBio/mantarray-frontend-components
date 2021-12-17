@@ -15,9 +15,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "ubuntu-18.04"
+          # - "ubuntu-18.04"
           - "ubuntu-20.04"
-          - "windows-2019"
+          # - "windows-2019"
         node-version:
           - 14
         e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
@@ -167,23 +167,23 @@ jobs:
         if: matrix.IS_FASTEST_E2E_SUITE == true
         run: npm run test:unit-no-prebuild -- --ci --verbose
 
-      - name: Run E2E Tests (Linux)
-        if: runner.os == 'Linux'
-        uses: CuriBio/testcafe-action@v0.0.4
-        with:
-          skip-install: true
-          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 45000'
+      # - name: Run E2E Tests (Linux)
+      #   if: runner.os == 'Linux'
+      #   uses: CuriBio/testcafe-action@v0.0.4
+      #   with:
+      #     skip-install: true
+      #     args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 45000'
 
-      - name: Confirm Sphinx Docs build correctly
-        # only check Sphinx docs build on the fastest job
-        if: matrix.IS_FASTEST_JOB == true
-        run: SPHINXOPTS="-W" make --directory=docs html # the -W flag treats warnings as errors to cause build failures
+      # - name: Confirm Sphinx Docs build correctly
+      #   # only check Sphinx docs build on the fastest job
+      #   if: matrix.IS_FASTEST_JOB == true
+      #   run: SPHINXOPTS="-W" make --directory=docs html # the -W flag treats warnings as errors to cause build failures
 
-      - name: Confirm no modifications to the repository files occurred when running the test suite
-        if: matrix.IS_FASTEST_JOB == true # only enable pre-commit on the fastest job
-        env:
-          PRE_COMMIT_HOME: ./.precommit_cache
-        run: pre-commit run git-dirty -a
+      # - name: Confirm no modifications to the repository files occurred when running the test suite
+      #   if: matrix.IS_FASTEST_JOB == true # only enable pre-commit on the fastest job
+      #   env:
+      #     PRE_COMMIT_HOME: ./.precommit_cache
+      #   run: pre-commit run git-dirty -a
 
       # - name: Confirm can install in other directory # https://docs.npmjs.com/cli/v6/using-npm/developers
       #   run: |
@@ -194,12 +194,12 @@ jobs:
           name: dist--${{ matrix.os }}--${{ matrix.node-version }}
           path: dist/*
 
-      - name: Archive visual regression
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node }}
-          path: "tests/e2e/screenshots/**/*"
+      # - name: Archive visual regression
+      #   if: ${{ failure() }}
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node }}
+      #     path: "tests/e2e/screenshots/**/*"
 
   publish_package:
     needs: [test]
