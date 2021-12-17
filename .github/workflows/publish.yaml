@@ -20,21 +20,21 @@ jobs:
           # - "windows-2019"
         node-version:
           - 14
-        e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
-          - "tests/e2e/playback"
-          - "tests/e2e/status"
-          - "tests/e2e/waveforms"
-          - "tests/e2e/settings"
-          - "tests/e2e/basic_widgets"
-          - "tests/e2e/plate_based_widgets"
-        include:
-          # only enable coverage on the fastest job
-          - os: "ubuntu-20.04"
-            node: "14"
-            e2e-tests: "tests/e2e/status"
-            IS_FASTEST_JOB: true
-          - e2e-tests: "tests/e2e/status"
-            IS_FASTEST_E2E_SUITE: true
+        # e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
+        #   # - "tests/e2e/playback"
+        #   # - "tests/e2e/status"
+        #   # - "tests/e2e/waveforms"
+        #   # - "tests/e2e/settings"
+        #   # - "tests/e2e/basic_widgets"
+        #   # - "tests/e2e/plate_based_widgets"
+        # include:
+        #   # only enable coverage on the fastest job
+        #   - os: "ubuntu-20.04"
+        #     node: "14"
+        #     e2e-tests: "tests/e2e/status"
+        #     IS_FASTEST_JOB: true
+        #   - e2e-tests: "tests/e2e/status"
+        #     IS_FASTEST_E2E_SUITE: true
 
     name: Test code before publishing in Node ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -105,15 +105,15 @@ jobs:
           node --version
           npm --version
 
-      - name: Display Chrome version (Windows)
-        if: runner.os == 'Windows'
-        run: (Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe').'(Default)').VersionInfo
+      # - name: Display Chrome version (Windows)
+      #   if: runner.os == 'Windows'
+      #   run: (Get-Item (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe').'(Default)').VersionInfo
 
-      - name: Display Chrome version (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          google-chrome --version
-          chromedriver --version
+      # - name: Display Chrome version (Linux)
+      #   if: runner.os == 'Linux'
+      #   run: |
+      #     google-chrome --version
+      #     chromedriver --version
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
         uses: actions/cache@v2.1.6
@@ -150,7 +150,7 @@ jobs:
         # not sure why CodeBuild fails without the --unsafe-perm flag for npm ci, but it seems to help when running the "prepare" scripts after the install https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
         run: |
           npm ci --unsafe-perm --cache .npm_cache/
-          pip freeze
+          # pip freeze
 
       - name: Run pre-commit hooks
         if: matrix.IS_FASTEST_JOB == true
@@ -261,7 +261,7 @@ jobs:
 
       - name: Uploading to NPM (if publishing)
         if: github.event.inputs.publish_package == '1'
-        run: npm publish --access public
+        run: npm publish --verbose --access public
 
       - name: Uploading to NPM (if dry run)
         if: github.event.inputs.publish_package != '1'
