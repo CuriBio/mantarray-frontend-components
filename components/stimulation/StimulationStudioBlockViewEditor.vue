@@ -16,7 +16,9 @@
     </div>
     <div class="div__Editor-background">
       <div class="div__setting-panel-container">
-        <span class="span__protocol-letter" :style="'color:' + current_color">{{ current_letter }}</span>
+        <span :key="current_letter" class="span__protocol-letter" :style="'color:' + current_color">{{
+          current_letter
+        }}</span>
         <input
           v-model="protocol_name"
           class="protocol_name_nput"
@@ -34,7 +36,7 @@
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
-            :input_width="196"
+            :input_width="200"
             :options_text="stimulation_types_array"
             :options_idx="stimulation_type_idx"
             :dom_id_suffix="'stimulation_type'"
@@ -179,6 +181,10 @@ export default {
   },
   beforeDestroy() {
     this.unsubscribe();
+  },
+  mounted() {
+    this.$store.commit("stimulation/set_edit_mode_off");
+    this.update_protocols();
   },
   methods: {
     ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_rest_duration"]),

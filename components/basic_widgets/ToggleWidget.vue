@@ -1,6 +1,6 @@
 <template>
   <label class="switch">
-    <input type="checkbox" :checked="checked" @click="toggle_checkbox" />
+    <input type="checkbox" :checked="checked" :disabled="disabled" @click="toggle_checkbox" />
     <div class="slider round" />
   </label>
 </template>
@@ -10,6 +10,7 @@ export default {
   props: {
     checked_state: { type: Boolean, default: false },
     label: { type: String, required: true },
+    disabled: { type: Boolean, default: false },
   },
   data() {
     return {

@@ -116,6 +116,7 @@ import { mapState, mapActions, mapMutations } from "vuex";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 
 /**
  * @vue-props {String} stimulation_type - Current selected stimulation type user selects from drowdown
@@ -184,6 +185,7 @@ export default {
       time_units_idx: 0,
       disable_dropdown: false,
       selected_frequency: null,
+      color_idx: 0,
     };
   },
   computed: {
@@ -308,12 +310,12 @@ export default {
     },
     clone(type) {
       this.cloned = true;
-      const random_color = Math.floor(Math.random() * 16777215).toString(16);
+      const random_color = generate_random_color();
 
       return {
         type,
         nested_protocols: [],
-        repeat: { color: random_color, number_of_repeats: 0 },
+        repeat: { color: `${random_color}`, number_of_repeats: 0 },
         pulse_settings: {
           phase_one_duration: "",
           phase_one_charge: "",
@@ -362,7 +364,7 @@ export default {
       this.handle_protocol_order(this.protocol_order);
     },
     get_style(type) {
-      if (type.nested_protocols.length > 0) return "border: 2px solid #" + type.repeat.color;
+      if (type.nested_protocols.length > 0) return "border: 2px solid " + type.repeat.color;
     },
   },
 };

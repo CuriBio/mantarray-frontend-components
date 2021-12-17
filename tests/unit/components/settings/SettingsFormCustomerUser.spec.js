@@ -52,7 +52,7 @@ describe("SettingsForm.vue", () => {
             cust_idx: 2,
             cust_id: "5FY8KwTsQaUJ2KzHJGetfE",
             pass_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
-            nickname: "Customer account -3",
+            user_account_id: "Customer account -3",
             user_ids: [],
           };
 
@@ -80,115 +80,12 @@ describe("SettingsForm.vue", () => {
           // eslint-disable-next-line jest/no-standalone-expect
           expect(wrapper.find("#cust-2").text()).toStrictEqual("Customer account -3");
         });
-        // test("When the method handling the user 'cancel-id' event is invoked, Then the Customer ID text input is not modified", async () => {
-        //   wrapper.vm.onCancelAddUserId();
-        //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual(
-        //     "Customer account -3"
-        //   );
-        //   expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
-        // });
-        // test("When the method is invoked that handles the user 'save-id' event with a new user account, Then the User ID input is updated with nickname value of 'New User -1'", async () => {
-        //   const add_user = {
-        //     user_id: 0,
-        //     cust_id: "5FY8ghtsQaUJ2KzHJGetfE",
-        //     nickname: "New User -1",
-        //   };
-        //   /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
-        //   /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
-        //   wrapper.vm.onSaveUserId(add_user);
-        //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual(
-        //     "Customer account -3"
-        //   );
-        //   expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("New User -1");
-        // });
-
-        // describe("Given that the SettingsForm has been populated with a new User account through invoking the methods handling the 'save-id' events for Add User", () => {
-        //   beforeEach(async () => {
-        //     const add_user = {
-        //       user_id: 0,
-        //       uuid: "5FY8ghtsQaUJ2KzHJGetfE",
-        //       nickname: "New User -1",
-        //     };
-
-        //     wrapper.vm.onSaveUserId(add_user);
-
-        //     await wrapper.vm.$nextTick();
-        //     // Eli (11/30/20): This beforeEach block of code will always get executed, and these expect statements help confirm the pre-condition to the test is set up correctly
-        //     // eslint-disable-next-line jest/no-standalone-expect
-        //     expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("New User -1");
-        //   });
-
-        // test("Given that a customer account and user account are selected, When the method handling the Cancel User event is invoked, Then the dropdown choices for the user are not altered", async () => {
-        //   await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
-        //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#user-0").text()).toStrictEqual("Lab User  -1");
-        //   expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
-
-        //   await wrapper.find("#input-dropdown-widget-user-").setValue("Lab User  -1");
-        //   wrapper.vm.onCancelUserId();
-
-        //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#user-0").text()).toStrictEqual("Lab User  -1");
-        //   expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
-        // });
-
-        // test("Given that a customer account and user account are selected, When the method handling the 'save-id' event for Edit User is invoked to update the nickname of the selected user, Then the nickname is updated in the dropdown choices for select user", async () => {
-        //   const update_user = {
-        //     user_id: 0,
-        //     uuid: "2VSckkkkk2An3dqHEyfRRE",
-        //     nickname: "Renamed User -1",
-        //   };
-
-        //   await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
-        //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#user-0").text()).not.toStrictEqual(update_user.nickname);
-        //   expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
-
-        //   /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
-        //   /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
-
-        //   await wrapper.find("#input-dropdown-widget-user-").setValue("Lab User  -1");
-        //   wrapper.vm.onUpdateUserId(update_user);
-
-        //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#user-0").text()).toStrictEqual(update_user.nickname);
-        //   expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
-        // });
-
-        // test("When a customer account is selected, Then the user account options change to the users for the selected customer account", async () => {
-        //   await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
-        //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#user-0").text()).toStrictEqual("Lab User  -1");
-        //   expect(wrapper.find("#user-1").text()).toStrictEqual("Intern -1");
-        // });
-        // test("Given a customer account and user account have been selected in the text input, When the function handling the 'delete-id' event for user is invoked for the selected user, Then the dropdown options for the user adjust so that the deleted user is removed", async () => {
-        //   const delete_user = {
-        //     user_id: 0,
-        //     uuid: "2VSckkkkk2An3dqHEyfRRE",
-        //     nickname: "Lab User -1",
-        //   };
-
-        //   await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
-        //   await wrapper.vm.$nextTick();
-        //   // confirm pre-condition
-        //   expect(wrapper.find("#user-0").text()).not.toStrictEqual("Intern -1");
-
-        //   wrapper.find("#input-dropdown-widget-user-").setValue("Lab User  -1");
-        //   /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
-        //   /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
-        //   wrapper.vm.onDeleteUserId(delete_user);
-
-        //   await wrapper.vm.$nextTick();
-        //   expect(wrapper.find("#user-0").text()).toStrictEqual("Intern -1");
-        // });
-        test("When the method handling the 'save-id' event for the Edit Customer button is invoked to change the nickname, Then the Customer ID dropdown list gets updated to change to the new nickname", async () => {
+        test("When the method handling the 'save-id' event for the Edit Customer button is invoked to change the user_account_id, Then the Customer ID dropdown list gets updated to change to the new user_account_id", async () => {
           const edit_customer = {
             cust_idx: 1,
             cust_id: "6cBaidlJ84Ggc5JA7IYCgv",
             pass_key: "941532a0-6be1-443a-cdee-d57bdf180a52",
-            nickname: "Renamed Account -1",
+            user_account_id: "Renamed Account -1",
             user_ids: array_of_user_ids_2,
           };
           wrapper.vm.onUpdateCustomerId(edit_customer);
@@ -203,7 +100,7 @@ describe("SettingsForm.vue", () => {
             cust_idx: 0,
             cust_id: "4vqyd62oARXqj9nRUNhtLQ",
             pass_key: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-            nickname: "Customer account -1",
+            user_account_id: "Customer account -1",
             user_ids: array_of_user_ids_1,
           };
 
@@ -216,12 +113,12 @@ describe("SettingsForm.vue", () => {
       });
       // });
 
-      test("When the SettingsForm method that handles receiving the add customer 'save-id' event is invoked with a new customer account, Then the Customer ID text input is updated with nickname value of the newly added account", async () => {
+      test("When the SettingsForm method that handles receiving the add customer 'save-id' event is invoked with a new customer account, Then the Customer ID text input is updated with user_account_id value of the newly added account", async () => {
         const add_customer = {
           cust_idx: 2,
           cust_id: "5FY8KwTsQaUJ2KzHJGetfE",
           pass_key: "ba86b8f0-6fdf-4944-87a0-8a491a19490e",
-          nickname: "Customer account -3",
+          user_account_id: "Customer account -3",
           user_ids: [],
         };
         /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
@@ -247,7 +144,6 @@ describe("SettingsForm.vue", () => {
         expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual(
           "Customer account -1"
         );
-        // expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
         /* This testing is based on the inspiration provided by the documentation handbook mentioned in the link below */
         /* https://lmiller1990.github.io/vue-testing-handbook/testing-emitted-events.html#write-a-component-and-test   */
         wrapper.vm.onCancelCustomerId();
@@ -255,7 +151,6 @@ describe("SettingsForm.vue", () => {
         expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual(
           "Customer account -1"
         );
-        // expect(wrapper.find("#input-dropdown-widget-user-").element.value).toStrictEqual("");
       });
     });
   });

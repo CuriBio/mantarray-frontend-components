@@ -88,9 +88,7 @@ export default {
         this.$store.commit("playback/set_loop_playback", new_state);
       },
     },
-    ...mapState("playback", {
-      playback_state: "playback_state",
-    }),
+    ...mapState("playback", ["playback_state"]),
     svg__playback_web_player_controls_loop_button__dynamic_class: function () {
       return {
         "span__playback-web-player-controls--active": this.loop_playback,

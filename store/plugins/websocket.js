@@ -35,7 +35,7 @@ export default function create_web_socket_plugin(socket) {
       }
     });
     socket.on("stimulation", function (stim_json, cb = null) {
-      store.commit("data/append_stim_waveforms", JSON.parse(stim_json));
+      store.dispatch("data/append_stim_waveforms", JSON.parse(stim_json));
       if (cb !== null) {
         // this callback is only used for testing. The backend will not send a callback
         cb("commit done");

@@ -141,7 +141,14 @@
       :no-close-on-backdrop="true"
       :static="true"
     >
-      <SettingsForm @close_modal="close_modal" />
+      <SettingsForm @close_modal="close_settings_modal" />
+    </b-modal>
+    <b-modal id="calibration-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+      <StatusWarningWidget
+        id="calibration-modal"
+        :modal_labels="modal_labels"
+        @handle_confirmation="close_calibration_modal"
+      />
     </b-modal>
   </div>
 </template>
@@ -153,6 +160,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlayCircle as fa_play_circle, faSpinner as fa_spinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import SettingsForm from "@/components/settings/SettingsForm.vue";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
@@ -207,7 +215,7 @@ library.add(fa_spinner);
  */
 export default {
   name: "DesktopPlayerControls",
-  components: { PlayerControlsSettingsButton, FontAwesomeIcon, SettingsForm },
+  components: { PlayerControlsSettingsButton, FontAwesomeIcon, SettingsForm, StatusWarningWidget },
   data: function () {
     return {
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES, // Eli (5/8/20): (this seems) needed to give access to the imported playback_module the v-show directives
@@ -218,22 +226,17 @@ export default {
       record_title: "Record",
       settings_tooltip_text: "Edit customer account",
       schedule_tooltip_text: "(Not Yet Available)",
+      modal_labels: {
+        header: "Warning!",
+        msg_one: "Please ensure no plate is present on device.",
+        msg_two: "Do you wish to continue?",
+        button_names: ["Cancel", "Yes"],
+      },
     };
   },
   computed: {
-    ...mapState("playback", {
-      playback_state: "playback_state",
-    }),
-    ...mapState("playback", {
-      is_valid_barcode: "is_valid_barcode",
-    }),
-    ...mapState("playback", {
-      tooltips_delay: "tooltips_delay",
-    }),
-    ...mapState("settings", {
-      customer_index: "customer_index",
-      auto_upload: "auto_upload",
-    }),
+    ...mapState("playback", ["playback_state", "is_valid_barcode", "tooltips_delay"]),
+    ...mapState("settings", ["customer_index", "auto_upload", "beta_2_mode"]),
     calibrate_tooltip_text: function () {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Calibration needed. Click to calibrate.";
@@ -344,14 +347,19 @@ export default {
         this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
         this.playback_state === this.playback_state_enums.CALIBRATED
       ) {
-        this.$store.dispatch("playback/start_calibration");
+        if (this.beta_2_mode) this.$bvModal.show("calibration-warning");
+        else this.$store.dispatch("playback/start_calibration");
       }
     },
     open_settings_form: function () {
       this.$bvModal.show("settings-form");
     },
-    close_modal: function () {
+    close_settings_modal: function () {
       this.$bvModal.hide("settings-form");
+    },
+    close_calibration_modal(idx) {
+      this.$bvModal.hide("calibration-warning");
+      if (idx === 1) this.$store.dispatch("playback/start_calibration");
     },
   },
 };
@@ -510,5 +518,13 @@ export default {
   font-size: 14px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
+}
+
+#calibration-warning {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
 }
 </style>

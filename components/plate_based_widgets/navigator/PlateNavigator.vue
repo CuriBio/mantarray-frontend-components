@@ -24,7 +24,7 @@
             r="15"
             stroke="#FFFFFF"
             stroke-width="0"
-            fill="#b7b7b7"
+            :fill="getProtocolColor(well_index)"
             :class="{
               'circle__plate-navigator-well--selected': selected_quadrant_well_indices.includes(well_index),
               'circle__plate-navigator-well--unselected-hover':
@@ -62,6 +62,7 @@ export default {
     ...mapState("twentyfourcontrols", {
       selected_quadrant_well_indices: "is_quadrant",
     }),
+    ...mapState("stimulation", ["protocol_assignments"]),
   },
   created() {
     this.quadrant_options = {
@@ -126,6 +127,11 @@ export default {
     on_click_well: function (well_index) {
       const quadrant_containing_this_well = this.get_quadrant_from_well_index(well_index);
       this.$store.commit(this.quadrant_options_api_set.QUADRANT, quadrant_containing_this_well);
+    },
+    getProtocolColor(well_index) {
+      if (this.protocol_assignments[well_index] !== undefined)
+        return this.protocol_assignments[well_index].color;
+      else return "#B7B7B7";
     },
   },
 };

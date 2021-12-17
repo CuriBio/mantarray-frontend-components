@@ -76,15 +76,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("playback", {
-      playback_state: "playback_state",
-    }),
-    ...mapState("playback", {
-      barcode: "barcode",
-    }),
-    ...mapState("playback", {
-      is_valid_barcode: "is_valid_barcode",
-    }),
+    ...mapState("playback", ["playback_state", "barcode", "is_valid_barcode"]),
   },
   updated() {
     this.plate_barcode = this.$store.state.playback.barcode;

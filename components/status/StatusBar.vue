@@ -55,12 +55,14 @@ export default {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
-    ...mapState("settings", {
-      log_path: "log_path",
-      shutdown_error_message: "shutdown_error_message",
-      total_uploaded_files: "total_uploaded_files",
-      total_file_count: "total_file_count",
-    }),
+    ...mapState("stimulation", ["stim_status"]),
+    ...mapState("settings", [
+      "log_path",
+      "shutdown_error_message",
+      "total_uploaded_files",
+      "total_file_count",
+      "beta_2_mode",
+    ]),
   },
   watch: {
     status_uuid: function (newValue) {
@@ -70,6 +72,8 @@ export default {
       const check_status =
         this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE ||
         this.status_uuid === STATUS.MESSAGE.RECORDING ||
+        this.status_uuid === STATUS.MESSAGE.CALIBRATING ||
+        this.stim_status ||
         this.total_uploaded_files.length < this.total_file_count;
 
       if (this.confirmation_request) {

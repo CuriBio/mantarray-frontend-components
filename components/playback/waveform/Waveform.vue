@@ -14,7 +14,8 @@
   </div>
 </template>
 <script>
-import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear } from "d3";
+import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear, area as d3_area } from "d3";
+import { mapState } from "vuex";
 /**
  * @vue-prop {String} title - Current title of the waveform
  * @vue-prop {Int} samples_per_second - Current samples per second
@@ -25,7 +26,6 @@ import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear
  * @vue-prop {String} y_axis_label - Current Y Axis Label String value.
  * @vue-prop {String} x_axis_label - Current X Axis Label String value.
  * @vue-prop {Object} tissue_data_points  - Currently contains the array of 2D waveform data points[[x1,y1],[x2,y2]...]
- * @vue-prop {Object} stim_data_points  - Currently contains the array of 2D waveform data points[[x1,y1],[x2,y2]...]
  * @vue-prop {String} tissue_line_color   - Color of the line graph
  * @vue-prop {Object} margin              - An Object which determines a closing boundry margin
  * @vue-prop {Int} plot_area_pixel_height - Graph height definition
@@ -42,7 +42,6 @@ import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear
  * @vue-event {Event} x_axis_sample_length - A Function  is invoked when x_axis_sample_length prop is modified
  * @vue-event {Event} y_min                - A Function  is invoked when y_min prop is modified
  * @vue-event {Event} y_max                - A Function  is invoked when y_max prop is modified
- * @vue-event {Event} stim_data_points     - A Function  is invoked when stim_data_points prop is modified
  * @vue-event {Event} render_plot          - An Important function which plots the waveform svg in realtime.
  */
 export default {
@@ -58,12 +57,6 @@ export default {
     y_axis_label: { type: String, default: "Absolute Force (μN)" },
     x_axis_label: { type: String, default: "Time (seconds)" },
     tissue_data_points: {
-      type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]
-      default: function () {
-        return [];
-      },
-    },
-    stim_data_points: {
       type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]
       default: function () {
         return [];
@@ -85,6 +78,10 @@ export default {
       type: Number,
       default: 406,
     },
+    well_idx: {
+      type: Number,
+      default: 0,
+    },
   },
   data: function () {
     return {
@@ -99,6 +96,9 @@ export default {
         width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
       },
     };
+  },
+  computed: {
+    ...mapState("data", ["stim_fill_assignments", "stim_fill_colors"]),
   },
   watch: {
     x_axis_min() {
@@ -116,9 +116,6 @@ export default {
     tissue_data_points() {
       this.render_plot();
     },
-    stim_data_points() {
-      this.render_plot();
-    },
   },
   mounted: function () {
     // Eli (2/2/2020): having the svg be appended in the `data` function didn't work, so moved it to here
@@ -128,21 +125,21 @@ export default {
       .append("svg")
       .attr("width", this.plot_area_pixel_width + this.margin.left + this.margin.right)
       .attr("height", this.plot_area_pixel_height + this.margin.top + this.margin.bottom)
-      .attr("style", "background-color: black;")
+      .attr("style", "background-color: black")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
       .attr("id", "svg_of_waveform")
       .attr("font-family", "Muli");
 
-    this.waveform_line_node = the_svg
-      .append("g")
-      .attr("id", "waveform_line_node")
-      .attr("class", "waveform_path_node");
-
     this.stim_waveform_line_node = the_svg
       .append("g")
       .attr("id", "stim_waveform_line_node")
       .attr("class", "stim_path_node");
+
+    this.waveform_line_node = the_svg
+      .append("g")
+      .attr("id", "waveform_line_node")
+      .attr("class", "waveform_path_node");
 
     // Draw black rectangles over the margins so that any excess waveform line is not visible to user
 
@@ -150,7 +147,6 @@ export default {
     const margin_blockers_node = the_svg.append("g").attr("id", "margin_blockers_node");
 
     const margin = this.margin;
-
     // Left Side
     margin_blockers_node
       .append("rect")
@@ -233,38 +229,48 @@ export default {
     display_y_axis: function () {
       this.y_axis_node.call(axisLeft(this.y_axis_scale));
     },
-    plot_data: function () {
+    plot_data: async function () {
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
-      // update tissue lines
+      const area = d3_area()
+        .x(function (d) {
+          return x_axis_scale(d[0] / 1e6);
+        })
+        .y0(this.plot_area_pixel_height)
+        .y1(this.plot_area_pixel_height - 7);
+
+      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
       const tissue_data_to_plot = this.tissue_data_points;
+      this.stim_waveform_line_node.selectAll("*").remove();
+      const fill_colors = this.stim_fill_colors[this.well_idx];
+
+      this.stim_fill_assignments[this.well_idx].map((sub_protocol, idx) => {
+        // 255 is sent when a user stops a stim
+        const color = sub_protocol[0].indexOf(255) !== -1 ? "none" : fill_colors[sub_protocol[0][0]];
+        // makes sliding transition smoother and brings color to end of graph
+        sub_protocol[1][sub_protocol[1].length - 1][0] =
+          idx === this.stim_fill_assignments[this.well_idx].length - 1
+            ? this.x_axis_min + this.x_axis_sample_length
+            : sub_protocol[1][sub_protocol[1].length - 1][0];
+
+        this.stim_waveform_line_node
+          .append("path")
+          .datum(sub_protocol[1])
+          .attr("fill", color)
+          .attr("stroke", "black")
+          .attr("stroke-width", 2.5)
+          .attr("d", area);
+      });
+
+      // Needs to be last so tissue line sits on top of the colored background
       this.waveform_line_node.selectAll("*").remove();
       this.waveform_line_node
         .append("path")
         .datum(tissue_data_to_plot)
         .attr("fill", "none")
         .attr("stroke", this.tissue_line_color)
-        .attr("stroke-width", 1.5)
-        .attr(
-          "d",
-          d3_line()
-            .x((d) => {
-              return x_axis_scale(d[0] / 1e6);
-            })
-            .y((d) => {
-              return y_axis_scale(d[1]);
-            })
-        );
-      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
-      const stim_data_to_plot = this.stim_data_points;
-      this.stim_waveform_line_node.selectAll("*").remove();
-      this.stim_waveform_line_node
-        .append("path")
-        .datum(stim_data_to_plot)
-        .attr("fill", "none")
-        .attr("stroke", this.stim_line_color)
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 2.5)
         .attr(
           "d",
           d3_line()

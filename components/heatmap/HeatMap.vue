@@ -47,7 +47,12 @@
 
     <!-- original mockflow ID:  cmpD5cceb38a3af00a6bd7589d883fa87688 -->
     <div class="div__heatmap-layout-checkbox-container">
-      <CheckBoxWidget :checkbox_options="option" :reset="checkbox_reset" @checkbox-selected="auto_scale" />
+      <CheckBoxWidget
+        :checkbox_options="checkbox_options"
+        :reset="checkbox_reset"
+        :initial_selected="checkbox_state"
+        @checkbox-selected="set_auto_scale"
+      />
     </div>
 
     <!-- original mockflow ID:  cmpD8a25d29c92a6f84cc071bcf466ca36ce -->
@@ -63,7 +68,8 @@
         :input_width="105"
         :dom_id_suffix="'heatmap-max'"
         :disabled="autoscale"
-        @update:value="on_update_maximum($event)"
+        :initial_value="upper.toString()"
+        @update:value="!autoscale ? on_update_maximum($event) : null"
       />
     </div>
 
@@ -78,7 +84,8 @@
         :input_width="105"
         :dom_id_suffix="'heatmap-min'"
         :disabled="autoscale"
-        @update:value="on_update_minimum($event)"
+        :initial_value="lower.toString()"
+        @update:value="!autoscale ? on_update_minimum($event) : null"
       />
     </div>
 
@@ -110,7 +117,7 @@
     <div class="div__heatmap-radio-buttons-container">
       <RadioButtonWidget
         :radio_buttons="gradient_theme_names"
-        :pre_selected="0"
+        :pre_selected="color_theme_idx"
         @radio-btn-selected="radio_option_selected"
       />
     </div>
@@ -175,10 +182,9 @@ export default {
     CheckBoxWidget,
     RadioButtonWidget,
   },
-
   data() {
     return {
-      option: [{ text: "", value: "Auto-Scale" }],
+      checkbox_options: [{ text: "", value: "autoscale" }],
       label: "",
       keyplaceholder: "Twitch Force",
       error_text: "An ID is required",
@@ -191,13 +197,13 @@ export default {
       max_value_error_msg: "invalid",
       min_value_error_msg: "invalid",
       autoscale: false,
-      // selected_wells: [],
       upper: "",
       lower: "",
       checkbox_reset: false,
+      checkbox_state: false,
+      color_theme_idx: 0,
     };
   },
-
   computed: {
     ...mapState("data", {
       well_values: "heatmap_values",
@@ -206,31 +212,29 @@ export default {
       display_option: "display_option",
       display_option_idx: "display_option_idx",
       selected_wells: "selected_wells",
+      stored_auto_scale: "auto_scale",
     }),
     metric_names: function () {
       return Object.keys(this.well_values);
     },
-    ...mapState("gradient", {
-      gradients: "gradients",
-    }),
+    ...mapState("gradient", ["gradients", "gradient_theme_idx"]),
     ...mapGetters("gradient", {
       gradient_map: "gradient_color_mapping",
+      gradient_range: "gradient_range",
     }),
     gradient_theme_names: function () {
-      return this.gradients.map((t) => t.name);
+      return this.gradients.map((t) => {
+        return { value: t.name };
+      });
     },
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
-        if (well.length > 0) {
-          // const average = (a) => a.reduce((x, y) => x + y) / a.length;
-          // return this.gradient_map(average(well.slice(-5)));
-          return this.gradient_map(well.slice(-1)[0]);
-        } else {
-          return "#B7B7B7";
-        }
+        const color = this.gradient_map(well.slice(-1)[0]);
+        return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
+        // const average = (a) => a.reduce((x, y) => x + y) / a.length;
+        // return this.gradient_map(average(well.slice(-5)));
       });
     },
-
     is_mean_value_active: function () {
       return this.selected_wells.length > 0;
     },
@@ -264,22 +268,31 @@ export default {
         max: Math.max(...max_value_array).toFixed(3),
         min: Math.min(...min_value_array).toFixed(3),
       };
-      if (range.max === range.min) range.min -= 0.001; // guard against edge case where the max/min are the same
+      if (range.max === range.min) range.max = (Number(range.max) + 0.001).toString(); // guard against edge case where the max/min are the same
       return range;
     },
   },
-
   watch: {
     auto_max_min: function (new_value) {
       if (this.autoscale) this.$store.commit("gradient/set_gradient_range", new_value);
     },
   },
+  mounted() {
+    this.autoscale = this.stored_auto_scale;
+    this.checkbox_reset = !this.autoscale;
+    this.checkbox_state = this.autoscale;
+    this.color_theme_idx = this.gradient_theme_idx;
 
+    this.lower = isNaN(this.gradient_range.min) ? "" : this.gradient_range.min;
+    this.upper = isNaN(this.gradient_range.max) ? "" : this.gradient_range.max;
+  },
   methods: {
-    auto_scale: function (new_value) {
-      if (new_value == "Auto-Scale") {
+    set_auto_scale: function (new_value) {
+      if (new_value == "autoscale") {
         this.max_value_error_msg = "";
         this.min_value_error_msg = "";
+        this.lower = "";
+        this.upper = "";
         this.autoscale = true;
         this.checkbox_reset = false;
       } else {
@@ -295,12 +308,9 @@ export default {
     },
 
     radio_option_selected: function (option_value) {
-      const gradient_option_idx = option_value.index;
-      if (this.gradient_theme_names[gradient_option_idx]) {
-        this.$store.commit("gradient/set_gradient_theme_idx", gradient_option_idx);
-      }
+      this.color_theme_idx = option_value.index;
+      this.$store.commit("gradient/set_gradient_theme_idx", this.color_theme_idx);
     },
-
     on_update_maximum: function (new_value) {
       this.upper = parseFloat(new_value);
       if (isNaN(this.upper)) {
@@ -352,6 +362,8 @@ export default {
     },
 
     apply_heatmap_settings: function () {
+      this.$store.commit("heatmap/set_auto_scale", this.autoscale);
+
       if (this.is_apply_set && !this.autoscale) {
         this.$store.commit("gradient/set_gradient_range", {
           min: this.lower,
@@ -361,6 +373,8 @@ export default {
     },
 
     reset_heatmap_settings: function () {
+      // reset autoscale setting to false
+      this.$store.commit("heatmap/set_auto_scale", false);
       // reset display dropdown
       this.metric_selection_changed(0);
       // reset gradient theme, radio button is subscribed to this mutation and will reset itself
@@ -368,8 +382,11 @@ export default {
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range");
       // reset autoscale check box and disable setting for inputs
+      this.on_update_maximum("");
+      this.on_update_minimum("");
       this.checkbox_reset = true;
       this.autoscale = false;
+      this.color_theme_idx = 0;
     },
   },
 };

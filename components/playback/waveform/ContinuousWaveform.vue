@@ -1,8 +1,7 @@
 <template>
   <Waveform
     :title="title"
-    :tissue_data_points="d3_formatted_data_points.tissue"
-    :stim_data_points="d3_formatted_data_points.stim"
+    :tissue_data_points="d3_formatted_data_points"
     :samples_per_second="samples_per_second"
     :x_axis_sample_length="x_axis_sample_length"
     :x_axis_min="x_axis_min"
@@ -14,6 +13,7 @@
     :margin="margin"
     :plot_area_pixel_height="plot_area_pixel_height"
     :plot_area_pixel_width="plot_area_pixel_width"
+    :well_idx="well_idx"
   />
 </template>
 <script>
@@ -76,30 +76,17 @@ export default {
 
   data: function () {
     return {
-      d3_formatted_data_points: {
-        tissue: [],
-        stim: [],
-      },
+      d3_formatted_data_points: [],
     };
   },
   computed: {
-    ...mapState("playback", {
-      x_time_index: "x_time_index",
-    }),
-    ...mapState("twentyfourcontrols", {
-      current_quadrant: "is_quadrant",
-    }),
-    ...mapState("data", {
-      plate_waveforms: "plate_waveforms",
-      stim_waveforms: "stim_waveforms",
-    }),
-    ...mapState("waveform", {
-      x_zoom_levels: "x_zoom_levels",
-      x_zoom_level_idx: "x_zoom_level_idx",
-      y_axis_scale: "y_axis_scale",
-      y_axis_range: "y_axis_range",
-    }),
-
+    ...mapState("playback", ["x_time_index"]),
+    ...mapState("twentyfourcontrols", { current_quadrant: "is_quadrant" }),
+    ...mapState("data", ["plate_waveforms"]),
+    ...mapState("waveform", ["x_zoom_levels", "x_zoom_level_idx", "y_axis_scale", "y_axis_range"]),
+    well_idx: function () {
+      return this.current_quadrant[this.display_waveform_idx];
+    },
     x_axis_min: function () {
       if (this.display_data_prior_to_current_timepoint) {
         return this.x_time_index - this.x_axis_sample_length;
@@ -109,10 +96,7 @@ export default {
     },
 
     title: function () {
-      return twenty_four_well_plate_definition.get_well_name_from_well_index(
-        this.current_quadrant[this.display_waveform_idx],
-        true
-      );
+      return twenty_four_well_plate_definition.get_well_name_from_well_index(this.well_idx, true);
     },
     y_max: function () {
       // round to 2 decimals, based on https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
@@ -129,13 +113,9 @@ export default {
       return this.x_zoom_levels[this.x_zoom_level_idx].x_scale;
     },
   },
-
   watch: {
     plate_waveforms() {
-      this.calculate_data_to_plot("tissue");
-    },
-    stim_waveforms() {
-      this.calculate_data_to_plot("stim");
+      this.calculate_data_to_plot();
     },
     current_quadrant() {
       this.calculate_all_data_to_plot();
@@ -151,14 +131,14 @@ export default {
     this.calculate_all_data_to_plot();
   },
   methods: {
-    calculate_data_to_plot: function (data_type) {
-      const waveforms = data_type === "tissue" ? this.plate_waveforms : this.stim_waveforms;
-      const data_for_this_waveform_in_vuex = waveforms[this.current_quadrant[this.display_waveform_idx]];
+    calculate_data_to_plot: async function () {
+      const waveforms = this.plate_waveforms;
+      const data_for_this_waveform_in_vuex = waveforms[this.well_idx];
       if (
         data_for_this_waveform_in_vuex === undefined ||
         data_for_this_waveform_in_vuex.x_data_points.length == 0
       ) {
-        this.d3_formatted_data_points[data_type] = [];
+        this.d3_formatted_data_points = [];
         return;
       }
       let local_data_points = [];
@@ -173,11 +153,10 @@ export default {
         local_x_min_value,
         this.x_axis_sample_length
       );
-      this.d3_formatted_data_points[data_type] = local_data_points;
+      this.d3_formatted_data_points = local_data_points;
     },
     calculate_all_data_to_plot: function () {
-      this.calculate_data_to_plot("tissue");
-      this.calculate_data_to_plot("stim");
+      this.calculate_data_to_plot();
     },
   },
 };

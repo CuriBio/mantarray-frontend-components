@@ -99,7 +99,7 @@ describe("store/stimulation", () => {
             type: "Delay",
             src: "/delay-tile.png",
             nested_protocols: [],
-            repeat: { color: "d822f9", number_of_repeats: 1 },
+            repeat: { color: "hsla(99, 60%, 40%, 1)", number_of_repeats: 1 },
             pulse_settings: {
               phase_one_duration: 15000,
               phase_one_charge: 0,
@@ -454,7 +454,7 @@ describe("store/stimulation", () => {
 
       const test_well_protocol_pairs = {};
       for (let well_idx = 0; well_idx < 24; well_idx++) {
-        let well_name = twenty_four_well_plate_definition.get_well_name_from_well_index(well_idx, false);
+        const well_name = twenty_four_well_plate_definition.get_well_name_from_well_index(well_idx, false);
         test_well_protocol_pairs[well_name] = null;
       }
       test_well_protocol_pairs["A2"] = "B";
@@ -479,6 +479,13 @@ describe("store/stimulation", () => {
               total_active_duration: 50,
             },
           ],
+          detailed_pulses: [
+            {
+              repeat: {
+                color: "hsla(45, 90%, 40%, 1)",
+              },
+            },
+          ],
         },
       };
       const test_protocol_D = {
@@ -497,6 +504,13 @@ describe("store/stimulation", () => {
               phase_two_duration: 20,
               repeat_delay_interval: 0,
               total_active_duration: 100,
+            },
+          ],
+          detailed_pulses: [
+            {
+              repeat: {
+                color: "hsla(309, 50%, 60%, 1)",
+              },
             },
           ],
         },

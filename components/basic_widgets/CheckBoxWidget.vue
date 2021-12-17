@@ -4,8 +4,9 @@
       <b-form-checkbox-group
         v-model="selected"
         :options="checkbox_options"
+        value-field="value"
         stacked
-        @change="change_method"
+        @input="change_method"
       ></b-form-checkbox-group>
     </div>
   </div>
@@ -26,6 +27,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    initial_selected: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -35,6 +40,12 @@ export default {
   watch: {
     reset: function () {
       if (this.reset) this.selected = [];
+    },
+    initial_selected: function () {
+      if (this.initial_selected) {
+        this.selected.push(this.checkbox_options[0].value);
+        this.$emit("checkbox-selected", this.selected);
+      }
     },
   },
   methods: {

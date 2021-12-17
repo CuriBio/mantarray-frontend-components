@@ -48,7 +48,6 @@ export default {
       }
     }
   },
-
   set_stim_waveforms(state, new_value) {
     state.stim_waveforms = new_value;
   },
@@ -56,20 +55,9 @@ export default {
     for (let i = 0; i < state.stim_waveforms.length; i++) {
       state.stim_waveforms[i] = { x_data_points: [], y_data_points: [] };
     }
-  },
-  append_stim_waveforms(state, new_values) {
-    for (const well_idx in new_values) {
-      if (new_values[well_idx] !== undefined) {
-        // real Y values not actually used yet, just need to draw a straight vertical line at each new x value and connect the points at a Y value out of the max zoom window
-        const new_well_values = new_values[well_idx];
-        new_well_values[0].map((x) => {
-          const y_points = [101000, -201, 101000]; // arbitrary values far enough outside of max window that the connection between vertical lines will not be rendered
-          y_points.map((y) => {
-            state.stim_waveforms[well_idx].x_data_points.push(x);
-            state.stim_waveforms[well_idx].y_data_points.push(y);
-          });
-        });
-      }
+    for (let i = 0; i < state.stim_fill_assignments.length; i++) {
+      state.stim_fill_assignments[i] = [];
+      state.sub_protocol_flags[i] = [];
     }
   },
 };

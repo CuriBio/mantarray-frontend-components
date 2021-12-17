@@ -17,8 +17,7 @@ export default {
         cust_id: 0,
         uuid: "5FY8KwTsQaUJ2KzHJGetfE",
         pass_key: "06ad547f-fe02-477b-9473-f7977e4d5e17",
-        nickname: "Experiment anemia -1",
-        user_ids: [],
+        user_account_id: "Experiment anemia -1",
       },
     };
   },

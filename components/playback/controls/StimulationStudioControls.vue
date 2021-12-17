@@ -63,12 +63,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("stimulation", {
-      protocol_assignments: "protocol_assignments",
-    }),
-    ...mapState("playback", {
-      playback_state: "playback_state",
-    }),
+    ...mapState("stimulation", ["protocol_assignments", "stim_status"]),
+    ...mapState("playback", ["playback_state"]),
     is_start_stop_button_enabled: function () {
       // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
       let value = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
@@ -84,17 +80,11 @@ export default {
         : "span__stimulation-controls-play-stop-button--inactive";
     },
   },
-  created() {
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      // waits for response from BE before turning green
-      if (mutation.type === "stimulation/set_stim_status") {
-        this.current_gradient = mutation.payload ? this.active_gradient : this.inactive_gradient;
-        this.play_state = mutation.payload;
-      }
-    });
-  },
-  beforeDestroy() {
-    this.unsubscribe();
+  watch: {
+    stim_status: function () {
+      this.current_gradient = this.stim_status ? this.active_gradient : this.inactive_gradient;
+      this.play_state = this.stim_status;
+    },
   },
   methods: {
     async handle_play_stop() {

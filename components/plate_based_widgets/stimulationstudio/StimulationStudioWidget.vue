@@ -63,6 +63,7 @@ import StimulationStudioPlateWell from "@/components/basic_widgets/StimulationSt
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { mapState } from "vuex";
 
 library.add(faMinusCircle);
 library.add(faPlusCircle);
@@ -104,6 +105,11 @@ export default {
       protocol_assignments: {},
     };
   },
+  computed: {
+    ...mapState("stimulation", {
+      stored_protocol_assignments: "protocol_assignments",
+    }),
+  },
   watch: {
     all_select: function () {
       this.$store.dispatch("stimulation/handle_selected_wells", this.all_select);
@@ -121,12 +127,15 @@ export default {
         mutation.type === "stimulation/reset_state" ||
         mutation.type === "stimulation/reset_protocol_editor"
       ) {
-        this.protocol_assignments = this.$store.state.stimulation.protocol_assignments;
+        this.protocol_assignments = this.stored_protocol_assignments;
         this.all_select = new Array(this.number_of_wells).fill(false);
         this.stroke_width = new Array(this.number_of_wells).fill(no_stroke_width);
         if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
       }
     });
+  },
+  mounted() {
+    this.protocol_assignments = this.stored_protocol_assignments;
   },
   beforeDestroy() {
     this.unsubscribe();

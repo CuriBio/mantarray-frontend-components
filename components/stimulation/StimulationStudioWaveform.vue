@@ -267,7 +267,7 @@ export default {
             .append("path")
             .datum(sliced_data_array)
             .attr("fill", "none")
-            .attr("stroke", "#" + color)
+            .attr("stroke", color)
             .attr("stroke-width", 1.5)
             .attr(
               "d",

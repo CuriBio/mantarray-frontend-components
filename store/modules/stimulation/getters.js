@@ -1,3 +1,4 @@
+import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 export default {
   get_protocols({ protocol_list }) {
     return protocol_list;
@@ -33,14 +34,11 @@ export default {
   },
 };
 
-// TODO consider eliminating high contract colors
 const get_protocol_editor_color = (list) => {
-  let check_duplicate = false;
-  const color = "#" + Math.floor(Math.random() * 16777215).toString(16);
-  list.map((protocol) => {
-    if (protocol.color === color) check_duplicate = true;
-  });
-  if (color === "#b7b7b7" || color === "#000000" || check_duplicate) get_protocol_editor_color(list);
+  const color = generate_random_color();
+  const duplicate_color = list.filter((protocol) => protocol.color === color).length > 0;
+
+  if (duplicate_color) get_protocol_editor_color(list);
   else return color;
 };
 

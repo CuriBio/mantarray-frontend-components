@@ -11,10 +11,9 @@ const maximum_number_of_wells_in_any_plate = 96;
 const default_state = {
   // plate_waveforms: 24 element array. each element corresponds to a well in the plate  (all x/y data points for the whole recording)
   plate_waveforms: [],
-
   heatmap_values: {
-    "Twitch Force": { data: [], range_min: 0, range_max: 100 },
-    "Twitch Frequency": { data: [], range_min: 0, range_max: 100 },
+    "Twitch Force": { data: [[0]], range_min: 0, range_max: 100 },
+    "Twitch Frequency": { data: [[100]], range_min: 0, range_max: 100 },
     // "Twitch Period": { data: [], range_min: 0, range_max: 100 },
     // "Twitch Width 80": { data: [], range_min: 0, range_max: 100 },
     // "Contraction Velocity": { data: [], range_min: 0, range_max: 100 },
@@ -23,10 +22,16 @@ const default_state = {
 
   // Tanner (10/29/21): the data stored here aren't actually waveforms yet, but will be in the future
   stim_waveforms: [],
+  stim_fill_colors: {},
+  stim_fill_assignments: [],
+  sub_protocol_flags: [],
 };
+
 for (let i = 0; i < maximum_number_of_wells_in_any_plate; i++) {
   default_state.plate_waveforms.push(waveforms_entry_template);
   default_state.stim_waveforms.push(waveforms_entry_template);
+  default_state.stim_fill_assignments.push([]);
+  default_state.sub_protocol_flags.push([]);
 }
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2

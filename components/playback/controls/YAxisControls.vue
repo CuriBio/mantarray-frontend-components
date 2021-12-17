@@ -145,13 +145,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("waveform", {
-      y_axis_scale: "y_axis_scale",
-      y_axis_range: "y_axis_range",
-    }),
-    ...mapState("playback", {
-      tooltips_delay: "tooltips_delay",
-    }),
+    ...mapState("waveform", ["y_axis_scale", "y_axis_range"]),
+    ...mapState("playback", ["tooltips_delay"]),
     min_window_size: function () {
       return Math.round(this.y_axis_scale) <= 1;
     },
