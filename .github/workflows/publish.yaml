@@ -260,10 +260,14 @@ jobs:
           pip freeze
 
       - name: Uploading to NPM (if publishing)
+        env:
+          NODE_AUTH_TOKEN: $${ secrets.NPM_TOKEN }}
         if: github.event.inputs.publish_package == '1'
         run: npm publish --verbose --access public
 
       - name: Uploading to NPM (if dry run)
+        env:
+          NODE_AUTH_TOKEN: $${ secrets.NPM_TOKEN }}
         if: github.event.inputs.publish_package != '1'
         run: npm publish --access public --dry-run
 
