@@ -519,4 +519,12 @@ export default {
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
 }
+
+#calibration-warning {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
+}
 </style>
