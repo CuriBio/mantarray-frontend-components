@@ -259,6 +259,7 @@ jobs:
 
       - name: Logging into NPM
         env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USER: ${{ secrets.NPM_USERNAME }}
           NPM_PASS: ${{ secrets.NPM_PASSWORD }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
