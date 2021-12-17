@@ -1,12 +1,23 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.5.3 (2021-12-17)
+------------------
+
+- Added closure confirmation modal on window close if a stimulation is active or device is calibrating
+- Added stimulation subprotocol markers along the X-axis of graphs in Live View when stimulation is active
+- Added calibration modal to ensure device is empty in beta 2 mode
+- Added ability to retain state when user switches routes in desktop app
+- Updated customer credentials to include a User Account ID that gets validated in the BE
+- Disabled auto-delete feature of local files in customer settings
+
+
 0.5.2 (2021-11-17)
 ------------------
 
 - Added websocket handler for file upload statuses
 - Added failed and successful upload modals
-- Added warning confirmation on window close if files are still uploading
+- Added closure confirmation modal on window close if files are still uploading
 - Updated UploadFileWidget to increase when a recording stops and when a upload status is received
 
 
@@ -26,7 +37,7 @@ Changelog for Mantarray Frontend Components
 - Updated Stim Studio to make current controlled stimulation the default
 - Updated Stim play/stop button to be disabled when no protocols are assigned or if a recording is being made
 - Updated all timing to be in µs
-- Fixed Username/Password validations
+- Fixed Customer Account ID/Password validations
 - Fixed stim pulses being modified when creating outgoing message
 - Fixed issue with some stim pulses overlapping in protocol viewer
 - Fixed issue with heatmap not updating while recording
