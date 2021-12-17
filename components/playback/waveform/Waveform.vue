@@ -238,9 +238,7 @@ export default {
           return x_axis_scale(d[0] / 1e6);
         })
         .y0(this.plot_area_pixel_height)
-        .y1(function (d) {
-          return y_axis_scale(d[1]);
-        });
+        .y1(this.plot_area_pixel_height - 7);
 
       // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
       const tissue_data_to_plot = this.tissue_data_points;

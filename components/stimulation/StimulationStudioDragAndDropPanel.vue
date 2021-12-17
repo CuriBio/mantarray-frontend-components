@@ -116,6 +116,7 @@ import { mapState, mapActions, mapMutations } from "vuex";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 
 /**
  * @vue-props {String} stimulation_type - Current selected stimulation type user selects from drowdown
@@ -309,7 +310,7 @@ export default {
     },
     clone(type) {
       this.cloned = true;
-      const random_color = this.generate_random_color();
+      const random_color = generate_random_color();
 
       return {
         type,
@@ -364,22 +365,6 @@ export default {
     },
     get_style(type) {
       if (type.nested_protocols.length > 0) return "border: 2px solid " + type.repeat.color;
-    },
-    generate_random_color() {
-      const non_green_ranges = [
-        [0, 70],
-        [170, 359],
-      ];
-
-      const selected_range = non_green_ranges[this.color_idx];
-      this.color_idx = this.color_idx == 0 ? 1 : 0; // alternate to prevent similar colors next to each other
-
-      const random_hue = Math.random() * (selected_range[1] - selected_range[0]) + selected_range[0];
-      const random_sat = 90 + 10 * Math.random();
-      const random_light = 40 + 20 * Math.random();
-
-      // Random non-green with high saturation, around 50% lightness to remove black and whites, and 100% opacity.
-      return `hsla(${random_hue}, ${random_sat}%, ${random_light}%, 1)`;
     },
   },
 };

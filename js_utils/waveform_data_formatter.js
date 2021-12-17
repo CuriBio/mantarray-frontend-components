@@ -207,6 +207,19 @@ function append_well_data(arr, new_arr) {
   return arr;
 }
 
+/**
+ * Function to that returns a random, high-contrast color.
+ * @return  {string} string hsla value
+ */
+function generate_random_color() {
+  const random_hue = 1 + Math.floor(359 * Math.random());
+  const random_sat = 90 + Math.floor(10 * Math.random());
+  const random_light = 40 + Math.floor(20 * Math.random());
+
+  // Random non-green with high saturation, around 50% lightness to remove black and whites, and 100% opacity.
+  return `hsla(${random_hue}, ${random_sat}%, ${random_light}%, 1)`;
+}
+
 exports.convert_from_json_of_sample_idx_and_value = convert_from_json_of_sample_idx_and_value;
 exports.find_closest_array_idx = find_closest_array_idx;
 exports.get_array_slice_to_display = get_array_slice_to_display;
@@ -216,3 +229,4 @@ exports.find_closest_well_idx = find_closest_well_idx;
 exports.get_well_slice_to_display = get_well_slice_to_display;
 exports.convert_x_y_arrays_to_d3_array = convert_x_y_arrays_to_d3_array;
 exports.append_well_data = append_well_data;
+exports.generate_random_color = generate_random_color;
