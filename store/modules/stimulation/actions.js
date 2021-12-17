@@ -224,10 +224,7 @@ export default {
           well
         ].protocol;
 
-        stim_fill_colors[well] = detailed_pulses.map((pulse) => {
-          const fill_color = pulse.repeat.color.split(", ");
-          return `${fill_color[0]}, ${fill_color[1]}, 80%, .35)`;
-        });
+        stim_fill_colors[well] = detailed_pulses.map((pulse) => pulse.repeat.color);
         // add protocol to list of unique protocols if it has not been entered yet
         const { letter } = protocol_assignments[well];
         if (!unique_protocol_ids.has(letter)) {
