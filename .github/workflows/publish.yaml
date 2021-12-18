@@ -214,9 +214,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      NPM_USER: ${{ secrets.NPM_USERNAME }}
-      NPM_PASS: ${{ secrets.NPM_PASSWORD }}
-      NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -261,13 +258,6 @@ jobs:
         run: |
           npm ci --unsafe-perm --cache .npm_cache/
           #pip freeze
-
-      - name: Logging into NPM
-        # env:
-        #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          npm install -g npm-cli-login@0.1.1
-          npm-cli-login
 
       - name: Uploading to NPM (if publishing)
         if: github.event.inputs.publish_package == '1'
