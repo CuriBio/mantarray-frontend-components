@@ -1,6 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.5.4 (2021-12-17)
+------------------
+- No change, fix for github workflow
+
 0.5.3 (2021-12-17)
 ------------------
 
