@@ -212,8 +212,6 @@ jobs:
           - 14
     name: Publish to NPM using ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -222,8 +220,12 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v2.4.1
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org/
+          scope: "@curi-bio-ci"
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
         uses: actions/cache@v2.1.6
