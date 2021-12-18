@@ -150,7 +150,7 @@ jobs:
         # not sure why CodeBuild fails without the --unsafe-perm flag for npm ci, but it seems to help when running the "prepare" scripts after the install https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
         run: |
           npm ci --unsafe-perm --cache .npm_cache/
-          # pip freeze
+          pip freeze
 
       - name: Run pre-commit hooks
         if: matrix.IS_FASTEST_JOB == true
