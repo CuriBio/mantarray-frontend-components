@@ -262,13 +262,6 @@ jobs:
           #pip freeze
 
       - name: Uploading to NPM (if publishing)
-        uses: actions/setup-node@v2.4.1
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        with:
-          node-version: ${{ matrix.node-version }}
-          registry-url: https://registry.npmjs.org/
-          scope: "@curi-bio-ci"
         if: github.event.inputs.publish_package == '1'
         run: npm publish --verbose --access public
 
