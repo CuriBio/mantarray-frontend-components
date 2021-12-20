@@ -137,6 +137,9 @@ export default {
 };
 </script>
 <style>
+body {
+  user-select: none;
+}
 .div__plate-navigator {
   position: absolute;
   top: 0px;

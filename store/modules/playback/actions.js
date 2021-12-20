@@ -121,11 +121,13 @@ export default {
     // }
   },
   async start_calibration(context) {
+    console.log("reached inside FE");
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATING);
     const payload = {
       baseurl: "http://localhost:4567",
       endpoint: "start_calibration",
     };
+
     await this.dispatch("playback/start_stop_axios_request", payload);
     context.commit("flask/ignore_next_system_status_if_matching_status", this.state.flask.status_uuid, {
       root: true,

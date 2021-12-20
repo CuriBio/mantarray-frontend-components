@@ -127,6 +127,9 @@ export default {
 };
 </script>
 <style type="text/css">
+body {
+  user-select: none;
+}
 .div__input-background {
   transform: rotate(0deg);
   box-sizing: border-box;

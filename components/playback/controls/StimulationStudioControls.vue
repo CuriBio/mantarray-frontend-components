@@ -97,6 +97,9 @@ export default {
 };
 </script>
 <style scoped>
+body {
+  user-select: none;
+}
 .div__stimulation-controls-container {
   position: absolute;
   background: black;
