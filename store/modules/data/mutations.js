@@ -15,7 +15,7 @@ export default {
   append_plate_waveforms(state, new_value) {
     const new_waveforms = append_well_data(state.plate_waveforms, new_value);
     // Eli (6/25/20): Vuex needs special things to take place in order to react to changes in complex objects, such as using this spread operator. It does not be default react to some attribute of an object being updated https://stackoverflow.com/questions/59039029/vuex-doesnt-react-with-complex-object
-    state.plate_waveforms = { ...new_waveforms };
+    state.plate_waveforms = [...new_waveforms]; // TODO unit test
   },
 
   set_heatmap_values(state, new_value) {

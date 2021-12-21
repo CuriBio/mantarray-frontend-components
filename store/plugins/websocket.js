@@ -14,6 +14,7 @@ export default function create_web_socket_plugin(socket) {
     // every time a store with this plugin is created, these event handlers get recreated as well
     socket.on("waveform_data", function (data_json, cb = null) {
       if (
+        // TODO unit test
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.BUFFERING ||
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE ||
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.RECORDING
