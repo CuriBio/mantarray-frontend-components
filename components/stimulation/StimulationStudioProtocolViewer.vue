@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      y_min_max: 500,
+      y_min_max: 120,
       datapoints: [],
       repeat_colors: {},
       x_axis_sample_length: 100,

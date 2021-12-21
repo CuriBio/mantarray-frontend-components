@@ -125,7 +125,7 @@ export default {
       show_confirmation: false,
       current_letter: "",
       current_color: "",
-      stimulation_types_array: ["Current Controlled Stimulation", "Voltage Controlled Stimulation"],
+      stimulation_types_array: ["Current Controlled Stimulation"],
       stop_options_array: ["Stimulate Until Stopped", "Stimulate Until Complete"],
       protocol_name: "",
       stop_option_idx: 0,

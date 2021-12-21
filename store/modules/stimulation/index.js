@@ -19,7 +19,7 @@ const state = () => ({
   x_axis_values: [],
   y_axis_values: [],
   repeat_colors: {},
-  y_axis_scale: 500,
+  y_axis_scale: 120,
   delay_blocks: [],
   stim_status: false,
   edit_mode: { status: false, protocol: "", label: "", color: "" },

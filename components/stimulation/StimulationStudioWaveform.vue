@@ -50,7 +50,7 @@ export default {
     x_axis_sample_length: { type: Number, default: 100 },
     x_axis_min: { type: Number, default: 0 },
     y_min: { type: Number, default: 0 },
-    y_max: { type: Number, default: 400 },
+    y_max: { type: Number, default: 120 },
     y_axis_label: { type: String, default: "Voltage (V)" },
     x_axis_label: { type: String, default: "Time (s)" },
     data_points: {
@@ -162,7 +162,7 @@ export default {
       .attr("x", -margin.left)
       .attr("y", -margin.top)
       .attr("width", margin.left)
-      .attr("height", this.plot_area_pixel_height + margin.top + margin.bottom)
+      .attr("height", 230)
       .attr("fill", blocker_color);
     // Right Side
     // margin_blockers_node
