@@ -12,7 +12,7 @@ export async function ping_system_status() {
   let endpoint = "system_status?current_vuex_status_uuid=" + this.state.status_uuid;
   if (this.state.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
     const current_time_index = this.rootState.playback.x_time_index;
-    endpoint += "currently_displayed_time_index=" + current_time_index;
+    endpoint += "&currently_displayed_time_index=" + current_time_index;
   }
   const payload = {
     baseurl: "http://localhost:4567",
