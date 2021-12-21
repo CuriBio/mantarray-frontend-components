@@ -44,7 +44,7 @@ export async function call_axios_get_from_vuex(whole_url, action_context) {
     } else if (action_context.rootState.flask.status_uuid === STATUS.MESSAGE.SERVER_STILL_INITIALIZING) {
       return error;
     }
-    if (error.response.status !== 401) {
+    if (error.response === undefined || error.response.status !== 401) {
       action_context.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR, {
         root: true,
       });
