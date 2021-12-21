@@ -101,7 +101,7 @@ export default {
   },
   watch: {
     initial_value() {
-      this.input_value = this.initial_value;
+      this.input_vaśue = isNaN(this.initial_value) ? "" : this.initial_value;
       this.$emit("update:value", this.input_value);
     },
   },
@@ -111,7 +111,7 @@ export default {
         (this.dom_id_suffix === "heatmap-max" || this.dom_id_suffix === "heatmap-min") &&
         mutation.type === "gradient/reset_gradient_range"
       ) {
-        this.input_value = this.initial_value;
+        this.input_value = isNaN(this.initial_value) ? "" : this.initial_value;
         this.$emit("update:value", this.input_value);
       }
     });
