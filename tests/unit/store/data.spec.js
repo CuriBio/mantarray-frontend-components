@@ -83,6 +83,8 @@ describe("store/data", () => {
 
       expect(stored_waveform).toHaveLength(24);
       expect(stored_waveform[0].x_data_points).toHaveLength(8);
+      // Tanner (12/20/21): There was a bug where stored_waveform was being changed from an array to an object in append_plate_waveforms, so adding this assertion to prevent that
+      expect(Array.isArray(stored_waveform)).toBe(true);
     });
 
     test("When mutating heatmap_values, Then getting heatmap_values should return mutated value", async () => {
@@ -220,61 +222,142 @@ describe("store/data", () => {
         socket_server_side.send(expected_message);
       });
     });
-    test("Given that playback state is live view, When backend emits twitch_metrics message, Then ws client updates heatmap_values", async () => {
-      store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
+    test.each([
+      ["live_view_active", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE],
+      ["recording", ENUMS.PLAYBACK_STATES.RECORDING],
+    ])(
+      "Given that playback is in %s state, When backend emits twitch_metrics message, Then ws client updates heatmap_values",
+      async (state_name, state_uuid) => {
+        store.commit("playback/set_playback_state", state_uuid);
 
-      const init_heatmap_values = {
-        "Twitch Force": { data: [[0], [], [20]] },
-        "Twitch Period": { data: [[100], [], [120]] },
-        "Twitch Frequency": { data: [[200], [], [220]] },
-        "Twitch Width 80": { data: [[300], [], [320]] },
-        "Contraction Velocity": { data: [[400], [], [420]] },
-        "Relaxation Velocity": { data: [[500], [], [520]] },
-      };
-      store.commit("data/set_heatmap_values", init_heatmap_values);
+        const init_heatmap_values = {
+          "Twitch Force": { data: [[0], [], [20]] },
+          "Twitch Period": { data: [[100], [], [120]] },
+          "Twitch Frequency": { data: [[200], [], [220]] },
+          "Twitch Width 80": { data: [[300], [], [320]] },
+          "Contraction Velocity": { data: [[400], [], [420]] },
+          "Relaxation Velocity": { data: [[500], [], [520]] },
+        };
+        store.commit("data/set_heatmap_values", init_heatmap_values);
 
-      const stored_metrics = store.getters["data/heatmap_values"];
+        const stored_metrics = store.getters["data/heatmap_values"];
 
-      const new_heatmap_values = {
-        0: {
-          "89cf1105-a015-434f-b527-4169b9400e26": [1, 2], // Twitch Force
-          "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [501, 502], // Relaxation Velocity
-        },
-        2: {
-          "89cf1105-a015-434f-b527-4169b9400e26": [21, 22], // Twitch Force
-          "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [521, 522], // Relaxation Velocity
-        },
-      };
+        const new_heatmap_values = {
+          0: {
+            "89cf1105-a015-434f-b527-4169b9400e26": [1, 2], // Twitch Force
+            "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [501, 502], // Relaxation Velocity
+          },
+          2: {
+            "89cf1105-a015-434f-b527-4169b9400e26": [21, 22], // Twitch Force
+            "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [521, 522], // Relaxation Velocity
+          },
+        };
 
-      await new Promise((resolve) => {
-        socket_server_side.emit("twitch_metrics", JSON.stringify(new_heatmap_values), (ack) => {
-          resolve(ack);
+        await new Promise((resolve) => {
+          socket_server_side.emit("twitch_metrics", JSON.stringify(new_heatmap_values), (ack) => {
+            resolve(ack);
+          });
         });
-      });
 
-      let data_validator = (well, idx) => {
-        let expected_length = idx != 1 ? 3 : 0;
-        expect(well).toHaveLength(expected_length);
-      };
-      stored_metrics["Twitch Force"].data.map(data_validator);
-      stored_metrics["Relaxation Velocity"].data.map(data_validator);
-    });
-    test("When backend emits waveform_data message, Then ws client updates plate_waveforms", async () => {
-      store.commit("data/set_plate_waveforms", ar);
+        let data_validator = (well, idx) => {
+          let expected_length = idx != 1 ? 3 : 0;
+          expect(well).toHaveLength(expected_length);
+        };
+        stored_metrics["Twitch Force"].data.map(data_validator);
+        stored_metrics["Relaxation Velocity"].data.map(data_validator);
+      }
+    );
+    test.each([
+      ["buffering", ENUMS.PLAYBACK_STATES.BUFFERING],
+      ["calibrated", ENUMS.PLAYBACK_STATES.CALIBRATED],
+    ])(
+      "Given that playback is in %s state, When backend emits twitch_metrics message, Then ws client does not update heatmap_values",
+      async (state_name, state_uuid) => {
+        store.commit("playback/set_playback_state", state_uuid);
 
-      const stored_waveform = store.getters["data/plate_waveforms"];
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(4);
+        const init_heatmap_values = {
+          "Twitch Force": { data: [[0], [], [20]] },
+          "Twitch Period": { data: [[100], [], [120]] },
+          "Twitch Frequency": { data: [[200], [], [220]] },
+          "Twitch Width 80": { data: [[300], [], [320]] },
+          "Contraction Velocity": { data: [[400], [], [420]] },
+          "Relaxation Velocity": { data: [[500], [], [520]] },
+        };
+        store.commit("data/set_heatmap_values", init_heatmap_values);
 
-      await new Promise((resolve) => {
-        socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
-          resolve(ack);
+        const stored_metrics = store.getters["data/heatmap_values"];
+
+        const new_heatmap_values = {
+          0: {
+            "89cf1105-a015-434f-b527-4169b9400e26": [1, 2], // Twitch Force
+            "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [501, 502], // Relaxation Velocity
+          },
+          2: {
+            "89cf1105-a015-434f-b527-4169b9400e26": [21, 22], // Twitch Force
+            "0fcc0dc3-f9aa-4f1b-91b3-e5b5924279a9": [521, 522], // Relaxation Velocity
+          },
+        };
+
+        await new Promise((resolve) => {
+          socket_server_side.emit("twitch_metrics", JSON.stringify(new_heatmap_values), (ack) => {
+            resolve(ack);
+          });
         });
-      });
 
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(8);
-    });
+        let data_validator = (well, idx) => {
+          let expected_length = idx != 1 ? 1 : 0;
+          expect(well).toHaveLength(expected_length);
+        };
+        stored_metrics["Twitch Force"].data.map(data_validator);
+        stored_metrics["Relaxation Velocity"].data.map(data_validator);
+      }
+    );
+    test.each([
+      ["buffering", ENUMS.PLAYBACK_STATES.BUFFERING],
+      ["live_view_active", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE],
+      ["recording", ENUMS.PLAYBACK_STATES.RECORDING],
+    ])(
+      "Given that playback is in %s state, When backend emits waveform_data message, Then ws client updates plate_waveforms",
+      async (state_name, state_uuid) => {
+        store.commit("playback/set_playback_state", state_uuid);
+
+        store.commit("data/set_plate_waveforms", ar);
+
+        const stored_waveform = store.getters["data/plate_waveforms"];
+        expect(stored_waveform).toHaveLength(24);
+        expect(stored_waveform[0].x_data_points).toHaveLength(4);
+
+        await new Promise((resolve) => {
+          socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
+            resolve(ack);
+          });
+        });
+
+        expect(stored_waveform).toHaveLength(24);
+        expect(stored_waveform[0].x_data_points).toHaveLength(8);
+      }
+    );
+    test.each([["calibrated", ENUMS.PLAYBACK_STATES.CALIBRATED]])(
+      "Given that playback is in %s state, When backend emits waveform_data message, Then ws client does not update plate_waveforms",
+      async (state_name, state_uuid) => {
+        store.commit("playback/set_playback_state", state_uuid);
+
+        store.commit("data/set_plate_waveforms", ar);
+
+        const stored_waveform = store.getters["data/plate_waveforms"];
+        expect(stored_waveform).toHaveLength(24);
+        expect(stored_waveform[0].x_data_points).toHaveLength(4);
+
+        await new Promise((resolve) => {
+          socket_server_side.emit("waveform_data", JSON.stringify(nr), (ack) => {
+            resolve(ack);
+          });
+        });
+
+        expect(stored_waveform).toHaveLength(24);
+        expect(stored_waveform[0].x_data_points).toHaveLength(4);
+      }
+    );
     test("When backend emits stimulation message, Then ws client updates stim_waveforms", async () => {
       store.commit("data/set_stim_waveforms", [
         { x_data_points: [1], y_data_points: [2] },

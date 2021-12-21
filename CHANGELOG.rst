@@ -1,8 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.5.5 (2021-12-20)
+------------------
+
+- Fixed issue with waveforms not being deleted after stopping live view
+- Fixed with waveforms being appended to after stopping live view
+
+
 0.5.4 (2021-12-17)
 ------------------
+
 - No change, fix for github workflow
 
 0.5.3 (2021-12-17)
