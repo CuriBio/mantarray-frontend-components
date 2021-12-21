@@ -413,6 +413,7 @@ export default {
     },
     close_one_min_modal() {
       this.$bvModal.hide("one-min-warning");
+      this.state.playback.one_min_warning = false;
       this.$store.commit("playback/set_one_min_timer");
     },
   },
