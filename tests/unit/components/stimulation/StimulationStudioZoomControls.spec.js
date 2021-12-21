@@ -25,8 +25,8 @@ describe("StimulationStudioZoomControls.vue", () => {
         axis: "y-axis",
       },
     });
-    const expected_scale = 750;
-    expect(store.state.stimulation.y_axis_scale).toBe(500);
+    const expected_scale = 180;
+    expect(store.state.stimulation.y_axis_scale).toBe(120);
     await wrapper.find(".span__axis-controls-zoom-out-button").trigger("click");
     expect(store.state.stimulation.y_axis_scale).toBe(expected_scale);
   });
@@ -39,8 +39,8 @@ describe("StimulationStudioZoomControls.vue", () => {
         axis: "y-axis",
       },
     });
-    const expected_scale = 333.3333333333333;
-    expect(store.state.stimulation.y_axis_scale).toBe(500);
+    const expected_scale = 80;
+    expect(store.state.stimulation.y_axis_scale).toBe(120);
     await wrapper.find(".span__axis-controls-zoom-in-button").trigger("click");
     expect(store.state.stimulation.y_axis_scale).toBe(expected_scale);
   });

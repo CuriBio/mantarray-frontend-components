@@ -157,7 +157,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.findAll("li").at(1).trigger("click");
-    expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("V");
+    expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
   });
 
   test("When a user imports a new protocol, Then the the next available protocol letter/color assignment will get updated", async () => {
@@ -169,15 +169,6 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     const test_protocol = { label: "test", color: "#123456", letter: "B" };
     await store.commit("stimulation/set_new_protocol", test_protocol);
     expect(updateSpy).toHaveBeenCalledWith();
-  });
-
-  test("When a user selects from the stop requirement dropdown, Then the corresponding selection is stored", async () => {
-    const wrapper = mount(StimulationStudioBlockViewEditor, {
-      store,
-      localVue,
-    });
-    await wrapper.findAll("li").at(3).trigger("click");
-    expect(wrapper.vm.stop_option_idx).toBe(1);
   });
 
   test("When exiting instance, Then instance is effectively destroyed", async () => {

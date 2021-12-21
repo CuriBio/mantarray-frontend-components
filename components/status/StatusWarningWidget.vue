@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="div__status-warning-background">
+    <div class="div__status-warning-background" :style="modal_height">
       <span class="span__status-warning-label">{{ modal_labels.header }}</span>
       <div class="span__status-warning-message">
         <p>{{ modal_labels.msg_one }}</p>
@@ -50,6 +50,7 @@ export default {
           button_names: ["Cancel", "Yes"],
         };
       },
+      height: { type: Number, default: 150 },
     },
     success_status: {
       type: Boolean,
@@ -57,6 +58,9 @@ export default {
     },
   },
   computed: {
+    modal_height: function () {
+      return `height: ${this.height} px;`;
+    },
     textarea__error_cssprops: function () {
       return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";
     },
@@ -77,7 +81,6 @@ export default {
   transform: rotate(0deg);
   position: absolute;
   width: 420px;
-  height: 150px;
   top: 0;
   left: 0;
   visibility: visible;
@@ -86,7 +89,6 @@ export default {
   background: rgb(17, 17, 17);
   z-index: 3;
 }
-
 .span__status-warning-label {
   pointer-events: all;
   line-height: 100%;
