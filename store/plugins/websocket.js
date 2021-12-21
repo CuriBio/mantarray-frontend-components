@@ -14,16 +14,15 @@ export default function create_web_socket_plugin(socket) {
     // every time a store with this plugin is created, these event handlers get recreated as well
     socket.on("waveform_data", function (data_json, cb = null) {
       if (
-        // TODO unit test
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.BUFFERING ||
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE ||
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.RECORDING
       ) {
         store.commit("data/append_plate_waveforms", JSON.parse(data_json));
-        if (cb !== null) {
-          // this callback is only used for testing. The backend will not send a callback
-          cb("commit done");
-        }
+      }
+      if (cb !== null) {
+        // this callback is only used for testing. The backend will not send a callback
+        cb("handler done");
       }
     });
     socket.on("twitch_metrics", function (metrics_json, cb = null) {
@@ -34,13 +33,14 @@ export default function create_web_socket_plugin(socket) {
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.RECORDING
       ) {
         store.commit("data/append_metric_data", JSON.parse(metrics_json));
-        if (cb !== null) {
-          // this callback is only used for testing. The backend will not send a callback
-          cb("commit done");
-        }
+      }
+      if (cb !== null) {
+        // this callback is only used for testing. The backend will not send a callback
+        cb("handler done");
       }
     });
     socket.on("stimulation", function (stim_json, cb = null) {
+      // Tanner (12/20/21): may want to put the same checks here as are in the waveform_data handler once stim waveforms are sent instead of subprotocol indices
       store.dispatch("data/append_stim_waveforms", JSON.parse(stim_json));
       if (cb !== null) {
         // this callback is only used for testing. The backend will not send a callback
