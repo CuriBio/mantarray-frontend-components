@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- original mockflow ID: id="cmpDd7c4156bb0839a33f5be9502418562bf" -->
+    <!-- original mockflow ID: id="cmpDd7c4156bb0 839a33f5be9502418562bf" -->
     <div class="div__status-error-catch-background" :style="error_background_cssprops"></div>
     <!-- original mockflow ID: id="cmpD94339a6591e3ead19b4308b3a8b0cb68" -->
     <span class="div_status-error-catch-title-label">An&nbsp;<wbr />error&nbsp;<wbr />occurred. </span>

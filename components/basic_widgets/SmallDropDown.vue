@@ -115,6 +115,9 @@ export default {
 };
 </script>
 <style scoped>
+body {
+  user-select: none;
+}
 .div__small-dropdown-background {
   transform: rotate(0deg);
   margin: 0px;

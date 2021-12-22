@@ -115,6 +115,10 @@ export default {
     context.commit("stop_playback_progression");
     context.commit("data/clear_heatmap_values", null, { root: true });
 
+    // stop any timers from running
+    context.commit("set_one_min_warning", null);
+    context.commit("set_five_min_warning", null);
+
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
     //   context.commit("set_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
@@ -126,6 +130,7 @@ export default {
       baseurl: "http://localhost:4567",
       endpoint: "start_calibration",
     };
+
     await this.dispatch("playback/start_stop_axios_request", payload);
     context.commit("flask/ignore_next_system_status_if_matching_status", this.state.flask.status_uuid, {
       root: true,
@@ -177,6 +182,11 @@ export default {
     }
   },
   async start_live_view(context) {
+    // reset to default state and then set new timer
+    context.commit("set_one_min_warning", false);
+    context.commit("set_five_min_warning", false);
+    context.commit("set_five_min_timer");
+
     const payload = {
       baseurl: "http://localhost:4567",
       endpoint: "start_managed_acquisition",
@@ -189,8 +199,8 @@ export default {
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.BUFFERING, {
       root: true,
     });
-
     context.dispatch("flask/start_status_pinging", null, { root: true });
+
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
     //   context.dispatch("flask/start_status_pinging", null, { root: true });

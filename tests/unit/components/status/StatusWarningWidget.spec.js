@@ -21,13 +21,17 @@ describe("StatusWarningWidget.vue", () => {
     expect(target_span.text()).toStrictEqual("Warning!");
   });
   test("Given that StatusWarningWidget is active, When the lifecyle hook mounted is created, Then it will display a confirmation message that operations are still in progress", async () => {
+    const propsData = { height: 200 };
     wrapper = mount(ComponentToTest, {
       localVue,
+      propsData,
     });
+    const background = wrapper.find(".div__status-warning-background");
     const target_message_span = wrapper.find(".span__status-warning-message");
     const target_message_span_p = target_message_span.findAll("p");
     expect(target_message_span_p.at(0).text()).toStrictEqual("Operations are still in progress.");
     expect(target_message_span_p.at(1).text()).toStrictEqual("Are you sure you want to exit?");
+    expect(background.attributes().style).toBe("height: 200px;");
   });
   test("Given that StatusWarningWidget is mounted, When the StatusWarningWidget is visible, Then click on 'Yes' or 'Cancel' results in an event 'handle_warning_closure' to be emitted", async () => {
     wrapper = mount(ComponentToTest, {

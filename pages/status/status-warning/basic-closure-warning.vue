@@ -1,5 +1,5 @@
 <template>
-  <StatusWarningWidget />
+  <StatusWarningWidget :height="200" />
 </template>
 <script>
 // import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";

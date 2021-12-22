@@ -194,11 +194,11 @@ export default {
       provided_uuid: "0",
       height: 481,
       input_height: 45,
-      max_value_error_msg: "invalid",
-      min_value_error_msg: "invalid",
+      max_value_error_msg: "",
+      min_value_error_msg: "",
       autoscale: false,
-      upper: "",
-      lower: "",
+      upper: 100,
+      lower: 0,
       checkbox_reset: false,
       checkbox_state: false,
       color_theme_idx: 0,
@@ -283,16 +283,16 @@ export default {
     this.checkbox_state = this.autoscale;
     this.color_theme_idx = this.gradient_theme_idx;
 
-    this.lower = isNaN(this.gradient_range.min) ? "" : this.gradient_range.min;
-    this.upper = isNaN(this.gradient_range.max) ? "" : this.gradient_range.max;
+    this.lower = isNaN(this.gradient_range.min) ? 0 : this.gradient_range.min;
+    this.upper = isNaN(this.gradient_range.max) ? 100 : this.gradient_range.max;
   },
   methods: {
     set_auto_scale: function (new_value) {
       if (new_value == "autoscale") {
         this.max_value_error_msg = "";
         this.min_value_error_msg = "";
-        this.lower = "";
-        this.upper = "";
+        this.lower = 0;
+        this.upper = 100;
         this.autoscale = true;
         this.checkbox_reset = false;
       } else {
@@ -364,12 +364,12 @@ export default {
     apply_heatmap_settings: function () {
       this.$store.commit("heatmap/set_auto_scale", this.autoscale);
 
-      if (this.is_apply_set && !this.autoscale) {
+      if (this.is_apply_set) {
         this.$store.commit("gradient/set_gradient_range", {
           min: this.lower,
           max: this.upper,
         });
-      } else if (this.autoscale) this.$store.commit("gradient/set_gradient_range", this.auto_max_min);
+      }
     },
 
     reset_heatmap_settings: function () {
@@ -382,8 +382,8 @@ export default {
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range");
       // reset autoscale check box and disable setting for inputs
-      this.on_update_maximum("");
-      this.on_update_minimum("");
+      this.on_update_maximum(100);
+      this.on_update_minimum(0);
       this.checkbox_reset = true;
       this.autoscale = false;
       this.color_theme_idx = 0;

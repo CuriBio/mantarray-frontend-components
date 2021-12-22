@@ -353,15 +353,15 @@ describe("store/stimulation", () => {
     });
 
     test("When a user wants to zoom in on a the y-axis in the Protocol Viewer, Then the scale will divide by 10", async () => {
-      expect(store.state.stimulation.y_axis_scale).toBe(500);
+      expect(store.state.stimulation.y_axis_scale).toBe(120);
       await store.commit("stimulation/set_zoom_in", "y-axis");
-      expect(store.state.stimulation.y_axis_scale).toBe(333.3333333333333);
+      expect(store.state.stimulation.y_axis_scale).toBe(80);
     });
 
     test("When a user wants to zoom out on the y-axis, Then the scale will multiple by a power of 10", async () => {
-      expect(store.state.stimulation.y_axis_scale).toBe(500);
+      expect(store.state.stimulation.y_axis_scale).toBe(120);
       await store.commit("stimulation/set_zoom_out", "y-axis");
-      expect(store.state.stimulation.y_axis_scale).toBe(750);
+      expect(store.state.stimulation.y_axis_scale).toBe(180);
     });
 
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {

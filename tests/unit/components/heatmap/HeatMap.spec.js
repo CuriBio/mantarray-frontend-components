@@ -5,7 +5,7 @@ import { createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 
 const max_warm_rgb = "rgb(74.118% 20.784% 19.608%)";
-// const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
+const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
 const max_cool_rgb = "rgb(6.275% 39.216% 54.902%)";
 
 const localVue = createLocalVue();
@@ -38,8 +38,8 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     expect(wrapper.find(".div__heatmap-layout-background")).toBeTruthy();
-    expect(wrapper.vm.upper).toBe("");
-    expect(wrapper.vm.lower).toBe("");
+    expect(wrapper.vm.upper).toBe(100);
+    expect(wrapper.vm.lower).toBe(0);
     expect(wrapper.vm.autoscale).toBe(false);
     expect(wrapper.vm.color_theme_idx).toBe(0);
   });
@@ -173,7 +173,7 @@ describe("HeatMap.vue", () => {
 
     // switch back to force
     await wrapper.findAll("li").at(0).trigger("click");
-    expect(wrapper.findAll("circle").at(0).attributes("fill")).toStrictEqual("#b7b7b7");
+    expect(wrapper.findAll("circle").at(0).attributes("fill")).toStrictEqual(min_warm_rgb);
   });
 
   test("Given two metrics are present in data store, When display option is changed, Then the plateheatmap title and unit in all labels are updated", async () => {
@@ -262,10 +262,10 @@ describe("HeatMap.vue", () => {
     const unselected_options = wrapper.findAll("li");
     expect(unselected_options.at(0).text()).toBe("Twitch Frequency");
     // test min and max are reset
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("µN");
-    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("µN");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("100 µN");
+    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("0 µN");
     // test gradient theme is reset to Warm
-    expect(test_well.attributes("fill")).toStrictEqual("#b7b7b7");
+    expect(test_well.attributes("fill")).toStrictEqual(min_warm_rgb);
   });
 
   test("When user selects autoscale, Then the max/min input fields will become disabled and valid", async () => {
@@ -349,19 +349,13 @@ describe("HeatMap.vue", () => {
     expect(wrapper.vm.autoscale).toBe(true);
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
     expect(store_spy.mock.calls).toHaveLength(2);
-    expect(store_spy.mock.calls).toContainEqual([
-      "gradient/set_gradient_range",
-      { max: "0.001", min: "0.000" },
-    ]);
+    expect(store_spy.mock.calls).toContainEqual(["heatmap/set_auto_scale", true]);
 
     await store.commit("data/set_heatmap_values", {
       "Twitch Force": { data: [[0, 10]] },
     });
     expect(store_spy.mock.calls).toHaveLength(4);
-    expect(store_spy.mock.calls).toContainEqual([
-      "gradient/set_gradient_range",
-      { max: "10.000", min: "0.000" },
-    ]);
+    expect(store_spy.mock.calls).toContainEqual(["gradient/set_gradient_range", { max: 100, min: 0 }]);
 
     await autoscale_box.setChecked(false);
     await autoscale_box.trigger("change");

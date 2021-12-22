@@ -146,8 +146,22 @@
     <b-modal id="calibration-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
       <StatusWarningWidget
         id="calibration-modal"
-        :modal_labels="modal_labels"
+        :modal_labels="calibration_modal_labels"
         @handle_confirmation="close_calibration_modal"
+      />
+    </b-modal>
+    <b-modal id="five-min-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+      <StatusWarningWidget
+        id="five-min"
+        :modal_labels="time_warning_labels.five"
+        @handle_confirmation="close_five_min_modal"
+      />
+    </b-modal>
+    <b-modal id="one-min-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+      <StatusWarningWidget
+        id="one-min"
+        :modal_labels="time_warning_labels.one"
+        @handle_confirmation="close_one_min_modal"
       />
     </b-modal>
   </div>
@@ -226,16 +240,36 @@ export default {
       record_title: "Record",
       settings_tooltip_text: "Edit customer account",
       schedule_tooltip_text: "(Not Yet Available)",
-      modal_labels: {
+      calibration_modal_labels: {
         header: "Warning!",
         msg_one: "Please ensure no plate is present on device.",
         msg_two: "Do you wish to continue?",
         button_names: ["Cancel", "Yes"],
       },
+      time_warning_labels: {
+        one: {
+          header: "Warning!",
+          msg_one: "Live View has been active for over five minutes.",
+          msg_two: "Do you wish to continue?",
+          button_names: ["No", "Yes"],
+        },
+        five: {
+          header: "Warning!",
+          msg_one: "Live View has been active for five minutes.",
+          msg_two: "Do you wish to continue?",
+          button_names: ["No", "Yes"],
+        },
+      },
     };
   },
   computed: {
-    ...mapState("playback", ["playback_state", "is_valid_barcode", "tooltips_delay"]),
+    ...mapState("playback", [
+      "playback_state",
+      "is_valid_barcode",
+      "tooltips_delay",
+      "one_min_warning",
+      "five_min_warning",
+    ]),
     ...mapState("settings", ["customer_index", "auto_upload", "beta_2_mode"]),
     calibrate_tooltip_text: function () {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
@@ -316,6 +350,17 @@ export default {
       };
     },
   },
+  watch: {
+    one_min_warning() {
+      if (this.one_min_warning) {
+        this.$bvModal.show("one-min-warning");
+        this.$store.commit("playback/set_one_min_warning", false); // reset to false to ensure new timer starts
+      }
+    },
+    five_min_warning() {
+      if (this.five_min_warning) this.$bvModal.show("five-min-warning");
+    },
+  },
   methods: {
     on_activate_record_click: function () {
       if (this.customer_index === null) this.open_settings_form();
@@ -360,6 +405,18 @@ export default {
     close_calibration_modal(idx) {
       this.$bvModal.hide("calibration-warning");
       if (idx === 1) this.$store.dispatch("playback/start_calibration");
+    },
+    close_five_min_modal(idx) {
+      this.$bvModal.hide("five-min-warning");
+
+      if (idx === 0) this.$store.dispatch("playback/stop_live_view");
+      else this.$store.commit("playback/set_one_min_timer");
+    },
+    close_one_min_modal(idx) {
+      this.$bvModal.hide("one-min-warning");
+
+      if (idx === 0) this.$store.dispatch("playback/stop_live_view");
+      else this.$store.commit("playback/set_one_min_timer");
     },
   },
 };
@@ -520,7 +577,9 @@ export default {
   -webkit-font-smoothing: antialiased;
 }
 
-#calibration-warning {
+#calibration-warning,
+#five-min-warning,
+#one-min-warning {
   position: fixed;
   margin: 5% auto;
   top: 15%;

@@ -123,6 +123,9 @@ export default {
 };
 </script>
 <style>
+body {
+  user-select: none;
+}
 .div__button-background {
   transform: rotate(0deg);
   box-sizing: border-box;
