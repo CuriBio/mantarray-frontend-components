@@ -154,7 +154,6 @@
       <StatusWarningWidget
         id="five-min"
         :modal_labels="time_warning_labels.five"
-        :height="warning_modal_height"
         @handle_confirmation="close_five_min_modal"
       />
     </b-modal>
@@ -162,7 +161,6 @@
       <StatusWarningWidget
         id="one-min"
         :modal_labels="time_warning_labels.one"
-        :height="warning_modal_height"
         @handle_confirmation="close_one_min_modal"
       />
     </b-modal>
@@ -251,18 +249,17 @@ export default {
       time_warning_labels: {
         one: {
           header: "Warning!",
-          msg_one: "Live View has been active for over five minutes",
+          msg_one: "Live View has been active for over five minutes.",
           msg_two: "Do you wish to continue?",
           button_names: ["No", "Yes"],
         },
         five: {
           header: "Warning!",
-          msg_one: "Live View has been active for five minutes",
+          msg_one: "Live View has been active for five minutes.",
           msg_two: "Do you wish to continue?",
           button_names: ["No", "Yes"],
         },
       },
-      warning_modal_height: 200,
     };
   },
   computed: {
