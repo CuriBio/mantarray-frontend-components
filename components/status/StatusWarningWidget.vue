@@ -50,16 +50,16 @@ export default {
           button_names: ["Cancel", "Yes"],
         };
       },
-      height: { type: Number, default: 150 },
     },
     success_status: {
       type: Boolean,
       default: false,
     },
+    height: { type: Number, default: 150 },
   },
   computed: {
     modal_height: function () {
-      return `height: ${this.height} px;`;
+      return `height: ${this.height}px;`;
     },
     textarea__error_cssprops: function () {
       return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";
