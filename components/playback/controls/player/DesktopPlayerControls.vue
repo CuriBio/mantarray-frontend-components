@@ -406,15 +406,17 @@ export default {
       this.$bvModal.hide("calibration-warning");
       if (idx === 1) this.$store.dispatch("playback/start_calibration");
     },
-    close_five_min_modal() {
+    close_five_min_modal(idx) {
       this.$bvModal.hide("five-min-warning");
       this.$store.state.playback.five_min_warning = false;
-      this.$store.commit("playback/set_one_min_timer");
+      if (idx === 0) this.$store.dispatch("playback/stop_live_view");
+      else this.$store.commit("playback/set_one_min_timer");
     },
-    close_one_min_modal() {
+    close_one_min_modal(idx) {
       this.$bvModal.hide("one-min-warning");
       this.$store.state.playback.one_min_warning = false;
-      this.$store.commit("playback/set_one_min_timer");
+      if (idx === 0) this.$store.dispatch("playback/stop_live_view");
+      else this.$store.commit("playback/set_one_min_timer");
     },
   },
 };
