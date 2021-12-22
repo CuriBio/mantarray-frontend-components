@@ -436,11 +436,11 @@ describe("DesktopPlayerControls.vue", () => {
     });
 
     test.each([
-      ["one", 6e4],
-      ["five", 3e5],
+      ["one", 6e4, 2],
+      ["five", 3e5, 1],
     ])(
       "When a timer goes off to display live view warning, Then the corresponding modal appears with one min or five min labels",
-      async (type, ms) => {
+      async (type, ms, calls) => {
         jest.useFakeTimers();
         const one_min_spy = jest.spyOn(store, "commit");
         wrapper = mount(component_to_test, {
@@ -461,7 +461,7 @@ describe("DesktopPlayerControls.vue", () => {
           expect(wrapper.find(`#${type}-min-warning`).isVisible()).toBe(false);
           expect(store.state.playback.one_min_warning).toBe(false);
           expect(store.state.playback.five_min_warning).toBe(false);
-          expect(one_min_spy).toHaveBeenCalledWith(["playback/set_one_min_timer"]);
+          expect(one_min_spy).toHaveBeenCalledTimes(calls);
         });
       }
     );
