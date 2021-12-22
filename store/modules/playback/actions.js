@@ -183,6 +183,8 @@ export default {
     }
   },
   async start_live_view(context) {
+    context.commit("set_five_min_timer");
+
     const payload = {
       baseurl: "http://localhost:4567",
       endpoint: "start_managed_acquisition",
