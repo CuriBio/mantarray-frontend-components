@@ -251,13 +251,13 @@ export default {
       time_warning_labels: {
         one: {
           header: "Warning!",
-          msg_one: "LV has been on active for one minute",
+          msg_one: "Live View has been active for over fives minutes",
           msg_two: "Do you wish to continue?",
           button_names: ["Cancel", "Yes"],
         },
         five: {
           header: "Warning!",
-          msg_one: "LV has been on active for two minute",
+          msg_one: "Live View has been active for five minutes",
           msg_two: "Do you wish to continue?",
           button_names: ["Cancel", "Yes"],
         },
@@ -408,12 +408,12 @@ export default {
     },
     close_five_min_modal() {
       this.$bvModal.hide("five-min-warning");
-      this.state.playback.five_min_warning = false;
+      this.$store.state.playback.five_min_warning = false;
       this.$store.commit("playback/set_one_min_timer");
     },
     close_one_min_modal() {
       this.$bvModal.hide("one-min-warning");
-      this.state.playback.one_min_warning = false;
+      this.$store.state.playback.one_min_warning = false;
       this.$store.commit("playback/set_one_min_timer");
     },
   },
