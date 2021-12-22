@@ -97,8 +97,6 @@ export default {
     // }
   },
   async stop_live_view(context) {
-    let { one_min_warning, five_min_warning } = this.state.playback;
-
     const payload = {
       baseurl: "http://localhost:4567",
       endpoint: "stop_managed_acquisition",
@@ -117,8 +115,9 @@ export default {
     context.commit("stop_playback_progression");
     context.commit("data/clear_heatmap_values", null, { root: true });
 
-    if (one_min_warning) one_min_warning = null;
-    if (five_min_warning) five_min_warning = null;
+    // stop any timers from running
+    context.commit("set_one_min_warning", null);
+    context.commit("set_five_min_warning", null);
 
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
@@ -183,6 +182,9 @@ export default {
     }
   },
   async start_live_view(context) {
+    // reset to default state and then set new timer
+    context.commit("set_one_min_warning", false);
+    context.commit("set_five_min_warning", false);
     context.commit("set_five_min_timer");
 
     const payload = {
