@@ -253,13 +253,13 @@ export default {
           header: "Warning!",
           msg_one: "Live View has been active for over fives minutes",
           msg_two: "Do you wish to continue?",
-          button_names: ["Cancel", "Yes"],
+          button_names: ["No", "Yes"],
         },
         five: {
           header: "Warning!",
           msg_one: "Live View has been active for five minutes",
           msg_two: "Do you wish to continue?",
-          button_names: ["Cancel", "Yes"],
+          button_names: ["No", "Yes"],
         },
       },
       warning_modal_height: 200,
@@ -409,12 +409,14 @@ export default {
     close_five_min_modal(idx) {
       this.$bvModal.hide("five-min-warning");
       this.$store.state.playback.five_min_warning = false;
+
       if (idx === 0) this.$store.dispatch("playback/stop_live_view");
       else this.$store.commit("playback/set_one_min_timer");
     },
     close_one_min_modal(idx) {
       this.$bvModal.hide("one-min-warning");
       this.$store.state.playback.one_min_warning = false;
+
       if (idx === 0) this.$store.dispatch("playback/stop_live_view");
       else this.$store.commit("playback/set_one_min_timer");
     },
