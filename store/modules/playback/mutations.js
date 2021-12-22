@@ -58,7 +58,7 @@ export default {
     setTimeout(() => {
       if (state.five_min_warning === false) state.five_min_warning = true;
       else if (state.five_min_warning === null) state.five_min_warning = false;
-    }, 5 * 60e3);
+    }, 10e3);
   },
   set_one_min_timer(state) {
     setTimeout(() => {
@@ -66,6 +66,12 @@ export default {
         state.one_min_warning = true;
         state.five_min_warning = false;
       } else if (state.one_min_warning === null) state.one_min_warning = false;
-    }, 1 * 60e3);
+    }, 10e3);
+  },
+  set_five_min_warning(state, bool) {
+    state.five_min_warning = bool;
+  },
+  set_one_min_warning(state, bool) {
+    state.one_min_warning = bool;
   },
 };
