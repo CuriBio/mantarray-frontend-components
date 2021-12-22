@@ -54,4 +54,18 @@ export default {
   set_tooltips_delay(state, new_value) {
     state.tooltips_delay = new_value;
   },
+  set_five_min_timer(state) {
+    setTimeout(() => {
+      if (!state.five_min_warning) state.five_min_warning = true;
+      else if (state.five_min_warning === null) state.five_min_warning = false;
+    }, 3e5);
+  },
+  set_one_min_timer(state) {
+    setTimeout(() => {
+      if (!state.one_min_warning) {
+        state.one_min_warning = true;
+        state.five_min_warning = false;
+      } else if (state.one_min_warning === null) state.one_min_warning = false;
+    }, 6e4);
+  },
 };

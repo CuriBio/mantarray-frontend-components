@@ -117,6 +117,9 @@ export default {
 };
 </script>
 <style scoped>
+body {
+  user-select: none;
+}
 .div__input-dropdown-background {
   transform: rotate(0deg);
   box-sizing: border-box;

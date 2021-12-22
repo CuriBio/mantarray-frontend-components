@@ -101,23 +101,10 @@ export default {
   },
   watch: {
     initial_value() {
-      this.input_value = this.initial_value;
+      this.input_value =
+        this.dom_id_suffix.includes("heatmap") && isNaN(this.initial_value) ? "" : this.initial_value;
       this.$emit("update:value", this.input_value);
     },
-  },
-  created() {
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (
-        (this.dom_id_suffix === "heatmap-max" || this.dom_id_suffix === "heatmap-min") &&
-        mutation.type === "gradient/reset_gradient_range"
-      ) {
-        this.input_value = this.initial_value;
-        this.$emit("update:value", this.input_value);
-      }
-    });
-  },
-  beforeDestroy() {
-    this.unsubscribe();
   },
   methods: {
     on_b_form_input: function () {
@@ -127,6 +114,9 @@ export default {
 };
 </script>
 <style type="text/css">
+body {
+  user-select: none;
+}
 .div__input-background {
   transform: rotate(0deg);
   box-sizing: border-box;

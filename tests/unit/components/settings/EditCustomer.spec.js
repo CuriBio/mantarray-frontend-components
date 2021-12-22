@@ -77,7 +77,7 @@ describe("EditCustomer", () => {
       });
     });
     afterEach(() => wrapper.destroy());
-    test("When mounting EditCustomer with invalid credentials, Then it loads with 'Invalid ID, Passkey, or User Account ID' text, but not for user_account_id", () => {
+    test("When mounting EditCustomer with invalid credentials, Then it loads with 'Invalid ID, Passkey, or User Account ID' text", () => {
       const id_error_message = wrapper.find("#input-widget-feedback-alphanumeric-id");
       const pass_error_message = wrapper.find("#input-widget-feedback-passkey-id");
       const user_account_id_error_message = wrapper.find("#input-widget-feedback-user-account-id");
@@ -102,6 +102,7 @@ describe("EditCustomer", () => {
 
         const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
         await target_input_field.setValue("new entry");
+        await wrapper.vm.$nextTick(); // wait for update
 
         expect(id_error_message.text()).toStrictEqual("");
         expect(pass_error_message.text()).toStrictEqual("");
@@ -166,12 +167,13 @@ describe("EditCustomer", () => {
 
         target_input_field.setValue(entry);
 
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
         expect(spied_text_validator).toHaveBeenCalledWith(entry, text_id);
 
         expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
       }
     );
+
     test.each([
       ["alphanumeric-id", "This field is required"],
       ["passkey-id", "This field is required"],
@@ -192,12 +194,13 @@ describe("EditCustomer", () => {
         const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
         const target_error_message = wrapper.find("#input-widget-feedback-" + selector_id_suffix);
         target_input_field.setValue("blah");
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
         // confirm that the pre-condition is different
         expect(target_error_message.text()).not.toStrictEqual(expected_message);
 
         target_input_field.setValue("");
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
+
         expect(target_error_message.text()).toStrictEqual(expected_message);
       }
     );
@@ -246,18 +249,18 @@ describe("EditCustomer", () => {
           "#input-widget-field-" + selector_id_suffix_alphanumeric_id
         );
         target_input_field_uuid.setValue(uuid);
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
         const target_input_field_passkey = wrapper.find(
           "#input-widget-field-" + selector_id_suffix_passkey_id
         );
         target_input_field_passkey.setValue(passkey);
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
 
         const target_input_field_user_account_id = wrapper.find(
           "#input-widget-field-" + selector_id_suffix_user_account_id
         );
         target_input_field_user_account_id.setValue(user_account_id);
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
 
         const target_button_label_btn = wrapper.findAll(".span__button_label");
         const cancel_btn = target_button_label_btn.at(0);
@@ -324,7 +327,7 @@ describe("EditCustomer", () => {
           "#input-widget-feedback-" + selector_id_suffix_alphanumeric_id
         );
         target_input_field_uuid.setValue(uuid_test);
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
 
         expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
 
@@ -335,7 +338,7 @@ describe("EditCustomer", () => {
           "#input-widget-feedback-" + selector_id_suffix_passkey_id
         );
         target_input_field_passkey.setValue(passkey_test);
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
 
         expect(target_error_message_passkey.text()).toStrictEqual(invalid_passkey);
 
@@ -346,7 +349,7 @@ describe("EditCustomer", () => {
           "#input-widget-feedback-" + selector_id_suffix_user_account_id
         );
         target_input_field_user_account_id.setValue(user_account_id_test);
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
 
         expect(target_error_message_user_account_id.text()).toStrictEqual(invalid_user_account_id);
 
@@ -359,13 +362,13 @@ describe("EditCustomer", () => {
         expect(save_btn.attributes().style).toContain(save_btn_css);
 
         await cancel_btn.trigger("click");
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
         const cancel_id_events = wrapper.emitted("cancel-id");
         expect(cancel_id_events).toHaveLength(1);
         expect(cancel_id_events[0]).toStrictEqual([]);
 
         await delete_btn.trigger("click");
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
 
         const delete_id_events = wrapper.emitted("delete-id");
         expect(delete_id_events).toHaveLength(1);
@@ -380,7 +383,7 @@ describe("EditCustomer", () => {
         ]);
 
         await save_btn.trigger("click");
-        await Vue.nextTick();
+        await wrapper.vm.$nextTick();
 
         const save_id_events = wrapper.emitted("save-id");
         expect(save_id_events).toHaveLength(1);

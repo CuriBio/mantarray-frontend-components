@@ -31,8 +31,8 @@ const default_gradients = gradient_themes.map((theme) => {
 const default_idx = 0;
 
 const state = () => ({
-  gradient_range_min: "",
-  gradient_range_max: "",
+  gradient_range_min: 0,
+  gradient_range_max: 100,
   gradient_theme_idx: default_idx,
   gradients: default_gradients,
   gradient: default_gradients[default_idx],

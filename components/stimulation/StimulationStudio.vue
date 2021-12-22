@@ -98,6 +98,9 @@ export default {
 </script>
 
 <style scoped>
+body {
+  user-select: none;
+}
 .div__stimulationstudio-layout-background {
   box-sizing: border-box;
   padding: 0px;

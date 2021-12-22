@@ -434,5 +434,36 @@ describe("DesktopPlayerControls.vue", () => {
 
       expect(action_spy).toHaveBeenCalledWith("playback/start_calibration");
     });
+
+    test.each([
+      ["one", 6e4, 2],
+      ["five", 3e5, 1],
+    ])(
+      "When a timer goes off to display live view warning, Then the corresponding modal appears with one min or five min labels",
+      async (type, ms, calls) => {
+        jest.useFakeTimers();
+        const one_min_spy = jest.spyOn(store, "commit");
+        wrapper = mount(component_to_test, {
+          store,
+          localVue,
+        });
+
+        store.commit(`playback/set_${type}_min_timer`);
+        jest.advanceTimersByTime(ms);
+
+        Vue.nextTick(() => {
+          expect(wrapper.find(`#${type}-min-warning`).isVisible()).toBe(true);
+        });
+
+        await wrapper.findAll(".span__button_label").at(0).trigger("click");
+
+        Vue.nextTick(() => {
+          expect(wrapper.find(`#${type}-min-warning`).isVisible()).toBe(false);
+          expect(store.state.playback.one_min_warning).toBe(false);
+          expect(store.state.playback.five_min_warning).toBe(false);
+          expect(one_min_spy).toHaveBeenCalledTimes(calls);
+        });
+      }
+    );
   });
 });

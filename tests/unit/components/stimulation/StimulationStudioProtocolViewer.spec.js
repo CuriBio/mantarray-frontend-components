@@ -160,7 +160,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       store,
       localVue,
     });
-    const expected_scale = 333.3333333333333;
+    const expected_scale = 80;
     await store.commit("stimulation/set_zoom_in", "y-axis");
     expect(wrapper.vm.y_min_max).toBe(expected_scale);
 
@@ -174,7 +174,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       store,
       localVue,
     });
-    const expected_scale = 750;
+    const expected_scale = 180;
     await store.commit("stimulation/set_zoom_out", "y-axis");
     expect(wrapper.vm.y_min_max).toBe(expected_scale);
 

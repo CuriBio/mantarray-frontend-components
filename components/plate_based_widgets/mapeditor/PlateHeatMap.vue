@@ -425,6 +425,9 @@ export default {
 };
 </script>
 <style>
+body {
+  user-select: none;
+}
 .div__heatmap-editor-backdrop {
   transform: rotate(0deg);
   box-sizing: border-box;

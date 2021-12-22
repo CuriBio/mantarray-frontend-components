@@ -277,6 +277,7 @@ describe("InputWidget.vue", () => {
       store,
       localVue,
     });
+    await wrapper.setProps({ initial_value: "test" });
 
     expect(wrapper.vm.input_is_valid).toBe(true);
     expect(wrapper.find(".div__input-controls-content-widget--valid")).toBeTruthy();

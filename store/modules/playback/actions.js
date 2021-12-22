@@ -97,6 +97,8 @@ export default {
     // }
   },
   async stop_live_view(context) {
+    let { one_min_warning, five_min_warning } = this.state.playback;
+
     const payload = {
       baseurl: "http://localhost:4567",
       endpoint: "stop_managed_acquisition",
@@ -115,6 +117,9 @@ export default {
     context.commit("stop_playback_progression");
     context.commit("data/clear_heatmap_values", null, { root: true });
 
+    if (one_min_warning) one_min_warning = null;
+    if (five_min_warning) five_min_warning = null;
+
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
     //   context.commit("set_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
@@ -126,6 +131,7 @@ export default {
       baseurl: "http://localhost:4567",
       endpoint: "start_calibration",
     };
+
     await this.dispatch("playback/start_stop_axios_request", payload);
     context.commit("flask/ignore_next_system_status_if_matching_status", this.state.flask.status_uuid, {
       root: true,
@@ -189,8 +195,8 @@ export default {
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.BUFFERING, {
       root: true,
     });
-
     context.dispatch("flask/start_status_pinging", null, { root: true });
+
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
     //   context.dispatch("flask/start_status_pinging", null, { root: true });
