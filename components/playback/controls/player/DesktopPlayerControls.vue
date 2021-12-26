@@ -363,11 +363,7 @@ export default {
   },
   methods: {
     on_activate_record_click: function () {
-      if (this.customer_index === null) this.open_settings_form();
-      else if (
-        this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE &&
-        this.customer_index !== null
-      ) {
+      if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
         this.$store.dispatch("playback/start_recording");
       }
     },
@@ -401,6 +397,8 @@ export default {
     },
     close_settings_modal: function () {
       this.$bvModal.hide("settings-form");
+      console.log("reached in FE to emit event");
+      this.$emit("save_customer_id");
     },
     close_calibration_modal(idx) {
       this.$bvModal.hide("calibration-warning");

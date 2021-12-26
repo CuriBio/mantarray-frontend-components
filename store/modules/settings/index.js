@@ -9,7 +9,7 @@ const default_state = {
     pass_key: null,
     user_account_id: null,
   },
-  auto_upload: true,
+  auto_upload: false,
   auto_delete: false,
   customer_account_ids: [],
   customer_index: null,

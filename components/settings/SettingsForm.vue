@@ -207,7 +207,7 @@ export default {
       disallow_entry_customer: false,
       on_empty_flag_customer: true,
       open_for_invalid_creds: false,
-      auto_upload: true,
+      auto_upload: false,
       auto_delete: false,
       disable_toggle: false,
     };
