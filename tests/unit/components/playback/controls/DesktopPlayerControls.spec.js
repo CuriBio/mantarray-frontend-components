@@ -99,6 +99,7 @@ describe("DesktopPlayerControls.vue", () => {
 
     await wrapper.find(SettingsForm).vm.$emit("close_modal");
     expect(close_spy).toHaveBeenCalledWith();
+    expect(wrapper.emitted("save_customer_id")).toHaveLength(1);
   });
 
   describe("Given a valid barcode has been committed to Vuex", () => {
@@ -210,7 +211,6 @@ describe("DesktopPlayerControls.vue", () => {
             localVue,
           });
           const target_button = wrapper.find(selector_str);
-          await store.commit("settings/set_customer_index", 0);
           // set initial state
           store.commit(
             "playback/set_playback_state",

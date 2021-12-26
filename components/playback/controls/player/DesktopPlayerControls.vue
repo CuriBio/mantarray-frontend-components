@@ -397,7 +397,6 @@ export default {
     },
     close_settings_modal: function () {
       this.$bvModal.hide("settings-form");
-      console.log("reached in FE to emit event");
       this.$emit("save_customer_id");
     },
     close_calibration_modal(idx) {
