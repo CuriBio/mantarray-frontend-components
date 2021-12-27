@@ -87,7 +87,7 @@ describe("DesktopPlayerControls.vue", () => {
     expect(the_classes).not.toContain("span__playback-desktop-player-controls--available");
   });
 
-  test("When a user selects the settings control button, Then the modal will appear and will emit a close event when closed", async () => {
+  test("When a user selects the settings control button, Then the modal will appear and will emit a save customer id event when closed with save", async () => {
     const close_spy = jest.spyOn(component_to_test.methods, "close_settings_modal");
     wrapper = mount(component_to_test, {
       store,
@@ -97,8 +97,24 @@ describe("DesktopPlayerControls.vue", () => {
     await wrapper.find(".div__playback-desktop-player-controls-settings-button").trigger("click");
     expect(wrapper.find("#settings-form")).toBeTruthy();
 
-    await wrapper.find(SettingsForm).vm.$emit("close_modal");
-    expect(close_spy).toHaveBeenCalledWith();
+    await wrapper.find(SettingsForm).vm.$emit("close_modal", true);
+    expect(close_spy).toHaveBeenCalledWith(true);
+    expect(wrapper.emitted("save_customer_id")).toHaveLength(1);
+  });
+
+  test("When a user selects the settings control button, Then the modal will appear and will not emit a save event when closed with cancel", async () => {
+    const close_spy = jest.spyOn(component_to_test.methods, "close_settings_modal");
+    wrapper = mount(component_to_test, {
+      store,
+      localVue,
+    });
+
+    await wrapper.find(".div__playback-desktop-player-controls-settings-button").trigger("click");
+    expect(wrapper.find("#settings-form")).toBeTruthy();
+
+    await wrapper.find(SettingsForm).vm.$emit("close_modal", false);
+    expect(close_spy).toHaveBeenCalledWith(false);
+    expect(wrapper.emitted("save_customer_id")).toBeFalsy();
   });
 
   describe("Given a valid barcode has been committed to Vuex", () => {
@@ -210,7 +226,6 @@ describe("DesktopPlayerControls.vue", () => {
             localVue,
           });
           const target_button = wrapper.find(selector_str);
-          await store.commit("settings/set_customer_index", 0);
           // set initial state
           store.commit(
             "playback/set_playback_state",

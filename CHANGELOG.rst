@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.5.6 (2021-12-27)
+------------------
+
+- Added ability to send credentials through an ipcMain/ipcRenderer route to set in Electron store
+- Auto-populate settings modal with existing customer credentials if present in Electron store
+- Auto-upload defaults to false
+
+
 0.5.5 (2021-12-20)
 ------------------
 

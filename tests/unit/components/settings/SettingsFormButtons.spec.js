@@ -237,7 +237,7 @@ describe("SettingsForm.vue", () => {
       await settings_buttons.cancel_btn.trigger("click");
 
       const close_event = wrapper.emitted("close_modal");
-      expect(close_event[0]).toStrictEqual([]);
+      expect(close_event[0]).toStrictEqual([false]);
     });
 
     test("When the component is mounted and Customer account is/is not selected, Then clicking the save button will be disabled", async () => {
@@ -262,16 +262,16 @@ describe("SettingsForm.vue", () => {
       });
       const default_state = {
         auto_delete: false,
-        auto_upload: true,
+        auto_upload: false,
       };
       const expected_state = {
         auto_delete: true,
-        auto_upload: false,
+        auto_upload: true,
       };
       expect(wrapper.vm.auto_delete).toBe(default_state.auto_delete);
       expect(wrapper.vm.auto_upload).toBe(default_state.auto_upload);
 
-      await wrapper.find(ToggleWidget).vm.$emit("handle_toggle_state", false, "auto_upload");
+      await wrapper.find(ToggleWidget).vm.$emit("handle_toggle_state", true, "auto_upload");
       await wrapper.find(ToggleWidget).vm.$emit("handle_toggle_state", true, "auto_delete");
 
       expect(toggle_spy).toHaveBeenCalledTimes(2);
