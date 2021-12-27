@@ -237,7 +237,7 @@ describe("SettingsForm.vue", () => {
       await settings_buttons.cancel_btn.trigger("click");
 
       const close_event = wrapper.emitted("close_modal");
-      expect(close_event[0]).toStrictEqual([]);
+      expect(close_event[0]).toStrictEqual([false]);
     });
 
     test("When the component is mounted and Customer account is/is not selected, Then clicking the save button will be disabled", async () => {

@@ -282,7 +282,7 @@ export default {
         const { status } = await this.$store.dispatch("settings/update_settings");
 
         // Currently, error-handling by resetting inputs to force customer to try again if axios request fails
-        if (status === 200) this.$emit("close_modal");
+        if (status === 200) this.$emit("close_modal", true);
         else if (status == 401) {
           this.open_for_invalid_creds = true;
           this.$bvModal.show("edit-customer");
@@ -297,7 +297,7 @@ export default {
       this.$store.commit("settings/reset_to_default");
     },
     cancel_changes() {
-      this.$emit("close_modal");
+      this.$emit("close_modal", false);
     },
     onCancelAddCustomerId() {
       this.$bvModal.hide("add-customer");
