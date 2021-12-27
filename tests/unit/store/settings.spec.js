@@ -262,14 +262,14 @@ describe("store/settings", () => {
     expect(store.state.settings.customer_account_ids).toHaveLength(1);
     store.commit("settings/set_customer_index", 0);
 
-    store.commit("settings/set_auto_upload", false);
+    store.commit("settings/set_auto_upload", true);
     store.commit("settings/set_auto_delete", true);
 
     await store.commit("settings/reset_to_default");
 
     expect(store.state.settings.customer_account_ids).toHaveLength(1);
     expect(store.state.settings.auto_delete).toBe(false);
-    expect(store.state.settings.auto_upload).toBe(true);
+    expect(store.state.settings.auto_upload).toBe(false);
     expect(store.state.settings.customer_index).toBeNull();
   });
 

@@ -7,7 +7,7 @@
     <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
         :title_label="'Alphanumeric ID'"
-        :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
+        :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
         :invalid_text="error_text_id"
         :initial_value="cust_id"
         :spellcheck="false"
@@ -19,8 +19,8 @@
 
     <div id="passkey" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
-        :title_label="'Enter Pass-Key'"
-        :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
+        :title_label="'Enter Password'"
+        :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
         :invalid_text="error_text_pass"
         :initial_value="pass_key"
         :spellcheck="false"

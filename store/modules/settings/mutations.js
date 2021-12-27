@@ -33,7 +33,7 @@ export default {
     state.auto_delete = new_value;
   },
   reset_to_default(state) {
-    state.auto_upload = true;
+    state.auto_upload = false;
     state.customer_index = null;
     state.auto_delete = false;
   },
