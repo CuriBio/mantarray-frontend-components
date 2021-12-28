@@ -23,6 +23,7 @@
         :invalid_text="error_text_pass"
         :spellcheck="false"
         :input_width="400"
+        :type="'password'"
         :dom_id_suffix="'passkey-id'"
         @update:value="on_update_pass($event)"
       ></InputWidget>

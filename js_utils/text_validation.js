@@ -171,7 +171,7 @@ export class TextValidation {
         break;
     }
     if (stats == true) {
-      if (len > 0 && len < 36) {
+      if (len > 0 && len < 36 && type == "ID") {
         invalid_text = this.input_parser(stats, text, type, len);
       }
     }

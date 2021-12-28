@@ -32,6 +32,7 @@
             :placeholder="placeholder"
             :disabled="disabled"
             :onpaste="disable_paste"
+            :type="type"
             class="w-100 h-100 edit-id"
             style="border-radius: 0; color: rgb(255, 255, 255); background-color: #3f3f3f; border: 0px"
             @input="on_b_form_input"
@@ -77,6 +78,7 @@ export default {
     dom_id_suffix: { type: String, default: "" }, // TODO (Eli 11/3/20): consider defaulting this to a random UUID if no value supplied
     display_text_message: { type: Boolean, default: true }, // display_text_message (boolean) if set to false would not render invalid_text
     disable_paste: { type: Boolean, default: false }, // disable_paste (boolean) if set to true would prevent cut and paste of text into input
+    type: { type: String, default: "text" },
   },
   data() {
     return {

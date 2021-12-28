@@ -142,7 +142,7 @@ describe("AddCustomer", () => {
         "Experiment anemia -1 ",
         "color: rgb(63, 63, 63);",
       ],
-      ["5FY8KwTsQaUJ2KzHJGetfE", "06ad547f", "Cat * lab", "color: rgb(63, 63, 63);"],
+      ["5FY8KwTsQaUJ2KzH*%#@JGetfE", "06ad547f", "Cat * lab", "color: rgb(63, 63, 63);"],
       ["fasd44", "06ad54", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
       ["", "", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
     ])(

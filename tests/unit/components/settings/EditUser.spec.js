@@ -220,7 +220,7 @@ describe("EditUser", () => {
     afterEach(() => wrapper.destroy());
     test.each([
       ["0VSckkBYH2An3dqHEyfRRE", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
-      ["5FY8KwTsQaUJ2KzHJGetfE", "Cat * lab", "color: rgb(63, 63, 63);"],
+      ["5FY@#$%*J2KzHJGetfE", "Cat * lab", "color: rgb(63, 63, 63);"],
       ["5FY8KwTsQaUJ2KzHJGetfE", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
     ])(
       "Given an UUID (%s), Nickname (%s) for 'Edit User' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
