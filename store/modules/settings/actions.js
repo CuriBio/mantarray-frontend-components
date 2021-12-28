@@ -28,7 +28,11 @@ export default {
       customer_pass_key,
       user_account_id,
     } = payload;
-    const whole_url = `${baseurl}/${endpoint}?customer_account_uuid=${customer_account_id}&customer_pass_key=${customer_pass_key}&user_account_id=${user_account_id}&auto_upload=${auto_upload}&auto_delete=${auto_delete}`;
+    const whole_url = `${baseurl}/${endpoint}?customer_account_uuid=${customer_account_id}&customer_pass_key=${encodeURIComponent(
+      customer_pass_key
+    )}&user_account_id=${encodeURIComponent(
+      user_account_id
+    )}&auto_upload=${auto_upload}&auto_delete=${auto_delete}`;
     return await call_axios_get_from_vuex(whole_url, context);
   },
 };
