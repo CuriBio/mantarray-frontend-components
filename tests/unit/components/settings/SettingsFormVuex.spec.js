@@ -82,7 +82,7 @@ describe("SettingsForm.vue", () => {
       const expected_state = {
         entrykey_customer: "",
         auto_delete: false,
-        auto_upload: true,
+        auto_upload: false,
       };
 
       await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -2");
@@ -200,7 +200,7 @@ describe("SettingsForm.vue", () => {
     });
     expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");
   });
-  test("Given that badly formed data with empty customer account user_account_id with missing user_ids in the Vuex, When the component is mounted, Then verify that Input of Customer ID and User ID are <empty>", async () => {
+  test("Given that empty customer account user_account_id in the Vuex, When the component is mounted, Then verify that Input will display customer id instead", async () => {
     store.commit("settings/set_customer_account_ids", array_of_customerid_null_missing_user_ids);
     store.commit("settings/set_customer_index", 0);
     wrapper = mount(ComponentToTest, {
@@ -208,6 +208,8 @@ describe("SettingsForm.vue", () => {
       localVue,
     });
 
-    expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual("");
+    expect(wrapper.find("#input-dropdown-widget-cust-").element.value).toStrictEqual(
+      "4vqyd62oARXqj9nRUNhtLQ"
+    );
   });
 });

@@ -80,14 +80,6 @@ describe("AddCustomer", () => {
       ["Cat * lab", "passkey", "passkey-id", "validate_customer_account_input"],
       ["Valid", "passkey", "passkey-id", "validate_customer_account_input"],
       ["Cat lab", "passkey", "passkey-id", "validate_customer_account_input"],
-      [
-        "Experiment anemia alpha cells -1",
-        "user_account_id",
-        "user-account-id",
-        "validate_customer_account_input",
-      ],
-      ["C", "user_account_id", "user-account-id", "validate_customer_account_input"],
-      ["", "user_account_id", "user-account-id", "validate_customer_account_input"],
     ])(
       "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
       async (entry, test_id, selector_id_suffix, text_validation_type) => {
@@ -103,7 +95,6 @@ describe("AddCustomer", () => {
     test.each([
       ["alphanumeric-id", "This field is required"],
       ["passkey-id", "This field is required"],
-      ["user-account-id", "This field is required"],
     ])(
       "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
       async (selector_id_suffix, expected_message) => {

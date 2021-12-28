@@ -30,7 +30,7 @@
     </div>
     <div id="user_account_id" style="top: 241px; left: 50px; position: absolute; z-index: 22">
       <InputWidget
-        :title_label="'Enter User Account ID'"
+        :title_label="'Enter User Account ID (Optional)'"
         :placeholder="'Curi Bio User'"
         :invalid_text="error_text_user_account_id"
         :input_width="400"
@@ -66,7 +66,6 @@ Vue.use(BootstrapVue);
 Vue.component("BFormInput", BFormInput);
 Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
-// Vue.use(uuid);
 const TextValidation_Customer = new TextValidation("customer_account_input");
 
 export default {
@@ -85,7 +84,7 @@ export default {
       user_account_id: "",
       error_text_id: "This field is required",
       error_text_pass: "This field is required",
-      error_text_user_account_id: "This field is required",
+      error_text_user_account_id: "",
       enablelist_add_customer: [true, false],
     };
   },
@@ -101,7 +100,6 @@ export default {
       this.enable_save_button();
     },
     on_update_user_account_id: function (new_value) {
-      this.error_text_user_account_id = TextValidation_Customer.validate(new_value, "user_account_id");
       this.user_account_id = new_value;
       this.enable_save_button();
     },
@@ -131,10 +129,8 @@ export default {
     enable_save_button() {
       if (this.error_text_id === "") {
         if (this.error_text_pass === "") {
-          if (this.error_text_user_account_id === "") {
-            this.enablelist_add_customer = [true, true];
-            return;
-          }
+          this.enablelist_add_customer = [true, true];
+          return;
         }
       }
       this.enablelist_add_customer = [true, false];

@@ -197,6 +197,7 @@ export default {
   data() {
     return {
       valid_customer_focus: false,
+      customer_user_account_id: [],
       customer_focus_id: 0,
       disable_edit_customer: true,
       label_customer: "Customer Account ID",
@@ -215,7 +216,9 @@ export default {
   computed: {
     ...mapState("settings", ["customer_account_ids", "customer_index"]),
     customers_options: function () {
-      return this.customer_account_ids.map((customer) => customer.user_account_id);
+      return this.customer_account_ids.map((customer) => {
+        return customer.user_account_id === "" ? customer.cust_id : customer.user_account_id;
+      });
     },
     addcustomerid: function () {
       if (this.customer_account_ids.length == 0) {
@@ -238,10 +241,11 @@ export default {
           // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag_customer = false;
           const customer_focus = this.customer_account_ids.find(
-            (customer) => customer.user_account_id === this.entrykey_customer
+            (customer) =>
+              customer.user_account_id === this.entrykey_customer ||
+              customer.cust_id === this.entrykey_customer
           );
           this.valid_customer_focus = false;
-          // this.valid_user_focus = false;
           if (customer_focus != null) {
             this.customer_focus_id = customer_focus.cust_idx;
             this.valid_customer_focus = true;
@@ -258,7 +262,10 @@ export default {
   created: function () {
     this.customer_user_account_id = this.customers_options;
     if (this.customer_index != null) {
-      this.entrykey_customer = this.customer_account_ids[this.customer_index].user_account_id;
+      this.entrykey_customer =
+        this.customer_account_ids[this.customer_index].user_account_id === ""
+          ? this.customer_account_ids[this.customer_index].cust_id
+          : this.customer_account_ids[this.customer_index].user_account_id;
       this.valid_customer_focus = true;
       this.customer_focus_id = this.customer_index;
       this.disable_edit_customer = false;
@@ -285,7 +292,7 @@ export default {
     reset_changes() {
       this.entrykey_customer = "";
       this.auto_delete = false;
-      this.auto_upload = true;
+      this.auto_upload = false;
 
       this.$store.commit("settings/reset_to_default");
     },
@@ -296,26 +303,29 @@ export default {
       this.$bvModal.hide("add-customer");
     },
     onSaveCustomerId(add_customer) {
+      const { user_account_id, cust_id } = add_customer;
       this.$bvModal.hide("add-customer");
+
       this.customer_account_ids.push(add_customer);
       this.customer_user_account_id.splice(0, this.customer_user_account_id.length);
       this.customer_user_account_id = this.customers_options;
-      this.entrykey_customer = add_customer.user_account_id;
+      this.entrykey_customer = user_account_id === "" ? cust_id : user_account_id;
     },
     onCancelCustomerId() {
       this.$bvModal.hide("edit-customer");
     },
     onUpdateCustomerId(edit_customer) {
+      const { user_account_id, cust_id } = edit_customer;
+
       this.$bvModal.hide("edit-customer");
       this.open_for_invalid_creds = false;
       this.customer_account_ids[edit_customer.cust_idx].cust_idx = edit_customer.cust_idx;
-      this.customer_account_ids[edit_customer.cust_idx].cust_id = edit_customer.cust_id;
+      this.customer_account_ids[edit_customer.cust_idx].cust_id = cust_id;
       this.customer_account_ids[edit_customer.cust_idx].pass_key = edit_customer.pass_key;
-      this.customer_account_ids[edit_customer.cust_idx].user_account_id = edit_customer.user_account_id;
-      this.customer_account_ids[edit_customer.cust_idx].user_ids = edit_customer.user_ids;
+      this.customer_account_ids[edit_customer.cust_idx].user_account_id = user_account_id;
       this.customer_user_account_id.splice(0, this.customer_user_account_id.length);
       this.customer_user_account_id = this.customers_options;
-      this.entrykey_customer = edit_customer.user_account_id;
+      this.entrykey_customer = user_account_id === "" ? cust_id : user_account_id;
     },
     onDeleteCustomerId(delete_customer) {
       this.$bvModal.hide("edit-customer");

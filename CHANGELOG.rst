@@ -8,6 +8,7 @@ Changelog for Mantarray Frontend Components
 - Add password field to settings form
 - Remove sensitive information from /update_settings route
 - Removed special character restrictions from password and user account id
+- Removed user account id as a required input field
 
 
 0.5.6 (2021-12-27)

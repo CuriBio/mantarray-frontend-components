@@ -32,7 +32,7 @@
     </div>
     <div id="user_account_id" style="top: 241px; left: 50px; position: absolute; z-index: 22">
       <InputWidget
-        :title_label="'Enter User Account ID'"
+        :title_label="'Enter User Account ID (Optional)'"
         :placeholder="'Curi Bio User'"
         :invalid_text="error_text_user_account_id"
         :initial_value="user_account_id"
@@ -99,7 +99,6 @@ export default {
     if (this.open_for_invalid_creds) {
       this.error_text_id = "Invalid ID, Passkey, or User Account ID";
       this.error_text_pass = "Invalid ID, Passkey, or User Account ID";
-      this.error_text_user_account_id = "Invalid ID, Passkey, or User Account ID";
       this.enablelist_edit_customer = [true, true, false];
     }
   },
@@ -108,7 +107,6 @@ export default {
       this.error_text_id = TextValidation_Customer.validate(new_value, "ID");
       if (this.open_for_invalid_creds && this.error_text_id.length === 0) {
         this.error_text_pass = "";
-        this.error_text_user_account_id = "";
       }
       this.cust_id = new_value;
       this.enable_save_button();
@@ -117,17 +115,11 @@ export default {
       this.error_text_pass = TextValidation_Customer.validate(new_value, "passkey");
       if (this.open_for_invalid_creds && this.error_text_pass.length === 0) {
         this.error_text_id = "";
-        this.error_text_user_account_id = "";
       }
       this.pass_key = new_value;
       this.enable_save_button();
     },
     on_update_user_account_id: function (new_value) {
-      this.error_text_user_account_id = TextValidation_Customer.validate(new_value, "user_account_id");
-      if (this.open_for_invalid_creds && this.error_text_user_account_id.length === 0) {
-        this.error_text_id = "";
-        this.error_text_pass = "";
-      }
       this.user_account_id = new_value;
       this.enable_save_button();
     },
@@ -170,10 +162,8 @@ export default {
     enable_save_button() {
       if (this.error_text_id === "") {
         if (this.error_text_pass === "") {
-          if (this.error_text_user_account_id === "") {
-            this.enablelist_edit_customer = [true, true, true];
-            return;
-          }
+          this.enablelist_edit_customer = [true, true, true];
+          return;
         }
       }
       this.enablelist_edit_customer = [true, true, false];
