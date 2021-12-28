@@ -231,9 +231,6 @@ describe("TextValidation.validate_customer_account_input", () => {
     ["Experiment anemia -1", ""],
     [null, "This field is required"],
     ["Experiment anemia -1234567890-1234567890", "Invalid as its more than 36 charcters"],
-    ["Cat * lab", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
-    ["Cat lab` ", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
-    ["Cat lab;", "Invalid character present. Valid characters are alphanumeric & # - . _  ( ) /"],
   ])(
     "Given the user_account_id %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
     (user_account_id_id, message) => {

@@ -21,7 +21,8 @@ import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 // =========================================================================
 
 export const micros_per_milli = 1000;
-
+let five_min_timer = null;
+let one_min_timer = null;
 /**
  * Function to progress the time_index
  * @return {void}
@@ -116,8 +117,10 @@ export default {
     context.commit("data/clear_heatmap_values", null, { root: true });
 
     // stop any timers from running
-    context.commit("set_one_min_warning", null);
-    context.commit("set_five_min_warning", null);
+    clearInterval(one_min_timer);
+    clearTimeout(five_min_timer);
+    context.commit("set_one_min_warning", false);
+    context.commit("set_five_min_warning", false);
 
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
@@ -183,9 +186,7 @@ export default {
   },
   async start_live_view(context) {
     // reset to default state and then set new timer
-    context.commit("set_one_min_warning", false);
-    context.commit("set_five_min_warning", false);
-    context.commit("set_five_min_timer");
+    context.dispatch("set_five_min_timer");
 
     const payload = {
       baseurl: "http://localhost:4567",
@@ -234,5 +235,15 @@ export default {
     const whole_url = `${baseurl}/${endpoint}`;
     result = await call_axios_get_from_vuex(whole_url, context);
     return result;
+  },
+  set_five_min_timer(context) {
+    five_min_timer = setTimeout(() => {
+      context.commit("set_five_min_warning", true);
+    }, 5 * 60e3);
+  },
+  set_one_min_timer(context) {
+    one_min_timer = setInterval(() => {
+      context.commit("set_one_min_warning", true);
+    }, 1 * 60e3);
   },
 };

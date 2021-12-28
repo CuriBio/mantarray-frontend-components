@@ -21,6 +21,8 @@ describe("store/heatmap", () => {
       const test = true;
       store.commit("heatmap/set_heatmap_autoscale", test);
       expect(store.getters["heatmap/heatmap_autoscale"]).toBe(true);
+      expect(store.getters["heatmap/display_option_idx"]).toBe(0);
+      expect(store.getters["heatmap/selected_wells"]).toStrictEqual([]);
     });
   });
 });

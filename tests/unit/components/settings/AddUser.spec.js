@@ -203,7 +203,7 @@ describe("AddUser tests", () => {
 
     test.each([
       ["0VSckkBYH2An3dqHEyfRRE", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
-      ["5FY8KwTsQaUJ2KzHJGetfE", "Cat * lab", "color: rgb(63, 63, 63);"],
+      ["5FY8@#$??JGetfE", "Cat * lab", "color: rgb(63, 63, 63);"],
       ["5FY8KwTsQaUJ2KzHJGetfE", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
     ])(
       "Given an UUID (%s),  Nickname (%s) for 'Add User' as input, When the input contains based on valid the critera, Then display of Label 'Save ID' is visible or greyed (%s)",
