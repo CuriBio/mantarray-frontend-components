@@ -407,13 +407,11 @@ export default {
       this.$bvModal.hide("five-min-warning");
 
       if (idx === 0) this.$store.dispatch("playback/stop_live_view");
-      else this.$store.commit("playback/set_one_min_timer");
+      else this.$store.dispatch("playback/set_one_min_timer");
     },
     close_one_min_modal(idx) {
       this.$bvModal.hide("one-min-warning");
-
       if (idx === 0) this.$store.dispatch("playback/stop_live_view");
-      else this.$store.commit("playback/set_one_min_timer");
     },
   },
 };

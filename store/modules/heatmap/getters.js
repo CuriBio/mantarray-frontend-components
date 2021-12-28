@@ -6,7 +6,6 @@ export default {
   selected_wells(state) {
     return state.selected_wells;
   },
-
   heatmap_autoscale(state) {
     return state.heatmap_autoscale;
   },

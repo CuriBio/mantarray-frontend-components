@@ -23,6 +23,7 @@
         :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
         :invalid_text="error_text_pass"
         :initial_value="pass_key"
+        :type="'password'"
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'passkey-id'"

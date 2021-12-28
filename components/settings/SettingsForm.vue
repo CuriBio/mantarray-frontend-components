@@ -215,16 +215,7 @@ export default {
   computed: {
     ...mapState("settings", ["customer_account_ids", "customer_index"]),
     customers_options: function () {
-      if (this.customer_account_ids.length == 0) {
-        return [];
-      } else {
-        const list = [];
-
-        for (let i = 0; i < this.customer_account_ids.length; i++) {
-          list.push(this.customer_account_ids[i].user_account_id);
-        }
-        return list;
-      }
+      return this.customer_account_ids.map((customer) => customer.user_account_id);
     },
     addcustomerid: function () {
       if (this.customer_account_ids.length == 0) {
@@ -260,10 +251,12 @@ export default {
       }
       this.modify_btn_states();
     },
+    customer_account_ids() {
+      this.customer_user_account_id = this.customers_options;
+    },
   },
   created: function () {
     this.customer_user_account_id = this.customers_options;
-    // this.user_account_id_list_user = this.users_options;
     if (this.customer_index != null) {
       this.entrykey_customer = this.customer_account_ids[this.customer_index].user_account_id;
       this.valid_customer_focus = true;
