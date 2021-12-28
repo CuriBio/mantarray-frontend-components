@@ -1,7 +1,7 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-0.5.7 (2021-12-28)
+0.5.8 (2021-12-28)
 ------------------
 
 - Live view timer fix that correctly resets and clears time intervals
@@ -9,6 +9,10 @@ Changelog for Mantarray Frontend Components
 - Remove sensitive information from /update_settings route
 - Removed special character restrictions from password and user account id
 
+0.5.7 (2021-12-28)
+------------------
+
+- Url encode parameters for update_settings
 
 0.5.6 (2021-12-27)
 ------------------
