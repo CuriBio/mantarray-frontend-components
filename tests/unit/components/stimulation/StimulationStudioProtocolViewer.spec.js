@@ -236,7 +236,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
         [0, 300],
         [200, 300],
       ],
-      delay_blocks: [[NaN, NaN]],
+      delay_blocks: [],
     });
     await wrapper.vm.get_dynamic_sample_length();
     expect(wrapper.vm.x_axis_sample_length).toBe(250);
