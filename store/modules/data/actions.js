@@ -38,20 +38,19 @@ export default {
       if (new_values[well_idx] !== undefined && state.plate_waveforms[well_idx] !== undefined) {
         // real Y values not actually used yet, just need to draw a straight vertical line at each new x value and connect the points at a Y value out of the max zoom window
         const new_well_values = new_values[well_idx];
-
         // aligns color blocking with start of tissue data when live view starts after stim
         new_well_values[0][0] =
           new_well_values[0][0] < state.plate_waveforms[well_idx].x_data_points[0]
             ? state.plate_waveforms[well_idx].x_data_points[0]
             : new_well_values[0][0];
 
-        new_well_values[0].map((x) => {
+        new_well_values[0].map((x, idx) => {
           const y_points = [101000, -201, 101000]; // arbitrary values far enough outside of max window that the connection between vertical lines will not be rendered
           y_points.map((y) => {
             state.stim_waveforms[well_idx].x_data_points.push(x);
             state.stim_waveforms[well_idx].y_data_points.push(y);
           });
-          state.sub_protocol_flags[well_idx].push([new_well_values[1], x]);
+          state.sub_protocol_flags[well_idx].push([new_well_values[1][idx], x]);
         });
         dispatch("assign_stim_fill_colors", well_idx);
       }
