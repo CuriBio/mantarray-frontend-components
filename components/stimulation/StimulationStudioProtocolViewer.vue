@@ -91,9 +91,11 @@ export default {
   },
   methods: {
     get_dynamic_sample_length() {
-      if (isNaN(this.delay_blocks[0][1])) this.last_x_value = this.datapoints[this.datapoints.length - 1][0];
-      else this.last_x_value = this.delay_blocks[0][1];
-
+      if (this.delay_blocks.length > 0) {
+        if (isNaN(this.delay_blocks[0][1]))
+          this.last_x_value = this.datapoints[this.datapoints.length - 1][0];
+        else this.last_x_value = this.delay_blocks[0][1];
+      }
       if (this.last_x_value === 0) this.x_axis_sample_length = 100;
       else this.x_axis_sample_length = this.last_x_value + 50;
 
