@@ -245,14 +245,9 @@ export default {
       this.stim_waveform_line_node.selectAll("*").remove();
       const fill_colors = this.stim_fill_colors[this.well_idx];
 
-      this.stim_fill_assignments[this.well_idx].map((sub_protocol, idx) => {
+      this.stim_fill_assignments[this.well_idx].map((sub_protocol) => {
         // 255 is sent when a user stops a stim
-        const color = sub_protocol[0].indexOf(255) !== -1 ? "none" : fill_colors[sub_protocol[0][0]];
-        // makes sliding transition smoother and brings color to end of graph
-        sub_protocol[1][sub_protocol[1].length - 1][0] =
-          idx === this.stim_fill_assignments[this.well_idx].length - 1
-            ? this.x_axis_min + this.x_axis_sample_length
-            : sub_protocol[1][sub_protocol[1].length - 1][0];
+        const color = sub_protocol[0] === 255 ? "none" : fill_colors[sub_protocol[0]]; // makes sliding transition smoother and brings color to end of grap
 
         this.stim_waveform_line_node
           .append("path")
