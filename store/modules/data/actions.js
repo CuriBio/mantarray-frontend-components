@@ -45,13 +45,13 @@ export default {
             ? state.plate_waveforms[well_idx].x_data_points[0]
             : new_well_values[0][0];
 
-        new_well_values[0].map((x) => {
+        new_well_values[0].map((x, idx) => {
           const y_points = [101000, -201, 101000]; // arbitrary values far enough outside of max window that the connection between vertical lines will not be rendered
           y_points.map((y) => {
             state.stim_waveforms[well_idx].x_data_points.push(x);
             state.stim_waveforms[well_idx].y_data_points.push(y);
           });
-          state.sub_protocol_flags[well_idx].push([new_well_values[1], x]);
+          state.sub_protocol_flags[well_idx].push([new_well_values[1][idx], x]);
         });
         dispatch("assign_stim_fill_colors", well_idx);
       }
