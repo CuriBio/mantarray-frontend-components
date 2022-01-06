@@ -1,5 +1,10 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.5.9 (2022-01-6)
+------------------
+
+- Fixed bug with the changing of subprotocol markers in live view when subprotocol length is less than 1000ms
+- Removed arguments from log when axios response includes an error to remove sensitive information in renderer logs
 
 0.5.8 (2021-12-28)
 ------------------
