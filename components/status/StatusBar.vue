@@ -98,6 +98,9 @@ export default {
         case STATUS.MESSAGE.INITIALIZING_INSTRUMENT:
           this.alert_txt += "Initializing...";
           break;
+        case STATUS.MESSAGE.CHECKING_FOR_UPDATES:
+          this.alert_txt += "Checking for Firmware Updates...";
+          break;
         case STATUS.MESSAGE.CALIBRATION_NEEDED:
           this.alert_txt += `Connected...Calibration Needed`;
           break;
@@ -115,6 +118,22 @@ export default {
           break;
         case STATUS.MESSAGE.RECORDING:
           this.alert_txt += `Recording to File`;
+          break;
+        case STATUS.MESSAGE.UPDATES_NEEDED:
+          this.alert_txt += `Firmware Updates Required`;
+          break;
+        case STATUS.MESSAGE.DOWNLOADING_UPDATES:
+          this.alert_txt += `Download Firmware Updates...`;
+          break;
+        case STATUS.MESSAGE.INSTALLING_UPDATES:
+          this.alert_txt += `Installing Firmware Updates...`;
+          break;
+        case STATUS.MESSAGE.UPDATES_COMPLETE:
+          this.alert_txt += `Firmware Updates Complete`;
+          break;
+        case STATUS.MESSAGE.UPDATE_ERROR:
+          this.alert_txt += `Error Occurred During Firmware Update`;
+          // TODO ? this.$bvModal.show("error-catch");
           break;
         case STATUS.MESSAGE.ERROR:
           this.shutdown_request();
