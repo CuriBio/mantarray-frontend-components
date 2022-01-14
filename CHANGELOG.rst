@@ -1,6 +1,13 @@
 Changelog for Mantarray Frontend Components
 ===========================================
-0.5.9 (2022-01-6)
+
+0.6.0 (unreleased)
+------------------
+
+- Added Firmware Autoupdating features
+
+
+0.5.9 (2022-01-06)
 ------------------
 
 - Fixed bug with the changing of subprotocol markers in live view when subprotocol length is less than 1000ms
