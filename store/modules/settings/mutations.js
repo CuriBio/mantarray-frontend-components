@@ -48,4 +48,10 @@ export default {
   set_beta_2_mode(state, bool) {
     state.beta_2_mode = bool;
   },
+  set_allow_sw_update_install(state, bool) {
+    state.allow_sw_update_install = bool;
+  },
+  set_user_cred_input_needed(state, bool) {
+    state.user_cred_input_needed = bool;
+  },
 };
