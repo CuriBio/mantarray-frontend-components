@@ -10,6 +10,20 @@
           @ok-clicked="remove_error_catch"
         ></ErrorCatchWidget>
       </b-modal>
+      <b-modal
+        id="fw-updates-complete-message"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+      >
+        <StatusWarningWidget
+          id="fw-updates-complete"
+          :modal_labels="fw_updates_complete_labels"
+          @handle_confirmation="close_fw_updates_complete_modal"
+        />
+      </b-modal>
       <b-modal id="closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
         <StatusWarningWidget id="closure" @handle_confirmation="handle_confirmation" />
       </b-modal>
@@ -49,6 +63,13 @@ export default {
   data() {
     return {
       alert_txt: "",
+      fw_updates_complete_labels: {
+        header: "TODO",
+        msg_one: "Firmware updates have been installed on the Mantarray instrument.",
+        msg_two:
+          "Please close the Mantarray software, power the Mantarray instrument off and on, then restart the Mantarray software.",
+        button_names: ["Okay"],
+      },
     };
   },
   computed: {
@@ -123,13 +144,14 @@ export default {
           this.alert_txt += `Firmware Updates Required`;
           break;
         case STATUS.MESSAGE.DOWNLOADING_UPDATES:
-          this.alert_txt += `Download Firmware Updates...`;
+          this.alert_txt += `Downloading Firmware Updates...`;
           break;
         case STATUS.MESSAGE.INSTALLING_UPDATES:
           this.alert_txt += `Installing Firmware Updates...`;
           break;
         case STATUS.MESSAGE.UPDATES_COMPLETE:
           this.alert_txt += `Firmware Updates Complete`;
+          this.$bvModal.show("fw-updates-complete-message");
           break;
         case STATUS.MESSAGE.UPDATE_ERROR:
           this.alert_txt += `Error Occurred During Firmware Update`;
@@ -155,6 +177,9 @@ export default {
     handle_confirmation: function (idx) {
       this.$bvModal.hide("closure-warning");
       this.$emit("send_confirmation", idx);
+    },
+    close_fw_updates_complete_modal: function () {
+      this.$bvModal.hide("fw-updates-complete-message");
     },
     shutdown_request: async function () {
       const shutdown_url = "http://localhost:4567/shutdown";

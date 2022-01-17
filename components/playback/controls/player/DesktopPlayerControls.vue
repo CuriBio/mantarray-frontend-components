@@ -150,6 +150,20 @@
         @handle_confirmation="close_calibration_modal"
       />
     </b-modal>
+    <b-modal
+      id="user-input-prompt-message"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+    >
+      <StatusWarningWidget
+        id="user-input-prompt"
+        :modal_labels="user_input_prompt_labels"
+        @handle_confirmation="close_user_input_prompt_modal"
+      />
+    </b-modal>
     <b-modal id="five-min-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
       <StatusWarningWidget
         id="five-min"
@@ -261,6 +275,12 @@ export default {
           button_names: ["No", "Yes"],
         },
       },
+      user_input_prompt_labels: {
+        header: "TODO",
+        msg_one: "A firmware update is required for this Mantarray instrument.",
+        msg_two: "Please input your credentials to begin downloading the firmware update.",
+        button_names: ["Okay"],
+      },
     };
   },
   computed: {
@@ -271,7 +291,7 @@ export default {
       "one_min_warning",
       "five_min_warning",
     ]),
-    ...mapState("settings", ["customer_index", "auto_upload", "beta_2_mode"]),
+    ...mapState("settings", ["customer_index", "auto_upload", "beta_2_mode", "user_cred_input_needed"]),
     calibrate_tooltip_text: function () {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Calibration needed. Click to calibrate.";
@@ -361,6 +381,9 @@ export default {
     five_min_warning() {
       if (this.five_min_warning) this.$bvModal.show("five-min-warning");
     },
+    user_cred_input_needed() {
+      this.$bvModal.show("user-input-prompt-message");
+    },
   },
   methods: {
     on_activate_record_click: function () {
@@ -408,6 +431,10 @@ export default {
     close_calibration_modal(idx) {
       this.$bvModal.hide("calibration-warning");
       if (idx === 1) this.$store.dispatch("playback/start_calibration");
+    },
+    close_user_input_prompt_modal() {
+      this.$bvModal.hide("user-input-prompt-message");
+      this.$bvModal.show("settings-form");
     },
     close_five_min_modal(idx) {
       this.$bvModal.hide("five-min-warning");
