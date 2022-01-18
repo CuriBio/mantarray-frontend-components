@@ -13,15 +13,15 @@
     :margin="margin"
     :plot_area_pixel_height="plot_area_pixel_height"
     :plot_area_pixel_width="plot_area_pixel_width"
-    :well_idx="well_idx"
+    :stim_fill_assignments="fill_assignments"
+    :stim_fill_colors="fill_colors"
   />
 </template>
 <script>
-import { get_array_slice_to_display } from "@/js_utils/waveform_data_formatter.js";
+import { convert_x_y_arrays_to_d3_array } from "@/js_utils/waveform_data_formatter.js";
 import { mapState } from "vuex";
 import Waveform from "@/components/playback/waveform/Waveform.vue";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
-
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 
 /**
@@ -77,12 +77,13 @@ export default {
   data: function () {
     return {
       d3_formatted_data_points: [],
+      fill_assignments: [],
     };
   },
   computed: {
     ...mapState("playback", ["x_time_index"]),
     ...mapState("twentyfourcontrols", { current_quadrant: "is_quadrant" }),
-    ...mapState("data", ["plate_waveforms"]),
+    ...mapState("data", ["plate_waveforms", "stim_fill_assignments", "stim_fill_colors"]),
     ...mapState("waveform", ["x_zoom_levels", "x_zoom_level_idx", "y_axis_scale", "y_axis_range"]),
     well_idx: function () {
       return this.current_quadrant[this.display_waveform_idx];
@@ -94,7 +95,6 @@ export default {
         return this.x_time_index;
       }
     },
-
     title: function () {
       return twenty_four_well_plate_definition.get_well_name_from_well_index(this.well_idx, true);
     },
@@ -112,51 +112,39 @@ export default {
     x_axis_sample_length: function () {
       return this.x_zoom_levels[this.x_zoom_level_idx].x_scale;
     },
+    fill_colors: function () {
+      const str_idx = this.well_idx.toString();
+      return this.stim_fill_colors[str_idx];
+    },
   },
   watch: {
     plate_waveforms() {
       this.calculate_data_to_plot();
     },
     current_quadrant() {
-      this.calculate_all_data_to_plot();
+      this.calculate_data_to_plot();
     },
     x_time_index() {
-      this.calculate_all_data_to_plot();
+      this.calculate_data_to_plot();
     },
     x_axis_sample_length() {
-      this.calculate_all_data_to_plot();
+      this.calculate_data_to_plot();
     },
   },
   mounted: function () {
-    this.calculate_all_data_to_plot();
+    this.calculate_data_to_plot();
   },
   methods: {
     calculate_data_to_plot: async function () {
       const waveforms = this.plate_waveforms;
       const data_for_this_waveform_in_vuex = waveforms[this.well_idx];
-      if (
-        data_for_this_waveform_in_vuex === undefined ||
-        data_for_this_waveform_in_vuex.x_data_points.length == 0
-      ) {
-        this.d3_formatted_data_points = [];
-        return;
-      }
-      let local_data_points = [];
-      let local_x_min_value = this.x_time_index;
-      if (this.display_data_prior_to_current_timepoint) {
-        local_x_min_value -= this.x_axis_sample_length;
-      }
-      local_data_points = data_for_this_waveform_in_vuex;
-      local_data_points = get_array_slice_to_display(
-        local_data_points.x_data_points,
-        local_data_points.y_data_points,
-        local_x_min_value,
-        this.x_axis_sample_length
-      );
-      this.d3_formatted_data_points = local_data_points;
-    },
-    calculate_all_data_to_plot: function () {
-      this.calculate_data_to_plot();
+      const { x_data_points, y_data_points } = data_for_this_waveform_in_vuex;
+      this.fill_assignments = this.stim_fill_assignments[this.well_idx];
+
+      this.d3_formatted_data_points =
+        data_for_this_waveform_in_vuex === undefined || x_data_points.length == 0
+          ? []
+          : convert_x_y_arrays_to_d3_array(x_data_points, y_data_points);
     },
   },
 };

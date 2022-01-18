@@ -18,7 +18,7 @@ export default function create_web_socket_plugin(socket) {
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE ||
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.RECORDING
       ) {
-        store.commit("data/append_plate_waveforms", JSON.parse(data_json));
+        store.dispatch("data/append_plate_waveforms", JSON.parse(data_json));
       }
       if (cb !== null) {
         // this callback is only used for testing. The backend will not send a callback
