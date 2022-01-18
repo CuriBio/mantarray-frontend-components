@@ -64,8 +64,8 @@ export default {
     return {
       alert_txt: "",
       fw_updates_complete_labels: {
-        header: "TODO",
-        msg_one: "Firmware updates have been installed on the Mantarray instrument.",
+        header: "Important!",
+        msg_one: "Firmware updates have been successfully installed.",
         msg_two:
           "Please close the Mantarray software, power the Mantarray instrument off and on, then restart the Mantarray software.",
         button_names: ["Okay"],
@@ -90,7 +90,7 @@ export default {
       this.set_text_from_state(newValue);
     },
     confirmation_request: function () {
-      const check_status =
+      const sensitive_ops_in_progress =
         this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE ||
         this.status_uuid === STATUS.MESSAGE.RECORDING ||
         this.status_uuid === STATUS.MESSAGE.CALIBRATING ||
@@ -98,7 +98,7 @@ export default {
         this.total_uploaded_files.length < this.total_file_count;
 
       if (this.confirmation_request) {
-        if (check_status) this.$bvModal.show("closure-warning");
+        if (sensitive_ops_in_progress) this.$bvModal.show("closure-warning");
         else this.handle_confirmation(1);
       }
     },

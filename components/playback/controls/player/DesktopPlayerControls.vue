@@ -276,7 +276,7 @@ export default {
         },
       },
       user_input_prompt_labels: {
-        header: "TODO",
+        header: "Important!",
         msg_one: "A firmware update is required for this Mantarray instrument.",
         msg_two: "Please input your credentials to begin downloading the firmware update.",
         button_names: ["Okay"],

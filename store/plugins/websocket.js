@@ -61,6 +61,11 @@ export default function create_web_socket_plugin(socket) {
       if (message.allow_software_update !== undefined) {
         store.commit("settings/set_allow_sw_update_install", message.allow_software_update);
       }
+      if (message.software_update_available !== undefined) {
+        const status = message.software_update_available ? "found" : "not found";
+        console.log("Software update " + status); // allow-log
+        store.commit("settings/set_software_update_available", message.software_update_available);
+      }
 
       // this callback is only used for testing. The backend will not send a callback
       if (cb !== null) cb("commit done");

@@ -48,6 +48,9 @@ export default {
   set_beta_2_mode(state, bool) {
     state.beta_2_mode = bool;
   },
+  set_software_update_available(state, bool) {
+    state.software_update_available = bool;
+  },
   set_allow_sw_update_install(state, bool) {
     state.allow_sw_update_install = bool;
   },
