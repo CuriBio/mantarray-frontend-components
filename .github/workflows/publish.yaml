@@ -334,7 +334,7 @@ jobs:
 
       - name: Create tiny .js file to require package
         run: |
-          echo 'require("${{steps.package-name.outputs.prop}}")' > tmp.js
+          echo 'import * as exports from "${{steps.package-name.outputs.prop}}";' > tmp.js
 
       - name: Confirm to import errors when opening package
         run: node tmp.js
