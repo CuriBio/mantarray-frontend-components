@@ -237,10 +237,7 @@ export default {
         .y0(this.plot_area_pixel_height)
         .y1(this.plot_area_pixel_height - 7);
 
-      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
-      this.stim_waveform_line_node.selectAll("*").remove();
       this.waveform_line_node.selectAll("*").remove();
-
       this.waveform_line_node
         .append("path")
         .datum(tissue_data_to_plot)
@@ -257,10 +254,9 @@ export default {
               return y_axis_scale(d[1]);
             })
         );
-
+      this.stim_waveform_line_node.selectAll("*").remove();
       for (const sub_protocol of stim_data) {
         if (stim_data.length > 0) {
-          console.log("SUB PROTO: ", JSON.stringify(sub_protocol));
           // 255 is sent when a user stops a stim
           const color = sub_protocol[0] === 255 ? "none" : this.stim_fill_colors[sub_protocol[0]]; // makes sliding transition smoother and brings color to end of grap
           this.stim_waveform_line_node

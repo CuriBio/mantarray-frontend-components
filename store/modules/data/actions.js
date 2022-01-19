@@ -30,7 +30,6 @@ export default {
       if (new_values[well_idx] !== undefined && state.plate_waveforms[well_idx] !== undefined) {
         // real Y values not actually used yet, just need to draw a straight vertical line at each new x value and connect the points at a Y value out of the max zoom window
         const new_well_values = new_values[well_idx];
-
         let idx = 0;
         while (idx < new_well_values[0].length) {
           const x = new_well_values[0][idx];
@@ -40,17 +39,18 @@ export default {
             state.stim_waveforms[well_idx].y_data_points.push(y);
           });
           state.sub_protocol_flags[well_idx].push([new_well_values[1][idx], x]);
+          dispatch("assign_stim_fill_colors", well_idx);
           idx++;
         }
-        dispatch("assign_stim_fill_colors", well_idx);
       }
     }
     // dispatch("remove_old_stim_data");
   },
-  assign_stim_fill_colors({ state }, well_idx) {
+  assign_stim_fill_colors({ state, dispatch }, well_idx) {
     const time_x_values = state.stim_waveforms[well_idx].x_data_points;
     const time_y_values = state.stim_waveforms[well_idx].y_data_points;
     const flags_copy = state.sub_protocol_flags[well_idx];
+
     if (flags_copy.length > 0) {
       for (const sub of flags_copy) {
         const start_idx = time_x_values.indexOf(sub[1]) + 1; // want index with y-value === -201
@@ -59,30 +59,18 @@ export default {
         const sliced_d3_subprotocol = convert_x_y_arrays_to_d3_array(sliced_x_values, sliced_y_values);
         state.stim_fill_assignments[well_idx].push([sub[0], sliced_d3_subprotocol]);
       }
-      state.sub_protocol_flags[well_idx] = [flags_copy[flags_copy.length - 1]];
+      state.sub_protocol_flags[well_idx] = [flags_copy.pop()];
+      state.stim_waveforms[well_idx].x_data_points.splice(0, time_x_values.length - 4);
+      state.stim_waveforms[well_idx].y_data_points.splice(0, time_y_values.length - 4);
+      dispatch("remove_old_stim_data", well_idx);
     }
   },
-  remove_old_stim_data({ rootState }) {
+  remove_old_stim_data({ rootState }, well_idx) {
     const { waveform, playback, data } = rootState;
     const max_x_min_value = playback.x_time_index - waveform.x_zoom_levels[0].x_scale;
-    const entries = data.stim_waveforms.length;
-    let idx = 0;
-    while (idx < entries) {
-      const fill_idx_to_splice = find_closest_array_idx(data.stim_fill_assignments[idx], max_x_min_value);
-      data.stim_fill_assignments[idx].splice(0, fill_idx_to_splice - 2);
+    const fill_copy = data.stim_fill_assignments[well_idx];
+    const fill_idx_to_splice = fill_copy.findIndex((sub) => sub[1][sub[1].length - 1][0] >= max_x_min_value);
 
-      const flags_idx_to_splice = find_closest_array_idx(data.sub_protocol_flags[idx], max_x_min_value);
-      data.sub_protocol_flags[idx].splice(0, flags_idx_to_splice - 2);
-
-      const data_idx_to_splice = find_closest_array_idx(
-        data.stim_waveforms[idx].x_data_points,
-        max_x_min_value
-      );
-
-      data.stim_waveforms[idx].x_data_points.splice(0, data_idx_to_splice - 2);
-      data.stim_waveforms[idx].y_data_points.splice(0, data_idx_to_splice - 2);
-
-      idx++;
-    }
+    data.stim_fill_assignments[well_idx].splice(0, fill_idx_to_splice);
   },
 };
