@@ -24,6 +24,13 @@
           @handle_confirmation="close_fw_updates_complete_modal"
         />
       </b-modal>
+      <b-modal id="sw-update-message" size="sm" hide-footer hide-header hide-header-close :static="true">
+        <StatusWarningWidget
+          id="sw-update"
+          :modal_labels="sw_update_labels"
+          @handle_confirmation="close_sw_update_modal"
+        />
+      </b-modal>
       <b-modal id="closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
         <StatusWarningWidget id="closure" @handle_confirmation="handle_confirmation" />
       </b-modal>
@@ -70,6 +77,12 @@ export default {
           "Please close the Mantarray software, power the Mantarray instrument off and on, then restart the Mantarray software.",
         button_names: ["Okay"],
       },
+      sw_update_labels: {
+        header: "Important!",
+        msg_one: "A software update will be installed after exiting.",
+        msg_two: "Please wait a few minutes before starting the software again.",
+        button_names: ["Okay"],
+      },
     };
   },
   computed: {
@@ -83,6 +96,8 @@ export default {
       "total_uploaded_files",
       "total_file_count",
       "beta_2_mode",
+      "software_update_available",
+      "allow_sw_update_install",
     ]),
   },
   watch: {
@@ -176,10 +191,18 @@ export default {
     },
     handle_confirmation: function (idx) {
       this.$bvModal.hide("closure-warning");
-      this.$emit("send_confirmation", idx);
+      // if a SW update is available, show message before confirming closure
+      if (idx === 1 && this.software_update_available && this.allow_sw_update_install) {
+        this.$bvModal.show("sw-update-message");
+      } else {
+        this.$emit("send_confirmation", idx);
+      }
     },
     close_fw_updates_complete_modal: function () {
       this.$bvModal.hide("fw-updates-complete-message");
+    },
+    close_sw_update_modal: function () {
+      this.$emit("send_confirmation", 1);
     },
     shutdown_request: async function () {
       const shutdown_url = "http://localhost:4567/shutdown";
