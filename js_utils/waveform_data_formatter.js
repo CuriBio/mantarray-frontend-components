@@ -30,7 +30,7 @@ function find_closest_array_idx(arr, sample_idx_to_match) {
   // Modeled from https://stackoverflow.com/questions/22697936/binary-search-in-javascript
   // finds the array idx that has a sample idx >= the one searched for
   const max_idx = arr.findIndex((x_value) => x_value >= sample_idx_to_match);
-  return max_idx;
+  return max_idx >= 0 ? max_idx : arr.length - 1;
 }
 
 /**
@@ -56,12 +56,28 @@ function convert_x_y_arrays_to_d3_array(x_array, y_array) {
  * @param   {int}  well_idx index
  * @return  {array} converted d3 array
  */
-function get_array_slice_to_display(sample_indices, measured_values, starting_sample_idx) {
-  const max_idx = sample_indices.findIndex((x_value) => x_value >= starting_sample_idx);
+function get_array_slice_to_display(
+  sample_indices,
+  measured_values,
+  starting_sample_idx,
+  sample_duration_to_display
+) {
+  // TODO (Eli 2/4/20): update the binary search to allow a manual setting of the start idx of the search, and update this to set that start when searching for the end idx (which should always be after the located start idx)
+  let starting_arr_idx = find_closest_array_idx(sample_indices, starting_sample_idx);
+  if (sample_indices[starting_arr_idx] > starting_sample_idx) {
+    if (starting_arr_idx > 0) {
+      // It is non-sensical to return a value below zero for the beginning of the slice
+      starting_arr_idx -= 1;
+    }
+  }
+  const ending_arr_idx = find_closest_array_idx(
+    sample_indices,
+    starting_sample_idx + sample_duration_to_display
+  );
 
-  const sliced_x_data_points = sample_indices.slice(max_idx);
-  const sliced_y_data_points = measured_values.slice(max_idx);
-  return { x_data_points: sliced_x_data_points, y_data_points: sliced_y_data_points };
+  const sliced_x_data_points = sample_indices.slice(starting_arr_idx, ending_arr_idx + 1);
+  const sliced_y_data_points = measured_values.slice(starting_arr_idx, ending_arr_idx + 1);
+  return convert_x_y_arrays_to_d3_array(sliced_x_data_points, sliced_y_data_points);
 }
 
 /**

@@ -205,6 +205,7 @@ export default {
       this.display_x_axis();
       this.display_y_axis();
       this.plot_data();
+      this.plot_stim_data();
     },
     create_x_axis_scale: function () {
       this.x_axis_scale = scaleLinear()
@@ -225,10 +226,8 @@ export default {
     display_y_axis: function () {
       this.y_axis_node.call(axisLeft(this.y_axis_scale));
     },
-    plot_data: async function () {
+    plot_stim_data() {
       const x_axis_scale = this.x_axis_scale;
-      const y_axis_scale = this.y_axis_scale;
-      const tissue_data_to_plot = this.tissue_data_points;
       const stim_data = this.stim_fill_assignments;
       const area = d3_area()
         .x(function (d) {
@@ -236,6 +235,26 @@ export default {
         })
         .y0(this.plot_area_pixel_height)
         .y1(this.plot_area_pixel_height - 7);
+
+      this.stim_waveform_line_node.selectAll("*").remove();
+      for (const sub_protocol of stim_data) {
+        if (stim_data.length > 0) {
+          // 255 is sent when a user stops a stim
+          const color = sub_protocol[0] === 255 ? "none" : this.stim_fill_colors[sub_protocol[0]]; // makes sliding transition smoother and brings color to end of grap
+          this.stim_waveform_line_node
+            .append("path")
+            .datum(sub_protocol[1])
+            .attr("fill", color)
+            .attr("stroke", "black")
+            .attr("stroke-width", 2.5)
+            .attr("d", area);
+        }
+      }
+    },
+    plot_data: async function () {
+      const x_axis_scale = this.x_axis_scale;
+      const y_axis_scale = this.y_axis_scale;
+      const tissue_data_to_plot = this.tissue_data_points;
 
       this.waveform_line_node.selectAll("*").remove();
       this.waveform_line_node
@@ -254,20 +273,6 @@ export default {
               return y_axis_scale(d[1]);
             })
         );
-      this.stim_waveform_line_node.selectAll("*").remove();
-      for (const sub_protocol of stim_data) {
-        if (stim_data.length > 0) {
-          // 255 is sent when a user stops a stim
-          const color = sub_protocol[0] === 255 ? "none" : this.stim_fill_colors[sub_protocol[0]]; // makes sliding transition smoother and brings color to end of grap
-          this.stim_waveform_line_node
-            .append("path")
-            .datum(sub_protocol[1])
-            .attr("fill", color)
-            .attr("stroke", "black")
-            .attr("stroke-width", 2.5)
-            .attr("d", area);
-        }
-      }
     },
   },
 };

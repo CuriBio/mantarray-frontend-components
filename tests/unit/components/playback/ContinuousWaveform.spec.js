@@ -135,9 +135,9 @@ describe("ContinuousWaveform.vue", () => {
       ]);
     });
     test("Given some data existing in the store and the x_time_index set forward so that data should be displayed and the ContinuousWaveform is mounted, When append_plate_waveforms is committed, Then the data_points prop passed to the child Waveform is updated to contain both the old and the new appended data", async () => {
-      store.commit("playback/set_x_time_index", 100001);
+      store.commit("playback/set_x_time_index", 60000);
 
-      const temp_datapoints = new Array(6);
+      const temp_datapoints = new Array(6).fill({ x_data_points: [], y_data_points: [] });
 
       temp_datapoints[0] = {
         x_data_points: [0, 30, 500, 1000, 1250, 1500],
@@ -160,7 +160,8 @@ describe("ContinuousWaveform.vue", () => {
         [1500, 84],
       ]);
 
-      store.commit("data/append_plate_waveforms", cr);
+      store.dispatch("data/append_plate_waveforms", cr);
+
       await wrapper.vm.$nextTick(); // wait for update
       // confirm the values updated in Vuex
 
@@ -179,7 +180,7 @@ describe("ContinuousWaveform.vue", () => {
         [52000, 138.4825657],
       ]);
     });
-    test("Given there is data past the zero timepoint, When first mounted, Then only the zero timepoint is set for the data_points prop passed to the child Waveform", async () => {
+    test("Given there is data past the zero timepoint, When first mounted, Then all timepoints are set for the data_points prop passed to the child Waveform", async () => {
       const temp_datapoints = new Array(6);
 
       temp_datapoints[0] = {
@@ -602,7 +603,7 @@ describe("ContinuousWaveform.vue", () => {
       const propsData = {
         display_waveform_idx: 0 /* pointing to A01 */,
       };
-      let temp_datapoints = new Array(6);
+      let temp_datapoints = new Array(6).fill({ x_data_points: [], y_data_points: [] });
 
       temp_datapoints[0] = {
         x_data_points: [0, 30, 40],
@@ -620,7 +621,7 @@ describe("ContinuousWaveform.vue", () => {
         [40, 95],
       ]);
 
-      temp_datapoints = new Array(6);
+      temp_datapoints = new Array(6).fill({ x_data_points: [], y_data_points: [] });
 
       temp_datapoints[0] = {
         x_data_points: [],
@@ -636,7 +637,7 @@ describe("ContinuousWaveform.vue", () => {
         display_waveform_idx: 1,
       };
 
-      const temp_datapoints = new Array(6);
+      const temp_datapoints = new Array(6).fill({ x_data_points: [], y_data_points: [] });
 
       temp_datapoints[1] = {
         x_data_points: [0, 25, 90],
@@ -660,7 +661,7 @@ describe("ContinuousWaveform.vue", () => {
         display_waveform_idx: 0,
       };
 
-      const temp_datapoints = new Array(6);
+      const temp_datapoints = new Array(6).fill({ x_data_points: [], y_data_points: [] });
 
       temp_datapoints[1] = {
         x_data_points: [0, 22, 95],
@@ -691,7 +692,7 @@ describe("ContinuousWaveform.vue", () => {
         display_waveform_idx: 0,
       };
 
-      const temp_datapoints = new Array(6);
+      const temp_datapoints = new Array(6).fill({ x_data_points: [], y_data_points: [] });
 
       temp_datapoints[0] = {
         x_data_points: [0, 22, 95],
@@ -718,7 +719,7 @@ describe("ContinuousWaveform.vue", () => {
         display_waveform_idx: 0,
       };
 
-      const temp_datapoints = new Array(6);
+      const temp_datapoints = new Array(6).fill({ x_data_points: [], y_data_points: [] });
 
       temp_datapoints[0] = {
         x_data_points: [0, 22, 95],

@@ -398,11 +398,10 @@ describe("Waveform.vue", () => {
       const reduced_array_y_2 = converted_array_y_2.slice(0, 17);
       const x_y_data = convert_x_y_arrays_to_d3_array(reduced_array_x_2, reduced_array_y_2);
 
-      wrapper.setProps({
+      await wrapper.setProps({
         tissue_data_points: x_y_data,
+        x_axis_min: 500,
       });
-
-      await wrapper.vm.$nextTick(); // wait for update
 
       pixel_coords = get_waveform_line_pixel_coordinates_from_svg(wrapper);
       expect(pixel_coords).toHaveLength(17);

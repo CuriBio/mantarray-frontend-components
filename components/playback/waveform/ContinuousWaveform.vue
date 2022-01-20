@@ -18,7 +18,7 @@
   />
 </template>
 <script>
-import { convert_x_y_arrays_to_d3_array } from "@/js_utils/waveform_data_formatter.js";
+import { get_array_slice_to_display } from "@/js_utils/waveform_data_formatter.js";
 import { mapState } from "vuex";
 import Waveform from "@/components/playback/waveform/Waveform.vue";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
@@ -136,15 +136,22 @@ export default {
   },
   methods: {
     calculate_data_to_plot: async function () {
-      const waveforms = this.plate_waveforms;
-      const data_for_this_waveform_in_vuex = waveforms[this.well_idx];
+      const stim_data = this.stim_fill_assignments[this.well_idx];
+      const data_for_this_waveform_in_vuex = this.plate_waveforms[this.well_idx];
       const { x_data_points, y_data_points } = data_for_this_waveform_in_vuex;
-      this.fill_assignments = this.stim_fill_assignments[this.well_idx];
 
+      // render the least amount of datapoints
       this.d3_formatted_data_points =
         data_for_this_waveform_in_vuex === undefined || x_data_points.length == 0
           ? []
-          : convert_x_y_arrays_to_d3_array(x_data_points, y_data_points);
+          : get_array_slice_to_display(
+              x_data_points,
+              y_data_points,
+              this.x_axis_min,
+              this.x_axis_sample_length
+            );
+      const stim_idx_to_display = stim_data.findIndex((time) => time[1][1][0] >= this.x_axis_min);
+      this.fill_assignments = stim_data.slice(stim_idx_to_display);
     },
   },
 };

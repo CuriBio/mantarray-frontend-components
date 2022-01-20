@@ -44,29 +44,19 @@ export default {
       }
     }
   },
-  set_stim_waveforms_at_idx(state, payload) {
-    const { waveforms_copy, idx } = payload;
-    state.stim_waveforms[idx] = waveforms_copy;
+  set_stim_waveforms(state, new_value) {
+    state.stim_waveforms = new_value;
   },
   clear_stim_waveforms(state) {
     for (let i = 0; i < state.stim_waveforms.length; i++) {
       state.stim_waveforms[i] = { x_data_points: [], y_data_points: [] };
       state.stim_fill_assignments[i] = [];
-      state.sub_protocol_flags[i] = [];
+      state.last_protocol_flag[i] = [];
     }
-  },
-  set_stim_fill_assignments_at_idx(state, payload) {
-    const { assignment_copy, idx } = payload;
-    state.stim_fill_assignments[idx] = assignment_copy;
-  },
-  set_sub_protocol_flags_at_idx(state, payload) {
-    const { flags_copy, idx } = payload;
-    state.sub_protocol_flags[idx] = flags_copy;
   },
   set_fill_colors(state, payload) {
     const { stim_fill_colors, well } = payload;
-    // making a copy to get reassigned was the only way to make the change reactive in the waveform component
-    const copy = state.stim_fill_colors;
+    const copy = state.stim_fill_colors; // required to be reactive
     copy[well] = stim_fill_colors;
     state.stim_fill_colors = { ...copy };
   },
