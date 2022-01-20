@@ -1,8 +1,5 @@
 import Waveform from "@/components/playback/waveform/Waveform.vue";
 import { Waveform as dist_Waveform } from "@/dist/mantarray.common";
-import parse_svg_d_path from "d-path-parser";
-// const parse_svg_d_path = require("d-path-parser");
-
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 

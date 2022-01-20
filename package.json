@@ -61,7 +61,6 @@
     "@vue/test-utils": "^1.1.1",
     "axios-mock-adapter": "^1.18.1",
     "core-js": "~3.10.0",
-    "d-path-parser": "^1.0.0",
     "eslint": "~7.24.0",
     "eslint-config-google": "~0.14.0",
     "eslint-config-prettier": "~8.1.0",
