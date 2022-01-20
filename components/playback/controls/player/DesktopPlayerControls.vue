@@ -367,6 +367,7 @@ export default {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
         this.$store.dispatch("playback/start_recording");
       }
+
       this.recording_timer = setTimeout(() => {
         if (this.playback_state === this.playback_state_enums.RECORDING) this.on_stop_record_click();
       }, 30e3);

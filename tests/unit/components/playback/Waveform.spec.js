@@ -1,5 +1,7 @@
 import Waveform from "@/components/playback/waveform/Waveform.vue";
 import { Waveform as dist_Waveform } from "@/dist/mantarray.common";
+import parse_svg_d_path from "d-path-parser";
+// const parse_svg_d_path = require("d-path-parser");
 
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
@@ -293,11 +295,43 @@ describe("Waveform.vue", () => {
     const reduced_array_x = converted_array_x.slice(0, 19);
     const reduced_array_y = converted_array_y.slice(0, 19);
     const x_y_data = convert_x_y_arrays_to_d3_array(reduced_array_x, reduced_array_y);
-
+    const stim_data = [
+      [
+        0,
+        [
+          [1000, 101000],
+          [4000, 101000],
+        ],
+      ],
+      [
+        1,
+        [
+          [4000, 101000],
+          [7000, 101000],
+        ],
+      ],
+      [
+        0,
+        [
+          [7000, 101000],
+          [10000, 101000],
+        ],
+      ],
+      [
+        255,
+        [
+          [10000, 101000],
+          [13000, 101000],
+        ],
+      ],
+    ];
+    const fill_colors = ["#000000", "#b7b7b7"];
     beforeEach(async () => {
       propsData = {
         title: "C12",
         tissue_data_points: x_y_data,
+        stim_fill_assignments: stim_data,
+        stim_fill_colors: fill_colors,
         x_axis_min: 0,
         x_axis_sample_length: 1 * 1e6,
         y_min: 0,
@@ -413,6 +447,26 @@ describe("Waveform.vue", () => {
 
       expect(calculated_data_from_pixels[0][1]).toBeCloseTo(359.0517964, 4);
       expect(calculated_data_from_pixels[14][1]).toBeCloseTo(403.9590062, 4);
+    });
+    test("When stim data gets plotted, Then it will be filled with the color matching the corresponding subprotocol", async () => {
+      const stim_waveform_line_node = wrapper.find("#stim_waveform_line_node");
+      const stim_waveform_line_path = stim_waveform_line_node.findAll("path");
+
+      expect(stim_waveform_line_path).toHaveLength(4);
+      expect(stim_waveform_line_path.at(0).attributes().fill).toBe(fill_colors[0]);
+      expect(stim_waveform_line_path.at(1).attributes().fill).toBe(fill_colors[1]);
+      expect(stim_waveform_line_path.at(2).attributes().fill).toBe(fill_colors[0]);
+      expect(stim_waveform_line_path.at(3).attributes().fill).toBe("none");
+    });
+    test("When there's no stim data, Then the stim waveform path will be removed", async () => {
+      await wrapper.setProps({
+        stim_fill_assignments: [],
+        x_axis_min: 15000,
+      });
+
+      const stim_waveform_line_node = wrapper.find("#stim_waveform_line_node");
+      const stim_waveform_line_path = stim_waveform_line_node.findAll("path");
+      expect(stim_waveform_line_path).toHaveLength(0);
     });
   });
 });
