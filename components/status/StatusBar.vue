@@ -24,6 +24,20 @@
           @handle_confirmation="close_fw_updates_complete_modal"
         />
       </b-modal>
+      <b-modal
+        id="fw-updates-in-progress-message"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+      >
+        <StatusWarningWidget
+          id="fw-updates-in-progress"
+          :modal_labels="fw_updates_in_progress_labels"
+          @handle_confirmation="close_fw_updates_in_progress_modal"
+        />
+      </b-modal>
       <b-modal id="sw-update-message" size="sm" hide-footer hide-header hide-header-close :static="true">
         <StatusWarningWidget
           id="sw-update"
@@ -31,8 +45,15 @@
           @handle_confirmation="close_sw_update_modal"
         />
       </b-modal>
-      <b-modal id="closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
-        <StatusWarningWidget id="closure" @handle_confirmation="handle_confirmation" />
+      <b-modal id="fw-closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+        <StatusWarningWidget
+          id="fw-closure"
+          :modal_labels="fw_closure_warning_labels"
+          @handle_confirmation="handle_confirmation"
+        />
+      </b-modal>
+      <b-modal id="ops-closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+        <StatusWarningWidget id="ops-closure" @handle_confirmation="handle_confirmation" />
       </b-modal>
     </span>
   </div>
@@ -70,6 +91,19 @@ export default {
   data() {
     return {
       alert_txt: "",
+      fw_updates_in_progress_labels: {
+        header: "Important!",
+        msg_one: "A firmware update for the Mantarray instrument is in progress.",
+        msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
+        button_names: ["Okay"],
+      },
+      fw_closure_warning_labels: {
+        header: "Warning!",
+        msg_one:
+          "A firmware update for the Mantarray instrument is in progress. Closing the software now could damage the instrument.",
+        msg_two: "Are you sure you want to exit?",
+        button_names: ["Cancel", "Yes"],
+      },
       fw_updates_complete_labels: {
         header: "Important!",
         msg_one: "Firmware updates have been successfully installed.",
@@ -111,9 +145,13 @@ export default {
         this.status_uuid === STATUS.MESSAGE.CALIBRATING ||
         this.stim_status ||
         this.total_uploaded_files.length < this.total_file_count;
+      const fw_update_in_progress =
+        this.status_uuid === STATUS.MESSAGE.DOWNLOADING_UPDATES ||
+        this.status_uuid === STATUS.MESSAGE.INSTALLING_UPDATES;
 
       if (this.confirmation_request) {
-        if (sensitive_ops_in_progress) this.$bvModal.show("closure-warning");
+        if (fw_update_in_progress) this.$bvModal.show("fw-closure-warning");
+        else if (sensitive_ops_in_progress) this.$bvModal.show("ops-closure-warning");
         else this.handle_confirmation(1);
       }
     },
@@ -160,17 +198,19 @@ export default {
           break;
         case STATUS.MESSAGE.DOWNLOADING_UPDATES:
           this.alert_txt += `Downloading Firmware Updates...`;
+          this.$bvModal.show("fw-updates-in-progress-message");
           break;
         case STATUS.MESSAGE.INSTALLING_UPDATES:
           this.alert_txt += `Installing Firmware Updates...`;
           break;
         case STATUS.MESSAGE.UPDATES_COMPLETE:
           this.alert_txt += `Firmware Updates Complete`;
+          this.close_modals_by_id(["fw-updates-in-progress-message", "fw-closure-warning"]);
           this.$bvModal.show("fw-updates-complete-message");
           break;
         case STATUS.MESSAGE.UPDATE_ERROR:
           this.alert_txt += `Error Occurred During Firmware Update`;
-          // TODO ? this.$bvModal.show("error-catch");
+          this.$bvModal.show("error-catch"); // TODO could make a customer error message for this
           break;
         case STATUS.MESSAGE.ERROR:
           this.shutdown_request();
@@ -190,7 +230,9 @@ export default {
       this.$store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
     },
     handle_confirmation: function (idx) {
-      this.$bvModal.hide("closure-warning");
+      // Tanner (1/19/22): skipping automatic closure cancellation since this method gaurantees
+      // send_confirmation will be emitted, either immediately or after closing sw-update-message
+      this.close_modals_by_id(["ops-closure-warning", "fw-closure-warning"], false);
       // if a SW update is available, show message before confirming closure
       if (idx === 1 && this.software_update_available && this.allow_sw_update_install) {
         this.$bvModal.show("sw-update-message");
@@ -198,10 +240,29 @@ export default {
         this.$emit("send_confirmation", idx);
       }
     },
+    close_modals_by_id: function (ids, auto_cancel_closure = true) {
+      for (const id of ids) {
+        if (id !== undefined) this.$bvModal.hide(id);
+      }
+      // Tanner (1/19/22): if one of the closure warning modals is given here while there is an unresolved
+      // closure confirmation, need to respond with cancel value. If this step is skipped, need to make sure
+      // send_confirmation will definitely be emitted, or the window will essentially be locked open
+      if (
+        auto_cancel_closure &&
+        this.confirmation_request &&
+        (ids.includes("ops-closure-warning") || ids.includes("fw-closure-warning"))
+      ) {
+        this.$emit("send_confirmation", 0);
+      }
+    },
+    close_fw_updates_in_progress_modal: function () {
+      this.$bvModal.hide("fw-updates-in-progress-message");
+    },
     close_fw_updates_complete_modal: function () {
       this.$bvModal.hide("fw-updates-complete-message");
     },
     close_sw_update_modal: function () {
+      this.$bvModal.hide("sw-update-message");
       this.$emit("send_confirmation", 1);
     },
     shutdown_request: async function () {
@@ -250,7 +311,11 @@ export default {
 
 /* Center the error-catch pop-up dialog within the viewport */
 #error-catch,
-#closure-warning {
+#sw-update-message,
+#fw-updates-in-progress-message,
+#fw-updates-complete-message,
+#fw-closure-warning,
+#ops-closure-warning {
   position: fixed;
   margin: 5% auto;
   top: 15%;

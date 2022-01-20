@@ -606,6 +606,7 @@ export default {
 }
 
 #calibration-warning,
+#user-input-prompt-message,
 #five-min-warning,
 #one-min-warning {
   position: fixed;
