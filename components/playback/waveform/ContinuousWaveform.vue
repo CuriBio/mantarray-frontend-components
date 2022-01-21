@@ -150,8 +150,7 @@ export default {
               this.x_axis_min,
               this.x_axis_sample_length
             );
-      const stim_idx_to_display = stim_data.findIndex((time) => time[1][1][0] >= this.x_axis_min);
-      this.fill_assignments = stim_data.slice(stim_idx_to_display);
+      this.fill_assignments = stim_data;
     },
   },
 };

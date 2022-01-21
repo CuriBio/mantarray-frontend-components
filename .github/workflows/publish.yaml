@@ -334,10 +334,12 @@ jobs:
 
       - name: Create tiny .mjs file to require package
         run: |
-          echo 'import * as exports from "${{steps.package-name.outputs.prop}}";' > tmp.mjs
+          echo 'import exports from "${{steps.package-name.outputs.prop}}";' > tmp.mjs
 
       - name: Confirm to import errors when opening package
-        run: node tmp.mjs
+        run: |
+          cat tmp.mjs
+          node tmp.mjs
 
   create_tag:
     needs: [install_from_npm]
