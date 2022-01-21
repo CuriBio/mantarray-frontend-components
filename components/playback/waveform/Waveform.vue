@@ -246,7 +246,7 @@ export default {
       for (const sub_protocol of stim_data) {
         if (stim_data.length > 0) {
           // 255 is sent when a user stops a stim
-          const color = sub_protocol[0] === 255 ? "none" : this.stim_fill_colors[sub_protocol[0]]; // makes sliding transition smoother and brings color to end of grap
+          const color = sub_protocol[0] === 255 ? "none" : this.stim_fill_colors[sub_protocol[0]];
           this.stim_waveform_line_node
             .append("path")
             .datum(sub_protocol[1])

@@ -164,9 +164,6 @@ function get_well_slice_to_display(
  * @return  {array} arr appended
  */
 function append_well_data(arr, new_arr) {
-  // const inner_object_waveform_data = new_arr.waveform_data;
-  // const inner_object_basic_data = inner_object_waveform_data.basic_data;
-  // const inner_object_waveform_data_points = inner_object_basic_data.waveform_data_points;
   const { waveform_data_points } = new_arr.waveform_data.basic_data;
   /* lint identifyies this as potential crash point as we not verifying if the
      inner_object_waveform_data_points is not null
