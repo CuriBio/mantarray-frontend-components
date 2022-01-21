@@ -332,14 +332,9 @@ jobs:
         if: github.event.inputs.publish_package != '1'
         run: npm install ${{steps.package-name.outputs.prop}}
 
-      - name: Create tiny .mjs file to require package
+      - name: Create tiny .mjs file to import package
         run: |
           echo 'import exports from "${{steps.package-name.outputs.prop}}";' > tmp.mjs
-
-      - name: Confirm to import errors when opening package
-        run: |
-          cat tmp.mjs
-          node tmp.mjs
 
   create_tag:
     needs: [install_from_npm]
