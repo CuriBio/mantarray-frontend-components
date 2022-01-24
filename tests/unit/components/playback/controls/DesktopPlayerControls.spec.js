@@ -21,6 +21,7 @@ import {
   system_status_when_live_view_active_regexp,
   all_mantarray_commands_regexp,
 } from "@/store/modules/flask/url_regex";
+import { TestWatcher } from "jest";
 let wrapper = null;
 
 const localVue = createLocalVue();
@@ -243,6 +244,28 @@ describe("DesktopPlayerControls.vue", () => {
           });
         }
       );
+    });
+    test("When a user starts a recording and doesn't manually stop it within 30 seconds, Then a recording will get stopped regardless at that time point", async () => {
+      jest.useFakeTimers();
+      wrapper = shallowMount(component_to_test, {
+        store,
+        localVue,
+      });
+      await store.commit(
+        "playback/set_playback_state",
+        playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
+      );
+      await wrapper.find(".svg__playback-desktop-player-controls-record-button--inactive").trigger("click");
+      await wait_for_expect(() => {
+        expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]);
+      });
+
+      jest.advanceTimersByTime(30e3);
+      await wait_for_expect(() => {
+        expect(store.state.playback.playback_state).toBe(
+          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
+        );
+      });
     });
     test.each([
       [

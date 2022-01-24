@@ -322,7 +322,7 @@ jobs:
 
       - name: Create tiny package.json file to allow a test installation
         run: |
-          echo '{"name":"test_package"}' > package.json
+          echo '{"name":"test_package", "type": "module"}' > package.json
 
       - name: Install Just Published Package From NPM
         if: github.event.inputs.publish_package == '1'
@@ -332,12 +332,9 @@ jobs:
         if: github.event.inputs.publish_package != '1'
         run: npm install ${{steps.package-name.outputs.prop}}
 
-      - name: Create tiny .js file to require package
+      - name: Create tiny .mjs file to import package
         run: |
-          echo 'require("${{steps.package-name.outputs.prop}}")' > tmp.js
-
-      - name: Confirm to import errors when opening package
-        run: node tmp.js
+          echo 'import exports from "${{steps.package-name.outputs.prop}}";' > tmp.mjs
 
   create_tag:
     needs: [install_from_npm]

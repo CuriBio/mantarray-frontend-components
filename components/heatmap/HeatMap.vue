@@ -256,14 +256,8 @@ export default {
       );
     },
     auto_max_min: function () {
-      const max_value_array = this.well_values[this.display_option].data.map((well) => {
-        if (well.length <= 1) return Math.max(well);
-        else return Math.max(...well.slice(-100));
-      });
-      const min_value_array = this.well_values[this.display_option].data.map((well) => {
-        if (well.length <= 1) return Math.min(well);
-        else return Math.min(...well.slice(-100));
-      });
+      const max_value_array = this.well_values[this.display_option].data.map((well) => Math.max(well));
+      const min_value_array = this.well_values[this.display_option].data.map((well) => Math.min(well));
       const range = {
         max: Math.max(...max_value_array).toFixed(3),
         min: Math.min(...min_value_array).toFixed(3),

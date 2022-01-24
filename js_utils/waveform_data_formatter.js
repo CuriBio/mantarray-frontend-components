@@ -29,26 +29,8 @@ function convert_from_json_of_sample_idx_and_value(the_json) {
 function find_closest_array_idx(arr, sample_idx_to_match) {
   // Modeled from https://stackoverflow.com/questions/22697936/binary-search-in-javascript
   // finds the array idx that has a sample idx >= the one searched for
-  let start = 0;
-  let end = arr.length - 1;
-
-  let closest_sample_idx_that_is_larger_than_sample_idx_to_match = end;
-
-  while (start <= end) {
-    const mid = Math.floor((start + end) / 2);
-    const sample_idx_at_mid = arr[mid];
-    if (sample_idx_at_mid === sample_idx_to_match) {
-      return mid;
-    }
-
-    if (sample_idx_to_match < sample_idx_at_mid) {
-      end = mid - 1;
-      closest_sample_idx_that_is_larger_than_sample_idx_to_match = mid;
-    } else {
-      start = mid + 1;
-    }
-  }
-  return closest_sample_idx_that_is_larger_than_sample_idx_to_match;
+  const max_idx = arr.findIndex((x_value) => x_value >= sample_idx_to_match);
+  return max_idx >= 0 ? max_idx : arr.length - 1;
 }
 
 /**
@@ -71,6 +53,7 @@ function convert_x_y_arrays_to_d3_array(x_array, y_array) {
  * @param   {array} measured_values the array
  * @param   {int}  starting_sample_idx
  * @param   {int}  sample_duration_to_display combined array
+ * @param   {int}  well_idx index
  * @return  {array} converted d3 array
  */
 function get_array_slice_to_display(
@@ -181,25 +164,22 @@ function get_well_slice_to_display(
  * @return  {array} arr appended
  */
 function append_well_data(arr, new_arr) {
-  const inner_object_waveform_data = new_arr.waveform_data;
-  const inner_object_basic_data = inner_object_waveform_data.basic_data;
-  const inner_object_waveform_data_points = inner_object_basic_data.waveform_data_points;
-
+  const { waveform_data_points } = new_arr.waveform_data.basic_data;
   /* lint identifyies this as potential crash point as we not verifying if the
      inner_object_waveform_data_points is not null
      so with only if condition it allows so including the if condition as guard-for-in
      */
 
-  for (const str_well_idx in inner_object_waveform_data_points) {
-    if (inner_object_waveform_data_points != undefined) {
+  for (const str_well_idx in waveform_data_points) {
+    if (waveform_data_points != undefined) {
       const int_well_idx = parseInt(str_well_idx);
       Array.prototype.push.apply(
         arr[int_well_idx].x_data_points,
-        inner_object_waveform_data_points[str_well_idx].x_data_points
+        waveform_data_points[str_well_idx].x_data_points
       );
       Array.prototype.push.apply(
         arr[int_well_idx].y_data_points,
-        inner_object_waveform_data_points[str_well_idx].y_data_points
+        waveform_data_points[str_well_idx].y_data_points
       );
     }
   }

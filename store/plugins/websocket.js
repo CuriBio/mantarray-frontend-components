@@ -18,7 +18,7 @@ export default function create_web_socket_plugin(socket) {
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE ||
         store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.RECORDING
       ) {
-        store.commit("data/append_plate_waveforms", JSON.parse(data_json));
+        store.dispatch("data/append_plate_waveforms", JSON.parse(data_json));
       }
       if (cb !== null) {
         // this callback is only used for testing. The backend will not send a callback
@@ -42,6 +42,7 @@ export default function create_web_socket_plugin(socket) {
     socket.on("stimulation", function (stim_json, cb = null) {
       // Tanner (12/20/21): may want to put the same checks here as are in the waveform_data handler once stim waveforms are sent instead of subprotocol indices
       store.dispatch("data/append_stim_waveforms", JSON.parse(stim_json));
+      // store.dispatch("data/remove_old_stim_data");
       if (cb !== null) {
         // this callback is only used for testing. The backend will not send a callback
         cb("commit done");

@@ -240,6 +240,7 @@ export default {
       record_title: "Record",
       settings_tooltip_text: "Edit customer account",
       schedule_tooltip_text: "(Not Yet Available)",
+      recording_timer: null,
       calibration_modal_labels: {
         header: "Warning!",
         msg_one: "Please ensure no plate is present on device.",
@@ -366,8 +367,13 @@ export default {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
         this.$store.dispatch("playback/start_recording");
       }
+
+      this.recording_timer = setTimeout(() => {
+        if (this.playback_state === this.playback_state_enums.RECORDING) this.on_stop_record_click();
+      }, 30e3);
     },
     on_stop_record_click: function () {
+      clearTimeout(this.recording_timer);
       this.$store.dispatch("playback/stop_recording");
       if (this.auto_upload) {
         this.$store.commit("settings/set_total_file_count");

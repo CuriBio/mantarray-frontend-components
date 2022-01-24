@@ -24,14 +24,14 @@ const default_state = {
   stim_waveforms: [],
   stim_fill_colors: {},
   stim_fill_assignments: [],
-  sub_protocol_flags: [],
+  last_protocol_flag: [],
 };
 
 for (let i = 0; i < maximum_number_of_wells_in_any_plate; i++) {
   default_state.plate_waveforms.push(waveforms_entry_template);
   default_state.stim_waveforms.push(waveforms_entry_template);
   default_state.stim_fill_assignments.push([]);
-  default_state.sub_protocol_flags.push([]);
+  default_state.last_protocol_flag.push([]);
 }
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2
