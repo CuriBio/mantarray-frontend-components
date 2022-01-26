@@ -20,7 +20,7 @@
       :rows="compute_number_of_rows"
       cols="50"
       spellcheck="false"
-      :value.prop="log_path"
+      :value.prop="log_filepath"
       :style="textarea__error_cssprops"
     ></textarea>
     <div class="div_status-error-catch-next-step-txt" :style="next_step_cssprops">
@@ -56,9 +56,6 @@ export default {
     shutdown_error_message: { type: String, default: "" },
   },
   computed: {
-    log_path: function () {
-      return this.log_filepath.replace(/([/\\])/g, "$1\u200B");
-    },
     compute_number_of_rows: function () {
       return Math.ceil(((this.log_filepath.length * 1.0) / 30).toFixed(1));
     },
@@ -159,7 +156,7 @@ a:hover {
   transform: rotate(0deg);
   padding: 0px;
   margin: 0px;
-  word-wrap: break-word;
+  word-break: break-all;
   outline: none;
   color: rgb(183, 183, 183);
   font-family: Courier New;
