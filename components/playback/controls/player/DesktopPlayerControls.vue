@@ -151,6 +151,20 @@
       />
     </b-modal>
     <b-modal
+      id="fw-update-available-message"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+    >
+      <StatusWarningWidget
+        id="fw-update-available"
+        :modal_labels="fw_update_available_labels"
+        @handle_confirmation="close_fw_update_available_modal"
+      />
+    </b-modal>
+    <b-modal
       id="user-input-prompt-message"
       size="sm"
       hide-footer
@@ -275,10 +289,18 @@ export default {
           button_names: ["No", "Yes"],
         },
       },
+      fw_update_available_labels: {
+        header: "Important!",
+        msg_one:
+          "A firmware update is required for this Mantarray instrument. It will take about X minutes to complete.",
+        msg_two:
+          "Declining it will prevent automatic software updating. Would you like to download and install the update?",
+        button_names: ["No", "Yes"],
+      },
       user_input_prompt_labels: {
         header: "Important!",
-        msg_one: "A firmware update is required for this Mantarray instrument.",
-        msg_two: "Please input your credentials to begin downloading the firmware update.",
+        msg_one: "Downloading the firmware update requires your user credentials.",
+        msg_two: "Please input them to begin the download",
         button_names: ["Okay"],
       },
     };
@@ -291,7 +313,13 @@ export default {
       "one_min_warning",
       "five_min_warning",
     ]),
-    ...mapState("settings", ["customer_index", "auto_upload", "beta_2_mode", "user_cred_input_needed"]),
+    ...mapState("settings", [
+      "customer_index",
+      "auto_upload",
+      "beta_2_mode",
+      "user_cred_input_needed",
+      "firmware_update_available",
+    ]),
     calibrate_tooltip_text: function () {
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Calibration needed. Click to calibrate.";
@@ -381,8 +409,11 @@ export default {
     five_min_warning() {
       if (this.five_min_warning) this.$bvModal.show("five-min-warning");
     },
+    firmware_update_available() {
+      if (this.firmware_update_available) this.$bvModal.show("fw-update-available-message");
+    },
     user_cred_input_needed() {
-      this.$bvModal.show("user-input-prompt-message");
+      if (this.user_cred_input_needed) this.$bvModal.show("user-input-prompt-message");
     },
   },
   methods: {
@@ -431,6 +462,10 @@ export default {
     close_calibration_modal(idx) {
       this.$bvModal.hide("calibration-warning");
       if (idx === 1) this.$store.dispatch("playback/start_calibration");
+    },
+    close_fw_update_available_modal(idx) {
+      this.$bvModal.hide("fw-update-available-message");
+      this.$store.dispatch("settings/send_firmware_update_confirmation", idx === 1);
     },
     close_user_input_prompt_modal() {
       this.$bvModal.hide("user-input-prompt-message");

@@ -70,6 +70,17 @@ export default function create_web_socket_plugin(socket) {
       // this callback is only used for testing. The backend will not send a callback
       if (cb !== null) cb("commit done");
     });
+    socket.on("fw_update", function (message_json, cb = null) {
+      // TODO unit test
+      const message = JSON.parse(message_json);
+      if (message.firmware_update_available !== undefined) {
+        if (message.firmware_update_available) console.log("Firmware update found"); // allow-log
+        store.commit("settings/set_firmware_update_available", message.firmware_update_available);
+      }
+
+      // this callback is only used for testing. The backend will not send a callback
+      if (cb !== null) cb("commit done");
+    });
     socket.on("prompt_user_input", function (message_json, cb = null) {
       // TODO unit test
       const message = JSON.parse(message_json);

@@ -51,6 +51,9 @@ export default {
   set_software_update_available(state, bool) {
     state.software_update_available = bool;
   },
+  set_firmware_update_available(state, bool) {
+    state.firmware_update_available = bool;
+  },
   set_allow_sw_update_install(state, bool) {
     state.allow_sw_update_install = bool;
   },

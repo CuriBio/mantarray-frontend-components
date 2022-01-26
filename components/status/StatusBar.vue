@@ -93,7 +93,7 @@ export default {
       alert_txt: "",
       fw_updates_in_progress_labels: {
         header: "Important!",
-        msg_one: "A firmware update for the Mantarray instrument is in progress.",
+        msg_one: "The firmware update has begun.",
         msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
         button_names: ["Okay"],
       },
