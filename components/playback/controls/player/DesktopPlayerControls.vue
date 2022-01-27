@@ -689,6 +689,7 @@ export default {
 
 #calibration-warning,
 #user-input-prompt-message,
+#fw-update-available-message,
 #five-min-warning,
 #one-min-warning {
   position: fixed;

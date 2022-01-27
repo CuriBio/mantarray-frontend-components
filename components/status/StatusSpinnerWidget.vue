@@ -111,11 +111,11 @@ export default {
   pointer-events: all;
 }
 .span__status-spinner {
-  left: 168px;
+  left: 177px;
   position: absolute;
 }
 .fa-pulse {
-  font-size: 3.5em;
+  font-size: 4em;
   color: grey;
 }
 </style>
