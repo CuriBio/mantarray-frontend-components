@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import { createLocalVue, mount } from "@vue/test-utils";
-import StimulationStudioControls from "@/components/playback/controls/StimulationStudioControls.vue";
+import AdditionalControls from "@/components/playback/controls/AdditionalControls.vue";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -21,9 +21,9 @@ describe("store/stimulation", () => {
     jest.clearAllMocks();
   });
 
-  describe("StimulationStudioControls", () => {
-    test("When StimulationStudioControls mounts, Then the initial play state should be false", () => {
-      const wrapper = mount(StimulationStudioControls, {
+  describe("AdditionalControls", () => {
+    test("When AdditionalControls mounts, Then the initial play state should be false", () => {
+      const wrapper = mount(AdditionalControls, {
         store,
         localVue,
       });
@@ -36,7 +36,7 @@ describe("store/stimulation", () => {
       dispatch_spy.mockImplementation(async () => await store.commit("stimulation/set_stim_status", false));
 
       store.state.stimulation.protocol_assignments = { test: "assignment" };
-      const wrapper = mount(StimulationStudioControls, {
+      const wrapper = mount(AdditionalControls, {
         store,
         localVue,
       });
@@ -47,7 +47,7 @@ describe("store/stimulation", () => {
     });
 
     test("Given there are no wells assigned with a protocol, When a user clicks to start a stimulation, Then no signal should be dispatched to BE", async () => {
-      const wrapper = mount(StimulationStudioControls, {
+      const wrapper = mount(AdditionalControls, {
         store,
         localVue,
       });
@@ -62,7 +62,7 @@ describe("store/stimulation", () => {
       dispatch_spy.mockImplementation(async () => await store.commit("stimulation/set_stim_status", true));
 
       store.state.stimulation.protocol_assignments = { test: "assignment" };
-      const wrapper = mount(StimulationStudioControls, {
+      const wrapper = mount(AdditionalControls, {
         store,
         localVue,
       });
@@ -72,7 +72,7 @@ describe("store/stimulation", () => {
       expect(dispatch_spy).toHaveBeenCalledWith("stimulation/create_protocol_message");
     });
     test("When set_stim_status is called with different values, Then current gradient is updated correctly", async () => {
-      const wrapper = mount(StimulationStudioControls, {
+      const wrapper = mount(AdditionalControls, {
         store,
         localVue,
       });

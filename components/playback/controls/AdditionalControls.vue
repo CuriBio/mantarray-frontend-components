@@ -1,5 +1,10 @@
 <template>
   <div class="div__stimulation-controls-container">
+    <div
+      v-b-popover.hover.bottom="'Additional Controls are disabled until device is Calibrated'"
+      class="div__controls-block"
+      :style="controls_block_block__dynamic_style"
+    />
     <span class="span__additional-controls-header">Additional Controls</span>
     <span class="span__stimulation-label">Stimulation</span>
     <div class="div__border-container">
@@ -25,6 +30,7 @@
         <FontAwesomeIcon v-if="play_state" class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
       </span>
     </div>
+    <img class="img__temp-icon" src="@/assets/img/temp-controls-icon.png" />
     <img class="img__waveform-icon" src="@/assets/img/waveform-icon.png" />
   </div>
 </template>
@@ -37,6 +43,29 @@ import {
   faPlayCircle as fa_play_circle,
   faStopCircle as fa_stop_circle,
 } from "@fortawesome/free-solid-svg-icons";
+import Vue from "vue";
+import BootstrapVue from "bootstrap-vue";
+import { VBPopover } from "bootstrap-vue";
+// Note: Vue automatically prefixes the directive name with 'v-'
+Vue.directive("b-popover", VBPopover);
+const stateObj = playback_module.state();
+const vuex_delay = stateObj.tooltips_delay;
+const options = {
+  BTooltip: {
+    delay: {
+      show: 400,
+      hide: 100,
+    },
+  },
+  BPopover: {
+    delay: {
+      show: vuex_delay,
+      hide: 50,
+    },
+  },
+};
+Vue.use(BootstrapVue, { ...options });
+
 library.add(fa_play_circle, fa_stop_circle);
 
 // TODO Luci, swap out PNG for SVG once folder becomes available
@@ -50,7 +79,7 @@ library.add(fa_play_circle, fa_stop_circle);
  */
 
 export default {
-  name: "StimulationStudioControls",
+  name: "AdditionalControls",
   components: {
     FontAwesomeIcon,
   },
@@ -64,7 +93,7 @@ export default {
   },
   computed: {
     ...mapState("stimulation", ["protocol_assignments", "stim_status"]),
-    ...mapState("playback", ["playback_state"]),
+    ...mapState("playback", ["playback_state", "enable_additional_controls"]),
     is_start_stop_button_enabled: function () {
       // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
       let value = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
@@ -78,6 +107,10 @@ export default {
       return this.is_start_stop_button_enabled
         ? "span__stimulation-controls-play-stop-button--active"
         : "span__stimulation-controls-play-stop-button--inactive";
+    },
+    controls_block_block__dynamic_style: function () {
+      const display = this.enable_additional_controls ? "none" : "block";
+      return `display: ${display};`;
     },
   },
   watch: {
@@ -106,6 +139,17 @@ body {
   height: 85px;
   width: 287px;
   font-family: Muli;
+  padding-left: 20px;
+  top: 0px;
+  left: 0px;
+}
+.div__controls-block {
+  position: absolute;
+  z-index: 999;
+  background: black;
+  opacity: 0.7;
+  height: 85px;
+  width: 287px;
   padding-left: 20px;
   top: 0px;
   left: 0px;
@@ -168,6 +212,12 @@ body {
   position: relative;
   color: #b7b7b7;
   grid-column: 2/3;
+}
+.img__temp-icon {
+  position: absolute;
+  top: 29px;
+  height: 56px;
+  left: 7px;
 }
 .img__waveform-icon {
   position: absolute;

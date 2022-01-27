@@ -13,14 +13,14 @@ fixture`playback/controls/stimulation-studio-controls/basic`
 
 const status_btn_active = Selector(".span__stimulation-controls-play-stop-button--active");
 
-test("testing the StimulationStudioControls layout on initialization", async (t) => {
+test("testing the AdditionalControls layout on initialization", async (t) => {
   const screenshot_path_base = path.join("playback", "controls", "stimulation-studio-controls");
   const screenshot_path = path.join(screenshot_path_base, "basic-init-inactive");
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-test("testing the StimulationStudioControls layout when stimulation is active", async (t) => {
+test("testing the AdditionalControls layout when stimulation is active", async (t) => {
   const screenshot_path_base = path.join("playback", "controls", "stimulation-studio-controls");
   const screenshot_path = path.join(screenshot_path_base, "basic-active");
   await t.click(update_button).click(status_btn_active).wait(1000);

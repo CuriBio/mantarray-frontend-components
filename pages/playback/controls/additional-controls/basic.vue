@@ -1,18 +1,18 @@
 <template>
   <div>
-    <StimulationStudioControls />
+    <AdditionalControls />
     <button class="update-button" @click="update_protocol_assignment">Update protocol assignments</button>
   </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
-// import { StimulationStudioControls } from "@/dist/mantarray.common";
-import StimulationStudioControls from "@/components/playback/controls/StimulationStudioControls.vue";
+// import { AdditionalControls } from "@/dist/mantarray.common";
+import AdditionalControls from "@/components/playback/controls/AdditionalControls.vue";
 
 export default {
   components: {
-    StimulationStudioControls,
+    AdditionalControls,
   },
   created() {
     this.unsubscribe = this.$store.subscribeAction(async (action, state) => {

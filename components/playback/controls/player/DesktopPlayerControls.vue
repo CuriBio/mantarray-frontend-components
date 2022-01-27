@@ -195,8 +195,9 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import playback_module from "@/store/modules/playback";
+import { STATUS } from "@/store/modules/flask/enums";
 import PlayerControlsSettingsButton from "./PlayerControlsSettingsButton.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlayCircle as fa_play_circle, faSpinner as fa_spinner } from "@fortawesome/free-solid-svg-icons";
@@ -320,7 +321,19 @@ export default {
       "user_cred_input_needed",
       "firmware_update_available",
     ]),
+    ...mapGetters({
+      status_uuid: "flask/status_id",
+    }),
     calibrate_tooltip_text: function () {
+      if (
+        this.status_uuid == STATUS.MESSAGE.UPDATES_NEEDED ||
+        this.status_uuid == STATUS.MESSAGE.DOWNLOADING_UPDATES ||
+        this.status_uuid == STATUS.MESSAGE.INSTALLING_UPDATES ||
+        this.status_uuid == STATUS.MESSAGE.UPDATES_COMPLETE ||
+        this.status_uuid == STATUS.MESSAGE.UPDATE_ERROR
+      ) {
+        return "Cannot calibrate during firmware update.";
+      }
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Calibration needed. Click to calibrate.";
       }

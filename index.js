@@ -49,7 +49,7 @@ export { default as WebPlayerControls } from "./components/playback/controls/pla
 export { default as DesktopPlayerControls } from "./components/playback/controls/player/DesktopPlayerControls.vue";
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
 export { default as PlateBarcode } from "./components/playback/controls/PlateBarcode.vue";
-export { default as StimulationStudioControls } from "./components/playback/controls/StimulationStudioControls.vue";
+export { default as AdditionalControls } from "./components/playback/controls/AdditionalControls.vue";
 
 // Settings Components
 export { default as SettingsForm } from "./components/settings/SettingsForm.vue";
