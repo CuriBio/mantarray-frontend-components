@@ -17,6 +17,7 @@
         hide-header
         hide-header-close
         :static="true"
+        :no-close-on-backdrop="true"
       >
         <StatusWarningWidget
           id="fw-updates-complete"
@@ -35,21 +36,45 @@
       >
         <StatusSpinnerWidget id="fw-updates-in-progress" />
       </b-modal>
-      <b-modal id="sw-update-message" size="sm" hide-footer hide-header hide-header-close :static="true">
+      <b-modal
+        id="sw-update-message"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
         <StatusWarningWidget
           id="sw-update"
           :modal_labels="sw_update_labels"
           @handle_confirmation="close_sw_update_modal"
         />
       </b-modal>
-      <b-modal id="fw-closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+      <b-modal
+        id="fw-closure-warning"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
         <StatusWarningWidget
           id="fw-closure"
           :modal_labels="fw_closure_warning_labels"
           @handle_confirmation="handle_confirmation"
         />
       </b-modal>
-      <b-modal id="ops-closure-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+      <b-modal
+        id="ops-closure-warning"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
         <StatusWarningWidget id="ops-closure" @handle_confirmation="handle_confirmation" />
       </b-modal>
     </span>

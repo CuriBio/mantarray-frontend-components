@@ -143,7 +143,15 @@
     >
       <SettingsForm @close_modal="close_settings_modal" />
     </b-modal>
-    <b-modal id="calibration-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+    <b-modal
+      id="calibration-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
       <StatusWarningWidget
         id="calibration-modal"
         :modal_labels="calibration_modal_labels"
@@ -157,6 +165,7 @@
       hide-header
       hide-header-close
       :static="true"
+      :no-close-on-backdrop="true"
     >
       <StatusWarningWidget
         id="fw-update-available"
@@ -171,6 +180,7 @@
       hide-header
       hide-header-close
       :static="true"
+      :no-close-on-backdrop="true"
     >
       <StatusWarningWidget
         id="user-input-prompt"
@@ -178,14 +188,30 @@
         @handle_confirmation="close_user_input_prompt_modal"
       />
     </b-modal>
-    <b-modal id="five-min-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+    <b-modal
+      id="five-min-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
       <StatusWarningWidget
         id="five-min"
         :modal_labels="time_warning_labels.five"
         @handle_confirmation="close_five_min_modal"
       />
     </b-modal>
-    <b-modal id="one-min-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+    <b-modal
+      id="one-min-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
       <StatusWarningWidget
         id="one-min"
         :modal_labels="time_warning_labels.one"
