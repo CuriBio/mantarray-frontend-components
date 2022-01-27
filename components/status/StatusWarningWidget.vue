@@ -16,6 +16,9 @@
           :style="textarea__error_cssprops"
         />
       </div>
+      <span v-show="show_spinner" class="span__fw-update-in-progress-spinner">
+        <FontAwesomeIcon :icon="['fa', 'spinner']" pulse />
+      </span>
       <div class="div__status-warning-button">
         <ButtonWidget
           :button_widget_width="420"

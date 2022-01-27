@@ -31,12 +31,9 @@
         hide-header
         hide-header-close
         :static="true"
+        :no-close-on-backdrop="true"
       >
-        <StatusWarningWidget
-          id="fw-updates-in-progress"
-          :modal_labels="fw_updates_in_progress_labels"
-          @handle_confirmation="close_fw_updates_in_progress_modal"
-        />
+        <StatusSpinnerWidget id="fw-updates-in-progress" />
       </b-modal>
       <b-modal id="sw-update-message" size="sm" hide-footer hide-header hide-header-close :static="true">
         <StatusWarningWidget
@@ -67,6 +64,7 @@ import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import ErrorCatchWidget from "@/components/status/ErrorCatchWidget.vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+import StatusSpinnerWidget from "@/components/status/StatusSpinnerWidget.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -81,6 +79,7 @@ export default {
   components: {
     ErrorCatchWidget,
     StatusWarningWidget,
+    StatusSpinnerWidget,
   },
   props: {
     confirmation_request: {

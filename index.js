@@ -83,6 +83,7 @@ export { default as UploadFilesWidget } from "./components/status/UploadFilesWid
 export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
 export { default as GradientBar } from "./components/status/GradientBar.vue";
 export { default as StatusWarningWidget } from "./components/status/StatusWarningWidget.vue";
+export { default as StatusSpinnerWidget } from "./components/status/StatusSpinnerWidget.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
