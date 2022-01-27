@@ -290,14 +290,6 @@ export default {
           button_names: ["No", "Yes"],
         },
       },
-      fw_update_available_labels: {
-        header: "Important!",
-        msg_one:
-          "A firmware update is required for this Mantarray instrument. It will take about X minutes to complete.",
-        msg_two:
-          "Declining it will prevent automatic software updating. Would you like to download and install the update?",
-        button_names: ["No", "Yes"],
-      },
       user_input_prompt_labels: {
         header: "Important!",
         msg_one: "Downloading the firmware update requires your user credentials.",
@@ -320,10 +312,23 @@ export default {
       "beta_2_mode",
       "user_cred_input_needed",
       "firmware_update_available",
+      "firmware_update_dur_mins",
     ]),
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
+    fw_update_available_labels: function () {
+      let duration = `${this.firmware_update_dur_mins} minute`;
+      if (duration !== 1) duration += "s";
+      return {
+        header: "Important!",
+        msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete.`,
+        msg_two:
+          "Declining it will prevent automatic software updating. Would you like to download and install the update?",
+        button_names: ["No", "Yes"],
+      };
+    },
+
     calibrate_tooltip_text: function () {
       if (
         this.status_uuid == STATUS.MESSAGE.UPDATES_NEEDED ||
@@ -355,7 +360,10 @@ export default {
       if (this.playback_state === this.playback_state_enums.RECORDING) {
         return "Must stop recording before deactivating.";
       }
-      if (this.playback_state === this.playback_state_enums.CALIBRATION_NEEDED) {
+      if (
+        this.playback_state === this.playback_state_enums.CALIBRATION_NEEDED ||
+        this.playback_state === this.playback_state_enums.CALIBRATING
+      ) {
         return "Must calibrate before activating.";
       }
       if (this.playback_state === this.playback_state_enums.CALIBRATED) {

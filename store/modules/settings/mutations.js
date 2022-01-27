@@ -51,8 +51,9 @@ export default {
   set_software_update_available(state, bool) {
     state.software_update_available = bool;
   },
-  set_firmware_update_available(state, bool) {
-    state.firmware_update_available = bool;
+  set_firmware_update_available(state, update_info) {
+    state.firmware_update_available = update_info.firmware_update_available;
+    state.firmware_update_dur_mins = update_info.channel_fw_update ? 5 : 1; // TODO
   },
   set_allow_sw_update_install(state, bool) {
     state.allow_sw_update_install = bool;
