@@ -340,6 +340,7 @@ export default {
       "firmware_update_available",
       "firmware_update_dur_mins",
     ]),
+    ...mapState("stimulation", ["stim_status"]),
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
@@ -365,6 +366,9 @@ export default {
       ) {
         return "Cannot calibrate during firmware update.";
       }
+      if (this.stim_status) {
+        return "Cannot calibrate while stimulating";
+      }
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Calibration needed. Click to calibrate.";
       }
@@ -373,6 +377,7 @@ export default {
       }
       if (
         this.playback_state == this.playback_state_enums.LIVE_VIEW_ACTIVE ||
+        this.playback_state == this.playback_state_enums.BUFFERING ||
         this.playback_state == this.playback_state_enums.RECORDING
       ) {
         return "Cannot calibrate while Mantarray is in use.";
@@ -441,8 +446,9 @@ export default {
     svg__playback_desktop_player_controls_calibrate_button__dynamic_class: function () {
       return {
         "span__playback-desktop-player-controls--available":
-          this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
-          this.playback_state === this.playback_state_enums.CALIBRATED,
+          (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
+            this.playback_state === this.playback_state_enums.CALIBRATED) &&
+          !this.stim_status,
       };
     },
   },
@@ -492,8 +498,9 @@ export default {
     },
     on_calibrate_click: function () {
       if (
-        this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
-        this.playback_state === this.playback_state_enums.CALIBRATED
+        (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
+          this.playback_state === this.playback_state_enums.CALIBRATED) &&
+        !this.stim_status
       ) {
         if (this.beta_2_mode) this.$bvModal.show("calibration-warning");
         else this.$store.dispatch("playback/start_calibration");
