@@ -96,12 +96,15 @@ export default {
     ...mapState("playback", ["playback_state", "enable_additional_controls"]),
     is_start_stop_button_enabled: function () {
       // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
-      let value = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
-      if (!this.play_state) {
-        // only need to take this condition into account when not stimulating
-        value = value && Object.keys(this.protocol_assignments).length !== 0;
+      let is_enabled = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
+      if (!this.play_state && this.enable_additional_controls) {
+        // only need to take these conditions into account when additional controls are enabled and not stimulating
+        is_enabled =
+          is_enabled &&
+          Object.keys(this.protocol_assignments).length !== 0 &&
+          this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING;
       }
-      return value;
+      return is_enabled;
     },
     svg__stimulation_controls_play_stop_button__dynamic_class: function () {
       return this.is_start_stop_button_enabled
