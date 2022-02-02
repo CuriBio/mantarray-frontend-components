@@ -8,8 +8,9 @@ Changelog for Mantarray Frontend Components
 - Added prevention of starting stimulation while calibrating
 - Added prevention of starting calibration while stimulating
 - Added prevention of additional controls before initial calibration completes
-- Added temperature controls icon to additional controls widet
+- Added temperature controls icon to additional controls widget
 - Fixed various tooltips
+- Fixed issue where many modals that emit messages could be closed by clicking on backdrop
 - Changed some modal styling
 
 
