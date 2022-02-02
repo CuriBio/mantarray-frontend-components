@@ -1,5 +1,6 @@
 <template>
   <div class="div__stimulation-controls-container">
+    <!-- Tanner (2/1/22): Only need controls block until SVGs are made of all the buttons in this widget and they can be shaded manually when inactive-->
     <div
       v-b-popover.hover.bottom="'Additional Controls are disabled until device is Calibrated'"
       class="div__controls-block"
@@ -97,7 +98,7 @@ export default {
     is_start_stop_button_enabled: function () {
       // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
       let is_enabled = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
-      if (!this.play_state && this.enable_additional_controls) {
+      if (!this.play_state) {
         // only need to take these conditions into account when additional controls are enabled and not stimulating
         is_enabled =
           is_enabled &&
@@ -107,6 +108,12 @@ export default {
       return is_enabled;
     },
     svg__stimulation_controls_play_stop_button__dynamic_class: function () {
+      if (!this.enable_additional_controls) {
+        // Tanner (2/1/22): This is only necessary so that the this button is shaded the same as the rest of
+        // the additional controls buttons when the controls block is displayed. The button is
+        // not actually active here. If the controls block is removed, this branch can likely be removed too.
+        return "span__stimulation-controls-play-stop-button--active";
+      }
       return this.is_start_stop_button_enabled
         ? "span__stimulation-controls-play-stop-button--active"
         : "span__stimulation-controls-play-stop-button--inactive";
