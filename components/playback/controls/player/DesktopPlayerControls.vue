@@ -346,7 +346,7 @@ export default {
     }),
     fw_update_available_labels: function () {
       let duration = `${this.firmware_update_dur_mins} minute`;
-      if (duration !== 1) duration += "s";
+      if (this.firmware_update_dur_mins !== 1) duration += "s";
       return {
         header: "Important!",
         msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete.`,
@@ -515,12 +515,10 @@ export default {
     },
     close_calibration_modal(idx) {
       this.$bvModal.hide("calibration-warning");
-      console.log("!!!");
       if (idx === 1) this.$store.dispatch("playback/start_calibration");
     },
     close_fw_update_available_modal(idx) {
       this.$bvModal.hide("fw-update-available-message");
-      console.log("$$$");
       this.$store.dispatch("settings/send_firmware_update_confirmation", idx === 1);
     },
     close_user_input_prompt_modal() {
