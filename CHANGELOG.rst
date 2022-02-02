@@ -1,6 +1,22 @@
 Changelog for Mantarray Frontend Components
 ===========================================
-0.5.9 (2022-01-6)
+
+0.6.0 (2022-02-02)
+------------------
+
+- Added Firmware Autoupdating features
+- Added prevention of starting stimulation while calibrating
+- Added prevention of starting calibration while stimulating
+- Added prevention of additional controls before initial calibration completes
+- Added temperature controls icon to additional controls widget
+- Added 30 second timer on recordings to automatically stop
+- Fixed some live view performance issues
+- Fixed various tooltips
+- Fixed issue where many modals that emit messages could be closed by clicking on backdrop
+- Changed some modal styling
+
+
+0.5.9 (2022-01-06)
 ------------------
 
 - Fixed bug with the changing of subprotocol markers in live view when subprotocol length is less than 1000ms

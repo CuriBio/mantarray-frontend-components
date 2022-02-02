@@ -3,6 +3,9 @@ import { TextValidation } from "@/js_utils/text_validation.js";
 const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 
 export default {
+  set_enable_additional_controls(state, new_value) {
+    state.enable_additional_controls = new_value;
+  },
   set_loop_playback(state, new_value) {
     state.loop_playback = new_value;
   },

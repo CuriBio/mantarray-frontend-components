@@ -32,6 +32,13 @@ describe("store/data", () => {
     // some tests modify these two values, so make a deep copy before each test
     ar = JSON.parse(JSON.stringify(arry));
     nr = JSON.parse(JSON.stringify(new_arry));
+    store.commit("waveform/set_x_axis_zoom_levels", [
+      { x_scale: 30 * 1e6 },
+      { x_scale: 15 * 1e6 },
+      { x_scale: 5 * 1e6 },
+      { x_scale: 2 * 1e6 },
+      { x_scale: 1 * 1e6 },
+    ]);
   });
 
   afterEach(() => {
@@ -75,16 +82,14 @@ describe("store/data", () => {
       store.commit("data/set_plate_waveforms", ar);
 
       const stored_waveform = store.getters["data/plate_waveforms"];
-
       expect(stored_waveform).toHaveLength(24);
       expect(stored_waveform[0].x_data_points).toHaveLength(4);
 
-      store.commit("data/append_plate_waveforms", nr);
-
-      expect(stored_waveform).toHaveLength(24);
-      expect(stored_waveform[0].x_data_points).toHaveLength(8);
+      await store.dispatch("data/append_plate_waveforms", nr);
+      expect(store.state.data.plate_waveforms).toHaveLength(24);
+      expect(store.state.data.plate_waveforms[0].x_data_points).toHaveLength(8);
       // Tanner (12/20/21): There was a bug where stored_waveform was being changed from an array to an object in append_plate_waveforms, so adding this assertion to prevent that
-      expect(Array.isArray(stored_waveform)).toBe(true);
+      expect(Array.isArray(store.state.data.plate_waveforms)).toBe(true);
     });
 
     test("When mutating heatmap_values, Then getting heatmap_values should return mutated value", async () => {
@@ -154,35 +159,19 @@ describe("store/data", () => {
 
     expect(stored_waveform).toHaveLength(3);
     expect(stored_waveform[0]).toStrictEqual({
-      x_data_points: [11, 12, 13, 13, 13],
-      y_data_points: [0, 0, 101000, -201, 101000],
+      x_data_points: [11, 12, 13],
+      y_data_points: [0, 0, 101000],
     });
     expect(stored_waveform[1]).toStrictEqual({
       x_data_points: [21],
       y_data_points: [0],
     });
     expect(stored_waveform[2]).toStrictEqual({
-      x_data_points: [211, 211, 211, 212, 212, 212],
-      y_data_points: [101000, -201, 101000, 101000, -201, 101000],
+      x_data_points: [211, 212],
+      y_data_points: [101000, 101000],
     });
   });
-  test("When stim_waveforms is dispatched before plate waveforms are mutated, Then the first time index in stim_waveforms will be changed to match the first tissue time index", async () => {
-    const stored_waveform = store.getters["data/stim_waveforms"];
 
-    store.commit("data/set_plate_waveforms", [
-      { x_data_points: [15], y_data_points: [0] },
-      { x_data_points: [1], y_data_points: [2] },
-    ]);
-
-    store.dispatch("data/append_stim_waveforms", {
-      0: [[13], [99]],
-    });
-
-    expect(stored_waveform[0]).toStrictEqual({
-      x_data_points: [15, 15, 15],
-      y_data_points: [101000, -201, 101000],
-    });
-  });
   describe("websocket", () => {
     // windows CI is having issues
     if (process.platform == "win32") {
@@ -191,7 +180,15 @@ describe("store/data", () => {
     let http_server;
     let ws_server;
     let socket_server_side;
-
+    beforeEach(() => {
+      store.commit("waveform/set_x_axis_zoom_levels", [
+        { x_scale: 30 * 1e6 },
+        { x_scale: 15 * 1e6 },
+        { x_scale: 5 * 1e6 },
+        { x_scale: 2 * 1e6 },
+        { x_scale: 1 * 1e6 },
+      ]);
+    });
     beforeAll((done) => {
       http_server = http.createServer().listen(4567); // TODO use constant here
       ws_server = io_server(http_server);
@@ -384,12 +381,12 @@ describe("store/data", () => {
 
       expect(stored_stim_data).toHaveLength(2);
       expect(stored_stim_data[0]).toStrictEqual({
-        x_data_points: [1, 2, 2, 2, 3, 3, 3],
-        y_data_points: [2, 101000, -201, 101000, 101000, -201, 101000],
+        x_data_points: [1, 2, 3],
+        y_data_points: [2, 101000, 101000],
       });
       expect(stored_stim_data[1]).toStrictEqual({
-        x_data_points: [3, 8, 8, 8],
-        y_data_points: [4, 101000, -201, 101000],
+        x_data_points: [3, 8],
+        y_data_points: [4, 101000],
       });
     });
     test("When backend emits status update message with no error, Then ws client updates file count", async () => {
@@ -427,6 +424,86 @@ describe("store/data", () => {
       expect(total_uploaded_files[0]).toBe(new_status_update.file_name);
       expect(upload_error).toBe(true);
       expect(file_count).toBe(0);
+    });
+    test("When backend emits sw_update message with allow_software_update value, Then ws client commits value to store", async () => {
+      const message = {
+        allow_software_update: true,
+      };
+
+      // confirm precondition
+      expect(store.state.settings.allow_sw_update_install).toBe(false);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("sw_update", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.allow_sw_update_install).toBe(true);
+    });
+    test("When backend emits sw_update message with software_update_available value, Then ws client commits value to store", async () => {
+      const message = {
+        software_update_available: true,
+      };
+
+      // confirm precondition
+      expect(store.state.settings.software_update_available).toBe(false);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("sw_update", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.software_update_available).toBe(true);
+    });
+    test("When backend emits fw_update message with firmware_update_available true, Then ws client commits value to store", async () => {
+      const message = {
+        firmware_update_available: true,
+        channel_fw_update: true,
+      };
+
+      // confirm precondition
+      expect(store.state.settings.firmware_update_available).toBe(false);
+      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("fw_update", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.firmware_update_available).toBe(true);
+      expect(store.state.settings.firmware_update_dur_mins).toBe(5);
+    });
+    test("When backend emits fw_update message with firmware_update_available false, Then ws client does not commit value to store", async () => {
+      const message = {
+        firmware_update_available: false,
+      };
+
+      // confirm precondition
+      expect(store.state.settings.firmware_update_available).toBe(false);
+      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("fw_update", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.firmware_update_available).toBe(false);
+      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+    });
+    test("When backend emits prompt_user_input message with customer_creds as input type, Then ws client sets correct flag in store", async () => {
+      const message = {
+        input_type: "customer_creds",
+      };
+
+      // confirm precondition
+      expect(store.state.settings.user_cred_input_needed).toBe(false);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("prompt_user_input", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.user_cred_input_needed).toBe(true);
     });
   });
 

@@ -49,7 +49,7 @@ export { default as WebPlayerControls } from "./components/playback/controls/pla
 export { default as DesktopPlayerControls } from "./components/playback/controls/player/DesktopPlayerControls.vue";
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
 export { default as PlateBarcode } from "./components/playback/controls/PlateBarcode.vue";
-export { default as StimulationStudioControls } from "./components/playback/controls/StimulationStudioControls.vue";
+export { default as AdditionalControls } from "./components/playback/controls/AdditionalControls.vue";
 
 // Settings Components
 export { default as SettingsForm } from "./components/settings/SettingsForm.vue";
@@ -83,6 +83,7 @@ export { default as UploadFilesWidget } from "./components/status/UploadFilesWid
 export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
 export { default as GradientBar } from "./components/status/GradientBar.vue";
 export { default as StatusWarningWidget } from "./components/status/StatusWarningWidget.vue";
+export { default as StatusSpinnerWidget } from "./components/status/StatusSpinnerWidget.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";

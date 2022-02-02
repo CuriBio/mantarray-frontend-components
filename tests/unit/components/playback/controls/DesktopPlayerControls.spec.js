@@ -21,6 +21,7 @@ import {
   system_status_when_live_view_active_regexp,
   all_mantarray_commands_regexp,
 } from "@/store/modules/flask/url_regex";
+import { TestWatcher } from "jest";
 let wrapper = null;
 
 const localVue = createLocalVue();
@@ -116,6 +117,60 @@ describe("DesktopPlayerControls.vue", () => {
     expect(close_spy).toHaveBeenCalledWith(false);
     expect(wrapper.emitted("save_customer_id")).toBeFalsy();
   });
+
+  test("When user_cred_input_needed is set to true, Then user input prompt message is displayed and settings form is opened upon closing modal", async () => {
+    wrapper = mount(component_to_test, {
+      store,
+      localVue,
+    });
+
+    // confirm precondition
+    expect(wrapper.find("#user-input-prompt-message").isVisible()).toBe(false);
+    expect(wrapper.find("#settings-form").isVisible()).toBe(false);
+
+    store.commit("settings/set_user_cred_input_needed", true);
+    Vue.nextTick(() => {
+      expect(wrapper.find("#user-input-prompt-message").isVisible()).toBe(true);
+      expect(wrapper.find("#settings-form").isVisible()).toBe(false);
+    });
+
+    await wrapper.findAll(".span__button_label").at(0).trigger("click");
+
+    Vue.nextTick(() => {
+      expect(wrapper.find("#user-input-prompt-message").isVisible()).toBe(false);
+      expect(wrapper.find("#settings-form").isVisible()).toBe(true);
+    });
+  });
+
+  test.each([0, 1])(
+    "When firmware_update_available is set to true, Then firmware update available message is displayed and send_firmware_update_confirmation is emitted upon closure",
+    async (close_idx) => {
+      const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+
+      // confirm precondition
+      expect(wrapper.find("#fw-update-available-message").isVisible()).toBe(false);
+
+      store.commit("settings/set_firmware_update_available", true);
+      Vue.nextTick(() => {
+        expect(wrapper.find("#fw-update-available-message").isVisible()).toBe(true);
+        expect(wrapper.find("#calibration-warning").isVisible()).toBe(false);
+      });
+
+      await wrapper.findAll(".span__button_label").at(close_idx).trigger("click");
+
+      Vue.nextTick(() => {
+        expect(wrapper.find("#fw-update-available-message").isVisible()).toBe(false);
+        expect(action_spy).toHaveBeenCalledWith(
+          "settings/send_firmware_update_confirmation",
+          close_idx === 1
+        );
+      });
+    }
+  );
 
   describe("Given a valid barcode has been committed to Vuex", () => {
     beforeEach(async () => {
@@ -244,6 +299,28 @@ describe("DesktopPlayerControls.vue", () => {
         }
       );
     });
+    test("When a user starts a recording and doesn't manually stop it within 30 seconds, Then a recording will get stopped regardless at that time point", async () => {
+      jest.useFakeTimers();
+      wrapper = shallowMount(component_to_test, {
+        store,
+        localVue,
+      });
+      await store.commit(
+        "playback/set_playback_state",
+        playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
+      );
+      await wrapper.find(".svg__playback-desktop-player-controls-record-button--inactive").trigger("click");
+      await wait_for_expect(() => {
+        expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]);
+      });
+
+      jest.advanceTimersByTime(30e3);
+      await wait_for_expect(() => {
+        expect(store.state.playback.playback_state).toBe(
+          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
+        );
+      });
+    });
     test.each([
       [
         "NEEDS_CALIBRATION",
@@ -356,6 +433,25 @@ describe("DesktopPlayerControls.vue", () => {
         });
       }
     );
+    test("Given calibration button would otherwise be active, When stim is running, Then calibration button is inactive", async () => {
+      const propsData = {};
+      wrapper = shallowMount(component_to_test, {
+        propsData,
+        store,
+        localVue,
+      });
+      const target_button = wrapper.find(".svg__playback-desktop-player-controls-calibrate-button");
+
+      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
+      store.commit("stimulation/set_stim_status", true);
+      await wrapper.vm.$nextTick(); // wait for update
+
+      await wait_for_expect(() => {
+        const the_classes = target_button.classes();
+        expect(target_button.isVisible()).toBe(true);
+        expect(the_classes).not.toContain("span__playback-desktop-player-controls--available");
+      });
+    });
     test.each([
       ["LIVE_VIEW_ACTIVE", ".svg__playback-desktop-player-controls-live-view-button", false],
       ["RECORDING", ".svg__playback-desktop-player-controls-live-view-button", true],
@@ -428,7 +524,7 @@ describe("DesktopPlayerControls.vue", () => {
       );
     });
 
-    test("When in beta 2 mode, Then confirmation modal that device is empty will appear before starting calibration", async () => {
+    test("When in beta 2 mode, Then confirmation modal saying to confirm that device is empty will appear before starting calibration", async () => {
       const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
 
       wrapper = mount(component_to_test, {

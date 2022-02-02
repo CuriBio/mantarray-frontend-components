@@ -15,7 +15,6 @@
 </template>
 <script>
 import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear, area as d3_area } from "d3";
-import { mapState } from "vuex";
 /**
  * @vue-prop {String} title - Current title of the waveform
  * @vue-prop {Int} samples_per_second - Current samples per second
@@ -66,7 +65,7 @@ export default {
     stim_line_color: { type: String, default: "#fff200" },
     margin: {
       type: Object,
-      default: function () {
+      default: () => {
         return { top: 10, right: 20, bottom: 30, left: 60 };
       },
     },
@@ -78,9 +77,13 @@ export default {
       type: Number,
       default: 406,
     },
-    well_idx: {
-      type: Number,
-      default: 0,
+    stim_fill_colors: {
+      type: Array,
+      default: () => [],
+    },
+    stim_fill_assignments: {
+      type: Array,
+      default: () => [],
     },
   },
   data: function () {
@@ -97,9 +100,6 @@ export default {
       },
     };
   },
-  computed: {
-    ...mapState("data", ["stim_fill_assignments", "stim_fill_colors"]),
-  },
   watch: {
     x_axis_min() {
       this.render_plot();
@@ -114,6 +114,9 @@ export default {
       this.render_plot();
     },
     tissue_data_points() {
+      this.render_plot();
+    },
+    stim_fill_assignments() {
       this.render_plot();
     },
   },
@@ -208,8 +211,8 @@ export default {
       this.display_x_axis();
       this.display_y_axis();
       this.plot_data();
+      this.plot_stim_data();
     },
-
     create_x_axis_scale: function () {
       this.x_axis_scale = scaleLinear()
         .domain([
@@ -229,10 +232,9 @@ export default {
     display_y_axis: function () {
       this.y_axis_node.call(axisLeft(this.y_axis_scale));
     },
-    plot_data: async function () {
+    plot_stim_data() {
       const x_axis_scale = this.x_axis_scale;
-      const y_axis_scale = this.y_axis_scale;
-
+      const stim_data = this.stim_fill_assignments;
       const area = d3_area()
         .x(function (d) {
           return x_axis_scale(d[0] / 1e6);
@@ -240,25 +242,26 @@ export default {
         .y0(this.plot_area_pixel_height)
         .y1(this.plot_area_pixel_height - 7);
 
-      // update stim lines  // TODO add tests for stim waveform drawing after frontend-test-utils update
-      const tissue_data_to_plot = this.tissue_data_points;
       this.stim_waveform_line_node.selectAll("*").remove();
-      const fill_colors = this.stim_fill_colors[this.well_idx];
+      for (const sub_protocol of stim_data) {
+        if (stim_data.length > 0) {
+          // 255 is sent when a user stops a stim
+          const color = sub_protocol[0] === 255 ? "none" : this.stim_fill_colors[sub_protocol[0]];
+          this.stim_waveform_line_node
+            .append("path")
+            .datum(sub_protocol[1])
+            .attr("fill", color)
+            .attr("stroke", "black")
+            .attr("stroke-width", 2.5)
+            .attr("d", area);
+        }
+      }
+    },
+    plot_data: async function () {
+      const x_axis_scale = this.x_axis_scale;
+      const y_axis_scale = this.y_axis_scale;
+      const tissue_data_to_plot = this.tissue_data_points;
 
-      this.stim_fill_assignments[this.well_idx].map((sub_protocol) => {
-        // 255 is sent when a user stops a stim
-        const color = sub_protocol[0] === 255 ? "none" : fill_colors[sub_protocol[0]]; // makes sliding transition smoother and brings color to end of grap
-
-        this.stim_waveform_line_node
-          .append("path")
-          .datum(sub_protocol[1])
-          .attr("fill", color)
-          .attr("stroke", "black")
-          .attr("stroke-width", 2.5)
-          .attr("d", area);
-      });
-
-      // Needs to be last so tissue line sits on top of the colored background
       this.waveform_line_node.selectAll("*").remove();
       this.waveform_line_node
         .append("path")

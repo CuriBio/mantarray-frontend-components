@@ -8,8 +8,7 @@
     <div class="div_status-error-catch-alert-txt">
       <p>{{ shutdown_error_message }}</p>
       <p>
-        Please send the 3 most recent log files in the folder <br />
-        shown below to
+        Please send the folder shown below to
         <a id="error_contact" href="mailto:contact@curibio.com ? subject = Mantarray Error log"
           >contact@curibio.com</a
         >
@@ -24,7 +23,7 @@
       :value.prop="log_filepath"
       :style="textarea__error_cssprops"
     ></textarea>
-    <div class="div_status-error-catch-next-step-txt">
+    <div class="div_status-error-catch-next-step-txt" :style="next_step_cssprops">
       <p>
         Please restart the computer, unplug and plug back in the <br />
         power for the Mantarray before attempting to use again
@@ -58,13 +57,16 @@ export default {
   },
   computed: {
     compute_number_of_rows: function () {
-      return Math.ceil(((this.log_filepath.length * 1.0) / 40).toFixed(1));
+      return Math.ceil(((this.log_filepath.length * 1.0) / 30).toFixed(1));
     },
     error_background_cssprops: function () {
       return "height: " + (220 + this.compute_number_of_rows * 12) + "px;";
     },
     textarea__error_cssprops: function () {
       return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";
+    },
+    next_step_cssprops: function () {
+      return "top: " + (160 + this.compute_number_of_rows * 12) + "px;";
     },
     error_catch_button_cssprops: function () {
       return "top: " + (220 + this.compute_number_of_rows * 12) + "px; left: 0px; position: absolute";
@@ -154,12 +156,12 @@ a:hover {
   transform: rotate(0deg);
   padding: 0px;
   margin: 0px;
-  word-wrap: break-word;
+  word-break: break-all;
   outline: none;
   color: rgb(183, 183, 183);
   font-family: Courier New;
   position: absolute;
-  top: 148px;
+  top: 122px;
   left: 56px;
   width: 338px;
   background: rgb(17, 17, 17);
@@ -190,7 +192,6 @@ a:hover {
   color: rgb(183, 183, 183);
   font-family: Muli;
   position: absolute;
-  top: 195px;
   left: 0px;
   width: 450px;
   height: 66px;

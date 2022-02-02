@@ -56,8 +56,7 @@ describe("ErrorCatchWidget.vue", () => {
     expect(target_alert_div_p.at(0).text()).toStrictEqual("Mantarray software is about to shut down.");
     expect(target_alert_div_p.at(1)).toMatchInlineSnapshot(`
       <p>
-        Please send the 3 most recent log files in the folder <br>
-        shown below to
+        Please send the folder shown below to
         <a id="error_contact" href="mailto:contact@curibio.com ? subject = Mantarray Error log">contact@curibio.com</a>
       </p>
     `);

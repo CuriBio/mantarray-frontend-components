@@ -208,7 +208,6 @@ export default {
     const message = { protocols: [], protocol_assignments: {} };
 
     const { protocol_assignments } = this.state.stimulation;
-    const { stim_fill_colors } = this.state.data;
 
     const charge_conversion = { C: 1000, V: 1 };
 
@@ -223,13 +222,16 @@ export default {
         const { stimulation_type, pulses, stop_setting, detailed_pulses } = protocol_assignments[
           well
         ].protocol;
-
-        stim_fill_colors[well] = detailed_pulses.map((pulse) => pulse.repeat.color);
-        // add protocol to list of unique protocols if it has not been entered yet
         const { letter } = protocol_assignments[well];
+
+        const fill_color_payload = {
+          stim_fill_colors: detailed_pulses.map((pulse) => pulse.repeat.color),
+          well,
+        };
+        this.commit("data/set_fill_colors", fill_color_payload);
+        // add protocol to list of unique protocols if it has not been entered yet
         if (!unique_protocol_ids.has(letter)) {
           unique_protocol_ids.add(letter);
-
           const converted_pulses = pulses.map((pulse) => {
             return {
               phase_one_duration: pulse.phase_one_duration * 1000, // sent in µs

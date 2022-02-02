@@ -21,6 +21,11 @@ const default_state = {
   total_uploaded_files: [],
   shutdown_error_message: "Mantarray software is about to shut down.",
   beta_2_mode: false,
+  software_update_available: false,
+  firmware_update_available: false,
+  firmware_update_dur_mins: null,
+  allow_sw_update_install: false,
+  user_cred_input_needed: false,
 };
 
 const state = () => JSON.parse(JSON.stringify(default_state));

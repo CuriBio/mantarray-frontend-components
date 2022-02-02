@@ -26,6 +26,7 @@ repos:
     rev: v2.2.1
     hooks:
       - id: prettier
+        args: [--print-width=110]
         # args: [--vue-indent-script-and-style true]
         exclude: sample_waveform_data/|dist/|jsdoc.json
 

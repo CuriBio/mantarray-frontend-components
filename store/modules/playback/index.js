@@ -6,6 +6,7 @@ import mutations from "./mutations";
 import { ENUMS } from "./enums";
 
 const default_state = {
+  enable_additional_controls: false,
   loop_playback: false,
   is_playing: false,
   x_time_index: 0,
