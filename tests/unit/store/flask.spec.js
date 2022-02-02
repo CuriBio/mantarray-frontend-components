@@ -118,6 +118,7 @@ describe("store/flask", () => {
         ui_status_code: STATUS.MESSAGE.CALIBRATED,
         in_simulation_mode: false,
       });
+      const commit_spy = jest.spyOn(store, "commit");
 
       store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING);
 
@@ -130,8 +131,13 @@ describe("store/flask", () => {
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
+
+      // Also make sure additional controls are enabled
+      expect(commit_spy).toHaveBeenCalledWith("playback/set_enable_additional_controls", true, {
+        root: true,
+      });
     });
-    describe("Given /system_status is mocked to return CALIBRATED as the status anda valid place barcode, and the current status is LIVE_VIEW_ACTIVE", () => {
+    describe("Given /system_status is mocked to return CALIBRATED as the status and a valid plate barcode, and the current status is LIVE_VIEW_ACTIVE", () => {
       beforeEach(() => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATED,

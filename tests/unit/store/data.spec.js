@@ -425,6 +425,86 @@ describe("store/data", () => {
       expect(upload_error).toBe(true);
       expect(file_count).toBe(0);
     });
+    test("When backend emits sw_update message with allow_software_update value, Then ws client commits value to store", async () => {
+      const message = {
+        allow_software_update: true,
+      };
+
+      // confirm precondition
+      expect(store.state.settings.allow_sw_update_install).toBe(false);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("sw_update", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.allow_sw_update_install).toBe(true);
+    });
+    test("When backend emits sw_update message with software_update_available value, Then ws client commits value to store", async () => {
+      const message = {
+        software_update_available: true,
+      };
+
+      // confirm precondition
+      expect(store.state.settings.software_update_available).toBe(false);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("sw_update", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.software_update_available).toBe(true);
+    });
+    test("When backend emits fw_update message with firmware_update_available true, Then ws client commits value to store", async () => {
+      const message = {
+        firmware_update_available: true,
+        channel_fw_update: true,
+      };
+
+      // confirm precondition
+      expect(store.state.settings.firmware_update_available).toBe(false);
+      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("fw_update", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.firmware_update_available).toBe(true);
+      expect(store.state.settings.firmware_update_dur_mins).toBe(5);
+    });
+    test("When backend emits fw_update message with firmware_update_available false, Then ws client does not commit value to store", async () => {
+      const message = {
+        firmware_update_available: false,
+      };
+
+      // confirm precondition
+      expect(store.state.settings.firmware_update_available).toBe(false);
+      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("fw_update", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.firmware_update_available).toBe(false);
+      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+    });
+    test("When backend emits prompt_user_input message with customer_creds as input type, Then ws client sets correct flag in store", async () => {
+      const message = {
+        input_type: "customer_creds",
+      };
+
+      // confirm precondition
+      expect(store.state.settings.user_cred_input_needed).toBe(false);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("prompt_user_input", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.settings.user_cred_input_needed).toBe(true);
+    });
   });
 
   // TODO move these to another test file

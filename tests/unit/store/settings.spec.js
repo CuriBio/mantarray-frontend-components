@@ -326,5 +326,39 @@ describe("store/settings", () => {
       const { status } = await store.dispatch("settings/update_settings");
       expect(status).toBe(200);
     });
+    test.each([true, false])(
+      "When a user confirms whether or not they want to proceed with a FW update, Then that decision is sent to the BE",
+      async (decision) => {
+        const post_spy = jest
+          .spyOn(axios_helpers, "post_firmware_update_confirmation")
+          .mockImplementation(() => {
+            return {
+              status: 200,
+            };
+          });
+
+        const { status } = await store.dispatch("settings/send_firmware_update_confirmation", decision);
+        expect(status).toBe(200);
+        expect(post_spy).toHaveBeenCalledWith(decision);
+      }
+    );
+  });
+  describe("settings/mutations", () => {
+    test.each([true, false])(
+      "When set_firmware_update_available is commited, Then firmware_update_dur_mins is updated accordingly",
+      (channel) => {
+        const update_info = { channel_fw_update: channel };
+        store.commit("settings/set_firmware_update_available", update_info);
+        expect(store.state.settings.firmware_update_dur_mins).toStrictEqual(channel ? 5 : 1);
+      }
+    );
+    test.each([true, false])(
+      "When set_firmware_update_available is commited, Then firmware_update_available is updated accordingly",
+      (update) => {
+        const update_info = { firmware_update_available: update };
+        store.commit("settings/set_firmware_update_available", update_info);
+        expect(store.state.settings.firmware_update_available).toStrictEqual(update);
+      }
+    );
   });
 });

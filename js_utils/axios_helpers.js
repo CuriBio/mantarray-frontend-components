@@ -96,3 +96,20 @@ export async function post_stim_status(status) {
     if (error.response) return error.response.status;
   }
 }
+
+/**
+ * Function to post firmware update confirmation
+ * @param  {Boolean} update_accepted of type Boolean.
+ * @return {Int} Int status code if error
+ */
+export async function post_firmware_update_confirmation(update_accepted) {
+  const baseURL = "http://localhost:4567";
+  const URL = `/firmware_update_confirmation?update_accepted=${update_accepted}`;
+  try {
+    await Vue.axios.post(`${baseURL}${URL}`);
+    return;
+  } catch (error) {
+    console.log("Error in firmware_update_confirmation for " + `${baseURL}${URL}` + ": " + error);
+    if (error.response) return error.response.status;
+  }
+}

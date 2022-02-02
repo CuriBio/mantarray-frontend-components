@@ -143,21 +143,75 @@
     >
       <SettingsForm @close_modal="close_settings_modal" />
     </b-modal>
-    <b-modal id="calibration-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+    <b-modal
+      id="calibration-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
       <StatusWarningWidget
         id="calibration-modal"
         :modal_labels="calibration_modal_labels"
         @handle_confirmation="close_calibration_modal"
       />
     </b-modal>
-    <b-modal id="five-min-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+    <b-modal
+      id="fw-update-available-message"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        id="fw-update-available"
+        :modal_labels="fw_update_available_labels"
+        @handle_confirmation="close_fw_update_available_modal"
+      />
+    </b-modal>
+    <b-modal
+      id="user-input-prompt-message"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        id="user-input-prompt"
+        :modal_labels="user_input_prompt_labels"
+        @handle_confirmation="close_user_input_prompt_modal"
+      />
+    </b-modal>
+    <b-modal
+      id="five-min-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
       <StatusWarningWidget
         id="five-min"
         :modal_labels="time_warning_labels.five"
         @handle_confirmation="close_five_min_modal"
       />
     </b-modal>
-    <b-modal id="one-min-warning" size="sm" hide-footer hide-header hide-header-close :static="true">
+    <b-modal
+      id="one-min-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
       <StatusWarningWidget
         id="one-min"
         :modal_labels="time_warning_labels.one"
@@ -167,8 +221,9 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import playback_module from "@/store/modules/playback";
+import { STATUS } from "@/store/modules/flask/enums";
 import PlayerControlsSettingsButton from "./PlayerControlsSettingsButton.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlayCircle as fa_play_circle, faSpinner as fa_spinner } from "@fortawesome/free-solid-svg-icons";
@@ -261,6 +316,12 @@ export default {
           button_names: ["No", "Yes"],
         },
       },
+      user_input_prompt_labels: {
+        header: "Important!",
+        msg_one: "Downloading the firmware update requires your user credentials.",
+        msg_two: "Please input them to begin the download",
+        button_names: ["Okay"],
+      },
     };
   },
   computed: {
@@ -271,8 +332,43 @@ export default {
       "one_min_warning",
       "five_min_warning",
     ]),
-    ...mapState("settings", ["customer_index", "auto_upload", "beta_2_mode"]),
+    ...mapState("settings", [
+      "customer_index",
+      "auto_upload",
+      "beta_2_mode",
+      "user_cred_input_needed",
+      "firmware_update_available",
+      "firmware_update_dur_mins",
+    ]),
+    ...mapState("stimulation", ["stim_status"]),
+    ...mapGetters({
+      status_uuid: "flask/status_id",
+    }),
+    fw_update_available_labels: function () {
+      let duration = `${this.firmware_update_dur_mins} minute`;
+      if (this.firmware_update_dur_mins !== 1) duration += "s";
+      return {
+        header: "Important!",
+        msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete.`,
+        msg_two:
+          "Declining it will prevent automatic software updating. Would you like to download and install the update?",
+        button_names: ["No", "Yes"],
+      };
+    },
+
     calibrate_tooltip_text: function () {
+      if (
+        this.status_uuid == STATUS.MESSAGE.UPDATES_NEEDED ||
+        this.status_uuid == STATUS.MESSAGE.DOWNLOADING_UPDATES ||
+        this.status_uuid == STATUS.MESSAGE.INSTALLING_UPDATES ||
+        this.status_uuid == STATUS.MESSAGE.UPDATES_COMPLETE ||
+        this.status_uuid == STATUS.MESSAGE.UPDATE_ERROR
+      ) {
+        return "Cannot calibrate during firmware update.";
+      }
+      if (this.stim_status) {
+        return "Cannot calibrate while stimulating";
+      }
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
         return "Calibration needed. Click to calibrate.";
       }
@@ -281,6 +377,7 @@ export default {
       }
       if (
         this.playback_state == this.playback_state_enums.LIVE_VIEW_ACTIVE ||
+        this.playback_state == this.playback_state_enums.BUFFERING ||
         this.playback_state == this.playback_state_enums.RECORDING
       ) {
         return "Cannot calibrate while Mantarray is in use.";
@@ -294,7 +391,10 @@ export default {
       if (this.playback_state === this.playback_state_enums.RECORDING) {
         return "Must stop recording before deactivating.";
       }
-      if (this.playback_state === this.playback_state_enums.CALIBRATION_NEEDED) {
+      if (
+        this.playback_state === this.playback_state_enums.CALIBRATION_NEEDED ||
+        this.playback_state === this.playback_state_enums.CALIBRATING
+      ) {
         return "Must calibrate before activating.";
       }
       if (this.playback_state === this.playback_state_enums.CALIBRATED) {
@@ -346,8 +446,9 @@ export default {
     svg__playback_desktop_player_controls_calibrate_button__dynamic_class: function () {
       return {
         "span__playback-desktop-player-controls--available":
-          this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
-          this.playback_state === this.playback_state_enums.CALIBRATED,
+          (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
+            this.playback_state === this.playback_state_enums.CALIBRATED) &&
+          !this.stim_status,
       };
     },
   },
@@ -360,6 +461,12 @@ export default {
     },
     five_min_warning() {
       if (this.five_min_warning) this.$bvModal.show("five-min-warning");
+    },
+    firmware_update_available() {
+      if (this.firmware_update_available) this.$bvModal.show("fw-update-available-message");
+    },
+    user_cred_input_needed() {
+      if (this.user_cred_input_needed) this.$bvModal.show("user-input-prompt-message");
     },
   },
   methods: {
@@ -391,8 +498,9 @@ export default {
     },
     on_calibrate_click: function () {
       if (
-        this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
-        this.playback_state === this.playback_state_enums.CALIBRATED
+        (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
+          this.playback_state === this.playback_state_enums.CALIBRATED) &&
+        !this.stim_status
       ) {
         if (this.beta_2_mode) this.$bvModal.show("calibration-warning");
         else this.$store.dispatch("playback/start_calibration");
@@ -408,6 +516,14 @@ export default {
     close_calibration_modal(idx) {
       this.$bvModal.hide("calibration-warning");
       if (idx === 1) this.$store.dispatch("playback/start_calibration");
+    },
+    close_fw_update_available_modal(idx) {
+      this.$bvModal.hide("fw-update-available-message");
+      this.$store.dispatch("settings/send_firmware_update_confirmation", idx === 1);
+    },
+    close_user_input_prompt_modal() {
+      this.$bvModal.hide("user-input-prompt-message");
+      this.$bvModal.show("settings-form");
     },
     close_five_min_modal(idx) {
       this.$bvModal.hide("five-min-warning");
@@ -579,6 +695,8 @@ export default {
 }
 
 #calibration-warning,
+#user-input-prompt-message,
+#fw-update-available-message,
 #five-min-warning,
 #one-min-warning {
   position: fixed;

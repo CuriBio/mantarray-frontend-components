@@ -48,4 +48,17 @@ export default {
   set_beta_2_mode(state, bool) {
     state.beta_2_mode = bool;
   },
+  set_software_update_available(state, bool) {
+    state.software_update_available = bool;
+  },
+  set_firmware_update_available(state, update_info) {
+    state.firmware_update_available = update_info.firmware_update_available;
+    state.firmware_update_dur_mins = update_info.channel_fw_update ? 5 : 1;
+  },
+  set_allow_sw_update_install(state, bool) {
+    state.allow_sw_update_install = bool;
+  },
+  set_user_cred_input_needed(state, bool) {
+    state.user_cred_input_needed = bool;
+  },
 };

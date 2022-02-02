@@ -1,4 +1,4 @@
-import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
+import { call_axios_get_from_vuex, post_firmware_update_confirmation } from "@/js_utils/axios_helpers.js";
 
 export default {
   async update_settings() {
@@ -34,5 +34,10 @@ export default {
       user_account_id
     )}&auto_upload=${auto_upload}&auto_delete=${auto_delete}`;
     return await call_axios_get_from_vuex(whole_url, context);
+  },
+  async send_firmware_update_confirmation(context, update_accepted) {
+    const status = update_accepted ? "accepted" : "declined";
+    console.log(`User ${status} firmware update`); // allow-log
+    return await post_firmware_update_confirmation(update_accepted);
   },
 };

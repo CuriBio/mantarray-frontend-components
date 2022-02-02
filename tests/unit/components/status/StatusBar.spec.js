@@ -163,14 +163,16 @@ describe("StatusWidget.vue", () => {
   test.each([
     "SERVER_STILL_INITIALIZING",
     "SERVER_READY",
-    "INITIALIZING_INSTRUMEN",
+    "INITIALIZING_INSTRUMENT",
     "CALIBRATION_NEEDED",
     "CALIBRATING",
     "CALIBRATED",
-    "BUFFERING",
+    "UPDATES_NEEDED",
+    "UPDATES_COMPLETE",
+    "UPDATE_ERROR",
     "ERROR",
   ])(
-    "When a user wants to exit the desktop app, Then the closure warning modal should not appear if there are no active processes",
+    "When a user wants to exit the desktop app, Then the closure warning modals should not appear if there are no active processes or fw update",
     async (vuex_state) => {
       const confirmation_spy = jest.spyOn(StatusWidget.methods, "handle_confirmation");
       wrapper = mount(StatusWidget, {
@@ -178,29 +180,34 @@ describe("StatusWidget.vue", () => {
         localVue,
       });
 
-      await store.commit("flask/set_status_uuid", STATUS.MESSAGE.vuex_state);
+      await store.commit("flask/set_status_uuid", STATUS.MESSAGE[vuex_state]);
       await wrapper.setProps({ confirmation_request: true });
       expect(confirmation_spy).toHaveBeenCalledWith(1);
+
+      Vue.nextTick(() => {
+        expect(wrapper.find("#fw-closure-warning").isVisible()).toBe(false);
+        expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(false);
+      });
     }
   );
 
-  test.each(["LIVE_VIEW_ACTIVE", "RECORDING", "CALIBRATINž"])(
+  test.each(["BUFFERING", "LIVE_VIEW_ACTIVE", "RECORDING", "CALIBRATING"])(
     "When a user wants to exit the desktop app, Then the closure warning modal should appear if there are active processes",
     async (vuex_state) => {
       wrapper = mount(StatusWidget, {
         store,
         localVue,
       });
-      await store.commit("flask/set_status_uuid", STATUS.MESSAGE.vuex_state);
+      await store.commit("flask/set_status_uuid", STATUS.MESSAGE[vuex_state]);
 
       await wrapper.setProps({ confirmation_request: false });
       Vue.nextTick(() => {
-        expect(wrapper.find("#closure").isVisible()).toBe(false);
+        expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(false);
       });
 
       await wrapper.setProps({ confirmation_request: true });
       Vue.nextTick(() => {
-        expect(wrapper.find("#closure").isVisible()).toBe(true);
+        expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(true);
       });
     }
   );
@@ -214,12 +221,33 @@ describe("StatusWidget.vue", () => {
     await store.commit("stimulation/set_stim_status", true);
     await wrapper.setProps({ confirmation_request: false });
     Vue.nextTick(() => {
-      expect(wrapper.find("#closure").isVisible()).toBe(false);
+      expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(false);
     });
 
     await wrapper.setProps({ confirmation_request: true });
     Vue.nextTick(() => {
-      expect(wrapper.find("#closure").isVisible()).toBe(true);
+      expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(true);
     });
   });
+
+  test.each(["DOWNLOADING_UPDATES", "INSTALLING_UPDATES"])(
+    "When a user wants to exit the desktop app, Then the fw closure warning modal should appear if a fw update is in progress",
+    async (vuex_state) => {
+      wrapper = mount(StatusWidget, {
+        store,
+        localVue,
+      });
+      await store.commit("flask/set_status_uuid", STATUS.MESSAGE[vuex_state]);
+
+      await wrapper.setProps({ confirmation_request: false });
+      Vue.nextTick(() => {
+        expect(wrapper.find("#fw-closure-warning").isVisible()).toBe(false);
+      });
+
+      await wrapper.setProps({ confirmation_request: true });
+      Vue.nextTick(() => {
+        expect(wrapper.find("#fw-closure-warning").isVisible()).toBe(true);
+      });
+    }
+  );
 });
