@@ -1,10 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-0.6.0 (unreleased)
+0.6.0 (2022-02-02)
 ------------------
 
 - Added Firmware Autoupdating features
+- Added prevention of starting stimulation while calibrating
+- Added prevention of starting calibration while stimulating
+- Added prevention of additional controls before initial calibration completes
+- Added temperature controls icon to additional controls widet
+- Fixed various tooltips
+- Changed some modal styling
 
 
 0.5.9 (2022-01-06)
