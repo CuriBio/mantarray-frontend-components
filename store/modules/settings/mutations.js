@@ -53,7 +53,7 @@ export default {
   },
   set_firmware_update_available(state, update_info) {
     state.firmware_update_available = update_info.firmware_update_available;
-    state.firmware_update_dur_mins = update_info.channel_fw_update ? 5 : 1; // TODO
+    state.firmware_update_dur_mins = update_info.channel_fw_update ? 5 : 1;
   },
   set_allow_sw_update_install(state, bool) {
     state.allow_sw_update_install = bool;

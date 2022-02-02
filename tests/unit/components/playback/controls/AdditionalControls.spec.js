@@ -31,9 +31,33 @@ describe("store/stimulation", () => {
       expect(wrapper.vm.play_state).toBe(false);
     });
 
+    describe("Given additional controls are disabled", () => {
+      beforeEach(() => {
+        store.commit("playback/set_enable_additional_controls", false);
+      });
+
+      test("Then controls block should be displayed", () => {
+        const wrapper = mount(AdditionalControls, {
+          store,
+          localVue,
+        });
+        const controls_block = wrapper.find(".div__controls-block");
+        expect(controls_block.isVisible()).toBe(true);
+      });
+    });
+
     describe("Given additional controls are enabled", () => {
       beforeEach(() => {
         store.commit("playback/set_enable_additional_controls", true);
+      });
+
+      test("Then controls block should not be displayed", () => {
+        const wrapper = mount(AdditionalControls, {
+          store,
+          localVue,
+        });
+        const controls_block = wrapper.find(".div__controls-block");
+        expect(controls_block.isVisible()).toBe(false);
       });
 
       test("Given a stimulation is active, When a user clicks the button to turn off stimulation, Then a signal should be dispatched to BE", async () => {
