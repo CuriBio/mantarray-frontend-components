@@ -164,6 +164,7 @@ export default {
     },
     confirmation_request: function () {
       const sensitive_ops_in_progress =
+        this.status_uuid === STATUS.MESSAGE.BUFFERING ||
         this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE ||
         this.status_uuid === STATUS.MESSAGE.RECORDING ||
         this.status_uuid === STATUS.MESSAGE.CALIBRATING ||

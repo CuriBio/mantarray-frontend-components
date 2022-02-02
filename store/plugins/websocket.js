@@ -56,7 +56,6 @@ export default function create_web_socket_plugin(socket) {
       if (cb !== null) cb("commit done");
     });
     socket.on("sw_update", function (message_json, cb = null) {
-      // TODO unit test
       const message = JSON.parse(message_json);
       if (message.allow_software_update !== undefined) {
         store.commit("settings/set_allow_sw_update_install", message.allow_software_update);
@@ -71,7 +70,6 @@ export default function create_web_socket_plugin(socket) {
       if (cb !== null) cb("commit done");
     });
     socket.on("fw_update", function (message_json, cb = null) {
-      // TODO unit test
       const message = JSON.parse(message_json);
       if (message.firmware_update_available === true) {
         console.log("Firmware update found"); // allow-log
@@ -82,7 +80,6 @@ export default function create_web_socket_plugin(socket) {
       if (cb !== null) cb("commit done");
     });
     socket.on("prompt_user_input", function (message_json, cb = null) {
-      // TODO unit test
       const message = JSON.parse(message_json);
       if (message.input_type === "customer_creds") {
         store.commit("settings/set_user_cred_input_needed", true);
