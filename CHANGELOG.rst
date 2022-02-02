@@ -9,6 +9,8 @@ Changelog for Mantarray Frontend Components
 - Added prevention of starting calibration while stimulating
 - Added prevention of additional controls before initial calibration completes
 - Added temperature controls icon to additional controls widget
+- Added 30 second timer on recordings to automatically stop
+- Fixed some live view performance issues
 - Fixed various tooltips
 - Fixed issue where many modals that emit messages could be closed by clicking on backdrop
 - Changed some modal styling

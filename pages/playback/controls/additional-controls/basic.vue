@@ -1,6 +1,7 @@
 <template>
   <div>
     <AdditionalControls />
+    <button class="enable-button" @click="enable_controls">Enable Additional Controls</button>
     <button class="update-button" @click="update_protocol_assignment">Update protocol assignments</button>
   </div>
 </template>
@@ -29,6 +30,7 @@ export default {
   },
   methods: {
     ...mapMutations("stimulation", ["set_stim_status"]),
+    ...mapMutations("playback", ["set_enable_additional_controls"]),
     update_protocol_assignment() {
       const test_assignment = {
         A2: {
@@ -77,14 +79,33 @@ export default {
       };
       this.$store.state.stimulation.protocol_assignments = test_assignment;
     },
+    enable_controls() {
+      this.set_enable_additional_controls(true);
+    },
   },
 };
 </script>
 <style scoped>
+.enable-button {
+  position: absolute;
+  top: 45px;
+  left: 350px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: #4ca0af;
+  z-index: 999;
+}
 .update-button {
   position: absolute;
   top: 100px;
-  left: 300px;
+  left: 350px;
   border: none;
   color: white;
   padding: 15px 32px;
