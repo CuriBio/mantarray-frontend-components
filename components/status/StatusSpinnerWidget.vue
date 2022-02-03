@@ -28,7 +28,7 @@ export default {
       default() {
         return {
           header: "Important!",
-          msg_one: "The firmware update is in progress.",
+          msg_one: "The firmware update is in progress. It will take about 7 minutes to complete.",
           msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
         };
       },
