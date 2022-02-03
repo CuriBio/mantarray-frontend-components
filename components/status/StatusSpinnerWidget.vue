@@ -48,7 +48,7 @@ export default {
       return `height: ${60 + this.compute_number_of_rows * 12}px;`;
     },
     spinner_top: function () {
-      return `top: ${105 + this.compute_number_of_rows * 12}px;`;
+      return `top: ${110 + this.compute_number_of_rows * 12}px;`;
     },
   },
 };
