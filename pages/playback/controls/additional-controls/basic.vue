@@ -8,8 +8,8 @@
 
 <script>
 import { mapMutations } from "vuex";
-// import { AdditionalControls } from "@/dist/mantarray.common";
-import AdditionalControls from "@/components/playback/controls/AdditionalControls.vue";
+import { AdditionalControls } from "@/dist/mantarray.common";
+// import AdditionalControls from "@/components/playback/controls/AdditionalControls.vue";
 
 export default {
   components: {
