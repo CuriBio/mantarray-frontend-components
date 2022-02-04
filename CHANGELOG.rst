@@ -7,6 +7,7 @@ Changelog for Mantarray Frontend Components
 - Added expected firmware update duration to spinner widget
 - Added firmware update timeout message
 - Added minor styling updates
+- Added additional controls hover modals
 - Changed subprotocol edit from Shift+Click to Double Click
 
 
