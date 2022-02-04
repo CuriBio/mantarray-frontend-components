@@ -46,7 +46,7 @@ export default {
       x_axis_sample_length: 100,
       dynamic_plot_width: 1200,
       delay_blocks: [],
-      x_axis_label: "Time (ms)",
+      x_axis_label: "Time",
       last_x_value: 0,
     };
   },

@@ -1,14 +1,12 @@
 <template>
   <div class="div__axis-controls">
-    <div class="div__axis-controls-elements">
-      <span class="span__axis-controls-zoom-out-button" @click="zoom_out">
-        <FontAwesomeIcon :icon="['fa', 'minus-circle']" />
-      </span>
+    <span class="span__axis-controls-zoom-out-button" @click="zoom_out">
+      <FontAwesomeIcon :icon="['fa', 'minus-circle']" />
+    </span>
 
-      <span class="span__axis-controls-zoom-in-button" @click="zoom_in">
-        <FontAwesomeIcon :icon="['fa', 'plus-circle']" />
-      </span>
-    </div>
+    <span class="span__axis-controls-zoom-in-button" @click="zoom_in">
+      <FontAwesomeIcon :icon="['fa', 'plus-circle']" />
+    </span>
   </div>
 </template>
 <script>
@@ -49,28 +47,21 @@ export default {
 </script>
 <style scoped>
 .div__axis-controls {
-  position: absolute;
-  top: 3px;
+  position: relative;
   left: 0px;
 }
-.div__axis-controls-elements {
-  height: 45px;
-  width: 218px;
-  margin: 0px auto;
-}
+
 .span__axis-controls-zoom-out-button {
   text-align: center;
   font-weight: normal;
   position: relative;
   padding-right: 11px;
-  left: 160px;
   height: 24px;
   width: 24px;
 }
 .span__axis-controls-zoom-in-button {
   font-weight: normal;
   position: relative;
-  left: 155px;
   height: 24px;
   width: 24px;
 }

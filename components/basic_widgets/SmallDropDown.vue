@@ -19,7 +19,7 @@
       </div>
       <div class="arrow" :class="{ expanded: visible }" />
       <div :class="{ hidden: !visible, visible }">
-        <ul>
+        <ul :style="`bottom: ${bottom_pixels}px`">
           <li
             v-for="item in options_list"
             :id="item.name"
@@ -68,6 +68,9 @@ export default {
     },
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
+    },
+    bottom_pixels: function () {
+      return (this.options_text.length - 2) * 25 + 12;
     },
   },
   watch: {
@@ -171,19 +174,20 @@ ul {
   width: 100%;
   list-style-type: none;
   padding: 0;
-  margin-top: 16px;
   left: 0;
   font-size: 11px;
+  height: 25px;
+  line-height: 25px;
   position: absolute;
   color: #b7b7b7;
-  border-top: 1px solid rgb(17, 17, 17);
   z-index: 5;
 }
 
 li {
-  padding: 4px 10px 4px 10px;
   color: #b7b7b7;
   background-color: #292929;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 li:hover {
   background: #1c1c1c;
