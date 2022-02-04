@@ -109,8 +109,6 @@ export default {
       frequency_of_y_ticks: 5,
       time_units: ["milliseconds", "seconds"],
       active_duration_idx: 0,
-      scalable_x_min: this.x_axis_min,
-      scalable_x_max: this.x_axis_min + this.x_axis_sample_length,
     };
   },
   computed: {
@@ -122,9 +120,6 @@ export default {
     },
   },
   watch: {
-    x_axis_min() {
-      this.render_plot();
-    },
     x_axis_sample_length() {
       this.render_plot();
     },
@@ -137,8 +132,7 @@ export default {
     data_points() {
       this.render_plot();
     },
-
-    plot_area_pixel_width: function () {
+    plot_area_pixel_width() {
       this.the_svg = d3_select(this.$el)
         .select(".div__waveform-graph")
         .append("svg")
@@ -179,15 +173,7 @@ export default {
       .attr("width", margin.left)
       .attr("height", 230)
       .attr("fill", blocker_color);
-    // Right Side
-    // margin_blockers_node
-    //   .append("rect")
-    //   .attr("id", "margin_blocker_right")
-    //   .attr("x", this.plot_area_pixel_width + 1)
-    //   .attr("y", -margin.top)
-    //   .attr("width", margin.right)
-    //   .attr("height", this.plot_area_pixel_height + margin.top + margin.bottom)
-    //   .attr("fill", blocker_color);
+
     // Top
     margin_blockers_node
       .append("rect")
@@ -226,10 +212,7 @@ export default {
   methods: {
     handle_total_duration_unit_change(idx) {
       this.active_duration_idx = idx;
-      this.scalable_x_max = idx === 1 ? this.scalable_x_max * 1e-3 : this.scalable_x_max * 1e3;
-      this.scalable_x_min = idx === 1 ? this.scalable_x_min * 1e-3 : this.scalable_x_min * 1e3;
-
-      this.render_plot();
+      this.$store.dispatch("stimulation/handle_x_axis_unit", idx);
     },
     render_plot: function () {
       this.create_x_axis_scale();
@@ -241,7 +224,7 @@ export default {
     },
     create_x_axis_scale: function () {
       this.x_axis_scale = scaleLinear()
-        .domain([this.scalable_x_min, this.scalable_x_max])
+        .domain([0, this.x_axis_sample_length])
         .range([0, this.plot_area_pixel_width]);
     },
     create_y_axis_scale: function () {
@@ -257,7 +240,6 @@ export default {
     },
     plot_data: function () {
       const data_to_plot = this.data_points;
-
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 

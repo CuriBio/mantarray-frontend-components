@@ -305,4 +305,13 @@ export default {
     }
     this.commit("stimulation/reset_protocol_editor");
   },
+  handle_x_axis_unit({ commit, state }, idx) {
+    const { x_axis_values, y_axis_values } = state;
+    const converted_x_values = x_axis_values.map((val) => (idx === 1 ? val * 1e-3 : val * 1e3));
+    this.commit("stimulation/set_x_axis_time_idx", idx);
+    this.dispatch("stimulation/handle_rest_duration", {
+      x_values: converted_x_values,
+      y_values: y_axis_values,
+    });
+  },
 };
