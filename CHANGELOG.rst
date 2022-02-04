@@ -1,6 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.6.1 (2022-02-03)
+------------------
+
+- Added expected firmware update duration to spinner widget
+- Added firmware update timeout message
+- Added minor styling updates
+- Added additional controls hover modals
+- Changed subprotocol edit from Shift+Click to Double Click
+
+
 0.6.0 (2022-02-02)
 ------------------
 

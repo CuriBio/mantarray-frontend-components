@@ -34,7 +34,7 @@
         :static="true"
         :no-close-on-backdrop="true"
       >
-        <StatusSpinnerWidget id="fw-updates-in-progress" />
+        <StatusSpinnerWidget id="fw-updates-in-progress" :modal_labels="fw_update_in_progress_labels" />
       </b-modal>
       <b-modal
         id="sw-update-message"
@@ -115,12 +115,6 @@ export default {
   data() {
     return {
       alert_txt: "",
-      fw_updates_in_progress_labels: {
-        header: "Important!",
-        msg_one: "The firmware update has begun.",
-        msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
-        button_names: ["Okay"],
-      },
       fw_closure_warning_labels: {
         header: "Warning!",
         msg_one:
@@ -156,7 +150,17 @@ export default {
       "beta_2_mode",
       "software_update_available",
       "allow_sw_update_install",
+      "firmware_update_dur_mins",
     ]),
+    fw_update_in_progress_labels: function () {
+      let duration = `${this.firmware_update_dur_mins} minute`;
+      if (this.firmware_update_dur_mins !== 1) duration += "s";
+      return {
+        header: "Important!",
+        msg_one: `The firmware update is in progress. It will take about ${duration} to complete.`,
+        msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
+      };
+    },
   },
   watch: {
     status_uuid: function (newValue) {
@@ -234,16 +238,21 @@ export default {
           this.$bvModal.show("fw-updates-complete-message");
           break;
         case STATUS.MESSAGE.UPDATE_ERROR:
-          this.alert_txt += `Error Occurred During Firmware Update`;
-          this.$bvModal.show("error-catch"); // TODO could make a customer error message for this
+          this.alert_txt += `Error During Firmware Update`;
+          this.close_modals_by_id(["fw-updates-in-progress-message", "fw-closure-warning"]);
+          this.$store.commit("flask/stop_status_pinging");
+          this.$store.commit("settings/set_shutdown_error_message", "Error during firmware update.");
+          this.$bvModal.show("error-catch");
           break;
         case STATUS.MESSAGE.ERROR:
           this.shutdown_request();
+          this.close_modals_by_id([
+            "fw-updates-in-progress-message",
+            "fw-closure-warning",
+            "ops-closure-warning",
+          ]);
           this.alert_txt += `Error Occurred`;
           this.$bvModal.show("error-catch");
-          break;
-        case STATUS.MESSAGE.SHUTDOWN:
-          this.alert_txt += `Shutting Down`;
           break;
         default:
           this.alert_txt = `Status:` + new_value; // to be 43 characters and include the UUID, there isn't room for a space
@@ -252,7 +261,6 @@ export default {
     },
     remove_error_catch: function () {
       this.$bvModal.hide("error-catch");
-      this.$store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
     },
     handle_confirmation: function (idx) {
       // Tanner (1/19/22): skipping automatic closure cancellation since this method gaurantees
