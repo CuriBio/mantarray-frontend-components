@@ -114,19 +114,6 @@ describe("StatusWidget.vue", () => {
       done();
     });
   });
-  test("When Vuex is mutated to an SHUTDOWN UUID, Then the status text should update as 'Shutting Down'", async () => {
-    const propsData = {};
-    wrapper = mount(StatusWidget, {
-      propsData,
-      store,
-      localVue,
-    });
-
-    store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
-    await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toBe("Status: Shutting Down");
-    await wrapper.vm.$nextTick(); // wait for update
-  });
   test("Given that the http response is 200 for api request /shutdown, When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden and Status is changed to 'Shutting Down", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
     mocked_axios.onGet(shutdown_url).reply(200, {});
