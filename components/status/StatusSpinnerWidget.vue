@@ -28,7 +28,7 @@ export default {
       default() {
         return {
           header: "Important!",
-          msg_one: "The firmware update is in progress.",
+          msg_one: "The firmware update is in progress. It will take about 7 minutes to complete.",
           msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
         };
       },
@@ -48,7 +48,7 @@ export default {
       return `height: ${60 + this.compute_number_of_rows * 12}px;`;
     },
     spinner_top: function () {
-      return `top: ${105 + this.compute_number_of_rows * 12}px;`;
+      return `top: ${110 + this.compute_number_of_rows * 12}px;`;
     },
   },
 };

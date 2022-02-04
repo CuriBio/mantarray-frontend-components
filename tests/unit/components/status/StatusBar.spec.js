@@ -114,22 +114,7 @@ describe("StatusWidget.vue", () => {
       done();
     });
   });
-  test("When Vuex is mutated to an SHUTDOWN UUID, Then the status text should update as 'Shutting Down'", async () => {
-    const propsData = {};
-    wrapper = mount(StatusWidget, {
-      propsData,
-      store,
-      localVue,
-    });
-
-    store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
-    await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toBe("Status: Shutting Down");
-    await wrapper.vm.$nextTick(); // wait for update
-  });
-  test("Given that the http response is 200 for api request /shutdown, When an event 'ok-clicked'  is emitted from 'ErrorCatchWidget, Then verify that the dialog of ErrorCatchWidget is hidden and Status is changed to 'Shutting Down", async () => {
-    const shutdown_url = "http://localhost:4567/shutdown";
-    mocked_axios.onGet(shutdown_url).reply(200, {});
+  test("When Vuex is mutated to an UPDATE ERROR UUID, Then the status text should update as 'Error During Firmware Update' and the the dialog of ErrorCatchWidget is visible", async () => {
     const propsData = {};
     wrapper = mount(StatusWidget, {
       propsData,
@@ -141,9 +126,9 @@ describe("StatusWidget.vue", () => {
     expect(wrapper.contains("#error-catch")).toBe(true);
     const modal = wrapper.find("#error-catch");
 
-    store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
+    store.commit("flask/set_status_uuid", STATUS.MESSAGE.UPDATE_ERROR);
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toBe("Status: Error Occurred");
+    expect(wrapper.find(text_selector).text()).toBe("Status: Error During Firmware Update");
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(true);
       done();
@@ -151,15 +136,11 @@ describe("StatusWidget.vue", () => {
 
     wrapper.vm.remove_error_catch(); // the event of ok-clicked got invoked.
 
-    await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toBe("Status: Shutting Down");
-
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(false);
       done();
     });
   });
-
   test.each([
     "SERVER_STILL_INITIALIZING",
     "SERVER_READY",

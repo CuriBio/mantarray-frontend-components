@@ -256,12 +256,6 @@ describe("store/flask", () => {
         store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATION_NEEDED);
         expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.ERROR);
       });
-      test("Given the status is set to ERROR, When attempting to commit SHUTDOWN, Then updates to SHUTDOWN mode", () => {
-        store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
-
-        store.commit("flask/set_status_uuid", STATUS.MESSAGE.SHUTDOWN);
-        expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.SHUTDOWN);
-      });
       test("When set_status_ping_interval_id is committed, Then ID mutates", async () => {
         const expected_id = 2993;
         store.commit("flask/set_status_ping_interval_id", expected_id);

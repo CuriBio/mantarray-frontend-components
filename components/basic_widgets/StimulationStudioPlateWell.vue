@@ -55,7 +55,7 @@ export default {
                              The Stimulation studio, always comprises of 24 wells and placed in a japanese order,
                              as such left to right is a faster way and its quicker way of finding values and just
                              incrementing the left offset where in the top offset remains the same during rendering
-                             but, our bussiness logic of japanese order makes to recompute top and left offset to
+                             but, our business logic of japanese order makes to recompute top and left offset to
                              arrange in the japanese order resulting in more computation.
                              So in order to reduce the same at present we compute the offset and return for left and top
                              as a result in the renderer the execution improves to a great extent
@@ -64,72 +64,12 @@ export default {
     // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
     // eslint-disable-next-line vue/return-in-computed-property
     computed_top: function () {
-      switch (this.index) {
-        case 0:
-        case 4:
-        case 8:
-        case 12:
-        case 16:
-        case 20:
-          return 26;
-        case 1:
-        case 5:
-        case 9:
-        case 13:
-        case 17:
-        case 21:
-          return 86;
-        case 2:
-        case 6:
-        case 10:
-        case 14:
-        case 18:
-        case 22:
-          return 146;
-        case 3:
-        case 7:
-        case 11:
-        case 15:
-        case 19:
-        case 23:
-          return 206;
-      }
+      return 26 + (this.index % 4) * 60;
     },
     // Eli (2/5/21): The prop validator for ``index`` ensures that the value will always be between 0-23
     // eslint-disable-next-line vue/return-in-computed-property
     computed_left: function () {
-      switch (this.index) {
-        case 0:
-        case 1:
-        case 2:
-        case 3:
-          return 30;
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-          return 91;
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-          return 153;
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-          return 215;
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-          return 277;
-        case 20:
-        case 21:
-        case 22:
-        case 23:
-          return 339;
-      }
+      return 29 + Math.floor(this.index / 4) * 62;
     },
   },
   methods: {

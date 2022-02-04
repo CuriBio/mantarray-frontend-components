@@ -55,7 +55,7 @@
               </div>
               <img
                 :src="require(`@/assets/img/${types.type}.png`)"
-                @click.shift.exact="open_modal_for_edit(types.type, idx)"
+                @dblclick="open_modal_for_edit(types.type, idx)"
               />
 
               <draggable
@@ -74,7 +74,7 @@
                   v-for="(nested_types, nested_idx) in types.nested_protocols"
                   :key="nested_idx"
                   :style="'position: relative;'"
-                  @click.shift.exact="open_modal_for_edit(nested_types.type, idx, nested_idx)"
+                  @dblclick="open_modal_for_edit(nested_types.type, idx, nested_idx)"
                 >
                   <img :src="require(`@/assets/img/${nested_types.type}.png`)" :style="'margin-top: 4px;'" />
                 </div>

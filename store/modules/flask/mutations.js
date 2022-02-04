@@ -12,7 +12,7 @@ export default {
     }
   },
   set_status_uuid(state, new_id) {
-    if (state.status_uuid !== STATUS.MESSAGE.ERROR || new_id === STATUS.MESSAGE.SHUTDOWN) {
+    if (state.status_uuid !== STATUS.MESSAGE.ERROR) {
       state.status_uuid = new_id;
     }
   },

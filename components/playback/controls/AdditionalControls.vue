@@ -2,7 +2,7 @@
   <div class="div__stimulation-controls-container">
     <!-- Tanner (2/1/22): Only need controls block until SVGs are made of all the buttons in this widget and they can be shaded manually when inactive-->
     <div
-      v-b-popover.hover.bottom="'Additional Controls are disabled until device is Calibrated'"
+      v-b-popover.hover.bottom="controls_block_label"
       class="div__controls-block"
       :style="controls_block_block__dynamic_style"
     />
@@ -27,11 +27,19 @@
         ></path>
       </svg>
       <span :class="svg__stimulation_controls_play_stop_button__dynamic_class" @click="handle_play_stop">
-        <FontAwesomeIcon v-if="!play_state" class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
-        <FontAwesomeIcon v-if="play_state" class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
+        <div v-if="!play_state" v-b-popover.hover.bottom="start_stim_label" title="Stimulation Studio">
+          <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
+        </div>
+        <div v-if="play_state" v-b-popover.hover.bottom="'Stop'" title="Stimulation Studio">
+          <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
+        </div>
       </span>
     </div>
-    <img class="img__temp-icon" src="@/assets/img/temp-controls-icon.png" />
+    <img
+      v-b-popover.hover.bottom="temp_icon_label"
+      class="img__temp-icon"
+      src="@/assets/img/temp-controls-icon.png"
+    />
     <img class="img__waveform-icon" src="@/assets/img/waveform-icon.png" />
   </div>
 </template>
@@ -90,6 +98,8 @@ export default {
       active_gradient: ["#19ac8a", "#24524b"],
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
+      controls_block_label: "Additional Controls are disabled until device is Calibrated",
+      temp_icon_label: "(Not Yet Available)",
     };
   },
   computed: {
@@ -106,6 +116,9 @@ export default {
           this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING;
       }
       return is_enabled;
+    },
+    start_stim_label: function () {
+      return this.is_start_stop_button_enabled ? "Start" : "No protocols have been assigned";
     },
     svg__stimulation_controls_play_stop_button__dynamic_class: function () {
       if (!this.enable_additional_controls) {
@@ -224,6 +237,7 @@ body {
   grid-column: 2/3;
 }
 .img__temp-icon {
+  cursor: pointer;
   position: absolute;
   top: 29px;
   height: 56px;
