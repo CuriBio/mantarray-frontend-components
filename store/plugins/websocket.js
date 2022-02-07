@@ -44,6 +44,12 @@ export default function create_web_socket_plugin(socket) {
       // this callback is only used for testing. The backend will not send a callback
       if (cb !== null) cb("commit done");
     });
+    socket.on("barcode", function (message_json, cb = null) {
+      if (!store.state.barcode_manual_mode) {
+        const message = JSON.parse(message_json);
+        store.commit("playback/set_barcode_number", message.plate_barcode);
+      }
+    });
     socket.on("upload_status", function (status_json, cb = null) {
       const status = JSON.parse(status_json);
 
