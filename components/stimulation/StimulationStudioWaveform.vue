@@ -10,7 +10,7 @@
       <span :style="'grid-column: 1/2; align-self: center;'">{{ x_axis_label }}</span>
       <SmallDropDown
         :style="'grid-column: 2/3;'"
-        :input_height="25"
+        :input_height="9"
         :input_width="110"
         :options_text="time_units"
         :options_idx="active_duration_idx"
@@ -381,7 +381,6 @@ export default {
   width: 379px;
   overflow: hidden;
   user-select: none;
-  text-align: center;
   font-size: 14px;
   letter-spacing: normal;
   z-index: 99;
@@ -390,17 +389,15 @@ export default {
 }
 .div__waveform-x-axis-title {
   display: grid;
-  grid-template-columns: 20% 50% 20%;
+  grid-template-columns: 20% 60% 20%;
   justify-items: start;
   line-height: 1;
-  /* padding: 5px; */
   margin: 0px;
-  overflow-wrap: break-word;
   color: #b7b7b7;
   font-family: Muli;
   font-weight: bold;
   position: sticky;
-  top: 200px;
+  top: 195px;
   left: 550px;
   width: 250px;
   height: 29px;
@@ -410,6 +407,8 @@ export default {
   z-index: 99;
   pointer-events: all;
   box-sizing: content-box;
+  overflow: visible;
+  text-align: start;
 }
 .div__waveform-graph {
   overflow: hidden;

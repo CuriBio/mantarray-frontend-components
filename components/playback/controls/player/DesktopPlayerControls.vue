@@ -694,6 +694,10 @@ export default {
   -webkit-font-smoothing: antialiased;
 }
 
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
 #calibration-warning,
 #user-input-prompt-message,
 #fw-update-available-message,

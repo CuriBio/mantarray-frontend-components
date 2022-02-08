@@ -341,7 +341,7 @@ export default {
   },
 };
 </script>
-<style type="text/css">
+<style scoped>
 .div__settingsform-controls {
   top: 0px;
   left: 0px;
@@ -1327,7 +1327,7 @@ datalist {
   position: fixed;
   margin: 5% auto;
   top: 15%;
-  left: 0.5%;
+  left: 0;
   right: 0;
 }
 </style>

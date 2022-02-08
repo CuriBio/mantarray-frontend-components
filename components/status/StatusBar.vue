@@ -333,6 +333,9 @@ export default {
   text-align: left;
   z-index: 101;
 }
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
 
 /* Center the error-catch pop-up dialog within the viewport */
 #error-catch,
@@ -340,7 +343,8 @@ export default {
 #fw-updates-in-progress-message,
 #fw-updates-complete-message,
 #fw-closure-warning,
-#ops-closure-warning {
+#ops-closure-warning,
+#del-protocol-modal {
   position: fixed;
   margin: 5% auto;
   top: 15%;

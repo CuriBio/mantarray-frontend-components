@@ -257,7 +257,6 @@ export default {
         message.protocol_assignments[well_number] = letter;
       }
     }
-
     try {
       await post_stim_message(message);
       await post_stim_status(status);

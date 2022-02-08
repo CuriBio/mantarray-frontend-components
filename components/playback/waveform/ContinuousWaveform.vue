@@ -151,6 +151,7 @@ export default {
               this.x_axis_sample_length
             );
       this.fill_assignments = stim_data;
+      if (this.well_idx == 0) console.log("ASS: ", JSON.stringify(stim_data));
     },
   },
 };

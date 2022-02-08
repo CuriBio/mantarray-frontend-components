@@ -1,5 +1,9 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+0.6.1 (Unreleased)
+------------------
+
+- Added time unit dropdown to x-axis in stim studio
 
 0.6.0 (2022-02-02)
 ------------------

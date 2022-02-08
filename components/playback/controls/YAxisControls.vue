@@ -394,6 +394,9 @@ export default {
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
 }
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
 
 #y-axis-controls-settings {
   position: fixed;

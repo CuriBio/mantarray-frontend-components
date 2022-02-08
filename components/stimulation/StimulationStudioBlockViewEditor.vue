@@ -35,6 +35,7 @@
         />
         <div class="div__right-settings-panel">
           <SmallDropDown
+            :disabled="true"
             :input_height="25"
             :input_width="200"
             :options_text="stimulation_types_array"
@@ -63,33 +64,45 @@
             id="trash_icon"
             class="trash-icon"
             :icon="['fa', 'trash-alt']"
-            @click="handle_trash_modal"
+            @click="open_del_modal"
           />
-          <div v-show="show_confirmation" class="delete_popover_class">
-            <div class="delete_popover_label">Are you sure?</div>
-            <div class="popover_button_container">
-              <button class="delete_button_container" @click="handle_delete">Delete</button>
-              <button class="cancel_button_container" @click="show_confirmation = false">Cancel</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
+    <b-modal
+      :id="'del-protocol-modal'"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        id="del-protocol"
+        :modal_labels="del_protocol_labels"
+        @handle_confirmation="close_del_protocol_modal"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
+import Vue from "vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+import BootstrapVue from "bootstrap-vue";
+import { BModal } from "bootstrap-vue";
+Vue.use(BootstrapVue);
+Vue.component("BModal", BModal);
 library.add(faPencilAlt, faTrashAlt);
 
 /**
  * @vue-data {String} active_tab - Shows current selected tab
  * @vue-data {Boolean} disabled - Disables the name and time input fields
- * @vue-data {Boolean} show_confirmation - Determines if delete popover is visible
  * @vue-data {String} current_letter - Next available letter in alphabet
  * @vue-data {String} current_color -  Next available color in alphabet
  * @vue-data {Array} stimulation_types_array - Availble options in dropdown
@@ -116,16 +129,16 @@ export default {
   components: {
     SmallDropDown,
     FontAwesomeIcon,
+    StatusWarningWidget,
   },
   data() {
     return {
       active_tab: "Basic",
       disabled_name: true,
       disabled_time: false,
-      show_confirmation: false,
       current_letter: "",
       current_color: "",
-      stimulation_types_array: ["Current Controlled Stimulation", "More options coming..."],
+      stimulation_types_array: ["Current Controlled Stimulation", "(Not Yet Available)"],
       stop_options_array: ["Stimulate Until Stopped", "Stimulate Until Complete"],
       protocol_name: "",
       stop_option_idx: 0,
@@ -134,6 +147,12 @@ export default {
       name_validity: "null",
       error_message: "",
       protocol_list: [],
+      del_protocol_labels: {
+        header: "Warning!",
+        msg_one: "You are about to permanently delete this protocol.",
+        msg_two: "Please confirm to continue.",
+        button_names: ["Delete", "Cancel"],
+      },
     };
   },
   computed: {
@@ -156,7 +175,6 @@ export default {
         mutation.type === "stimulation/reset_protocol_editor"
       ) {
         this.update_protocols();
-        this.show_confirmation = false;
         this.protocol_name = "";
         this.rest_duration = "";
         this.name_validity = "";
@@ -198,11 +216,12 @@ export default {
     toggle_tab(tab) {
       tab === "Basic" ? (this.active_tab = "Basic") : (this.active_tab = "Advanced");
     },
-    handle_trash_modal() {
-      this.show_confirmation = !this.show_confirmation;
+    open_del_modal() {
+      this.$bvModal.show("del-protocol-modal");
     },
-    handle_delete() {
-      this.handle_protocol_editor_reset();
+    close_del_protocol_modal(idx) {
+      this.$bvModal.hide("del-protocol-modal");
+      if (idx === 0) this.handle_protocol_editor_reset();
     },
     handle_stimulation_type(idx) {
       const type = this.stimulation_types_array[idx];
@@ -259,62 +278,6 @@ export default {
   top: 36px;
   font-size: 13px;
   font-style: italic;
-}
-
-.delete_popover_class {
-  position: fixed;
-  height: 80px;
-  width: 201px;
-  font-family: Muli;
-  padding: 4px;
-  display: flex;
-  z-index: 100;
-  left: 1340px;
-  justify-content: center;
-  background: rgb(17, 17, 17);
-  border: 1px solid #b7b7b7;
-  border-radius: 4px;
-}
-
-.delete_popover_label {
-  font-weight: bold;
-  padding-top: 5px;
-  color: #b7b7b7;
-  height: 50px;
-  width: 200px;
-  position: absolute;
-  left: 50px;
-}
-
-.popover_button_container {
-  display: flex;
-  justify-content: space-evenly;
-  bottom: 0px;
-  position: absolute;
-  width: 197px;
-}
-
-.delete_button_container {
-  border-bottom-left-radius: 4px;
-}
-
-.cancel_button_container {
-  border-bottom-right-radius: 4px;
-}
-
-button {
-  width: 100px;
-  height: 35px;
-  background: rgb(17, 17, 17);
-  border-color: #3f3f3f;
-  color: #b7b7b7;
-  padding-top: 4px;
-}
-
-button:hover {
-  cursor: pointer;
-  color: #fffefe;
-  background: rgba(0, 0, 0, 0.849);
 }
 
 .span__settings-label {
@@ -423,12 +386,15 @@ button:hover {
   font-size: 12px;
   cursor: pointer;
 }
-.trash_confirmation_modal {
-  position: absolute;
-  background: #b7b7b7;
-  opacity: 0.5;
-  height: 100px;
-  width: 250px;
-  right: -26%;
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
+#del-protocol-modal {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
 }
 </style>

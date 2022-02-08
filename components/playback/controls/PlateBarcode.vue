@@ -232,6 +232,11 @@ input:focus {
 .fa-pencil-alt:hover {
   color: #ececed;
 }
+
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
 /* Center the edit-plate-barcode-modal pop-up dialog within the viewport */
 #edit-plate-barcode-modal {
   position: fixed;

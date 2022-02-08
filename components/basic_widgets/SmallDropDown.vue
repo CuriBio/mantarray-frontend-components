@@ -9,7 +9,7 @@
       :style="
         'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;' + 'height:' + input_height + 'px;'
       "
-      @click="!disabled ? toggle() : null"
+      @click="toggle()"
     >
       <div
         class="span__small-dropdown-controls-content-input-txt-widget"
@@ -25,7 +25,7 @@
             :id="item.name"
             :key="item.id"
             :value="item"
-            @click="change_selection(item.id)"
+            @click="!disabled ? change_selection(item.id) : null"
           >
             {{ item.name }}
           </li>
