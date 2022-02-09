@@ -5,6 +5,22 @@ Changelog for Mantarray Frontend Components
 
 - Added time unit dropdown to x-axis in stim studio
 
+0.6.2 (2022-02-09)
+------------------
+
+- Increased 30 second recording limit to 5 minutes
+
+
+0.6.1 (2022-02-03)
+------------------
+
+- Added expected firmware update duration to spinner widget
+- Added firmware update timeout message
+- Added minor styling updates
+- Added additional controls hover modals
+- Changed subprotocol edit from Shift+Click to Double Click
+
+
 0.6.0 (2022-02-02)
 ------------------
 

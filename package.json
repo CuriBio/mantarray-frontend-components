@@ -1,6 +1,6 @@
 {
   "name": "@curi-bio/mantarray-frontend-components",
-  "version": "0.6.0",
+  "version": "0.6.2",
   "description": "shared components between web and desktop app.",
   "main": "./dist/mantarray.common.js",
   "author": "Curi Bio <contact@curibio.com> (http://www.curibio.com/)",
