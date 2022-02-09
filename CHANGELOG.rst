@@ -1,6 +1,12 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.6.2 (2022-02-09)
+------------------
+
+- Increased 30 second recording limit to 5 minutes
+
+
 0.6.1 (2022-02-03)
 ------------------
 
