@@ -218,6 +218,21 @@
         @handle_confirmation="close_one_min_modal"
       />
     </b-modal>
+    <b-modal
+      id="recording-limit-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        id="recording-limit"
+        :modal_labels="recording_limit_labels"
+        @handle_confirmation="close_recording_limit_modal"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -322,6 +337,12 @@ export default {
         msg_two: "Please input them to begin the download",
         button_names: ["Okay"],
       },
+      recording_limit_labels: {
+        header: "Warning!",
+        msg_one: "You've reached the maximum recording duration for your current session.",
+        msg_two: "Your recording has been stopped.",
+        button_names: ["Okay"],
+      },
     };
   },
   computed: {
@@ -355,7 +376,6 @@ export default {
         button_names: ["No", "Yes"],
       };
     },
-
     calibrate_tooltip_text: function () {
       if (
         this.status_uuid == STATUS.MESSAGE.UPDATES_NEEDED ||
@@ -473,11 +493,14 @@ export default {
     on_activate_record_click: function () {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
         this.$store.dispatch("playback/start_recording");
-      }
 
-      this.recording_timer = setTimeout(() => {
-        if (this.playback_state === this.playback_state_enums.RECORDING) this.on_stop_record_click();
-      }, 5 * 60e3);
+        this.recording_timer = setTimeout(() => {
+          if (this.playback_state === this.playback_state_enums.RECORDING) {
+            this.$bvModal.show("recording-limit-warning");
+            this.on_stop_record_click();
+          }
+        }, 5 * 60e3);
+      }
     },
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
@@ -524,6 +547,9 @@ export default {
     close_user_input_prompt_modal() {
       this.$bvModal.hide("user-input-prompt-message");
       this.$bvModal.show("settings-form");
+    },
+    close_recording_limit_modal() {
+      this.$bvModal.hide("recording-limit-warning");
     },
     close_five_min_modal(idx) {
       this.$bvModal.hide("five-min-warning");
@@ -694,6 +720,7 @@ export default {
   -webkit-font-smoothing: antialiased;
 }
 
+#recording-limit-warning,
 #calibration-warning,
 #user-input-prompt-message,
 #fw-update-available-message,

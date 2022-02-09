@@ -45,6 +45,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+  jest.useRealTimers();
   wrapper.destroy();
   store.commit("playback/stop_playback_progression");
 });
@@ -567,5 +568,25 @@ describe("DesktopPlayerControls.vue", () => {
         });
       }
     );
+    test("When recording limit has been reached, Then the recording limit modal will be visible", async () => {
+      const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
+      jest.useFakeTimers();
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+      await store.commit(
+        "playback/set_playback_state",
+        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
+      );
+      await wrapper.find(".svg__playback-desktop-player-controls-record-button").trigger("click");
+
+      jest.advanceTimersByTime(7 * 60e3);
+      jest.runAllTicks();
+      Vue.nextTick(() => {
+        expect(wrapper.find("#recording-limit").isVisible()).toBe(true);
+        expect(action_spy).toHaveBeenCalledWith("playback/stop_recording");
+      });
+    });
   });
 });
