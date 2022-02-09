@@ -142,7 +142,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        stimulation_type: "Current (mA)",
+        stimulation_type: "Current",
         pulse_type: "Monophasic",
         selected_pulse_settings: {
           phase_one_duration: "",

@@ -200,8 +200,8 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     await wrapper.find("#trash_icon").trigger("click");
-    expect(wrapper.vm.show_confirmation).toBe(true);
-    await wrapper.vm.handle_delete();
-    expect(wrapper.vm.show_confirmation).toBe(false);
+    expect(wrapper.find("#del-protocol").isVisible()).toBe(true);
+    await wrapper.vm.close_del_protocol_modal();
+    expect(wrapper.find("#del-protocol").isVisible()).toBe(false);
   });
 });

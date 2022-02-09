@@ -228,7 +228,7 @@ export default {
           stim_fill_colors: detailed_pulses.map((pulse) => pulse.repeat.color),
           well,
         };
-        commit("data/set_fill_colors", fill_color_payload);
+        this.commit("data/set_fill_colors", fill_color_payload);
         // add protocol to list of unique protocols if it has not been entered yet
         if (!unique_protocol_ids.has(letter)) {
           unique_protocol_ids.add(letter);
