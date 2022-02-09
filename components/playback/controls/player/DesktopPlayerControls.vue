@@ -477,7 +477,7 @@ export default {
 
       this.recording_timer = setTimeout(() => {
         if (this.playback_state === this.playback_state_enums.RECORDING) this.on_stop_record_click();
-      }, 30e3);
+      }, 5 * 60e3);
     },
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
