@@ -36,7 +36,7 @@ export default {
     StimulationStudioWaveform,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (V)" },
+    stimulation_type: { type: String, default: "Voltage" },
   },
   data() {
     return {

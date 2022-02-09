@@ -40,6 +40,8 @@ beforeAll(async () => {
 beforeEach(async () => {
   store = await NuxtStore.createStore();
   jest.restoreAllMocks();
+  mocked_axios = new MockAxiosAdapter(axios);
+  mocked_axios.onGet(all_mantarray_commands_regexp).reply(200, {});
 });
 
 afterEach(async () => {
@@ -209,10 +211,6 @@ describe("DesktopPlayerControls.vue", () => {
     );
     describe("Tests that invoke axios", () => {
       beforeEach(async () => {
-        mocked_axios = new MockAxiosAdapter(axios);
-
-        mocked_axios.onGet(all_mantarray_commands_regexp).reply(200, {});
-
         mocked_axios
           .onGet(system_status_when_calibrating_regexp)
           .replyOnce(200, { ui_status_code: STATUS.MESSAGE.CALIBRATING });

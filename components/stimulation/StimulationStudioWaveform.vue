@@ -62,7 +62,7 @@ export default {
     x_axis_min: { type: Number, default: 0 },
     y_min: { type: Number, default: 0 },
     y_max: { type: Number, default: 120 },
-    y_axis_label: { type: String, default: "Voltage (V)" },
+    y_axis_label: { type: String, default: "Voltage" },
     x_axis_label: { type: String, default: "Time" },
     data_points: {
       type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]

@@ -179,7 +179,7 @@ describe("store/stimulation", () => {
     });
 
     test("When requesting the next stimulation type, Then it should return what user has selected in dropdown", async () => {
-      const voltage = "Voltage (mV)";
+      const voltage = "Voltage";
       const current = "Current";
 
       const default_type = store.getters["stimulation/get_stimulation_type"];

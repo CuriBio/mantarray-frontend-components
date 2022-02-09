@@ -308,9 +308,10 @@ export default {
     const { x_axis_values, y_axis_values } = state;
     const converted_x_values = x_axis_values.map((val) => (idx === 1 ? val * 1e-3 : val * 1e3));
     commit("set_x_axis_time_idx", idx);
-    dispatch("handle_rest_duration", {
-      x_values: converted_x_values,
-      y_values: y_axis_values,
-    });
+    if (converted_x_values.length > 0)
+      dispatch("handle_rest_duration", {
+        x_values: converted_x_values,
+        y_values: y_axis_values,
+      });
   },
 };
