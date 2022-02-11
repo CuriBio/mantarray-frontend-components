@@ -9,7 +9,7 @@
       :style="
         'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;' + 'height:' + input_height + 'px;'
       "
-      @click="toggle()"
+      @click="!disable_toggle ? toggle() : null"
     >
       <div
         class="span__small-dropdown-controls-content-input-txt-widget"
@@ -22,10 +22,10 @@
         <ul :style="`bottom: ${bottom_pixels}px`">
           <li
             v-for="item in options_list"
-            :id="item.name"
+            :id="dom_id_suffix + `_${item.id}`"
             :key="item.id"
             :value="item"
-            @click="!disabled ? change_selection(item.id) : null"
+            @click="!disable_selection ? change_selection(item.id) : null"
           >
             {{ item.name }}
           </li>
@@ -44,7 +44,8 @@ export default {
     options_idx: { type: Number, default: 0 },
     dom_id_suffix: { type: String, default: "" }, // for testing
     title_label: { type: String, default: "" },
-    disabled: { type: Boolean, default: false },
+    disable_toggle: { type: Boolean, default: false },
+    disable_selection: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -82,8 +83,8 @@ export default {
     options_idx: function () {
       this.get_preselected_option();
     },
-    disabled: function () {
-      if (this.disabled) this.visible = false;
+    disable_toggle: function () {
+      if (this.disable_toggle) this.visible = false;
     },
   },
   created() {

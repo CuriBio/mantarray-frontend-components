@@ -35,9 +35,9 @@
         />
         <div class="div__right-settings-panel">
           <SmallDropDown
-            :disabled="true"
             :input_height="25"
             :input_width="200"
+            :disable_selection="true"
             :options_text="stimulation_types_array"
             :options_idx="stimulation_type_idx"
             :dom_id_suffix="'stimulation_type'"
@@ -385,16 +385,5 @@ export default {
   align-items: center;
   font-size: 12px;
   cursor: pointer;
-}
-.modal-backdrop {
-  background-color: rgb(0, 0, 0, 0.5);
-}
-
-#del-protocol-modal {
-  position: fixed;
-  margin: 5% auto;
-  top: 15%;
-  left: 0;
-  right: 0;
 }
 </style>

@@ -57,6 +57,7 @@ export default {
       repeat_colors: {},
       y_axis_scale: 120,
       delay_blocks: [],
+      x_axis_time_idx: 0,
       edit_mode: { status: false, letter: "", label: "" },
     };
     Object.assign(state, replace_state);
@@ -79,6 +80,7 @@ export default {
       repeat_colors: {},
       y_axis_scale: 120,
       delay_blocks: [],
+      x_axis_time_idx: 0,
       edit_mode: { status: false, letter: "", label: "" },
     };
     Object.assign(state, replace_state);

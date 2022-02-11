@@ -20,6 +20,7 @@
         <SmallDropDown
           class="dropdown-container"
           :input_height="25"
+          :disable="disable_dropdown"
           :input_width="100"
           :options_text="time_units_array"
           :options_idx="time_units_idx"

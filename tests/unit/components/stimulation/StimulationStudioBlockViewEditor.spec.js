@@ -182,16 +182,38 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
   });
 
   test("When a user clicks the Clear All button, Then the dropdowns will reset to default value", async () => {
-    const wrapper = mount(SmallDropDown, {
+    const wrapper = mount(StimulationStudioBlockViewEditor, {
       store,
       localVue,
-      propsData: {
-        options_text: ["test", "test_1"],
-      },
     });
-    const expected_obj = { id: 0, name: "test" };
+
+    await wrapper.setData({
+      protocol_name: "test_name",
+      rest_duration: "10",
+      name_validity: "border: 1px solid #19ac8a",
+    });
+
     await store.commit("stimulation/reset_state");
-    expect(wrapper.vm.chosen_option).toStrictEqual(expected_obj);
+
+    expect(wrapper.vm.protocol_name).toBe("");
+    expect(wrapper.vm.rest_duration).toBe("");
+    expect(wrapper.vm.name_validity).toBe("");
+  });
+
+  test("When 'Stimulate Until Complete' is selected, Then the input and time unit dropdown will be disabled", async () => {
+    const wrapper = mount(StimulationStudioBlockViewEditor, {
+      store,
+      localVue,
+    });
+    const toggle_stop_options = wrapper.find("#small_dropdown_stop_options");
+    const visible_option = wrapper.find("#stop_options_1");
+
+    expect(wrapper.vm.disabled_time).toBe(false);
+
+    await toggle_stop_options.trigger("click");
+    await visible_option.trigger("click");
+
+    expect(wrapper.vm.disabled_time).toBe(true);
   });
 
   test("When a user clicks the trash icon and deletes the protocol, Then it should reset local data and mutate state", async () => {

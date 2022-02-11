@@ -264,6 +264,36 @@ describe("store/stimulation", () => {
 
       expect(store.state.stimulation.protocol_assignments).toStrictEqual(test_assignment);
     });
+    test("When chagnes the stim studios x-axis unit, Then the coordinate values in the store will be changed accordingly", async () => {
+      const test_ms_coordinates = {
+        x_values: [0, 5000, 10000, 15000],
+        y_values: [50, 55, 60, 65],
+      };
+      const test_sec_coordinates = {
+        x_values: [0, 5, 10, 15],
+        y_values: [50, 55, 60, 65],
+      };
+
+      await store.commit("stimulation/set_axis_values", test_ms_coordinates);
+
+      await store.dispatch("stimulation/handle_x_axis_unit", 1);
+      expect(store.state.stimulation.x_axis_values).toStrictEqual(test_sec_coordinates.x_values);
+      expect(store.state.stimulation.y_axis_values).toStrictEqual(test_sec_coordinates.y_values);
+
+      // test to ensure it won't happen twice in a row, will only occur when the index value is changes
+      await store.dispatch("stimulation/handle_x_axis_unit", 1);
+      expect(store.state.stimulation.x_axis_values).toStrictEqual(test_sec_coordinates.x_values);
+      expect(store.state.stimulation.y_axis_values).toStrictEqual(test_sec_coordinates.y_values);
+
+      await store.dispatch("stimulation/handle_x_axis_unit", 0);
+      expect(store.state.stimulation.x_axis_values).toStrictEqual(test_ms_coordinates.x_values);
+      expect(store.state.stimulation.y_axis_values).toStrictEqual(test_ms_coordinates.y_values);
+
+      // test to ensure it won't happen twice in a row, will only occur when the index value is changes
+      await store.dispatch("stimulation/handle_x_axis_unit", 0);
+      expect(store.state.stimulation.x_axis_values).toStrictEqual(test_ms_coordinates.x_values);
+      expect(store.state.stimulation.y_axis_values).toStrictEqual(test_ms_coordinates.y_values);
+    });
 
     test("When a user imports a new protocol file, Then it will be read by the FileReader API and dispatched", async () => {
       const file = {

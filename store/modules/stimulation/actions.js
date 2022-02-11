@@ -132,7 +132,6 @@ export default {
 
     reader.onerror = function () {
       console.log(reader.onerror);
-      alert("Import unsuccessful");
     };
 
     reader.readAsText(file);
@@ -257,12 +256,9 @@ export default {
         message.protocol_assignments[well_number] = letter;
       }
     }
-    try {
-      await post_stim_message(message);
-      await post_stim_status(status);
-    } catch (error) {
-      console.log(error);
-    }
+
+    await post_stim_message(message);
+    await post_stim_status(status);
   },
 
   async stop_stim_status() {
@@ -275,16 +271,12 @@ export default {
     const { stimulation_type, time_unit, rest_duration, detailed_pulses, stop_setting } = protocol.protocol;
     state.current_assignment = { letter, color };
 
-    try {
-      await commit("set_protocol_name", label);
-      await commit("set_stimulation_type", stimulation_type);
-      await commit("set_time_unit", time_unit);
-      await commit("set_rest_duration", rest_duration);
-      await commit("set_stop_setting", stop_setting);
-      await dispatch("handle_protocol_order", detailed_pulses);
-    } catch (error) {
-      console.log(error);
-    }
+    await commit("set_protocol_name", label);
+    await commit("set_stimulation_type", stimulation_type);
+    await commit("set_time_unit", time_unit);
+    await commit("set_rest_duration", rest_duration);
+    await commit("set_stop_setting", stop_setting);
+    await dispatch("handle_protocol_order", detailed_pulses);
 
     commit("set_edit_mode", protocol);
   },
@@ -305,13 +297,15 @@ export default {
     commit("reset_protocol_editor");
   },
   handle_x_axis_unit({ commit, dispatch, state }, idx) {
-    const { x_axis_values, y_axis_values } = state;
-    const converted_x_values = x_axis_values.map((val) => (idx === 1 ? val * 1e-3 : val * 1e3));
-    commit("set_x_axis_time_idx", idx);
-    if (converted_x_values.length > 0)
-      dispatch("handle_rest_duration", {
-        x_values: converted_x_values,
-        y_values: y_axis_values,
-      });
+    const { x_axis_values, y_axis_values, x_axis_time_idx } = state;
+    if (idx !== x_axis_time_idx) {
+      const converted_x_values = x_axis_values.map((val) => (idx === 1 ? val * 1e-3 : val * 1e3));
+      commit("set_x_axis_time_idx", idx);
+      if (converted_x_values.length > 0)
+        dispatch("handle_rest_duration", {
+          x_values: converted_x_values,
+          y_values: y_axis_values,
+        });
+    }
   },
 };

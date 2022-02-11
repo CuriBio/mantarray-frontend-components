@@ -345,6 +345,10 @@ export default {
   background-color: rgb(0, 0, 0, 0.5);
 }
 
+.modal-content {
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
 /* Center the error-catch pop-up dialog within the viewport */
 #error-catch,
 #sw-update-message,
