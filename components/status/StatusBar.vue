@@ -356,7 +356,11 @@ export default {
 #fw-updates-complete-message,
 #fw-closure-warning,
 #ops-closure-warning,
-#del-protocol-modal {
+#del-protocol-modal,
+#add-customer,
+#edit-customer,
+#add-user,
+#edit-user {
   position: fixed;
   margin: 5% auto;
   top: 15%;
