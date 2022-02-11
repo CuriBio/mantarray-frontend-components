@@ -210,6 +210,9 @@ export default {
 #upload-progress-bar > .bg-success {
   background-color: #00c46f !important;
 }
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
 
 #upload-status {
   position: fixed;

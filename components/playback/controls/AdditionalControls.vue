@@ -118,7 +118,11 @@ export default {
       return is_enabled;
     },
     start_stim_label: function () {
-      return this.is_start_stop_button_enabled ? "Start" : "No protocols have been assigned";
+      const is_recording = this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
+      const not_recording_msg = this.is_start_stop_button_enabled
+        ? "Start"
+        : "No protocols have been assigned";
+      return is_recording ? "Cannot start/stop a stimulation when a recording is active" : not_recording_msg;
     },
     svg__stimulation_controls_play_stop_button__dynamic_class: function () {
       if (!this.enable_additional_controls) {

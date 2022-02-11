@@ -1,6 +1,7 @@
 import Vuex from "vuex";
 import { createLocalVue, mount } from "@vue/test-utils";
 import AdditionalControls from "@/components/playback/controls/AdditionalControls.vue";
+import playback_module from "@/store/modules/playback";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();

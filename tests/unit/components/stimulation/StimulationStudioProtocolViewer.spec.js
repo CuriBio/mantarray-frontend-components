@@ -282,12 +282,11 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       [1, 2],
       [2, 3],
     ]);
-    wrapper.vm.$options.watch.x_axis_min.call(wrapper.vm, 100);
     wrapper.vm.$options.watch.x_axis_sample_length.call(wrapper.vm, 1000);
     wrapper.vm.$options.watch.y_min.call(wrapper.vm, 0);
     wrapper.vm.$options.watch.y_max.call(wrapper.vm, 100);
 
-    expect(render_spy).toHaveBeenCalledTimes(5);
+    expect(render_spy).toHaveBeenCalledTimes(4);
   });
 
   test("When a user zooms in or zooms out of the x axis in waveform graph, Then the new graph width will be reflected and the number of the ticks of the axis will change accordingly", async () => {

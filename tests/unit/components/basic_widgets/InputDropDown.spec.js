@@ -180,19 +180,6 @@ describe("InputDropDown.vue", () => {
     expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 48px;");
   });
 
-  test("When exiting the SmallDropDown instance, Then instance is effectively destroyed", async () => {
-    const destroyed_spy = jest.spyOn(SmallDropDown, "beforeDestroy");
-    const wrapper = mount(SmallDropDown, {
-      store,
-      localVue,
-      propsData: {
-        options_text: ["test"],
-      },
-    });
-    wrapper.destroy();
-    expect(destroyed_spy).toHaveBeenCalledWith();
-  });
-
   test("When exiting the SelectDropDown instance, Then instance is effectively destroyed", async () => {
     const destroyed_spy = jest.spyOn(SelectDropDown, "beforeDestroy");
     const wrapper = mount(SelectDropDown, {
@@ -205,22 +192,68 @@ describe("InputDropDown.vue", () => {
     wrapper.destroy();
     expect(destroyed_spy).toHaveBeenCalledWith();
   });
+  describe("SmallDropdown.vue", () => {
+    test("When the disable_toggle prop changes to true , Then the options list will not expand when a user clicks on it", async () => {
+      const toggle_spy = jest.spyOn(SmallDropDown.methods, "toggle");
+      const wrapper = mount(SmallDropDown, {
+        store,
+        localVue,
+        propsData: {
+          options_text: ["option_1", "option_2"],
+          disable_toggle: false,
+        },
+      });
 
-  test("When the SmallDropDown becomes disabled, Then the list visibility should become false and toggle should become disabled", async () => {
-    const toggle_spy = jest.spyOn(SmallDropDown.methods, "toggle");
-    const wrapper = mount(SmallDropDown, {
-      store,
-      localVue,
-      propsData: {
-        options_text: ["test"],
-        disabled: false,
-      },
+      await wrapper.setProps({ disable_toggle: true });
+      const selected_opt = wrapper.find(".span__small-dropdown-controls-content-input-txt-widget");
+      await wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
+
+      expect(wrapper.vm.visible).toBe(false);
+      expect(selected_opt.text()).toContain("option_1");
+      expect(toggle_spy).toHaveBeenCalledTimes(0);
     });
+    test("When exiting the SmallDropDown instance, Then instance is effectively destroyed", async () => {
+      const destroyed_spy = jest.spyOn(SmallDropDown, "beforeDestroy");
+      const wrapper = mount(SmallDropDown, {
+        store,
+        localVue,
+        propsData: {
+          options_text: ["test"],
+        },
+      });
+      wrapper.destroy();
+      expect(destroyed_spy).toHaveBeenCalledWith();
+    });
+    test("When the disable_selection prop changes to true, Then the ability to change the selected option should be disabled", async () => {
+      const toggle_spy = jest.spyOn(SmallDropDown.methods, "toggle");
+      const change_spy = jest.spyOn(SmallDropDown.methods, "change_selection");
+      const wrapper = mount(SmallDropDown, {
+        store,
+        localVue,
+        propsData: {
+          options_text: ["option_1", "option_2"],
+          disable_selection: false,
+        },
+      });
 
-    await wrapper.setProps({ disabled: true });
-    expect(wrapper.vm.visible).toBe(false);
+      await wrapper.setProps({ disable_selection: true });
+      expect(wrapper.vm.visible).toBe(false);
 
-    wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
-    expect(toggle_spy).toHaveBeenCalledTimes(0);
+      const selected_opt = wrapper.find(".span__small-dropdown-controls-content-input-txt-widget");
+      expect(selected_opt.text()).toContain("option_1");
+
+      await wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
+      const list_opts = wrapper.findAll("li");
+
+      expect(toggle_spy).toHaveBeenCalledTimes(1);
+      expect(list_opts).toHaveLength(1);
+
+      // try to select other option when disabled
+      await list_opts.at(0).trigger("click");
+
+      // selected option should not have changed
+      expect(selected_opt.text()).toContain("option_1");
+      expect(change_spy).toHaveBeenCalledTimes(0);
+    });
   });
 });
