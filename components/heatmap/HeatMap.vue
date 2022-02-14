@@ -372,8 +372,12 @@ export default {
     reset_heatmap_settings: function () {
       // reset autoscale setting to false
       this.$store.commit("heatmap/set_auto_scale", false);
+
       // reset display dropdown
       this.metric_selection_changed(0);
+      this.$store.commit("heatmap/set_display_option", this.metric_names[this.metric_selection_idx]);
+      this.$store.commit("heatmap/set_display_option_idx", this.metric_selection_idx);
+
       // reset gradient theme, radio button is subscribed to this mutation and will reset itself
       this.$store.commit("gradient/reset_gradient_theme_idx");
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
@@ -882,6 +886,7 @@ export default {
 
 .div__heatmap-settings-apply-btn-container-enable:hover {
   background: #19ac8a;
+  cursor: pointer;
 }
 
 .canvas__heatmap-settings-apply-btn-container {
@@ -933,6 +938,12 @@ export default {
   left: 1490.08px;
   visibility: visible;
   z-index: 154;
+  background: #b7b7b7;
+}
+
+.div__heatmap-settings-reset-btn-container:hover {
+  background: #b7b7b7c9;
+  cursor: pointer;
 }
 
 .canvas__heatmap-settings-reset-btn-container {
@@ -942,7 +953,7 @@ export default {
   height: 55px;
   top: 0px;
   left: 0px;
-  background: #b7b7b7;
+  /* background: #b7b7b7; */
 }
 
 .span__heatmap-settings-reset-btn-label {

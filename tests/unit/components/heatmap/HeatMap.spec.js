@@ -91,6 +91,10 @@ describe("HeatMap.vue", () => {
     expect(mean_value.text()).toBe("3.000");
     // switch to Twitch Frequency
     await wrapper.findAll("li").at(0).trigger("click");
+
+    // apply changes
+    await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
+
     // test new values
     expect(mean_text.text()).toBe("Mean of 4 Wells (Hz):");
     expect(mean_value.text()).toBe("10.000");
@@ -132,6 +136,8 @@ describe("HeatMap.vue", () => {
 
     await wrapper.find("#input-widget-field-heatmap-max").setValue("15");
     await wrapper.find("#input-widget-field-heatmap-min").setValue("0");
+
+    // apply changes
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
 
     expect(wrapper.findAll("circle").at(0).attributes("fill")).toStrictEqual(max_warm_rgb);
@@ -163,16 +169,27 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [[0]] },
-      "Twitch Frequency": { data: [[100]] },
+      "Twitch Force": {
+        data: [[0]],
+      },
+      "Twitch Frequency": {
+        data: [[100]],
+      },
     });
 
     // switch to freq first
     await wrapper.findAll("li").at(0).trigger("click");
+
+    // apply changes
+    await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
+
     expect(wrapper.findAll("circle").at(0).attributes("fill")).toStrictEqual(max_warm_rgb);
 
     // switch back to force
     await wrapper.findAll("li").at(0).trigger("click");
+
+    // apply changes
+    await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
     expect(wrapper.findAll("circle").at(0).attributes("fill")).toStrictEqual(min_warm_rgb);
   });
 
@@ -182,12 +199,19 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [[]] },
-      "Twitch Frequency": { data: [[]] },
+      "Twitch Force": {
+        data: [[]],
+      },
+      "Twitch Frequency": {
+        data: [[]],
+      },
     });
 
     // switch to freq
     await wrapper.findAll("li").at(0).trigger("click");
+
+    // apply changes
+    await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
 
     expect(wrapper.find(".div__heatmap-layout-twitch-metric-label").text()).toBe("Twitch Frequency (Hz)");
     expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toContain("Hz");
@@ -208,12 +232,19 @@ describe("HeatMap.vue", () => {
     // for some reason need to select a metric first before colors are displayed so switching to freq
     await wrapper.findAll("li").at(0).trigger("click");
 
+    // apply changes
+    await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
+
     const test_well = wrapper.findAll("circle").at(0);
     expect(test_well.attributes("fill")).toStrictEqual(max_warm_rgb);
     // switch from Warm to Cool theme
     const target_radio_btn = wrapper.findAll("input[type='radio']");
     target_radio_btn.at(1).setChecked(true);
     await target_radio_btn.at(1).trigger("change");
+
+    // apply changes
+    await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
+
     expect(test_well.attributes("fill")).toStrictEqual(max_cool_rgb);
   });
 
@@ -236,7 +267,10 @@ describe("HeatMap.vue", () => {
     // set and apply min and max values
     await wrapper.find("#input-widget-field-heatmap-max").setValue("96");
     await wrapper.find("#input-widget-field-heatmap-min").setValue("34");
+
+    // apply changes
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
+
     // select well 0
     const test_well = wrapper.findAll("circle").at(0);
     await wrapper.findAll("circle").at(0).trigger("click");
@@ -347,15 +381,21 @@ describe("HeatMap.vue", () => {
     await autoscale_box.trigger("change");
 
     expect(wrapper.vm.autoscale).toBe(true);
+
+    // apply changes
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
-    expect(store_spy.mock.calls).toHaveLength(2);
+
+    expect(store_spy.mock.calls).toHaveLength(5);
     expect(store_spy.mock.calls).toContainEqual(["heatmap/set_auto_scale", true]);
 
     await store.commit("data/set_heatmap_values", {
       "Twitch Force": { data: [[0, 10]] },
     });
-    expect(store_spy.mock.calls).toHaveLength(4);
-    expect(store_spy.mock.calls).toContainEqual(["gradient/set_gradient_range", { max: 100, min: 0 }]);
+    expect(store_spy.mock.calls).toHaveLength(7);
+    expect(store_spy.mock.calls).toContainEqual([
+      "gradient/set_gradient_range",
+      { max: "10.000", min: "0.000" },
+    ]);
 
     await autoscale_box.setChecked(false);
     await autoscale_box.trigger("change");
@@ -366,6 +406,6 @@ describe("HeatMap.vue", () => {
       "Twitch Force": { data: [[10, 15, 20]] },
     });
 
-    expect(store_spy.mock.calls).toHaveLength(5);
+    expect(store_spy.mock.calls).toHaveLength(8);
   });
 });
