@@ -260,10 +260,12 @@ export default {
       const max_value_array = this.well_values[this.display_option].data.map((well) => Math.max(...well));
       const min_value_array = this.well_values[this.display_option].data.map((well) => Math.min(...well));
 
+      // conditional protects against when autoscale is true and a user selects apply when live view is off
       const range = {
-        max: Math.max(...max_value_array).toFixed(3),
-        min: Math.min(...min_value_array).toFixed(3),
+        max: Math.max(...max_value_array) == -Infinity ? this.upper : Math.max(...max_value_array).toFixed(3),
+        min: Math.min(...min_value_array) == Infinity ? this.lower : Math.min(...min_value_array).toFixed(3),
       };
+
       if (range.max === range.min) range.max = (Number(range.max) + 0.001).toString(); // guard against edge case where the max/min are the same
       return range;
     },
@@ -273,6 +275,7 @@ export default {
       if (this.autoscale) this.$store.commit("gradient/set_gradient_range", new_value);
     },
     playback_state: function (_, old_value) {
+      // cleans up settings when live view becomes inactive
       if (old_value == this.playback_state_enums.LIVE_VIEW_ACTIVE) this.reset_heatmap_settings();
     },
   },
