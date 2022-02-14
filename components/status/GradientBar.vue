@@ -52,7 +52,6 @@ export default {
   },
 };
 </script>
-
 <style type="text/css">
 .div__heatmap-gradient-holder {
   transform: rotate(0deg);

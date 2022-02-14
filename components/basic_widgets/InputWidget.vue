@@ -107,6 +107,9 @@ export default {
         this.dom_id_suffix.includes("heatmap") && isNaN(this.initial_value) ? "" : this.initial_value;
       this.$emit("update:value", this.input_value);
     },
+    disabled(bool) {
+      this.input_value = bool ? "" : this.initial_value;
+    },
   },
   methods: {
     on_b_form_input: function () {

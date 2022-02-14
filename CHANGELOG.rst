@@ -8,6 +8,7 @@ Changelog for Mantarray Frontend Components
 - Added time unit dropdown to x-axis in Stimulation Studio
 - Updated 'Delete Protocol' modal to match
 - Added AdditionalControls tooltip on start/stop button when a recording is active
+- Updated Heatmap's apply/reset button functionality
 
 0.6.1 (2022-02-03)
 ------------------
