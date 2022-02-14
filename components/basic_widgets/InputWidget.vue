@@ -108,8 +108,7 @@ export default {
       this.$emit("update:value", this.input_value);
     },
     disabled(bool) {
-      if (bool) this.input_value = "";
-      else this.input_value = this.initial_value;
+      this.input_value = bool ? "" : this.initial_value;
     },
   },
   methods: {
