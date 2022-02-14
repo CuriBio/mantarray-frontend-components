@@ -3,6 +3,7 @@ import HeatMap from "@/components/heatmap/HeatMap.vue";
 import { HeatMap as DistComponentToTest } from "@/dist/mantarray.common";
 import { createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
+import playback_module from "@/store/modules/playback";
 
 const max_warm_rgb = "rgb(74.118% 20.784% 19.608%)";
 const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
@@ -22,6 +23,7 @@ describe("HeatMap.vue", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
   });
 
   test("When mounting HeatMap from the build dist file, Then it loads successfully", async () => {

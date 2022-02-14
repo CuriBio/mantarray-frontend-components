@@ -253,7 +253,9 @@ export default {
       return (
         this.max_value_error_msg === "" &&
         this.min_value_error_msg === "" &&
-        this.display_option in this.well_values
+        this.display_option in this.well_values &&
+        (this.playback_state == this.playback_state_enums.LIVE_VIEW_ACTIVE ||
+          this.playback_state == this.playback_state_enums.RECORDING)
       );
     },
     auto_max_min: function () {
