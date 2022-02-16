@@ -69,7 +69,7 @@ describe("StatusWidget.vue", () => {
   );
   test("When initially mounted, Then the status text matches the Vuex state", () => {
     const propsData = {};
-    store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING_uuid);
+    store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING);
     wrapper = mount(StatusWidget, {
       propsData,
       store,

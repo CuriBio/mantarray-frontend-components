@@ -19,11 +19,11 @@ const mocked_all_mantarray_commands = RequestMock()
 
 const mocked_static_system_status_states = RequestMock()
   .onRequestTo(system_status_when_calibration_needed_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.NEEDS_CALIBRATION_uuid }, 200, {
+  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED }, 200, {
     "Access-Control-Allow-Origin": "*",
   })
   .onRequestTo(system_status_when_recording_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.RECORDING_uuid }, 200, {
+  .respond({ ui_status_code: STATUS.MESSAGE.RECORDING }, 200, {
     "Access-Control-Allow-Origin": "*",
   });
 

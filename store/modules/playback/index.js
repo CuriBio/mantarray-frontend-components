@@ -10,7 +10,7 @@ const default_state = {
   loop_playback: false,
   is_playing: false,
   x_time_index: 0,
-  playback_state: ENUMS.PLAYBACK_STATES.FILE_NOT_LOADED,
+  playback_state: ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT,
   recording_start_time: 0,
   playback_progression_interval_id: null,
   playback_progression_time_interval: 40, // milliseconds
