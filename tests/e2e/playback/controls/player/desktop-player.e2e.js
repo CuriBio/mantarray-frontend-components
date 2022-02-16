@@ -64,7 +64,7 @@ const mocked_system_status_switch_to_calibration_needed_from_server_still_initia
 
 const mocked_system_status_keep_calibrating = RequestMock()
   .onRequestTo(system_status_when_calibrating_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATING_uuid }, 200, {
+  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATING }, 200, {
     "Access-Control-Allow-Origin": "*",
   });
 
@@ -76,13 +76,13 @@ const mocked_system_status_finish_calibration = RequestMock()
 
 const mocked_system_status_finish_buffering = RequestMock()
   .onRequestTo(system_status_when_buffering_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid }, 200, {
+  .respond({ ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE }, 200, {
     "Access-Control-Allow-Origin": "*",
   });
 
 const mocked_system_status_recording_even_when_in_live_view_active = RequestMock()
   .onRequestTo(system_status_when_live_view_active_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.RECORDING_uuid }, 200, {
+  .respond({ ui_status_code: STATUS.MESSAGE.RECORDING }, 200, {
     "Access-Control-Allow-Origin": "*",
   });
 const mocked_system_status_live_view_active_when_in_live_view_active = RequestMock()

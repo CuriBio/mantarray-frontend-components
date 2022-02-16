@@ -47,7 +47,7 @@ export async function ping_system_status() {
     if (this.state.ignore_next_system_status_if_matching_this_status !== status_uuid) {
       if (status_uuid != this.state.status_uuid) {
         this.commit("set_status_uuid", status_uuid);
-        if (status_uuid == STATUS.MESSAGE.CALIBRATION_NEEDED_uuid) {
+        if (status_uuid == STATUS.MESSAGE.CALIBRATION_NEEDED) {
           this.dispatch(
             "playback/transition_playback_state",
             PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED,
@@ -61,7 +61,7 @@ export async function ping_system_status() {
           this.commit("playback/set_enable_additional_controls", true, { root: true });
         }
 
-        if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid) {
+        if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
           this.dispatch(
             "playback/transition_playback_state",
             PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,

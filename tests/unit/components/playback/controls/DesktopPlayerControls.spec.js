@@ -236,7 +236,7 @@ describe("DesktopPlayerControls.vue", () => {
           .replyOnce(200, { ui_status_code: STATUS.MESSAGE.BUFFERING });
         mocked_axios
           .onGet(system_status_when_buffering_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid });
+          .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE });
       });
       afterEach(async () => {
         // make sure to stop pinging before unmocking axios so there aren't any unmocked HTTP requests
