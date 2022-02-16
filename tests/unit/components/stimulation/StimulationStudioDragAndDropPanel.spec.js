@@ -403,7 +403,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     await store.commit("stimulation/set_stop_setting", test_settings.complete);
     expect(wrapper.vm.disable_dropdown).toBe(true);
-    await store.commit("stimulation/set_stop_setting", test_settings.CALIBRATED);
+    await store.commit("stimulation/set_stop_setting", test_settings.stopped);
     expect(wrapper.vm.disable_dropdown).toBe(false);
   });
 
