@@ -4,11 +4,12 @@ Changelog for Mantarray Frontend Components
 0.6.2 (Unreleased)
 ------------------
 
-- Increased 30 second recording limit to 5 minutes
 - Added time unit dropdown to x-axis in Stimulation Studio
-- Updated 'Delete Protocol' modal to match
 - Added AdditionalControls tooltip on start/stop button when a recording is active
-- Updated Heatmap's apply/reset button functionality
+- Fixed player controls so that playback state can only transition to live view active from buffering
+- Changed 30 second recording limit to 5 minutes
+- Changed 'Delete Protocol' modal to match
+- Changed Heatmap's apply/reset button functionality
 
 0.6.1 (2022-02-03)
 ------------------
