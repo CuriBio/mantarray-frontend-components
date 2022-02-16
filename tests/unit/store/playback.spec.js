@@ -51,9 +51,9 @@ describe("store/playback", () => {
   });
 
   describe("Playback", () => {
-    test("When the playback store is initialized, Then playback_state should be FILE_NOT_LOADED", () => {
+    test("When the playback store is initialized, Then playback_state should be NOT_CONNECTED_TO_INSTRUMENT", () => {
       expect(store.state.playback.playback_state).toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.FILE_NOT_LOADED
+        playback_module.ENUMS.PLAYBACK_STATES.NOT_CONNECTED_TO_INSTRUMENT
       );
     });
     test("When the playback store is initialized, Then playback_progression_time_interval should be 40", () => {
@@ -196,13 +196,13 @@ describe("store/playback", () => {
     });
 
     test("When set_playback_state is committed, Then the playback_state is mutated", () => {
-      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.PLAYING);
+      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
       expect(store.state.playback.playback_state).toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.PLAYING
+        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
-      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.STOPPED);
+      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
       expect(store.state.playback.playback_state).toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.STOPPED
+        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
     });
     test("When the playback store is initialized, Then the x_time_index is initially 0", () => {
@@ -342,10 +342,10 @@ describe("store/playback", () => {
         });
       });
     });
-    test("Given x_time_index is not 0 and playback state is PLAYING, and playback_progression_interval is active, When stop_playback is dispatched, Then x_time_index becomes 0, playback state becomes STOPPED and the playback_progression_interval is cleared", async () => {
+    test("Given x_time_index is not 0 and playback state is LIVE_VIEW_ACTIVE, and playback_progression_interval is active, When stop_playback is dispatched, Then x_time_index becomes 0, playback state becomes CALIBRATED and the playback_progression_interval is cleared", async () => {
       store.commit("playback/set_x_time_index", 200);
       await store.dispatch("playback/start_playback_progression");
-      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.PLAYING);
+      store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
 
       // confirm pre-condition
       expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
@@ -354,16 +354,19 @@ describe("store/playback", () => {
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
       expect(store.state.playback.x_time_index).toStrictEqual(0);
       expect(store.state.playback.playback_state).toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.STOPPED
+        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
     });
     test("When transition_playback_state is dispatched, Then the playback_state is mutated", async () => {
-      store.dispatch("playback/transition_playback_state", playback_module.ENUMS.PLAYBACK_STATES.PLAYING);
+      store.dispatch(
+        "playback/transition_playback_state",
+        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
+      );
       expect(store.state.playback.playback_state).toStrictEqual(
-        playback_module.ENUMS.PLAYBACK_STATES.PLAYING
+        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
     });
-    test("Given playback_progression interval is not active and playback_state is BUFFERING, When the playback_state transitions to LIVE_VIEW_ACTIVE/PLAYING, Then the playback_progression_interval becomes active", async () => {
+    test("Given playback_progression interval is not active and playback_state is BUFFERING, When the playback_state transitions to LIVE_VIEW_ACTIVE, Then the playback_progression_interval becomes active", async () => {
       await store.dispatch(
         "playback/transition_playback_state",
         playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
@@ -374,15 +377,15 @@ describe("store/playback", () => {
 
       await store.dispatch(
         "playback/transition_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.PLAYING
+        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
 
       expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
     });
-    test("Given playback_progression interval is not active and playback_state is STOPPED, When the playback_state transitions to CALIBRATING, Then the playback_progression_interval does not become active", async () => {
+    test("Given playback_progression interval is not active and playback_state is CALIBRATED, When the playback_state transitions to CALIBRATING, Then the playback_progression_interval does not become active", async () => {
       await store.dispatch(
         "playback/transition_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.STOPPED
+        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
 
       // confirm pre-condition
@@ -396,10 +399,10 @@ describe("store/playback", () => {
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
     });
 
-    test("Given playback_progression interval is not active and playback_state is STOPPED, When the playback_state transitions to LIVE_VIEW_ACTIVE/PLAYING, Then the playback_progression_interval becomes active", async () => {
+    test("Given playback_progression interval is not active and playback_state is CALIBRATED, When the playback_state transitions to LIVE_VIEW_ACTIVE, Then the playback_progression_interval becomes active", async () => {
       await store.dispatch(
         "playback/transition_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.STOPPED
+        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
 
       // confirm pre-condition
@@ -407,12 +410,12 @@ describe("store/playback", () => {
 
       await store.dispatch(
         "playback/transition_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.PLAYING
+        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
 
       expect(store.state.playback.playback_progression_interval_id).not.toBeNull();
     });
-    test("Given playback_progression interval is active and playback_state is LIVE_VIEW_ACTIVE, When the playback_state transitions to STOPPED, Then the playback_progression_interval is cleared", async () => {
+    test("Given playback_progression interval is active and playback_state is LIVE_VIEW_ACTIVE, When the playback_state transitions to CALIBRATED, Then the playback_progression_interval is cleared", async () => {
       store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
       await store.dispatch("playback/start_playback_progression");
 
@@ -421,7 +424,7 @@ describe("store/playback", () => {
 
       await store.dispatch(
         "playback/transition_playback_state",
-        playback_module.ENUMS.PLAYBACK_STATES.STOPPED
+        playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
 
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
@@ -585,9 +588,9 @@ describe("store/playback", () => {
       expect(spied_clear_interval).toHaveBeenCalledWith(expected_interval_id);
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
     });
-    test("Given playback_progression interval is active and SYSTEM_STATUS is set to PLAYING and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the SYSTEM_STATUS is set to ERROR and the interval playback_progression_interval_id is cleared", async () => {
+    test("Given playback_progression interval is active and SYSTEM_STATUS is set to LIVE_VIEW_ACTIVE and Mantarray Commands are mocked to return status 400, When an axios error handled called, Then the SYSTEM_STATUS is set to ERROR and the interval playback_progression_interval_id is cleared", async () => {
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(400);
-      store.commit("flask/set_status_uuid", STATUS.MESSAGE.PLAYING);
+      store.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
 
       await store.dispatch("playback/start_playback_progression");
 
@@ -605,7 +608,7 @@ describe("store/playback", () => {
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
 
-      const expected_status_state = STATUS.MESSAGE.STOPPED;
+      const expected_status_state = STATUS.MESSAGE.CALIBRATED;
       store.commit("playback/set_x_time_index", 400);
       // confirm pre-condition
       expect(store.state.playback.playback_state).not.toStrictEqual(

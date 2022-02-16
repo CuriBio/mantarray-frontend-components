@@ -125,7 +125,7 @@ describe("store/flask", () => {
       expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(system_status_when_calibrating_regexp);
 
-      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.STOPPED);
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATED);
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );

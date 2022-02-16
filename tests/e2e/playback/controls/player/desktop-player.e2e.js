@@ -36,7 +36,7 @@ const mocked_system_status_static_calibration_needed = RequestMock()
 
 const mocked_static_system_status_states = RequestMock()
   .onRequestTo(system_status_when_calibrated_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.STOPPED }, 200, {
+  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATED }, 200, {
     "Access-Control-Allow-Origin": "*",
   })
   .onRequestTo(system_status_when_calibration_needed_regexp)
@@ -70,7 +70,7 @@ const mocked_system_status_keep_calibrating = RequestMock()
 
 const mocked_system_status_finish_calibration = RequestMock()
   .onRequestTo(system_status_when_calibrating_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.STOPPED }, 200, {
+  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATED }, 200, {
     "Access-Control-Allow-Origin": "*",
   });
 
