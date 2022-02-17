@@ -36,7 +36,7 @@
   "dependencies": {
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@tofandel/uuid-base62": "^1.0.3",
-    "axios": "^0.21.1",
+    "axios": "^0.26.0",
     "bootstrap-vue": "^2.21.1",
     "colorjs.io": "^0.0.3",
     "d3": "^6.2.0",
