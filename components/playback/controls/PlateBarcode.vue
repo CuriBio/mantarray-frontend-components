@@ -5,7 +5,7 @@
     >
     <!-- original Mockflow ID: cmpDd0be63536ca605546f566539e51ad0c3-->
     <input
-      v-if="manual"
+      v-if="!manual"
       id="plateinfo"
       disabled="disabled"
       type="text"
@@ -15,7 +15,7 @@
       :value="barcode"
     />
     <input
-      v-if="!manual"
+      v-if="manual"
       id="plateinfo"
       :disabled="
         playback_state === playback_state_enums.RECORDING ||
@@ -29,7 +29,7 @@
       :value="plate_barcode"
       @input="validatePlateBarcode"
     />
-    <div v-show="manual" class="input__plate-barcode-manual-entry-enable">
+    <div v-show="!manual" class="input__plate-barcode-manual-entry-enable">
       <span class="input__plate-barcode-manual-entry-enable-icon">
         <div id="edit-plate-barcode" v-b-modal.edit-plate-barcode-modal>
           <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      manual: true,
+      manual: false,
       plate_barcode: "",
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
     };
@@ -79,17 +79,18 @@ export default {
     ...mapState("playback", ["playback_state", "barcode", "is_valid_barcode"]),
   },
   updated() {
-    this.plate_barcode = this.$store.state.playback.barcode;
+    this.plate_barcode = this.barcode;
   },
   methods: {
     manual_mode_off: function () {
       this.$bvModal.hide("edit-plate-barcode-modal");
     },
     manual_mode_on: function () {
-      this.manual = false;
+      this.manual = true;
       this.$bvModal.hide("edit-plate-barcode-modal");
       this.$store.commit("flask/set_barcode_manual_mode", true);
       this.$store.commit("playback/set_barcode_number_manual_mode", null);
+      this.$store.commit("playback/set_barcode_valid_manual_mode", false); // TODO unit test
     },
     validatePlateBarcode: function (event) {
       const val = event.target.value;
