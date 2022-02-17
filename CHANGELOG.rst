@@ -10,6 +10,7 @@ Changelog for Mantarray Frontend Components
 - Changed 30 second recording limit to 5 minutes
 - Changed 'Delete Protocol' modal to match
 - Changed Heatmap's apply/reset button functionality
+- Fixed stim/live-view bug handling long subprotocols
 
 0.6.1 (2022-02-03)
 ------------------
