@@ -90,7 +90,7 @@ export default {
       this.$bvModal.hide("edit-plate-barcode-modal");
       this.$store.commit("flask/set_barcode_manual_mode", true);
       this.$store.commit("playback/set_barcode_number_manual_mode", null);
-      this.$store.commit("playback/set_barcode_valid_manual_mode", false); // TODO unit test
+      this.$store.commit("playback/set_barcode_valid_manual_mode", false);
     },
     validatePlateBarcode: function (event) {
       const val = event.target.value;
