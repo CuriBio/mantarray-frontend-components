@@ -9,7 +9,7 @@
       :style="
         'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;' + 'height:' + input_height + 'px;'
       "
-      @click="!disabled ? toggle() : null"
+      @click="!disable_toggle ? toggle() : null"
     >
       <div
         class="span__small-dropdown-controls-content-input-txt-widget"
@@ -19,13 +19,13 @@
       </div>
       <div class="arrow" :class="{ expanded: visible }" />
       <div :class="{ hidden: !visible, visible }">
-        <ul>
+        <ul :style="`bottom: ${bottom_pixels}px`">
           <li
             v-for="item in options_list"
-            :id="item.name"
+            :id="dom_id_suffix + `_${item.id}`"
             :key="item.id"
             :value="item"
-            @click="change_selection(item.id)"
+            @click="!disable_selection ? change_selection(item.id) : null"
           >
             {{ item.name }}
           </li>
@@ -44,7 +44,8 @@ export default {
     options_idx: { type: Number, default: 0 },
     dom_id_suffix: { type: String, default: "" }, // for testing
     title_label: { type: String, default: "" },
-    disabled: { type: Boolean, default: false },
+    disable_toggle: { type: Boolean, default: false },
+    disable_selection: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -69,6 +70,9 @@ export default {
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
     },
+    bottom_pixels: function () {
+      return (this.options_text.length - 2) * 25 + 12;
+    },
   },
   watch: {
     chosen_option: function () {
@@ -79,8 +83,8 @@ export default {
     options_idx: function () {
       this.get_preselected_option();
     },
-    disabled: function () {
-      if (this.disabled) this.visible = false;
+    disable_toggle: function () {
+      if (this.disable_toggle) this.visible = false;
     },
   },
   created() {
@@ -171,19 +175,20 @@ ul {
   width: 100%;
   list-style-type: none;
   padding: 0;
-  margin-top: 16px;
   left: 0;
   font-size: 11px;
+  height: 25px;
+  line-height: 25px;
   position: absolute;
   color: #b7b7b7;
-  border-top: 1px solid rgb(17, 17, 17);
   z-index: 5;
 }
 
 li {
-  padding: 4px 10px 4px 10px;
   color: #b7b7b7;
   background-color: #292929;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 li:hover {
   background: #1c1c1c;

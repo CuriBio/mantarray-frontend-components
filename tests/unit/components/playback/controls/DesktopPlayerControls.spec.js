@@ -217,7 +217,7 @@ describe("DesktopPlayerControls.vue", () => {
           .replyOnce(200, { ui_status_code: STATUS.MESSAGE.CALIBRATING });
         mocked_axios
           .onGet(system_status_when_calibrating_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED });
+          .reply(200, { ui_status_code: STATUS.MESSAGE.CALIBRATED });
 
         mocked_axios
           .onGet(system_status_when_recording_regexp)
@@ -229,14 +229,14 @@ describe("DesktopPlayerControls.vue", () => {
 
         mocked_axios
           .onGet(system_status_when_calibrated_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.STOPPED });
+          .reply(200, { ui_status_code: STATUS.MESSAGE.CALIBRATED });
 
         mocked_axios
           .onGet(system_status_when_buffering_regexp)
           .replyOnce(200, { ui_status_code: STATUS.MESSAGE.BUFFERING });
         mocked_axios
           .onGet(system_status_when_buffering_regexp)
-          .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid });
+          .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE });
       });
       afterEach(async () => {
         // make sure to stop pinging before unmocking axios so there aren't any unmocked HTTP requests

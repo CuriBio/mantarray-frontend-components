@@ -110,7 +110,7 @@ export default {
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
       root: true,
     });
-    context.commit("flask/set_status_uuid", STATUS.MESSAGE.STOPPED, {
+    context.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATED, {
       root: true,
     });
     context.commit("stop_playback_progression");
@@ -151,22 +151,19 @@ export default {
   },
   async stop_playback(context) {
     context.commit("set_x_time_index", 0);
-    await this.dispatch("playback/transition_playback_state", ENUMS.PLAYBACK_STATES.STOPPED);
+    await this.dispatch("playback/transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
   },
   async transition_playback_state(context, new_state) {
     const current_playback_state = this.state.playback.playback_state;
     context.commit("set_playback_state", new_state);
     if (new_state == ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE) {
-      if (
-        current_playback_state === ENUMS.PLAYBACK_STATES.BUFFERING ||
-        current_playback_state === ENUMS.PLAYBACK_STATES.STOPPED
-      ) {
+      if (current_playback_state === ENUMS.PLAYBACK_STATES.BUFFERING) {
         await this.dispatch("playback/start_playback_progression");
       }
     }
     if (
       current_playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE &&
-      new_state === ENUMS.PLAYBACK_STATES.STOPPED
+      new_state === ENUMS.PLAYBACK_STATES.CALIBRATED
     ) {
       context.commit("stop_playback_progression");
     }

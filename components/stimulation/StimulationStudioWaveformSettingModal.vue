@@ -24,7 +24,7 @@
     >
       <span id="cmpD830cdea88a8752e1fdd278dd0215b99d_txt" class="span__stimulationstudio-input">
         <InputWidget
-          :placeholder="'10 ms'"
+          :placeholder="'10'"
           :dom_id_suffix="'duration'"
           :invalid_text="err_msg.phase_one_duration"
           :input_width="142"
@@ -38,7 +38,7 @@
       id="cmpDad40b728ec40e75944b1291803f7785b"
       class="span__stimulationstudio-current-settings-label-right"
       :style="'top: 109.5px;'"
-      >Balance&nbsp;<wbr />Charge</span
+      >milliseconds</span
     >
     <span
       id="cmpDf2d0dbfd2edb4ffa3b8615863fa1b9a7"
@@ -66,7 +66,7 @@
       id="cmpD7695902a49c6eaeb81d267812f0a90cd"
       class="span__stimulationstudio-current-settings-label-right"
       :style="'top: 179.5px;'"
-      >Balance&nbsp;<wbr />Charge</span
+      >{{ stim_unit }}</span
     >
     <div v-if="pulse_type === 'Biphasic'">
       <canvas id="cmpDefb479b0caa166978ebed24ab8c44baf" :style="'top: 246px;'" />
@@ -113,7 +113,7 @@
       >
         <span id="cmpD818347e832e1274793ffe2c57a5d0a9c_txt" class="span__stimulationstudio-input">
           <InputWidget
-            :placeholder="'10 ms'"
+            :placeholder="'10'"
             :dom_id_suffix="'durationtwo'"
             :invalid_text="err_msg.phase_two_duration"
             :input_width="142"
@@ -126,7 +126,7 @@
         id="cmpD470ae881458be847aa3ef17c347d3973"
         class="span__stimulationstudio-current-settings-label-right"
         :style="'top: 396.5px;'"
-        >Balance&nbsp;<wbr />Charge</span
+        >milliseconds</span
       >
       <span
         id="cmpDdd1b9fc6423c3af17206292a54489078"
@@ -154,7 +154,7 @@
         id="cmpDbc629158eb67226e3134f41509394ec9"
         class="span__stimulationstudio-current-settings-label-right"
         :style="'top: 466.5px;'"
-        >Balance&nbsp;<wbr />Charge</span
+        >{{ stim_unit }}</span
       >
     </div>
     <canvas :style="pulse_type === 'Monophasic' ? 'top: 240px;' : 'top: 533px;'" />
@@ -302,7 +302,7 @@ export default {
     SmallDropDown,
   },
   props: {
-    stimulation_type: { type: String, default: "Current (mA)" },
+    stimulation_type: { type: String, default: "Current" },
     pulse_type: { type: String, default: "Biphasic" },
     button_names: {
       type: Array,
@@ -378,6 +378,9 @@ export default {
     calculated_delay: function () {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
       return total_delay / this.input_pulse_frequency;
+    },
+    stim_unit: function () {
+      return this.stimulation_type.includes("C") ? "mA" : "V";
     },
   },
   watch: {

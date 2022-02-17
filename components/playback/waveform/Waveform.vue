@@ -247,6 +247,7 @@ export default {
         if (stim_data.length > 0) {
           // 255 is sent when a user stops a stim
           const color = sub_protocol[0] === 255 ? "none" : this.stim_fill_colors[sub_protocol[0]];
+
           this.stim_waveform_line_node
             .append("path")
             .datum(sub_protocol[1])

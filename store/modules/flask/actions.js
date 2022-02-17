@@ -31,37 +31,25 @@ export async function ping_system_status() {
     const status_uuid = data.ui_status_code;
 
     const simulation_mode = data.in_simulation_mode;
-    if (this.state.barcode_manual_mode === false) {
-      if (data.plate_barcode != undefined) {
-        const plate_barcode = data.plate_barcode;
-        if (plate_barcode == "") {
-          this.commit("playback/set_barcode_number", null, { root: true });
-        } else {
-          this.commit("playback/set_barcode_number", plate_barcode, {
-            root: true,
-          });
-        }
-      }
-    }
     this.commit("set_simulation_status", simulation_mode);
     if (this.state.ignore_next_system_status_if_matching_this_status !== status_uuid) {
       if (status_uuid != this.state.status_uuid) {
         this.commit("set_status_uuid", status_uuid);
-        if (status_uuid == STATUS.MESSAGE.CALIBRATION_NEEDED_uuid) {
+        if (status_uuid == STATUS.MESSAGE.CALIBRATION_NEEDED) {
           this.dispatch(
             "playback/transition_playback_state",
             PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED,
             { root: true }
           );
         }
-        if (status_uuid == STATUS.MESSAGE.STOPPED) {
+        if (status_uuid == STATUS.MESSAGE.CALIBRATED) {
           this.dispatch("playback/transition_playback_state", PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED, {
             root: true,
           });
           this.commit("playback/set_enable_additional_controls", true, { root: true });
         }
 
-        if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE_uuid) {
+        if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
           this.dispatch(
             "playback/transition_playback_state",
             PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,

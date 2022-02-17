@@ -418,7 +418,9 @@ export default {
         return "Must calibrate before activating.";
       }
       if (this.playback_state === this.playback_state_enums.CALIBRATED) {
-        return "Click to begin viewing Mantarray data.";
+        return this.is_valid_barcode
+          ? "Click to begin viewing Mantarray data."
+          : "Must have valid Plate Barcode before activating.";
       }
       return "Must initialize before activating.";
     },
@@ -456,7 +458,7 @@ export default {
     svg__playback_desktop_player_controls_live_view_button__dynamic_class: function () {
       return {
         "span__playback-desktop-player-controls--available":
-          this.playback_state === this.playback_state_enums.CALIBRATED && this.is_valid_barcode != false,
+          this.playback_state === this.playback_state_enums.CALIBRATED && this.is_valid_barcode,
         "span__playback-desktop-player-controls--active":
           this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE,
         "span__playback-desktop-player-controls--running-in-background":
@@ -718,6 +720,10 @@ export default {
   font-size: 14px;
   font-family: Muli;
   -webkit-font-smoothing: antialiased;
+}
+
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
 }
 
 #recording-limit-warning,

@@ -57,6 +57,7 @@ export default {
       repeat_colors: {},
       y_axis_scale: 120,
       delay_blocks: [],
+      x_axis_time_idx: 0,
       edit_mode: { status: false, letter: "", label: "" },
     };
     Object.assign(state, replace_state);
@@ -79,6 +80,7 @@ export default {
       repeat_colors: {},
       y_axis_scale: 120,
       delay_blocks: [],
+      x_axis_time_idx: 0,
       edit_mode: { status: false, letter: "", label: "" },
     };
     Object.assign(state, replace_state);
@@ -126,5 +128,8 @@ export default {
   },
   set_stop_setting({ protocol_editor }, setting) {
     protocol_editor.stop_setting = setting;
+  },
+  set_x_axis_time_idx(state, idx) {
+    state.x_axis_time_idx = idx;
   },
 };

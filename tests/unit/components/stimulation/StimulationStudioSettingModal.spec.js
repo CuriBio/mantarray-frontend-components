@@ -112,7 +112,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage",
         pulse_type: "Biphasic",
         selected_pulse_settings: {
           phase_one_duration: "",
@@ -132,7 +132,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       },
     });
     const title = wrapper.findAll("span").at(5).text();
-    expect(title).toBe("Voltage (mV)");
+    expect(title).toBe("Voltage");
     const interphase_label = wrapper.findAll("span").at(8);
     expect(interphase_label).toBeTruthy();
   });
@@ -142,7 +142,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        stimulation_type: "Current (mA)",
+        stimulation_type: "Current",
         pulse_type: "Monophasic",
         selected_pulse_settings: {
           phase_one_duration: "",
@@ -188,7 +188,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage",
         pulse_type: "Monophasic",
         selected_pulse_settings: {
           phase_one_duration: "",
@@ -223,7 +223,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage",
         pulse_type: "Monophasic",
         selected_pulse_settings: {
           phase_one_duration: "",
@@ -252,7 +252,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage",
         pulse_type: "Biphasic",
         selected_pulse_settings: {
           phase_one_duration: "10",
@@ -291,7 +291,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage",
         pulse_type: "Biphasic",
         selected_pulse_settings: {
           phase_one_duration: "2",
@@ -325,7 +325,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        stimulation_type: "Voltage (mV)",
+        stimulation_type: "Voltage",
         pulse_type: "Monophasic",
         selected_pulse_settings: {
           phase_one_duration: "",

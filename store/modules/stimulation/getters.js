@@ -22,8 +22,8 @@ export default {
     }
   },
   get_stimulation_type({ protocol_editor }) {
-    if (protocol_editor.stimulation_type === "C") return "Current (mA)";
-    if (protocol_editor.stimulation_type === "V") return "Voltage (mV)";
+    if (protocol_editor.stimulation_type === "C") return "Current";
+    if (protocol_editor.stimulation_type === "V") return "Voltage";
   },
 
   get_protocol_name({ protocol_editor }) {

@@ -22,6 +22,7 @@ const state = () => ({
   y_axis_scale: 120,
   delay_blocks: [],
   stim_status: false,
+  x_axis_time_idx: 0,
   edit_mode: { status: false, protocol: "", label: "", color: "" },
 });
 

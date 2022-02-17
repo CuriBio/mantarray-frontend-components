@@ -20,11 +20,11 @@
         <SmallDropDown
           class="dropdown-container"
           :input_height="25"
+          :disable="disable_dropdown"
           :input_width="100"
           :options_text="time_units_array"
           :options_idx="time_units_idx"
           :dom_id_suffix="'time_units'"
-          :disabled="disable_dropdown"
           :style="disable_dropdown ? 'cursor: unset;' : null"
           @selection-changed="handle_time_unit"
         />
@@ -158,7 +158,7 @@ export default {
     SmallDropDown,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage (V)" },
+    stimulation_type: { type: String, default: "Voltage" },
   },
   data() {
     return {

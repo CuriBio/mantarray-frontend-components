@@ -2,19 +2,30 @@
   <div class="div__waveform">
     <div class="div__waveform-graph" :style="div__waveform_graph__dynamic_style" />
     <div class="div__waveform-y-axis-title">
-      <StimulationStudioZoomControls :axis="'y-axis'" />
       <span>{{ y_axis_label }}</span>
+      <StimulationStudioZoomControls :style="'padding-left: 10px'" :axis="'y-axis'" />
     </div>
 
     <div class="div__waveform-x-axis-title">
-      <span :style="'padding-right: 35px;'">{{ x_axis_label }}</span>
-      <StimulationStudioZoomControls :axis="'x-axis'" />
+      <span :style="'grid-column: 1/2; align-self: center;'">{{ x_axis_label }}</span>
+      <SmallDropDown
+        :style="'grid-column: 2/3;'"
+        :input_height="9"
+        :input_width="110"
+        :options_text="time_units"
+        :options_idx="active_duration_idx"
+        :dom_id_suffix="'time_units'"
+        @selection-changed="handle_total_duration_unit_change"
+      />
+      <StimulationStudioZoomControls :style="'grid-column: 3; align-self: center;'" :axis="'x-axis'" />
     </div>
   </div>
 </template>
 <script>
 import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear } from "d3";
 import StimulationStudioZoomControls from "@/components/stimulation/StimulationStudioZoomControls.vue";
+import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+
 /**
  * @vue-prop {String} title - Current title of the waveform
  * @vue-prop {Int} x_axis_sample_length - Current X Axis sample length
@@ -44,15 +55,15 @@ import StimulationStudioZoomControls from "@/components/stimulation/StimulationS
  */
 export default {
   name: "StimulationStudioWaveform",
-  components: { StimulationStudioZoomControls },
+  components: { StimulationStudioZoomControls, SmallDropDown },
   props: {
     title: { type: String, default: "" },
     x_axis_sample_length: { type: Number, default: 100 },
     x_axis_min: { type: Number, default: 0 },
     y_min: { type: Number, default: 0 },
     y_max: { type: Number, default: 120 },
-    y_axis_label: { type: String, default: "Voltage (V)" },
-    x_axis_label: { type: String, default: "Time (s)" },
+    y_axis_label: { type: String, default: "Voltage" },
+    x_axis_label: { type: String, default: "Time" },
     data_points: {
       type: Array, // exactly the format D3 accepts: 2D array of [[x1,y1],[x2,y2],...]
       default: function () {
@@ -96,6 +107,8 @@ export default {
       y_axis_scale: null,
       waveform_line_node: null,
       frequency_of_y_ticks: 5,
+      time_units: ["milliseconds", "seconds"],
+      active_duration_idx: 0,
     };
   },
   computed: {
@@ -107,9 +120,6 @@ export default {
     },
   },
   watch: {
-    x_axis_min() {
-      this.render_plot();
-    },
     x_axis_sample_length() {
       this.render_plot();
     },
@@ -122,8 +132,7 @@ export default {
     data_points() {
       this.render_plot();
     },
-
-    plot_area_pixel_width: function () {
+    plot_area_pixel_width() {
       this.the_svg = d3_select(this.$el)
         .select(".div__waveform-graph")
         .append("svg")
@@ -164,15 +173,7 @@ export default {
       .attr("width", margin.left)
       .attr("height", 230)
       .attr("fill", blocker_color);
-    // Right Side
-    // margin_blockers_node
-    //   .append("rect")
-    //   .attr("id", "margin_blocker_right")
-    //   .attr("x", this.plot_area_pixel_width + 1)
-    //   .attr("y", -margin.top)
-    //   .attr("width", margin.right)
-    //   .attr("height", this.plot_area_pixel_height + margin.top + margin.bottom)
-    //   .attr("fill", blocker_color);
+
     // Top
     margin_blockers_node
       .append("rect")
@@ -209,6 +210,10 @@ export default {
     this.render_plot();
   },
   methods: {
+    handle_total_duration_unit_change(idx) {
+      this.active_duration_idx = idx;
+      this.$store.dispatch("stimulation/handle_x_axis_unit", idx);
+    },
     render_plot: function () {
       this.create_x_axis_scale();
       this.create_y_axis_scale();
@@ -219,7 +224,7 @@ export default {
     },
     create_x_axis_scale: function () {
       this.x_axis_scale = scaleLinear()
-        .domain([this.x_axis_min, this.x_axis_min + this.x_axis_sample_length])
+        .domain([0, this.x_axis_sample_length])
         .range([0, this.plot_area_pixel_width]);
     },
     create_y_axis_scale: function () {
@@ -235,7 +240,6 @@ export default {
     },
     plot_data: function () {
       const data_to_plot = this.data_points;
-
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
@@ -350,14 +354,19 @@ export default {
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   height: 15px;
+  overflow: visible;
 }
 ::-webkit-scrollbar-thumb {
   background-color: #2f2f2f;
+  overflow: visible;
 }
 ::-webkit-scrollbar-track {
   background-color: #1c1c1c;
+  overflow: visible;
 }
 .div__waveform-y-axis-title {
+  display: flex;
+  justify-content: center;
   line-height: 1;
   transform: rotate(270deg);
   padding: 5px;
@@ -370,10 +379,8 @@ export default {
   top: 100px;
   left: -170px;
   width: 379px;
-  height: 28px;
   overflow: hidden;
   user-select: none;
-  text-align: center;
   font-size: 14px;
   letter-spacing: normal;
   z-index: 99;
@@ -381,26 +388,27 @@ export default {
   box-sizing: content-box;
 }
 .div__waveform-x-axis-title {
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  justify-items: start;
   line-height: 1;
-  padding: 5px;
   margin: 0px;
-  overflow-wrap: break-word;
   color: #b7b7b7;
   font-family: Muli;
   font-weight: bold;
   position: sticky;
-  top: 200px;
-  left: 450px;
-  width: 430px;
+  top: 195px;
+  left: 550px;
+  width: 250px;
   height: 29px;
-  overflow: hidden;
   user-select: none;
-  text-align: center;
   font-size: 14px;
   letter-spacing: normal;
   z-index: 99;
   pointer-events: all;
   box-sizing: content-box;
+  overflow: visible;
+  text-align: start;
 }
 .div__waveform-graph {
   overflow: hidden;

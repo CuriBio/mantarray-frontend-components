@@ -16,7 +16,7 @@ export default {
       if (well) well_values.push(idx);
     });
 
-    this.commit("stimulation/set_selected_wells", well_values);
+    commit("set_selected_wells", well_values);
   },
 
   async handle_protocol_order({ commit, dispatch }, new_pulse_order) {
@@ -86,16 +86,16 @@ export default {
       color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
     });
 
-    this.commit("stimulation/set_repeat_color_assignments", color_assignments);
-    this.commit("stimulation/set_pulses", { pulses, new_pulse_order });
-    this.dispatch("stimulation/handle_rest_duration", {
+    commit("set_repeat_color_assignments", color_assignments);
+    commit("set_pulses", { pulses, new_pulse_order });
+    dispatch("handle_rest_duration", {
       x_values,
       y_values,
     });
   },
 
   handle_rest_duration({ commit, state }, { x_values, y_values }) {
-    const { rest_duration, time_unit } = this.state.stimulation.protocol_editor;
+    const { rest_duration, time_unit } = state.protocol_editor;
     let delay_block;
 
     if (rest_duration !== 0) {
@@ -109,17 +109,17 @@ export default {
       delay_block = [NaN, NaN];
     }
 
-    this.commit("stimulation/set_delay_axis_values", delay_block);
-    this.commit("stimulation/set_axis_values", { x_values, y_values });
+    commit("set_delay_axis_values", delay_block);
+    commit("set_axis_values", { x_values, y_values });
   },
 
   async handle_new_rest_duration({ dispatch, state, commit }, time) {
-    const { detailed_pulses } = this.state.stimulation.protocol_editor;
+    const { detailed_pulses } = state.protocol_editor;
 
     if (time === "") time = "0";
 
-    await this.commit("stimulation/set_rest_duration", time);
-    this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
+    await commit("set_rest_duration", time);
+    dispatch("handle_protocol_order", detailed_pulses);
   },
 
   async handle_import_protocol({ commit, state, dispatch }, file) {
@@ -132,14 +132,13 @@ export default {
 
     reader.onerror = function () {
       console.log(reader.onerror);
-      alert("Import unsuccessful");
     };
 
     reader.readAsText(file);
   },
 
-  async handle_export_protocol({ commit, state }) {
-    const { protocol_editor } = this.state.stimulation;
+  async handle_export_protocol({ state }) {
+    const { protocol_editor } = state;
     const text_to_write = JSON.stringify(protocol_editor);
     const text_file_blob = new Blob([text_to_write], { type: "application/json" });
     const file_name_to_save = protocol_editor.name;
@@ -161,23 +160,23 @@ export default {
   },
 
   async add_imported_protocol({ commit, state, getters }, protocol) {
-    await this.commit("stimulation/set_edit_mode_off");
+    await commit("set_edit_mode_off");
 
-    const assignment = await this.getters["stimulation/get_next_protocol"];
+    const assignment = await getters["get_next_protocol"];
     const { color, letter } = assignment;
     const imported_protocol = { color, letter, label: protocol.name, protocol };
 
-    await this.commit("stimulation/set_edit_mode", { label: protocol.name, letter });
-    this.commit("stimulation/set_imported_protocol", imported_protocol);
+    await commit("set_edit_mode", { label: protocol.name, letter });
+    commit("set_imported_protocol", imported_protocol);
   },
 
   async add_saved_protocol({ commit, state, dispatch }) {
-    const { protocol_editor, edit_mode, protocol_list } = this.state.stimulation;
-    const { letter, color } = this.state.stimulation.current_assignment;
+    const { protocol_editor, edit_mode, protocol_list } = state;
+    const { letter, color } = state.current_assignment;
     const updated_protocol = { color, letter, label: protocol_editor.name, protocol: protocol_editor };
 
     if (!edit_mode.status) {
-      this.commit("stimulation/set_new_protocol", updated_protocol);
+      commit("set_new_protocol", updated_protocol);
     } else if (edit_mode.status) {
       protocol_list.map((protocol, idx) => {
         if (protocol.letter === edit_mode.letter)
@@ -188,13 +187,13 @@ export default {
           };
       });
 
-      await this.commit("stimulation/set_edit_mode_off");
-      await this.dispatch("stimulation/update_protocol_assignments", updated_protocol);
+      await commit("set_edit_mode_off");
+      await dispatch("update_protocol_assignments", updated_protocol);
     }
   },
 
   update_protocol_assignments({ state }, updated_protocol) {
-    const { protocol_assignments } = this.state.stimulation;
+    const { protocol_assignments } = state;
 
     for (const assignment in protocol_assignments) {
       if (protocol_assignments[assignment].letter === updated_protocol.letter) {
@@ -207,7 +206,7 @@ export default {
     const status = true;
     const message = { protocols: [], protocol_assignments: {} };
 
-    const { protocol_assignments } = this.state.stimulation;
+    const { protocol_assignments } = state;
 
     const charge_conversion = { C: 1000, V: 1 };
 
@@ -258,12 +257,8 @@ export default {
       }
     }
 
-    try {
-      await post_stim_message(message);
-      await post_stim_status(status);
-    } catch (error) {
-      console.log(error);
-    }
+    await post_stim_message(message);
+    await post_stim_status(status);
   },
 
   async stop_stim_status() {
@@ -274,24 +269,20 @@ export default {
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {
     const { label, letter, color } = protocol;
     const { stimulation_type, time_unit, rest_duration, detailed_pulses, stop_setting } = protocol.protocol;
-    this.state.stimulation.current_assignment = { letter, color };
+    state.current_assignment = { letter, color };
 
-    try {
-      await this.commit("stimulation/set_protocol_name", label);
-      await this.commit("stimulation/set_stimulation_type", stimulation_type);
-      await this.commit("stimulation/set_time_unit", time_unit);
-      await this.commit("stimulation/set_rest_duration", rest_duration);
-      await this.commit("stimulation/set_stop_setting", stop_setting);
-      await this.dispatch("stimulation/handle_protocol_order", detailed_pulses);
-    } catch (error) {
-      console.log(error);
-    }
+    await commit("set_protocol_name", label);
+    await commit("set_stimulation_type", stimulation_type);
+    await commit("set_time_unit", time_unit);
+    await commit("set_rest_duration", rest_duration);
+    await commit("set_stop_setting", stop_setting);
+    await dispatch("handle_protocol_order", detailed_pulses);
 
-    this.commit("stimulation/set_edit_mode", protocol);
+    commit("set_edit_mode", protocol);
   },
 
   async handle_protocol_editor_reset({ commit, state }) {
-    const { protocol_list, edit_mode, protocol_assignments } = this.state.stimulation;
+    const { protocol_list, edit_mode, protocol_assignments } = state;
     const { status, label } = edit_mode;
 
     if (status) {
@@ -301,8 +292,20 @@ export default {
       for (const well in protocol_assignments) {
         if (protocol_assignments[well].label === label) delete protocol_assignments[well];
       }
-      await this.commit("stimulation/set_edit_mode_off");
+      await commit("set_edit_mode_off");
     }
-    this.commit("stimulation/reset_protocol_editor");
+    commit("reset_protocol_editor");
+  },
+  handle_x_axis_unit({ commit, dispatch, state }, idx) {
+    const { x_axis_values, y_axis_values, x_axis_time_idx } = state;
+    if (idx !== x_axis_time_idx) {
+      const converted_x_values = x_axis_values.map((val) => (idx === 1 ? val * 1e-3 : val * 1e3));
+      commit("set_x_axis_time_idx", idx);
+      if (converted_x_values.length > 0)
+        dispatch("handle_rest_duration", {
+          x_values: converted_x_values,
+          y_values: y_axis_values,
+        });
+    }
   },
 };
