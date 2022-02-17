@@ -43,7 +43,7 @@ export default {
           state.stim_waveforms[well_idx].x_data_points.push(x);
           state.stim_waveforms[well_idx].y_data_points.push(101000);
 
-          if (next_x) {
+          if (next_x)
             state.stim_fill_assignments[well_idx].push([
               protocol_flags[idx],
               [
@@ -51,7 +51,7 @@ export default {
                 [next_x, 101000],
               ],
             ]);
-          } else if (!next_x && new_well_values.length == 1) {
+          else if (new_well_values.length == 1)
             /*
               Protects against long subprotocols.
               Second x timepoint is a filler value and will be replaced in ContinuousWaveform with last tissue data timepoint
@@ -64,7 +64,7 @@ export default {
                 [x, 101000],
               ],
             ]);
-          } else state.last_protocol_flag[well_idx] = [x, protocol_flags[idx]];
+          else state.last_protocol_flag[well_idx] = [x, protocol_flags[idx]];
 
           idx++;
         }
@@ -78,7 +78,7 @@ export default {
 
     data.stim_waveforms.map((well, well_idx) => {
       // second conditional protects against long subprotocols
-      // don't want to delete coordinate if a subprotocol is still active and it's the last index in array
+      // don't want to delete timepoint if a subprotocol is still active and it's the last index in array
       data.stim_fill_assignments[well_idx] = data.stim_fill_assignments[well_idx].filter(
         (x, idx) => x[1][1][0] >= max_x_min_value || idx == data.stim_fill_assignments[well_idx].length - 1
       );
