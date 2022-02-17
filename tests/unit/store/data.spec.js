@@ -9,6 +9,9 @@ import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
 import { ping_system_status } from "../../../store/modules/flask/actions";
 
+const valid_plate_barcode = "ML2022047001";
+const invalid_plate_barcode = "ML2022047002";
+
 const http = require("http");
 const io_server = require("socket.io");
 
@@ -504,6 +507,40 @@ describe("store/data", () => {
         });
       });
       expect(store.state.settings.user_cred_input_needed).toBe(true);
+    });
+    test("Given barcode is not in manual mode, When backend emits barcode message, Then ws client sets new barcode in store", async () => {
+      const message = {
+        plate_barcode: valid_plate_barcode,
+      };
+
+      store.commit("flask/set_barcode_manual_mode", false);
+
+      // confirm precondition
+      expect(store.state.playback.barcode).toBe(null);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.playback.barcode).toBe(valid_plate_barcode);
+    });
+    test("Given barcode is in manual mode, When backend emits barcode message, Then ws client does not set new barcode in store", async () => {
+      const message = {
+        plate_barcode: valid_plate_barcode,
+      };
+
+      store.commit("flask/set_barcode_manual_mode", true);
+
+      // confirm precondition
+      expect(store.state.playback.barcode).toBe(null);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.playback.barcode).toBe(null);
     });
   });
 
