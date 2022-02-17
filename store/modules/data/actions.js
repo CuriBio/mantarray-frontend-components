@@ -43,15 +43,26 @@ export default {
           state.stim_waveforms[well_idx].x_data_points.push(x);
           state.stim_waveforms[well_idx].y_data_points.push(101000);
 
-          next_x
-            ? state.stim_fill_assignments[well_idx].push([
-                protocol_flags[idx],
-                [
-                  [x, 101000],
-                  [next_x, 101000],
-                ],
-              ])
-            : (state.last_protocol_flag[well_idx] = [x, protocol_flags[idx]]);
+          if (next_x) {
+            state.stim_fill_assignments[well_idx].push([
+              protocol_flags[idx],
+              [
+                [x, 101000],
+                [next_x, 101000],
+              ],
+            ]);
+          } else if (!next_x && new_well_values.length == 1) {
+            // protects against long subprotocols
+            // second x timepoint is a filler value and will be replaced in ContinuousWaveform with last tissue data timepoint
+            // can't replace it here with tissue datapoint because it needs to be updated in real time, this only gets called when a new subprotocol comes in
+            state.stim_fill_assignments[well_idx].push([
+              protocol_flags[idx],
+              [
+                [x, 101000],
+                [x, 101000],
+              ],
+            ]);
+          } else state.last_protocol_flag[well_idx] = [x, protocol_flags[idx]];
 
           idx++;
         }
@@ -64,8 +75,10 @@ export default {
     const max_x_min_value = playback.x_time_index - waveform.x_zoom_levels[0].x_scale;
 
     data.stim_waveforms.map((well, well_idx) => {
+      // second conditional protects against long subprotocols
+      // don't want to delete coordinate if a subprotocol is still active and it's the last index in array
       data.stim_fill_assignments[well_idx] = data.stim_fill_assignments[well_idx].filter(
-        (x) => x[1][1][0] >= max_x_min_value
+        (x, idx) => x[1][1][0] >= max_x_min_value || idx == data.stim_fill_assignments[well_idx].length - 1
       );
 
       const idx_to_splice = find_closest_array_idx(well.x_data_points, max_x_min_value);

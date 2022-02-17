@@ -150,6 +150,11 @@ export default {
               this.x_axis_min,
               this.x_axis_sample_length
             );
+
+      // protects against long subprotocols
+      if (stim_data.length > 0)
+        stim_data[stim_data.length - 1][1][1][0] = x_data_points[x_data_points.length - 1];
+
       this.fill_assignments = stim_data;
     },
   },
