@@ -9,6 +9,10 @@ Changelog for Mantarray Frontend Components
 - Fixed player controls so that playback state can only transition to LIVE_VIEW_ACTIVE from BUFFERING
 - Changed 30-second recording limit to 5 minutes with modal informing user that the recording has been stopped
 - Changed 'Delete Protocol' modal to match all other warning modals
+- Fixed live view button so it is disabled as soon as a user decides to switch to manual entry,
+  even if a valid barcode has been scanned
+- Fixed live view button tooltip displayed when calibrated but no valid barcode has been entered/scanned
+- Changed barcode comms from backend to use websockets
 - Changed Heatmap's apply/reset button functionality
 - Improved Heatmap's autoscale feature
 - Fixed stim/live-view bug that wasn't displaying subprotocols longer than 10-second
