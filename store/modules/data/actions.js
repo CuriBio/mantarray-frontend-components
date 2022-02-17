@@ -52,9 +52,11 @@ export default {
               ],
             ]);
           } else if (!next_x && new_well_values.length == 1) {
-            // protects against long subprotocols
-            // second x timepoint is a filler value and will be replaced in ContinuousWaveform with last tissue data timepoint
-            // can't replace it here with tissue datapoint because it needs to be updated in real time, this only gets called when a new subprotocol comes in
+            /*
+              Protects against long subprotocols.
+              Second x timepoint is a filler value and will be replaced in ContinuousWaveform with last tissue data timepoint
+              Can't replace it here with tissue datapoint because it needs to be updated in real time, this only gets called when a new subprotocol comes in
+            */
             state.stim_fill_assignments[well_idx].push([
               protocol_flags[idx],
               [
