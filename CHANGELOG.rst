@@ -6,8 +6,12 @@ Changelog for Mantarray Frontend Components
 
 - Added time unit dropdown to x-axis in Stimulation Studio
 - Added AdditionalControls tooltip on start/stop button when a recording is active
+- Fixed live view button so it is disabled as soon as a user decides to switch to manual entry,
+  even if a valid barcode has been scanned
+- Fixed live view button tooltip displayed when calibrated but no valid barcode has been entered/scanned
 - Fixed player controls so that playback state can only transition to live view active from buffering
 - Changed 30 second recording limit to 5 minutes
+- Changed barcode comms from backend to use websockets
 - Changed 'Delete Protocol' modal to match
 - Changed Heatmap's apply/reset button functionality
 - Fixed stim/live-view bug handling long subprotocols

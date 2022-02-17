@@ -82,6 +82,22 @@ describe("PlateBarcode.vue", () => {
     expect(wrapper.find("input").element.value).toEqual("MA209990004");
     expect(wrapper.find(".input__plate-barcode-entry-invalid").isVisible()).toBe(true);
   });
+  test("Given that its not in manual mode and a valid scanned barcode is stored, When a user switches to manual mode, Then is_valid_barcode value in store is set to false", async () => {
+    // confirm pre-condition
+    store.commit("playback/set_barcode_number", "ML2022047000");
+    expect(store.state.playback.is_valid_barcode).toBe(true);
+
+    const propsData = {};
+    let wrapper = mount(PlateBarcode, {
+      propsData,
+      store,
+      localVue,
+      attachToDocument: true,
+    });
+
+    await wrapper.vm.manual_mode_on();
+    expect(store.state.playback.is_valid_barcode).toBe(false);
+  });
   test("Given that its in manual mode and no barcode has been entered (default state), When Playback State is mutated to CALIBRATING, Then the text of the Barcode Input field should be empty string (not cause error or say null)", async () => {
     // confirm pre-condition
     store.commit("flask/set_barcode_manual_mode", true);
@@ -177,7 +193,7 @@ describe("PlateBarcode.vue", () => {
       expect(store.state.flask.barcode_manual_mode).toBe(true);
     }
   );
-  test("Given that its in manual mode and a valid barcode has been entered in the [input.length = 11]  and playback state is BUFFERING, When Playback State is mutated to BUFFERING, Then the text of the Barcode Inpput remains as the valid barcode instead of becoming blank", async () => {
+  test("Given that its in manual mode and a valid barcode has been entered in the [input.length = 11]  and playback state is BUFFERING, When Playback State is mutated to BUFFERING, Then the text of the Barcode Input remains as the valid barcode instead of becoming blank", async () => {
     const propsData = {};
 
     let wrapper = mount(PlateBarcode, {
