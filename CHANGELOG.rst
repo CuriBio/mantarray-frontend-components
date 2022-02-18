@@ -1,7 +1,7 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-0.6.2 (unreleased)
+0.6.3 (unreleased)
 ------------------
 
 - Fixed stim start/stop button tooltip when calibrating
