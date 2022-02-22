@@ -4,6 +4,7 @@ Changelog for Mantarray Frontend Components
 0.6.3 (unreleased)
 ------------------
 
+- Changed accepted barcode headers to ML and MS.
 - Fixed stim start/stop button tooltip when calibrating
 
 0.6.2 (2022-02-17)
