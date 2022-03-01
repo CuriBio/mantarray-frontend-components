@@ -6,69 +6,6 @@ const uuidBase62 = require("@tofandel/uuid-base62"); // External library depenen
 uuidBase62.customBase = new uuidBase62.baseX("23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"); // Custom Base 57 defined as per requirement.
 /* eslint-enable */
 
-// Helper function for validate_plate_barcode
-const _validate_old_barcode = function (barcode) {
-  const plate_barcode_len = barcode.length;
-  // check that barcode is a valid length
-  if (plate_barcode_len < 10 || plate_barcode_len > 11) {
-    return " ";
-  }
-  const start_code = barcode.slice(0, 2); // Tanner (7/30/21): "old" barcodes with the same format are MA, MB, ME
-  if (!["MA", "MB", "ME"].includes(start_code)) {
-    return " ";
-  }
-  for (let i = 2; i < plate_barcode_len; i++) {
-    const scan_ascii = barcode.charCodeAt(i);
-    // check that remaining characters are numeric
-    if (scan_ascii < 47 || scan_ascii > 58) {
-      return " ";
-    }
-  }
-  // check julian data is in range 001 to 366 [3 characters]
-  const day_code = barcode.slice(4, 7);
-  const day = parseInt(day_code);
-  if (day < 1 || day > 366) {
-    return " ";
-  }
-  return "";
-};
-
-// Helper function for validate_plate_barcode
-const _validate_new_barcode = function (barcode) {
-  const plate_barcode_len = barcode.length;
-  // check that barcode is a valid length
-  if (plate_barcode_len !== 12) {
-    return " ";
-  }
-  // Tanner (7/30/21): Assuming only barcodes with header 'ML' are passed to this function, so not checking header
-  for (let i = 2; i < plate_barcode_len; i++) {
-    const scan_ascii = barcode.charCodeAt(i);
-    // check that remaining characters are numeric
-    if (scan_ascii < 47 || scan_ascii > 58) {
-      return " ";
-    }
-  }
-  // check year is at least 2021 [4 characters]
-  const year_code = barcode.slice(2, 6);
-  const year = parseInt(year_code);
-  if (year < 2021) {
-    return " ";
-  }
-  // check julian data is in range 001 to 366 [3 characters]
-  const day_code = barcode.slice(6, 9);
-  const day = parseInt(day_code);
-  if (day < 1 || day > 366) {
-    return " ";
-  }
-  // check kit ID [3 characters]
-  const kit_id_remainder = parseInt(barcode.slice(9)) % 4;
-  // Tanner (7/30/21): currently this number must have a remainder of 0 or 1 when divided by 4
-  if (kit_id_remainder > 1) {
-    return " ";
-  }
-  return "";
-};
-
 /** Allows text validation for the pre-defined criteria rules applied on the text by definitions */
 export class TextValidation {
   /**
@@ -239,7 +176,36 @@ export class TextValidation {
     if (barcode == null) {
       return " ";
     }
-    return barcode.slice(0, 2) === "ML" ? _validate_new_barcode(barcode) : _validate_old_barcode(barcode);
+    // check that barcode is a valid length
+    const plate_barcode_len = barcode.length;
+    if (plate_barcode_len !== 12) {
+      return " ";
+    }
+    // check that header is valid
+    const barcode_header = barcode.slice(0, 2);
+    if (barcode_header !== "ML" && barcode_header !== "MS") {
+      return " ";
+    }
+    for (let i = 2; i < plate_barcode_len; i++) {
+      const scan_ascii = barcode.charCodeAt(i);
+      // check that remaining characters are numeric
+      if (scan_ascii < 47 || scan_ascii > 58) {
+        return " ";
+      }
+    }
+    // check year is at least 2021 [4 characters]
+    const year_code = barcode.slice(2, 6);
+    const year = parseInt(year_code);
+    if (year < 2021) {
+      return " ";
+    }
+    // check julian data is in range 001 to 366 [3 characters]
+    const day_code = barcode.slice(6, 9);
+    const day = parseInt(day_code);
+    if (day < 1 || day > 366) {
+      return " ";
+    }
+    return "";
   }
   /**
    * Returns the feedback text for the uuidBase57 encoding validation

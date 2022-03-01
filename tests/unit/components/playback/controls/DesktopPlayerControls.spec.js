@@ -80,7 +80,7 @@ describe("DesktopPlayerControls.vue", () => {
 
     expect(the_classes).not.toContain("span__playback-desktop-player-controls--available");
 
-    store.commit("playback/set_barcode_number", "MA202240004");
+    store.commit("playback/set_barcode_number", "ML2022053000");
     await wrapper.vm.$nextTick(); // wait for update
     the_classes = target_button.classes();
     expect(the_classes).toContain("span__playback-desktop-player-controls--available");
@@ -177,7 +177,7 @@ describe("DesktopPlayerControls.vue", () => {
 
   describe("Given a valid barcode has been committed to Vuex", () => {
     beforeEach(async () => {
-      store.commit("playback/set_barcode_number", "MA202240004");
+      store.commit("playback/set_barcode_number", "ML2022053000");
     });
 
     test.each([

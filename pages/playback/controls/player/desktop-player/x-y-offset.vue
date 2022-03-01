@@ -15,7 +15,7 @@ export default {
   created: function () {
     this.$store.dispatch("flask/start_status_pinging");
     // set a valid barcode so that live view can be initiated during the tests
-    this.$store.commit("playback/set_barcode_number", "MA200440004");
+    this.$store.commit("playback/set_barcode_number", "ML2022053000");
   },
 };
 </script>
