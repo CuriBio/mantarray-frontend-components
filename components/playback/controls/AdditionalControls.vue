@@ -30,7 +30,7 @@
         <div v-if="!play_state" v-b-popover.hover.bottom="start_stim_label" title="Stimulation Studio">
           <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
         </div>
-        <div v-if="play_state" v-b-popover.hover.bottom="'Stop'" title="Stimulation Studio">
+        <div v-if="play_state" v-b-popover.hover.bottom="stop_stim_label" title="Stimulation Studio">
           <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
         </div>
       </span>
@@ -118,11 +118,22 @@ export default {
       return is_enabled;
     },
     start_stim_label: function () {
-      const is_recording = this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
-      const not_recording_msg = this.is_start_stop_button_enabled
-        ? "Start"
-        : "No protocols have been assigned";
-      return is_recording ? "Cannot start/stop a stimulation when a recording is active" : not_recording_msg;
+      if (Object.keys(this.protocol_assignments).length === 0) {
+        return "No protocols have been assigned";
+      } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING) {
+        return "Cannot start stimulation while recording is active";
+      } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING) {
+        return "Cannot start stimulation while calibrating instrument";
+      } else {
+        return "Start Stimulation";
+      }
+    },
+    stop_stim_label: function () {
+      if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING) {
+        return "Cannot stop stimulation while recording is active";
+      } else {
+        return "Stop Stimulation";
+      }
     },
     svg__stimulation_controls_play_stop_button__dynamic_class: function () {
       if (!this.enable_additional_controls) {

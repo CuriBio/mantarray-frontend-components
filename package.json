@@ -1,6 +1,6 @@
 {
   "name": "@curi-bio/mantarray-frontend-components",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "shared components between web and desktop app.",
   "main": "./dist/mantarray.common.js",
   "author": "Curi Bio <contact@curibio.com> (http://www.curibio.com/)",
@@ -36,7 +36,7 @@
   "dependencies": {
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@tofandel/uuid-base62": "^1.0.3",
-    "axios": "^0.21.1",
+    "axios": "^0.26.0",
     "bootstrap-vue": "^2.21.1",
     "colorjs.io": "^0.0.3",
     "d3": "^6.2.0",
@@ -71,7 +71,7 @@
     "eslint-plugin-node": "~11.1.0",
     "eslint-plugin-promise": "~4.3.1",
     "eslint-plugin-snakecasejs": "~2.2.0",
-    "eslint-plugin-vue": "^7.5.0",
+    "eslint-plugin-vue": "^8.4.1",
     "flush-promises": "^1.0.2",
     "identity-obj-proxy": "~3.0.0",
     "jest": "~26.6.3",

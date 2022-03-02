@@ -53,7 +53,7 @@ jobs:
           python-version: 3.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2.4.1
+        uses: actions/setup-node@v2.5.1
         with:
           node-version: ${{ matrix.node-version }}
       - name: Display Language Dependency Versions
@@ -74,7 +74,7 @@ jobs:
           chromedriver --version
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         env:
           cache-name: cache-node-modules
         with:
@@ -84,7 +84,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
 
       - name: Cache Python modules # needed for pre-commit
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         env:
           cache-name: cache-python-modules
         with:
@@ -94,7 +94,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-
 
       - name: Cache Pre-commit hooks
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         env:
           cache-name: cache-pre-commit-hooks
         if: matrix.IS_FASTEST_JOB == true
@@ -150,7 +150,7 @@ jobs:
       - name: Upload coverage to Codecov
         # only upload coverage from fastest job
         if: matrix.IS_FASTEST_JOB == true
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2.1.0
         timeout-minutes: 1 # Tanner (8/11/20): once fundmental issue with codecov timeout is fixed, remove this line and the next
         continue-on-error: true
         with:

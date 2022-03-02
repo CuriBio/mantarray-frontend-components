@@ -29,6 +29,7 @@ module.exports = {
     "no-invalid-this": 0,
     // "snakecasejs/snakecasejs": "warn",
     // VueJS rules
+    "vue/multi-word-component-names": "off",
     "vue/prop-name-casing": ["error", "snake_case"],
     "vue/component-definition-name-casing": ["error", "PascalCase"],
     "vue/one-component-per-file": "error",

@@ -43,121 +43,21 @@ describe("TextValidation", () => {
   });
 });
 
-describe("TextValidation.validate_plate_barcode with old barcodes", () => {
-  test.each([
-    ["AB200440012", "letters"],
-    ["12200440012", "numbers"],
-    ["*#200440012", "symbols"],
-  ])(
-    "When validating invalid barcode: %s with incorrect %s in place of the header, Then ' ' is returned",
-    (plate_barcode, type) => {
-      const text = plate_barcode;
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
-    }
-  );
-  test.each([
-    ["MA200000012", "000"],
-    ["MA203670012", "367"],
-    ["MA209990121", "999"],
-  ])(
-    "When validating invalid barcode: %s with incorrect Julian Date: %s, Then ' ' is returned",
-    (plate_barcode, error) => {
-      const text = plate_barcode;
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
-    }
-  );
-  test.each([
-    // TODO separate out these tests by the following categories in comments
-    // invalid chars
-    ["MA 13000012", "11", "<space>", " "],
-    ["MA  300000", "10", "2<space>", " "],
-    ["MA*#300001", "10", "Invalid symbols", " "],
-    // bad year
-    ["MBFF0440991", "11", "YEAR is SET AS FF", " "],
-    // bad len
-    ["MB2204409", "9", "Length less than 9", " "],
-    ["", "0", "Empty", " "],
-    [null, "null", "null", " "],
-    [undefined, "undefined", "undefined", " "],
-    ["MB2204409913", "12", "Length more than 11", " "],
-    // valid year barcodes
-    ["MB190440991", "11", "YEAR is SET AS 19", ""],
-    ["MB210440991", "11", "YEAR is SET AS 21", ""],
-    ["MB100440991", "11", "YEAR is SET AS 10", ""],
-  ])(
-    "When validating barcode: %s with length %s and characters: '%s' present, Then ' ' is returned",
-    (plate_barcode, len, error, result) => {
-      const text = plate_barcode;
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual(result);
-    }
-  );
-  test.each([
-    ["MA20222111*", "Invalid symbols"],
-    ["MA20010*#12", "Invalid symbols"],
-    ["MA20001 021", "<space>"],
-    ["MA20001º21", "scientific symbols"],
-  ])(
-    "Given a text %s as the plate_barcode with invalid special charcters on the [input.length = 11], When the middle of the charcters [7-till end]  contained %s fails the defined criteria, Then validation fails and feedback text is <space>",
-    (plate_barcode, error) => {
-      const text = plate_barcode;
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
-    }
-  );
-  test.each([
-    ["MA20210न21", "unicode present"],
-    ["MA20011浩211", "unicode present length 11"],
-    ["MA二千万一千〇九", "All unicode"],
-  ])(
-    "Given a text %s as the plate_barcode with invalid charcters with the [input.length = 11 or 10], When the text has %s fails the the defined criteria, Then validation fails and feedback text is <space>",
-    (plate_barcode, error) => {
-      const text = plate_barcode;
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
-    }
-  );
-  test.each([
-    ["MA", "2"],
-    ["MA20", "4"],
-    ["MA20044", "7"],
-    ["MA20**#*", 8],
-  ])(
-    "When an improper barcode text  %s with the [input.length = %s] < 10 or 11 and special characters are not matching criteria, Then validation fails and feedback text is <space>",
-    (plate_barcode, error) => {
-      const text = plate_barcode;
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual(" ");
-    }
-  );
-  test.each([
-    ["MA20044001", "10", "", "MA is still valid"],
-    ["M120044099", "11", " ", "M1 disallowed"], // M1 is invalid so returns space
-    ["ME20044099", "11", "", "ME is new valid value"], // ME is valid so return empty
-  ])(
-    "When a proper barcode text of %s with the [input.length = %s] and as %s its matching criteria, Then validation PASSES and feedback text is <empty>",
-    (plate_barcode, error, result, reason) => {
-      const text = plate_barcode;
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(text)).toStrictEqual(result);
-    }
-  );
-});
-
 describe("TextValidation.validate_plate_barcode with new barcodes", () => {
   test.each([
+    ["", "empty"],
+    [null, "null"],
+    [undefined, "undefined"],
     ["ML34567890123", "length over 12"],
     ["ML345678901", "length under 12"],
+    ["MA2021072144", "invalid header 'MA'"],
+    ["MB2021072144", "invalid header 'MB'"],
+    ["ME2021$72144", "invalid header 'ME'"],
     ["ML2021$72144", "invalid character '$'"],
+    ["ML20210721*4", "invalid character '*'"],
     ["ML2020172144", "invalid year '2020'"],
     ["ML2021000144", "invalid Julian date '000'"],
     ["ML2021367144", "invalid Julian date '367'"],
-    ["ML2021172002", "invalid kit ID '002'"],
-    ["ML2021172003", "invalid kit ID '003'"],
-    ["ML2021172146", "invalid kit ID '146'"],
-    ["ML2021172147", "invalid kit ID '147'"],
   ])(
     "When barcode %s with %s is passed to validate function, Then ' ' is returned",
     (plate_barcode, error) => {
@@ -166,13 +66,14 @@ describe("TextValidation.validate_plate_barcode with new barcodes", () => {
     }
   );
   test.each([
-    ["ML2021172145", "kit ID '145'"],
-    ["ML2021172144", "kit ID '144'"],
-    ["ML2021172004", "kit ID '004'"],
+    ["MS2021172000", "header 'MS'"],
     ["ML2021172001", "kit ID '001'"],
+    ["ML2021172002", "kit ID '002'"],
+    ["ML2021172003", "kit ID '003'"],
+    ["ML2021172004", "kit ID '004'"],
     ["ML9999172001", "year '9999'"],
-    ["ML2021001144", "julian data '001'"],
-    ["ML2021366144", "julian data '366'"],
+    ["ML2021001144", "julian date '001'"],
+    ["ML2021366144", "julian date '366'"],
   ])(
     "When valid barcode %s with %s is passed to validate function, Then '' is returned",
     (plate_barcode, diff) => {

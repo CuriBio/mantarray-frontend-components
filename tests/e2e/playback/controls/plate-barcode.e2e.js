@@ -56,7 +56,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
   const span__button_label = Selector(".span__button_label");
   const yes_btn = span__button_label.nth(1);
   await t.click(yes_btn);
-  await t.typeText(barcode_input_field, "ME202050002");
+  await t.typeText(barcode_input_field, "ML2022053000");
   await unfocus();
   await testcafe_page_visual_regression(t, screenshot_path);
 });
