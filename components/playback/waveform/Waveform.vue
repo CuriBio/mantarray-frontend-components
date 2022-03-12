@@ -113,12 +113,12 @@ export default {
     y_max() {
       this.render_plot();
     },
-    tissue_data_points() {
-      this.render_plot();
-    },
-    stim_fill_assignments() {
-      this.render_plot();
-    },
+    // tissue_data_points() {
+    //   this.render_plot();
+    // },
+    // stim_fill_assignments() {
+    //   this.render_plot();
+    // }
   },
   mounted: function () {
     // Eli (2/2/2020): having the svg be appended in the `data` function didn't work, so moved it to here
@@ -243,6 +243,7 @@ export default {
         .y1(this.plot_area_pixel_height - 7);
 
       this.stim_waveform_line_node.selectAll("*").remove();
+
       for (const sub_protocol of stim_data) {
         if (stim_data.length > 0) {
           // 255 is sent when a user stops a stim
@@ -257,6 +258,7 @@ export default {
             .attr("d", area);
         }
       }
+      // if (stim_data.length > 0) console.log(JSON.stringify(stim_data));
     },
     plot_data: async function () {
       const x_axis_scale = this.x_axis_scale;

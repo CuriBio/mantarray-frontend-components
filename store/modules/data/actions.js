@@ -6,6 +6,15 @@ export default {
     const appended_waveforms = append_well_data(state.plate_waveforms, new_value);
     commit("set_plate_waveforms", appended_waveforms);
 
+    appended_waveforms.map((x, idx) => {
+      const { x_data_points } = x;
+      const payload = {
+        x: x_data_points[x_data_points.length - 1],
+        idx,
+      };
+      commit("update_fill_assignments", payload);
+    });
+
     dispatch("remove_old_waveform_data");
   },
   remove_old_waveform_data({ rootState }) {
@@ -36,32 +45,25 @@ export default {
         }
 
         let idx = 0;
+
         while (idx < new_well_values.length) {
           const x = new_well_values[idx];
-          const next_x = new_well_values[idx + 1];
+          const next_x = new_well_values[idx + 1] ? new_well_values[idx + 1] : x;
+          /*
+              Protects against long subprotocols.
+              Second x timepoint is a filler value and will be replaced in ContinuousWaveform with last tissue data timepoint
+              Can't replace it here with tissue datapoint because it needs to be updated in real time, this only gets called when a new subprotocol comes in
+          */
 
           state.stim_waveforms[well_idx].x_data_points.push(x);
           state.stim_waveforms[well_idx].y_data_points.push(101000);
 
-          if (next_x)
+          if (next_x || new_well_values.length == 1 || protocol_flags[idx] == 255)
             state.stim_fill_assignments[well_idx].push([
               protocol_flags[idx],
               [
                 [x, 101000],
                 [next_x, 101000],
-              ],
-            ]);
-          else if (new_well_values.length == 1)
-            /*
-              Protects against long subprotocols.
-              Second x timepoint is a filler value and will be replaced in ContinuousWaveform with last tissue data timepoint
-              Can't replace it here with tissue datapoint because it needs to be updated in real time, this only gets called when a new subprotocol comes in
-            */
-            state.stim_fill_assignments[well_idx].push([
-              protocol_flags[idx],
-              [
-                [x, 101000],
-                [x, 101000],
               ],
             ]);
           else state.last_protocol_flag[well_idx] = [x, protocol_flags[idx]];
