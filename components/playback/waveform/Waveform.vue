@@ -255,7 +255,6 @@ export default {
             .attr("d", area);
         }
       }
-      // if (stim_data.length > 0) console.log(JSON.stringify(stim_data));
     },
     plot_data: async function () {
       const x_axis_scale = this.x_axis_scale;
