@@ -60,4 +60,15 @@ export default {
     copy[well] = stim_fill_colors;
     state.stim_fill_colors = { ...copy };
   },
+  update_fill_assignments(state, { x, idx }) {
+    const assignments = state.stim_fill_assignments[idx];
+
+    // support for long subprotocols. this pulls the marker out to the last tissue data point.
+    if (assignments.length > 0) state.stim_fill_assignments[idx][assignments.length - 1][1][1][0] = x;
+
+    // fixes issue when stopping stimulation in live view, second to last subprotocol drags out past stop timepoint. this corrects it to match.
+    if (assignments.length > 1)
+      state.stim_fill_assignments[idx][assignments.length - 2][1][1][0] =
+        state.stim_fill_assignments[idx][assignments.length - 1][1][0][0];
+  },
 };
