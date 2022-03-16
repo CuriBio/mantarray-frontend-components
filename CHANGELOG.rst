@@ -1,10 +1,20 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-0.6.3 (unreleased)
+
+0.6.4 (2022-03-16)
 ------------------
 
-- Changed accepted barcode headers to ML and MS.
+- Fixed issue with stim subprotocols not displaying correctly in live view when:
+
+  - Stopping stimulation
+  - Switching between well quadrants
+
+
+0.6.3 (2022-03-01)
+------------------
+
+- Changed accepted barcode headers to ML and MS
 - Fixed stim start/stop button tooltip when calibrating
 
 0.6.2 (2022-02-17)
