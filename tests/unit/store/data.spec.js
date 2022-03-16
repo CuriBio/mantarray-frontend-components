@@ -81,6 +81,94 @@ describe("store/data", () => {
       expect(store.state.data.plate_waveforms[1].y_data_points).toHaveLength(0);
     });
 
+    test("When tissue waveforms get appended and stim is active, Then the stim waveforms will get updated with latest tissue data timepoint", async () => {
+      const test_stim = {
+        0: [
+          [5000, 10000],
+          [0, 1],
+        ],
+        1: [[11000], [1]],
+      };
+
+      await store.dispatch("data/append_stim_waveforms", test_stim);
+      expect(store.state.data.stim_fill_assignments).toStrictEqual(
+        [
+          [
+            [
+              0,
+              [
+                [5000, 101000],
+                [10000, 101000],
+              ],
+            ],
+            [
+              1,
+              [
+                [10000, 101000],
+                [10000, 101000],
+              ],
+            ],
+          ],
+          [
+            [
+              1,
+              [
+                [11000, 101000],
+                [11000, 101000],
+              ],
+            ],
+          ],
+        ].concat(new Array(94).fill([]))
+      );
+
+      const tissue_arr = {
+        waveform_data: {
+          basic_data: {
+            waveform_data_points: {
+              0: {
+                x_data_points: [13000],
+                y_data_points: [20],
+              },
+              1: {
+                x_data_points: [13000],
+                y_data_points: [50],
+              },
+            },
+          },
+        },
+      };
+      await store.dispatch("data/append_plate_waveforms", tissue_arr);
+      expect(store.state.data.stim_fill_assignments).toStrictEqual(
+        [
+          [
+            [
+              0,
+              [
+                [5000, 101000],
+                [10000, 101000],
+              ],
+            ],
+            [
+              1,
+              [
+                [10000, 101000],
+                [13000, 101000],
+              ],
+            ],
+          ],
+          [
+            [
+              1,
+              [
+                [11000, 101000],
+                [13000, 101000],
+              ],
+            ],
+          ],
+        ].concat(new Array(94).fill([]))
+      );
+    });
+
     test("When plate_waveforms is initially mutated with few data points, Then subsequent mutations append data points to the existing plate_waveforms", async () => {
       store.commit("data/set_plate_waveforms", ar);
 
@@ -466,7 +554,7 @@ describe("store/data", () => {
 
       // confirm precondition
       expect(store.state.settings.firmware_update_available).toBe(false);
-      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+      expect(store.state.settings.firmware_update_dur_mins).toBeNull();
 
       await new Promise((resolve) => {
         socket_server_side.emit("fw_update", JSON.stringify(message), (ack) => {
@@ -483,7 +571,7 @@ describe("store/data", () => {
 
       // confirm precondition
       expect(store.state.settings.firmware_update_available).toBe(false);
-      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+      expect(store.state.settings.firmware_update_dur_mins).toBeNull();
 
       await new Promise((resolve) => {
         socket_server_side.emit("fw_update", JSON.stringify(message), (ack) => {
@@ -491,7 +579,7 @@ describe("store/data", () => {
         });
       });
       expect(store.state.settings.firmware_update_available).toBe(false);
-      expect(store.state.settings.firmware_update_dur_mins).toBe(null);
+      expect(store.state.settings.firmware_update_dur_mins).toBeNull();
     });
     test("When backend emits prompt_user_input message with customer_creds as input type, Then ws client sets correct flag in store", async () => {
       const message = {
@@ -516,7 +604,7 @@ describe("store/data", () => {
       store.commit("flask/set_barcode_manual_mode", false);
 
       // confirm precondition
-      expect(store.state.playback.barcode).toBe(null);
+      expect(store.state.playback.barcode).toBeNull();
 
       await new Promise((resolve) => {
         socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
@@ -533,14 +621,14 @@ describe("store/data", () => {
       store.commit("flask/set_barcode_manual_mode", true);
 
       // confirm precondition
-      expect(store.state.playback.barcode).toBe(null);
+      expect(store.state.playback.barcode).toBeNull();
 
       await new Promise((resolve) => {
         socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
           resolve(ack);
         });
       });
-      expect(store.state.playback.barcode).toBe(null);
+      expect(store.state.playback.barcode).toBeNull();
     });
   });
 
@@ -558,7 +646,7 @@ describe("store/data", () => {
       store.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
     });
 
-    test("Given that the playback x_time_index is set to a specific value in Vuex, Then the /system_status route is called with Axios with the x_time_index as a parameter", async () => {
+    test("When x_time_index is set to a specific value in Vuex, Then the /system_status route is called with Axios with the x_time_index as a parameter", async () => {
       const expected_idx = 9876;
       store.commit("playback/set_x_time_index", expected_idx);
       mocked_axios.onGet(system_status_regexp).reply(200, nr);
