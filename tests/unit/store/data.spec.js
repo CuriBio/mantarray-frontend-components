@@ -480,6 +480,25 @@ describe("store/data", () => {
         y_data_points: [4, 101000],
       });
     });
+    test("When backend emits stimulator_circuit_status message, Then ws client updates statuses", async () => {
+      store.commit("data/set_stimulator_circuit_statuses", new Array(24).fill("any"));
+
+      // confirm precondition
+      const initial_statuses = store.state.data.stimulator_circuit_statuses;
+      expect(initial_statuses).toHaveLength(24);
+      expect(initial_statuses[0]).toEqual("any");
+
+      const new_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 20).fill("closed", 20, 24);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(new_statuses), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      const updated_statuses = store.state.data.stimulator_circuit_statuses;
+      expect(updated_statuses).toEqual(new_statuses);
+    });
     test("When backend emits status update message with no error, Then ws client updates file count", async () => {
       const new_status_update = {
         file_name: "test_filename",

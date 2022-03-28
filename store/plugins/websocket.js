@@ -38,8 +38,15 @@ export default function create_web_socket_plugin(socket) {
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
     socket.on("stimulation", (stim_json, cb) => {
+      // TODO change this message type to stimulation_data
       // Tanner (12/20/21): may want to put the same checks here as are in the waveform_data handler once stim waveforms are sent instead of subprotocol indices
       store.dispatch("data/append_stim_waveforms", JSON.parse(stim_json));
+      /* istanbul ignore else */
+      if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
+    });
+    socket.on("stimulator_circuit_statuses", (message_json, cb) => {
+      store.commit("data/set_stimulator_circuit_statuses", JSON.parse(message_json));
+
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
