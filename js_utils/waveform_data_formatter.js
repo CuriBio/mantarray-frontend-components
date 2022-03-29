@@ -201,7 +201,7 @@ function generate_random_color(non_green) {
   // if green is allowed then just generate random color
   const random_hue = 1 + Math.floor(359 * Math.random());
 
-  const selected_hue = non_green_hue ? non_green : random_hue;
+  const selected_hue = non_green ? non_green_hue : random_hue;
   const random_sat = 90 + Math.floor(10 * Math.random());
   const random_light = 40 + Math.floor(20 * Math.random());
 

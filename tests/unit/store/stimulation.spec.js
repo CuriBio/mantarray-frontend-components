@@ -1,8 +1,9 @@
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
-import * as axios_helpers from "../../../js_utils/axios_helpers.js";
+import * as axios_helpers from "@/js_utils/axios_helpers.js";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
+import * as waveform_utils from "@/js_utils/waveform_data_formatter";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -160,12 +161,10 @@ describe("store/stimulation", () => {
       expect(check_letter_duplicate).toBe(false);
     });
 
-    test("When there are no saved protocols, Then the first color and letter assigned to new protocol will be A and #4ca0af", async () => {
+    test("When there are no saved protocols, Then the letter assigned to new protocol will be A", async () => {
       store.state.stimulation.protocol_list = [{ letter: "", color: "", label: "Create New" }];
-      const { letter, color } = store.getters["stimulation/get_next_protocol"];
-
+      const { letter } = await store.getters["stimulation/get_next_protocol"];
       expect(letter).toBe("A");
-      expect(color).toBe("#4ca0af");
     });
 
     test("When a protocol is selected to be editted, Then the letter and color assignment should be that of the selected protocol", async () => {

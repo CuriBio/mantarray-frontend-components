@@ -8,13 +8,7 @@ export default {
 
     if (!state.edit_mode.status) {
       const letter = get_protocol_editor_letter(protocol_list);
-      let color;
-
-      // for e2e testing
-      if (letter === "A") color = "#4ca0af";
-      else if (letter === "B") color = "#578844";
-      else color = get_protocol_editor_color(protocol_list);
-
+      const color = get_protocol_editor_color(protocol_list);
       state.current_assignment = { letter, color };
       return { color, letter };
     } else if (state.edit_mode.status) {
@@ -22,8 +16,7 @@ export default {
     }
   },
   get_stimulation_type({ protocol_editor }) {
-    if (protocol_editor.stimulation_type === "C") return "Current";
-    if (protocol_editor.stimulation_type === "V") return "Voltage";
+    return protocol_editor.stimulation_type === "C" ? "Current" : "Voltage";
   },
 
   get_protocol_name({ protocol_editor }) {
@@ -38,8 +31,7 @@ const get_protocol_editor_color = (list) => {
   const color = generate_random_color(false);
   const duplicate_color = list.filter((protocol) => protocol.color === color).length > 0;
 
-  if (duplicate_color) get_protocol_editor_color(list);
-  else return color;
+  return duplicate_color ? get_protocol_editor_color(list) : color;
 };
 
 // TODO Luci, handle if there are more than 26 protocols
