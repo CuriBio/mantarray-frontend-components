@@ -35,7 +35,7 @@ export default {
 };
 
 const get_protocol_editor_color = (list) => {
-  const color = generate_random_color();
+  const color = generate_random_color(false);
   const duplicate_color = list.filter((protocol) => protocol.color === color).length > 0;
 
   if (duplicate_color) get_protocol_editor_color(list);

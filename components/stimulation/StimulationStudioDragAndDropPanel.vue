@@ -310,7 +310,7 @@ export default {
     },
     clone(type) {
       this.cloned = true;
-      const random_color = generate_random_color();
+      const random_color = generate_random_color(true);
 
       return {
         type,
