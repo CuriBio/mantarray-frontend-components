@@ -229,7 +229,7 @@
     <div class="div__waveform-preview-title">Waveform Preview</div>
     <div class="div__pulse-diagram-container">
       <img
-        :src="require(`@/assets/img/${pulse_type}-diagram.png`)"
+        :src="require(`@/assets/img/${pulse_type}-diagram-${stimulation_type}.png`)"
         :class="pulse_type === 'Monophasic' ? 'img__mononphasic-diagram' : 'None'"
       />
     </div>
@@ -363,11 +363,11 @@ export default {
       diagram_keys: {
         Monophasic: ["A. Phase Duration", `B. Phase ${this.stimulation_type}`, "C. Total Active Duration"],
         Biphasic: [
-          `A. Phase 1 ${this.stimulation_type}`,
-          "B. Phase 1 Duration",
+          "A. Phase 1 Duration",
+          `B. Phase 1 ${this.stimulation_type}`,
           "C. Interphase Interval",
-          `D. Phase 2 ${this.stimulation_type}`,
-          "E. Phase 2 Duration",
+          "D. Phase 2 Duration",
+          `E. Phase 2 ${this.stimulation_type}`,
           "F. Total Active Duration",
         ],
       },
@@ -714,7 +714,9 @@ canvas {
 
 .img__mononphasic-diagram {
   width: 350px;
-  margin-left: 10px;
+  margin-left: 50px;
+  max-width: 260px;
+  max-height: 300px;
 }
 
 .div__mononphasic-diagram-descriptors {
