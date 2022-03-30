@@ -63,7 +63,7 @@
     <!-- original mockflow ID:  cmpDb88cb7785bf9ca45549b1866c2c20122 -->
     <div class="div__heatmap-layout-maximum-input-container" width="121" height="52">
       <InputWidget
-        :placeholder="'100'"
+        :placeholder="max_min_placeholder.max.toString()"
         :invalid_text="max_value_error_msg"
         :input_width="105"
         :dom_id_suffix="'heatmap-max'"
@@ -79,7 +79,7 @@
     <!-- original mockflow ID:  cmpD1fda22cfac2b66c17a7f3def056669a0 -->
     <div class="div__heatmap-layout-minimum-input-container" width="121" height="52">
       <InputWidget
-        :placeholder="'0'"
+        :placeholder="max_min_placeholder.min.toString()"
         :invalid_text="min_value_error_msg"
         :input_width="105"
         :dom_id_suffix="'heatmap-min'"
@@ -205,6 +205,7 @@ export default {
       color_theme_idx: 0,
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
       metric_selection_idx: 0,
+      max_min_placeholder: { min: 0, max: 100 },
     };
   },
   computed: {
@@ -274,7 +275,10 @@ export default {
   },
   watch: {
     auto_max_min: function (new_value) {
-      if (this.autoscale) this.$store.commit("gradient/set_gradient_range", new_value);
+      if (this.autoscale) {
+        this.$store.commit("gradient/set_gradient_range", new_value);
+        this.max_min_placeholder = { min: Math.floor(new_value.min), max: Math.ceil(new_value.max) }; // the input box width cuts off decimal places so rounding vals
+      }
     },
     playback_state: function (_, old_value) {
       // cleans up settings when live view becomes inactive
@@ -289,6 +293,10 @@ export default {
 
     this.lower = this.gradient_range_min;
     this.upper = this.gradient_range_max;
+    this.max_min_placeholder = {
+      min: Math.floor(this.gradient_range_min),
+      max: Math.ceil(this.gradient_range_max),
+    };
   },
   methods: {
     set_auto_scale: function (new_value) {

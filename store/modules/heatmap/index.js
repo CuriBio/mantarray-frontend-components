@@ -9,7 +9,6 @@ const default_state = {
   well_selection_statuses: new Array(24).fill(false),
   display_option: "Twitch Force",
   display_option_idx: 0,
-  heatmap_autoscale: false,
   auto_scale: false,
 };
 

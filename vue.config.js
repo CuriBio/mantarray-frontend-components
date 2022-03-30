@@ -59,7 +59,7 @@ module.exports = {
       .tap((options) => {
         options = {
           ...options,
-          limit: 13000,
+          limit: 32000,
         };
         return options;
       })
