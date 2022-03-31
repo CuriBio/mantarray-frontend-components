@@ -57,6 +57,7 @@ export default {
     FontAwesomeIcon,
     BarcodeEditDialog,
   },
+  // TODO add prop for barcode_type
   data() {
     return {
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
