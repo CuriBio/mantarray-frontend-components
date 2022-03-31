@@ -35,14 +35,7 @@ export default {
   },
   methods: {
     manual_entry: function (choice) {
-      switch (choice) {
-        case 0:
-          this.$emit("cancel-plate-barcode");
-          break;
-        case 1:
-          this.$emit("yes-plate-barcode");
-          break;
-      }
+      this.$emit("manual-mode-choice", Boolean(choice));
     },
   },
 };
