@@ -686,9 +686,7 @@ describe("store/data", () => {
       await bound_ping_system_status();
       expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(new RegExp("http://localhost:4567/system_status?"));
-      expect(mocked_axios.history.get[0].url).toMatch(
-        new RegExp("currently_displayed_time_index=" + expected_idx)
-      );
+      expect(mocked_axios.history.get[0].params.currently_displayed_time_index).toEqual(expected_idx);
     });
 
     test("Given /system_status is mocked to return 200 (and some dummy response) and and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then both intervals are cleared in Vuex (status pinging, and playback progression)", async () => {

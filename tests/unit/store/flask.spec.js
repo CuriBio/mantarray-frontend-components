@@ -6,24 +6,7 @@ import { createLocalVue } from "@vue/test-utils";
 import { STATUS } from "@/store/modules/flask/enums";
 import playback_module from "@/store/modules/playback";
 import { ping_system_status } from "../../../store/modules/flask/actions";
-import {
-  system_status_regexp,
-  system_status_when_buffering_regexp,
-  system_status_when_calibrating_regexp,
-  system_status_when_server_ready_regexp,
-  system_status_when_initializing_instrument_regexp,
-  system_status_when_server_initializing_regexp,
-  all_mantarray_commands_regexp,
-} from "@/store/modules/flask/url_regex";
-
-import { FLASK_STATUS_ENUMS } from "@/dist/mantarray.common";
-import {
-  system_status_regexp as dist_system_status_regexp,
-  system_status_when_server_ready_regexp as dist_system_status_when_server_ready_regexp,
-  system_status_when_initializing_instrument_regexp as dist_system_status_when_initializing_instrument_regexp,
-  system_status_when_server_initializing_regexp as dist_system_status_when_server_initializing_regexp,
-  all_mantarray_commands_regexp as dist_all_mantarray_commands_regexp,
-} from "@/dist/mantarray.common";
+import { system_status_regexp } from "@/store/modules/flask/url_regex";
 
 describe("store/flask", () => {
   const localVue = createLocalVue();
@@ -48,18 +31,6 @@ describe("store/flask", () => {
     store.commit("flask/stop_status_pinging");
     store.commit("playback/stop_playback_progression");
     mocked_axios.restore();
-  });
-  test("When Enums are imported from pre-defined library, Then assert the values of enums", () => {
-    expect(FLASK_STATUS_ENUMS.MESSAGE.CALIBRATION_NEEDED).toStrictEqual(STATUS.MESSAGE.CALIBRATION_NEEDED);
-    expect(dist_all_mantarray_commands_regexp).toStrictEqual(all_mantarray_commands_regexp);
-    expect(dist_system_status_regexp).toStrictEqual(system_status_regexp);
-    expect(dist_system_status_when_server_ready_regexp).toStrictEqual(system_status_when_server_ready_regexp);
-    expect(dist_system_status_when_initializing_instrument_regexp).toStrictEqual(
-      system_status_when_initializing_instrument_regexp
-    );
-    expect(dist_system_status_when_server_initializing_regexp).toStrictEqual(
-      system_status_when_server_initializing_regexp
-    );
   });
   describe("Given the store in its default state", () => {
     test("When the flask Vuex store is initialized, Then port should be 4567", () => {
@@ -121,7 +92,10 @@ describe("store/flask", () => {
       await bound_ping_system_status();
 
       expect(mocked_axios.history.get).toHaveLength(1);
-      expect(mocked_axios.history.get[0].url).toMatch(system_status_when_calibrating_regexp);
+      expect(mocked_axios.history.get[0].url).toMatch(system_status_regexp);
+      expect(mocked_axios.history.get[0].params).toStrictEqual({
+        current_vuex_status_uuid: STATUS.MESSAGE.CALIBRATING,
+      });
 
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.CALIBRATED);
       expect(store.state.playback.playback_state).toStrictEqual(
@@ -166,7 +140,10 @@ describe("store/flask", () => {
 
       await bound_ping_system_status();
       expect(mocked_axios.history.get).toHaveLength(1);
-      expect(mocked_axios.history.get[0].url).toMatch(system_status_when_buffering_regexp);
+      expect(mocked_axios.history.get[0].url).toMatch(system_status_regexp);
+      expect(mocked_axios.history.get[0].params).toStrictEqual({
+        current_vuex_status_uuid: STATUS.MESSAGE.BUFFERING,
+      });
 
       expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.LIVE_VIEW_ACTIVE);
       expect(store.state.flask.simulation_mode).toStrictEqual(true);

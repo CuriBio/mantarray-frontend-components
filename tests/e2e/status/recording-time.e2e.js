@@ -1,15 +1,9 @@
-import { Selector } from "testcafe";
 import { RequestMock } from "testcafe";
 const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-import {
-  system_status_when_recording_regexp,
-  system_status_when_calibration_needed_regexp,
-  all_mantarray_commands_regexp,
-} from "../../../store/modules/flask/url_regex";
-import { STATUS } from "../../../store/modules/flask/enums";
+import { all_mantarray_commands_regexp } from "../../../store/modules/flask/url_regex";
 
 const base_screenshot_path = path.join("status");
 
@@ -18,13 +12,13 @@ const mocked_all_mantarray_commands = RequestMock()
   .respond({}, 200, { "Access-Control-Allow-Origin": "*" });
 
 const mocked_static_system_status_states = RequestMock()
-  .onRequestTo(system_status_when_calibration_needed_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  })
-  .onRequestTo(system_status_when_recording_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.RECORDING }, 200, {
-    "Access-Control-Allow-Origin": "*",
+  .onRequestTo(system_status_regexp)
+  .respond((req, res) => {
+    res.headers["Access-Control-Allow-Origin"] = "*";
+    res.statusCode = 200;
+
+    const status_uuid = new url.URLSearchParams(url.parse(req.url)).get("current_vuex_status_uuid");
+    res.setBody(JSON.stringify({ ui_status_code: status_uuid }));
   });
 
 // the fixture declares what we are testing

@@ -289,7 +289,7 @@ library.add(fa_spinner);
  * @vue-data {String} settings_tooltip_text - Tooltips body text for Settings
  * @vue-data {String} schedule_tooltip_text - Tooltips body text for Schedule
  * @vue-computed {String} playback_state - Current value in Vuex store
- * @vue-computed {Boolean} is_valid_barcode - Current value in Vuex store
+ * @vue-computed {Boolean} barcodes.plate_barcode.valid - Current value in Vuex store
  * @vue-computed {String} tooltips_delay - Current tooltips delay in Vuex store.
  * @vue-event {String} on_activate_record_click - User activated the record.
  * @vue-event {String} on_stop_record_click - User activated the stop record.
@@ -348,7 +348,7 @@ export default {
   computed: {
     ...mapState("playback", [
       "playback_state",
-      "is_valid_barcode",
+      "barcodes",
       "tooltips_delay",
       "one_min_warning",
       "five_min_warning",
@@ -365,6 +365,9 @@ export default {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
+    is_valid_barcode: function () {
+      return this.barcodes.plate_barcode.valid;
+    },
     fw_update_available_labels: function () {
       let duration = `${this.firmware_update_dur_mins} minute`;
       if (this.firmware_update_dur_mins !== 1) duration += "s";

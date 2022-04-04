@@ -9,23 +9,15 @@ import { STATUS } from "./enums";
  * @return {void}
  */
 export async function ping_system_status() {
-  let endpoint = "system_status?current_vuex_status_uuid=" + this.state.status_uuid;
+  const params = { current_vuex_status_uuid: this.state.status_uuid };
   if (this.state.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
     const current_time_index = this.rootState.playback.x_time_index;
-    endpoint += "&currently_displayed_time_index=" + current_time_index;
+    params.currently_displayed_time_index = current_time_index;
   }
-  const payload = {
-    baseurl: "http://localhost:4567",
-    endpoint: endpoint,
-  };
-  const whole_url = `${payload.baseurl}/${payload.endpoint}`;
-  // console.log("about to ping system status: " + whole_url)
-  let result = 0;
-  // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
-  result = await call_axios_get_from_vuex(whole_url, this);
-  // const response = JSON.stringify(result);
-  // console.log("Result from system_status: " + result.status);
+  const url = "http://localhost:4567/system_status";
 
+  let result = 0;
+  result = await call_axios_get_from_vuex(url, this, params);
   if (result.status == 200) {
     const data = result.data;
     const status_uuid = data.ui_status_code;
@@ -41,15 +33,12 @@ export async function ping_system_status() {
             PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED,
             { root: true }
           );
-        }
-        if (status_uuid == STATUS.MESSAGE.CALIBRATED) {
+        } else if (status_uuid == STATUS.MESSAGE.CALIBRATED) {
           this.dispatch("playback/transition_playback_state", PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED, {
             root: true,
           });
           this.commit("playback/set_enable_additional_controls", true, { root: true });
-        }
-
-        if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
+        } else if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
           this.dispatch(
             "playback/transition_playback_state",
             PLAYBACK_ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,

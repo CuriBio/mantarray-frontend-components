@@ -2,21 +2,9 @@ import { Selector } from "testcafe";
 import { RequestMock } from "testcafe";
 const path = require("path");
 
-import {
-  testcafe_page_visual_regression,
-  testcafe_element_visual_regression,
-} from "@curi-bio/frontend-test-utils";
+import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-import {
-  system_status_when_buffering_regexp,
-  system_status_when_calibrated_regexp,
-  system_status_when_calibrating_regexp,
-  system_status_when_recording_regexp,
-  system_status_when_live_view_active_regexp,
-  system_status_when_calibration_needed_regexp,
-  system_status_when_server_initializing_regexp,
-  all_mantarray_commands_regexp,
-} from "../../../../../store/modules/flask/url_regex";
+import { all_mantarray_commands_regexp } from "../../../../../store/modules/flask/url_regex";
 
 import { STATUS } from "../../../../../store/modules/flask/enums";
 
@@ -28,72 +16,28 @@ const mocked_all_mantarray_commands = RequestMock()
   .onRequestTo(all_mantarray_commands_regexp)
   .respond({}, 200, { "Access-Control-Allow-Origin": "*" });
 
-const mocked_system_status_static_calibration_needed = RequestMock()
-  .onRequestTo(system_status_when_calibration_needed_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  });
+const mocked_system_status = RequestMock()
+  .onRequestTo(system_status_regexp)
+  .respond((req, res) => {
+    res.headers["Access-Control-Allow-Origin"] = "*";
+    res.statusCode = 200;
 
-const mocked_static_system_status_states = RequestMock()
-  .onRequestTo(system_status_when_calibrated_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATED }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  })
-  .onRequestTo(system_status_when_calibration_needed_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  })
-  .onRequestTo(system_status_when_live_view_active_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  })
-  .onRequestTo(system_status_when_recording_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.RECORDING }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  })
-  .onRequestTo(system_status_when_server_initializing_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.SERVER_STILL_INITIALIZING }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  });
-
-const mocked_system_status_switch_to_calibration_needed_from_server_still_initializing = RequestMock()
-  .onRequestTo(system_status_when_server_initializing_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  });
-
-const mocked_system_status_keep_calibrating = RequestMock()
-  .onRequestTo(system_status_when_calibrating_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATING }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  });
-
-const mocked_system_status_finish_calibration = RequestMock()
-  .onRequestTo(system_status_when_calibrating_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.CALIBRATED }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  });
-
-const mocked_system_status_finish_buffering = RequestMock()
-  .onRequestTo(system_status_when_buffering_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  });
-
-const mocked_system_status_recording_even_when_in_live_view_active = RequestMock()
-  .onRequestTo(system_status_when_live_view_active_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.RECORDING }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  });
-const mocked_system_status_live_view_active_when_in_live_view_active = RequestMock()
-  .onRequestTo(system_status_when_live_view_active_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE }, 200, {
-    "Access-Control-Allow-Origin": "*",
-  });
-const mocked_system_status_recording_when_in_recording = RequestMock()
-  .onRequestTo(system_status_when_recording_regexp)
-  .respond({ ui_status_code: STATUS.MESSAGE.RECORDING }, 200, {
-    "Access-Control-Allow-Origin": "*",
+    const status_uuid = new url.URLSearchParams(url.parse(req.url)).get("current_vuex_status_uuid");
+    switch (status_uuid) {
+      case STATUS.MESSAGE.CALIBRATED:
+      case STATUS.MESSAGE.CALIBRATION_NEEDED:
+      case STATUS.MESSAGE.LIVE_VIEW_ACTIVE:
+      case STATUS.MESSAGE.RECORDING:
+      case STATUS.MESSAGE.SERVER_STILL_INITIALIZING:
+        res.setBody(JSON.stringify({ ui_status_code: status_uuid }));
+        break;
+      case STATUS.MESSAGE.CALIBRATING:
+        res.setBody(JSON.stringify({ ui_status_code: STATUS.MESSAGE.CALIBRATED }));
+        break;
+      case STATUS.MESSAGE.BUFFERING:
+        res.setBody(JSON.stringify({ ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE }));
+        break;
+    }
   });
 
 /* Eli (6/11/20): note for the future---you can remove and add mocks on the fly during a test as well. https://github.com/DevExpress/testcafe/issues/2477
@@ -128,12 +72,7 @@ fixture`playback/controls/player/desktop-player/calibration-needed`
     // declare the fixture
     `http://localhost:8080/playback/controls/player/desktop-player/calibration-needed`
   ) // specify the start page
-  .requestHooks(
-    mocked_all_mantarray_commands,
-    mocked_static_system_status_states,
-    mocked_system_status_finish_calibration,
-    mocked_system_status_finish_buffering
-  );
+  .requestHooks(mocked_all_mantarray_commands, mocked_system_status);
 
 test("DesktopPlayerControls UI updates transitioning through 'needs calibration'-->'stopped'-->'playing'-->'recording'-->'playing'-->'recording'-->'playing'-->'stopped'-->'playing'-->'stopped'-->['stopped' after clicking calibrate again]", async (t) => {
   // since the buttons have different hover behavior, making sure to move the mouse back off of the button (onto the generic text span) to deactivate the hover state of a button after clicking it
@@ -235,12 +174,7 @@ fixture`playback/controls/player/desktop-player/x-y-offset`
     // declare the fixture
     `http://localhost:8080/playback/controls/player/desktop-player/x-y-offset`
   ) // specify the start page
-  .requestHooks(
-    mocked_all_mantarray_commands,
-    mocked_static_system_status_states,
-    mocked_system_status_finish_calibration,
-    mocked_system_status_finish_buffering
-  );
+  .requestHooks(mocked_all_mantarray_commands, mocked_system_status);
 
 test("Given x/y offset of div containing DesktopPlayerControls, Then the component renders in offset position", async (t) => {
   const this_base_screenshot_path = path.join(base_screenshot_path, "x-y-offset");

@@ -13,7 +13,7 @@ export default {
     ComponentToTest,
   },
   created() {
-    this.$store.commit("playback/set_barcode_number", "M12020500024");
+    this.$store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "M12020500024" });
   },
 };
 </script>

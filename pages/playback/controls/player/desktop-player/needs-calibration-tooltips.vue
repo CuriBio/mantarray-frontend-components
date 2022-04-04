@@ -17,7 +17,7 @@ export default {
       "playback/set_playback_state",
       playback_module.ENUMS.PLAYBACK_STATES.NEEDS_CALIBRATION
     );
-    this.$store.commit("playback/set_barcode_number", "ML2022053000");
+    this.$store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
   },
 };
 </script>
