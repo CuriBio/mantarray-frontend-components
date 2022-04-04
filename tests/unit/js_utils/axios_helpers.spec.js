@@ -6,7 +6,11 @@ import { createLocalVue } from "@vue/test-utils";
 import { STATUS } from "@/store/modules/flask/enums";
 
 import { all_mantarray_commands_regexp, system_status_regexp } from "@/store/modules/flask/url_regex";
-import { call_axios_get_from_vuex, post_stim_message, post_stim_status } from "@/js_utils/axios_helpers.js";
+import {
+  call_axios_get_from_vuex,
+  call_axios_post_from_vuex,
+  call_axios_post_from_vuex,
+} from "@/js_utils/axios_helpers.js";
 const sandbox = sinon.createSandbox();
 let log_spy;
 describe("axios_helper.call_axios_get_from_vuex", () => {
@@ -209,7 +213,7 @@ describe("axios_helper.stim_studio", () => {
     const whole_url = "http://localhost:4567/set_protocols";
     const status_code = 500;
     mocked_axios.onPost(whole_url).reply(status_code);
-    const error = await post_stim_message(sample_message);
+    const error = await call_axios_post_from_vuex(sample_message);
     expect(error).toBe(status_code);
   });
 
@@ -217,22 +221,22 @@ describe("axios_helper.stim_studio", () => {
     const whole_url = "http://localhost:4567/set_protocols";
     const status_code = 200;
     mocked_axios.onPost(whole_url).reply(status_code);
-    const response = await post_stim_message(sample_message);
+    const response = await call_axios_post_from_vuex(sample_message);
     expect(response).toBeUndefined();
   });
 
   test("Given axios is mocked to return status code 500 when posting stimulation status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
-    const whole_url = "http://localhost:4567/set_stim_status?running=true";
+    const whole_url = "http://localhost:4567/set_stim_play_state?running=true";
     const status_code = 500;
     mocked_axios.onPost(whole_url).reply(status_code);
-    const error = await post_stim_status(true);
+    const error = await call_axios_post_from_vuex(true);
     expect(error).toBe(status_code);
   });
   test("Given axios is mocked to return status code 200 when posting stimulation status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
-    const whole_url = "http://localhost:4567/set_stim_status?running=false";
+    const whole_url = "http://localhost:4567/set_stim_play_state?running=false";
     const status_code = 200;
     mocked_axios.onPost(whole_url).reply(status_code);
-    const response = await post_stim_status(false);
+    const response = await call_axios_post_from_vuex(false);
     expect(response).toBeUndefined();
   });
 });

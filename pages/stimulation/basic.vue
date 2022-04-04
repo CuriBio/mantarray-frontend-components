@@ -3,20 +3,27 @@
     <StimulationStudio :style="'left: 10px; top: 10px;'" />
     <button class="update-button" @click="update_protocol_list">Update protocol list</button>
     <button class="update-button" :style="'top: 300px;'" @click="create_message">Create message</button>
+    <button class="update-button" :style="'top: 500px;'" @click="enable_controls">Enable buttons</button>
+    <div class="controls-container">
+      <StimulationControls />
+    </div>
   </div>
 </template>
 <script>
 import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
+import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
 import { mapMutations, mapActions } from "vuex";
 // import { StimulationStudio } from "@/dist/mantarray.common";
 
 export default {
   components: {
     StimulationStudio,
+    StimulationControls,
   },
   methods: {
     ...mapMutations("stimulation", ["set_new_protocol", "reset_state"]),
     ...mapActions("stimulation", ["create_protocol_message"]),
+    ...mapMutations("playback", ["set_enable_additional_controls"]),
     async update_protocol_list() {
       const test_protocol = {
         label: "mock_protocol",
@@ -171,6 +178,9 @@ export default {
     create_message() {
       this.create_protocol_message();
     },
+    enable_controls() {
+      this.set_enable_additional_controls(true);
+    },
   },
 };
 </script>
@@ -190,5 +200,10 @@ export default {
   cursor: pointer;
   background-color: #4ca0af;
   z-index: 999;
+}
+.controls-container {
+  left: 5%;
+  top: 75%;
+  position: absolute;
 }
 </style>

@@ -302,7 +302,7 @@ describe("store/flask", () => {
       beforeEach(async () => {
         context = await store.dispatch("flask/get_flask_action_context");
       });
-      test("Given that /system_status is mocked to include an is_stimulating value, When the ping_system_status is active, then stimulation/set_stim_status is called with that value", async () => {
+      test("Given that /system_status is mocked to include an is_stimulating value, When the ping_system_status is active, then stimulation/set_stim_play_state is called with that value", async () => {
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
           in_simulation_mode: false,
@@ -310,7 +310,7 @@ describe("store/flask", () => {
         });
         const bound_ping_system_status = ping_system_status.bind(context);
         await bound_ping_system_status();
-        expect(store.state.stimulation.stim_status).toBe(true);
+        expect(store.state.stimulation.stim_play_state).toBe(true);
 
         mocked_axios.onGet(system_status_regexp).reply(200, {
           ui_status_code: STATUS.MESSAGE.CALIBRATION_NEEDED,
@@ -318,7 +318,7 @@ describe("store/flask", () => {
           is_stimulating: false,
         });
         await bound_ping_system_status();
-        expect(store.state.stimulation.stim_status).toBe(false);
+        expect(store.state.stimulation.stim_play_state).toBe(false);
       });
     });
   });

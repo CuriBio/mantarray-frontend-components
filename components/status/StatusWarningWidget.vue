@@ -1,22 +1,31 @@
 <template>
   <div>
-    <div class="div__status-warning-background" :style="modal_height">
+    <div class="div__status-warning-background" :style="`height: ${modal_height}px;`">
       <span class="span__status-warning-label">{{ modal_labels.header }}</span>
-      <div class="span__status-warning-message">
+      <div ref="message_area" class="span__status-warning-message">
         <p>{{ modal_labels.msg_one }}</p>
-        <p v-show="!success_status">{{ modal_labels.msg_two }}</p>
+        <p v-show="!success_status">
+          {{ modal_labels.msg_two }}
+          <a
+            v-show="email_error"
+            id="error_contact"
+            href="mailto:contact@curibio.com ? subject = Short circuit error"
+            >contact@curibio.com</a
+          >
+        </p>
         <textarea
           v-show="success_status"
-          class="textarea__error-file-path"
-          name="uploaded_file"
-          :rows="compute_number_of_rows"
-          cols="50"
+          ref="textarea"
+          class="textarea__upload-file-path"
           spellcheck="false"
           :value.prop="modal_labels.msg_two"
-          :style="textarea__error_cssprops"
+          :rows="compute_number_of_rows"
+          :cols="50"
+          :style="`height: ${textarea__dynamic_height}`"
         />
       </div>
-      <div class="div__status-warning-button">
+
+      <div class="div__status-warning-button" :style="`top: ${modal_height}px;`">
         <ButtonWidget
           :button_widget_width="420"
           :button_widget_height="50"
@@ -51,22 +60,31 @@ export default {
         };
       },
     },
+    email_error: {
+      type: Boolean,
+      default: false,
+    },
     success_status: {
       type: Boolean,
       default: false,
     },
-    height: { type: Number, default: 150 },
+  },
+  data() {
+    return {
+      modal_height: 80, // minimum height with just header and button component
+    };
   },
   computed: {
-    modal_height: function () {
-      return `height: ${this.height}px;`;
-    },
-    textarea__error_cssprops: function () {
-      return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";
+    textarea__dynamic_height: function () {
+      return 25 + this.compute_number_of_rows * 12;
     },
     compute_number_of_rows: function () {
       return Math.ceil(((this.modal_labels.msg_two.length * 1.0) / 40).toFixed(1));
     },
+  },
+  mounted() {
+    // needs to go in mounted hook to calculate clientHeight
+    this.modal_height += this.$refs.message_area.clientHeight + this.$refs.textarea.clientHeight;
   },
   methods: {
     handle_click: function (idx) {
@@ -121,8 +139,6 @@ export default {
   top: 55px;
   left: 21px;
   width: 378px;
-  height: 123px;
-  overflow: hidden;
   visibility: visible;
   user-select: none;
   text-align: center;
@@ -134,11 +150,10 @@ export default {
   pointer-events: all;
 }
 .div__status-warning-button {
-  top: 150px;
   left: 0px;
   position: absolute;
 }
-.textarea__error-file-path {
+.textarea__upload-file-path {
   line-height: 1.2;
   transform: rotate(0deg);
   padding: 0px;
@@ -148,7 +163,6 @@ export default {
   color: rgb(183, 183, 183);
   font-family: Courier New;
   position: absolute;
-  top: 45px;
   left: 15px;
   width: 338px;
   background: rgb(17, 17, 17);
@@ -168,5 +182,9 @@ export default {
   resize: none;
   z-index: 5;
   pointer-events: all;
+}
+
+#error_contact {
+  color: rgb(183, 183, 183);
 }
 </style>

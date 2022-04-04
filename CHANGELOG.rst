@@ -21,7 +21,7 @@ Changelog for Mantarray Frontend Components
 ------------------
 
 - Added time unit dropdown to x-axis in Stimulation Studio to toggle ms/s
-- Added AdditionalControls tooltip on start/stop button when a recording is active
+- Added StimulationControls tooltip on start/stop button when a recording is active
 - Changed 30-second recording limit to 5 minutes with modal informing user that the recording has been stopped
 - Changed 'Delete Protocol' modal to match all other warning modals
 - Changed barcode comms from backend to use websockets

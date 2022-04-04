@@ -199,7 +199,7 @@ describe("StatusWidget.vue", () => {
       localVue,
     });
 
-    await store.commit("stimulation/set_stim_status", true);
+    await store.commit("stimulation/set_stim_play_state", true);
     await wrapper.setProps({ confirmation_request: false });
     Vue.nextTick(() => {
       expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(false);

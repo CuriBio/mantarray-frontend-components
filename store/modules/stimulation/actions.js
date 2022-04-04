@@ -1,6 +1,7 @@
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
-import { post_stim_message, post_stim_status } from "../../../js_utils/axios_helpers";
+import { call_axios_post_from_vuex } from "../../../js_utils/axios_helpers";
+import { STIM_STATUS } from "./enums";
 
 const time_conversion = {
   seconds: 1000,
@@ -257,13 +258,17 @@ export default {
       }
     }
 
-    await post_stim_message(message);
-    await post_stim_status(status);
+    const message_url = `/set_stim_play_state?running=${status}`;
+    const body = { data: JSON.stringify(message) };
+    await call_axios_post_from_vuex(message_url, body);
+
+    const status_url = `/set_stim_play_state?running=${status}`;
+    await call_axios_post_from_vuex(status_url);
   },
 
-  async stop_stim_status() {
-    const status = false;
-    await post_stim_status(status);
+  async stop_stimulation() {
+    const status_url = `/set_stim_play_state?running=${false}`;
+    await call_axios_post_from_vuex(status_url);
   },
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {
@@ -307,5 +312,12 @@ export default {
           y_values: y_axis_values,
         });
     }
+  },
+  async start_stim_configuration({ commit }) {
+    const url = `/start_stimulator_checks`;
+    const error = await call_axios_post_from_vuex(url);
+
+    if (error) commit("stim_status", STIM_STATUS.ERROR);
+    else commit("stim_status", STIM_STATUS.CONFIGURATION_IN_PROGRESS);
   },
 };

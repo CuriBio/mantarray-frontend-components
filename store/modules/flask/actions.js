@@ -2,6 +2,7 @@
 import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 
 import { ENUMS as PLAYBACK_ENUMS } from "../playback/enums";
+import { STIM_STATUS } from "../stimulation/enums";
 import { STATUS } from "./enums";
 
 /**
@@ -47,6 +48,7 @@ export async function ping_system_status() {
             root: true,
           });
           this.commit("playback/set_enable_additional_controls", true, { root: true });
+          this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED, { root: true });
         }
 
         if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
@@ -58,7 +60,7 @@ export async function ping_system_status() {
         }
       }
     }
-    this.commit("stimulation/set_stim_status", data.is_stimulating, { root: true });
+    this.commit("stimulation/set_stim_play_state", data.is_stimulating, { root: true });
   }
   this.commit("flask/ignore_next_system_status_if_matching_status", null, {
     root: true,

@@ -29,6 +29,7 @@
     <b-modal id="upload-status" size="sm" hide-footer hide-header hide-header-close :static="true">
       <StatusWarningWidget
         id="upload-modal"
+        :height="modal_height"
         :success_status="status"
         :modal_labels="modal_labels"
         @handle_confirmation="handle_confirmation"
@@ -62,6 +63,7 @@ export default {
         button_names: ["close"],
       },
       status: false,
+      modal_height: 150,
     };
   },
   computed: {
@@ -96,6 +98,7 @@ export default {
       if (this.upload_error) {
         this.$store.commit("settings/set_upload_error", false);
         this.status = false;
+        this.modal_height = 150;
         this.modal_labels = {
           header: "Error!",
           msg_one: `There was an error uploading recording: ${this.last_file_name}.`,
@@ -104,6 +107,7 @@ export default {
         };
       } else {
         this.status = true;
+        this.height = 180;
         this.modal_labels = {
           header: "Successful Upload!",
           msg_one: `The following recording was successfully uploaded: ${this.last_file_name}.`,

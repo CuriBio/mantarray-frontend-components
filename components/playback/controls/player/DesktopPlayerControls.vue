@@ -361,7 +361,7 @@ export default {
       "firmware_update_available",
       "firmware_update_dur_mins",
     ]),
-    ...mapState("stimulation", ["stim_status"]),
+    ...mapState("stimulation", ["stim_play_state"]),
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
@@ -386,7 +386,7 @@ export default {
       ) {
         return "Cannot calibrate during firmware update.";
       }
-      if (this.stim_status) {
+      if (this.stim_play_state) {
         return "Cannot calibrate while stimulating";
       }
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
@@ -470,7 +470,7 @@ export default {
         "span__playback-desktop-player-controls--available":
           (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
             this.playback_state === this.playback_state_enums.CALIBRATED) &&
-          !this.stim_status,
+          !this.stim_play_state,
       };
     },
   },
@@ -525,7 +525,7 @@ export default {
       if (
         (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
           this.playback_state === this.playback_state_enums.CALIBRATED) &&
-        !this.stim_status
+        !this.stim_play_state
       ) {
         if (this.beta_2_mode) this.$bvModal.show("calibration-warning");
         else this.$store.dispatch("playback/start_calibration");

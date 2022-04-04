@@ -161,7 +161,7 @@ export default {
 <style type="text/css">
 .div__playback-x-axis-controls {
   height: 45px;
-  width: calc(100vw - 353px);
+  width: 1584px;
   background-color: #1c1c1c;
   position: absolute;
   text-align: center;

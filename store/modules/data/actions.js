@@ -1,5 +1,6 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
 import { append_well_data, find_closest_array_idx } from "../../../js_utils/waveform_data_formatter.js";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 
 export default {
   async append_plate_waveforms({ dispatch, commit, state }, new_value) {
@@ -89,5 +90,17 @@ export default {
       well.x_data_points.splice(0, idx_to_splice - 2);
       well.y_data_points.splice(0, idx_to_splice - 2);
     });
+  },
+  check_stimulator_circuit_statuses({ commit }, { stimulator_statuses }) {
+    // incoming_array = {stimulator_statuses: [stimulator_status_0, stimulator_status_1, ...]}
+
+    // check if statuses include a short circuit status and set error status
+    if (stimulator_statuses.includes("short"))
+      this.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERR);
+    else {
+      // else set the stim status that other components watch
+      commit("set_stimulator_circuit_statuses", stimulator_statuses);
+      this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
+    }
   },
 };

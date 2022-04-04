@@ -478,8 +478,12 @@ describe("store/stimulation", () => {
     });
 
     test("When a user starts a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
-      const axios_message_spy = jest.spyOn(axios_helpers, "post_stim_message").mockImplementation(() => null);
-      const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
+      const axios_message_spy = jest
+        .spyOn(axios_helpers, "call_axios_post_from_vuex")
+        .mockImplementation(() => null);
+      const axios_status_spy = jest
+        .spyOn(axios_helpers, "call_axios_post_from_vuex")
+        .mockImplementation(() => null);
 
       const test_well_protocol_pairs = {};
       for (let well_idx = 0; well_idx < 24; well_idx++) {
@@ -599,8 +603,10 @@ describe("store/stimulation", () => {
       expect(axios_status_spy).toHaveBeenCalledWith(true);
     });
     test("When a user stops a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
-      const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
-      await store.dispatch("stimulation/stop_stim_status");
+      const axios_status_spy = jest
+        .spyOn(axios_helpers, "call_axios_post_from_vuex")
+        .mockImplementation(() => null);
+      await store.dispatch("stimulation/stop_stimulation");
       expect(axios_status_spy).toHaveBeenCalledWith(false);
     });
 

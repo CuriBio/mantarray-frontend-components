@@ -1,14 +1,14 @@
 <template>
   <div class="div__status-bar">
-    <span class="span__status-bar-text">{{ alert_txt }}</span>
+    <span class="span__status-bar-text">{{ status_label }}: {{ alert_txt }}</span>
     <span>
       <b-modal id="error-catch" size="sm" hide-footer hide-header hide-header-close :static="true">
         <ErrorCatchWidget
           id="error"
           :log_filepath="log_path"
           :shutdown_error_message="shutdown_error_message"
-          @ok-clicked="remove_error_catch"
-        ></ErrorCatchWidget>
+          @ok-clicked="close_modals_by_id(['error-catch'])"
+        />
       </b-modal>
       <b-modal
         id="fw-updates-complete-message"
@@ -22,7 +22,7 @@
         <StatusWarningWidget
           id="fw-updates-complete"
           :modal_labels="fw_updates_complete_labels"
-          @handle_confirmation="close_fw_updates_complete_modal"
+          @handle_confirmation="close_modals_by_id('fw-updates-complete-messages')"
         />
       </b-modal>
       <b-modal
@@ -84,6 +84,7 @@
 import Vue from "vue";
 import { mapGetters, mapState } from "vuex";
 import { STATUS } from "@/store/modules/flask/enums";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
@@ -111,6 +112,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    stim_specific: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -135,13 +140,19 @@ export default {
         msg_two: "Please wait a few minutes before starting the software again.",
         button_names: ["Okay"],
       },
+      short_circuit_labels: {
+        header: "Error!",
+        msg_one: "A short circuit error has been found during the configuration check.",
+        msg_two: "Please replace stimulation lid and contact ",
+        button_names: ["Okay"],
+      },
     };
   },
   computed: {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
-    ...mapState("stimulation", ["stim_status"]),
+    ...mapState("stimulation", ["stim_play_state", "stim_status"]),
     ...mapState("settings", [
       "log_path",
       "shutdown_error_message",
@@ -161,10 +172,18 @@ export default {
         msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
       };
     },
+    status_label: function () {
+      return this.stim_specific ? "Stimulation status" : "System status";
+    },
   },
   watch: {
-    status_uuid: function (newValue) {
-      this.set_text_from_state(newValue);
+    status_uuid: function (new_status) {
+      // set message for stimulation status and system status if error occurs
+      if (new_status == STATUS.MESSAGE.ERROR) this.alert_txt = `Error`;
+      if (!this.stim_specific) this.set_system_specific_status(new_status);
+    },
+    stim_status: function (new_status) {
+      if (this.stim_specific) this.set_stim_specific_status(new_status);
     },
     confirmation_request: function () {
       const sensitive_ops_in_progress =
@@ -172,13 +191,18 @@ export default {
         this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE ||
         this.status_uuid === STATUS.MESSAGE.RECORDING ||
         this.status_uuid === STATUS.MESSAGE.CALIBRATING ||
-        this.stim_status ||
+        this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS ||
+        this.stim_play_state ||
         this.total_uploaded_files.length < this.total_file_count;
       const fw_update_in_progress =
         this.status_uuid === STATUS.MESSAGE.DOWNLOADING_UPDATES ||
         this.status_uuid === STATUS.MESSAGE.INSTALLING_UPDATES;
 
-      if (this.confirmation_request) {
+      if (this.confirmation_request && !this.stim_specific) {
+        console.log("Sensitive ops in progress during user closure request:");
+        console.log(`Firmware update in progress: ${fw_update_in_progress}`);
+        console.log(`Other: ${sensitive_ops_in_progress}`);
+
         if (fw_update_in_progress) this.$bvModal.show("fw-closure-warning");
         else if (sensitive_ops_in_progress) this.$bvModal.show("ops-closure-warning");
         else this.handle_confirmation(1);
@@ -186,59 +210,82 @@ export default {
     },
   },
   created() {
-    this.set_text_from_state(this.status_uuid);
+    this.stim_specific ? this.set_stim_specific_status() : this.set_system_specific_status();
   },
   methods: {
-    set_text_from_state: function (new_value) {
-      this.alert_txt = "Status: ";
-      switch (new_value) {
-        case STATUS.MESSAGE.SERVER_STILL_INITIALIZING:
-          this.alert_txt += "Connecting...";
+    set_stim_specific_status: function (status) {
+      switch (status) {
+        case STIM_STATUS.CONFIG_CHECK_NEEDED:
+          this.alert_txt = `Configuration check needed`;
           break;
+        case STIM_STATUS.CONFIG_CHECK_IN_PROGRESS:
+          this.alert_txt = `Configuration check in progress...`;
+          break;
+        case STIM_STATUS.CONFIG_CHECK_COMPLETE:
+          this.alert_txt = `Check complete`;
+          // TODO modal to show config check results
+          break;
+        case STIM_STATUS.READY:
+          this.alert_txt = `Ready`;
+          break;
+        case STIM_STATUS.STIM_ACTIVE:
+          this.alert_txt = `Stimulating...`;
+          break;
+        case STIM_STATUS.SHORT_CIRCUIT_ERR:
+          this.alert_txt = `Short circuit error`;
+          // TODO modal to show fatal short circuit modal
+          break;
+        default:
+          this.alert_txt = STIM_STATUS.CALIBRATION_NEEDED;
+          break;
+      }
+    },
+    set_system_specific_status: function (status) {
+      switch (status) {
         case STATUS.MESSAGE.SERVER_READY:
-          this.alert_txt += "Connecting...";
+          this.alert_txt = "Connecting...";
           break;
         case STATUS.MESSAGE.INITIALIZING_INSTRUMENT:
-          this.alert_txt += "Initializing...";
-          break;
-        case STATUS.MESSAGE.CHECKING_FOR_UPDATES:
-          this.alert_txt += "Checking for Firmware Updates...";
+          this.alert_txt = "Initializing...";
           break;
         case STATUS.MESSAGE.CALIBRATION_NEEDED:
-          this.alert_txt += `Connected...Calibration Needed`;
+          this.alert_txt = `Connected...Calibration needed`;
           break;
         case STATUS.MESSAGE.CALIBRATING:
-          this.alert_txt += `Calibrating...`;
+          this.alert_txt = `Calibrating...`;
           break;
         case STATUS.MESSAGE.CALIBRATED:
-          this.alert_txt += `Ready`;
+          this.alert_txt = `Ready`;
           break;
         case STATUS.MESSAGE.BUFFERING:
-          this.alert_txt += `Preparing for Live View...`;
+          this.alert_txt = `Preparing for live view...`;
           break;
         case STATUS.MESSAGE.LIVE_VIEW_ACTIVE:
-          this.alert_txt += `Live View Active`;
+          this.alert_txt = `Live view active`;
           break;
         case STATUS.MESSAGE.RECORDING:
-          this.alert_txt += `Recording to File`;
+          this.alert_txt = `Recording to file...`;
+          break;
+        case STATUS.MESSAGE.CHECKING_FOR_UPDATES:
+          this.alert_txt = "Checking for firmware updates...";
           break;
         case STATUS.MESSAGE.UPDATES_NEEDED:
-          this.alert_txt += `Firmware Updates Required`;
+          this.alert_txt = `Firmware updates required`;
           break;
         case STATUS.MESSAGE.DOWNLOADING_UPDATES:
-          this.alert_txt += `Downloading Firmware Updates...`;
+          this.alert_txt = `Downloading firmware updates...`;
           this.$bvModal.show("fw-updates-in-progress-message");
           break;
         case STATUS.MESSAGE.INSTALLING_UPDATES:
-          this.alert_txt += `Installing Firmware Updates...`;
+          this.alert_txt = `Installing firmware updates...`;
           break;
         case STATUS.MESSAGE.UPDATES_COMPLETE:
-          this.alert_txt += `Firmware Updates Complete`;
+          this.alert_txt = `Firmware updates complete`;
           this.close_modals_by_id(["fw-updates-in-progress-message", "fw-closure-warning"]);
           this.$bvModal.show("fw-updates-complete-message");
           break;
         case STATUS.MESSAGE.UPDATE_ERROR:
-          this.alert_txt += `Error During Firmware Update`;
+          this.alert_txt = `Error during firmware update`;
           this.close_modals_by_id(["fw-updates-in-progress-message", "fw-closure-warning"]);
           this.$store.commit("flask/stop_status_pinging");
           this.$store.commit("settings/set_shutdown_error_message", "Error during firmware update.");
@@ -251,17 +298,14 @@ export default {
             "fw-closure-warning",
             "ops-closure-warning",
           ]);
-          this.alert_txt += `Error Occurred`;
           this.$bvModal.show("error-catch");
           break;
         default:
-          this.alert_txt = `Status:` + new_value; // to be 43 characters and include the UUID, there isn't room for a space
+          this.alert_txt = "Connecting...";
           break;
       }
     },
-    remove_error_catch: function () {
-      this.$bvModal.hide("error-catch");
-    },
+
     handle_confirmation: function (idx) {
       // Tanner (1/19/22): skipping automatic closure cancellation since this method gaurantees
       // send_confirmation will be emitted, either immediately or after closing sw-update-message
@@ -288,12 +332,6 @@ export default {
         this.$emit("send_confirmation", 0);
       }
     },
-    close_fw_updates_in_progress_modal: function () {
-      this.$bvModal.hide("fw-updates-in-progress-message");
-    },
-    close_fw_updates_complete_modal: function () {
-      this.$bvModal.hide("fw-updates-complete-message");
-    },
     close_sw_update_modal: function () {
       this.$bvModal.hide("sw-update-message");
       this.$emit("send_confirmation", 1);
@@ -314,7 +352,7 @@ export default {
   top: 0px;
   left: 0px;
   width: 287px;
-  height: 32px;
+  height: 45px;
   background: #1c1c1c;
   border: none;
   border-radius: 0px;
@@ -324,7 +362,6 @@ export default {
 .span__status-bar-text {
   pointer-events: all;
   line-height: 100%;
-  overflow: hidden;
   position: absolute;
   width: 274px;
   height: 23px;

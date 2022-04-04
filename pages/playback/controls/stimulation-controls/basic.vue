@@ -1,27 +1,27 @@
 <template>
   <div>
-    <AdditionalControls />
-    <button class="enable-button" @click="enable_controls">Enable Additional Controls</button>
+    <StimulationControls />
+    <button class="enable-button" @click="enable_controls">Enable Stim Controls</button>
     <button class="update-button" @click="update_protocol_assignment">Update protocol assignments</button>
   </div>
 </template>
 
 <script>
 import { mapMutations } from "vuex";
-import { AdditionalControls } from "@/dist/mantarray.common";
-// import AdditionalControls from "@/components/playback/controls/AdditionalControls.vue";
+import { StimulationControls } from "@/dist/mantarray.common";
+// import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
 
 export default {
   components: {
-    AdditionalControls,
+    StimulationControls,
   },
   created() {
     this.unsubscribe = this.$store.subscribeAction(async (action, state) => {
       // simulate response from BE when play/stop button is pressed
       if (action.type === "stimulation/create_protocol_message") {
-        this.set_stim_status(true);
-      } else if (action.type === "stimulation/stop_stim_status") {
-        this.set_stim_status(false);
+        this.set_stim_play_state(true);
+      } else if (action.type === "stimulation/stop_stimulation") {
+        this.set_stim_play_state(false);
       }
     });
   },
@@ -29,7 +29,7 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    ...mapMutations("stimulation", ["set_stim_status"]),
+    ...mapMutations("stimulation", ["set_stim_play_state"]),
     ...mapMutations("playback", ["set_enable_additional_controls"]),
     update_protocol_assignment() {
       const test_assignment = {

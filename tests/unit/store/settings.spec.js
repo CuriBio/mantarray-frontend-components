@@ -329,13 +329,11 @@ describe("store/settings", () => {
     test.each([true, false])(
       "When a user confirms whether or not they want to proceed with a FW update, Then that decision is sent to the BE",
       async (decision) => {
-        const post_spy = jest
-          .spyOn(axios_helpers, "post_firmware_update_confirmation")
-          .mockImplementation(() => {
-            return {
-              status: 200,
-            };
-          });
+        const post_spy = jest.spyOn(axios_helpers, "call_axios_post_from_vuex").mockImplementation(() => {
+          return {
+            status: 200,
+          };
+        });
 
         const { status } = await store.dispatch("settings/send_firmware_update_confirmation", decision);
         expect(status).toBe(200);

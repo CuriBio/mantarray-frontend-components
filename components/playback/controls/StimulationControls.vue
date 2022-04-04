@@ -6,7 +6,7 @@
       class="div__controls-block"
       :style="controls_block_block__dynamic_style"
     />
-    <span class="span__additional-controls-header">Additional Controls</span>
+    <span class="span__additional-controls-header">Stimulation Controls</span>
     <span class="span__stimulation-label">Stimulation</span>
     <div class="div__border-container">
       <svg class="svg__stimulation-active-button" height="20" width="20">
@@ -27,20 +27,22 @@
         ></path>
       </svg>
       <span :class="svg__stimulation_controls_play_stop_button__dynamic_class" @click="handle_play_stop">
-        <div v-if="!play_state" v-b-popover.hover.bottom="start_stim_label" title="Stimulation Studio">
+        <div v-if="!play_state" v-b-popover.hover.bottom="start_stim_label" title="Start Stimulation">
           <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
         </div>
-        <div v-if="play_state" v-b-popover.hover.bottom="stop_stim_label" title="Stimulation Studio">
+        <div v-if="play_state" v-b-popover.hover.bottom="stop_stim_label" title="Stop Stimulation">
           <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
         </div>
       </span>
     </div>
-    <img
-      v-b-popover.hover.bottom="temp_icon_label"
-      class="img__temp-icon"
-      src="@/assets/img/temp-controls-icon.png"
-    />
     <img class="img__waveform-icon" src="@/assets/img/waveform-icon.png" />
+    <img
+      v-b-popover.hover.bottom="configuration_message"
+      class="img__temp-icon"
+      title="Configuration Check"
+      src="@/assets/img/temp-controls-icon.png"
+      @click="start_stim_configuration"
+    />
   </div>
 </template>
 <script>
@@ -48,6 +50,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { mapState } from "vuex";
 import playback_module from "@/store/modules/playback";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import {
   faPlayCircle as fa_play_circle,
   faStopCircle as fa_stop_circle,
@@ -88,7 +91,7 @@ library.add(fa_play_circle, fa_stop_circle);
  */
 
 export default {
-  name: "AdditionalControls",
+  name: "StimulationControls",
   components: {
     FontAwesomeIcon,
   },
@@ -99,11 +102,11 @@ export default {
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
       controls_block_label: "Additional Controls are disabled until device is Calibrated",
-      temp_icon_label: "(Not Yet Available)",
+      configuration_message: "Start configuration check",
     };
   },
   computed: {
-    ...mapState("stimulation", ["protocol_assignments", "stim_status"]),
+    ...mapState("stimulation", ["protocol_assignments", "stim_play_state", "stim_status"]),
     ...mapState("playback", ["playback_state", "enable_additional_controls"]),
     is_start_stop_button_enabled: function () {
       // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
@@ -118,6 +121,12 @@ export default {
       return is_enabled;
     },
     start_stim_label: function () {
+      if (
+        this.stim_status == STIM_STATUS.CONFIGURATION_NEEDED ||
+        this.stim_status == STIM_STATUS.CONFURATION_IN_PROGRESS
+      )
+        return this.stim_status;
+
       if (Object.keys(this.protocol_assignments).length === 0) {
         return "No protocols have been assigned";
       } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING) {
@@ -152,17 +161,25 @@ export default {
     },
   },
   watch: {
-    stim_status: function () {
-      this.current_gradient = this.stim_status ? this.active_gradient : this.inactive_gradient;
-      this.play_state = this.stim_status;
+    stim_play_state: function () {
+      this.current_gradient = this.stim_play_state ? this.active_gradient : this.inactive_gradient;
+      this.play_state = this.stim_play_state;
+    },
+    stim_status: function (new_status, _) {
+      this.configuration_message = new_status;
     },
   },
   methods: {
     async handle_play_stop() {
       if (this.is_start_stop_button_enabled) {
-        const action = this.play_state ? "stop_stim_status" : "create_protocol_message";
+        const action = this.play_state ? "stop_stimulation" : "create_protocol_message";
         this.$store.dispatch(`stimulation/${action}`);
       }
+    },
+    async start_stim_configuration() {
+      // TODO add in requirement to check is stim barcode is  valid
+      if (!this.stim_play_state && this.stim_status !== STIM_STATUS.CONFIGURATION_IN_PROGRESS)
+        this.$store.dispatch(`stimulation/start_stim_configuration`);
     },
   },
 };
@@ -255,14 +272,14 @@ body {
   cursor: pointer;
   position: absolute;
   top: 29px;
-  height: 56px;
-  left: 7px;
+  height: 54px;
+  left: 55px;
 }
 .img__waveform-icon {
   position: absolute;
-  top: 29px;
-  height: 56px;
-  left: 55px;
+  top: 27px;
+  height: 60px;
+  left: 2px;
 }
 .fontawesome_icon_class {
   height: 20px;
