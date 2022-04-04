@@ -28,18 +28,14 @@ const mocked_system_status = RequestMock()
 
     const status_uuid = new url.URLSearchParams(url.parse(req.url)).get("current_vuex_status_uuid");
     switch (status_uuid) {
-      case STATUS.MESSAGE.CALIBRATED:
-      case STATUS.MESSAGE.CALIBRATION_NEEDED:
-      case STATUS.MESSAGE.LIVE_VIEW_ACTIVE:
-      case STATUS.MESSAGE.RECORDING:
-      case STATUS.MESSAGE.SERVER_STILL_INITIALIZING:
-        res.setBody(JSON.stringify({ ui_status_code: status_uuid }));
-        break;
       case STATUS.MESSAGE.CALIBRATING:
         res.setBody(JSON.stringify({ ui_status_code: STATUS.MESSAGE.CALIBRATED }));
         break;
       case STATUS.MESSAGE.BUFFERING:
         res.setBody(JSON.stringify({ ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE }));
+        break;
+      default:
+        res.setBody(JSON.stringify({ ui_status_code: status_uuid }));
         break;
     }
   });
@@ -54,7 +50,6 @@ const calibrate_button = Selector(".svg__playback-desktop-player-controls-calibr
 const live_view_button = Selector(".svg__playback-desktop-player-controls-live-view-button");
 const inactive_record_button = Selector(".svg__playback-desktop-player-controls-record-button--inactive");
 const active_record_button = Selector(".svg__playback-desktop-player-controls-record-button--active");
-const whole_component = Selector(".div__play-desktop-player-controls");
 const title_text = Selector(".span__playback-desktop-player-controls-text");
 const update_customer_idx_button = Selector(".update-idx-button");
 
