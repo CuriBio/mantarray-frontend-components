@@ -50,12 +50,14 @@ library.add(faPencilAlt);
  * @vue-event {String} set_barcode_manually - User entered String parser
  */
 export default {
-  name: "PlateBarcode",
+  name: "PlateBarcode", // TODO rename this component
   components: {
     FontAwesomeIcon,
     BarcodeEditDialog,
   },
-  // TODO add prop for barcode_type
+  props: {
+    barcode_type: { type: String, default: "plate_barcode" },
+  },
   data() {
     return {
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
@@ -65,17 +67,17 @@ export default {
     ...mapState("playback", ["playback_state", "barcodes"]),
     ...mapState("flask", ["barcode_manual_mode"]),
     barcode_info: function () {
-      return this.barcodes.plate_barcode;
+      return this.barcodes[this.barcode_type];
     },
   },
   methods: {
     handle_manual_mode_choice(choice) {
       this.$bvModal.hide("edit-plate-barcode-modal");
       this.$store.commit("flask/set_barcode_manual_mode", choice);
-      if (choice) this.$store.commit("playback/set_barcode", { type: "plate_barcode", new_value: null });
+      if (choice) this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: null });
     },
     set_barcode_manually: function (event) {
-      this.$store.commit("playback/set_barcode", { type: "plate_barcode", new_value: event.target.value });
+      this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: event.target.value });
     },
     set_green_color(inp) {
       inp.style.border = "1px solid green";
