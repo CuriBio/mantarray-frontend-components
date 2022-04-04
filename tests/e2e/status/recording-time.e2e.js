@@ -3,7 +3,7 @@ const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-import { all_mantarray_commands_regexp } from "../../../store/modules/flask/url_regex";
+import { system_status_regexp, all_mantarray_commands_regexp } from "../../../store/modules/flask/url_regex";
 
 const base_screenshot_path = path.join("status");
 
