@@ -8,11 +8,7 @@ import playback_module from "@/store/modules/playback";
 import { STATUS } from "@/store/modules/flask/enums";
 
 const wait_for_expect = require("wait-for-expect");
-import {
-  all_mantarray_commands_regexp,
-  system_status_when_calibrating_regexp,
-  system_status_when_buffering_regexp,
-} from "@/store/modules/flask/url_regex";
+import { all_mantarray_commands_regexp, system_status_regexp } from "@/store/modules/flask/url_regex";
 import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
 import { advance_playback_progression, micros_per_milli } from "@/store/modules/playback/actions";
 const sandbox = sinon.createSandbox();
@@ -218,7 +214,7 @@ describe("store/playback", () => {
       store.commit("playback/increment_x_time_index", 150);
       expect(store.getters["playback/x_time_index"]).toBe(250);
     });
-    describe("is_valid_barcode", () => {
+    describe("barcode validity", () => {
       test.each([
         ["", "error due to empty string", false],
         ["ML34567890123", "error due tolength over 12", false],
@@ -237,10 +233,11 @@ describe("store/playback", () => {
         ["ML2021001144", "julian date '001'", true],
         ["ML2021366144", "julian date '366'", true],
       ])(
-        "Given a barcode scanned results in value %s, When validation rule FAILS  or PASSES due %s, Then validation results set is_valid_barcode to %s",
+        "Given a plate barcode scanned results in value %s, When validation rule FAILS  or PASSES due %s, Then validation results set valid to %s",
         async (platecode, reason, valid) => {
-          store.commit("playback/set_barcode_number", platecode);
-          expect(store.state.playback.is_valid_barcode).toBe(valid);
+          // testing with plate barcode here but the functionality is exactly the same for stim barcodes
+          store.commit("playback/set_barcode", { type: "plate_barcode", new_value: platecode });
+          expect(store.state.playback.barcodes.plate_barcode.valid).toBe(valid);
         }
       );
     });
@@ -447,13 +444,17 @@ describe("store/playback", () => {
 
         store.commit("playback/set_x_time_index", 12345);
 
-        store.commit("playback/set_barcode_number", "MB2036078");
+        const test_barcode = "ML2022001000";
+        store.commit("playback/set_barcode", { type: "plate_barcode", new_value: test_barcode });
 
         await store.dispatch("playback/start_recording");
 
-        expect(mocked_axios.history.get[0].url).toStrictEqual(
-          `${base_url}/${api}?time_index=12345&barcode=MB2036078&is_hardware_test_recording=false`
-        );
+        expect(mocked_axios.history.get[0].url).toStrictEqual(`${base_url}/${api}`);
+        expect(mocked_axios.history.get[0].params).toStrictEqual({
+          time_index: 12345,
+          plate_barcode: test_barcode,
+          is_hardware_test_recording: false,
+        });
 
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.RECORDING
@@ -477,11 +478,12 @@ describe("store/playback", () => {
 
         store.commit("playback/set_x_time_index", 456789);
 
-        store.commit("playback/set_barcode_number", "MB2024599");
+        store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022001000" });
 
         await store.dispatch("playback/stop_recording");
 
-        expect(mocked_axios.history.get[0].url).toStrictEqual(`${base_url}/${api}?time_index=456789`);
+        expect(mocked_axios.history.get[0].url).toStrictEqual(`${base_url}/${api}`);
+        expect(mocked_axios.history.get[0].params).toStrictEqual({ time_index: 456789 });
 
         expect(store.state.playback.playback_state).toStrictEqual(
           playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
@@ -605,7 +607,7 @@ describe("store/playback", () => {
       const api = "start_calibration";
       beforeEach(() => {
         mocked_axios
-          .onGet(system_status_when_calibrating_regexp)
+          .onGet(system_status_regexp, { params: { current_vuex_status_uuid: STATUS.MESSAGE.CALIBRATING } })
           .reply(200, { ui_status_code: STATUS.MESSAGE.CALIBRATED });
 
         mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
@@ -656,7 +658,7 @@ describe("store/playback", () => {
       const api = "start_managed_acquisition";
 
       mocked_axios
-        .onGet(system_status_when_buffering_regexp)
+        .onGet(system_status_regexp, { params: { current_vuex_status_uuid: STATUS.MESSAGE.BUFFERING } })
         .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE });
 
       mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);

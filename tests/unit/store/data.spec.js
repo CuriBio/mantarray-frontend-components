@@ -9,8 +9,8 @@ import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
 import { ping_system_status } from "../../../store/modules/flask/actions";
 
-const valid_plate_barcode = "ML2022047001";
-const invalid_plate_barcode = "ML2022047002";
+const valid_plate_barcode = "ML2022001000";
+const valid_stim_barcode = "MS2022001000";
 
 const http = require("http");
 const io_server = require("socket.io");
@@ -615,40 +615,52 @@ describe("store/data", () => {
       });
       expect(store.state.settings.user_cred_input_needed).toBe(true);
     });
-    test("Given barcode is not in manual mode, When backend emits barcode message, Then ws client sets new barcode in store", async () => {
-      const message = {
-        plate_barcode: valid_plate_barcode,
-      };
+    test.each([
+      ["plate_barcode", valid_plate_barcode],
+      ["stim_barcode", valid_stim_barcode],
+    ])(
+      "Given barcode is not in manual mode, When backend emits barcode message with valid %s, Then ws client updates correct barcode in store",
+      async (barcode_type, valid_barcode) => {
+        const message = {
+          [barcode_type]: valid_barcode,
+        };
 
-      store.commit("flask/set_barcode_manual_mode", false);
+        store.commit("flask/set_barcode_manual_mode", false);
 
-      // confirm precondition
-      expect(store.state.playback.barcode).toBeNull();
+        // confirm precondition
+        expect(store.state.playback.barcodes[barcode_type].value).toBeNull();
 
-      await new Promise((resolve) => {
-        socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
-          resolve(ack);
+        await new Promise((resolve) => {
+          socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
+            resolve(ack);
+          });
         });
-      });
-      expect(store.state.playback.barcode).toBe(valid_plate_barcode);
-    });
-    test("Given barcode is in manual mode, When backend emits barcode message, Then ws client does not set new barcode in store", async () => {
-      const message = {
-        plate_barcode: valid_plate_barcode,
-      };
+        expect(store.state.playback.barcodes[barcode_type].value).toBe(valid_barcode);
+      }
+    );
+    test.each([
+      ["plate_barcode", valid_plate_barcode],
+      ["stim_barcode", valid_stim_barcode],
+    ])(
+      "Given barcode is in manual mode, When backend emits barcode message with valid %s, Then ws client does not set new barcode in store",
+      async (barcode_type, valid_barcode) => {
+        const message = {
+          barcode_type: valid_barcode,
+        };
 
-      store.commit("flask/set_barcode_manual_mode", true);
+        store.commit("flask/set_barcode_manual_mode", true);
 
-      // confirm precondition
-      expect(store.state.playback.barcode).toBeNull();
+        // confirm precondition
+        expect(store.state.playback.barcodes[barcode_type].value).toBeNull();
 
-      await new Promise((resolve) => {
-        socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
-          resolve(ack);
+        await new Promise((resolve) => {
+          socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
+            resolve(ack);
+          });
         });
-      });
-      expect(store.state.playback.barcode).toBeNull();
-    });
+        expect(store.state.playback.barcodes[barcode_type].value).toBeNull();
+      }
+    );
   });
 
   // TODO move these to another test file
@@ -674,9 +686,7 @@ describe("store/data", () => {
       await bound_ping_system_status();
       expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(new RegExp("http://localhost:4567/system_status?"));
-      expect(mocked_axios.history.get[0].url).toMatch(
-        new RegExp("currently_displayed_time_index=" + expected_idx)
-      );
+      expect(mocked_axios.history.get[0].params.currently_displayed_time_index).toEqual(expected_idx);
     });
 
     test("Given /system_status is mocked to return 200 (and some dummy response) and and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then both intervals are cleared in Vuex (status pinging, and playback progression)", async () => {

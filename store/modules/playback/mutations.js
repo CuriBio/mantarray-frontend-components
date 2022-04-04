@@ -39,20 +39,11 @@ export default {
   set_playback_progression_interval_id(state, new_value) {
     state.playback_progression_interval_id = new_value;
   },
-  set_barcode_number(state, new_value) {
+  set_barcode(state, { type, new_value }) {
     const result = TextValidation_plate_barcode.validate(new_value);
-    if (result == "") {
-      state.is_valid_barcode = true;
-    } else {
-      state.is_valid_barcode = false;
-    }
-    state.barcode = new_value;
-  },
-  set_barcode_valid_manual_mode(state, new_value) {
-    state.is_valid_barcode = new_value;
-  },
-  set_barcode_number_manual_mode(state, new_value) {
-    state.barcode = new_value;
+    const is_valid = result == "";
+    state.barcodes[type].value = new_value;
+    state.barcodes[type].valid = is_valid;
   },
   set_tooltips_delay(state, new_value) {
     state.tooltips_delay = new_value;
