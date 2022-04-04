@@ -1,5 +1,6 @@
 import { RequestMock } from "testcafe";
 const path = require("path");
+import url from "url";
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
