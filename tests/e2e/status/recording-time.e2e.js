@@ -18,9 +18,7 @@ const mocked_system_status = RequestMock()
     res.headers["Access-Control-Allow-Origin"] = "*";
     res.statusCode = 200;
 
-    console.log("###", req.url);
-    const status_uuid = new url.URLSearchParams(url.parse(req.url)).get("current_vuex_status_uuid");
-    console.log("$$$", status_uuid);
+    const status_uuid = url.parse(req.url, true).query.current_vuex_status_uuid;
     res.setBody(JSON.stringify({ ui_status_code: status_uuid }));
   });
 
