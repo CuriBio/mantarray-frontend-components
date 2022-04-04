@@ -8,20 +8,20 @@ Vue.use(VueAxios, axios);
 /**
  * Handles all HTTP GET calls from Vuex and updates system status if there was an error
  *
- * @param {string} whole_url - The entire URL to pass to axios.get
+ * @param {string} url - The URL to pass to axios.get, without query params
  * @param {Object} action_context - The context of the Vuex action calling this function (to give this function access to the Vuex store)
+ * @param {Object} params - The query params to include in the URL
  * @return {Object} the result of the axios call
  */
-export async function call_axios_get_from_vuex(whole_url, action_context) {
+export async function call_axios_get_from_vuex(url, action_context, params = {}) {
   let result = 0;
   try {
-    result = await Vue.axios.get(whole_url);
+    result = await Vue.axios.get(url, { params });
   } catch (error) {
     // adapted from https://stackoverflow.com/questions/49967779/axios-handling-errors
-    const route = whole_url.split("?")[0];
     console.log(
       // allow-log
-      "Error in call_axios_get_from_vuex for " + route + ": " + error
+      "Error in call_axios_get_from_vuex for " + url + ": " + error
     );
     if (error.response) {
       // Request made and server responded

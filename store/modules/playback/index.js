@@ -14,8 +14,16 @@ const default_state = {
   recording_start_time: 0,
   playback_progression_interval_id: null,
   playback_progression_time_interval: 40, // milliseconds
-  barcode: null,
-  is_valid_barcode: false,
+  barcodes: {
+    plate_barcode: {
+      value: null,
+      valid: false,
+    },
+    stim_barcode: {
+      value: null,
+      valid: false,
+    },
+  },
   tooltips_delay: 2000,
   timestamp_of_beginning_of_progression: undefined,
   num_milliseconds_to_fast_forward_if_delayed: 400,

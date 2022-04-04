@@ -41,28 +41,28 @@ describe("BarcodeEditDialog.vue", () => {
       </p>
     `);
   });
-  test("Given that BarcodeEditDialog is mounted, When the BarcodeEditDialog is visible, Then click on 'Yes' results in an event 'yes-pb' to be emitted", async () => {
+  test("Given that BarcodeEditDialog is mounted, When the BarcodeEditDialog is visible, Then click on 'Yes' results in correct event being emitted", async () => {
     wrapper = mount(ComponentToTest, {
       localVue,
     });
 
-    const cancel_yes_btn = wrapper.findAll(".span__button_label");
-    await cancel_yes_btn.at(1).trigger("click");
+    const buttons = wrapper.findAll(".span__button_label");
+    await buttons.at(1).trigger("click");
     await wrapper.vm.$nextTick();
-    const yes_btn_events = wrapper.emitted("yes-plate-barcode");
-    expect(yes_btn_events).toHaveLength(1);
-    expect(yes_btn_events[0]).toStrictEqual([]);
+    const button_events = wrapper.emitted("manual-mode-choice");
+    expect(button_events).toHaveLength(1);
+    expect(button_events[0]).toStrictEqual([true]);
   });
-  test("Given that BarcodeEditDialog is mounted, When the BarcodeEditDialog is visible, Then click on 'Cancel' results in an event 'cancel-pb' to be emitted", async () => {
+  test("Given that BarcodeEditDialog is mounted, When the BarcodeEditDialog is visible, Then click on 'Cancel' results in correct event being emitted", async () => {
     wrapper = mount(ComponentToTest, {
       localVue,
     });
 
-    const cancel_yes_btn = wrapper.findAll(".span__button_label");
-    await cancel_yes_btn.at(0).trigger("click");
+    const buttons = wrapper.findAll(".span__button_label");
+    await buttons.at(0).trigger("click");
     await wrapper.vm.$nextTick();
-    const yes_btn_events = wrapper.emitted("cancel-plate-barcode");
-    expect(yes_btn_events).toHaveLength(1);
-    expect(yes_btn_events[0]).toStrictEqual([]);
+    const button_events = wrapper.emitted("manual-mode-choice");
+    expect(button_events).toHaveLength(1);
+    expect(button_events[0]).toStrictEqual([false]);
   });
 });
