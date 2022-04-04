@@ -2,7 +2,7 @@
   <div>
     <div
       class="div__simulationstudio-plate-well-location"
-      :style="'top:' + computed_top + 'px;' + 'left:' + computed_left + 'px;'"
+      :style="computed_style"
       @mouseenter="on_enter_well(index)"
       @mouseleave="on_leave_well(index)"
       @click.exact="on_click_exact(index)"
@@ -15,27 +15,38 @@
         :circle_x="38"
         :circle_y="35"
         :radius="26"
-        :strk="stroke"
+        :strk="disable ? 'red' : stroke"
         :plate_fill="protocol_fill"
-        :stroke_wdth="stroke_wdth"
+        :stroke_wdth="disable ? 4 : stroke_wdth"
         :index="index"
-      ></PlateWell>
-      <span :class="'span__simulationstudio-plate-well-protocol-location'">
+        :fill-opacity="fill_opacity"
+      />
+      <span class="span__simulationstudio-plate-well-protocol-location">
         {{ protocol_type }}
       </span>
+      <div
+        v-if="disable"
+        v-b-popover.hover.top="error_message"
+        :title="'Disabled'"
+        :class="'div__popover-overlay'"
+      />
     </div>
   </div>
 </template>
 <script>
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
+import Vue from "vue";
+import { VBPopover } from "bootstrap-vue";
+Vue.directive("b-popover", VBPopover);
 export default {
   name: "StimulationStudioPlateWell",
   components: {
     PlateWell,
   },
   props: {
+    disable: { type: Boolean, default: false },
     stroke: { type: String, default: "" },
-    protocol_fill: { type: String, default: "" },
+    protocol_fill: { type: String, default: "#B7B7B7" },
     stroke_wdth: { type: Number, default: 0 },
     index: {
       type: Number,
@@ -45,6 +56,7 @@ export default {
         return value >= 0 && value < 24;
       },
     },
+    error_message: { type: String, default: "Open circuit found" },
     protocol_type: { type: String, default: "" },
   },
   computed: {
@@ -71,6 +83,14 @@ export default {
     computed_left: function () {
       return 29 + Math.floor(this.index / 4) * 62;
     },
+    computed_style: function () {
+      return "top:" + this.computed_top + "px;" + "left:" + this.computed_left + "px;";
+    },
+    fill_opacity: function () {
+      if (this.disable) return 0.4;
+      else if (this.protocol_type) return 0.7;
+      else return 1;
+    },
   },
   methods: {
     on_enter_well(index) {
@@ -96,7 +116,6 @@ export default {
   width: 66px;
   height: 66px;
   visibility: visible;
-  /* z-index: 8; */
 }
 .span__simulationstudio-plate-well-protocol-location {
   line-height: 100%;
@@ -110,5 +129,12 @@ export default {
   font-family: Muli;
   color: rgb(255, 255, 255);
   cursor: pointer;
+}
+.div__popover-overlay {
+  height: 50px;
+  width: 50px;
+  left: 15px;
+  top: 10px;
+  position: absolute;
 }
 </style>

@@ -25,8 +25,7 @@ const default_state = {
   stim_fill_colors: {},
   stim_fill_assignments: [],
   last_protocol_flag: [],
-
-  stimulator_circuit_statuses: [],
+  stimulator_circuit_statuses: [2, 6, 10],
 };
 
 for (let i = 0; i < maximum_number_of_wells_in_any_plate; i++) {

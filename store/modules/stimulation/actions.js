@@ -208,6 +208,7 @@ export default {
     const message = { protocols: [], protocol_assignments: {} };
 
     const { protocol_assignments } = state;
+    const { stimulator_circuit_statuses } = this.state.data;
 
     const charge_conversion = { C: 1000, V: 1 };
 
@@ -218,7 +219,8 @@ export default {
 
     const unique_protocol_ids = new Set();
     for (const well in protocol_assignments) {
-      if (protocol_assignments !== {}) {
+      // remove open circuit wells
+      if (!stimulator_circuit_statuses.includes(Number(well))) {
         const { stimulation_type, pulses, stop_setting, detailed_pulses } = protocol_assignments[
           well
         ].protocol;
@@ -258,6 +260,7 @@ export default {
       }
     }
 
+    console.log(JSON.stringify(message));
     const message_url = `/set_stim_play_state?running=${status}`;
     const body = { data: JSON.stringify(message) };
     await call_axios_post_from_vuex(message_url, body);

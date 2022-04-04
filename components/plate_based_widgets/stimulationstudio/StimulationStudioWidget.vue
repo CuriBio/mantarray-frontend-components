@@ -49,12 +49,20 @@
         :stroke_wdth="stroke_width[well_index]"
         :protocol_fill="getProtocolColor(well_index)"
         :index="well_index"
+        :disable="stimulator_circuit_statuses.includes(well_index)"
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
         @click-shift-exact="basic_shift_select(well_index)"
       />
     </div>
+    <div v-if="disable" class="div__simulationstudio-disable-overlay" />
+    <div
+      v-if="short_circuit_error"
+      v-b-popover.hover.top="'Stimulation lid must be replaced. There was a short circuit error found.'"
+      title="Disabled"
+      class="div__simulationstudio-disable-overlay"
+    />
   </div>
 </template>
 
@@ -64,7 +72,11 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { mapState } from "vuex";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
+import Vue from "vue";
+import { VBPopover } from "bootstrap-vue";
 
+Vue.directive("b-popover", VBPopover);
 library.add(faMinusCircle);
 library.add(faPlusCircle);
 
@@ -80,6 +92,7 @@ export default {
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
   props: {
     number_of_wells: { type: Number, default: 24 },
+    disable: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -103,16 +116,22 @@ export default {
       hover_color: new Array(this.number_of_wells).fill(hover_color),
       stroke_width: new Array(this.number_of_wells).fill(no_stroke_width),
       protocol_assignments: {},
+      short_circuit_error: false,
     };
   },
   computed: {
     ...mapState("stimulation", {
       stored_protocol_assignments: "protocol_assignments",
+      stim_status: "stim_status",
     }),
+    ...mapState("data", ["stimulator_circuit_statuses"]),
   },
   watch: {
     all_select: function () {
       this.$store.dispatch("stimulation/handle_selected_wells", this.all_select);
+    },
+    stim_status: function (new_status) {
+      this.short_circuit_error = new_status == STIM_STATUS.SHORT_CIRCUIT_ERR;
     },
   },
   created() {
@@ -333,7 +352,6 @@ export default {
   position: absolute;
   width: 415px;
   height: 280px;
-
   visibility: visible;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
@@ -417,5 +435,11 @@ export default {
 .span__stimulationstudio-toggle-plus-minus-icon:hover {
   color: #ffffff;
   cursor: pointer;
+}
+.div__simulationstudio-disable-overlay {
+  opacity: 0;
+  height: 300px;
+  width: 415px;
+  z-index: 3;
 }
 </style>

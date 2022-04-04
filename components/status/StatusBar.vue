@@ -26,6 +26,21 @@
         />
       </b-modal>
       <b-modal
+        id="short-circuit-err"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
+        <StatusWarningWidget
+          id="short-circuit"
+          :modal_labels="short_circuit_labels"
+          @handle_confirmation="close_modals_by_id('short-circuit-err')"
+        />
+      </b-modal>
+      <b-modal
         id="fw-updates-in-progress-message"
         size="sm"
         hide-footer
@@ -77,6 +92,17 @@
       >
         <StatusWarningWidget id="ops-closure" @handle_confirmation="handle_confirmation" />
       </b-modal>
+      <b-modal
+        id="stim-qc-summary"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
+        <StimQCSummary id="stim-qc" @handle_confirmation="close_modals_by_id('stim-qc-summary')" />
+      </b-modal>
     </span>
   </div>
 </template>
@@ -91,6 +117,7 @@ import { BModal } from "bootstrap-vue";
 import ErrorCatchWidget from "@/components/status/ErrorCatchWidget.vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 import StatusSpinnerWidget from "@/components/status/StatusSpinnerWidget.vue";
+import StimQCSummary from "@/components/status/StimQCSummary.vue";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -106,6 +133,7 @@ export default {
     ErrorCatchWidget,
     StatusWarningWidget,
     StatusSpinnerWidget,
+    StimQCSummary,
   },
   props: {
     confirmation_request: {
@@ -223,7 +251,7 @@ export default {
           break;
         case STIM_STATUS.CONFIG_CHECK_COMPLETE:
           this.alert_txt = `Check complete`;
-          // TODO modal to show config check results
+          this.$bvModal.show("stim-qc-summary");
           break;
         case STIM_STATUS.READY:
           this.alert_txt = `Ready`;
@@ -233,7 +261,7 @@ export default {
           break;
         case STIM_STATUS.SHORT_CIRCUIT_ERR:
           this.alert_txt = `Short circuit error`;
-          // TODO modal to show fatal short circuit modal
+          this.$bvModal.show("short-circuit-err");
           break;
         default:
           this.alert_txt = STIM_STATUS.CALIBRATION_NEEDED;
@@ -331,6 +359,8 @@ export default {
       ) {
         this.$emit("send_confirmation", 0);
       }
+      if (ids.includes("stim-qc-summary"))
+        this.$store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
     },
     close_sw_update_modal: function () {
       this.$bvModal.hide("sw-update-message");
