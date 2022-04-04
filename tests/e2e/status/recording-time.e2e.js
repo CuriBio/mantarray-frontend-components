@@ -12,13 +12,15 @@ const mocked_all_mantarray_commands = RequestMock()
   .onRequestTo(all_mantarray_commands_regexp)
   .respond({}, 200, { "Access-Control-Allow-Origin": "*" });
 
-const mocked_static_system_status_states = RequestMock()
+const mocked_system_status = RequestMock()
   .onRequestTo(system_status_regexp)
   .respond((req, res) => {
     res.headers["Access-Control-Allow-Origin"] = "*";
     res.statusCode = 200;
 
+    console.log("###", req.url);
     const status_uuid = new url.URLSearchParams(url.parse(req.url)).get("current_vuex_status_uuid");
+    console.log("$$$", status_uuid);
     res.setBody(JSON.stringify({ ui_status_code: status_uuid }));
   });
 
@@ -48,7 +50,7 @@ fixture`status/recording-time/on-recording-init`
     // declare the fixture
     `http://localhost:8080/status/recording-time/on-recording-init`
   )
-  .requestHooks(mocked_all_mantarray_commands, mocked_static_system_status_states);
+  .requestHooks(mocked_all_mantarray_commands, mocked_system_status);
 
 test.requestHooks()("recording time text displays as 0", async (t) => {
   const screenshot_path = path.join(base_screenshot_path, "recording-time", "on-recording-init");
@@ -62,7 +64,7 @@ fixture`status/recording-time/on-recording-after-time-elapsed`
     // declare the fixture
     `http://localhost:8080/status/recording-time/on-recording-after-time-elapsed`
   )
-  .requestHooks(mocked_all_mantarray_commands, mocked_static_system_status_states);
+  .requestHooks(mocked_all_mantarray_commands, mocked_system_status);
 
 test.requestHooks()("recording time text contains numbers greater than 0", async (t) => {
   const screenshot_path = path.join(
