@@ -1,7 +1,7 @@
 <template>
   <div class="div__plate-barcode">
-    <span class="span__plate-barcode-text"
-      >Plate Barcode:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
+    <span class="span__plate-barcode-text" :style="dynamic_label_style"
+      >{{ barcode_label }}:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
     >
     <!-- original Mockflow ID: cmpDd0be63536ca605546f566539e51ad0c3-->
     <input
@@ -16,6 +16,7 @@
       spellcheck="false"
       onpaste="return false;"
       class="input__plate-barcode-entry"
+      :style="dynamic_entry_style"
       :class="[
         barcode_info.valid ? `input__plate-barcode-entry-valid` : `input__plate-barcode-entry-invalid`,
       ]"
@@ -69,6 +70,15 @@ export default {
     barcode_info: function () {
       return this.barcodes[this.barcode_type];
     },
+    barcode_label: function () {
+      return this.barcode_type == "plate_barcode" ? "Plate Barcode" : "Stim Lid Barcode";
+    },
+    dynamic_label_style: function () {
+      return this.barcode_type == "plate_barcode" ? "left: 17px;" : "left: 0px;";
+    },
+    dynamic_entry_style: function () {
+      return this.barcode_type == "plate_barcode" ? "width: 110px;" : "width: 105px;";
+    },
   },
   methods: {
     handle_manual_mode_choice(choice) {
@@ -116,7 +126,6 @@ export default {
   width: 278px;
   height: 23px;
   top: 2px;
-  left: 17px;
   padding: 5px;
   user-select: none;
   font-family: "Muli";
@@ -142,22 +151,17 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-align: left;
-
   line-height: 24px;
   font-style: normal;
   text-decoration: none;
   font-size: 15px;
-
   background-color: #000000;
-
   color: #b7b7b7;
   font-family: Anonymous Pro;
   font-weight: normal;
   box-shadow: none;
   border: none;
   position: absolute;
-
-  width: 110px;
   height: 24px;
   top: 3px;
   right: 27px;

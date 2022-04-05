@@ -1,5 +1,3 @@
-import { STIM_STATUS } from "./enums";
-
 export default {
   set_selected_wells(state, wells) {
     state.selected_wells = wells;
@@ -119,7 +117,6 @@ export default {
   },
   set_stim_play_state(state, bool) {
     state.stim_play_state = bool;
-    state.stim_status = bool ? STIM_STATUS.STIM_ACTIVE : STIM_STATUS.READY; // changes stimulation status component to reflect play state
   },
   set_stim_status(state, status) {
     state.stim_status = status;

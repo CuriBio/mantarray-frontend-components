@@ -11,14 +11,14 @@ import { STATUS } from "./enums";
  */
 export async function ping_system_status() {
   const params = { current_vuex_status_uuid: this.state.status_uuid };
+
   if (this.state.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
     const current_time_index = this.rootState.playback.x_time_index;
     params.currently_displayed_time_index = current_time_index;
   }
-  const url = "http://localhost:4567/system_status";
 
-  let result = 0;
-  result = await call_axios_get_from_vuex(url, this, params);
+  const url = "http://localhost:4567/system_status";
+  const result = await call_axios_get_from_vuex(url, this, params);
   if (result.status == 200) {
     const data = result.data;
     const status_uuid = data.ui_status_code;

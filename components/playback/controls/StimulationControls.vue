@@ -7,7 +7,6 @@
       :style="controls_block_block__dynamic_style"
     />
     <span class="span__additional-controls-header">Stimulation Controls</span>
-    <span class="span__stimulation-label">Stimulation</span>
     <div class="div__border-container">
       <svg class="svg__stimulation-active-button" height="20" width="20">
         <defs>
@@ -227,17 +226,7 @@ body {
   justify-items: center;
   padding: 5px;
 }
-.span__stimulation-label {
-  position: absolute;
-  color: rgb(255, 255, 255);
-  font-size: 9px;
-  background: black;
-  font-weight: lighter;
-  top: 26px;
-  z-index: 1;
-  left: 115px;
-  letter-spacing: 1px;
-}
+
 .span__stimulation-controls-play-stop-button--inactive {
   position: relative;
   color: #2f2f2f;

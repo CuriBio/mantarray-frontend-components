@@ -1,11 +1,11 @@
 <template>
   <!-- <StatusWarningWidget :email_error="true" :modal_labels="short_circuit_labels" /> -->
   <!-- <StatusWarningWidget id="upload-modal" :modal_labels="sw_update_labels" /> -->
-  <StatusWarningWidget id="upload-modal" :success_status="false" />
+  <StatusWarningWidget id="upload-modal" :success_status="true" :modal_labels="success_labels" />
 </template>
 <script>
-import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
-// import { StatusWarningWidget } from "@/dist/mantarray.common";
+// import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+import { StatusWarningWidget } from "@/dist/mantarray.common";
 
 export default {
   components: {
@@ -45,6 +45,12 @@ export default {
         msg_one: "A software update will be installed after exiting.",
         msg_two: "Please wait a few minutes before starting the software again.",
         button_names: ["Okay"],
+      },
+      calibration_modal_labels: {
+        header: "Warning!",
+        msg_one: "Please ensure no plate is present on device.",
+        msg_two: "Do you wish to continue?",
+        button_names: ["Cancel", "Yes"],
       },
     };
   },

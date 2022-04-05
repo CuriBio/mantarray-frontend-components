@@ -14,9 +14,8 @@ Vue.use(VueAxios, axios);
  * @return {Object} the result of the axios call
  */
 export async function call_axios_get_from_vuex(url, action_context, params = {}) {
-  let result = 0;
   try {
-    result = await Vue.axios.get(url, { params });
+    return await Vue.axios.get(url, { params });
   } catch (error) {
     // adapted from https://stackoverflow.com/questions/49967779/axios-handling-errors
     console.log(
@@ -58,7 +57,6 @@ export async function call_axios_get_from_vuex(url, action_context, params = {})
     }
     return;
   }
-  return result;
 }
 
 /**

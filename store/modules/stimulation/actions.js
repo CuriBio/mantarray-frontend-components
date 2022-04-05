@@ -261,17 +261,19 @@ export default {
     }
 
     console.log(JSON.stringify(message));
-    const message_url = `/set_stim_play_state?running=${status}`;
+    const message_url = `/set_protocols`;
     const body = { data: JSON.stringify(message) };
     await call_axios_post_from_vuex(message_url, body);
 
-    const status_url = `/set_stim_play_state?running=${status}`;
+    const status_url = `/set_stim_status?running=${status}`;
     await call_axios_post_from_vuex(status_url);
+    commit("set_stim_status", STIM_STATUS.STIM_ACTIVE);
   },
 
-  async stop_stimulation() {
-    const status_url = `/set_stim_play_state?running=${false}`;
+  async stop_stimulation({ commit }) {
+    const status_url = `/set_stim_status?running=${false}`;
     await call_axios_post_from_vuex(status_url);
+    commit("set_stim_status", STIM_STATUS.READY);
   },
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {

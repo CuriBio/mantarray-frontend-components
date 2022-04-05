@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="div__status-warning-background" :style="`height: ${modal_height}px;`">
+    <div class="div__status-warning-background" :style="`height: ${dynamic_modal_height}px;`">
       <span class="span__status-warning-label">{{ modal_labels.header }}</span>
       <div ref="message_area" class="span__status-warning-message">
         <p>{{ modal_labels.msg_one }}</p>
@@ -24,8 +24,7 @@
           :style="`height: ${textarea__dynamic_height}`"
         />
       </div>
-
-      <div class="div__status-warning-button" :style="`top: ${modal_height}px;`">
+      <div class="div__status-warning-button" :style="`top: ${dynamic_modal_height}px;`">
         <ButtonWidget
           :button_widget_width="420"
           :button_widget_height="50"
@@ -69,23 +68,21 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      modal_height: 80, // minimum height with just header and button component
-    };
-  },
   computed: {
     textarea__dynamic_height: function () {
-      return 25 + this.compute_number_of_rows * 12;
+      return this.compute_number_of_rows * 18 + 25;
     },
     compute_number_of_rows: function () {
       return Math.ceil(((this.modal_labels.msg_two.length * 1.0) / 40).toFixed(1));
     },
+    dynamic_modal_height: function () {
+      const msg_rows = Math.ceil(
+        ((this.modal_labels.msg_one.length + this.modal_labels.msg_two.length) / 50).toFixed(1)
+      );
+      return msg_rows * 18 + 115;
+    },
   },
-  mounted() {
-    // needs to go in mounted hook to calculate clientHeight
-    this.modal_height += this.$refs.message_area.clientHeight + this.$refs.textarea.clientHeight;
-  },
+
   methods: {
     handle_click: function (idx) {
       this.$emit("handle_confirmation", idx);

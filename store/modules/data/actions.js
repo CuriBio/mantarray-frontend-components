@@ -103,7 +103,6 @@ export default {
         if (status == "open") return idx;
       });
       commit("set_stimulator_circuit_statuses", filtered_statuses);
-
       // if no errors to report, go straight to stim ready status, else notify user of errors handled in StatusBar
       this.commit(
         "stimulation/set_stim_status",

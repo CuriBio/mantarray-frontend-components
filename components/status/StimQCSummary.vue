@@ -55,7 +55,6 @@ export default {
   mounted() {
     // needs to go in mounted hook to calculate clientHeight
     this.modal_height += this.$refs.message_area.clientHeight + 345;
-    console.log(this.modal_height);
   },
   methods: {
     handle_click: function (idx) {

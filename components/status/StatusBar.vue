@@ -407,6 +407,7 @@ export default {
   color: #ffffff;
   text-align: left;
   z-index: 101;
+  line-height: 1.1;
 }
 .modal-backdrop {
   background-color: rgb(0, 0, 0, 0.5);
