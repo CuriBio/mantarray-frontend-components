@@ -35,9 +35,14 @@ export async function ping_system_status() {
             { root: true }
           );
         } else if (status_uuid == STATUS.MESSAGE.CALIBRATED) {
-          this.dispatch("playback/transition_playback_state", PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED, {
-            root: true,
-          });
+          // awaiting to ensure playback state gets changed to this calibrated state before enabling stim controls
+          await this.dispatch(
+            "playback/transition_playback_state",
+            PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED,
+            {
+              root: true,
+            }
+          );
 
           this.commit("playback/set_enable_stim_controls", true, { root: true });
           this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED, { root: true });

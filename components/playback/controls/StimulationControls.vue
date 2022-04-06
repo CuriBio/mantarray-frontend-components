@@ -103,7 +103,8 @@ export default {
       active_gradient: ["#19ac8a", "#24524b"],
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
-      controls_block_label: "Stimulation Controls are disabled until device is Calibrated",
+      controls_block_label:
+        "Stimulation Controls are disabled until device is Calibrated and a valid Stimulation Lid Barcode is added",
     };
   },
   computed: {
