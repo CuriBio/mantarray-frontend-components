@@ -6,7 +6,8 @@ const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 export default {
   set_enable_stim_controls(state, new_value) {
     // only enable if stim barcode is valid too
-    if (new_value && state.barcodes.stim_barcode.valid) state.enable_stim_controls = new_value;
+    if (new_value && state.barcodes.stim_barcode.valid) state.enable_stim_controls = true;
+    else state.enable_stim_controls = false;
   },
   set_loop_playback(state, new_value) {
     state.loop_playback = new_value;

@@ -11,11 +11,11 @@
   </div>
 </template>
 <script>
-import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
+// import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
 import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
 import { mapMutations, mapActions } from "vuex";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
-// import { StimulationStudio } from "@/dist/mantarray.common";
+import { StimulationStudio } from "@/dist/mantarray.common";
 
 export default {
   components: {

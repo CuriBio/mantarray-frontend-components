@@ -320,9 +320,12 @@ export default {
   },
   async start_stim_configuration({ commit }) {
     const url = `/start_stimulator_checks`;
-    const error = await call_axios_post_from_vuex(url);
-
-    if (error) commit("stim_status", STIM_STATUS.ERROR);
-    else commit("stim_status", STIM_STATUS.CONFIGURATION_IN_PROGRESS);
+    await call_axios_post_from_vuex(url);
+    commit("set_stim_status", STIM_STATUS.CONFIGURATION_IN_PROGRESS);
+    setTimeout(() => {
+      commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
+    }, 5000);
+    // if (error) commit("set_stim_status", STIM_STATUS.ERROR);
+    // else commit("set_stim_status", STIM_STATUS.CONFIGURATION_IN_PROGRESS);
   },
 };

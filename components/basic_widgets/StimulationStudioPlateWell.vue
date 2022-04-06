@@ -15,21 +15,45 @@
         :circle_x="38"
         :circle_y="35"
         :radius="26"
-        :strk="disable ? 'red' : stroke"
+        :strk="disable ? 'none' : stroke"
         :plate_fill="protocol_fill"
-        :stroke_wdth="disable ? 4 : stroke_wdth"
+        :stroke_wdth="disable ? 0 : stroke_wdth"
         :index="index"
         :fill-opacity="fill_opacity"
       />
-      <span class="span__simulationstudio-plate-well-protocol-location">
+      <span v-if="!disable" class="span__simulationstudio-plate-well-protocol-location">
         {{ protocol_type }}
       </span>
-      <div
+      <svg
         v-if="disable"
         v-b-popover.hover.top="error_message"
         :title="'Disabled'"
-        :class="'div__popover-overlay'"
-      />
+        class="svg__open-circuit-container"
+        viewBox="0 0 77 77"
+      >
+        <path
+          class="svg__open-circuit"
+          d="M30.9,3.9a27,27,0,1,1-27,27,27,27,0,0,1,27-27m0-3.9A30.9,30.9,0,1,0,61.8,30.9,30.9,30.9,0,0,0,30.9,0Z"
+        />
+        <path
+          class="svg__open-circuit"
+          d="M17.3,28.8a2,2,0,0,1,2,2.1,2,2,0,0,1-2,2,2,2,0,0,1-2.1-2,2.1,2.1,0,0,1,2.1-2.1m0-4a6.1,6.1,0,1,0,6,6.1,6.1,6.1,0,0,0-6-6.1Z"
+        />
+        <path
+          class="svg__open-circuit"
+          d="M45.3,28.8a2,2,0,0,1,2,2.1,2,2,0,0,1-2,2,2,2,0,0,1-2.1-2,2.1,2.1,0,0,1,2.1-2.1m0-4a6.1,6.1,0,1,0,6,6.1,6.1,6.1,0,0,0-6-6.1Z"
+        />
+        <rect class="svg__open-circuit" x="3.5" y="28.9" width="8.3" height="4" />
+        <rect
+          class="svg__open-circuit"
+          x="18.3"
+          y="22.1"
+          width="19.3"
+          height="4"
+          transform="translate(-8.8 26.8) rotate(-45)"
+        />
+        <rect class="svg__open-circuit" x="50.5" y="28.9" width="8.3" height="4" />
+      </svg>
     </div>
   </div>
 </template>
@@ -87,7 +111,7 @@ export default {
       return "top:" + this.computed_top + "px;" + "left:" + this.computed_left + "px;";
     },
     fill_opacity: function () {
-      if (this.disable) return 0.4;
+      if (this.disable) return 0.3;
       else if (this.protocol_type) return 0.7;
       else return 1;
     },
@@ -136,5 +160,13 @@ export default {
   left: 15px;
   top: 10px;
   position: absolute;
+}
+.svg__open-circuit {
+  fill: rgb(228, 4, 4);
+}
+.svg__open-circuit-container {
+  position: relative;
+  bottom: 62px;
+  left: 12px;
 }
 </style>

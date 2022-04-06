@@ -15,4 +15,5 @@ export const STIM_STATUS = {
 
   // error
   SHORT_CIRCUIT_ERR: "Short circuit error",
+  ERROR: "Error",
 };

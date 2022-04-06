@@ -35,7 +35,12 @@
         </div>
       </span>
     </div>
-    <img class="img__waveform-icon" src="@/assets/img/waveform-icon.png" />
+    <svg class="svg__waveform-container" viewBox="0 0 62 62">
+      <path
+        class="svg__waveform-icon"
+        d="M30.4,0A30.4,30.4,0,1,0,60.7,30.4,30.4,30.4,0,0,0,30.4,0Zm20,42.1a.9.9,0,0,1-.9.9H11.3a.9.9,0,0,1-.9-.9V18.7a.9.9,0,0,1,.9-.9H49.5a.9.9,0,0,1,.9.9Zm-4.1-9.6H43.6a.9.9,0,0,0-.9.9V38H39.3V22a.9.9,0,0,0-.9-.9H32.7a.9.9,0,0,0-.8.9V32.5H29a.9.9,0,0,0-.9.9V38H24.7V22a.9.9,0,0,0-.8-.9H18.2a.9.9,0,0,0-.9.9V32.5H14.5a.9.9,0,1,0,0,1.8h3.7a.9.9,0,0,0,.9-.9V22.8H23V38.9a.9.9,0,0,0,.9.8H29a.9.9,0,0,0,.9-.8V34.3h2.8a.9.9,0,0,0,.9-.9V22.8h3.9V38.9a.9.9,0,0,0,.9.8h5.2a.9.9,0,0,0,.8-.8V34.3h1.9a.9.9,0,0,0,0-1.8Z"
+      />
+    </svg>
     <div
       v-b-popover.hover.bottom="configuration_message"
       title="Configuration Check"
@@ -50,6 +55,20 @@
         <FontAwesomeIcon :style="'fill: #ececed;'" :icon="['fa', 'spinner']" pulse />
       </span>
     </div>
+    <b-modal
+      id="open-circuit-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        :modal_labels="open_circuit_warning_labels"
+        @handle_confirmation="close_warning_modal"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -58,6 +77,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { mapState } from "vuex";
 import playback_module from "@/store/modules/playback";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 import {
   faPlayCircle as fa_play_circle,
   faStopCircle as fa_stop_circle,
@@ -101,6 +121,7 @@ export default {
   name: "StimulationControls",
   components: {
     FontAwesomeIcon,
+    StatusWarningWidget,
   },
   data() {
     return {
@@ -110,11 +131,19 @@ export default {
       current_gradient: ["#b7b7b7", "#858585"],
       controls_block_label:
         "Stimulation Controls are disabled until device is Calibrated and a valid Stimulation Lid Barcode has been added",
+      open_circuit_warning_labels: {
+        header: "Warning!",
+        msg_one: "Firmware updates have been successfully installed.",
+        msg_two:
+          "Please close the Mantarray software, power the Mantarray instrument off and on, then restart the Mantarray software.",
+        button_names: ["Cancel", "Continue"],
+      },
     };
   },
   computed: {
     ...mapState("stimulation", ["protocol_assignments", "stim_play_state", "stim_status"]),
     ...mapState("playback", ["playback_state", "enable_stim_controls", "barcodes"]),
+    ...mapState("data", ["stimulator_circuit_statuses"]),
     is_start_stop_button_enabled: function () {
       // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
       let is_enabled = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
@@ -123,7 +152,13 @@ export default {
         is_enabled =
           is_enabled &&
           Object.keys(this.protocol_assignments).length !== 0 &&
-          this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING;
+          this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING &&
+          ![
+            STIM_STATUS.ERROR,
+            STIM_STATUS.CONFIG_CHECK_NEEDED,
+            STIM_STATUS.CONFIG_CHECK_IN_PROGRESS,
+            STIM_STATUS.SHORT_CIRCUIT_ERR,
+          ].includes(this.stim_status);
       }
       return is_enabled;
     },
@@ -133,6 +168,10 @@ export default {
         this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
       ) {
         return "Configuration check needed";
+      }
+
+      if (this.stim_status == STIM_STATUS.ERROR) {
+        return "Error is preventing starting a stimulation";
       }
 
       if (Object.keys(this.protocol_assignments).length === 0) {
@@ -170,6 +209,7 @@ export default {
         return "Configuration check in progress";
       else if (this.stim_status == STIM_STATUS.STIM_ACTIVE)
         return "Cannot run a configuration check while stimulation is active";
+      else if (this.stim_status == STIM_STATUS.ERROR) return "Cannot run a configuration check";
       else return "Configuration check complete. Click to rerun.";
     },
     config_check_in_progress: function () {
@@ -185,14 +225,21 @@ export default {
   methods: {
     async handle_play_stop() {
       if (this.is_start_stop_button_enabled) {
-        const action = this.play_state ? "stop_stimulation" : "create_protocol_message";
-        this.$store.dispatch(`stimulation/${action}`);
+        if (this.play_state) this.$store.dispatch(`stimulation/stop_stimulation`);
+        else if (this.stimulator_circuit_statuses.length > 0) this.$bvModal.show("open-circuit-warning");
+        else this.$store.dispatch(`stimulation/create_protocol_message`);
       }
     },
     async start_stim_configuration() {
-      // TODO add in requirement to check is stim barcode is  valid
-      if (!this.stim_play_state && this.stim_status !== STIM_STATUS.CONFIGURATION_IN_PROGRESS)
+      if (
+        !this.play_state &&
+        ![STIM_STATUS.CONFIGURATION_IN_PROGRESS, STIM_STATUS.ERROR].includes(this.stim_status)
+      )
         this.$store.dispatch(`stimulation/start_stim_configuration`);
+    },
+    close_warning_modal(idx) {
+      this.$bvModal.hide("open-circuit-warning");
+      if (idx === 1) this.$store.dispatch(`stimulation/create_protocol_message`);
     },
   },
 };
@@ -290,7 +337,7 @@ body {
   position: absolute;
   font-size: 34px;
   right: 9px;
-  bottom: 2px;
+  bottom: 3px;
   width: 45px;
   color: #ffffff;
   padding-left: 5px;
@@ -304,5 +351,24 @@ body {
   top: 29px;
   height: 54px;
   left: 55px;
+}
+.svg__waveform-icon {
+  fill: #b7b7b7;
+}
+.svg__waveform-icon:hover {
+  fill: #ffffff;
+}
+.svg__waveform-container {
+  height: 44px;
+  top: 32px;
+  right: 4px;
+  position: relative;
+}
+#open-circuit-warning {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
 }
 </style>

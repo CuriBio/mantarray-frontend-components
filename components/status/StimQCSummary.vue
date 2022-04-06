@@ -41,16 +41,11 @@ export default {
         return {
           header: "Configuration Check Summary",
           msg_one: "An open circuit error has been found in the wells shown below.",
-          msg_two: "Please replace stimulation lid or continue without stimulating these wells.",
-          button_names: ["Continue"],
+          msg_two: "Please replace the stimulation lid or continue without these wells.",
+          button_names: ["Okay"],
         };
       },
     },
-  },
-  data() {
-    return {
-      modal_height: 415,
-    };
   },
   methods: {
     handle_click: function (idx) {
@@ -67,6 +62,7 @@ export default {
   width: 600px;
   top: 0;
   left: 0;
+  height: 520px;
   visibility: visible;
   color: #1c1c1c;
   border-color: #000000;
@@ -118,5 +114,6 @@ export default {
 .div__stimqc-button-container {
   left: 0px;
   position: absolute;
+  top: 520px;
 }
 </style>

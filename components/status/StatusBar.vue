@@ -420,7 +420,10 @@ export default {
 #add-customer,
 #edit-customer,
 #add-user,
-#edit-user {
+#edit-user,
+#short-circuit-err,
+#success-qc-check,
+#failed-qc-check {
   position: fixed;
   margin: 5% auto;
   top: 15%;
