@@ -4,6 +4,7 @@
     <div
       v-if="!enable_stim_controls"
       v-b-popover.hover.bottom="controls_block_label"
+      title="Stimulation Controls"
       class="div__controls-block"
     />
     <span class="span__additional-controls-header">Stimulation Controls</span>
@@ -35,16 +36,20 @@
       </span>
     </div>
     <img class="img__waveform-icon" src="@/assets/img/waveform-icon.png" />
-    <img
+    <div
       v-b-popover.hover.bottom="configuration_message"
-      class="img__temp-icon"
       title="Configuration Check"
-      src="@/assets/img/temp-controls-icon.png"
-      @click="start_stim_configuration"
-    />
-    <span v-show="stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS" class="img__temp-icon">
-      <FontAwesomeIcon :icon="['fa', 'spinner']" pulse />
-    </span>
+      class="div__temp-icon-container"
+    >
+      <img
+        src="@/assets/img/temp-controls-icon.png"
+        class="img__temp-icon"
+        @click="start_stim_configuration"
+      />
+      <span v-show="config_check_in_progress" class="span__spinner">
+        <FontAwesomeIcon :style="'fill: #ececed;'" :icon="['fa', 'spinner']" pulse />
+      </span>
+    </div>
   </div>
 </template>
 <script>
@@ -104,7 +109,7 @@ export default {
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
       controls_block_label:
-        "Stimulation Controls are disabled until device is Calibrated and a valid Stimulation Lid Barcode is added",
+        "Stimulation Controls are disabled until device is Calibrated and a valid Stimulation Lid Barcode has been added",
     };
   },
   computed: {
@@ -166,6 +171,9 @@ export default {
       else if (this.stim_status == STIM_STATUS.STIM_ACTIVE)
         return "Cannot run a configuration check while stimulation is active";
       else return "Configuration check complete. Click to rerun.";
+    },
+    config_check_in_progress: function () {
+      return this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS;
     },
   },
   watch: {
@@ -265,10 +273,8 @@ body {
 }
 .img__temp-icon {
   cursor: pointer;
-  position: absolute;
-  top: 29px;
-  height: 54px;
-  left: 55px;
+  position: relative;
+  height: 55px;
 }
 .img__waveform-icon {
   position: absolute;
@@ -279,5 +285,24 @@ body {
 .fontawesome_icon_class {
   height: 20px;
   width: 20px;
+}
+.span__spinner {
+  position: absolute;
+  font-size: 34px;
+  right: 9px;
+  bottom: 2px;
+  width: 45px;
+  color: #ffffff;
+  padding-left: 5px;
+  background-color: black;
+  opacity: 0.9;
+}
+
+.div__temp-icon-container {
+  cursor: pointer;
+  position: absolute;
+  top: 29px;
+  height: 54px;
+  left: 55px;
 }
 </style>

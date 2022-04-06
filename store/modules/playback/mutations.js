@@ -46,7 +46,6 @@ export default {
     const is_valid = result == "";
     state.barcodes[type].value = new_value;
     state.barcodes[type].valid = is_valid;
-
     // enable controls only if vaid barcode and device is not in need calibration state
     state.enable_stim_controls =
       type == "stim_barcode" &&

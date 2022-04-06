@@ -34,4 +34,5 @@ export default {
   mutations,
   getters,
   actions,
+  STIM_STATUS,
 };

@@ -25,6 +25,7 @@ export { default as stimulation_store_module } from "./store/modules/stimulation
 export { default as heatmap_store_module } from "./store/modules/heatmap";
 export { default as gradient_store_module } from "./store/modules/gradient";
 export { TWITCH as DATA_ENUMS } from "./store/modules/data/enums";
+export { STIM_STATUS } from "./store/modules/stimulation/enums";
 export { ENUMS as PLAYBACK_ENUMS } from "./store/modules/playback/enums";
 export { STATUS as FLASK_STATUS_ENUMS } from "./store/modules/flask/enums";
 export { METRIC_UNITS as HEATMAP_METRIC_UNITS } from "./store/modules/heatmap/enums";
@@ -73,7 +74,6 @@ export { default as RecordingTime } from "./components/status/RecordingTime.vue"
 export { default as SimulationMode } from "./components/status/SimulationMode.vue";
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
-export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
 export { default as GradientBar } from "./components/status/GradientBar.vue";
 export { default as StatusWarningWidget } from "./components/status/StatusWarningWidget.vue";
 export { default as StatusSpinnerWidget } from "./components/status/StatusSpinnerWidget.vue";

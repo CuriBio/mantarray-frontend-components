@@ -48,11 +48,13 @@ export default {
   async start_recording(context) {
     const time_index = this.state.playback.x_time_index;
     const plate_barcode = this.state.playback.barcodes.plate_barcode.value;
+    const stim_barcode = this.state.playback.barcodes.stim_barcode.value;
     const url = "http://localhost:4567/start_recording";
     const params = {
-      time_index: time_index,
-      plate_barcode: plate_barcode,
+      time_index,
+      plate_barcode,
       is_hardware_test_recording: false,
+      stim_barcode,
     };
     context.commit("set_recording_start_time", time_index);
     await call_axios_get_from_vuex(url, context, params);

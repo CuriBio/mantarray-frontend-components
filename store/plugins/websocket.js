@@ -55,7 +55,15 @@ export default function create_web_socket_plugin(socket) {
         const message = JSON.parse(message_json);
         for (const barcode_type in store.state.playback.barcodes)
           if (message[barcode_type])
-            store.commit("playback/set_barcode", { type: barcode_type, new_value: message[barcode_type] });
+            store.commit("playback/set_barcode", {
+              type: barcode_type,
+              new_value: message[barcode_type],
+            });
+
+        store.commit("playback/set_barcode", {
+          type: "stim_barcode",
+          new_value: "MS2022001000", // REMOVE
+        });
       }
 
       /* istanbul ignore else */
