@@ -422,11 +422,17 @@ export default {
 #add-user,
 #edit-user,
 #short-circuit-err,
-#success-qc-check,
-#failed-qc-check {
+#success-qc-check {
   position: fixed;
   margin: 5% auto;
   top: 15%;
+  left: 0;
+  right: 0;
+}
+#failed-qc-check {
+  position: fixed;
+  margin: 5% auto;
+  top: 10%;
   left: 0;
   right: 0;
 }

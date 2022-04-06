@@ -260,7 +260,6 @@ export default {
       }
     }
 
-    console.log(JSON.stringify(message));
     const message_url = `/set_protocols`;
     const body = { data: JSON.stringify(message) };
     await call_axios_post_from_vuex(message_url, body);
@@ -320,12 +319,15 @@ export default {
   },
   async start_stim_configuration({ commit }) {
     const url = `/start_stimulator_checks`;
-    await call_axios_post_from_vuex(url);
-    commit("set_stim_status", STIM_STATUS.CONFIGURATION_IN_PROGRESS);
-    setTimeout(() => {
-      commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
-    }, 5000);
-    // if (error) commit("set_stim_status", STIM_STATUS.ERROR);
-    // else commit("set_stim_status", STIM_STATUS.CONFIGURATION_IN_PROGRESS);
+    const error = await call_axios_post_from_vuex(url);
+    // if (error) {
+    //   commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
+    //   setTimeout(() => {
+    //     this.commit("data/set_stimulator_circuit_statuses", [2, 4, 6]);
+    //     commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
+    //   }, 5000);
+    // }
+    if (error) commit("set_stim_status", STIM_STATUS.ERROR);
+    else commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
   },
 };

@@ -69,6 +69,17 @@
         @handle_confirmation="close_warning_modal"
       />
     </b-modal>
+    <b-modal
+      id="stim-24hr-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget :modal_labels="timer_warning_labels" @handle_confirmation="close_timer_modal" />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -133,11 +144,19 @@ export default {
         "Stimulation Controls are disabled until device is Calibrated and a valid Stimulation Lid Barcode has been added",
       open_circuit_warning_labels: {
         header: "Warning!",
-        msg_one: "Firmware updates have been successfully installed.",
-        msg_two:
-          "Please close the Mantarray software, power the Mantarray instrument off and on, then restart the Mantarray software.",
+        msg_one:
+          "You are about to start a stimulation with disabled wells due to errors found in the configuration check.",
+        msg_two: "Please confirm to continue, otherwise replace stimulation lid and try again.",
         button_names: ["Cancel", "Continue"],
       },
+      timer_warning_labels: {
+        header: "Warning!",
+        msg_one: "You have been running a stimulation for 24 hours.",
+        msg_two:
+          "We strongly recommend stopping the stimulation and running another configuration check to ensure the integrity of the stimulation.",
+        button_names: ["Continue Anyway", "Stop Stimulation"],
+      },
+      stim_24hr_timer: null,
     };
   },
   computed: {
@@ -225,26 +244,46 @@ export default {
   methods: {
     async handle_play_stop() {
       if (this.is_start_stop_button_enabled) {
-        if (this.play_state) this.$store.dispatch(`stimulation/stop_stimulation`);
-        else if (this.stimulator_circuit_statuses.length > 0) this.$bvModal.show("open-circuit-warning");
-        else this.$store.dispatch(`stimulation/create_protocol_message`);
+        if (this.play_state) {
+          this.$store.dispatch(`stimulation/stop_stimulation`);
+          clearTimeout(this.stim_24hr_timer); // clear 24 hour timer for next stimulation
+        } else if (this.stimulator_circuit_statuses.length > 0) this.$bvModal.show("open-circuit-warning");
+        else {
+          await this.$store.dispatch(`stimulation/create_protocol_message`);
+          this.start_24hr_timer();
+        }
       }
     },
     async start_stim_configuration() {
       if (
         !this.play_state &&
-        ![STIM_STATUS.CONFIGURATION_IN_PROGRESS, STIM_STATUS.ERROR].includes(this.stim_status)
+        ![STIM_STATUS.CONFIG_CHECK_IN_PROGRESS, STIM_STATUS.ERROR].includes(this.stim_status)
       )
         this.$store.dispatch(`stimulation/start_stim_configuration`);
     },
-    close_warning_modal(idx) {
+    async close_warning_modal(idx) {
       this.$bvModal.hide("open-circuit-warning");
-      if (idx === 1) this.$store.dispatch(`stimulation/create_protocol_message`);
+      if (idx === 1) {
+        await this.$store.dispatch(`stimulation/create_protocol_message`);
+        this.start_24hr_timer();
+      }
+    },
+    async close_timer_modal(idx) {
+      this.$bvModal.hide("stim-24hr-warning");
+      if (idx === 1) {
+        await this.$store.dispatch(`stimulation/stop_stimulation`);
+        clearTimeout(this.start_24hr_timer);
+      } else this.start_24hr_timer(); // start new timer
+    },
+    async start_24hr_timer() {
+      this.stim_24hr_timer = setTimeout(() => {
+        this.$bvModal.show("stim-24hr-warning");
+      }, 24 * 60 * 60e3);
     },
   },
 };
 </script>
-<style scoped>
+<style>
 body {
   user-select: none;
 }
@@ -364,7 +403,8 @@ body {
   right: 4px;
   position: relative;
 }
-#open-circuit-warning {
+#open-circuit-warning,
+#stim-24hr-warning {
   position: fixed;
   margin: 5% auto;
   top: 15%;
