@@ -22,7 +22,7 @@
         <StatusWarningWidget
           id="fw-updates-complete"
           :modal_labels="fw_updates_complete_labels"
-          @handle_confirmation="close_modals_by_id('fw-updates-complete-messages')"
+          @handle_confirmation="close_modals_by_id(['fw-updates-complete-messages'])"
         />
       </b-modal>
       <b-modal
@@ -37,7 +37,7 @@
         <StatusWarningWidget
           id="short-circuit"
           :modal_labels="short_circuit_labels"
-          @handle_confirmation="close_modals_by_id('short-circuit-err')"
+          @handle_confirmation="close_modals_by_id(['short-circuit-err'])"
         />
       </b-modal>
       <b-modal
@@ -101,7 +101,7 @@
         :static="true"
         :no-close-on-backdrop="true"
       >
-        <StimQCSummary id="stim-qc" @handle_confirmation="close_modals_by_id('stim-qc-summary')" />
+        <StimQCSummary id="stim-qc" @handle_confirmation="close_modals_by_id(['stim-qc-summary'])" />
       </b-modal>
     </span>
   </div>
@@ -227,10 +227,6 @@ export default {
         this.status_uuid === STATUS.MESSAGE.INSTALLING_UPDATES;
 
       if (this.confirmation_request && !this.stim_specific) {
-        console.log("Sensitive ops in progress during user closure request:");
-        console.log(`Firmware update in progress: ${fw_update_in_progress}`);
-        console.log(`Other: ${sensitive_ops_in_progress}`);
-
         if (fw_update_in_progress) this.$bvModal.show("fw-closure-warning");
         else if (sensitive_ops_in_progress) this.$bvModal.show("ops-closure-warning");
         else this.handle_confirmation(1);
