@@ -34,7 +34,7 @@ describe("store/stimulation", () => {
 
     describe("Given additional controls are disabled", () => {
       beforeEach(() => {
-        store.commit("playback/set_enable_additional_controls", false);
+        store.commit("playback/set_enable_stim_controls", false);
       });
 
       test("Then controls block should be displayed", () => {
@@ -49,7 +49,7 @@ describe("store/stimulation", () => {
 
     describe("Given additional controls are enabled", () => {
       beforeEach(() => {
-        store.commit("playback/set_enable_additional_controls", true);
+        store.commit("playback/set_enable_stim_controls", true);
       });
 
       test("Then controls block should not be displayed", () => {

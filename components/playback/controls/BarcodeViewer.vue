@@ -32,7 +32,10 @@
     </div>
     <!--</div>-->
     <b-modal id="edit-plate-barcode-modal" size="sm" hide-footer hide-header hide-header-close>
-      <BarcodeEditDialog @manual-mode-choice="handle_manual_mode_choice"></BarcodeEditDialog>
+      <StatusWarningWidget
+        :modal_labels="barcode_manual_labels"
+        @handle_confirmation="handle_manual_mode_choice"
+      />
     </b-modal>
   </div>
 </template>
@@ -42,7 +45,7 @@ import playback_module from "@/store/modules/playback";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import BarcodeEditDialog from "@/components/status/BarcodeEditDialog.vue";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 
 library.add(faPencilAlt);
 /**
@@ -51,10 +54,10 @@ library.add(faPencilAlt);
  * @vue-event {String} set_barcode_manually - User entered String parser
  */
 export default {
-  name: "PlateBarcode", // TODO rename this component
+  name: "BarcodeViewer",
   components: {
     FontAwesomeIcon,
-    BarcodeEditDialog,
+    StatusWarningWidget,
   },
   props: {
     barcode_type: { type: String, default: "plate_barcode" },
@@ -62,6 +65,13 @@ export default {
   data() {
     return {
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
+      barcode_manual_labels: {
+        header: "Warning!",
+        msg_one: "Do you want to enable manual barcode editing?",
+        msg_two:
+          "Once enabled, all barcodes must be entered manually. This should only be done if the barcode scanner is malfunctioning. Scanning cannot be re-enabled until software is restarted.",
+        button_names: ["Cancel", "Yes"],
+      },
     };
   },
   computed: {
@@ -82,9 +92,11 @@ export default {
   },
   methods: {
     handle_manual_mode_choice(choice) {
+      const bool_choice = Boolean(choice);
       this.$bvModal.hide("edit-plate-barcode-modal");
-      this.$store.commit("flask/set_barcode_manual_mode", choice);
-      if (choice) this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: null });
+      this.$store.commit("flask/set_barcode_manual_mode", bool_choice);
+      if (bool_choice)
+        this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: null });
     },
     set_barcode_manually: function (event) {
       this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: event.target.value });

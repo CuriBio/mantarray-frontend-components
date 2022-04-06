@@ -41,7 +41,7 @@ export { default as YAxisControls } from "./components/playback/controls/YAxisCo
 export { default as YAxisControlsSettings } from "./components/playback/controls/YAxisControlsSettings.vue";
 export { default as DesktopPlayerControls } from "./components/playback/controls/player/DesktopPlayerControls.vue";
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
-export { default as PlateBarcode } from "./components/playback/controls/PlateBarcode.vue";
+export { default as BarcodeViewer } from "./components/playback/controls/BarcodeViewer.vue";
 export { default as StimulationControls } from "./components/playback/controls/StimulationControls.vue";
 
 // Settings Components

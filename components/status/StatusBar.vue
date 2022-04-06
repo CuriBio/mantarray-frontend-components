@@ -4,7 +4,6 @@
     <span>
       <b-modal id="error-catch" size="sm" hide-footer hide-header hide-header-close :static="true">
         <ErrorCatchWidget
-          id="error"
           :log_filepath="log_path"
           :shutdown_error_message="shutdown_error_message"
           @ok-clicked="close_modals_by_id(['error-catch'])"
@@ -20,7 +19,6 @@
         :no-close-on-backdrop="true"
       >
         <StatusWarningWidget
-          id="fw-updates-complete"
           :modal_labels="fw_updates_complete_labels"
           @handle_confirmation="close_modals_by_id(['fw-updates-complete-messages'])"
         />
@@ -35,7 +33,6 @@
         :no-close-on-backdrop="true"
       >
         <StatusWarningWidget
-          id="short-circuit"
           :modal_labels="short_circuit_labels"
           @handle_confirmation="close_modals_by_id(['short-circuit-err'])"
         />
@@ -49,7 +46,7 @@
         :static="true"
         :no-close-on-backdrop="true"
       >
-        <StatusSpinnerWidget id="fw-updates-in-progress" :modal_labels="fw_update_in_progress_labels" />
+        <StatusSpinnerWidget :modal_labels="fw_update_in_progress_labels" />
       </b-modal>
       <b-modal
         id="sw-update-message"
@@ -60,11 +57,7 @@
         :static="true"
         :no-close-on-backdrop="true"
       >
-        <StatusWarningWidget
-          id="sw-update"
-          :modal_labels="sw_update_labels"
-          @handle_confirmation="close_sw_update_modal"
-        />
+        <StatusWarningWidget :modal_labels="sw_update_labels" @handle_confirmation="close_sw_update_modal" />
       </b-modal>
       <b-modal
         id="fw-closure-warning"
@@ -76,7 +69,6 @@
         :no-close-on-backdrop="true"
       >
         <StatusWarningWidget
-          id="fw-closure"
           :modal_labels="fw_closure_warning_labels"
           @handle_confirmation="handle_confirmation"
         />
@@ -90,10 +82,10 @@
         :static="true"
         :no-close-on-backdrop="true"
       >
-        <StatusWarningWidget id="ops-closure" @handle_confirmation="handle_confirmation" />
+        <StatusWarningWidget @handle_confirmation="handle_confirmation" />
       </b-modal>
       <b-modal
-        id="stim-qc-summary"
+        id="failed-qc-check"
         size="sm"
         hide-footer
         hide-header
@@ -101,7 +93,21 @@
         :static="true"
         :no-close-on-backdrop="true"
       >
-        <StimQCSummary id="stim-qc" @handle_confirmation="close_modals_by_id(['stim-qc-summary'])" />
+        <StimQCSummary @handle_confirmation="close_modals_by_id(['failed-qc-check'])" />
+      </b-modal>
+      <b-modal
+        id="success-qc-check"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
+        <StatusWarningWidget
+          :modal_labels="successful_qc_check_labels"
+          @handle_confirmation="close_modals_by_id(['success-qc-check'])"
+        />
       </b-modal>
     </span>
   </div>
@@ -170,8 +176,14 @@ export default {
       },
       short_circuit_labels: {
         header: "Error!",
-        msg_one: "A short circuit error has been found during the configuration check.",
-        msg_two: "Please replace stimulation lid and contact ",
+        msg_one: "A short circuit has been found during the configuration check.",
+        msg_two: "Please replace stimulation lid. If issue persists, please contact ",
+        button_names: ["Okay"],
+      },
+      successful_qc_check_labels: {
+        header: "Configuration Check Complete!",
+        msg_one: "No errors were found in the stimulation lid during the check.",
+        msg_two: "You can now run a stimulation.",
         button_names: ["Okay"],
       },
     };
@@ -181,6 +193,7 @@ export default {
       status_uuid: "flask/status_id",
     }),
     ...mapState("stimulation", ["stim_play_state", "stim_status"]),
+    ...mapState("data", ["stimulator_circuit_statuses"]),
     ...mapState("settings", [
       "log_path",
       "shutdown_error_message",
@@ -234,35 +247,18 @@ export default {
     },
   },
   created() {
-    this.stim_specific ? this.set_stim_specific_status() : this.set_system_specific_status();
+    this.stim_specific ? this.set_stim_specific_status(this.stim_status) : this.set_system_specific_status();
   },
   methods: {
     set_stim_specific_status: function (status) {
-      switch (status) {
-        case STIM_STATUS.CONFIG_CHECK_NEEDED:
-          this.alert_txt = `Configuration check needed`;
-          break;
-        case STIM_STATUS.CONFIG_CHECK_IN_PROGRESS:
-          this.alert_txt = `Configuration check in progress...`;
-          break;
-        case STIM_STATUS.CONFIG_CHECK_COMPLETE:
-          this.alert_txt = `Check complete`;
-          this.$bvModal.show("stim-qc-summary");
-          break;
-        case STIM_STATUS.READY:
-          this.alert_txt = `Ready`;
-          break;
-        case STIM_STATUS.STIM_ACTIVE:
-          this.alert_txt = `Stimulating...`;
-          break;
-        case STIM_STATUS.SHORT_CIRCUIT_ERR:
-          this.alert_txt = `Short circuit error`;
-          this.$bvModal.show("short-circuit-err");
-          break;
-        default:
-          this.alert_txt = STIM_STATUS.CALIBRATION_NEEDED;
-          break;
-      }
+      this.alert_txt = status;
+
+      if (status === STIM_STATUS.CONFIG_CHECK_COMPLETE)
+        this.stimulator_circuit_statuses.length > 0
+          ? this.$bvModal.show("failed-qc-check")
+          : this.$bvModal.show("success-qc-check");
+
+      if (status === STIM_STATUS.SHORT_CIRCUIT_ERR) this.$bvModal.show("short-circuit-err");
     },
     set_system_specific_status: function (status) {
       switch (status) {
@@ -355,7 +351,7 @@ export default {
       ) {
         this.$emit("send_confirmation", 0);
       }
-      if (ids.includes("stim-qc-summary"))
+      if (ids.includes("failed-qc-check") || ids.includes("success-qc-check"))
         this.$store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
     },
     close_sw_update_modal: function () {

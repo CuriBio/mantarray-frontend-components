@@ -23,7 +23,7 @@ export default {
   methods: {
     ...mapMutations("stimulation", ["set_new_protocol", "reset_state"]),
     ...mapActions("stimulation", ["create_protocol_message"]),
-    ...mapMutations("playback", ["set_enable_additional_controls"]),
+    ...mapMutations("playback", ["set_enable_stim_controls"]),
     async update_protocol_list() {
       const test_protocol = {
         label: "mock_protocol",
@@ -179,7 +179,7 @@ export default {
       this.create_protocol_message();
     },
     enable_controls() {
-      this.set_enable_additional_controls(true);
+      this.set_enable_stim_controls(true);
     },
   },
 };

@@ -103,7 +103,7 @@ describe("store/flask", () => {
       );
 
       // Also make sure additional controls are enabled
-      expect(commit_spy).toHaveBeenCalledWith("playback/set_enable_additional_controls", true, {
+      expect(commit_spy).toHaveBeenCalledWith("playback/set_enable_stim_controls", true, {
         root: true,
       });
     });

@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     ...mapMutations("stimulation", ["set_stim_play_state"]),
-    ...mapMutations("playback", ["set_enable_additional_controls"]),
+    ...mapMutations("playback", ["set_enable_stim_controls"]),
     update_protocol_assignment() {
       const test_assignment = {
         A2: {
@@ -80,7 +80,7 @@ export default {
       this.$store.state.stimulation.protocol_assignments = test_assignment;
     },
     enable_controls() {
-      this.set_enable_additional_controls(true);
+      this.set_enable_stim_controls(true);
     },
   },
 };

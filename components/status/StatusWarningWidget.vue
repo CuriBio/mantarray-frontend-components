@@ -79,7 +79,7 @@ export default {
       const msg_rows = Math.ceil(
         ((this.modal_labels.msg_one.length + this.modal_labels.msg_two.length) / 50).toFixed(1)
       );
-      return msg_rows * 18 + 115;
+      return msg_rows * 18 + 105;
     },
   },
 

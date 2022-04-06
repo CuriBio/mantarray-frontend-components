@@ -41,7 +41,7 @@ export default {
         return {
           header: "Configuration Check Summary",
           msg_one: "An open circuit error has been found in the wells shown below.",
-          msg_two: "They will be disabled.",
+          msg_two: "Please replace stimulation lid or continue without stimulating these wells.",
           button_names: ["Continue"],
         };
       },
@@ -49,12 +49,8 @@ export default {
   },
   data() {
     return {
-      modal_height: 80, // minimum height with just header and button component
+      modal_height: 415,
     };
-  },
-  mounted() {
-    // needs to go in mounted hook to calculate clientHeight
-    this.modal_height += this.$refs.message_area.clientHeight + 345;
   },
   methods: {
     handle_click: function (idx) {
