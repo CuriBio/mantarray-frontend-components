@@ -140,8 +140,7 @@ export default {
       active_gradient: ["#19ac8a", "#24524b"],
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
-      controls_block_label:
-        "Stimulation Controls are disabled until device is Calibrated and a valid Stimulation Lid Barcode has been added",
+      controls_block_label: "Stimulation Controls are disabled until device is Calibrated",
       open_circuit_warning_labels: {
         header: "Warning!",
         msg_one:
@@ -223,6 +222,7 @@ export default {
     },
     configuration_message: function () {
       // TODO needs to add error status codes
+      if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
       if (this.stim_status == STIM_STATUS.CONFIG_CHECK_NEEDED) return "Start configuration check";
       else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS)
         return "Configuration check in progress";
@@ -257,7 +257,8 @@ export default {
     async start_stim_configuration() {
       if (
         !this.play_state &&
-        ![STIM_STATUS.CONFIG_CHECK_IN_PROGRESS, STIM_STATUS.ERROR].includes(this.stim_status)
+        ![STIM_STATUS.CONFIG_CHECK_IN_PROGRESS, STIM_STATUS.ERROR].includes(this.stim_status) &&
+        this.barcodes.stim_barcode.valid
       )
         this.$store.dispatch(`stimulation/start_stim_configuration`);
     },
