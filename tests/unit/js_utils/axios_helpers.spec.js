@@ -6,11 +6,7 @@ import { createLocalVue } from "@vue/test-utils";
 import { STATUS } from "@/store/modules/flask/enums";
 
 import { all_mantarray_commands_regexp, system_status_regexp } from "@/store/modules/flask/url_regex";
-import {
-  call_axios_get_from_vuex,
-  call_axios_post_from_vuex,
-  call_axios_post_from_vuex,
-} from "@/js_utils/axios_helpers.js";
+import { call_axios_get_from_vuex, call_axios_post_from_vuex } from "@/js_utils/axios_helpers.js";
 const sandbox = sinon.createSandbox();
 let log_spy;
 describe("axios_helper.call_axios_get_from_vuex", () => {
@@ -211,32 +207,40 @@ describe("axios_helper.stim_studio", () => {
 
   test("Given axios is mocked to return status code 500 when posting new protocol message, When the function is called, Then it returns the status code of the axios request and logs", async () => {
     const whole_url = "http://localhost:4567/set_protocols";
+    const endpoint = "/set_protocols";
+
     const status_code = 500;
     mocked_axios.onPost(whole_url).reply(status_code);
-    const error = await call_axios_post_from_vuex(sample_message);
+    const error = await call_axios_post_from_vuex(endpoint, sample_message);
     expect(error).toBe(status_code);
   });
 
   test("Given axios is mocked to return status code 200 when posting new protocol message, When the function is called, Then it returns the status code of the axios request and logs", async () => {
     const whole_url = "http://localhost:4567/set_protocols";
+    const endpoint = "/set_protocols";
+
     const status_code = 200;
     mocked_axios.onPost(whole_url).reply(status_code);
-    const response = await call_axios_post_from_vuex(sample_message);
+    const response = await call_axios_post_from_vuex(endpoint, sample_message);
     expect(response).toBeUndefined();
   });
 
   test("Given axios is mocked to return status code 500 when posting stimulation status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
     const whole_url = "http://localhost:4567/set_stim_play_state?running=true";
+    const endpoint = "/set_stim_play_state?running=true";
+
     const status_code = 500;
     mocked_axios.onPost(whole_url).reply(status_code);
-    const error = await call_axios_post_from_vuex(true);
+    const error = await call_axios_post_from_vuex(endpoint);
     expect(error).toBe(status_code);
   });
   test("Given axios is mocked to return status code 200 when posting stimulation status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
     const whole_url = "http://localhost:4567/set_stim_play_state?running=false";
+    const endpoint = "/set_stim_play_state?running=false";
+
     const status_code = 200;
     mocked_axios.onPost(whole_url).reply(status_code);
-    const response = await call_axios_post_from_vuex(false);
+    const response = await call_axios_post_from_vuex(endpoint);
     expect(response).toBeUndefined();
   });
 });

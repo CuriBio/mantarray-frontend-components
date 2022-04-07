@@ -7,7 +7,7 @@
         <p v-show="!success_status">
           {{ modal_labels.msg_two }}
           <a
-            v-show="email_error"
+            v-if="email_error"
             id="error_contact"
             href="mailto:contact@curibio.com ? subject = Short circuit error"
             >contact@curibio.com</a

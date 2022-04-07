@@ -59,8 +59,8 @@
     <div v-if="disable" class="div__simulationstudio-disable-overlay" />
     <div
       v-if="short_circuit_error"
-      v-b-popover.hover.top="'Stimulation lid must be replaced. There was a short circuit error found.'"
-      title="Disabled"
+      v-b-popover.hover.bottom="'Stimulation lid must be replaced before running a stimulation'"
+      title="Error"
       class="div__simulationstudio-disable-overlay"
     />
   </div>
@@ -155,6 +155,7 @@ export default {
   },
   mounted() {
     this.protocol_assignments = this.stored_protocol_assignments;
+    this.short_circuit_error = this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERR;
   },
   beforeDestroy() {
     this.unsubscribe();

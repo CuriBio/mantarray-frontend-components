@@ -34,6 +34,7 @@
       >
         <StatusWarningWidget
           :modal_labels="short_circuit_labels"
+          :email_error="true"
           @handle_confirmation="close_modals_by_id(['short-circuit-err'])"
         />
       </b-modal>
@@ -176,13 +177,14 @@ export default {
       },
       short_circuit_labels: {
         header: "Error!",
-        msg_one: "A short circuit has been found during the configuration check.",
-        msg_two: "Please replace stimulation lid. If issue persists, please contact ",
+        msg_one:
+          "A short circuit has been found during the configuration check. Please replace stimulation lid.",
+        msg_two: "If issue persists, please contact:  ",
         button_names: ["Okay"],
       },
       successful_qc_check_labels: {
         header: "Configuration Check Complete!",
-        msg_one: "No errors were found in the stimulation lid during the check.",
+        msg_one: "No errors were found during configuration check.",
         msg_two: "You can now run a stimulation.",
         button_names: ["Okay"],
       },
@@ -220,7 +222,7 @@ export default {
   watch: {
     status_uuid: function (new_status) {
       // set message for stimulation status and system status if error occurs
-      if (new_status == STATUS.MESSAGE.ERROR) this.alert_txt = `Error`;
+      if (new_status == STATUS.MESSAGE.ERROR) this.alert_txt = `Error Occurred`;
       if (!this.stim_specific) this.set_system_specific_status(new_status);
     },
     stim_status: function (new_status) {
@@ -247,7 +249,9 @@ export default {
     },
   },
   created() {
-    this.stim_specific ? this.set_stim_specific_status(this.stim_status) : this.set_system_specific_status();
+    this.stim_specific
+      ? this.set_stim_specific_status(this.stim_status)
+      : this.set_system_specific_status(this.status_uuid);
   },
   methods: {
     set_stim_specific_status: function (status) {
@@ -265,11 +269,14 @@ export default {
         case STATUS.MESSAGE.SERVER_READY:
           this.alert_txt = "Connecting...";
           break;
+        case STATUS.MESSAGE.SERVER_STILL_INITIALIZING:
+          this.alert_txt = "Connecting...";
+          break;
         case STATUS.MESSAGE.INITIALIZING_INSTRUMENT:
           this.alert_txt = "Initializing...";
           break;
         case STATUS.MESSAGE.CALIBRATION_NEEDED:
-          this.alert_txt = `Connected...Calibration needed`;
+          this.alert_txt = `Connected...Calibration Needed`;
           break;
         case STATUS.MESSAGE.CALIBRATING:
           this.alert_txt = `Calibrating...`;
@@ -278,34 +285,34 @@ export default {
           this.alert_txt = `Ready`;
           break;
         case STATUS.MESSAGE.BUFFERING:
-          this.alert_txt = `Preparing for live view...`;
+          this.alert_txt = `Preparing for Live View...`;
           break;
         case STATUS.MESSAGE.LIVE_VIEW_ACTIVE:
-          this.alert_txt = `Live view active`;
+          this.alert_txt = `Live View Active`;
           break;
         case STATUS.MESSAGE.RECORDING:
-          this.alert_txt = `Recording to file...`;
+          this.alert_txt = `Recording to File...`;
           break;
         case STATUS.MESSAGE.CHECKING_FOR_UPDATES:
-          this.alert_txt = "Checking for firmware updates...";
+          this.alert_txt = "Checking for Firmware Updates...";
           break;
         case STATUS.MESSAGE.UPDATES_NEEDED:
-          this.alert_txt = `Firmware updates required`;
+          this.alert_txt = `Firmware Updates Required`;
           break;
         case STATUS.MESSAGE.DOWNLOADING_UPDATES:
-          this.alert_txt = `Downloading firmware updates...`;
+          this.alert_txt = `Downloading Firmware Updates...`;
           this.$bvModal.show("fw-updates-in-progress-message");
           break;
         case STATUS.MESSAGE.INSTALLING_UPDATES:
-          this.alert_txt = `Installing firmware updates...`;
+          this.alert_txt = `Installing Firmware Updates...`;
           break;
         case STATUS.MESSAGE.UPDATES_COMPLETE:
-          this.alert_txt = `Firmware updates complete`;
+          this.alert_txt = `Firmware Updates Complete`;
           this.close_modals_by_id(["fw-updates-in-progress-message", "fw-closure-warning"]);
           this.$bvModal.show("fw-updates-complete-message");
           break;
         case STATUS.MESSAGE.UPDATE_ERROR:
-          this.alert_txt = `Error during firmware update`;
+          this.alert_txt = `Error During Firmware Update`;
           this.close_modals_by_id(["fw-updates-in-progress-message", "fw-closure-warning"]);
           this.$store.commit("flask/stop_status_pinging");
           this.$store.commit("settings/set_shutdown_error_message", "Error during firmware update.");
@@ -321,7 +328,7 @@ export default {
           this.$bvModal.show("error-catch");
           break;
         default:
-          this.alert_txt = "Connecting...";
+          this.alert_txt = status;
           break;
       }
     },

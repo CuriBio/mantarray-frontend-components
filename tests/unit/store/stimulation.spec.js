@@ -595,19 +595,23 @@ describe("store/stimulation", () => {
       store.state.stimulation.protocol_assignments = test_assignment;
       // send message once
       await store.dispatch("stimulation/create_protocol_message");
-      expect(axios_message_spy).toHaveBeenCalledWith(expected_message);
-      expect(axios_status_spy).toHaveBeenCalledWith(true);
+      expect(axios_message_spy).toHaveBeenCalledWith("/set_protocols", {
+        data: JSON.stringify(expected_message),
+      });
+      expect(axios_status_spy).toHaveBeenCalledWith("/set_stim_status?running=true");
       // send message again and make sure nothing was modified. Tanner (11/3/21): there was an issue where the protocols were modified inside of create_protocol_message, so sending message twice to catch that issue if present
       await store.dispatch("stimulation/create_protocol_message");
-      expect(axios_message_spy).toHaveBeenCalledWith(expected_message);
-      expect(axios_status_spy).toHaveBeenCalledWith(true);
+      expect(axios_message_spy).toHaveBeenCalledWith("/set_protocols", {
+        data: JSON.stringify(expected_message),
+      });
+      expect(axios_status_spy).toHaveBeenCalledWith("/set_stim_status?running=true");
     });
     test("When a user stops a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
       const axios_status_spy = jest
         .spyOn(axios_helpers, "call_axios_post_from_vuex")
         .mockImplementation(() => null);
       await store.dispatch("stimulation/stop_stimulation");
-      expect(axios_status_spy).toHaveBeenCalledWith(false);
+      expect(axios_status_spy).toHaveBeenCalledWith("/set_stim_status?running=false");
     });
 
     test("When a user adds a repeat delay into the input of the settings panel, Then it will appear at the end of the waveform in the graph", async () => {

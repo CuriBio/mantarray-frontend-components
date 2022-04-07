@@ -444,15 +444,18 @@ describe("store/playback", () => {
 
         store.commit("playback/set_x_time_index", 12345);
 
-        const test_barcode = "ML2022001000";
-        store.commit("playback/set_barcode", { type: "plate_barcode", new_value: test_barcode });
+        const test_plate_barcode = "ML2022001000";
+        const test_stim_barcode = "MS2022001000";
+        store.commit("playback/set_barcode", { type: "plate_barcode", new_value: test_plate_barcode });
+        store.commit("playback/set_barcode", { type: "stim_barcode", new_value: test_stim_barcode });
 
         await store.dispatch("playback/start_recording");
 
         expect(mocked_axios.history.get[0].url).toStrictEqual(`${base_url}/${api}`);
         expect(mocked_axios.history.get[0].params).toStrictEqual({
           time_index: 12345,
-          plate_barcode: test_barcode,
+          plate_barcode: test_plate_barcode,
+          stim_barcode: test_stim_barcode,
           is_hardware_test_recording: false,
         });
 

@@ -337,7 +337,7 @@ describe("store/settings", () => {
 
         const { status } = await store.dispatch("settings/send_firmware_update_confirmation", decision);
         expect(status).toBe(200);
-        expect(post_spy).toHaveBeenCalledWith(decision);
+        expect(post_spy).toHaveBeenCalledWith(`/firmware_update_confirmation?update_accepted=${decision}`);
       }
     );
   });

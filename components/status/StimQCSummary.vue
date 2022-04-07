@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="div__stimqc-background" :style="`height: ${modal_height}px;`">
+    <div class="div__stimqc-background">
       <span class="span__stimqc-label">{{ modal_labels.header }}</span>
       <div ref="message_area" class="span__stimqc-message">
         <p>{{ modal_labels.msg_one }}</p>
@@ -9,7 +9,7 @@
           <StimulationStudioWidget :disable="true" />
         </div>
       </div>
-      <div class="div__stimqc-button-container" :style="`top: ${modal_height}px;`">
+      <div class="div__stimqc-button-container">
         <ButtonWidget
           :button_widget_width="600"
           :button_widget_height="50"

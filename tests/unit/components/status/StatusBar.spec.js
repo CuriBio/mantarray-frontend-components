@@ -40,16 +40,16 @@ describe("StatusWidget.vue", () => {
   });
 
   test.each([
-    ["SERVER_STILL_INITIALIZING", "Status: Connecting..."],
-    ["SERVER_READY", "Status: Connecting..."],
-    ["INITIALIZING_INSTRUMENT", "Status: Initializing..."],
-    ["CALIBRATION_NEEDED", "Status: Connected...Calibration Needed"],
-    ["CALIBRATING", "Status: Calibrating..."],
-    ["CALIBRATED", "Status: Ready"],
-    ["BUFFERING", "Status: Preparing for Live View..."],
-    ["LIVE_VIEW_ACTIVE", "Status: Live View Active"],
-    ["RECORDING", "Status: Recording to File"],
-    ["ERROR", "Status: Error Occurred"],
+    ["SERVER_STILL_INITIALIZING", "System status: Connecting..."],
+    ["SERVER_READY", "System status: Connecting..."],
+    ["INITIALIZING_INSTRUMENT", "System status: Initializing..."],
+    ["CALIBRATION_NEEDED", "System status: Connected...Calibration Needed"],
+    ["CALIBRATING", "System status: Calibrating..."],
+    ["CALIBRATED", "System status: Ready"],
+    ["BUFFERING", "System status: Preparing for Live View..."],
+    ["LIVE_VIEW_ACTIVE", "System status: Live View Active"],
+    ["RECORDING", "System status: Recording to File..."],
+    ["ERROR", "System status: Error Occurred"],
   ])(
     "Given that /shutdown is mocked to return status 200, When Vuex is mutated to the state %s, Then the status text should update to be: %s",
     async (vuex_state, expected_text) => {
@@ -67,7 +67,7 @@ describe("StatusWidget.vue", () => {
       expect(wrapper.find(text_selector).text()).toBe(expected_text);
     }
   );
-  test("When initially mounted, Then the status text matches the Vuex state", () => {
+  test("When initially mounted, Then the status text matches the Vuex state", async () => {
     const propsData = {};
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING);
     wrapper = mount(StatusWidget, {
@@ -75,8 +75,8 @@ describe("StatusWidget.vue", () => {
       store,
       localVue,
     });
-
-    expect(wrapper.find(text_selector).text()).toBe("Status: Calibrating...");
+    await wrapper.vm.$nextTick(); // wait for update
+    expect(wrapper.find(text_selector).text()).toBe("System status: Calibrating...");
   });
 
   test("When Vuex is mutated to an unknown UUID, Then the status text should update to include that UUID", async () => {
@@ -89,7 +89,7 @@ describe("StatusWidget.vue", () => {
 
     store.commit("flask/set_status_uuid", "3dbb8814-09f1-44db-b7d5-7a9f702beac4");
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toBe("Status:3dbb8814-09f1-44db-b7d5-7a9f702beac4");
+    expect(wrapper.find(text_selector).text()).toBe("System status: 3dbb8814-09f1-44db-b7d5-7a9f702beac4");
   });
   test("Given that the http response is 404 for api request /shutdown, When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' and the the dialog of ErrorCatchWidget is visible", async () => {
     const shutdown_url = "http://localhost:4567/shutdown";
@@ -108,7 +108,7 @@ describe("StatusWidget.vue", () => {
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
     await wrapper.vm.$nextTick(); // wait for update
     expect(mocked_axios.history.get[0].url).toStrictEqual(shutdown_url);
-    expect(wrapper.find(text_selector).text()).toBe("Status: Error Occurred");
+    expect(wrapper.find(text_selector).text()).toBe("System status: Error Occurred");
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(true);
       done();
@@ -128,13 +128,13 @@ describe("StatusWidget.vue", () => {
 
     store.commit("flask/set_status_uuid", STATUS.MESSAGE.UPDATE_ERROR);
     await wrapper.vm.$nextTick(); // wait for update
-    expect(wrapper.find(text_selector).text()).toBe("Status: Error During Firmware Update");
+    expect(wrapper.find(text_selector).text()).toBe("System status: Error During Firmware Update");
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(true);
       done();
     });
 
-    wrapper.vm.remove_error_catch(); // the event of ok-clicked got invoked.
+    wrapper.vm.close_modals_by_id(["error-catch"]); // the event of ok-clicked got invoked.
 
     Vue.nextTick(() => {
       expect(modal.isVisible()).toBe(false);
