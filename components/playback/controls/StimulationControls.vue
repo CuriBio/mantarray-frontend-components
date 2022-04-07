@@ -332,18 +332,20 @@ body {
   position: relative;
   color: #2f2f2f;
   grid-column: 4;
-  height: 20px;
+  height: 30px;
   width: 20px;
+  font-size: 20px;
 }
 .span__stimulation-controls-play-stop-button--active {
   position: relative;
   color: #b7b7b7;
   grid-column: 4;
-  height: 20px;
+  height: 30px;
   width: 20px;
+  font-size: 20px;
 }
 .span__stimulation-controls-play-stop-button--active:hover {
-  color: #b7b7b7c9;
+  color: #ffffff;
   cursor: pointer;
 }
 .svg__stimulation-controls-loop-button {
