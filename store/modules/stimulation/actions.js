@@ -323,8 +323,7 @@ export default {
     // if (error) {
     //   commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
     //   setTimeout(() => {
-    //     // this.dispatch("data/set_stimulator_circuit_statuses", ["short"]);
-    //     commit("set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERROR);
+    //     // this.dispatch("data/check_stimulator_circuit_statuses", ["short"]);
     //   }, 5000);
     // }
     if (error) commit("set_stim_status", STIM_STATUS.ERROR);

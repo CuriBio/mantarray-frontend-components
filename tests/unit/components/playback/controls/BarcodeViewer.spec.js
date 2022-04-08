@@ -13,27 +13,26 @@ const localVue = createLocalVue();
 let NuxtStore;
 let store;
 
-beforeAll(async () => {
-  // note the store will mutate across tests, so make sure to re-create it in beforeEach
-  const storePath = `${process.env.buildDir}/store.js`;
-  NuxtStore = await import(storePath);
-});
-
-beforeEach(async () => {
-  store = await NuxtStore.createStore();
-  jest.restoreAllMocks();
-  const propsData = {};
-  wrapper = shallowMount(BarcodeViewer, {
-    propsData,
-    store,
-    localVue,
-    attachToDocument: true,
-  });
-});
-
-afterEach(() => wrapper.destroy());
-
 describe("BarcodeViewer.vue", () => {
+  beforeAll(async () => {
+    // note the store will mutate across tests, so make sure to re-create it in beforeEach
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+
+  beforeEach(async () => {
+    store = await NuxtStore.createStore();
+    jest.restoreAllMocks();
+    const propsData = {};
+    wrapper = shallowMount(BarcodeViewer, {
+      propsData,
+      store,
+      localVue,
+      attachToDocument: true,
+    });
+  });
+
+  afterEach(() => wrapper.destroy());
   test("When mounting RecordingTime from the build dist file, it loads successfully text is Not Recording and time is null", () => {
     const propsData = {};
     wrapper = shallowMount(dist_BarcodeViewer, {
@@ -66,6 +65,25 @@ describe("BarcodeViewer.vue", () => {
     expect(wrapper.find("input").element.value).toEqual("ML2022053000");
     expect(wrapper.find(".input__plate-barcode-entry-valid").isVisible()).toBe(true);
   });
+
+  test.each([
+    ["stim_barcode", "Stim Lid Barcode", "left: 0px;", "width: 105px;"],
+    ["plate_barcode", "Plate Barcode", "left: 17px;", "width: 110px;"],
+  ])(
+    "When the component is mounted with barcode_type, Then component should render with type-specific css",
+    async (barcode_type, label, left_style, width_style) => {
+      const propsData = { barcode_type };
+      const wrapper = mount(BarcodeViewer, {
+        propsData,
+        store,
+        localVue,
+      });
+
+      expect(wrapper.find(".span__plate-barcode-text").text()).toContain(label);
+      expect(wrapper.find(".span__plate-barcode-text").attributes().style).toContain(left_style);
+      expect(wrapper.find("#plateinfo").attributes().style).toContain(width_style);
+    }
+  );
 
   test("Given a invalid barcode has been into the Vuex, When the component is mounted, Then the text of the Barcode Input field should be valid barcode string and Green Box is visible", async () => {
     store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "MA209990004" });
@@ -255,7 +273,7 @@ describe("BarcodeViewer.vue", () => {
   test("When user choose manual mode, Then BarcodeEditDialog is hidden", async () => {
     const propsData = {};
 
-    let wrapper = mount(BarcodeViewer, {
+    const wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
