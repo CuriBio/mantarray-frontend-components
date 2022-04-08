@@ -15,7 +15,7 @@ fixture`playback/controls/stimulation-controls/basic`
 const status_btn_active = Selector(".span__stimulation-controls-play-stop-button--active");
 
 test("testing the StimulationControls layout on initialization", async (t) => {
-  const screenshot_path_base = path.join("playback", "controls", "additional-controls");
+  const screenshot_path_base = path.join("playback", "controls", "stimulation-controls");
   const screenshot_path = path.join(screenshot_path_base, "basic-init-disabled");
 
   await testcafe_page_visual_regression(t, screenshot_path);
