@@ -27,7 +27,13 @@
         ></path>
       </svg>
       <span :class="svg__stimulation_controls_play_stop_button__dynamic_class" @click="handle_play_stop">
-        <div v-if="!play_state" v-b-popover.hover.bottom="start_stim_label" title="Start Stimulation">
+        <div
+          v-if="!play_state"
+          id="start-stim-button"
+          :key="start_stim_label"
+          v-b-popover.hover.bottom="start_stim_label"
+          title="Start Stimulation"
+        >
           <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
         </div>
         <div v-if="play_state" v-b-popover.hover.bottom="stop_stim_label" title="Stop Stimulation">
@@ -175,13 +181,13 @@ export default {
             STIM_STATUS.ERROR,
             STIM_STATUS.CONFIG_CHECK_NEEDED,
             STIM_STATUS.CONFIG_CHECK_IN_PROGRESS,
-            STIM_STATUS.SHORT_CIRCUIT_ERR,
+            STIM_STATUS.SHORT_CIRCUIT_ERROR,
           ].includes(this.stim_status);
       }
       return is_enabled;
     },
     start_stim_label: function () {
-      if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERR) {
+      if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR) {
         return "Cannot start a stimulation with error";
       }
       if (
@@ -222,7 +228,7 @@ export default {
       if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
       else if (this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED)
         return "Can only run a configuration check if device is calibrated. Please ensure no other processes are running.";
-      else if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERR)
+      else if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR)
         return "Cannot run a configuration check with error";
       else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_NEEDED) return "Start configuration check";
       else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS)

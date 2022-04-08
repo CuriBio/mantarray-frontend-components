@@ -96,7 +96,7 @@ export default {
 
     // check if statuses include a short circuit status and set error status
     if (stimulator_statuses.includes("short"))
-      this.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERR);
+      this.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERROR);
     else {
       // else set the stim status that other components watch, only save indices
       const filtered_statuses = stimulator_statuses.filter((idx, status) => {

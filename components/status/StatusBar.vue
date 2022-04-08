@@ -262,7 +262,7 @@ export default {
           ? this.$bvModal.show("failed-qc-check")
           : this.$bvModal.show("success-qc-check");
 
-      if (status === STIM_STATUS.SHORT_CIRCUIT_ERR) this.$bvModal.show("short-circuit-err");
+      if (status === STIM_STATUS.SHORT_CIRCUIT_ERROR) this.$bvModal.show("short-circuit-err");
     },
     set_system_specific_status: function (status) {
       switch (status) {

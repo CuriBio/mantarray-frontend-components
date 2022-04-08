@@ -131,7 +131,7 @@ export default {
       this.$store.dispatch("stimulation/handle_selected_wells", this.all_select);
     },
     stim_status: function (new_status) {
-      this.short_circuit_error = new_status == STIM_STATUS.SHORT_CIRCUIT_ERR;
+      this.short_circuit_error = new_status === STIM_STATUS.SHORT_CIRCUIT_ERROR;
     },
   },
   created() {
@@ -155,7 +155,7 @@ export default {
   },
   mounted() {
     this.protocol_assignments = this.stored_protocol_assignments;
-    this.short_circuit_error = this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERR;
+    this.short_circuit_error = this.stim_status === STIM_STATUS.SHORT_CIRCUIT_ERROR;
   },
   beforeDestroy() {
     this.unsubscribe();

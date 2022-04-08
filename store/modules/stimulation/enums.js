@@ -14,6 +14,6 @@ export const STIM_STATUS = {
   STIM_ACTIVE: "Stimulating...",
 
   // error
-  SHORT_CIRCUIT_ERR: "Short Circuit Error",
+  SHORT_CIRCUIT_ERROR: "Short Circuit Error",
   ERROR: "Error Occurred",
 };
