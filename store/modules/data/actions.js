@@ -99,15 +99,15 @@ export default {
       this.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERROR);
     else {
       // else set the stim status that other components watch, only save indices
-      const filtered_statuses = stimulator_statuses.filter((idx, status) => {
-        if (status == "open") return idx;
-      });
+
+      const filtered_statuses = stimulator_statuses
+        .map((status, idx) => {
+          return status == "open" ? idx : undefined;
+        })
+        .filter((i) => i === 0 || i);
+      console.log(filtered_statuses);
       commit("set_stimulator_circuit_statuses", filtered_statuses);
-      // if no errors to report, go straight to stim ready status, else notify user of errors handled in StatusBar
-      this.commit(
-        "stimulation/set_stim_status",
-        filtered_statuses.length > 0 ? STIM_STATUS.CONFIG_CHECK_COMPLETE : STIM_STATUS.READY
-      );
+      this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
     }
   },
 };

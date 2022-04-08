@@ -3,7 +3,9 @@ import { createLocalVue } from "@vue/test-utils";
 import * as axios_helpers from "@/js_utils/axios_helpers.js";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
-import * as waveform_utils from "@/js_utils/waveform_data_formatter";
+const MockAxiosAdapter = require("axios-mock-adapter");
+import axios from "axios";
+import { STIM_STATUS } from "../../../store/modules/stimulation/enums";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -478,12 +480,7 @@ describe("store/stimulation", () => {
     });
 
     test("When a user starts a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
-      const axios_message_spy = jest
-        .spyOn(axios_helpers, "call_axios_post_from_vuex")
-        .mockImplementation(() => null);
-      const axios_status_spy = jest
-        .spyOn(axios_helpers, "call_axios_post_from_vuex")
-        .mockImplementation(() => null);
+      const axios_spy = jest.spyOn(axios_helpers, "call_axios_post_from_vuex").mockImplementation(() => null);
 
       const test_well_protocol_pairs = {};
       for (let well_idx = 0; well_idx < 24; well_idx++) {
@@ -595,16 +592,16 @@ describe("store/stimulation", () => {
       store.state.stimulation.protocol_assignments = test_assignment;
       // send message once
       await store.dispatch("stimulation/create_protocol_message");
-      expect(axios_message_spy).toHaveBeenCalledWith("/set_protocols", {
+      expect(axios_spy).toHaveBeenCalledWith("/set_protocols", {
         data: JSON.stringify(expected_message),
       });
-      expect(axios_status_spy).toHaveBeenCalledWith("/set_stim_status?running=true");
+      expect(axios_spy).toHaveBeenCalledWith("/set_stim_status?running=true");
       // send message again and make sure nothing was modified. Tanner (11/3/21): there was an issue where the protocols were modified inside of create_protocol_message, so sending message twice to catch that issue if present
       await store.dispatch("stimulation/create_protocol_message");
-      expect(axios_message_spy).toHaveBeenCalledWith("/set_protocols", {
+      expect(axios_spy).toHaveBeenCalledWith("/set_protocols", {
         data: JSON.stringify(expected_message),
       });
-      expect(axios_status_spy).toHaveBeenCalledWith("/set_stim_status?running=true");
+      expect(axios_spy).toHaveBeenCalledWith("/set_stim_status?running=true");
     });
     test("When a user stops a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
       const axios_status_spy = jest
@@ -621,5 +618,21 @@ describe("store/stimulation", () => {
       const { delay_blocks } = store.state.stimulation;
       expect(delay_blocks).toStrictEqual(expected_block);
     });
+
+    test.each([
+      ["ERROR", "ERROR"],
+      [null, "CONFIG_CHECK_IN_PROGRESS"],
+    ])(
+      "When a user clicks icon to start a stim configuration check, Then action will post to BE and update stim_status",
+      async (response, status) => {
+        const axios_status_spy = jest
+          .spyOn(axios_helpers, "call_axios_post_from_vuex")
+          .mockImplementation(() => response);
+        await store.dispatch("stimulation/start_stim_configuration");
+
+        expect(axios_status_spy).toHaveBeenCalledWith("/start_stimulator_checks");
+        expect(store.state.stimulation.stim_status).toBe(STIM_STATUS[status]);
+      }
+    );
   });
 });
