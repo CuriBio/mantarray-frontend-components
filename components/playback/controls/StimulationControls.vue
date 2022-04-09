@@ -30,13 +30,16 @@
         <div
           v-if="!play_state"
           id="start-stim-button"
-          :key="start_stim_label"
           v-b-popover.hover.bottom="start_stim_label"
           title="Start Stimulation"
         >
+          <!-- this is here for testing the popover message -->
+          <span id="start-popover-msg" style="display: none">{{ start_stim_label }}</span>
           <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
         </div>
         <div v-if="play_state" v-b-popover.hover.bottom="stop_stim_label" title="Stop Stimulation">
+          <!-- this is here for testing the popover message -->
+          <span id="stop-popover-msg" style="display: none">{{ stop_stim_label }}</span>
           <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
         </div>
       </span>
@@ -415,6 +418,7 @@ body {
   right: 4px;
   position: relative;
 }
+
 #open-circuit-warning,
 #stim-24hr-warning {
   position: fixed;

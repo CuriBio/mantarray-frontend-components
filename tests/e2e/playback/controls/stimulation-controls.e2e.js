@@ -2,11 +2,8 @@ import { Selector } from "testcafe";
 const path = require("path");
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-const protocol = Selector("li").withText("A Tester");
-const apply_btn = Selector(".div__stimulationstudio-btn-container").withText("Apply to Selection");
 const enable_button = Selector(".enable-button");
 const update_button = Selector(".update-button");
-const protocol_dropdown = Selector(".div__select-dropdown-controls-content-widget");
 
 fixture`playback/controls/stimulation-controls/basic`
   .page // declare the fixture
