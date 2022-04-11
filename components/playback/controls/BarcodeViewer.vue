@@ -1,7 +1,7 @@
 <template>
   <div class="div__plate-barcode">
-    <span class="span__plate-barcode-text"
-      >Plate Barcode:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
+    <span class="span__plate-barcode-text" :style="dynamic_label_style"
+      >{{ barcode_label }}:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
     >
     <!-- original Mockflow ID: cmpDd0be63536ca605546f566539e51ad0c3-->
     <input
@@ -16,6 +16,7 @@
       spellcheck="false"
       onpaste="return false;"
       class="input__plate-barcode-entry"
+      :style="dynamic_entry_style"
       :class="[
         barcode_info.valid ? `input__plate-barcode-entry-valid` : `input__plate-barcode-entry-invalid`,
       ]"
@@ -31,7 +32,10 @@
     </div>
     <!--</div>-->
     <b-modal id="edit-plate-barcode-modal" size="sm" hide-footer hide-header hide-header-close>
-      <BarcodeEditDialog @manual-mode-choice="handle_manual_mode_choice"></BarcodeEditDialog>
+      <StatusWarningWidget
+        :modal_labels="barcode_manual_labels"
+        @handle_confirmation="handle_manual_mode_choice"
+      />
     </b-modal>
   </div>
 </template>
@@ -41,7 +45,7 @@ import playback_module from "@/store/modules/playback";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import BarcodeEditDialog from "@/components/status/BarcodeEditDialog.vue";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 
 library.add(faPencilAlt);
 /**
@@ -50,10 +54,10 @@ library.add(faPencilAlt);
  * @vue-event {String} set_barcode_manually - User entered String parser
  */
 export default {
-  name: "PlateBarcode", // TODO rename this component
+  name: "BarcodeViewer",
   components: {
     FontAwesomeIcon,
-    BarcodeEditDialog,
+    StatusWarningWidget,
   },
   props: {
     barcode_type: { type: String, default: "plate_barcode" },
@@ -61,6 +65,13 @@ export default {
   data() {
     return {
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
+      barcode_manual_labels: {
+        header: "Warning!",
+        msg_one: "Do you want to enable manual barcode editing?",
+        msg_two:
+          "Once enabled, all barcodes must be entered manually. This should only be done if the barcode scanner is malfunctioning. Scanning cannot be re-enabled until software is restarted.",
+        button_names: ["Cancel", "Yes"],
+      },
     };
   },
   computed: {
@@ -69,12 +80,23 @@ export default {
     barcode_info: function () {
       return this.barcodes[this.barcode_type];
     },
+    barcode_label: function () {
+      return this.barcode_type == "plate_barcode" ? "Plate Barcode" : "Stim Lid Barcode";
+    },
+    dynamic_label_style: function () {
+      return this.barcode_type == "plate_barcode" ? "left: 17px;" : "left: 0px;";
+    },
+    dynamic_entry_style: function () {
+      return this.barcode_type == "plate_barcode" ? "width: 110px;" : "width: 105px;";
+    },
   },
   methods: {
     handle_manual_mode_choice(choice) {
+      const bool_choice = Boolean(choice);
       this.$bvModal.hide("edit-plate-barcode-modal");
-      this.$store.commit("flask/set_barcode_manual_mode", choice);
-      if (choice) this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: null });
+      this.$store.commit("flask/set_barcode_manual_mode", bool_choice);
+      if (bool_choice)
+        this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: null });
     },
     set_barcode_manually: function (event) {
       this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: event.target.value });
@@ -116,7 +138,6 @@ export default {
   width: 278px;
   height: 23px;
   top: 2px;
-  left: 17px;
   padding: 5px;
   user-select: none;
   font-family: "Muli";
@@ -142,22 +163,17 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-align: left;
-
   line-height: 24px;
   font-style: normal;
   text-decoration: none;
   font-size: 15px;
-
   background-color: #000000;
-
   color: #b7b7b7;
   font-family: Anonymous Pro;
   font-weight: normal;
   box-shadow: none;
   border: none;
   position: absolute;
-
-  width: 110px;
   height: 24px;
   top: 3px;
   right: 27px;

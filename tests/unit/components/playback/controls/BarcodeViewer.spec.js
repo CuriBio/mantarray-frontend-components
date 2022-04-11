@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
-import PlateBarcode from "@/components/playback/controls/PlateBarcode.vue";
-import { PlateBarcode as dist_PlateBarcode } from "@/dist/mantarray.common";
+import BarcodeViewer from "@/components/playback/controls/BarcodeViewer.vue";
+import { BarcodeViewer as dist_BarcodeViewer } from "@/dist/mantarray.common";
 import playback_module from "@/store/modules/playback";
 import { shallowMount } from "@vue/test-utils";
 import { createLocalVue } from "@vue/test-utils";
@@ -13,30 +13,29 @@ const localVue = createLocalVue();
 let NuxtStore;
 let store;
 
-beforeAll(async () => {
-  // note the store will mutate across tests, so make sure to re-create it in beforeEach
-  const storePath = `${process.env.buildDir}/store.js`;
-  NuxtStore = await import(storePath);
-});
-
-beforeEach(async () => {
-  store = await NuxtStore.createStore();
-  jest.restoreAllMocks();
-  const propsData = {};
-  wrapper = shallowMount(PlateBarcode, {
-    propsData,
-    store,
-    localVue,
-    attachToDocument: true,
+describe("BarcodeViewer.vue", () => {
+  beforeAll(async () => {
+    // note the store will mutate across tests, so make sure to re-create it in beforeEach
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
   });
-});
 
-afterEach(() => wrapper.destroy());
+  beforeEach(async () => {
+    store = await NuxtStore.createStore();
+    jest.restoreAllMocks();
+    const propsData = {};
+    wrapper = shallowMount(BarcodeViewer, {
+      propsData,
+      store,
+      localVue,
+      attachToDocument: true,
+    });
+  });
 
-describe("PlateBarcode.vue", () => {
+  afterEach(() => wrapper.destroy());
   test("When mounting RecordingTime from the build dist file, it loads successfully text is Not Recording and time is null", () => {
     const propsData = {};
-    wrapper = shallowMount(dist_PlateBarcode, {
+    wrapper = shallowMount(dist_BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -55,7 +54,7 @@ describe("PlateBarcode.vue", () => {
   test("Given a valid barcode has been into the Vuex, When the component is mounted, Then the text of the Barcode Input field should be valid barcode string and Red Box is visible ", async () => {
     store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
     const propsData = {};
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -67,10 +66,29 @@ describe("PlateBarcode.vue", () => {
     expect(wrapper.find(".input__plate-barcode-entry-valid").isVisible()).toBe(true);
   });
 
+  test.each([
+    ["stim_barcode", "Stim Lid Barcode", "left: 0px;", "width: 105px;"],
+    ["plate_barcode", "Plate Barcode", "left: 17px;", "width: 110px;"],
+  ])(
+    "When the component is mounted with barcode_type, Then component should render with type-specific css",
+    async (barcode_type, label, left_style, width_style) => {
+      const propsData = { barcode_type };
+      const wrapper = mount(BarcodeViewer, {
+        propsData,
+        store,
+        localVue,
+      });
+
+      expect(wrapper.find(".span__plate-barcode-text").text()).toContain(label);
+      expect(wrapper.find(".span__plate-barcode-text").attributes().style).toContain(left_style);
+      expect(wrapper.find("#plateinfo").attributes().style).toContain(width_style);
+    }
+  );
+
   test("Given a invalid barcode has been into the Vuex, When the component is mounted, Then the text of the Barcode Input field should be valid barcode string and Green Box is visible", async () => {
     store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "MA209990004" });
     const propsData = {};
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -91,7 +109,7 @@ describe("PlateBarcode.vue", () => {
     });
 
     const propsData = {};
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -111,7 +129,7 @@ describe("PlateBarcode.vue", () => {
     store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING);
     const propsData = {};
 
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -129,7 +147,7 @@ describe("PlateBarcode.vue", () => {
     store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING);
     const propsData = {};
 
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -146,7 +164,7 @@ describe("PlateBarcode.vue", () => {
   test("Given that its in manual mode and a valid barcode has been entered and playback state is BUFFERING, When Playback State is mutated to BUFFERING, Then the text of the Barcode Input remains as the valid barcode instead of becoming blank", async () => {
     const propsData = {};
 
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -166,7 +184,7 @@ describe("PlateBarcode.vue", () => {
   test("Given that its in manual mode and a valid barcode has been entered and playback state is CALIBRATED, When Playback State is mutated to CALIBRATING, Then the text of the Barcode Inpput remains as the valid barcode instead of becoming blank", async () => {
     const propsData = {};
 
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -187,7 +205,7 @@ describe("PlateBarcode.vue", () => {
   test("Given that its in manual mode and that the User entered a valid barcode, When user tries to enter barcode with an additional 13th digit, then it is not considered valid in Vuex", async () => {
     const propsData = {};
 
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -196,7 +214,7 @@ describe("PlateBarcode.vue", () => {
 
     await wrapper.vm.handle_manual_mode_choice(true);
 
-    wrapper.find("input").setValue("ML2022053000"); // test case will fail on delating if (barcode_len >= 10 && barcode_len < 12) in API validatePlateBarcode()
+    wrapper.find("input").setValue("ML2022053000"); // test case will fail on delating if (barcode_len >= 10 && barcode_len < 12) in API validateBarcodeViewer()
     await wrapper.vm.$nextTick(); // wait for update
     // confirm pre-condition
     expect(store.state.playback.barcodes.plate_barcode.valid).toBe(true);
@@ -212,7 +230,7 @@ describe("PlateBarcode.vue", () => {
   test("Fire an event to paste text ABCD validate its not updated on input", async () => {
     const propsData = {};
 
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -232,7 +250,7 @@ describe("PlateBarcode.vue", () => {
   test("On Vuex Store for playback_state set to RECORDING input is set to readonly true", async () => {
     const propsData = {};
 
-    let wrapper = mount(PlateBarcode, {
+    let wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,
@@ -255,7 +273,7 @@ describe("PlateBarcode.vue", () => {
   test("When user choose manual mode, Then BarcodeEditDialog is hidden", async () => {
     const propsData = {};
 
-    let wrapper = mount(PlateBarcode, {
+    const wrapper = mount(BarcodeViewer, {
       propsData,
       store,
       localVue,

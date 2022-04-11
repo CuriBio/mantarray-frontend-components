@@ -25,7 +25,6 @@ const default_state = {
   stim_fill_colors: {},
   stim_fill_assignments: [],
   last_protocol_flag: [],
-
   stimulator_circuit_statuses: [],
 };
 

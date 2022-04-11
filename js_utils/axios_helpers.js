@@ -1,7 +1,6 @@
 "use strict";
 import Vue from "vue";
 import { STATUS } from "@/store/modules/flask/enums";
-
 import axios from "axios";
 import VueAxios from "vue-axios";
 Vue.use(VueAxios, axios);
@@ -15,9 +14,8 @@ Vue.use(VueAxios, axios);
  * @return {Object} the result of the axios call
  */
 export async function call_axios_get_from_vuex(url, action_context, params = {}) {
-  let result = 0;
   try {
-    result = await Vue.axios.get(url, { params });
+    return await Vue.axios.get(url, { params });
   } catch (error) {
     // adapted from https://stackoverflow.com/questions/49967779/axios-handling-errors
     console.log(
@@ -59,57 +57,24 @@ export async function call_axios_get_from_vuex(url, action_context, params = {})
     }
     return;
   }
-  return result;
 }
 
 /**
- * Function to post protocol message for stim studio
- * @param  {Object} message of type Object
+ * Function to post statuses to flask server
+ * @param  {String} url endpoint with any additional params.
+ * @param  {Object} data request body sent with post request, otherwise null.
  * @return {Int} Int status code if error
  */
-export async function post_stim_message(message) {
+export async function call_axios_post_from_vuex(url, data = null) {
   const baseURL = "http://localhost:4567";
-  const URL = "/set_protocols";
-  const body = { data: JSON.stringify(message) };
-  try {
-    await Vue.axios.post(`${baseURL}${URL}`, body);
-    return;
-  } catch (error) {
-    console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
-    if (error.response) return error.response.status;
-  }
-}
+  const endpoint = url.split("?")[0];
 
-/**
- * Function to post play status for stim studio
- * @param  {Boolean} status of type Boolean.
- * @return {Int} Int status code if error
- */
-export async function post_stim_status(status) {
-  const baseURL = "http://localhost:4567";
-  const URL = `/set_stim_status?running=${status}`;
   try {
-    await Vue.axios.post(`${baseURL}${URL}`);
+    await Vue.axios.post(`${baseURL}${url}`, data);
     return;
   } catch (error) {
-    console.log("Error in post_stim_status for " + `${baseURL}${URL}` + ": " + error);
+    console.log(`Error in ${endpoint} for ${baseURL}${endpoint}: ${error}`);
     if (error.response) return error.response.status;
-  }
-}
-
-/**
- * Function to post firmware update confirmation
- * @param  {Boolean} update_accepted of type Boolean.
- * @return {Int} Int status code if error
- */
-export async function post_firmware_update_confirmation(update_accepted) {
-  const baseURL = "http://localhost:4567";
-  const URL = `/firmware_update_confirmation?update_accepted=${update_accepted}`;
-  try {
-    await Vue.axios.post(`${baseURL}${URL}`);
-    return;
-  } catch (error) {
-    console.log("Error in firmware_update_confirmation for " + `${baseURL}${URL}` + ": " + error);
-    if (error.response) return error.response.status;
+    else return error;
   }
 }

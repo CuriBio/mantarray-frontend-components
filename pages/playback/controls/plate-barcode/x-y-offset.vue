@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { PlateBarcode as ComponentToTest } from "../../../../dist/mantarray.common";
+import { BarcodeViewer as ComponentToTest } from "../../../../dist/mantarray.common";
 
 export default {
   components: {

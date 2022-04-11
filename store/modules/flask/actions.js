@@ -2,6 +2,7 @@
 import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
 
 import { ENUMS as PLAYBACK_ENUMS } from "../playback/enums";
+import { STIM_STATUS } from "../stimulation/enums";
 import { STATUS } from "./enums";
 
 /**
@@ -10,14 +11,14 @@ import { STATUS } from "./enums";
  */
 export async function ping_system_status() {
   const params = { current_vuex_status_uuid: this.state.status_uuid };
+
   if (this.state.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
     const current_time_index = this.rootState.playback.x_time_index;
     params.currently_displayed_time_index = current_time_index;
   }
-  const url = "http://localhost:4567/system_status";
 
-  let result = 0;
-  result = await call_axios_get_from_vuex(url, this, params);
+  const url = "http://localhost:4567/system_status";
+  const result = await call_axios_get_from_vuex(url, this, params);
   if (result.status == 200) {
     const data = result.data;
     const status_uuid = data.ui_status_code;
@@ -34,10 +35,17 @@ export async function ping_system_status() {
             { root: true }
           );
         } else if (status_uuid == STATUS.MESSAGE.CALIBRATED) {
-          this.dispatch("playback/transition_playback_state", PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED, {
-            root: true,
-          });
-          this.commit("playback/set_enable_additional_controls", true, { root: true });
+          // awaiting to ensure playback state gets changed to this calibrated state before enabling stim controls
+          await this.dispatch(
+            "playback/transition_playback_state",
+            PLAYBACK_ENUMS.PLAYBACK_STATES.CALIBRATED,
+            {
+              root: true,
+            }
+          );
+
+          this.commit("playback/set_enable_stim_controls", true, { root: true });
+          this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED, { root: true });
         } else if (status_uuid == STATUS.MESSAGE.LIVE_VIEW_ACTIVE) {
           this.dispatch(
             "playback/transition_playback_state",
@@ -47,7 +55,7 @@ export async function ping_system_status() {
         }
       }
     }
-    this.commit("stimulation/set_stim_status", data.is_stimulating, { root: true });
+    this.commit("stimulation/set_stim_play_state", data.is_stimulating, { root: true });
   }
   this.commit("flask/ignore_next_system_status_if_matching_status", null, {
     root: true,

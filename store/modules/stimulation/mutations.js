@@ -115,8 +115,11 @@ export default {
   set_imported_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
   },
-  set_stim_status(state, bool) {
-    state.stim_status = bool;
+  set_stim_play_state(state, bool) {
+    state.stim_play_state = bool;
+  },
+  set_stim_status(state, status) {
+    state.stim_status = status;
   },
   set_edit_mode({ edit_mode }, { label, letter }) {
     edit_mode.status = true;

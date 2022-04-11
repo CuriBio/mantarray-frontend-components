@@ -1,6 +1,7 @@
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
-import { post_stim_message, post_stim_status } from "../../../js_utils/axios_helpers";
+import { call_axios_post_from_vuex } from "../../../js_utils/axios_helpers";
+import { STIM_STATUS } from "./enums";
 
 const time_conversion = {
   seconds: 1000,
@@ -207,6 +208,7 @@ export default {
     const message = { protocols: [], protocol_assignments: {} };
 
     const { protocol_assignments } = state;
+    const { stimulator_circuit_statuses } = this.state.data;
 
     const charge_conversion = { C: 1000, V: 1 };
 
@@ -217,7 +219,8 @@ export default {
 
     const unique_protocol_ids = new Set();
     for (const well in protocol_assignments) {
-      if (protocol_assignments !== {}) {
+      // remove open circuit wells
+      if (!stimulator_circuit_statuses.includes(Number(well))) {
         const { stimulation_type, pulses, stop_setting, detailed_pulses } = protocol_assignments[
           well
         ].protocol;
@@ -257,13 +260,19 @@ export default {
       }
     }
 
-    await post_stim_message(message);
-    await post_stim_status(status);
+    const message_url = `/set_protocols`;
+    const body = { data: JSON.stringify(message) };
+    await call_axios_post_from_vuex(message_url, body);
+
+    const status_url = `/set_stim_status?running=${status}`;
+    await call_axios_post_from_vuex(status_url);
+    commit("set_stim_status", STIM_STATUS.STIM_ACTIVE);
   },
 
-  async stop_stim_status() {
-    const status = false;
-    await post_stim_status(status);
+  async stop_stimulation({ commit }) {
+    const status_url = `/set_stim_status?running=${false}`;
+    await call_axios_post_from_vuex(status_url);
+    commit("set_stim_status", STIM_STATUS.READY);
   },
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {
@@ -307,5 +316,17 @@ export default {
           y_values: y_axis_values,
         });
     }
+  },
+  async start_stim_configuration({ commit }) {
+    const url = `/start_stimulator_checks`;
+    const error = await call_axios_post_from_vuex(url);
+    // if (error) {
+    //   commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
+    //   setTimeout(() => {
+    //     // this.dispatch("data/check_stimulator_circuit_statuses", ["short"]);
+    //   }, 5000);
+    // }
+    if (error) commit("set_stim_status", STIM_STATUS.ERROR);
+    else commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
   },
 };

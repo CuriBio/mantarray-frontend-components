@@ -25,6 +25,7 @@ export { default as stimulation_store_module } from "./store/modules/stimulation
 export { default as heatmap_store_module } from "./store/modules/heatmap";
 export { default as gradient_store_module } from "./store/modules/gradient";
 export { TWITCH as DATA_ENUMS } from "./store/modules/data/enums";
+export { STIM_STATUS } from "./store/modules/stimulation/enums";
 export { ENUMS as PLAYBACK_ENUMS } from "./store/modules/playback/enums";
 export { STATUS as FLASK_STATUS_ENUMS } from "./store/modules/flask/enums";
 export { METRIC_UNITS as HEATMAP_METRIC_UNITS } from "./store/modules/heatmap/enums";
@@ -41,8 +42,8 @@ export { default as YAxisControls } from "./components/playback/controls/YAxisCo
 export { default as YAxisControlsSettings } from "./components/playback/controls/YAxisControlsSettings.vue";
 export { default as DesktopPlayerControls } from "./components/playback/controls/player/DesktopPlayerControls.vue";
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
-export { default as PlateBarcode } from "./components/playback/controls/PlateBarcode.vue";
-export { default as AdditionalControls } from "./components/playback/controls/AdditionalControls.vue";
+export { default as BarcodeViewer } from "./components/playback/controls/BarcodeViewer.vue";
+export { default as StimulationControls } from "./components/playback/controls/StimulationControls.vue";
 
 // Settings Components
 export { default as SettingsForm } from "./components/settings/SettingsForm.vue";
@@ -73,10 +74,10 @@ export { default as RecordingTime } from "./components/status/RecordingTime.vue"
 export { default as SimulationMode } from "./components/status/SimulationMode.vue";
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
-export { default as BarcodeEditDialog } from "./components/status/BarcodeEditDialog.vue";
 export { default as GradientBar } from "./components/status/GradientBar.vue";
 export { default as StatusWarningWidget } from "./components/status/StatusWarningWidget.vue";
 export { default as StatusSpinnerWidget } from "./components/status/StatusSpinnerWidget.vue";
+export { default as StimQCSummary } from "./components/status/StimQCSummary.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";

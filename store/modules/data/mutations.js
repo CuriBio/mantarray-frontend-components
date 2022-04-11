@@ -71,7 +71,7 @@ export default {
       state.stim_fill_assignments[idx][assignments.length - 2][1][1][0] =
         state.stim_fill_assignments[idx][assignments.length - 1][1][0][0];
   },
-  set_stimulator_circuit_statuses(state, status_arr) {
-    state.stimulator_circuit_statuses = status_arr;
+  set_stimulator_circuit_statuses(state, stimulator_statuses) {
+    state.stimulator_circuit_statuses = [...stimulator_statuses];
   },
 };

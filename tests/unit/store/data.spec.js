@@ -5,9 +5,10 @@ const MockAxiosAdapter = require("axios-mock-adapter");
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
 import { ENUMS } from "@/store/modules/playback/enums";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
-import { ping_system_status } from "../../../store/modules/flask/actions";
+import { ping_system_status } from "@/store/modules/flask/actions";
 
 const valid_plate_barcode = "ML2022001000";
 const valid_stim_barcode = "MS2022001000";
@@ -480,24 +481,52 @@ describe("store/data", () => {
         y_data_points: [4, 101000],
       });
     });
-    test("When backend emits stimulator_circuit_status message, Then ws client updates statuses", async () => {
-      store.commit("data/set_stimulator_circuit_statuses", new Array(24).fill("any"));
-
+    test("When backend emits stimulator_circuit_status message with short circuit errors, Then ws client updates stim status to short circuit error", async () => {
       // confirm precondition
       const initial_statuses = store.state.data.stimulator_circuit_statuses;
-      expect(initial_statuses).toHaveLength(24);
-      expect(initial_statuses[0]).toEqual("any");
+      expect(initial_statuses).toHaveLength(0);
 
-      const new_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 20).fill("closed", 20, 24);
+      const new_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 20).fill("short", 20, 24);
 
       await new Promise((resolve) => {
-        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(new_statuses), (ack) => {
-          resolve(ack);
-        });
+        socket_server_side.emit(
+          "stimulator_circuit_statuses",
+          JSON.stringify({ stimulator_statuses: new_statuses }),
+          (ack) => {
+            resolve(ack);
+          }
+        );
       });
 
       const updated_statuses = store.state.data.stimulator_circuit_statuses;
-      expect(updated_statuses).toEqual(new_statuses);
+      const stim_status = store.state.stimulation.stim_status;
+
+      expect(updated_statuses).toStrictEqual(initial_statuses);
+      expect(stim_status).toBe(STIM_STATUS.SHORT_CIRCUIT_ERROR);
+    });
+
+    test("When backend emits stimulator_circuit_status message with no short  errors, Then ws client updates stim status to config check complete and set indices to data state", async () => {
+      // confirm precondition
+      const initial_statuses = store.state.data.stimulator_circuit_statuses;
+      expect(initial_statuses).toHaveLength(0);
+
+      const new_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 24);
+      console.log(new_statuses);
+      await new Promise((resolve) => {
+        socket_server_side.emit(
+          "stimulator_circuit_statuses",
+          JSON.stringify({ stimulator_statuses: new_statuses }),
+          (ack) => {
+            resolve(ack);
+          }
+        );
+      });
+
+      const updated_statuses = store.state.data.stimulator_circuit_statuses;
+      const stim_status = store.state.stimulation.stim_status;
+
+      expect(updated_statuses).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(stim_status).toBe(STIM_STATUS.CONFIG_CHECK_COMPLETE);
     });
     test("When backend emits status update message with no error, Then ws client updates file count", async () => {
       const new_status_update = {
