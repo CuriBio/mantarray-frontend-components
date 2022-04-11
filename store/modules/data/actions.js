@@ -91,7 +91,7 @@ export default {
       well.y_data_points.splice(0, idx_to_splice - 2);
     });
   },
-  check_stimulator_circuit_statuses({ commit }, { stimulator_statuses }) {
+  check_stimulator_circuit_statuses({ commit }, stimulator_statuses) {
     // incoming_array = {stimulator_statuses: [stimulator_status_0, stimulator_status_1, ...]}
 
     // check if statuses include a short circuit status and set error status
@@ -105,7 +105,6 @@ export default {
           return status == "open" ? idx : undefined;
         })
         .filter((i) => i === 0 || i);
-      console.log(filtered_statuses);
       commit("set_stimulator_circuit_statuses", filtered_statuses);
       this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
     }

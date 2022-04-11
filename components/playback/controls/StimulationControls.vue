@@ -192,14 +192,13 @@ export default {
     start_stim_label: function () {
       if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR) {
         return "Cannot start a stimulation with error";
-      }
-      if (
+      } else if (
         this.stim_status == STIM_STATUS.CONFIG_CHECK_NEEDED ||
         this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
       ) {
         return "Configuration check needed";
-      }
-      if (Object.keys(this.protocol_assignments).length === 0) {
+      } else if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
+      else if (Object.keys(this.protocol_assignments).length === 0) {
         return "No protocols have been assigned";
       } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING) {
         return "Cannot start stimulation while recording is active";
