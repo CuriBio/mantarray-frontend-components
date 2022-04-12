@@ -92,19 +92,22 @@ export default {
     });
   },
   check_stimulator_circuit_statuses({ commit }, stimulator_statuses) {
-    // incoming_array = {stimulator_statuses: [stimulator_status_0, stimulator_status_1, ...]}
+    // incoming_array = [stimulator_status_0, stimulator_status_1, ...]
+    // possible status values: open, short, media
 
     // check if statuses include a short circuit status and set error status
     if (stimulator_statuses.includes("short"))
       this.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERROR);
     else {
-      // else set the stim status that other components watch, only save indices
+      // else set the stim status that other components watch
+      // only saves indices
 
       const filtered_statuses = stimulator_statuses
         .map((status, idx) => {
           return status == "open" ? idx : undefined;
         })
         .filter((i) => i === 0 || i);
+
       commit("set_stimulator_circuit_statuses", filtered_statuses);
       this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
     }

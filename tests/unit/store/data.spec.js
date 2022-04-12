@@ -486,16 +486,15 @@ describe("store/data", () => {
       const initial_statuses = store.state.data.stimulator_circuit_statuses;
       expect(initial_statuses).toHaveLength(0);
 
-      const new_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 20).fill("short", 20, 24);
+      const stimulator_statuses = new Array(24)
+        .fill("open", 0, 10)
+        .fill("media", 10, 20)
+        .fill("short", 20, 24);
 
       await new Promise((resolve) => {
-        socket_server_side.emit(
-          "stimulator_circuit_statuses",
-          JSON.stringify({ stimulator_statuses: new_statuses }),
-          (ack) => {
-            resolve(ack);
-          }
-        );
+        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(stimulator_statuses), (ack) => {
+          resolve(ack);
+        });
       });
 
       const updated_statuses = store.state.data.stimulator_circuit_statuses;
@@ -510,16 +509,12 @@ describe("store/data", () => {
       const initial_statuses = store.state.data.stimulator_circuit_statuses;
       expect(initial_statuses).toHaveLength(0);
 
-      const new_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 24);
-      console.log(new_statuses);
+      const stimulator_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 24);
+
       await new Promise((resolve) => {
-        socket_server_side.emit(
-          "stimulator_circuit_statuses",
-          JSON.stringify({ stimulator_statuses: new_statuses }),
-          (ack) => {
-            resolve(ack);
-          }
-        );
+        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(stimulator_statuses), (ack) => {
+          resolve(ack);
+        });
       });
 
       const updated_statuses = store.state.data.stimulator_circuit_statuses;

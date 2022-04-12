@@ -236,7 +236,7 @@ describe("store/playback", () => {
         "Given a plate barcode scanned results in value %s, When validation rule FAILS  or PASSES due %s, Then validation results set valid to %s",
         async (platecode, reason, valid) => {
           // testing with plate barcode here but the functionality is exactly the same for stim barcodes
-          store.commit("playback/set_barcode", { type: "plate_barcode", new_value: platecode });
+          store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: platecode });
           expect(store.state.playback.barcodes.plate_barcode.valid).toBe(valid);
         }
       );
@@ -446,8 +446,8 @@ describe("store/playback", () => {
 
         const test_plate_barcode = "ML2022001000";
         const test_stim_barcode = "MS2022001000";
-        store.commit("playback/set_barcode", { type: "plate_barcode", new_value: test_plate_barcode });
-        store.commit("playback/set_barcode", { type: "stim_barcode", new_value: test_stim_barcode });
+        store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: test_plate_barcode });
+        store.dispatch("playback/validate_barcode", { type: "stim_barcode", new_value: test_stim_barcode });
 
         await store.dispatch("playback/start_recording");
 
@@ -481,7 +481,7 @@ describe("store/playback", () => {
 
         store.commit("playback/set_x_time_index", 456789);
 
-        store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022001000" });
+        store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "ML2022001000" });
 
         await store.dispatch("playback/stop_recording");
 

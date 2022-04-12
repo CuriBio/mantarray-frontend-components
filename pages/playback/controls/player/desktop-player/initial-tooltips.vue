@@ -13,7 +13,7 @@ export default {
     DesktopPlayerControls,
   },
   created: function () {
-    this.$store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
+    this.$store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
   },
 };
 </script>

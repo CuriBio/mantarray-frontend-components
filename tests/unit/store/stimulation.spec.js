@@ -630,7 +630,7 @@ describe("store/stimulation", () => {
           .mockImplementation(() => response);
         await store.dispatch("stimulation/start_stim_configuration");
 
-        expect(axios_status_spy).toHaveBeenCalledWith("/start_stimulator_checks");
+        expect(axios_status_spy).toHaveBeenCalledWith("/start_stim_checks");
         expect(store.state.stimulation.stim_status).toBe(STIM_STATUS[status]);
       }
     );

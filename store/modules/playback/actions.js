@@ -190,14 +190,27 @@ export default {
       context.commit("set_one_min_warning", true);
     }, 1 * 60e3);
   },
-  validate_barcode({ commit, state }, { type, new_value }) {
+  validate_barcode({ commit, state, dispatch }, { type, new_value }) {
     const result = TextValidation_plate_barcode.validate(new_value);
     const is_valid = result == "";
 
-    // check if a new valid barcode has been entered to require new config checks
-    if (is_valid && state.barcodes[type].value !== new_value) {
-      this.state.stimulation.stim_status = STIM_STATUS.CONFIG_CHECK_NEEDED;
+    // check if a new valid plate barcode has been entered and require new calibration
+    // disable stim controls again until calibration is performed
+    if (
+      is_valid &&
+      type == "plate_barcode" &&
+      state.barcodes[type].value !== new_value &&
+      state.barcodes[type].value !== null // this prevents a second calibration being required at startup since we want users to be able to calibrate first
+    ) {
+      dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED);
+      commit("set_enable_stim_controls", false);
     }
+
+    // require new stim configuration check when either barcode is changed and valid
+    if (is_valid && state.barcodes[type].value !== new_value) {
+      this.commit("stimulation/set_stim_status", STIM_STATUS.CALIBRATION_NEEDED);
+    }
+
     commit("set_barcode", { type, new_value, is_valid });
   },
 };

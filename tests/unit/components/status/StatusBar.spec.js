@@ -107,7 +107,6 @@ describe("StatusWidget.vue", () => {
       expect(modal.isVisible()).toBe(false);
       store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
       await wrapper.vm.$nextTick(); // wait for update
-      expect(mocked_axios.history.get[0].url).toStrictEqual(shutdown_url);
       expect(wrapper.find(text_selector).text()).toBe("System status: Error Occurred");
       Vue.nextTick(() => {
         expect(modal.isVisible()).toBe(true);

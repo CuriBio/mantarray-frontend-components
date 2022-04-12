@@ -26,7 +26,7 @@ export default {
       }.bind(this)
     );
     // set a valid barcode so that live view can be initiated during the tests
-    this.$store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
+    this.$store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
   },
   methods: {
     update_customer_idx: function () {

@@ -52,7 +52,7 @@ describe("BarcodeViewer.vue", () => {
     expect(wrapper.find("input").text()).toEqual("");
   });
   test("Given a valid barcode has been into the Vuex, When the component is mounted, Then the text of the Barcode Input field should be valid barcode string and Red Box is visible ", async () => {
-    store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
+    store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
     const propsData = {};
     let wrapper = mount(BarcodeViewer, {
       propsData,
@@ -86,7 +86,7 @@ describe("BarcodeViewer.vue", () => {
   );
 
   test("Given a invalid barcode has been into the Vuex, When the component is mounted, Then the text of the Barcode Input field should be valid barcode string and Green Box is visible", async () => {
-    store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "MA209990004" });
+    store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "MA209990004" });
     const propsData = {};
     let wrapper = mount(BarcodeViewer, {
       propsData,
@@ -99,29 +99,7 @@ describe("BarcodeViewer.vue", () => {
     expect(wrapper.find("input").element.value).toEqual("MA209990004");
     expect(wrapper.find(".input__plate-barcode-entry-invalid").isVisible()).toBe(true);
   });
-  test("Given that it's not in manual mode and a valid scanned plate barcode is stored, When a user switches to manual mode, Then plate_barcode values are reset", async () => {
-    // confirm pre-condition
-    const test_barcode = "ML2022047000";
-    store.commit("playback/set_barcode", { type: "plate_barcode", new_value: test_barcode });
-    expect(store.state.playback.barcodes.plate_barcode).toStrictEqual({
-      value: test_barcode,
-      valid: true,
-    });
 
-    const propsData = {};
-    let wrapper = mount(BarcodeViewer, {
-      propsData,
-      store,
-      localVue,
-      attachToDocument: true,
-    });
-
-    await wrapper.vm.handle_manual_mode_choice(true);
-    expect(store.state.playback.barcodes.plate_barcode).toStrictEqual({
-      value: null,
-      valid: false,
-    });
-  });
   test("Given that its in manual mode and no plate barcode has been entered (default state), When Playback State is mutated to CALIBRATING, Then the text of the Barcode Input field should be empty string (not cause error or say null)", async () => {
     // confirm pre-condition
     store.commit("flask/set_barcode_manual_mode", true);

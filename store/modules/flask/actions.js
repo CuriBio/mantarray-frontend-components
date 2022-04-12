@@ -19,6 +19,7 @@ export async function ping_system_status() {
 
   const url = "http://localhost:4567/system_status";
   const result = await call_axios_get_from_vuex(url, this, params);
+
   if (result.status == 200) {
     const data = result.data;
     const status_uuid = data.ui_status_code;
