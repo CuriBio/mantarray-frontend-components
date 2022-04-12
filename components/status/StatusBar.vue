@@ -177,7 +177,7 @@ export default {
         button_names: ["Okay"],
       },
       short_circuit_labels: {
-        header: "Configuration Check Error!",
+        header: "Error!",
         msg_one:
           "A short circuit has been found during the configuration check. Replace the stimulation lid.",
         msg_two: "If the issue persists, please contact:  ",
