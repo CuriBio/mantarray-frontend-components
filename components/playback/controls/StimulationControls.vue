@@ -265,7 +265,7 @@ export default {
     async start_stim_configuration() {
       if (
         !this.play_state &&
-        ![STIM_STATUS.CONFIG_CHECK_IN_PROGRESS, STIM_STATUS.ERROR, STIM_STATUS.SHORT_CIRCUIT_ERR].includes(
+        ![STIM_STATUS.CONFIG_CHECK_IN_PROGRESS, STIM_STATUS.ERROR, STIM_STATUS.SHORT_CIRCUIT_ERROR].includes(
           this.stim_status
         ) &&
         this.barcodes.stim_barcode.valid &&

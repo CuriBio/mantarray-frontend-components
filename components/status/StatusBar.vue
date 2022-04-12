@@ -118,7 +118,6 @@ import Vue from "vue";
 import { mapGetters, mapState } from "vuex";
 import { STATUS } from "@/store/modules/flask/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
-import { ENUMS } from "@/store/modules/playback/enums";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
@@ -197,7 +196,6 @@ export default {
     }),
     ...mapState("stimulation", ["stim_play_state", "stim_status"]),
     ...mapState("data", ["stimulator_circuit_statuses"]),
-    ...mapState("playback", ["playback_state"]),
     ...mapState("settings", [
       "log_path",
       "shutdown_error_message",
@@ -229,14 +227,6 @@ export default {
     },
     stim_status: function (new_status) {
       if (this.stim_specific) this.set_stim_specific_status(new_status);
-    },
-    playback_state: function (new_status) {
-      if (
-        new_status == ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED &&
-        this.status_uuid !== STATUS.MESSAGE.CALIBRATION_NEEDED &&
-        !this.stim_specific
-      )
-        this.set_system_specific_status(STATUS.MESSAGE.CALIBRATION_NEEDED);
     },
     confirmation_request: function () {
       const sensitive_ops_in_progress =
