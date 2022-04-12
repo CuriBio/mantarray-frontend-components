@@ -639,27 +639,34 @@ describe("store/data", () => {
       });
       expect(store.state.settings.user_cred_input_needed).toBe(true);
     });
+
     test.each([
-      ["plate_barcode", valid_plate_barcode],
-      ["stim_barcode", valid_stim_barcode],
+      ["plate_barcode", "ML2022002001", valid_plate_barcode],
+      ["stim_barcode", "MS2022002001", valid_stim_barcode],
     ])(
-      "Given barcode is not in manual mode, When backend emits barcode message with valid %s, Then ws client updates correct barcode in store",
-      async (barcode_type, valid_barcode) => {
+      "Given barcode is not in manual mode, When backend emits barcode message with valid %s, Then ws client updates correct barcode in store and updates playback state",
+      async (barcode_type, old_barcode, valid_barcode) => {
         const message = {
           [barcode_type]: valid_barcode,
         };
-
-        store.commit("flask/set_barcode_manual_mode", false);
+        await store.commit("flask/set_barcode_manual_mode", false);
+        await store.commit("playback/set_barcode", {
+          type: barcode_type,
+          new_value: old_barcode,
+          is_valid: true,
+        });
 
         // confirm precondition
-        expect(store.state.playback.barcodes[barcode_type].value).toBeNull();
+        expect(store.state.playback.barcodes[barcode_type].value).toBe(old_barcode);
 
         await new Promise((resolve) => {
           socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
             resolve(ack);
           });
         });
+
         expect(store.state.playback.barcodes[barcode_type].value).toBe(valid_barcode);
+        expect(store.state.playback.enable_stim_controls).toBe(false);
       }
     );
     test.each([

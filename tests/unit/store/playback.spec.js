@@ -385,6 +385,7 @@ describe("store/playback", () => {
 
       expect(store.state.playback.playback_progression_interval_id).toBeNull();
     });
+
     test("Given playback_progression interval is active and playback_state is LIVE_VIEW_ACTIVE, When the playback_state transitions to CALIBRATED, Then the playback_progression_interval is cleared", async () => {
       store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
       await store.dispatch("playback/start_playback_progression");
