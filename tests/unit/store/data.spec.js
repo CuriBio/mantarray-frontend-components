@@ -641,11 +641,11 @@ describe("store/data", () => {
     });
 
     test.each([
-      ["plate_barcode", "ML2022002001", valid_plate_barcode, true],
-      ["stim_barcode", "MS2022002001", valid_stim_barcode, false],
+      ["plate_barcode", "ML2022002001", valid_plate_barcode],
+      ["stim_barcode", "MS2022002001", valid_stim_barcode],
     ])(
-      "Given barcode is not in manual mode, When backend emits barcode message with valid %s, Then ws client updates correct barcode in store and updates playback state",
-      async (barcode_type, old_barcode, valid_barcode, calibration_state) => {
+      "Given barcode is not in manual mode, When backend emits barcode message with valid %s, Then ws client updates correct barcode in store",
+      async (barcode_type, old_barcode, valid_barcode) => {
         const message = {
           [barcode_type]: valid_barcode,
         };
@@ -665,12 +665,10 @@ describe("store/data", () => {
           });
         });
 
-        const playback_calibration_state =
-          store.state.playback.playback_state === ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED;
+        const stim_config_state = store.state.stimulation.stim_status === STIM_STATUS.CONFIG_CHECK_NEEDED;
 
         expect(store.state.playback.barcodes[barcode_type].value).toBe(valid_barcode);
-        expect(playback_calibration_state).toBe(calibration_state);
-        expect(store.state.playback.enable_stim_controls).toBe(false);
+        expect(stim_config_state).toBe(true);
       }
     );
     test.each([

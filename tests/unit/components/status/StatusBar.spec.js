@@ -80,26 +80,6 @@ describe("StatusWidget.vue", () => {
       expect(wrapper.find(text_selector).text()).toBe("System status: Calibrating...");
     });
 
-    test.each([
-      [false, "System status: Connected...Calibration Needed"],
-      [true, "Stimulation status: Calibration Needed Before Available"],
-    ])(
-      "When a playback_state gets updated to CALIBRATION_NEEDED in and prop for stim is %s, Then the status text will get updated to %s",
-      async (stim_specific, message) => {
-        const propsData = { stim_specific };
-        await store.commit("flask/set_status_uuid", STATUS.MESSAGE.READY);
-        wrapper = mount(StatusWidget, {
-          propsData,
-          store,
-          localVue,
-        });
-
-        await store.dispatch("playback/transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED);
-
-        expect(wrapper.find(text_selector).text()).toBe(message);
-      }
-    );
-
     test("When Vuex is mutated to an unknown UUID, Then the status text should update to include that UUID", async () => {
       const propsData = {};
       wrapper = mount(StatusWidget, {
