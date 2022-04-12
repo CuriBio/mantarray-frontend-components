@@ -227,6 +227,7 @@ export default {
         : "span__stimulation-controls-play-stop-button--inactive";
     },
     configuration_message: function () {
+      console.log(this.stim_status);
       if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
       else if (this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED)
         return "Can only run a configuration check if device is calibrated. Please ensure no other processes are running.";
@@ -290,8 +291,7 @@ export default {
     async start_24hr_timer() {
       this.stim_24hr_timer = setTimeout(() => {
         this.$bvModal.show("stim-24hr-warning");
-        //   }, 24 * 60 * 60e3);
-      }, 5e3);
+      }, 24 * 60 * 60e3);
     },
   },
 };

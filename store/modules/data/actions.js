@@ -96,9 +96,10 @@ export default {
     // possible status values: open, short, media
 
     // check if statuses include a short circuit status and set error status
-    if (stimulator_statuses.includes("short"))
+    if (stimulator_statuses.includes("short")) {
+      this.commit("stimulation/reset_state");
       this.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERROR);
-    else {
+    } else {
       // else set the stim status that other components watch
       // only saves indices
 

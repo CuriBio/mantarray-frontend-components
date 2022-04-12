@@ -203,12 +203,10 @@ export default {
       state.barcodes[type].value !== null // this prevents a second calibration being required at startup since we want users to be able to calibrate first
     ) {
       dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED);
-      commit("set_enable_stim_controls", false);
-    }
-
-    // require new stim configuration check when either barcode is changed and valid
-    if (is_valid && state.barcodes[type].value !== new_value) {
       this.commit("stimulation/set_stim_status", STIM_STATUS.CALIBRATION_NEEDED);
+      commit("set_enable_stim_controls", false);
+    } else if (is_valid && type == "stim_barcode" && state.barcodes[type].value !== new_value) {
+      this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED);
     }
 
     commit("set_barcode", { type, new_value, is_valid });
