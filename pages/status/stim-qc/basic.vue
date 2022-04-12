@@ -4,8 +4,8 @@
   <StimQCSummary />
 </template>
 <script>
-import StimQCSummary from "@/components/status/StimQCSummary.vue";
-// import { StatusWarningWidget } from "@/dist/mantarray.common";
+// import StimQCSummary from "@/components/status/StimQCSummary.vue";
+import { StimQCSummary } from "@/dist/mantarray.common";
 
 export default {
   components: {

@@ -290,7 +290,8 @@ export default {
     async start_24hr_timer() {
       this.stim_24hr_timer = setTimeout(() => {
         this.$bvModal.show("stim-24hr-warning");
-      }, 24 * 60 * 60e3);
+        //   }, 24 * 60 * 60e3);
+      }, 5e3);
     },
   },
 };

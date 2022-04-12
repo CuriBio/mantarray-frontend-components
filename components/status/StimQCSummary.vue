@@ -39,9 +39,10 @@ export default {
       type: Object,
       default() {
         return {
-          header: "Configuration Check Summary",
-          msg_one: "An open circuit error has been found in the wells shown below.",
-          msg_two: "Please replace the stimulation lid or continue without these wells.",
+          header: "Configuration Check Summary!",
+          msg_one:
+            "An open circuit error has been found in the wells shown below. These wells will be disabled until a new stimulation lid is used and a new configuration check is run resulting in no errors.",
+          msg_two: "Please replace the stimulation lid or proceed at your own risk.",
           button_names: ["Okay"],
         };
       },

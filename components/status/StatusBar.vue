@@ -177,15 +177,15 @@ export default {
         button_names: ["Okay"],
       },
       short_circuit_labels: {
-        header: "Error!",
+        header: "Configuration Check Error!",
         msg_one:
-          "A short circuit has been found during the configuration check. Please replace stimulation lid.",
-        msg_two: "If issue persists, please contact:  ",
+          "A short circuit has been found during the configuration check. Please replace the stimulation lid.",
+        msg_two: "If the issue persists, please contact:  ",
         button_names: ["Okay"],
       },
       successful_qc_check_labels: {
         header: "Configuration Check Complete!",
-        msg_one: "No errors were found during configuration check.",
+        msg_one: "No errors were found during the configuration check.",
         msg_two: "You can now run a stimulation.",
         button_names: ["Okay"],
       },
