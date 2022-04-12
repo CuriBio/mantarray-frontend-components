@@ -29,10 +29,10 @@ Changelog for Mantarray Frontend Components
 
   - Changed the name of the PlateBarcode component to BarcodeViewer
   - Updated barcode websocket handler to handle stim_barcode and plate_barcode
-  - User cannot run a configuration check without a valid stim lid barcode
+  - Prevent user from starting a configuration check without a valid stim lid barcode
   - Removed the BarcodeEditDialogue component
 
-- Updated response to a new plate barcode and/or new stim barcode values to require a new calibration or configuration check to be run
+- Updated response to a new plate barcode and/or new stim barcode values to require a new configuration check to be run
 - Updated the StatusWarningWidget to dynamically render modal height
 
 0.6.4 (2022-03-16)
