@@ -225,7 +225,7 @@ export default {
     status_uuid: function (new_status) {
       // set message for stimulation status and system status if error occurs
       if (new_status == STATUS.MESSAGE.ERROR) this.alert_txt = `Error Occurred`;
-      else if (!this.stim_specific) this.set_system_specific_status(new_status);
+      if (!this.stim_specific) this.set_system_specific_status(new_status);
     },
     stim_status: function (new_status) {
       if (this.stim_specific) this.set_stim_specific_status(new_status);

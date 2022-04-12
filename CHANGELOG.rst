@@ -1,6 +1,39 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.6.5 (2022-04-12)
+------------------
+
+- Added stimulation configuration check feature:
+
+  - Changed the name of the AdditionalControls component to StimulationControls
+  - Added websocket handler for stimulator_circuit_statuses
+  - Added /start_stim_checks route to kick off configuration check
+  - Added tooltips to relay new requirement to the start stim button, the stim plate widget, and the configuration check icon
+  - Added three modals in repsonse to the completetion of a configuration check:
+
+    - One displaying summary of open circuit wells on stim plate widget that will now be disabled
+    - One letting user know a short circuit has been found and that a stim lid replacement is required before enabling stimulation
+    - One letting user know that no errors were found and that they may now proceed with starting a stimulation
+
+  - Added modal to appear when user starts a stimulation with open circuits in some wells warning them of the risk
+  - Added an open circuit icon and tooltip to be displayed over the wells with open circuits in the stimulation studio to let user know they aren't in operation
+  - Added a 24-hour active stimulation timer to display a warning to the user that it is recommended to run another configuration check
+  - Added a spinner over the configuration check icon to be displayed when a check in running to let user know it is "in-progress"
+  - Added checks preventing a calibration, live-view, or configuration check from being started while a configuration check is in-progress
+  - Added check preventing user from starting a stimulation before a configuration check has been run or a short circuit error was found
+  - Added configuration check to list of processes that prevent the desktop app from automatically  closing when a user exits. It will display a closure warning.
+
+- Added stimulation status component
+- Added Stim Lid Barcode requirement:
+
+  - Changed the name of the PlateBarcode component to BarcodeViewer
+  - Updated barcode websocket handler to handle stim_barcode and plate_barcode
+  - User cannot run a configuration check without a valid stim lid barcode
+  - Removed the BarcodeEditDialogue component
+
+- Updated response to a new plate barcode and/or new stim barcode values to require a new calibration or configuration check to be run
+- Updated the StatusWarningWidget to dynamically render modal height
 
 0.6.4 (2022-03-16)
 ------------------
