@@ -56,19 +56,14 @@ export default function create_web_socket_plugin(socket) {
         const message = JSON.parse(message_json);
         for (const barcode_type in store.state.playback.barcodes)
           if (message[barcode_type])
-            store.commit("playback/set_barcode", {
+            store.dispatch("playback/validate_barcode", {
               type: barcode_type,
               new_value: message[barcode_type],
             });
-
-        store.commit("playback/set_barcode", {
-          type: "stim_barcode",
-          new_value: "MS2022001000", // REMOVE
-        });
       }
 
       /* istanbul ignore else */
-      if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
+      if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback
     });
     socket.on("upload_status", (status_json, cb) => {
       const status = JSON.parse(status_json);

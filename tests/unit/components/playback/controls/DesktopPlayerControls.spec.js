@@ -56,7 +56,7 @@ describe("DesktopPlayerControls.vue", () => {
   });
 
   test("Given an invalid barcode in Vuex and the playback state is CALIBRATED, Then the Start Live View button should be Unavailable, When barcode becomes valid in Vuex Then Start Live View should be Available, Then when barcode becomes invalid, Start Live View becomes unavailable", async () => {
-    store.commit("playback/set_barcode", { type: "plate_barcode", new_value: null });
+    store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: null });
     store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
 
     const propsData = {};
@@ -72,12 +72,12 @@ describe("DesktopPlayerControls.vue", () => {
 
     expect(the_classes).not.toContain("span__playback-desktop-player-controls--available");
 
-    store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
+    store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
     await wrapper.vm.$nextTick(); // wait for update
     the_classes = target_button.classes();
     expect(the_classes).toContain("span__playback-desktop-player-controls--available");
 
-    store.commit("playback/set_barcode", { type: "plate_barcode", new_value: null });
+    store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: null });
     await wrapper.vm.$nextTick(); // wait for update
     the_classes = target_button.classes();
     expect(the_classes).not.toContain("span__playback-desktop-player-controls--available");
@@ -169,7 +169,7 @@ describe("DesktopPlayerControls.vue", () => {
 
   describe("Given a valid plate barcode has been committed to Vuex", () => {
     beforeEach(async () => {
-      store.commit("playback/set_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
+      store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
     });
 
     test.each([
@@ -239,7 +239,7 @@ describe("DesktopPlayerControls.vue", () => {
       });
 
       test("Given an invalid barcode in Vuex and the playback state is CALIBRATED, When Start Live View is clicked Then the playback state does not transition", async () => {
-        store.commit("playback/set_barcode", { type: "plate_barcode", new_value: null });
+        store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: null });
         store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
 
         const propsData = {};

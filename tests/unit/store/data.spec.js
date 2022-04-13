@@ -481,21 +481,21 @@ describe("store/data", () => {
         y_data_points: [4, 101000],
       });
     });
+
     test("When backend emits stimulator_circuit_status message with short circuit errors, Then ws client updates stim status to short circuit error", async () => {
       // confirm precondition
       const initial_statuses = store.state.data.stimulator_circuit_statuses;
       expect(initial_statuses).toHaveLength(0);
 
-      const new_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 20).fill("short", 20, 24);
+      const stimulator_statuses = new Array(24)
+        .fill("open", 0, 10)
+        .fill("media", 10, 20)
+        .fill("short", 20, 24);
 
       await new Promise((resolve) => {
-        socket_server_side.emit(
-          "stimulator_circuit_statuses",
-          JSON.stringify({ stimulator_statuses: new_statuses }),
-          (ack) => {
-            resolve(ack);
-          }
-        );
+        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(stimulator_statuses), (ack) => {
+          resolve(ack);
+        });
       });
 
       const updated_statuses = store.state.data.stimulator_circuit_statuses;
@@ -510,16 +510,12 @@ describe("store/data", () => {
       const initial_statuses = store.state.data.stimulator_circuit_statuses;
       expect(initial_statuses).toHaveLength(0);
 
-      const new_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 24);
-      console.log(new_statuses);
+      const stimulator_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 24);
+
       await new Promise((resolve) => {
-        socket_server_side.emit(
-          "stimulator_circuit_statuses",
-          JSON.stringify({ stimulator_statuses: new_statuses }),
-          (ack) => {
-            resolve(ack);
-          }
-        );
+        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(stimulator_statuses), (ack) => {
+          resolve(ack);
+        });
       });
 
       const updated_statuses = store.state.data.stimulator_circuit_statuses;
@@ -644,27 +640,36 @@ describe("store/data", () => {
       });
       expect(store.state.settings.user_cred_input_needed).toBe(true);
     });
+
     test.each([
-      ["plate_barcode", valid_plate_barcode],
-      ["stim_barcode", valid_stim_barcode],
+      ["plate_barcode", "ML2022002001", valid_plate_barcode],
+      ["stim_barcode", "MS2022002001", valid_stim_barcode],
     ])(
       "Given barcode is not in manual mode, When backend emits barcode message with valid %s, Then ws client updates correct barcode in store",
-      async (barcode_type, valid_barcode) => {
+      async (barcode_type, old_barcode, valid_barcode) => {
         const message = {
           [barcode_type]: valid_barcode,
         };
-
-        store.commit("flask/set_barcode_manual_mode", false);
+        await store.commit("flask/set_barcode_manual_mode", false);
+        await store.commit("playback/set_barcode", {
+          type: barcode_type,
+          new_value: old_barcode,
+          is_valid: true,
+        });
 
         // confirm precondition
-        expect(store.state.playback.barcodes[barcode_type].value).toBeNull();
+        expect(store.state.playback.barcodes[barcode_type].value).toBe(old_barcode);
 
         await new Promise((resolve) => {
           socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
             resolve(ack);
           });
         });
+
+        const stim_config_state = store.state.stimulation.stim_status === STIM_STATUS.CONFIG_CHECK_NEEDED;
+
         expect(store.state.playback.barcodes[barcode_type].value).toBe(valid_barcode);
+        expect(stim_config_state).toBe(true);
       }
     );
     test.each([

@@ -137,23 +137,35 @@ describe("store/stimulation", () => {
         expect(wrapper.vm.play_state).toBe(false);
       }
     );
-    test("When Vuex's stim_status changes state to ready but no protocols are assigned, Then the stim start tooltip will have an updated message asking using to assign protocols", async () => {
-      const wrapper = mount(StimulationControls, {
-        store,
-        localVue,
-      });
-      await store.commit("stimulation/set_stim_play_state", false);
-      await store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
 
-      expect(wrapper.find("#start-popover-msg").text()).toBe("No protocols have been assigned");
-    });
+    test.each([
+      ["MS2022001000", true, "No protocols have been assigned"],
+      ["invalid_barcode", false, "Must have a valid Stimulation Lid Barcode"],
+    ])(
+      "When Vuex's stim_status changes state to ready and stim barcodes value is changed to %s and validity is %s , Then the stim start tooltip will have an updated message %s",
+      async (new_value, is_valid, message) => {
+        const wrapper = mount(StimulationControls, {
+          store,
+          localVue,
+        });
+        await store.commit("stimulation/set_stim_play_state", false);
+        await store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
+        await store.commit("playback/set_barcode", {
+          type: "stim_barcode",
+          new_value,
+          is_valid,
+        });
+
+        expect(wrapper.find("#start-popover-msg").text()).toBe(message);
+      }
+    );
 
     test.each([
       ["RECORDING", "Cannot start stimulation while recording is active"],
       ["CALIBRATING", "Cannot start stimulation while calibrating instrument"],
       ["CALIBRATED", "Start Stimulation"],
     ])(
-      "Given that protocols have been assigned to wells in the stim studio and configuration check is complete, When Vuex's playback_state changes state to %s, Then the stim start tooltip will have an updated message %s",
+      "Given that protocols have been assigned to wells in the stim studio, valid stim barcode present, and configuration check is complete, When Vuex's playback_state changes state to %s, Then the stim start tooltip will have an updated message %s",
       async (status, expected_message) => {
         const wrapper = mount(StimulationControls, {
           store,
@@ -166,6 +178,11 @@ describe("store/stimulation", () => {
         await store.commit("stimulation/set_stim_play_state", false);
         await store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
         await store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES[status]);
+        await store.commit("playback/set_barcode", {
+          type: "stim_barcode",
+          new_value: "MS2022001000",
+          is_valid: true,
+        });
 
         expect(wrapper.find("#start-popover-msg").text()).toBe(expected_message);
         expect(wrapper.vm.play_state).toBe(false);
@@ -208,10 +225,11 @@ describe("store/stimulation", () => {
         await store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
         await store.commit("playback/set_barcode", {
           type: "stim_barcode",
-          new_value: "MS2022001000", // REMOVE
+          new_value: "MS2022001000",
+          is_valid: true,
         });
 
-        await wrapper.find(".img__temp-icon").trigger("click");
+        await wrapper.find(".svg__config_check_container").trigger("click");
         expect(action_spy).toHaveBeenCalledTimes(calls);
       }
     );

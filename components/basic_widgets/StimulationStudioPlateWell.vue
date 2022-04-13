@@ -21,9 +21,6 @@
         :index="index"
         :fill-opacity="fill_opacity"
       />
-      <span v-if="!disable" class="span__simulationstudio-plate-well-protocol-location">
-        {{ protocol_type }}
-      </span>
       <svg
         v-if="disable"
         v-b-popover.hover.top="error_message"
@@ -54,6 +51,13 @@
         />
         <rect class="svg__open-circuit" x="50.5" y="28.9" width="8.3" height="4" />
       </svg>
+      <span
+        v-if="!disable"
+        class="span__simulationstudio-plate-well-protocol-location"
+        :style="computed_label_left"
+      >
+        {{ protocol_type }}
+      </span>
     </div>
   </div>
 </template>
@@ -72,6 +76,7 @@ export default {
     stroke: { type: String, default: "" },
     protocol_fill: { type: String, default: "#B7B7B7" },
     stroke_wdth: { type: Number, default: 0 },
+    display: { type: Boolean, default: false },
     index: {
       type: Number,
       default: 0,
@@ -106,6 +111,9 @@ export default {
     // eslint-disable-next-line vue/return-in-computed-property
     computed_left: function () {
       return 29 + Math.floor(this.index / 4) * 62;
+    },
+    computed_label_left: function () {
+      return this.display ? "left: 29px;" : "left: 32px;";
     },
     computed_style: function () {
       return "top:" + this.computed_top + "px;" + "left:" + this.computed_left + "px;";
@@ -146,7 +154,6 @@ export default {
   width: 20px;
   height: 20px;
   position: fixed;
-  left: 33px;
   bottom: 19px;
   font-weight: bold;
   visibility: visible;

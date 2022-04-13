@@ -178,13 +178,13 @@ export default {
       short_circuit_labels: {
         header: "Error!",
         msg_one:
-          "A short circuit has been found during the configuration check. Please replace stimulation lid.",
-        msg_two: "If issue persists, please contact:  ",
+          "A short circuit has been found during the configuration check. Replace the stimulation lid.",
+        msg_two: "If the issue persists, please contact:  ",
         button_names: ["Okay"],
       },
       successful_qc_check_labels: {
         header: "Configuration Check Complete!",
-        msg_one: "No errors were found during configuration check.",
+        msg_one: "No errors were found during the configuration check.",
         msg_two: "You can now run a stimulation.",
         button_names: ["Okay"],
       },
@@ -261,8 +261,7 @@ export default {
         this.stimulator_circuit_statuses.length > 0
           ? this.$bvModal.show("failed-qc-check")
           : this.$bvModal.show("success-qc-check");
-
-      if (status === STIM_STATUS.SHORT_CIRCUIT_ERROR) this.$bvModal.show("short-circuit-err");
+      else if (status === STIM_STATUS.SHORT_CIRCUIT_ERROR) this.$bvModal.show("short-circuit-err");
     },
     set_system_specific_status: function (status) {
       switch (status) {

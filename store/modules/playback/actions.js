@@ -2,8 +2,10 @@
 
 import { ENUMS } from "./enums";
 import { STATUS } from "../flask/enums";
+import { STIM_STATUS } from "../stimulation/enums";
 import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
-
+import { TextValidation } from "@/js_utils/text_validation.js";
+const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 // =========================================================================
 // |   Following are the list of items called --todo                       |
 // |   a) baseurl {contains the flask server url } {obtain from config.ini}|
@@ -187,5 +189,16 @@ export default {
     one_min_timer = setInterval(() => {
       context.commit("set_one_min_warning", true);
     }, 1 * 60e3);
+  },
+  validate_barcode({ commit, state }, { type, new_value }) {
+    const result = TextValidation_plate_barcode.validate(new_value);
+    const is_valid = result == "";
+
+    // require new stim configuration check if either new barcode changes
+    if (is_valid && state.barcodes[type].value !== new_value) {
+      this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED);
+    }
+
+    commit("set_barcode", { type, new_value, is_valid });
   },
 };

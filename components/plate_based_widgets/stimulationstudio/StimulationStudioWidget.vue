@@ -50,6 +50,7 @@
         :protocol_fill="getProtocolColor(well_index)"
         :index="well_index"
         :disable="stimulator_circuit_statuses.includes(well_index)"
+        :display="disable"
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"

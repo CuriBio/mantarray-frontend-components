@@ -95,11 +95,12 @@ export default {
       const bool_choice = Boolean(choice);
       this.$bvModal.hide("edit-plate-barcode-modal");
       this.$store.commit("flask/set_barcode_manual_mode", bool_choice);
-      if (bool_choice)
-        this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: null });
     },
     set_barcode_manually: function (event) {
-      this.$store.commit("playback/set_barcode", { type: this.barcode_type, new_value: event.target.value });
+      this.$store.dispatch("playback/validate_barcode", {
+        type: this.barcode_type,
+        new_value: event.target.value,
+      });
     },
     set_green_color(inp) {
       inp.style.border = "1px solid green";
