@@ -481,6 +481,7 @@ describe("store/data", () => {
         y_data_points: [4, 101000],
       });
     });
+
     test("When backend emits stimulator_circuit_status message with short circuit errors, Then ws client updates stim status to short circuit error", async () => {
       // confirm precondition
       const initial_statuses = store.state.data.stimulator_circuit_statuses;

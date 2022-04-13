@@ -229,7 +229,7 @@ describe("store/stimulation", () => {
           is_valid: true,
         });
 
-        await wrapper.find(".img__temp-icon").trigger("click");
+        await wrapper.find(".svg__config_check_container").trigger("click");
         expect(action_spy).toHaveBeenCalledTimes(calls);
       }
     );

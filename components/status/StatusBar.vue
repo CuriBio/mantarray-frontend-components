@@ -261,8 +261,7 @@ export default {
         this.stimulator_circuit_statuses.length > 0
           ? this.$bvModal.show("failed-qc-check")
           : this.$bvModal.show("success-qc-check");
-
-      if (status === STIM_STATUS.SHORT_CIRCUIT_ERROR) this.$bvModal.show("short-circuit-err");
+      else if (status === STIM_STATUS.SHORT_CIRCUIT_ERROR) this.$bvModal.show("short-circuit-err");
     },
     set_system_specific_status: function (status) {
       switch (status) {
