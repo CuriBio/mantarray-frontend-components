@@ -53,13 +53,50 @@
     <div
       v-b-popover.hover.bottom="configuration_message"
       title="Configuration Check"
-      class="div__temp-icon-container"
+      class="div__config_check-container"
     >
-      <img
-        src="@/assets/img/temp-controls-icon.png"
-        class="img__temp-icon"
+      <svg
+        class="svg__config_check_container"
+        x="0px"
+        y="0px"
+        viewBox="-10 -10 100 100"
         @click="start_stim_configuration"
-      />
+      >
+        <path
+          class="svg__outer_circle"
+          d="M30.9,2.4c15.71,0,28.5,12.79,28.5,28.5c0,15.71-12.79,28.5-28.5,28.5S2.4,46.61,2.4,30.9
+	C2.4,15.18,15.18,2.4,30.9,2.4"
+        />
+        <g>
+          <g>
+            <g>
+              <g>
+                <path
+                  class="svg__inner_circle"
+                  d="M17.26,28.81c1.14,0,2.07,0.93,2.07,2.07c0,1.14-0.93,2.07-2.07,2.07s-2.07-0.93-2.07-2.07
+					C15.2,29.73,16.12,28.81,17.26,28.81 M17.26,24.81c-3.35,0-6.07,2.72-6.07,6.07c0,3.35,2.72,6.07,6.07,6.07
+					c3.35,0,6.07-2.72,6.07-6.07C23.33,27.52,20.61,24.81,17.26,24.81L17.26,24.81z"
+                />
+              </g>
+            </g>
+          </g>
+          <g>
+            <g>
+              <g>
+                <path
+                  class="svg__inner_circle"
+                  d="M45.26,28.81c1.14,0,2.07,0.93,2.07,2.07c0,1.14-0.93,2.07-2.07,2.07s-2.07-0.93-2.07-2.07
+					C43.2,29.73,44.12,28.81,45.26,28.81 M45.26,24.81c-3.35,0-6.07,2.72-6.07,6.07c0,3.35,2.72,6.07,6.07,6.07
+					c3.35,0,6.07-2.72,6.07-6.07C51.33,27.52,48.61,24.81,45.26,24.81L45.26,24.81z"
+                />
+              </g>
+            </g>
+          </g>
+          <line class="svg__inner_line" x1="11.73" y1="30.87" x2="3.48" y2="30.87" />
+          <line class="svg__inner_line" x1="34.8" y1="17.28" x2="21.16" y2="30.91" />
+          <line class="svg__inner_line" x1="58.73" y1="30.87" x2="50.48" y2="30.87" />
+        </g>
+      </svg>
       <span v-show="config_check_in_progress" class="span__spinner">
         <FontAwesomeIcon :style="'fill: #ececed;'" :icon="['fa', 'spinner']" pulse />
       </span>
@@ -389,21 +426,23 @@ body {
 .span__spinner {
   position: absolute;
   font-size: 34px;
-  right: 9px;
-  bottom: 3px;
+  right: 17.5px;
+  bottom: 15px;
   width: 45px;
-  color: #ffffff;
+  color: #fff;
   padding-left: 5px;
-  background-color: black;
-  opacity: 0.9;
+  background-color: #000;
+  opacity: 0.85;
 }
-
-.div__temp-icon-container {
+.svg__config_check_container {
+  height: 67px;
+  left: 20px;
+}
+.div__config_check-container {
   cursor: pointer;
+  top: 26px;
+  left: 60px;
   position: absolute;
-  top: 29px;
-  height: 54px;
-  left: 55px;
 }
 .svg__waveform-icon {
   fill: #b7b7b7;
@@ -416,6 +455,26 @@ body {
   top: 32px;
   right: 4px;
   position: relative;
+}
+.svg__outer_circle {
+  position: relative;
+  fill: #b7b7b7;
+  stroke: #b7b7b7;
+  stroke-width: 6px;
+}
+.svg__outer_circle:hover {
+  fill: #ffffff;
+  stroke: #ffffff;
+}
+.svg__inner_line {
+  stroke: black;
+  stroke-width: 6;
+  fill: none;
+}
+.svg__inner_circle {
+  stroke: black;
+  stroke-width: 8;
+  fill: none;
 }
 
 #open-circuit-warning,
