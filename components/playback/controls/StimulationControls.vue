@@ -53,17 +53,17 @@
     <div
       v-b-popover.hover.bottom="configuration_message"
       title="Configuration Check"
-      class="div__config_check-container"
+      class="div__config-check-container"
     >
       <svg
-        class="svg__config_check_container"
+        class="svg__config-check-container"
         x="0px"
         y="0px"
         viewBox="-10 -10 100 100"
         @click="start_stim_configuration"
       >
         <path
-          class="svg__outer_circle"
+          :class="svg__stimulation_controls_config_check_button__dynamic_class"
           d="M30.9,2.4c15.71,0,28.5,12.79,28.5,28.5c0,15.71-12.79,28.5-28.5,28.5S2.4,46.61,2.4,30.9
 	C2.4,15.18,15.18,2.4,30.9,2.4"
         />
@@ -72,7 +72,7 @@
             <g>
               <g>
                 <path
-                  class="svg__inner_circle"
+                  class="svg__inner-circle"
                   d="M17.26,28.81c1.14,0,2.07,0.93,2.07,2.07c0,1.14-0.93,2.07-2.07,2.07s-2.07-0.93-2.07-2.07
 					C15.2,29.73,16.12,28.81,17.26,28.81 M17.26,24.81c-3.35,0-6.07,2.72-6.07,6.07c0,3.35,2.72,6.07,6.07,6.07
 					c3.35,0,6.07-2.72,6.07-6.07C23.33,27.52,20.61,24.81,17.26,24.81L17.26,24.81z"
@@ -84,7 +84,7 @@
             <g>
               <g>
                 <path
-                  class="svg__inner_circle"
+                  class="svg__inner-circle"
                   d="M45.26,28.81c1.14,0,2.07,0.93,2.07,2.07c0,1.14-0.93,2.07-2.07,2.07s-2.07-0.93-2.07-2.07
 					C43.2,29.73,44.12,28.81,45.26,28.81 M45.26,24.81c-3.35,0-6.07,2.72-6.07,6.07c0,3.35,2.72,6.07,6.07,6.07
 					c3.35,0,6.07-2.72,6.07-6.07C51.33,27.52,48.61,24.81,45.26,24.81L45.26,24.81z"
@@ -92,10 +92,10 @@
               </g>
             </g>
           </g>
-          <line class="svg__inner_line" x1="11.73" y1="30.87" x2="3.48" y2="30.87" />
-          <line class="svg__inner_line" x1="34.8" y1="17.28" x2="21.16" y2="30.91" />
-          <line class="svg__inner_line" x1="58.73" y1="30.87" x2="50.48" y2="30.87" />
         </g>
+        <line class="svg__inner-line" x1="11.73" y1="30.87" x2="3.48" y2="30.87" />
+        <line class="svg__inner-line" x1="34.8" y1="17.28" x2="21.16" y2="30.91" />
+        <line class="svg__inner-line" x1="58.73" y1="30.87" x2="50.48" y2="30.87" />
       </svg>
       <span v-show="config_check_in_progress" class="span__spinner">
         <FontAwesomeIcon :style="'fill: #ececed;'" :icon="['fa', 'spinner']" pulse />
@@ -202,6 +202,7 @@ export default {
         button_names: ["Continue Anyway", "Stop Stimulation"],
       },
       stim_24hr_timer: null,
+      hover_enabled: false,
     };
   },
   computed: {
@@ -253,15 +254,29 @@ export default {
       }
     },
     svg__stimulation_controls_play_stop_button__dynamic_class: function () {
-      if (!this.enable_stim_controls) {
-        // Tanner (2/1/22): This is only necessary so that the this button is shaded the same as the rest of
-        // the additional controls buttons when the controls block is displayed. The button is
-        // not actually active here. If the controls block is removed, this branch can likely be removed too.
-        return "span__stimulation-controls-play-stop-button--active";
-      }
-      return this.is_start_stop_button_enabled
-        ? "span__stimulation-controls-play-stop-button--active"
-        : "span__stimulation-controls-play-stop-button--inactive";
+      // Tanner (2/1/22): This is only necessary so that the this button is shaded the same as the rest of
+      // the additional controls buttons when the controls block is displayed. The button is
+      // not actually active here. If the controls block is removed, this branch can likely be removed too.
+      return this.is_start_stop_button_enabled || !this.enable_stim_controls
+        ? "span__stimulation-controls-play-stop-button--enabled"
+        : "span__stimulation-controls-play-stop-button--disabled";
+    },
+    is_config_check_button_enabled: function () {
+      return (
+        ![
+          STIM_STATUS.ERROR,
+          STIM_STATUS.SHORT_CIRCUIT_ERROR,
+          STIM_STATUS.CALIBRATION_NEEDED,
+          STIM_STATUS.STIM_ACTIVE,
+        ].includes(this.stim_status) &&
+        this.barcodes.stim_barcode.valid &&
+        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
+      );
+    },
+    svg__stimulation_controls_config_check_button__dynamic_class: function () {
+      return this.is_config_check_button_enabled || !this.enable_stim_controls
+        ? "svg__stimulation-controls-config-check-button--enabled"
+        : "svg__stimulation-controls-config-check-button--disabled";
     },
     configuration_message: function () {
       if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
@@ -300,14 +315,7 @@ export default {
       }
     },
     async start_stim_configuration() {
-      if (
-        !this.play_state &&
-        ![STIM_STATUS.CONFIG_CHECK_IN_PROGRESS, STIM_STATUS.ERROR, STIM_STATUS.SHORT_CIRCUIT_ERROR].includes(
-          this.stim_status
-        ) &&
-        this.barcodes.stim_barcode.valid &&
-        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
-      )
+      if (this.is_config_check_button_enabled && !this.config_check_in_progress)
         this.$store.dispatch(`stimulation/start_stim_configuration`);
     },
     async close_warning_modal(idx) {
@@ -376,7 +384,7 @@ body {
   padding: 5px;
 }
 
-.span__stimulation-controls-play-stop-button--inactive {
+.span__stimulation-controls-play-stop-button--disabled {
   position: relative;
   color: #2f2f2f;
   grid-column: 4;
@@ -384,7 +392,7 @@ body {
   width: 20px;
   font-size: 20px;
 }
-.span__stimulation-controls-play-stop-button--active {
+.span__stimulation-controls-play-stop-button--enabled {
   position: relative;
   color: #b7b7b7;
   grid-column: 4;
@@ -392,7 +400,7 @@ body {
   width: 20px;
   font-size: 20px;
 }
-.span__stimulation-controls-play-stop-button--active:hover {
+.span__stimulation-controls-play-stop-button--enabled:hover {
   color: #ffffff;
   cursor: pointer;
 }
@@ -434,11 +442,11 @@ body {
   background-color: #000;
   opacity: 0.85;
 }
-.svg__config_check_container {
+.svg__config-check-container {
   height: 67px;
   left: 20px;
 }
-.div__config_check-container {
+.div__config-check-container {
   cursor: pointer;
   top: 26px;
   left: 60px;
@@ -456,22 +464,30 @@ body {
   right: 4px;
   position: relative;
 }
-.svg__outer_circle {
+
+.svg__stimulation-controls-config-check-button--disabled {
+  fill: #2f2f2f;
+  stroke: #2f2f2f;
   position: relative;
-  fill: #b7b7b7;
-  stroke: #b7b7b7;
   stroke-width: 6px;
 }
-.svg__outer_circle:hover {
+.svg__stimulation-controls-config-check-button--enabled {
+  fill: #b7b7b7;
+  stroke: #b7b7b7;
+  position: relative;
+  stroke-width: 6px;
+}
+.svg__stimulation-controls-config-check-button--enabled:hover {
   fill: #ffffff;
   stroke: #ffffff;
 }
-.svg__inner_line {
+
+.svg__inner-line {
   stroke: black;
   stroke-width: 6;
   fill: none;
 }
-.svg__inner_circle {
+.svg__inner-circle {
   stroke: black;
   stroke-width: 8;
   fill: none;

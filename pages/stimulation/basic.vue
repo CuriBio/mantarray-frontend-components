@@ -11,11 +11,12 @@
   </div>
 </template>
 <script>
-// import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
-// import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
+import StimulationStudio from "@/components/stimulation/StimulationStudio.vue";
+import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
 import { mapMutations, mapActions } from "vuex";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
-import { StimulationStudio, StimulationControls } from "@/dist/mantarray.common";
+// import { StimulationStudio, StimulationControls } from "@/dist/mantarray.common";
+import playback_module from "@/store/modules/playback";
 
 export default {
   components: {
@@ -182,6 +183,12 @@ export default {
     },
     enable_controls() {
       this.$store.state.playback.enable_stim_controls = true;
+      this.$store.dispatch("playback/validate_barcode", {
+        type: "stim_barcode",
+        new_value: "MS2022001000",
+      });
+      this.$store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
+      this.$store.dispatch("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED);
     },
     mock_config_check() {
       this.set_stim_status(STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
