@@ -1,3 +1,4 @@
+import { setTimeout } from "core-js";
 import { ENUMS } from "../modules/playback/enums";
 
 const io = require("socket.io-client");
@@ -46,7 +47,10 @@ export default function create_web_socket_plugin(socket) {
     });
 
     socket.on("stimulator_circuit_statuses", (message_json, cb) => {
-      store.dispatch("data/check_stimulator_circuit_statuses", JSON.parse(message_json));
+      setTimeout(() => {
+        store.dispatch("data/check_stimulator_circuit_statuses", JSON.parse(message_json));
+      }, 5000);
+      //   store.dispatch("data/check_stimulator_circuit_statuses", JSON.parse(message_json));
 
       /* istanbul ignore else */
       if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback

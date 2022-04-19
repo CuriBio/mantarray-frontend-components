@@ -190,9 +190,14 @@ export default {
       context.commit("set_one_min_warning", true);
     }, 1 * 60e3);
   },
-  validate_barcode({ commit, state }, { type, new_value }) {
+  validate_barcode({ commit, state, dispatch }, { type, new_value }) {
     const result = TextValidation_plate_barcode.validate(new_value);
     const is_valid = result == "";
+
+    // stop all running processes if either barcode changes regardless of validity
+    if (this.state.stimulation.stim_play_state) this.dispatch("stimulation/stop_stimulation");
+    if (state.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE) dispatch("stop_live_view");
+    else if (state.playback_state === ENUMS.PLAYBACK_STATES.RECORDING) dispatch("stop_recording");
 
     // require new stim configuration check if either new barcode changes
     if (is_valid && state.barcodes[type].value !== new_value) {

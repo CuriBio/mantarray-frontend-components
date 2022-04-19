@@ -9,8 +9,8 @@
           <a
             v-if="email_error"
             id="error_contact"
-            href="mailto:contact@curibio.com ? subject = Short circuit error"
-            >contact@curibio.com</a
+            href="mailto:support@curibio.com ? subject = Short circuit error"
+            >support@curibio.com</a
           >
         </p>
         <textarea

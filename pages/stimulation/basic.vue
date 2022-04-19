@@ -191,7 +191,8 @@ export default {
       this.$store.dispatch("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED);
     },
     mock_config_check() {
-      this.set_stim_status(STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
+      //   this.set_stim_status(STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
+      this.set_stim_status(STIM_STATUS.SHORT_CIRCUIT_ERROR);
     },
   },
 };

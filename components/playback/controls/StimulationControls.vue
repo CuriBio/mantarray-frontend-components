@@ -110,10 +110,7 @@
       :static="true"
       :no-close-on-backdrop="true"
     >
-      <StatusWarningWidget
-        :modal_labels="open_circuit_warning_labels"
-        @handle_confirmation="close_warning_modal"
-      />
+      <StatusWarningWidget :modal_labels="open_circuit_labels" @handle_confirmation="close_warning_modal" />
     </b-modal>
     <b-modal
       id="stim-24hr-warning"
@@ -187,12 +184,12 @@ export default {
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
       controls_block_label: "Stimulation Controls are disabled until device is Calibrated",
-      open_circuit_warning_labels: {
+      open_circuit_labels: {
         header: "Warning!",
         msg_one:
-          "You are about to start a stimulation with disabled wells due to errors found in the configuration check.",
-        msg_two: "Please confirm to continue, otherwise replace stimulation lid and try again.",
-        button_names: ["Cancel", "Continue"],
+          "You are attempting to assign a protocol to a well that an open circuit was previously found in during the configuration check.",
+        msg_two: "Please unassign all wells labeled with an open circuit.",
+        button_names: ["Okay"],
       },
       timer_warning_labels: {
         header: "Warning!",
@@ -202,7 +199,6 @@ export default {
         button_names: ["Continue Anyway", "Stop Stimulation"],
       },
       stim_24hr_timer: null,
-      hover_enabled: false,
     };
   },
   computed: {
@@ -217,6 +213,7 @@ export default {
         is_enabled =
           is_enabled &&
           Object.keys(this.protocol_assignments).length !== 0 &&
+          this.assigned_open_circuits.length === 0 &&
           this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING &&
           ![
             STIM_STATUS.ERROR,
@@ -226,6 +223,12 @@ export default {
           ].includes(this.stim_status);
       }
       return is_enabled;
+    },
+    assigned_open_circuits: function () {
+      // filter for matching indices
+      return this.stimulator_circuit_statuses.filter((well) =>
+        Object.keys(this.protocol_assignments).includes(well.toString())
+      );
     },
     start_stim_label: function () {
       if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR) {
@@ -242,6 +245,8 @@ export default {
         return "Cannot start stimulation while recording is active";
       } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING) {
         return "Cannot start stimulation while calibrating instrument";
+      } else if (this.assigned_open_circuits.length !== 0) {
+        return "Cannot start stimulation with a protocol assigned to a well with an open circuit.";
       } else {
         return "Start Stimulation";
       }
@@ -300,6 +305,13 @@ export default {
       this.current_gradient = this.stim_play_state ? this.active_gradient : this.inactive_gradient;
       this.play_state = this.stim_play_state;
     },
+    assigned_open_circuits: function (new_val, old_val) {
+      if (this.stim_status !== STIM_STATUS.CONFIG_CHECK_COMPLETE && new_val.length > old_val.length)
+        this.$bvModal.show("open-circuit-warning");
+
+      console.log("NEW: ", this.assigned_open_circuits, new_val, old_val);
+      console.log("STATUSES: ", this.stimulator_circuit_statuses);
+    },
   },
   methods: {
     async handle_play_stop() {
@@ -307,8 +319,7 @@ export default {
         if (this.play_state) {
           this.$store.dispatch(`stimulation/stop_stimulation`);
           clearTimeout(this.stim_24hr_timer); // clear 24 hour timer for next stimulation
-        } else if (this.stimulator_circuit_statuses.length > 0) this.$bvModal.show("open-circuit-warning");
-        else {
+        } else {
           await this.$store.dispatch(`stimulation/create_protocol_message`);
           this.start_24hr_timer();
         }
@@ -318,12 +329,8 @@ export default {
       if (this.is_config_check_button_enabled && !this.config_check_in_progress)
         this.$store.dispatch(`stimulation/start_stim_configuration`);
     },
-    async close_warning_modal(idx) {
+    async close_warning_modal() {
       this.$bvModal.hide("open-circuit-warning");
-      if (idx === 1) {
-        await this.$store.dispatch(`stimulation/create_protocol_message`);
-        this.start_24hr_timer();
-      }
     },
     async close_timer_modal(idx) {
       this.$bvModal.hide("stim-24hr-warning");
@@ -447,7 +454,6 @@ body {
   left: 20px;
 }
 .div__config-check-container {
-  cursor: pointer;
   top: 26px;
   left: 60px;
   position: absolute;
@@ -476,6 +482,7 @@ body {
   stroke: #b7b7b7;
   position: relative;
   stroke-width: 6px;
+  cursor: pointer;
 }
 .svg__stimulation-controls-config-check-button--enabled:hover {
   fill: #ffffff;
