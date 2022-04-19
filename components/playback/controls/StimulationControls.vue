@@ -308,9 +308,6 @@ export default {
     assigned_open_circuits: function (new_val, old_val) {
       if (this.stim_status !== STIM_STATUS.CONFIG_CHECK_COMPLETE && new_val.length > old_val.length)
         this.$bvModal.show("open-circuit-warning");
-
-      console.log("NEW: ", this.assigned_open_circuits, new_val, old_val);
-      console.log("STATUSES: ", this.stimulator_circuit_statuses);
     },
   },
   methods: {

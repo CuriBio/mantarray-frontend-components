@@ -184,7 +184,7 @@ export default {
       },
       successful_qc_check_labels: {
         header: "Configuration Check Complete!",
-        msg_one: "No circuit errors were found in the assigned wells.",
+        msg_one: "No open circuits were detected in a well assigned with a protocol.",
         msg_two: "You can now run this stimulation.",
         button_names: ["Okay"],
       },
