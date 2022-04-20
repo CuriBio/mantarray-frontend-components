@@ -29,6 +29,7 @@ const default_state = {
   num_milliseconds_to_fast_forward_if_delayed: 400,
   five_min_warning: false,
   one_min_warning: false,
+  barcode_warning: false,
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2

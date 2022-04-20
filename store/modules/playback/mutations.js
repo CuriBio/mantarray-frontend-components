@@ -50,4 +50,7 @@ export default {
   set_one_min_warning(state, bool) {
     state.one_min_warning = bool;
   },
+  set_barcode_warning(state, bool) {
+    state.barcode_warning = bool;
+  },
 };
