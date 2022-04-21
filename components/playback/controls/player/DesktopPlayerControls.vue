@@ -362,7 +362,7 @@ export default {
       "firmware_update_available",
       "firmware_update_dur_mins",
     ]),
-    ...mapState("stimulation", ["stim_play_state", "stim_status"]),
+    ...mapState("stimulation", ["stim_status"]),
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
@@ -392,7 +392,7 @@ export default {
       }
       if (this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS)
         return "Cannot calibrate while stimulation configuration check is in progress";
-      if (this.stim_play_state) {
+      if (this.stim_status === STIM_STATUS.STIM_ACTIVE) {
         return "Cannot calibrate while stimulating";
       }
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
@@ -480,7 +480,7 @@ export default {
         "span__playback-desktop-player-controls--available":
           (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
             this.playback_state === this.playback_state_enums.CALIBRATED) &&
-          !this.stim_play_state &&
+          this.stim_status !== STIM_STATUS.STIM_ACTIVE &&
           this.stim_status !== STIM_STATUS.CONFIG_CHECK_IN_PROGRESS,
       };
     },
@@ -527,7 +527,7 @@ export default {
         this.$store.dispatch("playback/stop_live_view");
       } else if (
         this.playback_state === this.playback_state_enums.CALIBRATED &&
-        this.is_valid_barcode != false &&
+        this.is_valid_barcode &&
         this.stim_status !== STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
       ) {
         this.$store.dispatch("playback/start_live_view");
@@ -537,7 +537,7 @@ export default {
       if (
         (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
           this.playback_state === this.playback_state_enums.CALIBRATED) &&
-        !this.stim_play_state &&
+        this.stim_status !== STIM_STATUS.STIM_ACTIVE &&
         this.stim_status !== STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
       ) {
         if (this.beta_2_mode) this.$bvModal.show("calibration-warning");
