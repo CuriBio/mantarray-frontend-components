@@ -9,7 +9,7 @@ fixture`playback/controls/stimulation-controls/basic`
   .page // declare the fixture
 `http://localhost:8080/playback/controls/stimulation-controls/basic`; // specify the start page
 
-const status_btn_active = Selector(".span__stimulation-controls-play-stop-button--active");
+const status_btn_active = Selector(".span__stimulation-controls-play-stop-button--enabled");
 
 test("testing the StimulationControls layout on initialization", async (t) => {
   const screenshot_path_base = path.join("playback", "controls", "stimulation-controls");
