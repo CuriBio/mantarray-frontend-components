@@ -57,7 +57,7 @@ describe("ErrorCatchWidget.vue", () => {
     expect(target_alert_div_p.at(1)).toMatchInlineSnapshot(`
       <p>
         Please send the folder shown below to
-        <a id="error_contact" href="mailto:contact@curibio.com ? subject = Mantarray Error log">contact@curibio.com</a>
+        <a id="error_contact" href="mailto:support@curibio.com ? subject = Mantarray Error log">support@curibio.com</a>
       </p>
     `);
     await wrapper.vm.$nextTick(); // wait for update

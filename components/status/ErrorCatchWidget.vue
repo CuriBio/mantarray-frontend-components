@@ -9,8 +9,8 @@
       <p>{{ shutdown_error_message }}</p>
       <p>
         Please send the folder shown below to
-        <a id="error_contact" href="mailto:contact@curibio.com ? subject = Mantarray Error log"
-          >contact@curibio.com</a
+        <a id="error_contact" href="mailto:support@curibio.com ? subject = Mantarray Error log"
+          >support@curibio.com</a
         >
       </p>
     </div>

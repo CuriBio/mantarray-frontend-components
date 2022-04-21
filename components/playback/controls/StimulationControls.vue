@@ -53,17 +53,17 @@
     <div
       v-b-popover.hover.bottom="configuration_message"
       title="Configuration Check"
-      class="div__config_check-container"
+      class="div__config-check-container"
     >
       <svg
-        class="svg__config_check_container"
+        class="svg__config-check-container"
         x="0px"
         y="0px"
         viewBox="-10 -10 100 100"
         @click="start_stim_configuration"
       >
         <path
-          class="svg__outer_circle"
+          :class="svg__stimulation_controls_config_check_button__dynamic_class"
           d="M30.9,2.4c15.71,0,28.5,12.79,28.5,28.5c0,15.71-12.79,28.5-28.5,28.5S2.4,46.61,2.4,30.9
 	C2.4,15.18,15.18,2.4,30.9,2.4"
         />
@@ -72,7 +72,7 @@
             <g>
               <g>
                 <path
-                  class="svg__inner_circle"
+                  class="svg__inner-circle"
                   d="M17.26,28.81c1.14,0,2.07,0.93,2.07,2.07c0,1.14-0.93,2.07-2.07,2.07s-2.07-0.93-2.07-2.07
 					C15.2,29.73,16.12,28.81,17.26,28.81 M17.26,24.81c-3.35,0-6.07,2.72-6.07,6.07c0,3.35,2.72,6.07,6.07,6.07
 					c3.35,0,6.07-2.72,6.07-6.07C23.33,27.52,20.61,24.81,17.26,24.81L17.26,24.81z"
@@ -84,7 +84,7 @@
             <g>
               <g>
                 <path
-                  class="svg__inner_circle"
+                  class="svg__inner-circle"
                   d="M45.26,28.81c1.14,0,2.07,0.93,2.07,2.07c0,1.14-0.93,2.07-2.07,2.07s-2.07-0.93-2.07-2.07
 					C43.2,29.73,44.12,28.81,45.26,28.81 M45.26,24.81c-3.35,0-6.07,2.72-6.07,6.07c0,3.35,2.72,6.07,6.07,6.07
 					c3.35,0,6.07-2.72,6.07-6.07C51.33,27.52,48.61,24.81,45.26,24.81L45.26,24.81z"
@@ -92,10 +92,10 @@
               </g>
             </g>
           </g>
-          <line class="svg__inner_line" x1="11.73" y1="30.87" x2="3.48" y2="30.87" />
-          <line class="svg__inner_line" x1="34.8" y1="17.28" x2="21.16" y2="30.91" />
-          <line class="svg__inner_line" x1="58.73" y1="30.87" x2="50.48" y2="30.87" />
         </g>
+        <line class="svg__inner-line" x1="11.73" y1="30.87" x2="3.48" y2="30.87" />
+        <line class="svg__inner-line" x1="34.8" y1="17.28" x2="21.16" y2="30.91" />
+        <line class="svg__inner-line" x1="58.73" y1="30.87" x2="50.48" y2="30.87" />
       </svg>
       <span v-show="config_check_in_progress" class="span__spinner">
         <FontAwesomeIcon :style="'fill: #ececed;'" :icon="['fa', 'spinner']" pulse />
@@ -110,10 +110,7 @@
       :static="true"
       :no-close-on-backdrop="true"
     >
-      <StatusWarningWidget
-        :modal_labels="open_circuit_warning_labels"
-        @handle_confirmation="close_warning_modal"
-      />
+      <StatusWarningWidget :modal_labels="open_circuit_labels" @handle_confirmation="close_warning_modal" />
     </b-modal>
     <b-modal
       id="stim-24hr-warning"
@@ -187,12 +184,12 @@ export default {
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
       controls_block_label: "Stimulation Controls are disabled until device is Calibrated",
-      open_circuit_warning_labels: {
+      open_circuit_labels: {
         header: "Warning!",
         msg_one:
-          "You are about to start a stimulation with disabled wells due to errors found in the configuration check.",
-        msg_two: "Please confirm to continue, otherwise replace stimulation lid and try again.",
-        button_names: ["Cancel", "Continue"],
+          "You are attempting to assign a protocol to a well that an open circuit was previously found in during the configuration check.",
+        msg_two: "Please unassign all wells labeled with an open circuit.",
+        button_names: ["Okay"],
       },
       timer_warning_labels: {
         header: "Warning!",
@@ -216,6 +213,7 @@ export default {
         is_enabled =
           is_enabled &&
           Object.keys(this.protocol_assignments).length !== 0 &&
+          this.assigned_open_circuits.length === 0 &&
           this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING &&
           ![
             STIM_STATUS.ERROR,
@@ -225,6 +223,12 @@ export default {
           ].includes(this.stim_status);
       }
       return is_enabled;
+    },
+    assigned_open_circuits: function () {
+      // filter for matching indices
+      return this.stimulator_circuit_statuses.filter((well) =>
+        Object.keys(this.protocol_assignments).includes(well.toString())
+      );
     },
     start_stim_label: function () {
       if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR) {
@@ -241,6 +245,8 @@ export default {
         return "Cannot start stimulation while recording is active";
       } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING) {
         return "Cannot start stimulation while calibrating instrument";
+      } else if (this.assigned_open_circuits.length !== 0) {
+        return "Cannot start stimulation with a protocol assigned to a well with an open circuit.";
       } else {
         return "Start Stimulation";
       }
@@ -253,15 +259,29 @@ export default {
       }
     },
     svg__stimulation_controls_play_stop_button__dynamic_class: function () {
-      if (!this.enable_stim_controls) {
-        // Tanner (2/1/22): This is only necessary so that the this button is shaded the same as the rest of
-        // the additional controls buttons when the controls block is displayed. The button is
-        // not actually active here. If the controls block is removed, this branch can likely be removed too.
-        return "span__stimulation-controls-play-stop-button--active";
-      }
-      return this.is_start_stop_button_enabled
-        ? "span__stimulation-controls-play-stop-button--active"
-        : "span__stimulation-controls-play-stop-button--inactive";
+      // Tanner (2/1/22): This is only necessary so that the this button is shaded the same as the rest of
+      // the additional controls buttons when the controls block is displayed. The button is
+      // not actually active here. If the controls block is removed, this branch can likely be removed too.
+      return this.is_start_stop_button_enabled || !this.enable_stim_controls
+        ? "span__stimulation-controls-play-stop-button--enabled"
+        : "span__stimulation-controls-play-stop-button--disabled";
+    },
+    is_config_check_button_enabled: function () {
+      return (
+        ![
+          STIM_STATUS.ERROR,
+          STIM_STATUS.SHORT_CIRCUIT_ERROR,
+          STIM_STATUS.CALIBRATION_NEEDED,
+          STIM_STATUS.STIM_ACTIVE,
+        ].includes(this.stim_status) &&
+        this.barcodes.stim_barcode.valid &&
+        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
+      );
+    },
+    svg__stimulation_controls_config_check_button__dynamic_class: function () {
+      return this.is_config_check_button_enabled || !this.enable_stim_controls
+        ? "svg__stimulation-controls-config-check-button--enabled"
+        : "svg__stimulation-controls-config-check-button--disabled";
     },
     configuration_message: function () {
       if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
@@ -285,6 +305,10 @@ export default {
       this.current_gradient = this.stim_play_state ? this.active_gradient : this.inactive_gradient;
       this.play_state = this.stim_play_state;
     },
+    assigned_open_circuits: function (new_val, old_val) {
+      if (this.stim_status !== STIM_STATUS.CONFIG_CHECK_COMPLETE && new_val.length > old_val.length)
+        this.$bvModal.show("open-circuit-warning");
+    },
   },
   methods: {
     async handle_play_stop() {
@@ -292,30 +316,18 @@ export default {
         if (this.play_state) {
           this.$store.dispatch(`stimulation/stop_stimulation`);
           clearTimeout(this.stim_24hr_timer); // clear 24 hour timer for next stimulation
-        } else if (this.stimulator_circuit_statuses.length > 0) this.$bvModal.show("open-circuit-warning");
-        else {
+        } else {
           await this.$store.dispatch(`stimulation/create_protocol_message`);
           this.start_24hr_timer();
         }
       }
     },
     async start_stim_configuration() {
-      if (
-        !this.play_state &&
-        ![STIM_STATUS.CONFIG_CHECK_IN_PROGRESS, STIM_STATUS.ERROR, STIM_STATUS.SHORT_CIRCUIT_ERROR].includes(
-          this.stim_status
-        ) &&
-        this.barcodes.stim_barcode.valid &&
-        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
-      )
+      if (this.is_config_check_button_enabled && !this.config_check_in_progress)
         this.$store.dispatch(`stimulation/start_stim_configuration`);
     },
-    async close_warning_modal(idx) {
+    async close_warning_modal() {
       this.$bvModal.hide("open-circuit-warning");
-      if (idx === 1) {
-        await this.$store.dispatch(`stimulation/create_protocol_message`);
-        this.start_24hr_timer();
-      }
     },
     async close_timer_modal(idx) {
       this.$bvModal.hide("stim-24hr-warning");
@@ -376,7 +388,7 @@ body {
   padding: 5px;
 }
 
-.span__stimulation-controls-play-stop-button--inactive {
+.span__stimulation-controls-play-stop-button--disabled {
   position: relative;
   color: #2f2f2f;
   grid-column: 4;
@@ -384,7 +396,7 @@ body {
   width: 20px;
   font-size: 20px;
 }
-.span__stimulation-controls-play-stop-button--active {
+.span__stimulation-controls-play-stop-button--enabled {
   position: relative;
   color: #b7b7b7;
   grid-column: 4;
@@ -392,7 +404,7 @@ body {
   width: 20px;
   font-size: 20px;
 }
-.span__stimulation-controls-play-stop-button--active:hover {
+.span__stimulation-controls-play-stop-button--enabled:hover {
   color: #ffffff;
   cursor: pointer;
 }
@@ -434,12 +446,11 @@ body {
   background-color: #000;
   opacity: 0.85;
 }
-.svg__config_check_container {
+.svg__config-check-container {
   height: 67px;
   left: 20px;
 }
-.div__config_check-container {
-  cursor: pointer;
+.div__config-check-container {
   top: 26px;
   left: 60px;
   position: absolute;
@@ -456,22 +467,31 @@ body {
   right: 4px;
   position: relative;
 }
-.svg__outer_circle {
+
+.svg__stimulation-controls-config-check-button--disabled {
+  fill: #2f2f2f;
+  stroke: #2f2f2f;
   position: relative;
-  fill: #b7b7b7;
-  stroke: #b7b7b7;
   stroke-width: 6px;
 }
-.svg__outer_circle:hover {
+.svg__stimulation-controls-config-check-button--enabled {
+  fill: #b7b7b7;
+  stroke: #b7b7b7;
+  position: relative;
+  stroke-width: 6px;
+  cursor: pointer;
+}
+.svg__stimulation-controls-config-check-button--enabled:hover {
   fill: #ffffff;
   stroke: #ffffff;
 }
-.svg__inner_line {
+
+.svg__inner-line {
   stroke: black;
   stroke-width: 6;
   fill: none;
 }
-.svg__inner_circle {
+.svg__inner-circle {
   stroke: black;
   stroke-width: 8;
   fill: none;

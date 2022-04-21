@@ -73,7 +73,7 @@ describe("store/stimulation", () => {
       });
 
       wrapper.vm.play_state = true;
-      await wrapper.find(".span__stimulation-controls-play-stop-button--active").trigger("click");
+      await wrapper.find(".span__stimulation-controls-play-stop-button--enabled").trigger("click");
       expect(dispatch_spy).toHaveBeenCalledWith("stimulation/stop_stimulation");
     });
 
@@ -84,7 +84,7 @@ describe("store/stimulation", () => {
       });
 
       wrapper.vm.play_state = false;
-      await wrapper.find(".span__stimulation-controls-play-stop-button--inactive").trigger("click");
+      await wrapper.find(".span__stimulation-controls-play-stop-button--disabled").trigger("click");
       expect(wrapper.vm.play_state).toBe(false);
     });
 
@@ -100,7 +100,7 @@ describe("store/stimulation", () => {
         localVue,
       });
 
-      await wrapper.find(".span__stimulation-controls-play-stop-button--active").trigger("click");
+      await wrapper.find(".span__stimulation-controls-play-stop-button--enabled").trigger("click");
       expect(wrapper.vm.play_state).toBe(true);
       expect(dispatch_spy).toHaveBeenCalledWith("stimulation/create_protocol_message");
     });
@@ -209,19 +209,19 @@ describe("store/stimulation", () => {
     );
 
     test.each([
-      [true, 0],
-      [false, 1],
+      [true, "STIM_ACTIVE", 0],
+      [false, "CONFIG_CHECK_NEEDED", 1],
     ])(
-      "When a user clicks on the configuration check icon to start, Then it will only get called when stimulation is inactive",
-      async (play_state, calls) => {
+      "When stim play state is %s and user clicks on the configuration check icon to start, Then it will only get called when stimulation is inactive",
+      async (play_state, stim_status, calls) => {
         const action_spy = jest.spyOn(store, "dispatch");
         const wrapper = mount(StimulationControls, {
           store,
           localVue,
         });
 
+        await store.commit("stimulation/set_stim_status", STIM_STATUS[stim_status]);
         await store.commit("stimulation/set_stim_play_state", play_state);
-        await store.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED);
         await store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
         await store.commit("playback/set_barcode", {
           type: "stim_barcode",
@@ -229,7 +229,7 @@ describe("store/stimulation", () => {
           is_valid: true,
         });
 
-        await wrapper.find(".svg__config_check_container").trigger("click");
+        await wrapper.find(".svg__config-check-container").trigger("click");
         expect(action_spy).toHaveBeenCalledTimes(calls);
       }
     );

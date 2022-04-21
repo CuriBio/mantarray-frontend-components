@@ -13,6 +13,7 @@ import { createLocalVue } from "@vue/test-utils";
 const MockAxiosAdapter = require("axios-mock-adapter");
 import SettingsForm from "@/components/settings/SettingsForm.vue";
 import { STATUS } from "@/store/modules/flask/enums";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import { system_status_regexp, all_mantarray_commands_regexp } from "@/store/modules/flask/url_regex";
 let wrapper = null;
 
@@ -436,7 +437,7 @@ describe("DesktopPlayerControls.vue", () => {
       const target_button = wrapper.find(".svg__playback-desktop-player-controls-calibrate-button");
 
       store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
-      store.commit("stimulation/set_stim_play_state", true);
+      store.commit("stimulation/set_stim_status", STIM_STATUS.STIM_ACTIVE);
       await wrapper.vm.$nextTick(); // wait for update
 
       await wait_for_expect(() => {

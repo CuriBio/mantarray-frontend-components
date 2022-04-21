@@ -37,6 +37,12 @@
         @handle_confirmation="handle_manual_mode_choice"
       />
     </b-modal>
+    <b-modal id="barcode-warning" size="sm" hide-footer hide-header hide-header-close>
+      <StatusWarningWidget
+        :modal_labels="barcode_warning_labels"
+        @handle_confirmation="close_warning_modal"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -72,10 +78,16 @@ export default {
           "Once enabled, all barcodes must be entered manually. This should only be done if the barcode scanner is malfunctioning. Scanning cannot be re-enabled until software is restarted.",
         button_names: ["Cancel", "Yes"],
       },
+      barcode_warning_labels: {
+        header: "Warning!",
+        msg_one: "A new barcode has been detected while a process was active.",
+        msg_two: "All processes have been stopped.",
+        button_names: ["Okay"],
+      },
     };
   },
   computed: {
-    ...mapState("playback", ["playback_state", "barcodes"]),
+    ...mapState("playback", ["playback_state", "barcodes", "barcode_warning"]),
     ...mapState("flask", ["barcode_manual_mode"]),
     barcode_info: function () {
       return this.barcodes[this.barcode_type];
@@ -90,6 +102,11 @@ export default {
       return this.barcode_type == "plate_barcode" ? "width: 110px;" : "width: 105px;";
     },
   },
+  watch: {
+    barcode_warning: function () {
+      if (this.barcode_warning) this.$bvModal.show("barcode-warning");
+    },
+  },
   methods: {
     handle_manual_mode_choice(choice) {
       const bool_choice = Boolean(choice);
@@ -101,6 +118,10 @@ export default {
         type: this.barcode_type,
         new_value: event.target.value,
       });
+    },
+    close_warning_modal() {
+      this.$bvModal.hide("barcode-warning");
+      this.$store.commit("playback/set_barcode_warning", false);
     },
     set_green_color(inp) {
       inp.style.border = "1px solid green";

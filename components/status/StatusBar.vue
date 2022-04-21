@@ -184,8 +184,8 @@ export default {
       },
       successful_qc_check_labels: {
         header: "Configuration Check Complete!",
-        msg_one: "No errors were found during the configuration check.",
-        msg_two: "You can now run a stimulation.",
+        msg_one: "No open circuits were detected in a well assigned with a protocol.",
+        msg_two: "You can now run this stimulation.",
         button_names: ["Okay"],
       },
     };
@@ -194,7 +194,7 @@ export default {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
-    ...mapState("stimulation", ["stim_play_state", "stim_status"]),
+    ...mapState("stimulation", ["protocol_assignments", "stim_play_state", "stim_status"]),
     ...mapState("data", ["stimulator_circuit_statuses"]),
     ...mapState("settings", [
       "log_path",
@@ -217,6 +217,12 @@ export default {
     },
     status_label: function () {
       return this.stim_specific ? "Stimulation status" : "System status";
+    },
+    assigned_open_circuits: function () {
+      // filter for matching indices
+      return this.stimulator_circuit_statuses.filter((well) =>
+        Object.keys(this.protocol_assignments).includes(well.toString())
+      );
     },
   },
   watch: {
@@ -258,7 +264,7 @@ export default {
       this.alert_txt = status;
 
       if (status === STIM_STATUS.CONFIG_CHECK_COMPLETE)
-        this.stimulator_circuit_statuses.length > 0
+        this.assigned_open_circuits.length > 0
           ? this.$bvModal.show("failed-qc-check")
           : this.$bvModal.show("success-qc-check");
       else if (status === STIM_STATUS.SHORT_CIRCUIT_ERROR) this.$bvModal.show("short-circuit-err");
@@ -345,7 +351,7 @@ export default {
     },
     close_modals_by_id: function (ids, auto_cancel_closure = true) {
       for (const id of ids) {
-        if (id !== undefined) this.$bvModal.hide(id);
+        this.$bvModal.hide(id);
       }
       // Tanner (1/19/22): if one of the closure warning modals is given here while there is an unresolved
       // closure confirmation, need to respond with cancel value. If this step is skipped, need to make sure

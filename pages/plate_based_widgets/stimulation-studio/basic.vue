@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { StimulationStudioWidget as ComponentToTest } from "@/dist/mantarray.common";
-// import ComponentToTest from "@/components/playback/controls/StimulationStudioWidget.vue";
+// import { StimulationStudioWidget as ComponentToTest } from "@/dist/mantarray.common";
+import ComponentToTest from "@/components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 
 export default {
   components: {

@@ -249,15 +249,12 @@ describe("StimulationStudioWidget.vue", () => {
     await store.commit("stimulation/apply_selected_protocol", 2);
     expect(wrapper.vm.protocol_assignments).toBe(store.state.stimulation.protocol_assignments);
   });
-  test("When stim's stim_status gets updated to SHORT_CIRCUIT_ERROR, Then StimulationStudioWidget will become  disabled", async () => {
+  test("When stim's stim_status gets updated to SHORT_CIRCUIT_ERROR, Then StimulationStudioWidget will become disabled", async () => {
     const wrapper = mount(StimulationStudioWidget, {
       store,
       localVue,
     });
-    expect(wrapper.vm.short_circuit_error).toBe(false);
-
     await store.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERROR);
-    expect(wrapper.vm.short_circuit_error).toBe(true);
     expect(wrapper.find(".div__simulationstudio-disable-overlay").isVisible()).toBe(true);
   });
 

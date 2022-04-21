@@ -41,8 +41,8 @@ export default {
         return {
           header: "Configuration Check Summary!",
           msg_one:
-            "An open circuit error has been found in the wells shown below. These wells will be disabled until a new stimulation lid is used and a new configuration check is run resulting in no errors.",
-          msg_two: "Please replace the stimulation lid or proceed at your own risk.",
+            "An open circuit was detected in the assigned wells shown below. This will prevent you from being able to start a stimulation.",
+          msg_two: "Please unassign these wells before proceeding.",
           button_names: ["Okay"],
         };
       },
