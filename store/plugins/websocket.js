@@ -22,7 +22,7 @@ export default function create_web_socket_plugin(socket) {
       }
 
       /* istanbul ignore else */
-      if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
+      if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback
     });
     socket.on("twitch_metrics", (metrics_json, cb) => {
       // guard against metrics coming right after live view stops so heatmap stays cleared,
@@ -38,19 +38,32 @@ export default function create_web_socket_plugin(socket) {
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
     socket.on("stimulation", (stim_json, cb) => {
+      // TODO change this message type to stimulation_data
       // Tanner (12/20/21): may want to put the same checks here as are in the waveform_data handler once stim waveforms are sent instead of subprotocol indices
       store.dispatch("data/append_stim_waveforms", JSON.parse(stim_json));
       /* istanbul ignore else */
-      if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
+      if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback
+    });
+
+    socket.on("stimulator_circuit_statuses", (message_json, cb) => {
+      store.dispatch("data/check_stimulator_circuit_statuses", JSON.parse(message_json));
+
+      /* istanbul ignore else */
+      if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback
     });
     socket.on("barcode", (message_json, cb) => {
       if (!store.state.flask.barcode_manual_mode) {
         const message = JSON.parse(message_json);
-        store.commit("playback/set_barcode_number", message.plate_barcode);
+        for (const barcode_type in store.state.playback.barcodes)
+          if (message[barcode_type])
+            store.dispatch("playback/validate_barcode", {
+              type: barcode_type,
+              new_value: message[barcode_type],
+            });
       }
 
       /* istanbul ignore else */
-      if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
+      if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback
     });
     socket.on("upload_status", (status_json, cb) => {
       const status = JSON.parse(status_json);

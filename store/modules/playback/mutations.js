@@ -1,10 +1,8 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-import { TextValidation } from "@/js_utils/text_validation.js";
-const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 
 export default {
-  set_enable_additional_controls(state, new_value) {
-    state.enable_additional_controls = new_value;
+  set_enable_stim_controls(state, new_value) {
+    state.enable_stim_controls = new_value;
   },
   set_loop_playback(state, new_value) {
     state.loop_playback = new_value;
@@ -39,20 +37,9 @@ export default {
   set_playback_progression_interval_id(state, new_value) {
     state.playback_progression_interval_id = new_value;
   },
-  set_barcode_number(state, new_value) {
-    const result = TextValidation_plate_barcode.validate(new_value);
-    if (result == "") {
-      state.is_valid_barcode = true;
-    } else {
-      state.is_valid_barcode = false;
-    }
-    state.barcode = new_value;
-  },
-  set_barcode_valid_manual_mode(state, new_value) {
-    state.is_valid_barcode = new_value;
-  },
-  set_barcode_number_manual_mode(state, new_value) {
-    state.barcode = new_value;
+  set_barcode(state, { type, new_value, is_valid }) {
+    state.barcodes[type].value = new_value;
+    state.barcodes[type].valid = is_valid;
   },
   set_tooltips_delay(state, new_value) {
     state.tooltips_delay = new_value;
@@ -62,5 +49,8 @@ export default {
   },
   set_one_min_warning(state, bool) {
     state.one_min_warning = bool;
+  },
+  set_barcode_warning(state, bool) {
+    state.barcode_warning = bool;
   },
 };

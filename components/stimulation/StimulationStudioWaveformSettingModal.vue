@@ -83,7 +83,7 @@
       >
         <span id="cmpD948f417edcd29d68f5801d54232d9431_txt" class="span__stimulationstudio-input">
           <InputWidget
-            :placeholder="'10 ms'"
+            :placeholder="'10'"
             :dom_id_suffix="'interphase'"
             :invalid_text="err_msg.interphase_interval"
             :input_width="142"
@@ -92,6 +92,9 @@
           />
         </span>
       </div>
+      <span class="span__stimulationstudio-current-settings-label-right" :style="'top: 279.5px;'"
+        >milliseconds</span
+      >
       <canvas id="cmpDa2bea934b07f6b108e90d5efecf200a3" :style="'top: 346px;'" />
       <span
         id="cmpD25434fb95b0bdb4dd6d951c83f90ad78"
@@ -226,7 +229,7 @@
     <div class="div__waveform-preview-title">Waveform Preview</div>
     <div class="div__pulse-diagram-container">
       <img
-        :src="require(`@/assets/img/${pulse_type}-diagram.png`)"
+        :src="require(`@/assets/img/${pulse_type}-diagram-${stimulation_type}.png`)"
         :class="pulse_type === 'Monophasic' ? 'img__mononphasic-diagram' : 'None'"
       />
     </div>
@@ -360,11 +363,11 @@ export default {
       diagram_keys: {
         Monophasic: ["A. Phase Duration", `B. Phase ${this.stimulation_type}`, "C. Total Active Duration"],
         Biphasic: [
-          `A. Phase 1 ${this.stimulation_type}`,
-          "B. Phase 1 Duration",
+          "A. Phase 1 Duration",
+          `B. Phase 1 ${this.stimulation_type}`,
           "C. Interphase Interval",
-          `D. Phase 2 ${this.stimulation_type}`,
-          "E. Phase 2 Duration",
+          "D. Phase 2 Duration",
+          `E. Phase 2 ${this.stimulation_type}`,
           "F. Total Active Duration",
         ],
       },
@@ -473,7 +476,9 @@ export default {
       if (value === "") {
         this.err_msg[label] = this.invalid_err_msg.required;
       } else if (!this.regex.duration.test(value) || (!check_total_duration && check_time_unit)) {
-        this.err_msg[label] = `Must be a number >= ${this.total_pulse_duration}ms`;
+        // if user continues with letter in one of the duration input fields, value will appear as NaN
+        const total_dur = isNaN(this.total_pulse_duration) ? 0 : this.total_pulse_duration;
+        this.err_msg[label] = `Must be a number >= ${total_dur}ms`;
       } else {
         this.err_msg[label] = this.invalid_err_msg.valid;
         this.stim_settings[label].duration = Number(value);
@@ -709,7 +714,9 @@ canvas {
 
 .img__mononphasic-diagram {
   width: 350px;
-  margin-left: 10px;
+  margin-left: 50px;
+  max-width: 260px;
+  max-height: 300px;
 }
 
 .div__mononphasic-diagram-descriptors {

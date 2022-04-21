@@ -1,7 +1,7 @@
 import { TextValidation } from "@/js_utils/text_validation.js";
 import { TextValidation as DistTextValidation } from "@/dist/mantarray.common";
 
-const TextValidation_PlateBarcode = new TextValidation("plate_barcode");
+const TextValidation_BarcodeViewer = new TextValidation("plate_barcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
 const TextValidation_user_account_id = new TextValidation("customer_account_input");
@@ -15,7 +15,7 @@ describe("DistTextValidation", () => {
 });
 describe("TextValidation", () => {
   test("Given a text validation is for plate_barcode, When called toString(), Then return would match the text rule of 'plate_barcode' applied", () => {
-    const validation = TextValidation_PlateBarcode;
+    const validation = TextValidation_BarcodeViewer;
     expect(validation.toString()).toStrictEqual("TextValidation.plate_barcode");
   });
   test("Given a text validation is for uuidBase57encode, When called toString(), Then return would match the text rule of 'uuidBase57encode' applied", () => {
@@ -61,8 +61,8 @@ describe("TextValidation.validate_plate_barcode with new barcodes", () => {
   ])(
     "When barcode %s with %s is passed to validate function, Then ' ' is returned",
     (plate_barcode, error) => {
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(plate_barcode)).toStrictEqual(" ");
+      const TestBarcodeViewer = TextValidation_BarcodeViewer;
+      expect(TestBarcodeViewer.validate(plate_barcode)).toStrictEqual(" ");
     }
   );
   test.each([
@@ -77,8 +77,8 @@ describe("TextValidation.validate_plate_barcode with new barcodes", () => {
   ])(
     "When valid barcode %s with %s is passed to validate function, Then '' is returned",
     (plate_barcode, diff) => {
-      const TestPlateBarCode = TextValidation_PlateBarcode;
-      expect(TestPlateBarCode.validate(plate_barcode)).toStrictEqual("");
+      const TestBarcodeViewer = TextValidation_BarcodeViewer;
+      expect(TestBarcodeViewer.validate(plate_barcode)).toStrictEqual("");
     }
   );
 });

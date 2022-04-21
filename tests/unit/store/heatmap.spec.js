@@ -19,8 +19,7 @@ describe("store/heatmap", () => {
   describe("mutations/getters", () => {
     test("When autoscale box is checked, Then getting the autoscale boolean should should return mutated boolean", async () => {
       const test = true;
-      store.commit("heatmap/set_heatmap_autoscale", test);
-      expect(store.getters["heatmap/heatmap_autoscale"]).toBe(true);
+      store.commit("heatmap/set_auto_scale", test);
       expect(store.getters["heatmap/display_option_idx"]).toBe(0);
       expect(store.getters["heatmap/selected_wells"]).toStrictEqual([]);
     });

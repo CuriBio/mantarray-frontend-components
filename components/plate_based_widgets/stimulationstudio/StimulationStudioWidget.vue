@@ -44,16 +44,28 @@
       <StimulationStudioPlateWell
         :id="'plate_' + well_index"
         :class="hover_color[well_index]"
-        :protocol_type="getProtocolAlphabet(well_index)"
+        :protocol_type="get_protocol_letter(well_index)"
         :stroke="hover_color[well_index]"
         :stroke_wdth="stroke_width[well_index]"
-        :protocol_fill="getProtocolColor(well_index)"
+        :protocol_fill="get_protocol_color(well_index)"
         :index="well_index"
+        :disable="assigned_open_circuits.includes(well_index)"
+        :display="disable"
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
         @click-shift-exact="basic_shift_select(well_index)"
       />
+    </div>
+    <div v-if="disable" class="div__simulationstudio-disable-overlay" :style="'opacity: 0;'" />
+    <div
+      v-if="short_circuit_error_found"
+      v-b-popover.hover.bottom="'Stimulation lid must be replaced before running a stimulation'"
+      title="Error"
+      class="div__simulationstudio-disable-overlay"
+      :style="'opacity: 0.7;'"
+    >
+      <div class="div__disabled-overlay-text">Disabled</div>
     </div>
   </div>
 </template>
@@ -64,7 +76,11 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { mapState } from "vuex";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
+import Vue from "vue";
+import { VBPopover } from "bootstrap-vue";
 
+Vue.directive("b-popover", VBPopover);
 library.add(faMinusCircle);
 library.add(faPlusCircle);
 
@@ -80,6 +96,7 @@ export default {
   components: { FontAwesomeIcon, StimulationStudioPlateWell },
   props: {
     number_of_wells: { type: Number, default: 24 },
+    disable: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -102,13 +119,20 @@ export default {
       all_select: new Array(this.number_of_wells).fill(false),
       hover_color: new Array(this.number_of_wells).fill(hover_color),
       stroke_width: new Array(this.number_of_wells).fill(no_stroke_width),
-      protocol_assignments: {},
     };
   },
   computed: {
-    ...mapState("stimulation", {
-      stored_protocol_assignments: "protocol_assignments",
-    }),
+    ...mapState("stimulation", ["protocol_assignments", "stim_status"]),
+    ...mapState("data", ["stimulator_circuit_statuses"]),
+    short_circuit_error_found: function () {
+      return this.stim_status === STIM_STATUS.SHORT_CIRCUIT_ERROR;
+    },
+    assigned_open_circuits: function () {
+      // filter for matching indices
+      return this.stimulator_circuit_statuses.filter((well) =>
+        Object.keys(this.protocol_assignments).includes(well.toString())
+      );
+    },
   },
   watch: {
     all_select: function () {
@@ -127,15 +151,12 @@ export default {
         mutation.type === "stimulation/reset_state" ||
         mutation.type === "stimulation/reset_protocol_editor"
       ) {
-        this.protocol_assignments = this.stored_protocol_assignments;
+        // this.protocol_assignments = this.stored_protocol_assignments;
         this.all_select = new Array(this.number_of_wells).fill(false);
         this.stroke_width = new Array(this.number_of_wells).fill(no_stroke_width);
         if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
       }
     });
-  },
-  mounted() {
-    this.protocol_assignments = this.stored_protocol_assignments;
   },
   beforeDestroy() {
     this.unsubscribe();
@@ -145,7 +166,7 @@ export default {
       this.all_select_or_cancel ? this.test_event("+ icon clicked") : this.test_event("- icon clicked");
       this.all_select_or_cancel = !state;
       for (let count = 0; count < 24; count++) this.all_select[count] = state;
-      state ? this.all_select.map((well) => (well = true)) : this.all_select.map((well) => (well = false));
+      state ? this.all_select.map((_) => true) : this.all_select.map((_) => false);
       this.$store.dispatch("stimulation/handle_selected_wells", this.all_select);
       this.stroke_width.splice(0, this.stroke_width.length);
       this.check_stroke_width();
@@ -220,12 +241,11 @@ export default {
 
     on_enter_hover(val, type) {
       const new_list = [];
-      let toChange = null;
       this.test_event(val + " hover enter");
       for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
       this.stroke_width.splice(0, this.stroke_width.length);
-      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
-      toChange[val].map(
+      const to_change = type == "column" ? this.column_values : this.row_values;
+      to_change[val].map(
         (well) => (new_list[well] = new_list[well] == no_stroke_width ? hover_stroke_width : new_list[well])
       );
       for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
@@ -272,7 +292,7 @@ export default {
     },
 
     test_event(evnt) {
-      if (debug_mode != undefined) this.$emit("test-event", evnt);
+      if (debug_mode) this.$emit("test-event", evnt);
     },
 
     check_stroke_width() {
@@ -312,14 +332,12 @@ export default {
       }
     },
 
-    getProtocolColor(index) {
-      if (this.protocol_assignments[index] !== undefined) return this.protocol_assignments[index].color;
-      else return "#B7B7B7";
+    get_protocol_color(index) {
+      return this.protocol_assignments[index] ? this.protocol_assignments[index].color : "#B7B7B7";
     },
 
-    getProtocolAlphabet(index) {
-      if (this.protocol_assignments[index] !== undefined) return this.protocol_assignments[index].letter;
-      else return "";
+    get_protocol_letter(index) {
+      return this.protocol_assignments[index] ? this.protocol_assignments[index].letter : "";
     },
   },
 };
@@ -333,7 +351,6 @@ export default {
   position: absolute;
   width: 415px;
   height: 280px;
-
   visibility: visible;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
@@ -417,5 +434,23 @@ export default {
 .span__stimulationstudio-toggle-plus-minus-icon:hover {
   color: #ffffff;
   cursor: pointer;
+}
+.div__simulationstudio-disable-overlay {
+  height: 280px;
+  width: 415px;
+  z-index: 3;
+  border-radius: 10px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.div__disabled-overlay-text {
+  color: #b7b7b7;
+  font-family: Muli;
+  font-size: 70px;
+  font-style: italic;
+  opacity: 0.5;
+  font-weight: 500;
 }
 </style>

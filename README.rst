@@ -1,4 +1,5 @@
 Frontend components for use in the desktop and cloud Mantarray Applications.
+Node v14 required
 
 Install steps:
  - ``npm install``

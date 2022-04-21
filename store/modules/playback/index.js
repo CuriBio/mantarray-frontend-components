@@ -6,7 +6,7 @@ import mutations from "./mutations";
 import { ENUMS } from "./enums";
 
 const default_state = {
-  enable_additional_controls: false,
+  enable_stim_controls: false,
   loop_playback: false,
   is_playing: false,
   x_time_index: 0,
@@ -14,13 +14,22 @@ const default_state = {
   recording_start_time: 0,
   playback_progression_interval_id: null,
   playback_progression_time_interval: 40, // milliseconds
-  barcode: null,
-  is_valid_barcode: false,
+  barcodes: {
+    plate_barcode: {
+      value: null,
+      valid: false,
+    },
+    stim_barcode: {
+      value: null,
+      valid: false,
+    },
+  },
   tooltips_delay: 2000,
   timestamp_of_beginning_of_progression: undefined,
   num_milliseconds_to_fast_forward_if_delayed: 400,
   five_min_warning: false,
   one_min_warning: false,
+  barcode_warning: false,
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2

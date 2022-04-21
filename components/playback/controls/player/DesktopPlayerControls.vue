@@ -239,6 +239,7 @@
 import { mapState, mapGetters } from "vuex";
 import playback_module from "@/store/modules/playback";
 import { STATUS } from "@/store/modules/flask/enums";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import PlayerControlsSettingsButton from "./PlayerControlsSettingsButton.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlayCircle as fa_play_circle, faSpinner as fa_spinner } from "@fortawesome/free-solid-svg-icons";
@@ -289,7 +290,7 @@ library.add(fa_spinner);
  * @vue-data {String} settings_tooltip_text - Tooltips body text for Settings
  * @vue-data {String} schedule_tooltip_text - Tooltips body text for Schedule
  * @vue-computed {String} playback_state - Current value in Vuex store
- * @vue-computed {Boolean} is_valid_barcode - Current value in Vuex store
+ * @vue-computed {Boolean} barcodes.plate_barcode.valid - Current value in Vuex store
  * @vue-computed {String} tooltips_delay - Current tooltips delay in Vuex store.
  * @vue-event {String} on_activate_record_click - User activated the record.
  * @vue-event {String} on_stop_record_click - User activated the stop record.
@@ -348,7 +349,7 @@ export default {
   computed: {
     ...mapState("playback", [
       "playback_state",
-      "is_valid_barcode",
+      "barcodes",
       "tooltips_delay",
       "one_min_warning",
       "five_min_warning",
@@ -365,6 +366,9 @@ export default {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
+    is_valid_barcode: function () {
+      return this.barcodes.plate_barcode.valid;
+    },
     fw_update_available_labels: function () {
       let duration = `${this.firmware_update_dur_mins} minute`;
       if (this.firmware_update_dur_mins !== 1) duration += "s";
@@ -386,7 +390,9 @@ export default {
       ) {
         return "Cannot calibrate during firmware update.";
       }
-      if (this.stim_status) {
+      if (this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS)
+        return "Cannot calibrate while stimulation configuration check is in progress";
+      if (this.stim_status === STIM_STATUS.STIM_ACTIVE) {
         return "Cannot calibrate while stimulating";
       }
       if (this.playback_state == this.playback_state_enums.CALIBRATION_NEEDED) {
@@ -411,6 +417,8 @@ export default {
       if (this.playback_state === this.playback_state_enums.RECORDING) {
         return "Must stop recording before deactivating.";
       }
+      if (this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS)
+        return "Cannot start live view while stimulation configuration check is in progress";
       if (
         this.playback_state === this.playback_state_enums.CALIBRATION_NEEDED ||
         this.playback_state === this.playback_state_enums.CALIBRATING
@@ -458,7 +466,9 @@ export default {
     svg__playback_desktop_player_controls_live_view_button__dynamic_class: function () {
       return {
         "span__playback-desktop-player-controls--available":
-          this.playback_state === this.playback_state_enums.CALIBRATED && this.is_valid_barcode,
+          this.playback_state === this.playback_state_enums.CALIBRATED &&
+          this.is_valid_barcode &&
+          this.stim_status !== STIM_STATUS.CONFIG_CHECK_IN_PROGRESS,
         "span__playback-desktop-player-controls--active":
           this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE,
         "span__playback-desktop-player-controls--running-in-background":
@@ -470,7 +480,8 @@ export default {
         "span__playback-desktop-player-controls--available":
           (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
             this.playback_state === this.playback_state_enums.CALIBRATED) &&
-          !this.stim_status,
+          this.stim_status !== STIM_STATUS.STIM_ACTIVE &&
+          this.stim_status !== STIM_STATUS.CONFIG_CHECK_IN_PROGRESS,
       };
     },
   },
@@ -516,7 +527,8 @@ export default {
         this.$store.dispatch("playback/stop_live_view");
       } else if (
         this.playback_state === this.playback_state_enums.CALIBRATED &&
-        this.is_valid_barcode != false
+        this.is_valid_barcode &&
+        this.stim_status !== STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
       ) {
         this.$store.dispatch("playback/start_live_view");
       }
@@ -525,7 +537,8 @@ export default {
       if (
         (this.playback_state === this.playback_state_enums.NEEDS_CALIBRATION ||
           this.playback_state === this.playback_state_enums.CALIBRATED) &&
-        !this.stim_status
+        this.stim_status !== STIM_STATUS.STIM_ACTIVE &&
+        this.stim_status !== STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
       ) {
         if (this.beta_2_mode) this.$bvModal.show("calibration-warning");
         else this.$store.dispatch("playback/start_calibration");

@@ -1,6 +1,7 @@
 import mutations from "./mutations";
 import getters from "./getters";
 import actions from "./actions";
+import { STIM_STATUS } from "./enums";
 
 const state = () => ({
   selected_wells: [],
@@ -21,9 +22,10 @@ const state = () => ({
   repeat_colors: {},
   y_axis_scale: 120,
   delay_blocks: [],
-  stim_status: false,
+  stim_play_state: false,
   x_axis_time_idx: 0,
   edit_mode: { status: false, protocol: "", label: "", color: "" },
+  stim_status: STIM_STATUS.CALIBRATION_NEEDED,
 });
 
 export default {
@@ -32,4 +34,5 @@ export default {
   mutations,
   getters,
   actions,
+  STIM_STATUS,
 };

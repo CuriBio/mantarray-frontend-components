@@ -5,12 +5,13 @@ const MockAxiosAdapter = require("axios-mock-adapter");
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
 import { STATUS } from "@/store/modules/flask/enums";
 import { ENUMS } from "@/store/modules/playback/enums";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
-import { ping_system_status } from "../../../store/modules/flask/actions";
+import { ping_system_status } from "@/store/modules/flask/actions";
 
-const valid_plate_barcode = "ML2022047001";
-const invalid_plate_barcode = "ML2022047002";
+const valid_plate_barcode = "ML2022001000";
+const valid_stim_barcode = "MS2022001000";
 
 const http = require("http");
 const io_server = require("socket.io");
@@ -480,6 +481,49 @@ describe("store/data", () => {
         y_data_points: [4, 101000],
       });
     });
+
+    test("When backend emits stimulator_circuit_status message with short circuit errors, Then ws client updates stim status to short circuit error", async () => {
+      // confirm precondition
+      const initial_statuses = store.state.data.stimulator_circuit_statuses;
+      expect(initial_statuses).toHaveLength(0);
+
+      const stimulator_statuses = new Array(24)
+        .fill("open", 0, 10)
+        .fill("media", 10, 20)
+        .fill("short", 20, 24);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(stimulator_statuses), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      const updated_statuses = store.state.data.stimulator_circuit_statuses;
+      const stim_status = store.state.stimulation.stim_status;
+
+      expect(updated_statuses).toStrictEqual(initial_statuses);
+      expect(stim_status).toBe(STIM_STATUS.SHORT_CIRCUIT_ERROR);
+    });
+
+    test("When backend emits stimulator_circuit_status message with no short  errors, Then ws client updates stim status to config check complete and set indices to data state", async () => {
+      // confirm precondition
+      const initial_statuses = store.state.data.stimulator_circuit_statuses;
+      expect(initial_statuses).toHaveLength(0);
+
+      const stimulator_statuses = new Array(24).fill("open", 0, 10).fill("media", 10, 24);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(stimulator_statuses), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      const updated_statuses = store.state.data.stimulator_circuit_statuses;
+      const stim_status = store.state.stimulation.stim_status;
+
+      expect(updated_statuses).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(stim_status).toBe(STIM_STATUS.CONFIG_CHECK_COMPLETE);
+    });
     test("When backend emits status update message with no error, Then ws client updates file count", async () => {
       const new_status_update = {
         file_name: "test_filename",
@@ -596,40 +640,61 @@ describe("store/data", () => {
       });
       expect(store.state.settings.user_cred_input_needed).toBe(true);
     });
-    test("Given barcode is not in manual mode, When backend emits barcode message, Then ws client sets new barcode in store", async () => {
-      const message = {
-        plate_barcode: valid_plate_barcode,
-      };
 
-      store.commit("flask/set_barcode_manual_mode", false);
-
-      // confirm precondition
-      expect(store.state.playback.barcode).toBeNull();
-
-      await new Promise((resolve) => {
-        socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
-          resolve(ack);
+    test.each([
+      ["plate_barcode", "ML2022002001", valid_plate_barcode],
+      ["stim_barcode", "MS2022002001", valid_stim_barcode],
+    ])(
+      "Given barcode is not in manual mode, When backend emits barcode message with valid %s, Then ws client updates correct barcode in store",
+      async (barcode_type, old_barcode, valid_barcode) => {
+        const message = {
+          [barcode_type]: valid_barcode,
+        };
+        await store.commit("flask/set_barcode_manual_mode", false);
+        await store.commit("playback/set_barcode", {
+          type: barcode_type,
+          new_value: old_barcode,
+          is_valid: true,
         });
-      });
-      expect(store.state.playback.barcode).toBe(valid_plate_barcode);
-    });
-    test("Given barcode is in manual mode, When backend emits barcode message, Then ws client does not set new barcode in store", async () => {
-      const message = {
-        plate_barcode: valid_plate_barcode,
-      };
 
-      store.commit("flask/set_barcode_manual_mode", true);
+        // confirm precondition
+        expect(store.state.playback.barcodes[barcode_type].value).toBe(old_barcode);
 
-      // confirm precondition
-      expect(store.state.playback.barcode).toBeNull();
-
-      await new Promise((resolve) => {
-        socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
-          resolve(ack);
+        await new Promise((resolve) => {
+          socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
+            resolve(ack);
+          });
         });
-      });
-      expect(store.state.playback.barcode).toBeNull();
-    });
+
+        const stim_config_state = store.state.stimulation.stim_status === STIM_STATUS.CONFIG_CHECK_NEEDED;
+
+        expect(store.state.playback.barcodes[barcode_type].value).toBe(valid_barcode);
+        expect(stim_config_state).toBe(true);
+      }
+    );
+    test.each([
+      ["plate_barcode", valid_plate_barcode],
+      ["stim_barcode", valid_stim_barcode],
+    ])(
+      "Given barcode is in manual mode, When backend emits barcode message with valid %s, Then ws client does not set new barcode in store",
+      async (barcode_type, valid_barcode) => {
+        const message = {
+          barcode_type: valid_barcode,
+        };
+
+        store.commit("flask/set_barcode_manual_mode", true);
+
+        // confirm precondition
+        expect(store.state.playback.barcodes[barcode_type].value).toBeNull();
+
+        await new Promise((resolve) => {
+          socket_server_side.emit("barcode", JSON.stringify(message), (ack) => {
+            resolve(ack);
+          });
+        });
+        expect(store.state.playback.barcodes[barcode_type].value).toBeNull();
+      }
+    );
   });
 
   // TODO move these to another test file
@@ -655,9 +720,7 @@ describe("store/data", () => {
       await bound_ping_system_status();
       expect(mocked_axios.history.get).toHaveLength(1);
       expect(mocked_axios.history.get[0].url).toMatch(new RegExp("http://localhost:4567/system_status?"));
-      expect(mocked_axios.history.get[0].url).toMatch(
-        new RegExp("currently_displayed_time_index=" + expected_idx)
-      );
+      expect(mocked_axios.history.get[0].params.currently_displayed_time_index).toEqual(expected_idx);
     });
 
     test("Given /system_status is mocked to return 200 (and some dummy response) and and /start_recording is mocked to return an HTTP error, When start_recording is dispatched, Then both intervals are cleared in Vuex (status pinging, and playback progression)", async () => {

@@ -13,15 +13,8 @@ import { createLocalVue } from "@vue/test-utils";
 const MockAxiosAdapter = require("axios-mock-adapter");
 import SettingsForm from "@/components/settings/SettingsForm.vue";
 import { STATUS } from "@/store/modules/flask/enums";
-import {
-  system_status_when_buffering_regexp,
-  system_status_when_calibrated_regexp,
-  system_status_when_calibrating_regexp,
-  system_status_when_recording_regexp,
-  system_status_when_live_view_active_regexp,
-  all_mantarray_commands_regexp,
-} from "@/store/modules/flask/url_regex";
-import { TestWatcher } from "jest";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
+import { system_status_regexp, all_mantarray_commands_regexp } from "@/store/modules/flask/url_regex";
 let wrapper = null;
 
 const localVue = createLocalVue();
@@ -64,7 +57,7 @@ describe("DesktopPlayerControls.vue", () => {
   });
 
   test("Given an invalid barcode in Vuex and the playback state is CALIBRATED, Then the Start Live View button should be Unavailable, When barcode becomes valid in Vuex Then Start Live View should be Available, Then when barcode becomes invalid, Start Live View becomes unavailable", async () => {
-    store.commit("playback/set_barcode_number", null);
+    store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: null });
     store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
 
     const propsData = {};
@@ -80,12 +73,12 @@ describe("DesktopPlayerControls.vue", () => {
 
     expect(the_classes).not.toContain("span__playback-desktop-player-controls--available");
 
-    store.commit("playback/set_barcode_number", "ML2022053000");
+    store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
     await wrapper.vm.$nextTick(); // wait for update
     the_classes = target_button.classes();
     expect(the_classes).toContain("span__playback-desktop-player-controls--available");
 
-    store.commit("playback/set_barcode_number", null);
+    store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: null });
     await wrapper.vm.$nextTick(); // wait for update
     the_classes = target_button.classes();
     expect(the_classes).not.toContain("span__playback-desktop-player-controls--available");
@@ -175,9 +168,9 @@ describe("DesktopPlayerControls.vue", () => {
     }
   );
 
-  describe("Given a valid barcode has been committed to Vuex", () => {
+  describe("Given a valid plate barcode has been committed to Vuex", () => {
     beforeEach(async () => {
-      store.commit("playback/set_barcode_number", "ML2022053000");
+      store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "ML2022053000" });
     });
 
     test.each([
@@ -213,29 +206,31 @@ describe("DesktopPlayerControls.vue", () => {
     describe("Tests that invoke axios", () => {
       beforeEach(async () => {
         mocked_axios
-          .onGet(system_status_when_calibrating_regexp)
+          .onGet(system_status_regexp, { params: { current_vuex_status_uuid: STATUS.MESSAGE.CALIBRATING } })
           .replyOnce(200, { ui_status_code: STATUS.MESSAGE.CALIBRATING });
         mocked_axios
-          .onGet(system_status_when_calibrating_regexp)
+          .onGet(system_status_regexp, { params: { current_vuex_status_uuid: STATUS.MESSAGE.CALIBRATING } })
           .reply(200, { ui_status_code: STATUS.MESSAGE.CALIBRATED });
 
         mocked_axios
-          .onGet(system_status_when_recording_regexp)
+          .onGet(system_status_regexp, { params: { current_vuex_status_uuid: STATUS.MESSAGE.RECORDING } })
           .reply(200, { ui_status_code: STATUS.MESSAGE.RECORDING });
 
         mocked_axios
-          .onGet(system_status_when_live_view_active_regexp)
+          .onGet(system_status_regexp, {
+            params: { current_vuex_status_uuid: STATUS.MESSAGE.LIVE_VIEW_ACTIVE },
+          })
           .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE });
 
         mocked_axios
-          .onGet(system_status_when_calibrated_regexp)
+          .onGet(system_status_regexp, { params: { current_vuex_status_uuid: STATUS.MESSAGE.CALIBRATED } })
           .reply(200, { ui_status_code: STATUS.MESSAGE.CALIBRATED });
 
         mocked_axios
-          .onGet(system_status_when_buffering_regexp)
+          .onGet(system_status_regexp, { params: { current_vuex_status_uuid: STATUS.MESSAGE.BUFFERING } })
           .replyOnce(200, { ui_status_code: STATUS.MESSAGE.BUFFERING });
         mocked_axios
-          .onGet(system_status_when_buffering_regexp)
+          .onGet(system_status_regexp, { params: { current_vuex_status_uuid: STATUS.MESSAGE.BUFFERING } })
           .reply(200, { ui_status_code: STATUS.MESSAGE.LIVE_VIEW_ACTIVE });
       });
       afterEach(async () => {
@@ -245,7 +240,7 @@ describe("DesktopPlayerControls.vue", () => {
       });
 
       test("Given an invalid barcode in Vuex and the playback state is CALIBRATED, When Start Live View is clicked Then the playback state does not transition", async () => {
-        store.commit("playback/set_barcode_number", null);
+        store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: null });
         store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
 
         const propsData = {};
@@ -442,7 +437,7 @@ describe("DesktopPlayerControls.vue", () => {
       const target_button = wrapper.find(".svg__playback-desktop-player-controls-calibrate-button");
 
       store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
-      store.commit("stimulation/set_stim_status", true);
+      store.commit("stimulation/set_stim_status", STIM_STATUS.STIM_ACTIVE);
       await wrapper.vm.$nextTick(); // wait for update
 
       await wait_for_expect(() => {

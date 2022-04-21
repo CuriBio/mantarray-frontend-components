@@ -1,8 +1,11 @@
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
-import * as axios_helpers from "../../../js_utils/axios_helpers.js";
+import * as axios_helpers from "@/js_utils/axios_helpers.js";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
+const MockAxiosAdapter = require("axios-mock-adapter");
+import axios from "axios";
+import { STIM_STATUS } from "../../../store/modules/stimulation/enums";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -160,12 +163,10 @@ describe("store/stimulation", () => {
       expect(check_letter_duplicate).toBe(false);
     });
 
-    test("When there are no saved protocols, Then the first color and letter assigned to new protocol will be A and #4ca0af", async () => {
+    test("When there are no saved protocols, Then the letter assigned to new protocol will be A", async () => {
       store.state.stimulation.protocol_list = [{ letter: "", color: "", label: "Create New" }];
-      const { letter, color } = store.getters["stimulation/get_next_protocol"];
-
+      const { letter } = await store.getters["stimulation/get_next_protocol"];
       expect(letter).toBe("A");
-      expect(color).toBe("#4ca0af");
     });
 
     test("When a protocol is selected to be editted, Then the letter and color assignment should be that of the selected protocol", async () => {
@@ -479,8 +480,7 @@ describe("store/stimulation", () => {
     });
 
     test("When a user starts a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
-      const axios_message_spy = jest.spyOn(axios_helpers, "post_stim_message").mockImplementation(() => null);
-      const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
+      const axios_spy = jest.spyOn(axios_helpers, "call_axios_post_from_vuex").mockImplementation(() => null);
 
       const test_well_protocol_pairs = {};
       for (let well_idx = 0; well_idx < 24; well_idx++) {
@@ -592,17 +592,23 @@ describe("store/stimulation", () => {
       store.state.stimulation.protocol_assignments = test_assignment;
       // send message once
       await store.dispatch("stimulation/create_protocol_message");
-      expect(axios_message_spy).toHaveBeenCalledWith(expected_message);
-      expect(axios_status_spy).toHaveBeenCalledWith(true);
+      expect(axios_spy).toHaveBeenCalledWith("/set_protocols", {
+        data: JSON.stringify(expected_message),
+      });
+      expect(axios_spy).toHaveBeenCalledWith("/set_stim_status?running=true");
       // send message again and make sure nothing was modified. Tanner (11/3/21): there was an issue where the protocols were modified inside of create_protocol_message, so sending message twice to catch that issue if present
       await store.dispatch("stimulation/create_protocol_message");
-      expect(axios_message_spy).toHaveBeenCalledWith(expected_message);
-      expect(axios_status_spy).toHaveBeenCalledWith(true);
+      expect(axios_spy).toHaveBeenCalledWith("/set_protocols", {
+        data: JSON.stringify(expected_message),
+      });
+      expect(axios_spy).toHaveBeenCalledWith("/set_stim_status?running=true");
     });
     test("When a user stops a stimulation, Then the protocol message should be created and then posted to the BE", async () => {
-      const axios_status_spy = jest.spyOn(axios_helpers, "post_stim_status").mockImplementation(() => null);
-      await store.dispatch("stimulation/stop_stim_status");
-      expect(axios_status_spy).toHaveBeenCalledWith(false);
+      const axios_status_spy = jest
+        .spyOn(axios_helpers, "call_axios_post_from_vuex")
+        .mockImplementation(() => null);
+      await store.dispatch("stimulation/stop_stimulation");
+      expect(axios_status_spy).toHaveBeenCalledWith("/set_stim_status?running=false");
     });
 
     test("When a user adds a repeat delay into the input of the settings panel, Then it will appear at the end of the waveform in the graph", async () => {
@@ -612,5 +618,21 @@ describe("store/stimulation", () => {
       const { delay_blocks } = store.state.stimulation;
       expect(delay_blocks).toStrictEqual(expected_block);
     });
+
+    test.each([
+      ["ERROR", "ERROR"],
+      [null, "CONFIG_CHECK_IN_PROGRESS"],
+    ])(
+      "When a user clicks icon to start a stim configuration check, Then action will post to BE and update stim_status",
+      async (response, status) => {
+        const axios_status_spy = jest
+          .spyOn(axios_helpers, "call_axios_post_from_vuex")
+          .mockImplementation(() => response);
+        await store.dispatch("stimulation/start_stim_configuration");
+
+        expect(axios_status_spy).toHaveBeenCalledWith("/start_stim_checks");
+        expect(store.state.stimulation.stim_status).toBe(STIM_STATUS[status]);
+      }
+    );
   });
 });

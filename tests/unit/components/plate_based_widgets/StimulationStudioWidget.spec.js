@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import StimulationStudioWidget from "@/components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 import { StimulationStudioWidget as ComponentToTest } from "@/dist/mantarray.common";
 import { createLocalVue } from "@vue/test-utils";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -247,6 +248,14 @@ describe("StimulationStudioWidget.vue", () => {
     await store.dispatch("stimulation/handle_selected_wells", [false, true, false, false]);
     await store.commit("stimulation/apply_selected_protocol", 2);
     expect(wrapper.vm.protocol_assignments).toBe(store.state.stimulation.protocol_assignments);
+  });
+  test("When stim's stim_status gets updated to SHORT_CIRCUIT_ERROR, Then StimulationStudioWidget will become disabled", async () => {
+    const wrapper = mount(StimulationStudioWidget, {
+      store,
+      localVue,
+    });
+    await store.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERROR);
+    expect(wrapper.find(".div__simulationstudio-disable-overlay").isVisible()).toBe(true);
   });
 
   test("When exiting instance, Then instance is effectively destroyed", async () => {

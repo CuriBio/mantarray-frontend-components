@@ -1,35 +1,29 @@
 <template>
   <div class="div__plate-barcode">
-    <span class="span__plate-barcode-text"
-      >Plate Barcode:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
+    <span class="span__plate-barcode-text" :style="dynamic_label_style"
+      >{{ barcode_label }}:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
     >
     <!-- original Mockflow ID: cmpDd0be63536ca605546f566539e51ad0c3-->
     <input
-      v-if="!manual"
-      id="plateinfo"
-      disabled="disabled"
-      type="text"
-      spellcheck="false"
-      class="input__plate-barcode-entry"
-      :class="[is_valid_barcode ? `input__plate-barcode-entry-valid` : `input__plate-barcode-entry-invalid`]"
-      :value="barcode"
-    />
-    <input
-      v-if="manual"
       id="plateinfo"
       :disabled="
         playback_state === playback_state_enums.RECORDING ||
         playback_state === playback_state_enums.BUFFERING ||
-        playback_state === playback_state_enums.LIVE_VIEW_ACTIVE
+        playback_state === playback_state_enums.LIVE_VIEW_ACTIVE ||
+        !barcode_manual_mode
       "
       type="text"
       spellcheck="false"
       onpaste="return false;"
       class="input__plate-barcode-entry"
-      :value="plate_barcode"
-      @input="validatePlateBarcode"
+      :style="dynamic_entry_style"
+      :class="[
+        barcode_info.valid ? `input__plate-barcode-entry-valid` : `input__plate-barcode-entry-invalid`,
+      ]"
+      :value="barcode_info.value"
+      @input="set_barcode_manually"
     />
-    <div v-show="!manual" class="input__plate-barcode-manual-entry-enable">
+    <div v-show="!barcode_manual_mode" class="input__plate-barcode-manual-entry-enable">
       <span class="input__plate-barcode-manual-entry-enable-icon">
         <div id="edit-plate-barcode" v-b-modal.edit-plate-barcode-modal>
           <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
@@ -38,76 +32,96 @@
     </div>
     <!--</div>-->
     <b-modal id="edit-plate-barcode-modal" size="sm" hide-footer hide-header hide-header-close>
-      <BarcodeEditDialog
-        @cancel-plate-barcode="manual_mode_off"
-        @yes-plate-barcode="manual_mode_on"
-      ></BarcodeEditDialog>
+      <StatusWarningWidget
+        :modal_labels="barcode_manual_labels"
+        @handle_confirmation="handle_manual_mode_choice"
+      />
+    </b-modal>
+    <b-modal id="barcode-warning" size="sm" hide-footer hide-header hide-header-close>
+      <StatusWarningWidget
+        :modal_labels="barcode_warning_labels"
+        @handle_confirmation="close_warning_modal"
+      />
     </b-modal>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import playback_module from "@/store/modules/playback";
-import { TextValidation } from "@/js_utils/text_validation.js";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import BarcodeEditDialog from "@/components/status/BarcodeEditDialog.vue";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 
 library.add(faPencilAlt);
-const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 /**
- * @vue-data {String} plate_barcode - Current plate barcode
  * @vue-data {String} playback_state_enums - Current state of playback
  * @vue-computed {String} playback_state - Current value in Vuex store
- * @vue-event {String} validatePlateBarcode - User entered String parser
+ * @vue-event {String} set_barcode_manually - User entered String parser
  */
 export default {
-  name: "PlateBarcode",
+  name: "BarcodeViewer",
   components: {
     FontAwesomeIcon,
-    BarcodeEditDialog,
+    StatusWarningWidget,
+  },
+  props: {
+    barcode_type: { type: String, default: "plate_barcode" },
   },
   data() {
     return {
-      manual: false,
-      plate_barcode: "",
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
+      barcode_manual_labels: {
+        header: "Warning!",
+        msg_one: "Do you want to enable manual barcode editing?",
+        msg_two:
+          "Once enabled, all barcodes must be entered manually. This should only be done if the barcode scanner is malfunctioning. Scanning cannot be re-enabled until software is restarted.",
+        button_names: ["Cancel", "Yes"],
+      },
+      barcode_warning_labels: {
+        header: "Warning!",
+        msg_one: "A new barcode has been detected while a process was active.",
+        msg_two: "All processes have been stopped.",
+        button_names: ["Okay"],
+      },
     };
   },
   computed: {
-    ...mapState("playback", ["playback_state", "barcode", "is_valid_barcode"]),
+    ...mapState("playback", ["playback_state", "barcodes", "barcode_warning"]),
+    ...mapState("flask", ["barcode_manual_mode"]),
+    barcode_info: function () {
+      return this.barcodes[this.barcode_type];
+    },
+    barcode_label: function () {
+      return this.barcode_type == "plate_barcode" ? "Plate Barcode" : "Stim Lid Barcode";
+    },
+    dynamic_label_style: function () {
+      return this.barcode_type == "plate_barcode" ? "left: 17px;" : "left: 0px;";
+    },
+    dynamic_entry_style: function () {
+      return this.barcode_type == "plate_barcode" ? "width: 110px;" : "width: 105px;";
+    },
   },
-  updated() {
-    this.plate_barcode = this.barcode;
+  watch: {
+    barcode_warning: function () {
+      if (this.barcode_warning) this.$bvModal.show("barcode-warning");
+    },
   },
   methods: {
-    manual_mode_off: function () {
+    handle_manual_mode_choice(choice) {
+      const bool_choice = Boolean(choice);
       this.$bvModal.hide("edit-plate-barcode-modal");
+      this.$store.commit("flask/set_barcode_manual_mode", bool_choice);
     },
-    manual_mode_on: function () {
-      this.manual = true;
-      this.$bvModal.hide("edit-plate-barcode-modal");
-      this.$store.commit("flask/set_barcode_manual_mode", true);
-      this.$store.commit("playback/set_barcode_number_manual_mode", null);
-      this.$store.commit("playback/set_barcode_valid_manual_mode", false);
+    set_barcode_manually: function (event) {
+      this.$store.dispatch("playback/validate_barcode", {
+        type: this.barcode_type,
+        new_value: event.target.value,
+      });
     },
-    validatePlateBarcode: function (event) {
-      const val = event.target.value;
-      const inp = document.getElementById("plateinfo");
-
-      inp.addEventListener("blur", this.set_red_color(inp));
-      this.$store.commit("playback/set_barcode_number_manual_mode", null);
-      this.$store.commit("playback/set_barcode_valid_manual_mode", false);
-      const result = TextValidation_plate_barcode.validate(val);
-      if (result == "") {
-        this.set_green_color(inp);
-        this.$store.commit("playback/set_barcode_number_manual_mode", val);
-        this.$store.commit("playback/set_barcode_valid_manual_mode", true);
-      }
-      if (result == " ") {
-        this.set_red_color(inp);
-      }
+    close_warning_modal() {
+      this.$bvModal.hide("barcode-warning");
+      this.$store.commit("playback/set_barcode_warning", false);
     },
     set_green_color(inp) {
       inp.style.border = "1px solid green";
@@ -146,7 +160,6 @@ export default {
   width: 278px;
   height: 23px;
   top: 2px;
-  left: 17px;
   padding: 5px;
   user-select: none;
   font-family: "Muli";
@@ -172,22 +185,17 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-align: left;
-
   line-height: 24px;
   font-style: normal;
   text-decoration: none;
   font-size: 15px;
-
   background-color: #000000;
-
   color: #b7b7b7;
   font-family: Anonymous Pro;
   font-weight: normal;
   box-shadow: none;
   border: none;
   position: absolute;
-
-  width: 110px;
   height: 24px;
   top: 3px;
   right: 27px;
@@ -202,7 +210,6 @@ export default {
 }
 input:focus {
   outline: none;
-  border: 1px solid red;
 }
 
 .input__plate-barcode-manual-entry-enable {

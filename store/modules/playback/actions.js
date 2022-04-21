@@ -2,8 +2,10 @@
 
 import { ENUMS } from "./enums";
 import { STATUS } from "../flask/enums";
+import { STIM_STATUS } from "../stimulation/enums";
 import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
-
+import { TextValidation } from "@/js_utils/text_validation.js";
+const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 // =========================================================================
 // |   Following are the list of items called --todo                       |
 // |   a) baseurl {contains the flask server url } {obtain from config.ini}|
@@ -47,16 +49,17 @@ export default {
 
   async start_recording(context) {
     const time_index = this.state.playback.x_time_index;
-    const barcode = this.state.playback.barcode;
-    const payload = {
-      baseurl: "http://localhost:4567",
-      endpoint: "start_recording",
-      time_index: time_index,
-      barcode: barcode,
+    const plate_barcode = this.state.playback.barcodes.plate_barcode.value;
+    const stim_barcode = this.state.playback.barcodes.stim_barcode.value;
+    const url = "http://localhost:4567/start_recording";
+    const params = {
+      time_index,
+      plate_barcode,
       is_hardware_test_recording: false,
+      stim_barcode,
     };
     context.commit("set_recording_start_time", time_index);
-    await this.dispatch("playback/start_stop_axios_request_with_time_index", payload);
+    await call_axios_get_from_vuex(url, context, params);
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.RECORDING);
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
       root: true,
@@ -64,22 +67,14 @@ export default {
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING, {
       root: true,
     });
-
-    // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
-    // if (response.status == 200) {
-    //   context.commit("set_playback_state", ENUMS.PLAYBACK_STATES.RECORDING);
-    // }
   },
 
   async stop_recording(context) {
     const time_index = this.state.playback.x_time_index;
-    const payload = {
-      baseurl: "http://localhost:4567",
-      endpoint: "stop_recording",
-      time_index: time_index,
-    };
+    const url = "http://localhost:4567/stop_recording";
+    const params = { time_index };
     context.commit("set_recording_start_time", 0);
-    await this.dispatch("playback/start_stop_axios_request_with_time_index", payload);
+    await call_axios_get_from_vuex(url, context, params);
     context.commit("set_playback_state", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
     context.commit("stop_recording");
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.RECORDING, {
@@ -98,11 +93,8 @@ export default {
     // }
   },
   async stop_live_view(context) {
-    const payload = {
-      baseurl: "http://localhost:4567",
-      endpoint: "stop_managed_acquisition",
-    };
-    await this.dispatch("playback/start_stop_axios_request", payload);
+    const url = "http://localhost:4567/stop_managed_acquisition";
+    await call_axios_get_from_vuex(url, context);
     context.commit("data/clear_plate_waveforms", null, { root: true });
     context.commit("data/clear_stim_waveforms", null, { root: true });
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
@@ -129,12 +121,8 @@ export default {
   },
   async start_calibration(context) {
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATING);
-    const payload = {
-      baseurl: "http://localhost:4567",
-      endpoint: "start_calibration",
-    };
-
-    await this.dispatch("playback/start_stop_axios_request", payload);
+    const url = "http://localhost:4567/start_calibration";
+    await call_axios_get_from_vuex(url, context);
     context.commit("flask/ignore_next_system_status_if_matching_status", this.state.flask.status_uuid, {
       root: true,
     });
@@ -144,10 +132,6 @@ export default {
     });
 
     context.dispatch("flask/start_status_pinging", null, { root: true });
-    // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
-    // if (response.status == 200) {
-    //   context.dispatch("flask/start_status_pinging", null, { root: true });
-    // }
   },
   async stop_playback(context) {
     context.commit("set_x_time_index", 0);
@@ -185,11 +169,8 @@ export default {
     // reset to default state and then set new timer
     context.dispatch("set_five_min_timer");
 
-    const payload = {
-      baseurl: "http://localhost:4567",
-      endpoint: "start_managed_acquisition",
-    };
-    await this.dispatch("playback/start_stop_axios_request", payload);
+    const url = "http://localhost:4567/start_managed_acquisition";
+    await call_axios_get_from_vuex(url, context);
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.BUFFERING);
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.CALIBRATED, {
       root: true,
@@ -198,40 +179,6 @@ export default {
       root: true,
     });
     context.dispatch("flask/start_status_pinging", null, { root: true });
-
-    // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
-    // if (response.status == 200) {
-    //   context.dispatch("flask/start_status_pinging", null, { root: true });
-    // }
-  },
-  async start_stop_axios_request_with_time_index(context, payload) {
-    let result = 0;
-    const baseurl = payload.baseurl;
-    const endpoint = payload.endpoint;
-    const time_index = payload.time_index;
-    let no_barcode = false;
-    let barcode = null;
-    let whole_url = ``;
-    if (payload.barcode == undefined) {
-      no_barcode = true;
-    } else {
-      barcode = payload.barcode;
-    }
-    if (no_barcode == true) {
-      whole_url = `${baseurl}/${endpoint}?time_index=${time_index}`;
-    } else {
-      whole_url = `${baseurl}/${endpoint}?time_index=${time_index}&barcode=${barcode}&is_hardware_test_recording=${payload.is_hardware_test_recording}`;
-    }
-    result = await call_axios_get_from_vuex(whole_url, context);
-    return result;
-  },
-  async start_stop_axios_request(context, payload) {
-    let result = 0;
-    const baseurl = payload.baseurl;
-    const endpoint = payload.endpoint;
-    const whole_url = `${baseurl}/${endpoint}`;
-    result = await call_axios_get_from_vuex(whole_url, context);
-    return result;
   },
   set_five_min_timer(context) {
     five_min_timer = setTimeout(() => {
@@ -242,5 +189,32 @@ export default {
     one_min_timer = setInterval(() => {
       context.commit("set_one_min_warning", true);
     }, 1 * 60e3);
+  },
+  async validate_barcode({ commit, state, dispatch }, { type, new_value }) {
+    const result = TextValidation_plate_barcode.validate(new_value);
+    const is_valid = result == "";
+
+    // stop all running processes if either barcode changes regardless of validity
+    if (this.state.stimulation.stim_play_state) {
+      await this.dispatch("stimulation/stop_stimulation");
+      commit("set_barcode_warning", true);
+    }
+
+    if (state.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE) {
+      await dispatch("stop_live_view");
+      commit("set_barcode_warning", true);
+    } else if (state.playback_state === ENUMS.PLAYBACK_STATES.RECORDING) {
+      await dispatch("stop_recording");
+      await dispatch("stop_live_view");
+
+      commit("set_barcode_warning", true);
+    }
+
+    // require new stim configuration check if either new barcode changes
+    if (is_valid && state.barcodes[type].value !== new_value) {
+      this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED);
+    }
+
+    commit("set_barcode", { type, new_value, is_valid });
   },
 };
