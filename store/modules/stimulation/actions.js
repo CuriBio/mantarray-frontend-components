@@ -123,7 +123,7 @@ export default {
     dispatch("handle_protocol_order", detailed_pulses);
   },
 
-  async handle_import_protocol({ commit, state, dispatch }, file) {
+  async handle_import_protocol({ dispatch }, file) {
     const reader = new FileReader();
 
     reader.onload = async function () {
@@ -160,7 +160,7 @@ export default {
     download_link.remove();
   },
 
-  async add_imported_protocol({ commit, state, getters }, protocol) {
+  async add_imported_protocol({ commit, getters }, protocol) {
     await commit("set_edit_mode_off");
 
     const assignment = await getters["get_next_protocol"];

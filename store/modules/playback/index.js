@@ -30,6 +30,7 @@ const default_state = {
   five_min_warning: false,
   one_min_warning: false,
   barcode_warning: false,
+  mag_find_analysis_state: ENUMS.MAG_FINDING_STATES.READY,
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2

@@ -279,9 +279,9 @@ describe("store/settings", () => {
 
     store.commit("settings/set_log_path", test_win_path);
 
-    const { log_path, base_downloads_path } = store.state.settings;
+    const { log_path, root_downloads_path } = store.state.settings;
     expect(log_path).toBe(test_win_path);
-    expect(base_downloads_path).toBe(expected_win_base_path);
+    expect(root_downloads_path).toBe(expected_win_base_path);
 
     const test_path = "/Users/CuriBio/TestPath";
     const expected_downloads_base_path = "C:\\Users\\CuriBio\\Downloads";
@@ -289,7 +289,7 @@ describe("store/settings", () => {
     store.commit("settings/set_log_path", test_path);
 
     expect(store.state.settings.log_path).toBe(test_path);
-    expect(store.state.settings.base_downloads_path).toBe(expected_downloads_base_path);
+    expect(store.state.settings.root_downloads_path).toBe(expected_downloads_base_path);
   });
 
   test("When an failed upload status gets sent on startup, Then the the file will get added to state and total file count will automatically increase", async () => {

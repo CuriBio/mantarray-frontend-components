@@ -4,7 +4,7 @@
       <span class="span__status-warning-label">{{ modal_labels.header }}</span>
       <div ref="message_area" class="span__status-warning-message">
         <p>{{ modal_labels.msg_one }}</p>
-        <p v-show="!success_status">
+        <p v-show="!include_filepath">
           {{ modal_labels.msg_two }}
           <a
             v-if="email_error"
@@ -14,13 +14,14 @@
           >
         </p>
         <textarea
-          v-show="success_status"
+          v-show="include_filepath"
           ref="textarea"
           class="textarea__upload-file-path"
           spellcheck="false"
           :value.prop="modal_labels.msg_two"
           :rows="compute_number_of_rows"
           :cols="50"
+          :disabled="true"
           :style="`height: ${textarea__dynamic_height}`"
         />
       </div>
@@ -63,7 +64,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    success_status: {
+    include_filepath: {
       type: Boolean,
       default: false,
     },
@@ -79,7 +80,7 @@ export default {
       const msg_rows = Math.ceil(
         ((this.modal_labels.msg_one.length + this.modal_labels.msg_two.length) / 50).toFixed(1)
       );
-      return msg_rows * 18 + 105;
+      return msg_rows * 18 + 125;
     },
   },
 
@@ -133,7 +134,7 @@ export default {
   color: rgb(183, 183, 183);
   font-family: Muli;
   position: absolute;
-  top: 55px;
+  top: 65px;
   left: 21px;
   width: 378px;
   visibility: visible;

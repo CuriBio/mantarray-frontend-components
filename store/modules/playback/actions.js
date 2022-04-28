@@ -3,7 +3,7 @@
 import { ENUMS } from "./enums";
 import { STATUS } from "../flask/enums";
 import { STIM_STATUS } from "../stimulation/enums";
-import { call_axios_get_from_vuex } from "@/js_utils/axios_helpers.js";
+import { call_axios_get_from_vuex, call_axios_post_from_vuex } from "@/js_utils/axios_helpers.js";
 import { TextValidation } from "@/js_utils/text_validation.js";
 const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 // =========================================================================
@@ -216,5 +216,17 @@ export default {
     }
 
     commit("set_barcode", { type, new_value, is_valid });
+  },
+  async start_mag_analysis({ commit }, selected_recordings) {
+    await commit("set_mag_find_analysis_status", ENUMS.MAG_FINDING_STATES.ACTIVE);
+
+    const post_endpoint = "/start_mag_analysis";
+    await call_axios_post_from_vuex(post_endpoint, {
+      selected_recordings,
+    });
+
+    setTimeout(() => {
+      commit("set_mag_find_analysis_status", ENUMS.MAG_FINDING_STATES.COMPLETE);
+    }, 5000);
   },
 };

@@ -6,7 +6,7 @@ export default {
     if (new_value.includes("\\")) username = new_value.split("\\")[2];
     else username = new_value.split("/")[2];
 
-    state.base_downloads_path = `C:\\Users\\${username}\\Downloads`;
+    state.root_downloads_path = `C:\\Users\\${username}\\Downloads`;
   },
   set_shutdown_error_message(state, new_value) {
     state.shutdown_error_message = new_value;
@@ -60,5 +60,9 @@ export default {
   },
   set_user_cred_input_needed(state, bool) {
     state.user_cred_input_needed = bool;
+  },
+  set_recording_dirs(state, { root_recording_path, recordings_list }) {
+    state.root_recording_path = root_recording_path;
+    state.recordings_list = [...recordings_list];
   },
 };

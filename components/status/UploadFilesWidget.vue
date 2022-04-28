@@ -29,7 +29,7 @@
     <b-modal id="upload-status" size="sm" hide-footer hide-header hide-header-close :static="true">
       <StatusWarningWidget
         id="upload-modal"
-        :success_status="status"
+        :include_filepath="status"
         :modal_labels="modal_labels"
         @handle_confirmation="handle_confirmation"
       />
@@ -70,7 +70,7 @@ export default {
       total: "total_file_count",
       upload_error: "upload_error",
       total_uploaded_files: "total_uploaded_files",
-      base_downloads_path: "base_downloads_path",
+      root_downloads_path: "root_downloads_path",
     }),
     last_file_name() {
       return this.total_uploaded_files[this.total_uploaded_files.length - 1];
@@ -107,7 +107,7 @@ export default {
         this.modal_labels = {
           header: "Successful Upload!",
           msg_one: `The following recording was successfully uploaded: ${this.last_file_name}.`,
-          msg_two: `${this.base_downloads_path}\\${this.last_file_name}.xlsx`,
+          msg_two: `${this.root_downloads_path}\\${this.last_file_name}.xlsx`,
           button_names: ["Close"],
         };
       }
