@@ -141,12 +141,13 @@ body {
   user-select: none;
 }
 .div__plate-navigator {
-  position: absolute;
+  position: relative;
   top: 0px;
   left: 0px;
   width: 287px;
   height: 177px;
   background: #1c1c1c;
+  margin-bottom: 8px;
 }
 
 .div__plate-navigator-plate-body {

@@ -217,16 +217,13 @@ export default {
 
     commit("set_barcode", { type, new_value, is_valid });
   },
-  async start_mag_analysis({ commit }, selected_recordings) {
-    await commit("set_mag_find_analysis_status", ENUMS.MAG_FINDING_STATES.ACTIVE);
+  async start_data_analysis({ commit }, selected_recordings) {
+    await commit("set_data_analysis_status", ENUMS.DATA_ANALYSIS_STATE.ACTIVE);
 
-    const post_endpoint = "/start_mag_analysis";
-    await call_axios_post_from_vuex(post_endpoint, {
+    const post_endpoint = "/start_data_analysis";
+    const res = await call_axios_post_from_vuex(post_endpoint, {
       selected_recordings,
     });
-
-    setTimeout(() => {
-      commit("set_mag_find_analysis_status", ENUMS.MAG_FINDING_STATES.COMPLETE);
-    }, 5000);
+    console.log(res);
   },
 };

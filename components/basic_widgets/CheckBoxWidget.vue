@@ -74,6 +74,7 @@ export default {
   border-radius: 0px;
   box-shadow: none;
   pointer-events: all;
+  cursor: pointer;
 }
 
 .custom-control-label {
@@ -91,6 +92,11 @@ export default {
   border-radius: 20%;
 }
 
+/* .custom-checkbox,
+.custom-control-input,
+.custom-control-label {
+  cursor: pointer;
+} */
 /*.custom-checkbox .custom-control-label:after {*/
 /*  background: no-repeat;*/
 /*}*/

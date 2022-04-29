@@ -16,6 +16,7 @@ const default_state = {
   log_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\logs_flask",
   root_downloads_path: "C:\\Users\\username\\Downloads",
   root_recording_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\recordings",
+  data_analysis_directory: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\time_force_analyses",
   recordings_list: [],
   file_count: 0,
   total_file_count: 0,

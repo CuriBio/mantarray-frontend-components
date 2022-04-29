@@ -86,7 +86,8 @@ export default {
             "px;" +
             "left: " +
             computed_left +
-            "px;"
+            "px;" +
+            "cursor: pointer;"
         : "color: " +
             this.disabled_color +
             ";" +
