@@ -219,11 +219,12 @@ export default {
   },
   async start_data_analysis({ commit }, selected_recordings) {
     await commit("set_data_analysis_status", ENUMS.DATA_ANALYSIS_STATE.ACTIVE);
-
     const post_endpoint = "/start_data_analysis";
-    const res = await call_axios_post_from_vuex(post_endpoint, {
+
+    const response = await call_axios_post_from_vuex(post_endpoint, {
       selected_recordings,
     });
-    console.log(res);
+
+    if (response) await commit("set_data_analysis_status", ENUMS.DATA_ANALYSIS_STATE.ERROR);
   },
 };

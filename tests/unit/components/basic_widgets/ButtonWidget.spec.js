@@ -87,7 +87,7 @@ describe("ButtonWidget.vue", () => {
     const target_button_label_btn = wrapper.find(".span__button_label");
     expect(target_button_label_btn.text()).toStrictEqual("Save ID");
     expect(target_button_label_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 500px; left: 0px;"
+      "color: rgb(255, 255, 255); width: 500px; left: 0px; cursor: pointer;"
     ); // DOM converts the #FFFFFF to rgb(255, 255, 255)
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color and greyed color the values provided from the props as visible is false a greyed color text is rendred", () => {
@@ -142,7 +142,7 @@ describe("ButtonWidget.vue", () => {
 
     await wrapper.setProps(updated_propsData);
     expect(target_button_label_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 500px; left: 0px;"
+      "color: rgb(255, 255, 255); width: 500px; left: 0px; cursor: pointer;"
     ); // DOM converts the #FFFFFF to rgb(255, 255, 255)
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color, greyed color, hover color the values provided from the props as visible is true so focus color text is rendred, user hover the hover color is rendered", async () => {
@@ -165,11 +165,11 @@ describe("ButtonWidget.vue", () => {
     const target_button_label_btn = wrapper.find(".span__button_label");
     await target_button_label_btn.trigger("mouseenter");
     expect(target_button_label_btn.attributes().style).toBe(
-      "color: rgb(189, 73, 50); width: 500px; left: 0px;"
+      "color: rgb(189, 73, 50); width: 500px; left: 0px; cursor: pointer;"
     );
     await target_button_label_btn.trigger("mouseleave");
     expect(target_button_label_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 500px; left: 0px;"
+      "color: rgb(255, 255, 255); width: 500px; left: 0px; cursor: pointer;"
     );
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, hover color, without enabled_color prop from the props as visible is true so focus color text is rendred", async () => {
@@ -190,7 +190,7 @@ describe("ButtonWidget.vue", () => {
     });
     const target_button_label_btn = wrapper.find(".span__button_label");
     expect(target_button_label_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 500px; left: 0px;"
+      "color: rgb(255, 255, 255); width: 500px; left: 0px; cursor: pointer;"
     );
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, hover color, without disabled_color prop from the props as visible is false so greyed color text is rendred", async () => {
@@ -234,11 +234,11 @@ describe("ButtonWidget.vue", () => {
     const target_button_label_btn = wrapper.findAll(".span__button_label");
     const cancel_btn = target_button_label_btn.at(0);
     expect(cancel_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 0px;"
+      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 0px; cursor: pointer;"
     );
     const delete_btn = target_button_label_btn.at(1);
     expect(delete_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 166.66666666666666px;"
+      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 166.66666666666666px; cursor: pointer;"
     );
     const save_btn = target_button_label_btn.at(2);
     expect(save_btn.attributes().style).toBe(
@@ -264,15 +264,15 @@ describe("ButtonWidget.vue", () => {
     const target_button_label_btn = wrapper.findAll(".span__button_label");
     const cancel_btn = target_button_label_btn.at(0);
     expect(cancel_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 0px;"
+      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 0px; cursor: pointer;"
     );
     const delete_btn = target_button_label_btn.at(1);
     expect(delete_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 166.66666666666666px;"
+      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 166.66666666666666px; cursor: pointer;"
     );
     const save_btn = target_button_label_btn.at(2);
     expect(save_btn.attributes().style).toBe(
-      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 333.3333333333333px;"
+      "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 333.3333333333333px; cursor: pointer;"
     );
   });
   test("When the ButtonWidget is mounted, Then it loads the horizontal top-line divider proportion, to the defined width of 490px with padding from edges of the widget length", async () => {

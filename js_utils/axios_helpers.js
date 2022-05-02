@@ -70,9 +70,11 @@ export async function call_axios_post_from_vuex(url, data = null) {
   const endpoint = url.split("?")[0];
 
   try {
-    return await Vue.axios.post(`${baseURL}${url}`, data);
+    await Vue.axios.post(`${baseURL}${url}`, data);
+    return;
   } catch (error) {
     console.log(`Error in ${endpoint} for ${baseURL}${endpoint}: ${error}`);
+
     if (error.response) return error.response.status;
     else return error;
   }

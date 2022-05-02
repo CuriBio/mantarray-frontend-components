@@ -17,7 +17,7 @@ export default {
     const response = await call_axios_get_from_vuex(url, context, params);
     return response;
   },
-  async send_firmware_update_confirmation(update_accepted) {
+  async send_firmware_update_confirmation(_, update_accepted) {
     const status = update_accepted ? "accepted" : "declined";
     console.log(`User ${status} firmware update`); // allow-log
 
@@ -27,10 +27,8 @@ export default {
   async get_recording_dirs({ commit }) {
     const url = "http://localhost:4567/get_recordings_list";
     const response = await call_axios_get_from_vuex(url, this);
-    // const data = {
-    //   recordings_list: [],
-    //   root_recording_path: "C://root//recording//path//mantarrayController//"
-    // };
+
+    // TODO handle errors
     await commit("set_recording_dirs", response.data);
   },
 };
