@@ -65,4 +65,7 @@ export default {
     state.root_recording_path = root_recording_path;
     state.recordings_list = [...recordings_list];
   },
+  set_data_analysis_directory(state, directory) {
+    state.data_analysis_directory = directory;
+  },
 };

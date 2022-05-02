@@ -109,10 +109,11 @@ export default function create_web_socket_plugin(socket) {
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
-    socket.on("data_analysis_complete", (message_json, cb) => {
+    socket.on("data_analysis_complete", async (message_json, cb) => {
       const { data_analysis_directory } = JSON.parse(message_json);
-      store.commit("settings/set_data_analysis_directory", data_analysis_directory);
-      store.commit("playback/set_data_analysis_status", ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
+
+      await store.commit("settings/set_data_analysis_directory", data_analysis_directory);
+      await store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
 
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback

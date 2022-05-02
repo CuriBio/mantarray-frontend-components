@@ -218,13 +218,12 @@ export default {
     commit("set_barcode", { type, new_value, is_valid });
   },
   async start_data_analysis({ commit }, selected_recordings) {
-    await commit("set_data_analysis_status", ENUMS.DATA_ANALYSIS_STATE.ACTIVE);
+    await commit("set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.ACTIVE);
     const post_endpoint = "/start_data_analysis";
 
     const response = await call_axios_post_from_vuex(post_endpoint, {
       selected_recordings,
     });
-
-    if (response) await commit("set_data_analysis_status", ENUMS.DATA_ANALYSIS_STATE.ERROR);
+    if (response) await commit("set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.ERROR);
   },
 };

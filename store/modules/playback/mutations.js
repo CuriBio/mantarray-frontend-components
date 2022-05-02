@@ -53,7 +53,7 @@ export default {
   set_barcode_warning(state, bool) {
     state.barcode_warning = bool;
   },
-  set_data_analysis_status(state, new_state) {
+  set_data_analysis_state(state, new_state) {
     state.data_analysis_state = new_state;
   },
 };

@@ -26,9 +26,8 @@ export default {
   },
   async get_recording_dirs({ commit }) {
     const url = "http://localhost:4567/get_recordings_list";
-    const response = await call_axios_get_from_vuex(url, this);
+    const response = await call_axios_get_from_vuex(url);
 
-    // TODO handle errors
     await commit("set_recording_dirs", response.data);
   },
 };
