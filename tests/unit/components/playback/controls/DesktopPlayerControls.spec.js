@@ -24,26 +24,25 @@ let NuxtStore;
 let store;
 let mocked_axios;
 
-beforeAll(async () => {
-  // note the store will mutate across tests, so make sure to re-create it in beforeEach
-  const storePath = `${process.env.buildDir}/store.js`;
-  NuxtStore = await import(storePath);
-});
-
-beforeEach(async () => {
-  store = await NuxtStore.createStore();
-  jest.restoreAllMocks();
-  mocked_axios = new MockAxiosAdapter(axios);
-  mocked_axios.onGet(all_mantarray_commands_regexp).reply(200, {});
-});
-
-afterEach(async () => {
-  jest.useRealTimers();
-  wrapper.destroy();
-  store.commit("playback/stop_playback_progression");
-});
-
 describe("DesktopPlayerControls.vue", () => {
+  beforeAll(async () => {
+    // note the store will mutate across tests, so make sure to re-create it in beforeEach
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+
+  beforeEach(async () => {
+    store = await NuxtStore.createStore();
+    jest.restoreAllMocks();
+    mocked_axios = new MockAxiosAdapter(axios);
+    mocked_axios.onGet(all_mantarray_commands_regexp).reply(200, {});
+  });
+
+  afterEach(async () => {
+    jest.useRealTimers();
+    wrapper.destroy();
+    store.commit("playback/stop_playback_progression");
+  });
   test("When mounting DesktopPlayerControls from the build dist file, it loads successfully", () => {
     const propsData = {};
     wrapper = shallowMount(dist_component_to_test, {
