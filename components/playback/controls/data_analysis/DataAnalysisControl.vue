@@ -204,7 +204,8 @@ export default {
 }
 
 #no-recordings-warning,
-#data-analysis-complete {
+#data-analysis-complete,
+#data-analysis-error {
   position: fixed;
   margin: 5% auto;
   top: 15%;
