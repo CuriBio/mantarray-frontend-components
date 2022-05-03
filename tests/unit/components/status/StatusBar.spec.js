@@ -234,14 +234,14 @@ describe("StatusWidget.vue", () => {
   });
   describe("stim_status", () => {
     test.each([
-      ["CALIBRATION_NEEDED", "Stimulation status: Calibration Needed Before Available"],
-      ["CONFIG_CHECK_NEEDED", "Stimulation status: Configuration Check Needed"],
-      ["CONFIG_CHECK_IN_PROGRESS", "Stimulation status: Configuration Check in Progress..."],
-      ["CONFIG_CHECK_COMPLETE", "Stimulation status: Configuration Check Complete"],
-      ["READY", "Stimulation status: Ready"],
-      ["STIM_ACTIVE", "Stimulation status: Stimulating..."],
-      ["SHORT_CIRCUIT_ERROR", "Stimulation status: Short Circuit Error"],
-      ["ERROR", "Stimulation status: Error Occurred"],
+      ["CALIBRATION_NEEDED", "Stim status: Calibration Needed"],
+      ["CONFIG_CHECK_NEEDED", "Stim status: Configuration Check Needed"],
+      ["CONFIG_CHECK_IN_PROGRESS", "Stim status: Configuration Check in Progress..."],
+      ["CONFIG_CHECK_COMPLETE", "Stim status: Configuration Check Complete"],
+      ["READY", "Stim status: Ready"],
+      ["STIM_ACTIVE", "Stim status: Stimulating..."],
+      ["SHORT_CIRCUIT_ERROR", "Stim status: Short Circuit Error"],
+      ["ERROR", "Stim status: Error Occurred"],
     ])(
       "When stim's stim_status gets mutated to %s, Then the status text should update to be: %s",
       async (vuex_state, expected_text) => {
@@ -264,7 +264,7 @@ describe("StatusWidget.vue", () => {
         store,
         localVue,
       });
-      expect(wrapper.find(text_selector).text()).toBe("Stimulation status: Configuration Check Needed");
+      expect(wrapper.find(text_selector).text()).toBe("Stim status: Configuration Check Needed");
     });
   });
 });

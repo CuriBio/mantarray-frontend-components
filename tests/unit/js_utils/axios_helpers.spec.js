@@ -225,7 +225,7 @@ describe("axios_helper.stim_studio", () => {
     expect(response).toBeUndefined();
   });
 
-  test("Given axios is mocked to return status code 500 when posting stimulation status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
+  test("Given axios is mocked to return status code 500 when posting Stim status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
     const whole_url = "http://localhost:4567/set_stim_play_state?running=true";
     const endpoint = "/set_stim_play_state?running=true";
 
@@ -234,7 +234,7 @@ describe("axios_helper.stim_studio", () => {
     const error = await call_axios_post_from_vuex(endpoint);
     expect(error).toBe(status_code);
   });
-  test("Given axios is mocked to return status code 200 when posting stimulation status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
+  test("Given axios is mocked to return status code 200 when posting Stim status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
     const whole_url = "http://localhost:4567/set_stim_play_state?running=false";
     const endpoint = "/set_stim_play_state?running=false";
 

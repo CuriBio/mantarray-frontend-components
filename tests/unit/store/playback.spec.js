@@ -6,7 +6,8 @@ const sinon = require("sinon");
 import { createLocalVue } from "@vue/test-utils";
 import playback_module from "@/store/modules/playback";
 import { STATUS } from "@/store/modules/flask/enums";
-
+import { ENUMS } from "@/store/modules/playback/enums";
+import * as axios_helpers from "@/js_utils/axios_helpers";
 const wait_for_expect = require("wait-for-expect");
 import { all_mantarray_commands_regexp, system_status_regexp } from "@/store/modules/flask/url_regex";
 import { PLAYBACK_ENUMS } from "@/dist/mantarray.common";
@@ -689,6 +690,30 @@ describe("store/playback", () => {
           playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
         );
       });
+    });
+    test("When a user successfully attempts to start a local data analysis, Then the recording names will be posted to  the flask server and state will update to ACTIVE", async () => {
+      const test_recordings = ["rec_1", "rec_2", "rec_3", "rec_4", "rec_5"];
+      const post_endpoint = "/start_data_analysis";
+      const post_url = "http://localhost:4567/start_data_analysis";
+
+      const spied_helper = jest.spyOn(axios_helpers, "call_axios_post_from_vuex");
+      mocked_axios.onPost(post_url).reply(200);
+
+      await store.dispatch("playback/start_data_analysis", test_recordings);
+
+      expect(store.state.playback.data_analysis_state).toBe(ENUMS.DATA_ANALYSIS_STATE.ACTIVE);
+      expect(spied_helper).toHaveBeenCalledWith(post_endpoint, { selected_recordings: test_recordings });
+    });
+
+    test("When a user attempts to start a local data analysis and an error occurs, Then the analysis state will get updated to ERROR", async () => {
+      const test_recordings = ["rec_1", "rec_2", "rec_3", "rec_4", "rec_5"];
+      const post_url = "http://localhost:4567/start_data_analysis";
+
+      mocked_axios.onPost(post_url).reply(404);
+
+      await store.dispatch("playback/start_data_analysis", test_recordings);
+
+      expect(store.state.playback.data_analysis_state).toBe(ENUMS.DATA_ANALYSIS_STATE.ERROR);
     });
   });
 });

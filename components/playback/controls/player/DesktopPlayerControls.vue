@@ -588,7 +588,7 @@ export default {
   width: 287px;
   top: 0px;
   left: 0px;
-  position: absolute;
+  position: relative;
   background-color: #000000;
   font-family: Muli;
   font-weight: normal;

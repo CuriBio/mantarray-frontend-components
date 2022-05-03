@@ -7,7 +7,7 @@
         value-field="value"
         stacked
         @input="change_method"
-      ></b-form-checkbox-group>
+      />
     </div>
   </div>
 </template>
@@ -61,12 +61,9 @@ export default {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: rgb(17, 17, 17);
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 140px;
-  height: 150px;
   font-family: Muli;
   font-weight: normal;
   font-style: normal;
@@ -74,16 +71,14 @@ export default {
   font-size: 15px;
   color: rgb(183, 183, 183);
   visibility: visible;
-  border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;
   box-shadow: none;
   pointer-events: all;
+  cursor: pointer;
 }
-.div__checkbox_selected {
-  white-space: nowrap;
-  padding-top: 15px;
-  color: #b7b7b7;
-  padding-bottom: 7px;
+
+.custom-control-label {
+  padding-left: 10px;
 }
 
 .custom-checkbox .custom-control-label::before {
@@ -97,9 +92,6 @@ export default {
   border-radius: 20%;
 }
 
-/*.custom-checkbox .custom-control-label:after {*/
-/*  background: no-repeat;*/
-/*}*/
 /* active state i.e. displayed while the mouse is being pressed down */
 .custom-checkbox .custom-control-input:active ~ .custom-control-label::before {
   color: #fff;

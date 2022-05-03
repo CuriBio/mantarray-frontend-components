@@ -27,9 +27,13 @@ module.exports = {
    ** Build configuration
    */
   build: {
+    // extend({ node }, { isDev, isClient }) {
+    //   node = {
+    //     fs: "empty"
+    //   };
+    // }
     /*
      ** Run ESLint on save
-
     extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({

@@ -1,0 +1,215 @@
+<template>
+  <div>
+    <button
+      v-b-popover.hover.bottom="analysis_tooltip_text"
+      title="Run Data Analysis"
+      :class="dynamic_button_class"
+      @click="check_analysis_requirements"
+    >
+      Select Recordings...
+    </button>
+    <b-modal
+      id="start-data-analysis"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <DataAnalysisWidget @send_confirmation="close_analysis_modal" />
+    </b-modal>
+    <b-modal
+      id="no-recordings-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        :include_filepath="true"
+        :modal_labels="warning_modal_labels"
+        @handle_confirmation="$bvModal.hide('no-recordings-warning')"
+      />
+    </b-modal>
+    <b-modal
+      id="data-analysis-complete"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        :include_filepath="true"
+        :modal_labels="anaysis_complete_modal_labels"
+        @handle_confirmation="close_analysis_complete_modal('data-analysis-complete')"
+      />
+    </b-modal>
+    <b-modal
+      id="data-analysis-error"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        :modal_labels="anaysis_error_modal_labels"
+        @handle_confirmation="close_analysis_complete_modal('data-analysis-error')"
+      />
+    </b-modal>
+  </div>
+</template>
+<script>
+import { ENUMS } from "@/store/modules/playback/enums";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
+import DataAnalysisWidget from "@/components/playback/controls/data_analysis/DataAnalysisWidget.vue";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+
+import BootstrapVue from "bootstrap-vue";
+import { BModal, VBPopover } from "bootstrap-vue";
+import Vue from "vue";
+import { mapState } from "vuex";
+
+Vue.use(BootstrapVue);
+Vue.component("BModal", BModal);
+Vue.directive("b-popover", VBPopover);
+
+export default {
+  name: "MagFindAnalysisControl",
+  components: {
+    DataAnalysisWidget,
+    StatusWarningWidget,
+  },
+  data: function () {
+    return {
+      warning_modal_labels: {
+        header: "No Recordings Found!",
+        msg_one: `There were no recordings found. Please ensure that they are located in the correct directory: `,
+        msg_two: "C:\\recording\\path\\placeholder",
+        button_names: ["Close"],
+      },
+      anaysis_complete_modal_labels: {
+        header: "Complete!",
+        msg_one: `All analyses complete. They can be found at: `,
+        msg_two: "C:\\analysis\\path\\placeholder",
+        button_names: ["Close"],
+      },
+      anaysis_error_modal_labels: {
+        header: "Error!",
+        msg_one: `An error occurred during the analysis.`,
+        msg_two: "Please try again later.",
+        button_names: ["Close"],
+      },
+    };
+  },
+  computed: {
+    ...mapState("settings", ["recordings_list", "root_recording_path", "data_analysis_directory"]),
+    ...mapState("playback", ["data_analysis_state", "playback_state"]),
+    ...mapState("stimulation", ["stim_status"]),
+    is_data_analysis_enabled: function () {
+      // system and stim states where a data analysis is enabled
+      return (
+        [ENUMS.PLAYBACK_STATES.CALIBRATED, ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED].includes(
+          this.playback_state
+        ) &&
+        [STIM_STATUS.CALIBRATION_NEEDED, STIM_STATUS.READY, STIM_STATUS.CONFIG_CHECK_NEEDED].includes(
+          this.stim_status
+        )
+      );
+    },
+    analysis_tooltip_text: function () {
+      return this.is_data_analysis_enabled
+        ? "Run analysis on existing recordings."
+        : "Unable to run analysis while instrument is initializing or other processes are active.";
+    },
+    dynamic_button_class: function () {
+      return this.is_data_analysis_enabled
+        ? "button__data-analysis-button--enabled"
+        : "button__data-analysis-button--disabled";
+    },
+  },
+  watch: {
+    root_recording_path: function (new_path, _) {
+      this.warning_modal_labels.msg_two = new_path;
+    },
+    data_analysis_state: function (new_state, _) {
+      if (new_state == ENUMS.DATA_ANALYSIS_STATE.COMPLETE) {
+        this.$bvModal.hide("start-data-analysis");
+        this.$bvModal.show("data-analysis-complete");
+      } else if (new_state == ENUMS.DATA_ANALYSIS_STATE.ERROR) {
+        this.$bvModal.hide("start-data-analysis");
+        this.$bvModal.show("data-analysis-error");
+      }
+    },
+    data_analysis_directory: function (new_dir, _) {
+      this.anaysis_complete_modal_labels.msg_two = new_dir;
+    },
+  },
+  methods: {
+    check_analysis_requirements: async function () {
+      if (this.is_data_analysis_enabled) {
+        await this.$store.dispatch("settings/get_recording_dirs");
+
+        if (this.recordings_list.length > 0) this.$bvModal.show("start-data-analysis");
+        else this.$bvModal.show("no-recordings-warning");
+      }
+    },
+    close_analysis_modal: async function ({ idx, selected_recordings }) {
+      if (idx === 2) await this.$store.dispatch("playback/start_data_analysis", selected_recordings);
+      else if (idx === 0) this.$bvModal.hide("start-data-analysis");
+    },
+    close_analysis_complete_modal: function (id) {
+      this.$bvModal.hide(id);
+      this.$store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.READY);
+    },
+  },
+};
+</script>
+<style>
+.button__data-analysis-button--enabled {
+  background: #b7b7b7;
+  border: 1px solid #b7b7b7;
+  left: 28px;
+  width: 230px;
+  position: relative;
+  margin-top: 15px;
+  font-size: 15px;
+}
+.button__data-analysis-button--enabled:hover {
+  background: #b7b7b7c9;
+  cursor: pointer;
+}
+.button__data-analysis-button--disabled {
+  background: #b7b7b7c9;
+  border: 1px solid #b7b7b7c9;
+  color: #6e6f72;
+  left: 28px;
+  width: 230px;
+  position: relative;
+  margin-top: 15px;
+  font-size: 15px;
+}
+#start-data-analysis {
+  position: fixed;
+  margin: 5% auto;
+  top: 10%;
+  left: -10%;
+  right: 0;
+}
+
+#no-recordings-warning,
+#data-analysis-complete,
+#data-analysis-error {
+  position: fixed;
+  margin: 5% auto;
+  top: 15%;
+  left: 0;
+  right: 0;
+}
+</style>

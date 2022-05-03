@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      base_downloads_path: "C:\\Users\\username\\Downloads",
+      root_downloads_path: "C:\\Users\\username\\Downloads",
       last_file_name: "test-filename",
       short_circuit_labels: {
         header: "Error!",

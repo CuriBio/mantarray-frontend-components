@@ -349,7 +349,7 @@ body {
   user-select: none;
 }
 .div__stimulation-controls-container {
-  position: absolute;
+  position: relative;
   background: black;
   height: 85px;
   width: 287px;

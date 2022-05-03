@@ -447,6 +447,19 @@ describe("store/data", () => {
         expect(stored_waveform[0].x_data_points).toHaveLength(4);
       }
     );
+    test("When a user starts a data analysis on selected recordings and they complete, Then a websocket message will be sent notifying user of completion and set directory of where to locate files", async () => {
+      const expected_message = { data_analysis_directory: "C:\\test\\analysis\\path\\" };
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("data_analysis_complete", JSON.stringify(expected_message), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      expect(store.state.settings.data_analysis_directory).toBe(expected_message.data_analysis_directory);
+      expect(store.state.playback.data_analysis_state).toBe(ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
+    });
+
     test("When backend emits stimulation message, Then ws client updates stim_waveforms", async () => {
       store.commit("data/set_stim_waveforms", [
         { x_data_points: [1], y_data_points: [2] },

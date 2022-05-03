@@ -24,7 +24,7 @@ describe("StatusWarningWidget.vue", () => {
     const target_message_span_p = target_message_span.findAll("p");
     expect(target_message_span_p.at(0).text()).toStrictEqual("Operations are still in progress.");
     expect(target_message_span_p.at(1).text()).toStrictEqual("Are you sure you want to exit?");
-    expect(background.attributes().style).toBe("height: 141px;");
+    expect(background.attributes().style).toBe("height: 161px;");
   });
   test("Given that StatusWarningWidget is mounted, When the StatusWarningWidget is visible, Then click on 'Yes' or 'Cancel' results in an event 'handle_warning_closure' to be emitted", async () => {
     wrapper = mount(ComponentToTest, {

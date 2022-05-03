@@ -3,7 +3,6 @@
     <span class="span__plate-barcode-text" :style="dynamic_label_style"
       >{{ barcode_label }}:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
     >
-    <!-- original Mockflow ID: cmpDd0be63536ca605546f566539e51ad0c3-->
     <input
       id="plateinfo"
       :disabled="
@@ -30,7 +29,6 @@
         </div>
       </span>
     </div>
-    <!--</div>-->
     <b-modal id="edit-plate-barcode-modal" size="sm" hide-footer hide-header hide-header-close>
       <StatusWarningWidget
         :modal_labels="barcode_manual_labels"
@@ -123,12 +121,6 @@ export default {
       this.$bvModal.hide("barcode-warning");
       this.$store.commit("playback/set_barcode_warning", false);
     },
-    set_green_color(inp) {
-      inp.style.border = "1px solid green";
-    },
-    set_red_color(inp) {
-      inp.style.border = "1px solid red";
-    },
   },
 };
 </script>
@@ -142,7 +134,7 @@ export default {
 }
 
 .div__plate-barcode {
-  position: absolute;
+  position: relative;
   top: 0px;
   left: 0px;
   width: 287px;

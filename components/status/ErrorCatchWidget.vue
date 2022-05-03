@@ -21,6 +21,7 @@
       cols="50"
       spellcheck="false"
       :value.prop="log_filepath"
+      :disabled="true"
       :style="textarea__error_cssprops"
     ></textarea>
     <div class="div_status-error-catch-next-step-txt" :style="next_step_cssprops">

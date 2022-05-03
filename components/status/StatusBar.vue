@@ -118,6 +118,7 @@ import Vue from "vue";
 import { mapGetters, mapState } from "vuex";
 import { STATUS } from "@/store/modules/flask/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
+import { ENUMS } from "@/store/modules/playback/enums";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
@@ -194,6 +195,7 @@ export default {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
+    ...mapState("playback", ["data_analysis_state"]),
     ...mapState("stimulation", ["protocol_assignments", "stim_play_state", "stim_status"]),
     ...mapState("data", ["stimulator_circuit_statuses"]),
     ...mapState("settings", [
@@ -216,7 +218,7 @@ export default {
       };
     },
     status_label: function () {
-      return this.stim_specific ? "Stimulation status" : "System status";
+      return this.stim_specific ? "Stim status" : "System status";
     },
     assigned_open_circuits: function () {
       // filter for matching indices
@@ -242,7 +244,8 @@ export default {
         this.status_uuid === STATUS.MESSAGE.CALIBRATING ||
         this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS ||
         this.stim_play_state ||
-        this.total_uploaded_files.length < this.total_file_count;
+        this.total_uploaded_files.length < this.total_file_count ||
+        this.data_analysis_state === ENUMS.DATA_ANALYSIS_STATE.ACTIVE;
       const fw_update_in_progress =
         this.status_uuid === STATUS.MESSAGE.DOWNLOADING_UPDATES ||
         this.status_uuid === STATUS.MESSAGE.INSTALLING_UPDATES;
@@ -386,11 +389,11 @@ export default {
   top: 0px;
   left: 0px;
   width: 287px;
-  height: 45px;
+  height: 40px;
   background: #1c1c1c;
   border: none;
   border-radius: 0px;
-  position: absolute;
+  position: relative;
 }
 
 .span__status-bar-text {
@@ -411,7 +414,6 @@ export default {
   color: #ffffff;
   text-align: left;
   z-index: 101;
-  line-height: 1.1;
 }
 .modal-backdrop {
   background-color: rgb(0, 0, 0, 0.5);

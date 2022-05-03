@@ -2,12 +2,15 @@ import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import { settings_store_module } from "@/dist/mantarray.common";
 import * as axios_helpers from "../../../js_utils/axios_helpers.js";
+import axios from "axios";
+const MockAxiosAdapter = require("axios-mock-adapter");
 
 describe("store/settings", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
   let NuxtStore;
   let store;
+  let mocked_axios;
 
   beforeAll(async () => {
     // note the store will mutate across tests, so make sure to re-create it in beforeEach
@@ -17,7 +20,14 @@ describe("store/settings", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    mocked_axios = new MockAxiosAdapter(axios);
   });
+  afterEach(async () => {
+    mocked_axios.restore();
+    jest.restoreAllMocks();
+    jest.clearAllMocks();
+  });
+
   test("When initialized, Then the customer_account_ids is an empty with no value assigned", () => {
     const array_of_customerids = store.state.settings.customer_account_ids;
     expect(array_of_customerids).toHaveLength(0);
@@ -279,9 +289,9 @@ describe("store/settings", () => {
 
     store.commit("settings/set_log_path", test_win_path);
 
-    const { log_path, base_downloads_path } = store.state.settings;
+    const { log_path, root_downloads_path } = store.state.settings;
     expect(log_path).toBe(test_win_path);
-    expect(base_downloads_path).toBe(expected_win_base_path);
+    expect(root_downloads_path).toBe(expected_win_base_path);
 
     const test_path = "/Users/CuriBio/TestPath";
     const expected_downloads_base_path = "C:\\Users\\CuriBio\\Downloads";
@@ -289,7 +299,7 @@ describe("store/settings", () => {
     store.commit("settings/set_log_path", test_path);
 
     expect(store.state.settings.log_path).toBe(test_path);
-    expect(store.state.settings.base_downloads_path).toBe(expected_downloads_base_path);
+    expect(store.state.settings.root_downloads_path).toBe(expected_downloads_base_path);
   });
 
   test("When an failed upload status gets sent on startup, Then the the file will get added to state and total file count will automatically increase", async () => {
@@ -340,6 +350,21 @@ describe("store/settings", () => {
         expect(post_spy).toHaveBeenCalledWith(`/firmware_update_confirmation?update_accepted=${decision}`);
       }
     );
+    test("When a user selects Select Files to start a new data analysis, Then a request to the BE is made returning list of local directories and root path", async () => {
+      const get_url = "http://localhost:4567/get_recordings_list";
+      const test_recordings = {
+        recordings_list: ["rec_1", "rec_2", "rec_3"],
+        root_recording_path: "C\\test\\recording\\path\\",
+      };
+
+      const spied_helper = jest.spyOn(axios_helpers, "call_axios_get_from_vuex");
+      mocked_axios.onGet(get_url).reply(200, test_recordings);
+
+      await store.dispatch("settings/get_recording_dirs");
+
+      expect(store.state.settings.recordings_list).toStrictEqual(test_recordings.recordings_list);
+      expect(spied_helper).toHaveBeenCalledWith(get_url);
+    });
   });
   describe("settings/mutations", () => {
     test.each([true, false])(

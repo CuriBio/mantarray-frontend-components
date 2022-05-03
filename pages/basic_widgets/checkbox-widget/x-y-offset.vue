@@ -1,5 +1,5 @@
 <template>
-  <div style="top: 50px; left: 88px; position: absolute">
+  <div class="div__check-background">
     <CheckBoxWidget :checkbox_options="options"></CheckBoxWidget>
   </div>
 </template>
@@ -25,3 +25,22 @@ export default {
   methods: {},
 };
 </script>
+<style scoped>
+.div__check-background {
+  transform: rotate(0deg);
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+  position: absolute;
+  top: 50px;
+  left: 88px;
+  font-size: 15px;
+  color: rgb(183, 183, 183);
+  visibility: visible;
+  width: 140px;
+  height: 150px;
+  cursor: pointer;
+  background: rgb(17, 17, 17);
+  border: 2px solid rgb(17, 17, 17);
+}
+</style>

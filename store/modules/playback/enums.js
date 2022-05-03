@@ -9,4 +9,10 @@ export const ENUMS = {
     CALIBRATION_NEEDED: "needs calibration",
     NOT_CONNECTED_TO_INSTRUMENT: "not connected",
   },
+  DATA_ANALYSIS_STATE: {
+    READY: "ready",
+    ACTIVE: "active",
+    COMPLETE: "complete",
+    ERROR: "error",
+  },
 };
