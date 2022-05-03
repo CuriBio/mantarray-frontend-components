@@ -92,14 +92,6 @@ export default {
   border-radius: 20%;
 }
 
-/* .custom-checkbox,
-.custom-control-input,
-.custom-control-label {
-  cursor: pointer;
-} */
-/*.custom-checkbox .custom-control-label:after {*/
-/*  background: no-repeat;*/
-/*}*/
 /* active state i.e. displayed while the mouse is being pressed down */
 .custom-checkbox .custom-control-input:active ~ .custom-control-label::before {
   color: #fff;
