@@ -2,14 +2,14 @@ import { call_axios_get_from_vuex, call_axios_post_from_vuex } from "@/js_utils/
 
 export default {
   async update_settings(context) {
-    const { customer_index, customer_account_ids, auto_upload, auto_delete } = this.state.settings;
-    const { cust_id, pass_key, user_account_id } = customer_account_ids[customer_index];
+    const { active_user_index, user_accounts, auto_upload, auto_delete } = this.state.settings;
+    const { customer_id, user_password, user_name } = user_accounts[active_user_index];
 
     const url = "http://localhost:4567/update_settings";
     const params = {
-      customer_account_id: cust_id,
-      customer_pass_key: pass_key,
-      user_account_id: user_account_id,
+      customer_id,
+      user_name,
+      user_password: user_password,
       auto_upload,
       auto_delete,
     };

@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     update_customer_idx: function () {
-      this.$store.commit("settings/set_customer_index", 0);
+      this.$store.commit("settings/set_active_user_index", 0);
     },
   },
 };

@@ -6,70 +6,65 @@
       <span class="span__settingsform-title">Settings</span>
       <!-- original mockflow ID : cmpD698ee7f9b579fcf64ee501697ea75af9 -->
       <!-- original mockflow ID : cmpDd8b22bfae4d2a9945a94972384dacecd -->
-      <span class="span__settingsform-customer-sub-title">Select&nbsp;<wbr />Customer&nbsp;<wbr />ID</span>
+      <span class="span__settingsform-user-sub-title">Select&nbsp;<wbr />User</span>
       <!-- original mockflow ID : cmpD5a52d34b430ce573300ed527a7b6a37d -->
       <div class="div__settingsform-editor-input">
         <InputDropDown
-          :title_label="label_customer"
-          :placeholder="key_placeholder_customer"
-          :invalid_text="error_text_customer"
-          :value.sync="entrykey_customer"
-          :input_width="entry_width_customer"
-          :disabled="disallow_entry_customer"
-          :options_text="customer_user_account_id"
-          :message_if_blank="on_empty_flag_customer"
-          :options_id="'cust-'"
+          :title_label="label_user"
+          :placeholder="key_placeholder_user"
+          :invalid_text="error_text_user"
+          :value.sync="entrykey_user"
+          :input_width="entry_width_user"
+          :disabled="disallow_entry_user"
+          :options_text="get_user_names"
+          :message_if_invalid="!user_found"
+          :options_id="'user-account-'"
         />
       </div>
-      <div class="div__settingsform-customer-edit-btn" width="88" height="45">
-        <span v-show="!disable_edit_customer" class="span__settingsform-customer-edit-btn-txt"
+      <div class="div__settingsform-user-edit-btn" width="88" height="45">
+        <span v-show="!disable_edit_user" class="span__settingsform-user-edit-btn-txt"
           ><b-button
-            id="edit-a-customer"
-            v-b-modal.edit-customer
+            id="edit-a-user"
+            v-b-modal.edit-user
             squared
             class="w-100 h-100 edit-id"
             style="background-color: #3f3f3f; border: 0px; color: #ececed"
-            >Edit&nbsp;<wbr />ID</b-button
+            >Edit&nbsp;<wbr />User</b-button
           >
-          <b-modal id="edit-customer" size="sm" hide-footer hide-header hide-header-close>
-            <EditCustomer
-              :dialogdata="customer_account_ids[customer_focus_id]"
-              :dataindex="customer_focus_id"
+          <b-modal id="edit-user" size="sm" hide-footer hide-header hide-header-close>
+            <EditUser
+              :dialogdata="user_accounts[user_focus_idx]"
               :open_for_invalid_creds="open_for_invalid_creds"
-              @cancel-id="onCancelCustomerId"
-              @save-id="onUpdateCustomerId"
-              @delete-id="onDeleteCustomerId"
+              @cancel-id="cancel_user_update"
+              @save-id="apply_user_update"
+              @delete-id="delete_user"
             />
           </b-modal>
         </span>
-        <span v-show="disable_edit_customer" class="span__settingsform-customer-edit-btn-txt-disable"
-          >Edit&nbsp;<wbr />ID</span
+        <span v-show="disable_edit_user" class="span__settingsform-user-edit-btn-txt-disable"
+          >Edit&nbsp;<wbr />User</span
         >
       </div>
     </div>
     <!-- original MockFlow ID : cmpD428472c72868527900568f8e5efe599b original mockflow ID span cmpD428472c72868527900568f8e5efe599b_txt -->
-    <div class="div__settingsform-customer-add-btn" width="285" height="45">
-      <span class="span__settingsform-customer-add-btn_txt"
+    <div class="div__settingsform-user-add-btn" width="285" height="45">
+      <span class="span__settingsform-user-add-btn_txt"
         ><b-button
-          id="add-a-customer"
-          v-b-modal.add-customer
+          id="add-a-user"
+          v-b-modal.add-user
           squared
           class="w-100 h-100 edit-id"
           style="background-color: #3f3f3f; border: 0px; color: #ececed"
         >
-          Add&nbsp;<wbr />New&nbsp;<wbr />Customer&nbsp;<wbr />Account&nbsp;<wbr />ID</b-button
+          Add&nbsp;<wbr />New&nbsp;<wbr />User</b-button
         >
-        <b-modal id="add-customer" size="sm" hide-footer hide-header hide-header-close>
-          <AddCustomer
-            :dataindex="addcustomerid"
-            @cancel-id="onCancelAddCustomerId"
-            @save-id="onSaveCustomerId"
-          />
+        <b-modal id="add-user" size="sm" hide-footer hide-header hide-header-close>
+          <AddUser @cancel-id="cancel_adding_user" @save-id="save_new_user" />
         </b-modal>
       </span>
     </div>
     <canvas class="canvas__settings-title-separator" width="510" height="20"> </canvas>
-    <canvas class="canvas__settings-customer-separator" width="510" height="20"> </canvas>
+    <canvas class="canvas__settings-user-separator" width="510" height="20"> </canvas>
     <!-- original MockFlow ID : cmpDf4cc1d0d47ffb031f42612730c3a717c -->
     <span class="span__settingsform-record-file-settings"
       >Recorded&nbsp;<wbr />File&nbsp;<wbr />Settings</span
@@ -117,9 +112,7 @@
     <div
       class="div__settings-tool-tip-reset-btn"
       :class="[
-        on_empty_flag_customer
-          ? 'div__settings-tool-tip-reset-btn-disable'
-          : 'div__settings-tool-tip-reset-btn-enable',
+        user_found ? 'div__settings-tool-tip-reset-btn-enable' : 'div__settings-tool-tip-reset-btn-disable',
       ]"
       width="180"
       height="55"
@@ -128,9 +121,9 @@
       <span
         class="span__settings-tool-tip-reset-btn-txt"
         :class="[
-          on_empty_flag_customer
-            ? 'span__settings-tool-tip-reset-btn-txt-disable'
-            : 'span__settings-tool-tip-reset-btn-txt-enable',
+          user_found
+            ? 'span__settings-tool-tip-reset-btn-txt-enable'
+            : 'span__settings-tool-tip-reset-btn-txt-disable',
         ]"
         @click="reset_changes()"
         >Reset&nbsp;<wbr />to&nbsp;<wbr />Defaults</span
@@ -140,9 +133,7 @@
     <div
       class="div__settings-tool-tip-save-btn"
       :class="[
-        on_empty_flag_customer
-          ? 'div__settings-tool-tip-save-btn-disable'
-          : 'div__settings-tool-tip-save-btn-enable',
+        user_found ? 'div__settings-tool-tip-save-btn-enable' : 'div__settings-tool-tip-save-btn-disable',
       ]"
       width="180"
       height="55"
@@ -153,9 +144,9 @@
       <span
         class="span__settings-tool-tip-save-btn-txt"
         :class="[
-          on_empty_flag_customer
-            ? 'span__settings-tool-tip-save-btn-txt-disable'
-            : 'span__settings-tool-tip-save-btn-txt-enable',
+          user_found
+            ? 'span__settings-tool-tip-save-btn-txt-enable'
+            : 'span__settings-tool-tip-save-btn-txt-disable',
         ]"
         @click="save_changes()"
         >Save&nbsp;<wbr />Changes</span
@@ -176,8 +167,8 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
-import AddCustomer from "@/components/settings/AddCustomer.vue";
-import EditCustomer from "@/components/settings/EditCustomer.vue";
+import AddUser from "@/components/settings/AddUser.vue";
+import EditUser from "@/components/settings/EditUser.vue";
 import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 import ToggleWidget from "@/components/basic_widgets/ToggleWidget.vue";
 
@@ -189,23 +180,22 @@ Vue.component("BFormInput", BFormInput);
 export default {
   name: "SettingsForm",
   components: {
-    AddCustomer,
-    EditCustomer,
+    AddUser,
+    EditUser,
     InputDropDown,
     ToggleWidget,
   },
   data() {
     return {
-      valid_customer_focus: false,
-      customer_focus_id: 0,
-      disable_edit_customer: true,
-      label_customer: "Customer Account ID",
-      entrykey_customer: "",
-      key_placeholder_customer: "Select the Customer",
-      error_text_customer: "An ID is required",
-      entry_width_customer: 283,
-      disallow_entry_customer: false,
-      on_empty_flag_customer: true,
+      user_focus_idx: 0,
+      disable_edit_user: true,
+      label_user: "User Selection",
+      entrykey_user: "",
+      key_placeholder_user: "Select User",
+      error_text_user: "An ID is required",
+      entry_width_user: 283,
+      disallow_entry_user: false,
+      user_found: false,
       open_for_invalid_creds: false,
       auto_upload: false,
       auto_delete: false,
@@ -213,77 +203,51 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["customer_account_ids", "customer_index"]),
-    customers_options: function () {
-      return this.customer_account_ids.map((customer) => customer.user_account_id);
-    },
-    addcustomerid: function () {
-      if (this.customer_account_ids.length == 0) {
-        return 0;
-      } else {
-        return this.customer_account_ids.length;
-      }
+    ...mapState("settings", ["user_accounts", "active_user_index"]),
+    get_user_names: function () {
+      return this.user_accounts.map((user_account) => user_account.user_name);
     },
   },
   watch: {
-    entrykey_customer: function () {
-      if (this.entrykey_customer == "") {
-        this.on_empty_flag_customer = true;
-      } else {
-        const user_account_id_focus = this.customer_user_account_id.indexOf(this.entrykey_customer);
-        if (user_account_id_focus == -1) {
-          // logic of "Add New Customer ID" in Settings
-          this.on_empty_flag_customer = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
-        } else {
-          // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
-          this.on_empty_flag_customer = false;
-          const customer_focus = this.customer_account_ids.find(
-            (customer) => customer.user_account_id === this.entrykey_customer
-          );
-          this.valid_customer_focus = false;
-          // this.valid_user_focus = false;
-          if (customer_focus != null) {
-            this.customer_focus_id = customer_focus.cust_idx;
-            this.valid_customer_focus = true;
-          }
-          this.modify_btn_states();
-        }
+    entrykey_user: function () {
+      const user_focus_idx = this.get_user_names.indexOf(this.entrykey_user);
+      this.user_found = this.entrykey_user !== "" && user_focus_idx !== -1;
+      if (this.user_found) {
+        this.user_focus_idx = user_focus_idx;
       }
       this.modify_btn_states();
     },
-    customer_account_ids() {
-      this.customer_user_account_id = this.customers_options;
-    },
   },
   created: function () {
-    this.customer_user_account_id = this.customers_options;
-    if (this.customer_index != null) {
-      this.entrykey_customer = this.customer_account_ids[this.customer_index].user_account_id;
-      this.valid_customer_focus = true;
-      this.customer_focus_id = this.customer_index;
-      this.disable_edit_customer = false;
-      this.on_empty_flag_customer = false;
+    if (this.active_user_index != null) {
+      this.entrykey_user = this.user_accounts[this.active_user_index].user_name;
+      this.user_focus_idx = this.active_user_index;
+      this.disable_edit_user = false;
+      this.user_found = true;
     }
   },
   methods: {
     async save_changes() {
-      if (!this.on_empty_flag_customer) {
-        this.$store.commit("settings/set_customer_index", this.customer_focus_id);
+      if (this.user_found) {
+        this.$store.commit("settings/set_active_user_index", this.user_focus_idx);
         this.$store.commit("settings/set_auto_upload", this.auto_upload);
         this.$store.commit("settings/set_auto_delete", this.auto_delete);
 
         const { status } = await this.$store.dispatch("settings/update_settings");
 
-        // Currently, error-handling by resetting inputs to force customer to try again if axios request fails
-        if (status === 200) this.$emit("close_modal", true);
-        else if (status == 401) {
+        // Currently, error-handling by resetting inputs to force user to try again if axios request fails
+        if (status === 200) {
+          this.$emit("close_modal", true);
+        } else if (status == 401) {
           this.open_for_invalid_creds = true;
-          this.$bvModal.show("edit-customer");
-        } else this.reset_changes();
+          this.$bvModal.show("edit-user");
+        } else {
+          this.reset_changes();
+        }
       }
     },
     reset_changes() {
-      this.entrykey_customer = "";
+      this.entrykey_user = "";
       this.auto_delete = false;
       this.auto_upload = true;
 
@@ -292,48 +256,34 @@ export default {
     cancel_changes() {
       this.$emit("close_modal", false);
     },
-    onCancelAddCustomerId() {
-      this.$bvModal.hide("add-customer");
+    cancel_adding_user() {
+      this.$bvModal.hide("add-user");
     },
-    onSaveCustomerId(add_customer) {
-      this.$bvModal.hide("add-customer");
-      this.customer_account_ids.push(add_customer);
-      this.customer_user_account_id.splice(0, this.customer_user_account_id.length);
-      this.customer_user_account_id = this.customers_options;
-      this.entrykey_customer = add_customer.user_account_id;
+    save_new_user(new_user) {
+      this.$bvModal.hide("add-user");
+      this.user_accounts.push(new_user);
+      this.entrykey_user = new_user.user_name;
     },
-    onCancelCustomerId() {
-      this.$bvModal.hide("edit-customer");
+    cancel_user_update() {
+      this.$bvModal.hide("edit-user");
     },
-    onUpdateCustomerId(edit_customer) {
-      this.$bvModal.hide("edit-customer");
+    apply_user_update(edited_user) {
+      this.$bvModal.hide("edit-user");
       this.open_for_invalid_creds = false;
-      this.customer_account_ids[edit_customer.cust_idx].cust_idx = edit_customer.cust_idx;
-      this.customer_account_ids[edit_customer.cust_idx].cust_id = edit_customer.cust_id;
-      this.customer_account_ids[edit_customer.cust_idx].pass_key = edit_customer.pass_key;
-      this.customer_account_ids[edit_customer.cust_idx].user_account_id = edit_customer.user_account_id;
-      this.customer_account_ids[edit_customer.cust_idx].user_ids = edit_customer.user_ids;
-      this.customer_user_account_id.splice(0, this.customer_user_account_id.length);
-      this.customer_user_account_id = this.customers_options;
-      this.entrykey_customer = edit_customer.user_account_id;
+      // need to use splice so that Vue will recognize that the array was updated
+      this.user_accounts.splice(this.user_focus_idx, 1, edited_user);
+      this.entrykey_user = edited_user.user_name;
     },
-    onDeleteCustomerId(delete_customer) {
-      this.$bvModal.hide("edit-customer");
+    delete_user() {
+      this.$bvModal.hide("edit-user");
       this.open_for_invalid_creds = false;
-      /* Received delete_customer remove from the array */
-      this.customer_account_ids.splice(delete_customer.cust_idx, 1);
-      /* Inside the SettingsVue page the index value has to be reset to startup value of 0 */
-      this.customer_focus_id = 0;
-      /* Now that customer id element is deleted we need to update all the right side customer cust_id index starting from 0 */
-      for (let i = 0; i < this.customer_account_ids.length; i++) {
-        this.customer_account_ids[i].cust_idx = i;
-      }
-      this.customer_user_account_id.splice(0, this.customer_user_account_id.length);
-      this.customer_user_account_id = this.customers_options;
-      this.entrykey_customer = "";
+      // need to use splice so that Vue will recognize that the array was updated
+      this.user_accounts.splice(this.user_focus_idx, 1);
+      this.user_focus_idx = 0;
+      this.entrykey_user = "";
     },
     modify_btn_states() {
-      this.disable_edit_customer = this.on_empty_flag_customer;
+      this.disable_edit_user = !this.user_found;
     },
     handle_toggle_state: function (state, label) {
       label === "auto_upload" ? (this.auto_upload = state) : (this.auto_delete = state);
@@ -378,31 +328,7 @@ export default {
   background-color: rgba(0, 0, 0);
 }
 
-.span__settingsform-customer-account-id {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 360px;
-  height: 30px;
-  top: 74px;
-  left: calc(925px - 734.511px);
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 19px;
-  color: rgb(255, 255, 255);
-  text-align: center;
-  z-index: 5;
-  background-color: rgba(0, 0, 0);
-}
-
-.span__settingsform-customer-sub-title {
+.span__settingsform-user-sub-title {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -468,18 +394,6 @@ export default {
   z-index: 55;
 }
 
-.div__settingsform-editor-customer-input-editor--invalid {
-  border-width: thin;
-  border-style: solid;
-  border-color: #bd3532;
-}
-
-.div__settingsform-editor-customer-input-editor--valid {
-  border-width: thin;
-  border-style: solid;
-  border-color: #19ac8a;
-}
-
 .div__settingsform-editor-user-input-editor--invalid {
   border-width: thin;
   border-style: solid;
@@ -520,7 +434,7 @@ export default {
   color: rgb(183, 183, 183);
 }
 
-.div__settingsform-customer-edit-btn {
+.div__settingsform-user-edit-btn {
   pointer-events: all;
   transform: rotate(0deg);
   overflow: hidden;
@@ -533,7 +447,7 @@ export default {
   z-index: 25;
 }
 
-.span__settingsform-customer-edit-btn-txt {
+.span__settingsform-user-edit-btn-txt {
   padding-left: 0px;
   padding-right: 0px;
   overflow: hidden;
@@ -557,7 +471,7 @@ export default {
   z-index: 55;
 }
 
-.span__settingsform-customer-edit-btn-txt-disable {
+.span__settingsform-user-edit-btn-txt-disable {
   padding-left: 0px;
   padding-right: 0px;
   overflow: hidden;
@@ -581,7 +495,7 @@ export default {
   z-index: 55;
 }
 
-.div__settingsform-customer-add-btn {
+.div__settingsform-user-add-btn {
   pointer-events: all;
   transform: rotate(0deg);
   overflow: hidden;
@@ -594,7 +508,7 @@ export default {
   z-index: 25;
 }
 
-.span__settingsform-customer-add-btn_txt {
+.span__settingsform-user-add-btn_txt {
   padding-left: 0px;
   padding-right: 0px;
   overflow: hidden;
@@ -630,7 +544,7 @@ export default {
   background-color: #878d99;
   opacity: 0.5;
 }
-.canvas__settings-customer-separator {
+.canvas__settings-user-separator {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;
@@ -1320,8 +1234,8 @@ datalist {
   font: 17px Muli;
   color: #ececed;
 }
-#add-customer,
-#edit-customer,
+#add-user,
+#edit-user,
 #add-user,
 #edit-user {
   position: fixed;

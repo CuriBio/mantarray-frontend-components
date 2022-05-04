@@ -22,9 +22,9 @@ export default {
   },
   data: function () {
     return {
-      label: "Customer Account ID",
+      label: "User Selection",
       entrykey: "Customer Account 1",
-      keyplaceholder: "Select the Customer",
+      keyplaceholder: "Select User",
       error_text: "An ID is required",
       entry_width: 400,
       disallow_entry: true,

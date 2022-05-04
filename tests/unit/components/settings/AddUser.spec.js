@@ -32,7 +32,6 @@ describe("AddUser tests", () => {
     beforeEach(async () => {
       const propsData = {
         dialogdata: null,
-        dataindex: 0,
       };
       wrapper = mount(ComponentToTest, {
         store,
@@ -44,7 +43,6 @@ describe("AddUser tests", () => {
     test("When mounting AddUser from the build dist file, Then it loads successfully and the `Add User` defined title text is rendered", () => {
       const propsData = {
         dialogdata: null,
-        dataindex: 0,
       };
       wrapper = mount(DistComponentToTest, {
         store,
@@ -63,7 +61,6 @@ describe("AddUser tests", () => {
     beforeEach(async () => {
       const propsData = {
         dialogdata: null,
-        dataindex: 0,
       };
       wrapper = mount(ComponentToTest, {
         store,
@@ -77,48 +74,33 @@ describe("AddUser tests", () => {
       jest.restoreAllMocks();
     });
     test.each([
-      [uuid_base57, "valid input", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      [
-        "0VSckkBYH2An3dqHEyfRRE",
-        "contains zero (0)",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
+      [uuid_base57, "valid input", "customer-id", "validate_uuidBase_fiftyseven_encode"],
+      ["0VSckkBYH2An3dqHEyfRRE", "contains zero (0)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
       [
         "2VSckkBY2An3dqHEyfRRE",
         "is less than 22 characters",
-        "alphanumeric-id",
+        "customer-id",
         "validate_uuidBase_fiftyseven_encode",
       ],
-      ["2VSckkBY2An3dqHEyfRREab", "23 characters", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      ["2VSckkBY12An3dqHEyfRRE", "contains  (1)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
+      ["2VSckkBY2An3dqHEyfRREab", "23 characters", "customer-id", "validate_uuidBase_fiftyseven_encode"],
+      ["2VSckkBY12An3dqHEyfRRE", "contains  (1)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
       [
         "2VSIkkBYH2An3dqHEyfRRE",
         "contains capital (I)",
-        "alphanumeric-id",
+        "customer-id",
         "validate_uuidBase_fiftyseven_encode",
       ],
-      ["2VSskkBYH2An3dqHElfRRE", "contains  (l)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      ["2VSskkBYH2An3dqHEyfRRO", "contains  (O)", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
-      [
-        "4vqyd62oARXqj9nRUNhtLQ",
-        "error in encoding",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      [
-        "2VSckkBY-2An3dqHEyfRRE",
-        "contains hypen (-)",
-        "alphanumeric-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
+      ["2VSskkBYH2An3dqHElfRRE", "contains  (l)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
+      ["2VSskkBYH2An3dqHEyfRRO", "contains  (O)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
+      ["4vqyd62oARXqj9nRUNhtLQ", "error in encoding", "customer-id", "validate_uuidBase_fiftyseven_encode"],
+      ["2VSckkBY-2An3dqHEyfRRE", "contains hypen (-)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
       [
         "2VSckkBYº2An3dqHEyfRRE",
         "contains symbols (º)",
-        "alphanumeric-id",
+        "customer-id",
         "validate_uuidBase_fiftyseven_encode",
       ],
-      ["", "<empty>", "alphanumeric-id", "validate_uuidBase_fiftyseven_encode"],
+      ["", "<empty>", "customer-id", "validate_uuidBase_fiftyseven_encode"],
     ])(
       "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
       async (entry, test_description, selector_id_suffix, text_validation_type) => {
@@ -137,18 +119,18 @@ describe("AddUser tests", () => {
       }
     );
     test.each([
-      ["Experiment anemia -1", "valid input", "nickname-id", "validate_customer_account_input"],
-      ["Cat * lab", "contains asterisk *", "nickname-id", "validate_customer_account_input"],
-      ["Cat lab`", "contains left quote `", "nickname-id", "validate_customer_account_input"],
-      ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_customer_account_input"],
+      ["Experiment anemia -1", "valid input", "nickname-id", "validate_user_account_input"],
+      ["Cat * lab", "contains asterisk *", "nickname-id", "validate_user_account_input"],
+      ["Cat lab`", "contains left quote `", "nickname-id", "validate_user_account_input"],
+      ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_user_account_input"],
       [
         "Experiment anemia alpha cells -1",
         "more than 20 characters",
         "nickname-id",
-        "validate_customer_account_input",
+        "validate_user_account_input",
       ],
-      ["C", "minimum one character C", "nickname-id", "validate_customer_account_input"],
-      ["", "<empty>", "nickname-id", "validate_customer_account_input"],
+      ["C", "minimum one character C", "nickname-id", "validate_user_account_input"],
+      ["", "<empty>", "nickname-id", "validate_user_account_input"],
     ])(
       "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
       async (entry, test_description, selector_id_suffix, text_validation_type) => {
@@ -167,7 +149,7 @@ describe("AddUser tests", () => {
       }
     );
     test.each([
-      ["alphanumeric-id", "This field is required"],
+      ["customer-id", "This field is required"],
       ["nickname-id", "This field is required"],
     ])(
       "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
@@ -190,7 +172,6 @@ describe("AddUser tests", () => {
     beforeEach(async () => {
       const propsData = {
         dialogdata: null,
-        dataindex: 0,
       };
       wrapper = mount(ComponentToTest, {
         store,
@@ -208,7 +189,7 @@ describe("AddUser tests", () => {
     ])(
       "Given an UUID (%s),  Nickname (%s) for 'Add User' as input, When the input contains based on valid the critera, Then display of Label 'Save ID' is visible or greyed (%s)",
       async (uuid, nickname, save_btn_css) => {
-        const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
+        const selector_id_suffix_alphanumeric_id = "customer-id";
         const selector_id_suffix_nickname_id = "nickname-id";
         const target_input_field_uuid = wrapper.find(
           "#input-widget-field-" + selector_id_suffix_alphanumeric_id
@@ -233,7 +214,6 @@ describe("AddUser tests", () => {
     beforeEach(async () => {
       const propsData = {
         dialogdata: null,
-        dataindex: 0,
       };
       wrapper = mount(ComponentToTest, {
         store,
@@ -245,7 +225,7 @@ describe("AddUser tests", () => {
     test.each([["5FY8KwTsQaUJ2KzHJGetfE", "Experiment anemia -1", "", "", "color: rgb(255, 255, 255);"]])(
       "Given an UUID(%s) , Nickname(%s) for 'Add User' as input, When the input contains based on valid the critera or failure %s  %s, Then display of Label 'Save ID' is visible %s, click on Cancel an event 'cancel-id' is emmited to the parent, and click on Save an event 'save-id' is emmited to the parent",
       async (uuid_test, nickname_test, invalid_uuid, invalid_nickname, save_btn_css) => {
-        const selector_id_suffix_alphanumeric_id = "alphanumeric-id";
+        const selector_id_suffix_alphanumeric_id = "customer-id";
         const selector_id_suffix_nickname_id = "nickname-id";
         const target_input_field_uuid = wrapper.find(
           "#input-widget-field-" + selector_id_suffix_alphanumeric_id

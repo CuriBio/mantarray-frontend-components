@@ -640,7 +640,7 @@ describe("store/data", () => {
     });
     test("When backend emits prompt_user_input message with customer_creds as input type, Then ws client sets correct flag in store", async () => {
       const message = {
-        input_type: "customer_creds",
+        input_type: "user_creds",
       };
 
       // confirm precondition

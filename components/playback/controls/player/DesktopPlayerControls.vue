@@ -309,7 +309,7 @@ export default {
       calibrate_title: "Calibration",
       liveview_title: "Live View",
       record_title: "Record",
-      settings_tooltip_text: "Edit customer account",
+      settings_tooltip_text: "Edit account settings",
       schedule_tooltip_text: "(Not Yet Available)",
       recording_timer: null,
       calibration_modal_labels: {
@@ -355,7 +355,6 @@ export default {
       "five_min_warning",
     ]),
     ...mapState("settings", [
-      "customer_index",
       "auto_upload",
       "beta_2_mode",
       "user_cred_input_needed",
@@ -549,7 +548,10 @@ export default {
     },
     close_settings_modal: function (save) {
       this.$bvModal.hide("settings-form");
-      if (save) this.$emit("save_customer_id");
+      if (save) {
+        // this event is used in electron
+        this.$emit("save_customer_id");
+      }
     },
     close_calibration_modal(idx) {
       this.$bvModal.hide("calibration-warning");

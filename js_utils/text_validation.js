@@ -28,7 +28,7 @@ export class TextValidation {
    * Returns the feedback text with either value of "" or text with reason for failure
    *
    * @param  {string}  text The text on which the validation rules are verified
-   * @param  {string}  type The type of value being checked: ID, passkey, or user_account_id
+   * @param  {string}  type The type of value being checked: ID, passkey, or user_name
 
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
@@ -46,8 +46,8 @@ export class TextValidation {
         // case "alphanumeric":
         //   feedback = this.validate_alphanumeric(text);
         //   break;
-        case "customer_account_input":
-          feedback = this.validate_customer_account_input(text, type);
+        case "user_account_input":
+          feedback = this.validate_user_account_input(text, type);
           break;
         default:
           obj.err = "rule error";
@@ -63,11 +63,11 @@ export class TextValidation {
    * Returns the feedback text with either value of "" or text with reason for failure
    *
    * @param  {text}  text The text on which the validation rules are verified
-   * @param  {string}  type The type of value being checked: ID, passkey, or user_account_id
+   * @param  {string}  type The type of value being checked: ID, passkey, or user_name
 
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
-  validate_customer_account_input(text, type) {
+  validate_user_account_input(text, type) {
     let feedback = "";
     if (text != null) {
       const val_length = text.length;
@@ -86,7 +86,7 @@ export class TextValidation {
    *
    * @param  {stats} stats The stats on the value of the name lenght verification (true) is proper length else (false)
    * @param  {text}  text The value on which the validation rules are verified
-   * @param  {string}  type The type of value being checked: ID, passkey, or user_account_id
+   * @param  {string}  type The type of value being checked: ID, passkey, or user_name
    * @param  {len}  len The len the total length of the input
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
@@ -119,7 +119,7 @@ export class TextValidation {
    *
    * @param  {stats}     stats The stats on the value of the name length verification (true) is proper length else (false)
    * @param  {text}  text The name on which the validation rules are verified
-   * @param  {string}  type The type of value being checked: ID, passkey, or user_account_id
+   * @param  {string}  type The type of value being checked: ID, passkey, or user_name
    * @param  {len}  len The len the total length of the name
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
@@ -129,7 +129,7 @@ export class TextValidation {
       let scan_ascii = 0;
       scan_ascii = text.charCodeAt(i);
       switch (true) {
-        case scan_ascii == 32 && type !== "user_account_id" /* space          */:
+        case scan_ascii == 32 && type !== "user_name" /* space          */:
           parse_error = "This field is required. No spaces allowed";
           break;
         case scan_ascii == 35: /* hash       #   */

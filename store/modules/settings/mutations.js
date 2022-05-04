@@ -2,23 +2,17 @@ export default {
   set_log_path(state, new_value) {
     state.log_path = new_value;
 
-    let username;
-    if (new_value.includes("\\")) username = new_value.split("\\")[2];
-    else username = new_value.split("/")[2];
-
+    const username = new_value.includes("\\") ? new_value.split("\\")[2] : new_value.split("/")[2];
     state.root_downloads_path = `C:\\Users\\${username}\\Downloads`;
   },
   set_shutdown_error_message(state, new_value) {
     state.shutdown_error_message = new_value;
   },
-  set_customer_account_ids(state, new_value) {
-    state.customer_account_ids = new_value;
+  set_user_accounts(state, new_value) {
+    state.user_accounts = new_value;
   },
-  set_customer_details(state, new_value) {
-    state.customer_details = new_value;
-  },
-  set_customer_index(state, new_value) {
-    state.customer_index = new_value;
+  set_active_user_index(state, new_value) {
+    state.active_user_index = new_value;
   },
   set_file_count(state) {
     state.file_count += 1;
@@ -34,7 +28,7 @@ export default {
   },
   reset_to_default(state) {
     state.auto_upload = false;
-    state.customer_index = null;
+    state.active_user_index = null;
     state.auto_delete = false;
   },
   set_upload_error(state, new_value) {

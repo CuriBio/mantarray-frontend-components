@@ -15,7 +15,7 @@
     <div
       class="div__input-dropdown-controls-content-widget"
       :class="[
-        message_if_blank
+        message_if_invalid
           ? 'div__input-dropdown-controls-content-widget--invalid'
           : 'div__input-dropdown-controls-content-widget--valid',
       ]"
@@ -42,7 +42,7 @@
       </span>
     </div>
     <div
-      v-show="message_if_blank"
+      v-show="message_if_invalid"
       class="div__input-dropdown-controls-content-feedback"
       :style="'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'"
     >
@@ -68,7 +68,7 @@ export default {
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     options_text: { type: Array, required: true },
     options_id: { type: String, default: "" }, // This prop is utilized by the parent component
-    message_if_blank: { type: Boolean, default: false }, // when set to true, will display a simple feedback
+    message_if_invalid: { type: Boolean, default: false }, // when set to true, will display a simple feedback
   },
   data() {
     return {
@@ -103,10 +103,6 @@ export default {
   },
   watch: {
     input_dropdown_value_key: function () {
-      //  console.log(this.input_dropdown_value_key);
-      // This is a very sensitive computed function as its invoked on every key entry by user action
-      // the function would never have any processing its only responsible to pass the value of string to the parent component
-      // any modification to add logic might impact depedent functionalities, request to consult Eli or Raghu
       this.$emit("update:value", this.input_dropdown_value_key);
     },
     value: function () {

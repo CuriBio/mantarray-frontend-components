@@ -102,7 +102,7 @@ export default function create_web_socket_plugin(socket) {
     });
     socket.on("prompt_user_input", (message_json, cb) => {
       const message = JSON.parse(message_json);
-      if (message.input_type === "customer_creds") {
+      if (message.input_type === "user_creds") {
         store.commit("settings/set_user_cred_input_needed", true);
       }
 
