@@ -22,15 +22,15 @@
         />
       </div>
       <div class="div__settingsform-user-edit-btn" width="88" height="45">
-        <span v-show="!disable_edit_user" class="span__settingsform-user-edit-btn-txt"
-          ><b-button
+        <span v-show="!disable_edit_user" class="span__settingsform-user-edit-btn-txt">
+          <b-button
             id="edit-a-user"
             v-b-modal.edit-user
             squared
             class="w-100 h-100 edit-id"
             style="background-color: #3f3f3f; border: 0px; color: #ececed"
-            >Edit&nbsp;<wbr />User</b-button
-          >
+            >Edit&nbsp;<wbr />User
+          </b-button>
           <b-modal id="edit-user" size="sm" hide-footer hide-header hide-header-close>
             <EditUser
               :dialogdata="user_accounts[user_focus_idx]"
@@ -48,8 +48,8 @@
     </div>
     <!-- original MockFlow ID : cmpD428472c72868527900568f8e5efe599b original mockflow ID span cmpD428472c72868527900568f8e5efe599b_txt -->
     <div class="div__settingsform-user-add-btn" width="285" height="45">
-      <span class="span__settingsform-user-add-btn_txt"
-        ><b-button
+      <span class="span__settingsform-user-add-btn_txt">
+        <b-button
           id="add-a-user"
           v-b-modal.add-user
           squared
@@ -203,7 +203,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["user_accounts", "active_user_index"]),
+    ...mapState("settings", ["user_accounts", "active_user_index", "stored_customer_id"]),
     get_user_names: function () {
       return this.user_accounts.map((user_account) => user_account.user_name);
     },

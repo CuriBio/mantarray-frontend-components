@@ -81,7 +81,7 @@ export default {
       const list = []; // list is empty to start
 
       for (let i = 0; i < this.options_text.length; i++) {
-        // the options_text is required true so a minimal of one element is needed
+        // the options_text is required true so a minimum of one element is needed
         // if suppose options_text.length is zero(0) then return doesn't change its []
         const name = {
           id: this.options_id + i,

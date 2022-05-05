@@ -11,6 +11,9 @@ export default {
   set_user_accounts(state, new_value) {
     state.user_accounts = new_value;
   },
+  set_stored_customer_id(state, new_value) {
+    state.stored_customer_id = new_value;
+  },
   set_active_user_index(state, new_value) {
     state.active_user_index = new_value;
   },

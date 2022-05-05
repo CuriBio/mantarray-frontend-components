@@ -29,39 +29,33 @@ describe("AddUser", () => {
   });
 
   describe("AddUser.vue", () => {
-    beforeEach(async () => {
-      const propsData = {
-        dialogdata: null,
-      };
-      wrapper = mount(ComponentToTest, {
-        store,
-        propsData,
-        localVue,
-      });
-    });
-    afterEach(() => wrapper.destroy());
     test("When mounting AddUser from the build dist file, Then it loads successfully and the `Add Customer` defined title text is rendered", () => {
-      const propsData = {
-        dialogdata: null,
-      };
       wrapper = mount(DistComponentToTest, {
         store,
-        propsData,
         localVue,
       });
       const target_span = wrapper.find(".span__AddUser-form-controls-content-title");
       expect(target_span.text()).toStrictEqual("Add New User");
     });
+    test("Given there is a stored customer ID, When mounting AddUser, Then the customer ID input is automatically populated with that value and validated", () => {
+      const stored_customer_id = "test_id";
+      store.commit("settings/set_stored_customer_id", stored_customer_id);
+
+      wrapper = mount(ComponentToTest, {
+        store,
+        localVue,
+      });
+      const target_input = wrapper.find("#input-widget-field-customer-id");
+      expect(target_input.element.value).toStrictEqual(stored_customer_id);
+      const error_text = wrapper.find("#input-widget-feedback-customer-id");
+      expect(error_text.text()).toStrictEqual("");
+    });
   });
 
   describe("AddUser.enter_uuidbase57", () => {
     beforeEach(async () => {
-      const propsData = {
-        dialogdata: null,
-      };
       wrapper = mount(ComponentToTest, {
         store,
-        propsData,
         localVue,
       });
     });
@@ -115,12 +109,8 @@ describe("AddUser", () => {
 
   describe("AddUser.enable_save_button", () => {
     beforeEach(async () => {
-      const propsData = {
-        dialogdata: null,
-      };
       wrapper = mount(ComponentToTest, {
         store,
-        propsData,
         localVue,
       });
     });
@@ -172,12 +162,8 @@ describe("AddUser", () => {
 
   describe("AddUser.clicked_button", () => {
     beforeEach(async () => {
-      const propsData = {
-        dialogdata: null,
-      };
       wrapper = mount(ComponentToTest, {
         store,
-        propsData,
         localVue,
       });
     });

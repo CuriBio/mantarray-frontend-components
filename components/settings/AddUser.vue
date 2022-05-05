@@ -10,6 +10,7 @@
         :spellcheck="false"
         :input_width="400"
         :dom_id_suffix="'customer-id'"
+        :initial_value="stored_customer_id"
         @update:value="on_update_id($event)"
       ></InputWidget>
     </div>
@@ -53,7 +54,7 @@
 </template>
 <script>
 import Vue from "vue";
-// import uuid from "@tofandel/uuid-base62";
+import { mapState } from "vuex";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
@@ -64,7 +65,6 @@ Vue.use(BootstrapVue);
 Vue.component("BFormInput", BFormInput);
 Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
-// Vue.use(uuid);
 const TextValidation_User = new TextValidation("user_account_input");
 
 export default {
@@ -73,7 +73,6 @@ export default {
     InputWidget,
     ButtonWidget,
   },
-  props: {},
   data() {
     return {
       customer_id: "",
@@ -84,6 +83,12 @@ export default {
       error_text_user_name: "This field is required",
       enablelist_add_user: [true, false],
     };
+  },
+  computed: {
+    ...mapState("settings", ["stored_customer_id"]),
+  },
+  created: function () {
+    if (this.stored_customer_id) this.on_update_id(this.stored_customer_id);
   },
   methods: {
     on_update_id: function (new_value) {

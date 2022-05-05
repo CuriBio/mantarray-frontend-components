@@ -6,6 +6,7 @@ const default_state = {
   auto_upload: false,
   auto_delete: false,
   user_accounts: [],
+  stored_customer_id: null,
   active_user_index: null,
   log_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\logs_flask",
   root_downloads_path: "C:\\Users\\username\\Downloads",
