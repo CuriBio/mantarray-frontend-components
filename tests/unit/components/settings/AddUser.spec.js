@@ -1,9 +1,9 @@
 import { mount } from "@vue/test-utils";
 import ComponentToTest from "@/components/settings/AddUser.vue";
 import { AddUser as DistComponentToTest } from "@/dist/mantarray.common";
-import Vuex from "vuex";
 
 import Vue from "vue";
+import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,7 +18,7 @@ localVue.use(Vuex);
 let NuxtStore;
 let store;
 
-describe("AddUser tests", () => {
+describe("AddUser", () => {
   beforeAll(async () => {
     const storePath = `${process.env.buildDir}/store.js`;
     NuxtStore = await import(storePath);
@@ -40,7 +40,7 @@ describe("AddUser tests", () => {
       });
     });
     afterEach(() => wrapper.destroy());
-    test("When mounting AddUser from the build dist file, Then it loads successfully and the `Add User` defined title text is rendered", () => {
+    test("When mounting AddUser from the build dist file, Then it loads successfully and the `Add Customer` defined title text is rendered", () => {
       const propsData = {
         dialogdata: null,
       };
@@ -49,15 +49,12 @@ describe("AddUser tests", () => {
         propsData,
         localVue,
       });
-
-      const target_span = wrapper.find(".span__adduser-form-controls-content-title");
-
-      expect(target_span.text()).toStrictEqual("Add New User ID");
+      const target_span = wrapper.find(".span__AddUser-form-controls-content-title");
+      expect(target_span.text()).toStrictEqual("Add New User");
     });
   });
 
   describe("AddUser.enter_uuidbase57", () => {
-    const uuid_base57 = "2VSckkBYr2An3dqHEyfRRE";
     beforeEach(async () => {
       const propsData = {
         dialogdata: null,
@@ -68,89 +65,37 @@ describe("AddUser tests", () => {
         localVue,
       });
     });
-
     afterEach(() => {
       wrapper.destroy();
       jest.restoreAllMocks();
     });
+
     test.each([
-      [uuid_base57, "valid input", "customer-id", "validate_uuidBase_fiftyseven_encode"],
-      ["0VSckkBYH2An3dqHEyfRRE", "contains zero (0)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
-      [
-        "2VSckkBY2An3dqHEyfRRE",
-        "is less than 22 characters",
-        "customer-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      ["2VSckkBY2An3dqHEyfRREab", "23 characters", "customer-id", "validate_uuidBase_fiftyseven_encode"],
-      ["2VSckkBY12An3dqHEyfRRE", "contains  (1)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
-      [
-        "2VSIkkBYH2An3dqHEyfRRE",
-        "contains capital (I)",
-        "customer-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      ["2VSskkBYH2An3dqHElfRRE", "contains  (l)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
-      ["2VSskkBYH2An3dqHEyfRRO", "contains  (O)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
-      ["4vqyd62oARXqj9nRUNhtLQ", "error in encoding", "customer-id", "validate_uuidBase_fiftyseven_encode"],
-      ["2VSckkBY-2An3dqHEyfRRE", "contains hypen (-)", "customer-id", "validate_uuidBase_fiftyseven_encode"],
-      [
-        "2VSckkBYº2An3dqHEyfRRE",
-        "contains symbols (º)",
-        "customer-id",
-        "validate_uuidBase_fiftyseven_encode",
-      ],
-      ["", "<empty>", "customer-id", "validate_uuidBase_fiftyseven_encode"],
+      ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "ID", "customer-id", "validate_user_account_input"],
+      ["Cat lab;", "ID", "customer-id", "validate_user_account_input"],
+      ["Experiment anemia -1", "ID", "customer-id", "validate_user_account_input"],
+      ["Cat * lab", "passkey", "passkey-id", "validate_user_account_input"],
+      ["Valid", "passkey", "passkey-id", "validate_user_account_input"],
+      ["Cat lab", "passkey", "passkey-id", "validate_user_account_input"],
+      ["Experiment anemia alpha cells -1", "user_name", "username", "validate_user_account_input"],
+      ["C", "user_name", "username", "validate_user_account_input"],
+      ["", "user_name", "username", "validate_user_account_input"],
     ])(
       "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
-      async (entry, test_description, selector_id_suffix, text_validation_type) => {
+      async (entry, test_id, selector_id_suffix, text_validation_type) => {
         const spied_text_validator = jest.spyOn(TextValidation.prototype, text_validation_type);
-
         const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
-
         const target_error_message = wrapper.find("#input-widget-feedback-" + selector_id_suffix);
-
         target_input_field.setValue(entry);
-
         await Vue.nextTick();
-        expect(spied_text_validator).toHaveBeenCalledWith(entry);
-
-        expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
-      }
-    );
-    test.each([
-      ["Experiment anemia -1", "valid input", "nickname-id", "validate_user_account_input"],
-      ["Cat * lab", "contains asterisk *", "nickname-id", "validate_user_account_input"],
-      ["Cat lab`", "contains left quote `", "nickname-id", "validate_user_account_input"],
-      ["Cat lab;", "contains semi-colon ;", "nickname-id", "validate_user_account_input"],
-      [
-        "Experiment anemia alpha cells -1",
-        "more than 20 characters",
-        "nickname-id",
-        "validate_user_account_input",
-      ],
-      ["C", "minimum one character C", "nickname-id", "validate_user_account_input"],
-      ["", "<empty>", "nickname-id", "validate_user_account_input"],
-    ])(
-      "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
-      async (entry, test_description, selector_id_suffix, text_validation_type) => {
-        const spied_text_validator = jest.spyOn(TextValidation.prototype, text_validation_type);
-
-        const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
-
-        const target_error_message = wrapper.find("#input-widget-feedback-" + selector_id_suffix);
-
-        target_input_field.setValue(entry);
-
-        await Vue.nextTick();
-        expect(spied_text_validator).toHaveBeenCalledWith(entry, "nickname");
-
+        expect(spied_text_validator).toHaveBeenCalledWith(entry, test_id);
         expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
       }
     );
     test.each([
       ["customer-id", "This field is required"],
-      ["nickname-id", "This field is required"],
+      ["passkey-id", "This field is required"],
+      ["username", "This field is required"],
     ])(
       "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
       async (selector_id_suffix, expected_message) => {
@@ -179,28 +124,43 @@ describe("AddUser tests", () => {
         localVue,
       });
     });
-
     afterEach(() => wrapper.destroy());
-
     test.each([
-      ["0VSckkBYH2An3dqHEyfRRE", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
-      ["5FY8@#$??JGetfE", "Cat * lab", "color: rgb(63, 63, 63);"],
-      ["5FY8KwTsQaUJ2KzHJGetfE", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
+      ["0VSckkBYH2An3dqHEyfRRE", "06ad547f", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
+      [
+        "5FY8KwTsQaUJ2KzHJGetfE123456asdfghDDDedsD74r",
+        "06ad547f",
+        "Experiment anemia -1 ",
+        "color: rgb(63, 63, 63);",
+      ],
+      ["5FY8KwTsQaUJ2KzH*%#@JGetfE", "06ad547f", "Cat * lab", "color: rgb(63, 63, 63);"],
+      ["fasd44", "06ad54", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
+      ["", "", "Experiment anemia -1", "color: rgb(63, 63, 63);"],
     ])(
-      "Given an UUID (%s),  Nickname (%s) for 'Add User' as input, When the input contains based on valid the critera, Then display of Label 'Save ID' is visible or greyed (%s)",
-      async (uuid, nickname, save_btn_css) => {
+      "Given an UUID (%s), pass Key (%s), user_name (%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure, Then display of Label 'Save ID' is visible or greyed (%s)",
+      async (uuid, passkey, user_name, save_btn_css) => {
         const selector_id_suffix_alphanumeric_id = "customer-id";
-        const selector_id_suffix_nickname_id = "nickname-id";
+        const selector_id_suffix_passkey_id = "passkey-id";
+        const selector_id_suffix_user_name = "username";
+
         const target_input_field_uuid = wrapper.find(
           "#input-widget-field-" + selector_id_suffix_alphanumeric_id
         );
         target_input_field_uuid.setValue(uuid);
         await Vue.nextTick();
-        const target_input_field_nickname = wrapper.find(
-          "#input-widget-field-" + selector_id_suffix_nickname_id
+
+        const target_input_field_passkey = wrapper.find(
+          "#input-widget-field-" + selector_id_suffix_passkey_id
         );
-        target_input_field_nickname.setValue(nickname);
+        target_input_field_passkey.setValue(passkey);
         await Vue.nextTick();
+
+        const target_input_field_user_name = wrapper.find(
+          "#input-widget-field-" + selector_id_suffix_user_name
+        );
+        target_input_field_user_name.setValue(user_name);
+        await Vue.nextTick();
+
         const target_button_label_btn = wrapper.findAll(".span__button_label");
         const cancel_btn = target_button_label_btn.at(0);
         expect(cancel_btn.attributes().style).toContain("color: rgb(255, 255, 255);");
@@ -222,11 +182,21 @@ describe("AddUser tests", () => {
       });
     });
     afterEach(() => wrapper.destroy());
-    test.each([["5FY8KwTsQaUJ2KzHJGetfE", "Experiment anemia -1", "", "", "color: rgb(255, 255, 255);"]])(
-      "Given an UUID(%s) , Nickname(%s) for 'Add User' as input, When the input contains based on valid the critera or failure %s  %s, Then display of Label 'Save ID' is visible %s, click on Cancel an event 'cancel-id' is emmited to the parent, and click on Save an event 'save-id' is emmited to the parent",
-      async (uuid_test, nickname_test, invalid_uuid, invalid_nickname, save_btn_css) => {
+    test.each([["5FY8KwTsQa", "06ad547f", "Experiment anemia -1", "", "", "", "color: rgb(255, 255, 255);"]])(
+      "Given an UUID(%s) , pass Key(%s), user_name(%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, an event 'cancel-id' is emmited to the parent and click on Save an event 'save-id' is emmited to parent with object containing uuid,passkey and user_name",
+      async (
+        uuid_test,
+        passkey_test,
+        user_name_test,
+        invalid_passkey,
+        invalid_uuid,
+        invalid_user_name,
+        save_btn_css
+      ) => {
         const selector_id_suffix_alphanumeric_id = "customer-id";
-        const selector_id_suffix_nickname_id = "nickname-id";
+        const selector_id_suffix_passkey_id = "passkey-id";
+        const selector_id_suffix_user_name = "username";
+
         const target_input_field_uuid = wrapper.find(
           "#input-widget-field-" + selector_id_suffix_alphanumeric_id
         );
@@ -236,15 +206,24 @@ describe("AddUser tests", () => {
         target_input_field_uuid.setValue(uuid_test);
         await Vue.nextTick();
         expect(target_error_message_uuid.text()).toStrictEqual(invalid_uuid);
-        const target_input_field_nickname = wrapper.find(
-          "#input-widget-field-" + selector_id_suffix_nickname_id
+        const target_input_field_passkey = wrapper.find(
+          "#input-widget-field-" + selector_id_suffix_passkey_id
         );
-        const target_error_message_nickname = wrapper.find(
-          "#input-widget-feedback-" + selector_id_suffix_nickname_id
+        const target_error_message_passkey = wrapper.find(
+          "#input-widget-feedback-" + selector_id_suffix_passkey_id
         );
-        target_input_field_nickname.setValue(nickname_test);
+        target_input_field_passkey.setValue(passkey_test);
         await Vue.nextTick();
-        expect(target_error_message_nickname.text()).toStrictEqual(invalid_nickname);
+        expect(target_error_message_passkey.text()).toStrictEqual(invalid_passkey);
+        const target_input_field_user_name = wrapper.find(
+          "#input-widget-field-" + selector_id_suffix_user_name
+        );
+        const target_error_message_user_name = wrapper.find(
+          "#input-widget-feedback-" + selector_id_suffix_user_name
+        );
+        target_input_field_user_name.setValue(user_name_test);
+        await Vue.nextTick();
+        expect(target_error_message_user_name.text()).toStrictEqual(invalid_user_name);
         const target_button_label_btn = wrapper.findAll(".span__button_label");
         const cancel_btn = target_button_label_btn.at(0);
         expect(cancel_btn.attributes().style).toContain("color: rgb(255, 255, 255);");
@@ -261,9 +240,9 @@ describe("AddUser tests", () => {
         expect(save_id_events).toHaveLength(1);
         expect(save_id_events[0]).toStrictEqual([
           {
-            user_id: 0,
-            uuid: uuid_test,
-            nickname: nickname_test,
+            user_password: passkey_test,
+            user_name: user_name_test,
+            customer_id: uuid_test,
           },
         ]);
       }

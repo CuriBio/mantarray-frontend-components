@@ -38,8 +38,8 @@ describe("SettingsForm.vue", () => {
         store,
         localVue,
       });
-      expect(wrapper.find("#user-account-0").text()).toStrictEqual("Customer account -1");
-      expect(wrapper.find("#user-account-1").text()).toStrictEqual("Customer account -2");
+      expect(wrapper.find("#user-account-0").text()).toStrictEqual("User account -1");
+      expect(wrapper.find("#user-account-1").text()).toStrictEqual("User account -2");
     });
 
     test("When the Component is mounted, Then the dropdown menu for the Customer Account matches the values in Vuex", async () => {
@@ -47,8 +47,8 @@ describe("SettingsForm.vue", () => {
         store,
         localVue,
       });
-      expect(wrapper.find("#user-account-0").text()).toStrictEqual("Customer account -1");
-      expect(wrapper.find("#user-account-1").text()).toStrictEqual("Customer account -2");
+      expect(wrapper.find("#user-account-0").text()).toStrictEqual("User account -1");
+      expect(wrapper.find("#user-account-1").text()).toStrictEqual("User account -2");
       expect(wrapper.find("#user-account-2").exists()).toBe(false); // confirm only the 2 accounts in Vuex are present
     });
   });

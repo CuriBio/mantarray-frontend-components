@@ -43,7 +43,7 @@ describe("PlateWell.vue", () => {
     const well = wrapper.findAll("circle");
     expect(well).toHaveLength(1);
   });
-  test("When the PlateWell is mouted, Then mouseenter event on the circle would emit and event 'enter-well' with plate index range [0..23]", async () => {
+  test("When the PlateWell is mounted, Then mouseenter event on the circle would emit and event 'enter-well' with plate index range [0..23]", async () => {
     const propsData = {
       svg_height: 100,
       svg_width: 100,
@@ -67,7 +67,7 @@ describe("PlateWell.vue", () => {
     expect(enter_well_events).toHaveLength(1);
     expect(enter_well_events[0]).toStrictEqual([0]);
   });
-  test("When the PlateWell is mouted, Then mouseleave event on the circle would emit and event 'leave-well' with plate index range [0..23]", async () => {
+  test("When the PlateWell is mounted, Then mouseleave event on the circle would emit and event 'leave-well' with plate index range [0..23]", async () => {
     const propsData = {
       classname: "plate",
       svg_height: 100,
@@ -93,7 +93,7 @@ describe("PlateWell.vue", () => {
     expect(leave_well_events[0]).toStrictEqual([1]);
   });
 
-  test("When the PlateWell is mouted, Then click event on the circle would emit and event 'click-exact' with plate index range [0..23]", async () => {
+  test("When the PlateWell is mounted, Then click event on the circle would emit and event 'click-exact' with plate index range [0..23]", async () => {
     const propsData = {
       classname: "plate",
       svg_height: 100,
@@ -119,7 +119,7 @@ describe("PlateWell.vue", () => {
     expect(click_well_events[0]).toStrictEqual([1]);
   });
 
-  test("When the PlateWell is mouted, Then click+shift event on the circle would emit and event 'click-shift-exact' with plate index range [0..23]", async () => {
+  test("When the PlateWell is mounted, Then click+shift event on the circle would emit and event 'click-shift-exact' with plate index range [0..23]", async () => {
     const propsData = {
       classname: "plate",
       svg_height: 100,
@@ -148,7 +148,7 @@ describe("PlateWell.vue", () => {
     expect(click_well_events[0]).toStrictEqual([5]);
   });
 
-  test("When the PlateWell is mouted, Then click+ctrl event on the circle would emit and event 'click-ctrl-exact' with plate index range [0..23]", async () => {
+  test("When the PlateWell is mounted, Then click+ctrl event on the circle would emit and event 'click-ctrl-exact' with plate index range [0..23]", async () => {
     const propsData = {
       classname: "plate",
       svg_height: 100,

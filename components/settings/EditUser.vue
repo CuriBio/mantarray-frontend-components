@@ -23,7 +23,7 @@
         :invalid_text="error_text_user_name"
         :initial_value="user_name"
         :input_width="400"
-        :dom_id_suffix="'username-id'"
+        :dom_id_suffix="'username'"
         @update:value="on_update_user_name($event)"
       ></InputWidget>
     </div>
@@ -208,7 +208,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget > #input-widget-field-user_name-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-username {
   font-family: Muli;
 }
 </style>

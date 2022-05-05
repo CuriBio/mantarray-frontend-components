@@ -80,14 +80,14 @@ describe("InputDropDown.vue", () => {
     expect(parent_id_events).toHaveLength(1);
     expect(parent_id_events).toStrictEqual([[customer]]);
   });
-  test("When the InputDropDown is mouted, Then a prop message_if_blank is set to true and invalid_text is provided as value is <empty>, an error text is rendered", async () => {
+  test("When the InputDropDown is mounted, Then a prop message_if_invalid is set to true and invalid_text is provided as value is <empty>, an error text is rendered", async () => {
     const propsData = {
       title_label: "Customer ID",
       options_text: nicknames,
       placeholder: "Select Customer ID",
       value: "",
       invalid_text: "This field is required",
-      message_if_blank: true,
+      message_if_invalid: true,
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -108,7 +108,7 @@ describe("InputDropDown.vue", () => {
       placeholder: "Select Customer ID",
       value: "",
       invalid_text: "This field is required",
-      message_if_blank: true,
+      message_if_invalid: true,
       disabled: true,
     };
     wrapper = mount(ComponentToTest, {
@@ -131,7 +131,7 @@ describe("InputDropDown.vue", () => {
       placeholder: "Select Customer ID",
       value: "",
       invalid_text: "This field is required",
-      message_if_blank: true,
+      message_if_invalid: true,
       disabled: true,
       input_width: 390,
     };
@@ -158,7 +158,7 @@ describe("InputDropDown.vue", () => {
       placeholder: "Select Customer ID",
       value: "",
       invalid_text: "This field is required",
-      message_if_blank: true,
+      message_if_invalid: true,
       disabled: true,
       input_width: 390,
     };

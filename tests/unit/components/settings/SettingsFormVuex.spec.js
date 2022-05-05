@@ -30,11 +30,12 @@ describe("SettingsForm.vue", () => {
 
   afterEach(() => wrapper.destroy());
 
+  // TODO figure out what these are actually trying to test
   const array_of_user_accounts_missing_user_ids = [
     {
       customer_id: "4vqyd62oARXqj9nRUNhtLQ",
       user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-      user_name: "Customer account -1",
+      user_name: "User account -1",
     },
   ];
   const array_of_customerid_null_missing_user_ids = [
@@ -68,7 +69,7 @@ describe("SettingsForm.vue", () => {
       jest.clearAllMocks();
     });
 
-    test("When the component is mounted, a Customer account is selected, and a user clicks reset, Then modal will default to no customer selected and will reset in Vuex", async () => {
+    test("When the component is mounted, a User account is selected, and a user clicks reset, Then modal will default to no customer selected and will reset in Vuex", async () => {
       const commit_spy = jest.spyOn(store, "commit");
       store.commit("settings/set_active_user_index", 0);
 
@@ -83,7 +84,7 @@ describe("SettingsForm.vue", () => {
         auto_upload: true,
       };
 
-      await wrapper.find("#input-dropdown-widget-user-account-").setValue("Customer account -2");
+      await wrapper.find("#input-dropdown-widget-user-account-").setValue("User account -2");
 
       const reset_btn = await wrapper.find(".span__settings-tool-tip-reset-btn-txt-enable");
       expect(reset_btn.isVisible()).toBe(true);
@@ -175,7 +176,7 @@ describe("SettingsForm.vue", () => {
         localVue,
       });
 
-      await wrapper.find("#input-dropdown-widget-user-account-").setValue("Customer account -2");
+      await wrapper.find("#input-dropdown-widget-user-account-").setValue("User account -2");
       await wrapper.vm.$nextTick(); // wait for update
 
       const save_changes = wrapper.find(".span__settings-tool-tip-save-btn-txt-enable");

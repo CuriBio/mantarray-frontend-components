@@ -17,12 +17,12 @@ export default {
   //     {
   //       customer_id: "4vqyd62oARXqj9nRUNhtLQ",
   //       user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-  //       user_name: "Customer account -1",
+  //       user_name: "User account -1",
   //     },
   //     {
   //       customer_id: "6cBaidlJ84Ggc5JA7IYCgv",
   //       user_password: "941532a0-6be1-443a-cdee-d57bdf180a52",
-  //       user_name: "Customer account -2",
+  //       user_name: "User account -2",
   //     },
   //   ];
   //   this.$store.commit("settings/set_user_accounts", array_of_user_accounts);

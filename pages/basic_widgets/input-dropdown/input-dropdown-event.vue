@@ -9,7 +9,7 @@
         :input_width="entry_width"
         :disabled="disallow_entry"
         :options_text="nicknames_list"
-        :message_if_blank="on_empty_flag"
+        :message_if_invalid="on_empty_flag"
       ></InputDropDown>
     </div>
     <div class="input-selected-handler">

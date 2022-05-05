@@ -47,7 +47,7 @@ describe("store/settings", () => {
       {
         customer_id: "4vqyd62oARXqj9nRUNhtLQ",
         user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        user_name: "Customer account -1",
+        user_name: "User account -1",
       },
     ];
     expect(store.state.settings.user_accounts).toHaveLength(0);
@@ -61,19 +61,19 @@ describe("store/settings", () => {
     ).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
     expect(
       store.state.settings.user_accounts[store.state.settings.active_user_index].user_name
-    ).toStrictEqual("Customer account -1");
+    ).toStrictEqual("User account -1");
   });
   test("When initialized the array of user_accounts is empty and size 0, Then commit an array of customer details in user_accounts and assert the number of customer records", () => {
     const array_of_user_accounts = [
       {
         customer_id: "4vqyd62oARXqj9nRUNhtLQ",
         user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        user_name: "Customer account -1",
+        user_name: "User account -1",
       },
       {
         customer_id: "6cBaidlJ84Ggc5JA7IYCgv",
         user_password: "941532a0-6be1-443a-cdee-d57bdf180a52",
-        user_name: "Customer account -1",
+        user_name: "User account -1",
       },
     ];
     expect(store.state.settings.user_accounts).toHaveLength(0);
@@ -93,21 +93,21 @@ describe("store/settings", () => {
       {
         customer_id: "4vqyd62oARXqj9nRUNhtLQ",
         user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        user_name: "Customer account -1",
+        user_name: "User account -1",
       },
       {
         customer_id: "6cBaidlJ84Ggc5JA7IYCgv",
         user_password: "941532a0-6be1-443a-cdee-d57bdf180a52",
-        user_name: "Customer account -2",
+        user_name: "User account -2",
       },
     ];
     expect(store.state.settings.user_accounts).toHaveLength(0);
     store.commit("settings/set_user_accounts", array_of_user_accounts);
 
-    /* User now does Edit Customer Click on the "Customer account - 1*/
+    /* User now does Edit Customer Click on the "User account - 1*/
     store.commit("settings/set_active_user_index", 0);
     const current_focus_customerid = store.state.settings.user_accounts[0];
-    expect(current_focus_customerid.user_name).toStrictEqual("Customer account -1");
+    expect(current_focus_customerid.user_name).toStrictEqual("User account -1");
     expect(current_focus_customerid.customer_id).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
     expect(current_focus_customerid.user_password).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
     /*  (Delete ID) selected */
@@ -120,7 +120,7 @@ describe("store/settings", () => {
     const updated_focus_customerid = store.state.settings.user_accounts[0];
     expect(updated_focus_customerid.customer_id).toStrictEqual("6cBaidlJ84Ggc5JA7IYCgv");
     expect(updated_focus_customerid.user_password).toStrictEqual("941532a0-6be1-443a-cdee-d57bdf180a52");
-    expect(updated_focus_customerid.user_name).toStrictEqual("Customer account -2");
+    expect(updated_focus_customerid.user_name).toStrictEqual("User account -2");
     expect(store.state.settings.user_accounts).toHaveLength(1);
   });
   test("When a user resets the settings form, Then the mutation will only reset current selection and toggle switches and will not reset existing IDs", async () => {
@@ -128,7 +128,7 @@ describe("store/settings", () => {
       {
         customer_id: "4vqyd62oARXqj9nRUNhtLQ",
         user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        user_name: "Customer account -1",
+        user_name: "User account -1",
       },
     ];
 
@@ -189,7 +189,7 @@ describe("store/settings", () => {
         {
           customer_id: "4vqyd62oARXqj9nRUNhtLQ",
           user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-          user_name: "Customer account -1",
+          user_name: "User account -1",
         },
       ];
 
