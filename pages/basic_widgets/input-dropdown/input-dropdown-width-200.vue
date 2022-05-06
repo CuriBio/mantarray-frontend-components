@@ -8,7 +8,7 @@
       :input_width="entry_width"
       :disabled="disallow_entry"
       :options_text="nicknames_list"
-      :message_if_blank="on_empty_flag"
+      :message_if_invalid="on_empty_flag"
     ></InputDropDown>
   </div>
 </template>
@@ -22,9 +22,9 @@ export default {
   },
   data: function () {
     return {
-      label: "Customer Account ID",
+      label: "User Selection",
       entrykey: "",
-      keyplaceholder: "Select the Customer",
+      keyplaceholder: "Select User",
       error_text: "An ID is required",
       entry_width: 200,
       disallow_entry: false,
@@ -39,10 +39,8 @@ export default {
       } else {
         const nickname_focus = this.nicknames_list.indexOf(this.entrykey);
         if (nickname_focus == -1) {
-          // logic of "Add New Customer ID" in Settings
-          this.on_empty_flag = true; // the reason this would mean the user has to click on "Add New Customer ID as per validation
+          this.on_empty_flag = true;
         } else {
-          // logic of enabling making just "Add New Customer ID" and "Edit ID" in Settings
           this.on_empty_flag = false;
         }
       }

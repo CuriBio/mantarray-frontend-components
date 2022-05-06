@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EditUser :dialogdata="user" :dataindex="0"> </EditUser>
+    <EditUser :dialogdata="customer"> </EditUser>
   </div>
 </template>
 
@@ -13,10 +13,11 @@ export default {
   },
   data() {
     return {
-      user: {
-        user_id: 0,
+      customer: {
+        customer_id: 0,
         uuid: "5FY8KwTsQaUJ2KzHJGetfE",
-        nickname: "Experiment anemia -1",
+        user_password: "06ad547f-fe02-477b-9473-f7977e4d5e17",
+        user_name: "Experiment anemia -1",
       },
     };
   },

@@ -1,6 +1,31 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+
+0.7.0 (2022-05-05)
+------------------
+
+Added:
+^^^^^^
+
+- Components:
+
+  - DataAnalysisControl component
+  - DataAnalysisWidget
+
+- Routes:
+
+  - GET route to get recording directories
+  - POST route to start the analyses
+
+- Websocket handler to receive data analysis statuses
+
+Changed
+^^^^^^^
+
+- SettingsForm component
+
+
 0.6.5 (2022-04-12)
 ------------------
 

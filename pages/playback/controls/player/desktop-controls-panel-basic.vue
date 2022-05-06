@@ -33,7 +33,7 @@
         </div>
         <b-collapse id="data-acquisition-card" visible accordion="controls-accordion" role="tabpanel">
           <div class="div__player-controls-container">
-            <DesktopPlayerControls @save_customer_id="save_customer_id" />
+            <DesktopPlayerControls />
           </div>
           <div
             class="div__screen-view-options-text"
@@ -200,8 +200,8 @@ export default {
   },
   computed: {
     ...mapState("settings", [
-      "customer_account_ids",
-      "customer_index",
+      "user_accounts",
+      "active_user_index",
       "allow_sw_update_install",
       "recordings_list",
       "root_recording_path",
@@ -257,42 +257,10 @@ export default {
       { x_scale: 2 * 1e6 },
       { x_scale: 1 * 1e6 },
     ]);
-    // this.$store.dispatch("flask/start_status_pinging");
-
-    // ipcRenderer.on("confirmation_request", () => {
-    //   this.confirmation_request = true;
-    // });
-
-    // ipcRenderer.on("beta_2_mode_response", (_, beta_2_mode) => {
-    //   this.beta_2_mode = beta_2_mode;
-    //   this.$store.commit("settings/set_beta_2_mode", beta_2_mode);
-    // });
-    // if (this.beta_2_mode === undefined) {
-    //   ipcRenderer.send("beta_2_mode_request");
-    // }
-
-    // ipcRenderer.on('customer_account_response', (e, customer_account) => {
-    //   if (customer_account.id !== '') {
-    //     const customer = {
-    //       cust_idx: 0,
-    //       cust_id: customer_account.id,
-    //       pass_key: customer_account.password,
-    //       user_account_id: 'default_user',
-    //     };
-    //     this.$store.commit('settings/set_customer_account_ids', [customer]);
-    //     this.$store.commit('settings/set_customer_index', 0);
-    //   }
-    // });
-    // ipcRenderer.send('customer_account_request');
   },
   methods: {
     send_confirmation: function (idx) {
-      //   ipcRenderer.send("confirmation_response", idx);
       this.confirmation_request = false;
-    },
-    save_customer_id: function () {
-      //   const customer_account = this.customer_account_ids[this.customer_index];
-      //   ipcRenderer.send("save_customer_id", customer_account);
     },
     handle_tab_visibility: function (tab) {
       if (tab === 0) {

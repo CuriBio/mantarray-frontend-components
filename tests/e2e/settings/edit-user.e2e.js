@@ -6,9 +6,9 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 const span__button_label = Selector(".span__button_label");
 
-const user_alphanumeric_input_field = Selector("#input-widget-field-alphanumeric-id");
-
-const user_id_nickname_input_field = Selector("#input-widget-field-nickname-id");
+const customer_id_input_field = Selector("#input-widget-field-customer-id");
+const username_input_field = Selector("#input-widget-field-username");
+const user_password_input_field = Selector("#input-widget-field-passkey-id");
 
 const edit_user_cancel_btn = span__button_label.nth(0);
 const edit_user_delete_btn = span__button_label.nth(1);
@@ -44,10 +44,11 @@ test("testing for the edit user Valid State Save Hover", async (t) => {
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-test("testing the edit user INVALID State", async (t) => {
+test("testing for the edit user INVALID State", async (t) => {
   const screenshot_path_base = path.join("settings", "edit-user");
-  await t.click(user_alphanumeric_input_field).pressKey("ctrl+a delete");
-  await t.click(user_id_nickname_input_field).pressKey("ctrl+a delete");
   const screenshot_path = path.join(screenshot_path_base, "edit-user-invalid");
+  await t.click(customer_id_input_field).pressKey("ctrl+a delete");
+  await t.click(username_input_field).pressKey("ctrl+a delete");
+  await t.click(user_password_input_field).pressKey("ctrl+a delete");
   await testcafe_page_visual_regression(t, screenshot_path);
 });
