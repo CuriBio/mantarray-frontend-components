@@ -68,4 +68,13 @@ export default {
   set_data_analysis_directory(state, directory) {
     state.data_analysis_directory = directory;
   },
+  set_failed_recordings(state, recordings) {
+    state.failed_recordings = [...recordings];
+  },
+  set_selected_recordings(state, recordings) {
+    state.selected_recordings_for_analysis = [...recordings];
+  },
+  set_confirmation_request(state, bool) {
+    state.confirmation_request = bool;
+  },
 };

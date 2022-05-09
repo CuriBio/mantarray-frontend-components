@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="div__data-analysis-background" :style="dynamic_modal_height">
-      <span class="span__data-analysis-label">{{ is_state_ready ? header_label : active_header_label }}</span>
+      <span class="span__data-analysis-label">{{ header_label }}</span>
       <div ref="message_area" class="span__data-analysis-message">
-        <p>{{ is_state_ready ? modal_msg_one : active_msg_one }}</p>
+        <p>{{ msg_one }}</p>
         <textarea
           v-if="is_state_ready"
           class="textarea__recording-dir-path"
@@ -14,17 +14,21 @@
           :value.prop="root_recording_path"
         />
       </div>
+      <div v-if="is_state_ready" class="div__file-directory-label-container">
+        <div v-for="label in ['Recording name:', 'Date created:']" :key="label">
+          {{ label }}
+        </div>
+      </div>
       <div v-if="is_state_ready" class="div__directory-list-container">
         <div
-          v-for="(rec_name, idx) in formatted_recordings_list"
-          :key="idx"
-          :style="`position: relative; top: ${idx * 30}px; margin: 15px;`"
+          v-for="rec_name in recordings_list"
+          :key="rec_name.creation_date"
+          class="div__recording-list-item"
+          :class="{ selected_recording: selected_recordings.includes(rec_name) }"
+          @click="handle_selected_recordings(rec_name)"
         >
-          <CheckBoxWidget
-            :checkbox_options="rec_name"
-            :reset="checkbox_reset"
-            @checkbox-selected="handle_selected_recordings(rec_name[0].value)"
-          />
+          <div class="div__recording-name-container">{{ rec_name.name }}</div>
+          <span>{{ rec_name.creation_time }}</span>
         </div>
       </div>
       <span v-if="!is_state_ready" class="span__data-analysis-spinner">
@@ -32,7 +36,7 @@
       </span>
       <div v-if="is_state_ready" class="div__data-analysis-button-container">
         <ButtonWidget
-          :button_widget_width="600"
+          :button_widget_width="700"
           :button_widget_height="50"
           :button_widget_top="0"
           :button_widget_left="0"
@@ -49,7 +53,6 @@
 <script>
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { mapState } from "vuex";
-import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSpinner as fa_spinner } from "@fortawesome/free-solid-svg-icons";
@@ -60,21 +63,14 @@ export default {
   name: "DataAnalysisWidget",
   components: {
     ButtonWidget,
-    CheckBoxWidget,
     FontAwesomeIcon,
   },
   data() {
     return {
-      header_label: "Start analysis",
-      active_header_label: "Running Analysis...",
-      modal_msg_one: `Please choose from the following recordings found at:`,
-      checkbox_reset: false,
       selected_recordings: [],
       button_names: ["Cancel", "Reset", "Run"],
       is_state_ready: true,
       enabled_buttons: [true, true, false],
-      active_msg_one:
-        "Please do not shutdown the Mantarray software or unplug Mantarray instrument while analysis is running.",
     };
   },
   computed: {
@@ -84,23 +80,28 @@ export default {
       return Math.ceil(((this.root_recording_path.length * 1.0) / 30).toFixed(1));
     },
     formatted_recordings_list: function () {
-      return this.recordings_list.map((name) => {
-        return [{ text: name, value: name }];
+      return this.recordings_list.map((rec) => {
+        return [{ text: rec.name, value: rec.name }];
       });
     },
     dynamic_modal_height: function () {
       return this.data_analysis_state == ENUMS.DATA_ANALYSIS_STATE.READY
-        ? "height: 420px;"
+        ? "height: 450px;"
         : "height: 300px;";
+    },
+    msg_one: function () {
+      return this.is_state_ready
+        ? `Please choose from the following recordings found at:`
+        : "Please do not shutdown the Mantarray software or unplug Mantarray instrument while analysis is running.";
+    },
+    header_label: function () {
+      return this.is_state_ready ? "Start analysis" : "Running Analysis...";
     },
   },
   watch: {
     selected_recordings: function (new_recs, _) {
       // required to reset the reset feature to false
-      if (new_recs.length === 0) {
-        this.checkbox_reset = false;
-        this.enabled_buttons = [true, true, false];
-      } else this.enabled_buttons = [true, true, true];
+      this.enabled_buttons = new_recs.length === 0 ? [true, true, false] : [true, true, true];
     },
     data_analysis_state: function (new_state, _) {
       this.is_state_ready = new_state == ENUMS.DATA_ANALYSIS_STATE.READY;
@@ -109,11 +110,13 @@ export default {
   methods: {
     handle_click: function (idx) {
       if (idx === 0) {
-        this.checkbox_reset = true;
         this.$emit("send_confirmation", { idx, selected_recordings: [] });
-      } else if (idx === 1) this.checkbox_reset = true;
-      else if (idx === 2 && this.selected_recordings.length > 0)
-        this.$emit("send_confirmation", { idx, selected_recordings: this.selected_recordings });
+        this.selected_recordings = [];
+      } else if (idx === 1) this.selected_recordings = [];
+      else if (idx === 2 && this.selected_recordings.length > 0) {
+        const rec_names = this.selected_recordings.map((rec) => rec.name);
+        this.$emit("send_confirmation", { idx, selected_recordings: rec_names });
+      }
     },
     handle_selected_recordings: function (rec_name) {
       // need to check  if recording is already present in stored  list to track if a user is selecting or unselecting an option
@@ -128,7 +131,7 @@ export default {
   pointer-events: all;
   transform: rotate(0deg);
   position: absolute;
-  width: 600px;
+  width: 700px;
   top: 0;
   left: 0;
   visibility: visible;
@@ -136,13 +139,45 @@ export default {
   background: rgb(17, 17, 17);
   z-index: 3;
 }
+.div__recording-list-item {
+  position: relative;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  font-family: Muli;
+  font-size: 14px;
+  border-bottom: 2px solid black;
+  color: #b7b7b7;
+  cursor: pointer;
+}
+.div__recording-list-item:hover,
+.selected_recording {
+  background: #2f2f2f;
+}
+.div__file-directory-label-container {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: Muli;
+  font-size: 14px;
+  color: #b7b7b7;
+  background: black;
+  width: 600px;
+  left: 50px;
+  position: absolute;
+  top: 170px;
+  padding: 0 70px 0 40px;
+}
 .span__data-analysis-label {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  width: 600px;
+  width: 700px;
   height: 30px;
   top: 22.385px;
   left: 0px;
@@ -167,7 +202,7 @@ export default {
   position: absolute;
   top: 65px;
   left: 21px;
-  width: 540px;
+  width: 640px;
   visibility: visible;
   user-select: none;
   text-align: center;
@@ -181,7 +216,7 @@ export default {
 .div__data-analysis-button-container {
   left: 0px;
   position: absolute;
-  top: 420px;
+  top: 450px;
 }
 .textarea__recording-dir-path {
   line-height: 1.2;
@@ -192,7 +227,7 @@ export default {
   outline: none;
   color: rgb(183, 183, 183);
   font-family: Courier New;
-  width: 338px;
+  width: 420px;
   background: rgb(17, 17, 17);
   border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;
@@ -212,16 +247,21 @@ export default {
 }
 .div__directory-list-container {
   background: #1c1c1c;
-  height: 200px;
-  width: 500px;
+  height: 225px;
+  width: 600px;
   left: 50px;
   position: absolute;
-  top: 170px;
+  top: 205px;
   overflow-y: scroll;
+}
+.div__recording-name-container {
+  max-width: 300px;
+  overflow-x: scroll;
+  padding-top: 10px;
 }
 ::-webkit-scrollbar {
   -webkit-appearance: none;
-  height: 15px;
+  height: 10px;
   overflow: visible;
   cursor: pointer;
 }
@@ -231,13 +271,12 @@ export default {
   cursor: pointer;
 }
 ::-webkit-scrollbar-track {
-  background-color: #1c1c1c;
   overflow: visible;
   cursor: pointer;
 }
 
 .span__data-analysis-spinner {
-  left: 245px;
+  left: 295px;
   position: absolute;
   top: 155px;
 }

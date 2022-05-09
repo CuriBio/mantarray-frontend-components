@@ -2,15 +2,6 @@
   <div>
     <div class="div__sidebar">
       <div class="div__sidebar-page-divider" />
-      <div class="div__plate-barcode-container">
-        <BarcodeViewer />
-      </div>
-      <div class="div__status-bar-container">
-        <StatusBar :confirmation_request="confirmation_request" @send_confirmation="send_confirmation" />
-      </div>
-      <div class="div__plate-navigator-container">
-        <PlateNavigator />
-      </div>
       <div class="div__accordian-container" role="tablist">
         <div
           role="tab"
@@ -32,6 +23,15 @@
           />
         </div>
         <b-collapse id="data-acquisition-card" visible accordion="controls-accordion" role="tabpanel">
+          <div class="div__plate-barcode-container">
+            <BarcodeViewer />
+          </div>
+          <div class="div__plate-navigator-container">
+            <PlateNavigator />
+          </div>
+          <div class="div__status-bar-container">
+            <StatusBar :confirmation_request="confirmation_request" @send_confirmation="send_confirmation" />
+          </div>
           <div class="div__player-controls-container">
             <DesktopPlayerControls @save_customer_id="save_customer_id" />
           </div>
@@ -331,7 +331,7 @@ body {
   padding: 5px 0px 10px 0px;
 }
 .div__accordian-container {
-  top: 310px;
+  top: 45px;
   position: absolute;
   width: 287px;
 }
@@ -411,21 +411,6 @@ body {
   height: 930px;
   background-color: #0e0e0e;
 }
-.div__plate-barcode-container {
-  position: absolute;
-  top: 45px;
-  left: 0px;
-}
-.div__status-bar-container {
-  position: absolute;
-  left: 0px;
-  top: 267px;
-}
-.div__plate-navigator-container {
-  position: absolute;
-  top: 83px;
-  left: 0px;
-}
 
 /* DATA-ACQUISITION */
 .div__screen-view-container {
@@ -435,12 +420,19 @@ body {
   grid-template-columns: 50% 50%;
   justify-items: center;
 }
-/* .div__screen-view-container--beta-2-mode {
-  top: 680px;
+.div__plate-barcode-container {
+  position: relative;
+  left: 0px;
 }
-.div__screen-view-container--beta-1-mode {
-  top: 410px;
-} */
+.div__status-bar-container {
+  position: relative;
+  left: 0px;
+}
+.div__plate-navigator-container {
+  position: relative;
+  top: 5px;
+  left: 0px;
+}
 .div__screen-view-options-text {
   line-height: 100%;
   position: relative;
@@ -454,12 +446,6 @@ body {
   text-align: left;
   margin: 10px;
 }
-/* .span__screen-view-options-text--beta-2-mode {
-  top: 645px;
-}
-.span__screen-view-options-text--beta-1-mode {
-  top: 376px;
-} */
 .div__waveform-screen-view- {
   grid-column: 1 / 2;
 }
@@ -487,12 +473,6 @@ body {
   margin-top: 3px;
   left: 0px;
 }
-/* .div__stimulation_controls-controls-icon-container--beta-1-mode {
-  visibility: hidden;
-}
-.div__stimulation_controls-controls-icon-container--beta-2-mode {
-  visibility: visible;
-} */
 .div__stim-studio-screen-view {
   position: absolute;
   top: 32px;

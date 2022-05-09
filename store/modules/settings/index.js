@@ -16,8 +16,10 @@ const default_state = {
   log_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\logs_flask",
   root_downloads_path: "C:\\Users\\username\\Downloads",
   root_recording_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\recordings",
-  data_analysis_directory: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\time_force_analyses",
+  data_analysis_directory: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\time_force_data",
   recordings_list: [],
+  failed_recordings: [],
+  selected_recordings_for_analysis: [],
   file_count: 0,
   total_file_count: 0,
   upload_error: false,
@@ -29,6 +31,7 @@ const default_state = {
   firmware_update_dur_mins: null,
   allow_sw_update_install: false,
   user_cred_input_needed: false,
+  confirmation_request: false,
 };
 
 const state = () => JSON.parse(JSON.stringify(default_state));
