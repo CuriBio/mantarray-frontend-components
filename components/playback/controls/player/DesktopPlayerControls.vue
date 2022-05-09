@@ -791,7 +791,8 @@ export default {
 #user-input-prompt-message,
 #fw-update-available-message,
 #five-min-warning,
-#one-min-warning {
+#one-min-warning,
+#recording-name-input-prompt-message {
   position: fixed;
   margin: 5% auto;
   top: 15%;
