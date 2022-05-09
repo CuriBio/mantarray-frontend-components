@@ -534,7 +534,18 @@ export default {
       }
     },
     generate_default_recording_name() {
-      return "TODO";
+      const barcode = this.barcodes.plate_barcode.value;
+
+      const now = new Date();
+      const utc_year = now.getUTCFullYear();
+      const utc_month = (now.getUTCMonth() + 1).toString().padStart(2, "0"); // UTC Month is zero-based for some reason
+      const utc_day = now.getUTCDate().toString().padStart(2, "0");
+      const utc_hour = now.getUTCHours().toString().padStart(2, "0");
+      const utc_min = now.getUTCMinutes().toString().padStart(2, "0");
+      const utc_sec = now.getUTCSeconds().toString().padStart(2, "0");
+
+      const default_name = `${barcode}__${utc_year}_${utc_month}_${utc_day}_${utc_hour}${utc_min}${utc_sec}`;
+      return default_name;
     },
     start_recording: function (file_name) {
       this.$bvModal.hide("recording-name-input-prompt-message");
