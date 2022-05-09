@@ -43,7 +43,7 @@ describe("DataAnalysisWidget.vue", () => {
       localVue,
     });
     expect(wrapper.find(".span__data-analysis-label").text()).toBe("Start analysis");
-    expect(wrapper.find(".div__data-analysis-background").attributes().style).toContain("height: 420px;");
+    expect(wrapper.find(".div__data-analysis-background").attributes().style).toContain("height: 450px;");
     expect(wrapper.find(".div__data-analysis-button-container").isVisible()).toBe(true);
   });
 
@@ -64,9 +64,9 @@ describe("DataAnalysisWidget.vue", () => {
 
       expect(wrapper.vm.selected_recordings).toStrictEqual([]);
 
-      await wrapper.findAll(".custom-control-input").at(0).trigger("click");
+      await wrapper.findAll(".div__recording-list-item").at(0).trigger("click");
 
-      await wrapper.findAll(".custom-control-input").at(3).trigger("click");
+      await wrapper.findAll(".div__recording-list-item").at(3).trigger("click");
 
       expect(wrapper.vm.selected_recordings).toStrictEqual(["rec_1", "rec_4"]);
 
@@ -84,7 +84,7 @@ describe("DataAnalysisWidget.vue", () => {
     });
 
     expect(wrapper.find(".span__data-analysis-label").text()).toBe("Start analysis");
-    expect(wrapper.find(".div__data-analysis-background").attributes().style).toContain("height: 420px;");
+    expect(wrapper.find(".div__data-analysis-background").attributes().style).toContain("height: 450px;");
     expect(wrapper.find(".div__data-analysis-button-container").isVisible()).toBe(true);
     expect(store.state.playback.data_analysis_state).toBe(ENUMS.DATA_ANALYSIS_STATE.READY);
 

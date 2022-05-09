@@ -5,7 +5,7 @@ import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { array_of_customer_ids } from "./SettingsFormCustomerData.js";
+import { array_of_user_accounts } from "./SettingsFormUserData.js";
 
 let wrapper = null;
 
@@ -24,10 +24,8 @@ describe("SettingsForm.vue", () => {
    */
   function get_buttons(wrap) {
     const buttons = {
-      add_customer_btn: wrap.find(".span__settingsform-customer-add-btn_txt"),
-      edit_customer_btn: wrap.find(".span__settingsform-customer-edit-btn-txt"),
-      // add_user_btn: wrap.find(".span__settingsform_user-input-editor"),
-      // edit_user_btn: wrap.find(".span__settingsform-user-input-edit-btn-txt"),
+      add_user_btn: wrap.find(".span__settingsform-user-add-btn_txt"),
+      edit_user_btn: wrap.find(".span__settingsform-user-edit-btn-txt"),
     };
     return buttons;
   }
@@ -97,10 +95,10 @@ describe("SettingsForm.vue", () => {
   afterEach(() => {
     wrapper.destroy();
   });
-  describe("Given Vuex has a valid customer account called as 'Customer account -1' but no customer index selected", () => {
+  describe("Given Vuex has a valid user account of 'User account -1' but no user index selected", () => {
     beforeEach(() => {
       // commit a deep copy of the template object to the Vuex store using JSON stringify/parse, as it may be modified during tests. https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
-      store.commit("settings/set_customer_account_ids", JSON.parse(JSON.stringify(array_of_customer_ids)));
+      store.commit("settings/set_user_accounts", JSON.parse(JSON.stringify(array_of_user_accounts)));
     });
     describe("Given the component is mounted", () => {
       beforeEach(() => {
@@ -110,18 +108,18 @@ describe("SettingsForm.vue", () => {
         });
       });
 
-      test("When the value of Customer ID is set to 'Customer account -1', Then the buttons 'Add New Customer ID', 'Edit ID'(of customer) are enabled", async () => {
-        await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
+      test("When the value of User is set to 'User account -1', Then the buttons 'Add New User', 'Edit ID' are enabled", async () => {
+        await wrapper.find("#input-dropdown-widget-user-account-").setValue("User account -1");
         await wrapper.vm.$nextTick(); // wait for update
 
         const all_buttons = get_buttons(wrapper);
         await wrapper.vm.$nextTick(); // wait for update
-        expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-        expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
+        expect(all_buttons.add_user_btn.isVisible()).toBe(true);
+        expect(all_buttons.edit_user_btn.isVisible()).toBe(true);
       });
     });
 
-    test("When the component is mounted, Then 'Add New Customer ID' is enabled and 'Edit ID'(of customer) is disabled", async () => {
+    test("When the component is mounted, Then 'Add New User' is enabled and 'Edit ID' is disabled", async () => {
       wrapper = mount(ComponentToTest, {
         store,
         localVue,
@@ -129,8 +127,8 @@ describe("SettingsForm.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       const all_buttons = get_buttons(wrapper);
       await wrapper.vm.$nextTick(); // wait for update
-      expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      expect(all_buttons.edit_customer_btn.isVisible()).toBe(false);
+      expect(all_buttons.add_user_btn.isVisible()).toBe(true);
+      expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
     });
     test("When the component is mounted, Then visually the Reset and Save Buttons are disabled", async () => {
       wrapper = mount(ComponentToTest, {
@@ -143,8 +141,8 @@ describe("SettingsForm.vue", () => {
       expect(settings_buttons.save_btn.isVisible()).toBe(true);
       expect(settings_buttons.save_btn_container.isVisible()).toBe(true);
     });
-    test("Given the SettingsForm has a valid customer account set as 'Customer account -1', When the Vuex Store data specifies a valid Customer ID, Then visually the Reset and Save Buttons are enabled", async () => {
-      store.commit("settings/set_customer_index", 0);
+    test("Given the SettingsForm has a valid customer account set as 'User account -1', When the Vuex Store data specifies a valid Customer ID, Then visually the Reset and Save Buttons are enabled", async () => {
+      store.commit("settings/set_active_user_index", 0);
 
       wrapper = mount(ComponentToTest, {
         store,
@@ -156,8 +154,8 @@ describe("SettingsForm.vue", () => {
       expect(settings_buttons.save_btn_container.isVisible()).toBe(true);
     });
     test("Given the SettingsForm has Vuex data is an empty array, When the value Customer ID is <empty>, Then visually the RED Box is enabled around the Customer ID", async () => {
-      const array_of_empty_customer_ids = [];
-      store.commit("settings/set_customer_account_ids", array_of_empty_customer_ids);
+      const array_of_empty_user_accounts = [];
+      store.commit("settings/set_user_accounts", array_of_empty_user_accounts);
       wrapper = mount(ComponentToTest, {
         store,
         localVue,
@@ -165,8 +163,8 @@ describe("SettingsForm.vue", () => {
       const invalid_box = get_invalid_boxes(wrapper);
       expect(invalid_box.customer.isVisible()).toBe(true);
     });
-    test("Given the SettingsForm has a valid customer account set as 'Customer account -1', When the 'Customer account -1' is in focus, Then the GREEN Box is enabled around the Customer ID", async () => {
-      store.commit("settings/set_customer_index", 0);
+    test("Given the SettingsForm has a valid customer account set as 'User account -1', When the 'User account -1' is in focus, Then the GREEN Box is enabled around the Customer ID", async () => {
+      store.commit("settings/set_active_user_index", 0);
 
       wrapper = mount(ComponentToTest, {
         store,
@@ -175,8 +173,8 @@ describe("SettingsForm.vue", () => {
       const valid_boxes = get_valid_boxes(wrapper);
       expect(valid_boxes.customer.isVisible()).toBe(true);
     });
-    test("Given the SettingsForm has a valid customer account set as 'Customer account -1', When the user now modifies to non-existent customer say 'Customer account -', Then validate that Red Boxes are visible around Customer ID 'Add New Customer Button' is enabled", async () => {
-      store.commit("settings/set_customer_index", 0);
+    test("Given the SettingsForm has a valid customer account set as 'User account -1', When the user now modifies to non-existent customer say 'User account -', Then validate that Red Boxes are visible around Customer ID 'Add New Customer Button' is enabled", async () => {
+      store.commit("settings/set_active_user_index", 0);
 
       wrapper = mount(ComponentToTest, {
         store,
@@ -186,7 +184,7 @@ describe("SettingsForm.vue", () => {
       const valid_boxes = get_valid_boxes(wrapper);
       expect(valid_boxes.customer.isVisible()).toBe(true);
 
-      await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -"); // customer with this doesn't exist.
+      await wrapper.find("#input-dropdown-widget-user-account-").setValue("User account -"); // customer with this doesn't exist.
 
       await wrapper.vm.$nextTick(); // wait for update
 
@@ -194,39 +192,38 @@ describe("SettingsForm.vue", () => {
       expect(invalid_box.customer.isVisible()).toBe(true);
       const all_buttons = get_buttons(wrapper);
       await wrapper.vm.$nextTick(); // wait for update
-      expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      expect(all_buttons.edit_customer_btn.isVisible()).toBe(false);
+      expect(all_buttons.add_user_btn.isVisible()).toBe(true);
+      expect(all_buttons.edit_user_btn.isVisible()).toBe(false);
     });
 
-    test("Given the SettingsForm has a valid customer account set as 'Customer account -1', When the user sets the value on input with same default value 'Customer account -1' , Then validate that Green Box is around the input, and based on rules relevant buttons are enabled", async () => {
-      store.commit("settings/set_customer_index", 0);
-      // store.commit("settings/set_user_index", 0);
+    test("Given the SettingsForm has a valid customer account set as 'User account -1', When the user sets the value on input with same default value 'User account -1' , Then validate that Green Box is around the input, and based on rules relevant buttons are enabled", async () => {
+      store.commit("settings/set_active_user_index", 0);
+      // store.commit("settings/set_active_user_index", 0);
 
       wrapper = mount(ComponentToTest, {
         store,
         localVue,
         data() {
           return {
-            valid_customer_focus: false,
-            disable_edit_customer: true,
+            disable_edit_user: true,
           };
         },
       });
 
       await wrapper.vm.$nextTick(); // wait for update
 
-      await wrapper.find("#input-dropdown-widget-cust-").setValue("Customer account -1");
+      await wrapper.find("#input-dropdown-widget-user-account-").setValue("User account -1");
       await wrapper.vm.$nextTick(); // wait for update
 
       const valid_boxes = get_valid_boxes(wrapper);
       expect(valid_boxes.customer.isVisible()).toBe(true);
       const all_buttons = get_buttons(wrapper);
       await wrapper.vm.$nextTick(); // wait for update
-      expect(all_buttons.add_customer_btn.isVisible()).toBe(true);
-      expect(all_buttons.edit_customer_btn.isVisible()).toBe(true);
+      expect(all_buttons.add_user_btn.isVisible()).toBe(true);
+      expect(all_buttons.edit_user_btn.isVisible()).toBe(true);
     });
 
-    test("When the component is mounted and Customer account is/is not selected, Then the cancel button is visible and will close modal on click", async () => {
+    test("When the component is mounted and User account is/is not selected, Then the cancel button is visible and will close modal on click", async () => {
       wrapper = mount(ComponentToTest, {
         store,
         localVue,
@@ -240,7 +237,7 @@ describe("SettingsForm.vue", () => {
       expect(close_event[0]).toStrictEqual([false]);
     });
 
-    test("When the component is mounted and Customer account is/is not selected, Then clicking the save button will be disabled", async () => {
+    test("When the component is mounted and User account is/is not selected, Then clicking the save button will be disabled", async () => {
       const commit_spy = jest.spyOn(store, "commit");
       wrapper = mount(ComponentToTest, {
         store,

@@ -106,7 +106,7 @@ export default {
         this.status = true;
         this.modal_labels = {
           header: "Successful Upload!",
-          msg_one: `The following recording was successfully uploaded: ${this.last_file_name}.`,
+          msg_one: `The following recording was successfully uploaded and analyzed: ${this.last_file_name}. It has been downloaded here:`,
           msg_two: `${this.root_downloads_path}\\${this.last_file_name}.xlsx`,
           button_names: ["Close"],
         };

@@ -1,32 +1,43 @@
 <template>
   <div>
-    <div class="div__adduser-form-controls"></div>
-    <span class="span__adduser-form-controls-content-title">
-      Add&nbsp;<wbr />New&nbsp;<wbr />User&nbsp;<wbr />ID
-    </span>
+    <div class="div__AddUser-form-controls"></div>
+    <span class="span__AddUser-form-controls-content-title"> Add&nbsp;<wbr />New&nbsp;<wbr />User </span>
     <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
-        :title_label="'Enter Alphanumeric ID'"
-        :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
-        :invalid_text="error_text_uuid"
+        :title_label="'Enter Customer ID'"
+        :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
+        :invalid_text="error_text_id"
         :spellcheck="false"
         :input_width="400"
-        :dom_id_suffix="'alphanumeric-id'"
-        @update:value="on_update_uuid($event)"
+        :dom_id_suffix="'customer-id'"
+        :initial_value="stored_customer_id"
+        @update:value="on_update_id($event)"
       ></InputWidget>
     </div>
 
-    <div id="nickname" style="top: 145px; left: 50px; position: absolute; z-index: 23">
+    <div id="user_name" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
-        :title_label="'Enter ID Nickname'"
-        :placeholder="'Marie Curie'"
-        :invalid_text="error_text_nickname"
+        :title_label="'Enter Username'"
+        :placeholder="'Curi Bio User'"
+        :invalid_text="error_text_user_name"
         :input_width="400"
-        :dom_id_suffix="'nickname-id'"
-        @update:value="on_update_nickname($event)"
+        :dom_id_suffix="'username'"
+        @update:value="on_update_user_name($event)"
       ></InputWidget>
     </div>
-    <div style="top: 254px; left: 0px; position: absolute">
+    <div id="pass-key" style="top: 241px; left: 50px; position: absolute; z-index: 22">
+      <InputWidget
+        :title_label="'Enter Password'"
+        :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
+        :invalid_text="error_text_pass"
+        :spellcheck="false"
+        :input_width="400"
+        :type="'password'"
+        :dom_id_suffix="'passkey-id'"
+        @update:value="on_update_pass($event)"
+      ></InputWidget>
+    </div>
+    <div style="top: 350px; left: 0px; position: absolute">
       <ButtonWidget
         :button_widget_width="500"
         :button_widget_height="50"
@@ -43,7 +54,7 @@
 </template>
 <script>
 import Vue from "vue";
-import uuid from "@tofandel/uuid-base62";
+import { mapState } from "vuex";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
@@ -54,66 +65,75 @@ Vue.use(BootstrapVue);
 Vue.component("BFormInput", BFormInput);
 Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
-Vue.use(uuid);
-const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
+const TextValidation_User = new TextValidation("user_account_input");
 
-const TextValidation_Nickname = new TextValidation("customer_account_input");
 export default {
   name: "AddUser",
   components: {
     InputWidget,
     ButtonWidget,
   },
-  props: {
-    dataindex: { type: Number, default: 0 },
-  },
   data() {
     return {
-      uuid: "",
-      nickname: "",
-      error_text_uuid: "This field is required",
-      error_text_nickname: "This field is required",
+      customer_id: "",
+      user_password: "",
+      user_name: "",
+      error_text_id: "This field is required",
+      error_text_pass: "This field is required",
+      error_text_user_name: "This field is required",
       enablelist_add_user: [true, false],
     };
   },
+  computed: {
+    ...mapState("settings", ["stored_customer_id"]),
+  },
+  created: function () {
+    if (this.stored_customer_id) this.on_update_id(this.stored_customer_id);
+  },
   methods: {
-    on_update_uuid: function (new_value) {
-      this.error_text_uuid = TextValidation_UUIDBase57.validate(new_value);
-      this.uuid = new_value;
+    on_update_id: function (new_value) {
+      this.error_text_id = TextValidation_User.validate(new_value, "ID");
+      this.customer_id = new_value;
       this.enable_save_button();
     },
-
-    on_update_nickname: function (new_value) {
-      this.error_text_nickname = TextValidation_Nickname.validate(new_value, "nickname");
-      this.nickname = new_value;
+    on_update_pass: function (new_value) {
+      this.error_text_pass = TextValidation_User.validate(new_value, "passkey");
+      this.user_password = new_value;
+      this.enable_save_button();
+    },
+    on_update_user_name: function (new_value) {
+      this.error_text_user_name = TextValidation_User.validate(new_value, "user_name");
+      this.user_name = new_value;
       this.enable_save_button();
     },
     clicked_button: function (choice) {
       switch (choice) {
         case 0:
-          this.cancel_adduser();
+          this.cancel_add_user();
           break;
         case 1:
-          this.save_adduser();
+          this.save_newuser();
           break;
       }
     },
-    cancel_adduser() {
+    cancel_add_user() {
       this.$emit("cancel-id");
     },
-    save_adduser() {
+    save_newuser() {
       const add_user = {
-        user_id: this.dataindex,
-        uuid: this.uuid,
-        nickname: this.nickname,
+        customer_id: this.customer_id,
+        user_password: this.user_password,
+        user_name: this.user_name,
       };
       this.$emit("save-id", add_user);
     },
     enable_save_button() {
-      if (this.error_text_uuid === "") {
-        if (this.error_text_nickname === "") {
-          this.enablelist_add_user = [true, true];
-          return;
+      if (this.error_text_id === "") {
+        if (this.error_text_pass === "") {
+          if (this.error_text_user_name === "") {
+            this.enablelist_add_user = [true, true];
+            return;
+          }
         }
       }
       this.enablelist_add_user = [true, false];
@@ -122,7 +142,7 @@ export default {
 };
 </script>
 <style type="text/css">
-.div__adduser-form-controls {
+.div__AddUser-form-controls {
   transform: rotate(0deg);
   box-sizing: border-box;
   padding: 0px;
@@ -130,7 +150,7 @@ export default {
   background: rgb(17, 17, 17);
   position: absolute;
   width: 500px;
-  height: 307px;
+  height: 401px;
   top: 0px;
   left: 0px;
   visibility: visible;
@@ -140,7 +160,7 @@ export default {
   z-index: 3;
   pointer-events: all;
 }
-.span__adduser-form-controls-content-title {
+.span__AddUser-form-controls-content-title {
   pointer-events: all;
   line-height: 100%;
   transform: rotate(0deg);
@@ -162,7 +182,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget > #input-widget-field-nickname-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-username {
   font-family: Muli;
 }
 </style>

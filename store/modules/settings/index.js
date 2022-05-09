@@ -3,16 +3,11 @@ import getters from "./getters";
 import mutations from "./mutations";
 
 const default_state = {
-  customer_details: {
-    cust_idx: null,
-    cust_id: null,
-    pass_key: null,
-    user_account_id: null,
-  },
   auto_upload: false,
   auto_delete: false,
-  customer_account_ids: [],
-  customer_index: null,
+  user_accounts: [],
+  stored_customer_id: null,
+  active_user_index: null,
   log_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\logs_flask",
   root_downloads_path: "C:\\Users\\username\\Downloads",
   root_recording_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\recordings",

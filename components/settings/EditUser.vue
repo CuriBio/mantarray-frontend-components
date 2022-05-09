@@ -1,32 +1,46 @@
 <template>
   <div>
     <div class="div__edituser-form-controls"></div>
-    <span class="span__edituser-form-controls-content-title"> Edit&nbsp;<wbr />User&nbsp;<wbr />ID </span>
+    <span class="span__edituser-form-controls-content-title">
+      Edit&nbsp;<wbr />User&nbsp;<wbr />Credentials
+    </span>
     <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
-        :title_label="'Alphanumeric ID'"
-        :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
-        :initial_value="uuid"
-        :invalid_text="error_text_uuid"
+        :title_label="'Customer ID'"
+        :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
+        :invalid_text="error_text_id"
+        :initial_value="customer_id"
         :spellcheck="false"
         :input_width="400"
-        :dom_id_suffix="'alphanumeric-id'"
-        @update:value="on_update_uuid($event)"
+        :dom_id_suffix="'customer-id'"
+        @update:value="on_update_id($event)"
       ></InputWidget>
     </div>
-
-    <div id="nickname" style="top: 145px; left: 50px; position: absolute; z-index: 23">
+    <div id="user_name" style="top: 145px; left: 50px; position: absolute; z-index: 23">
       <InputWidget
-        :title_label="'ID Nickname'"
-        :placeholder="'Marie Curie'"
-        :initial_value="nickname"
-        :invalid_text="error_text_nickname"
+        :title_label="'Username'"
+        :placeholder="'Curi Bio User'"
+        :invalid_text="error_text_user_name"
+        :initial_value="user_name"
         :input_width="400"
-        :dom_id_suffix="'nickname-id'"
-        @update:value="on_update_nickname($event)"
+        :dom_id_suffix="'username'"
+        @update:value="on_update_user_name($event)"
       ></InputWidget>
     </div>
-    <div style="top: 254px; left: 0px; position: absolute">
+    <div id="passkey" style="top: 241px; left: 50px; position: absolute; z-index: 22">
+      <InputWidget
+        :title_label="'Password'"
+        :placeholder="'2VSckkBYr2An3dqHEyfRRE'"
+        :invalid_text="error_text_pass"
+        :initial_value="user_password"
+        :type="'password'"
+        :spellcheck="false"
+        :input_width="400"
+        :dom_id_suffix="'passkey-id'"
+        @update:value="on_update_pass($event)"
+      ></InputWidget>
+    </div>
+    <div style="top: 350px; left: 0px; position: absolute">
       <ButtonWidget
         :button_widget_width="500"
         :button_widget_height="50"
@@ -43,7 +57,6 @@
 </template>
 <script>
 import Vue from "vue";
-import uuid from "@tofandel/uuid-base62";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
@@ -54,10 +67,8 @@ Vue.use(BootstrapVue);
 Vue.component("BFormInput", BFormInput);
 Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
-Vue.use(uuid);
-const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
+const TextValidation_User = new TextValidation("user_account_input");
 
-const TextValidation_Nickname = new TextValidation("customer_account_input");
 export default {
   name: "EditUser",
   components: {
@@ -66,27 +77,53 @@ export default {
   },
   props: {
     dialogdata: { type: Object, default: null },
-    dataindex: { type: Number, default: 0 },
+    open_for_invalid_creds: { type: Boolean, default: false },
   },
   data() {
     return {
-      uuid: this.dialogdata.uuid,
-      nickname: this.dialogdata.nickname,
-      error_text_uuid: "",
-      error_text_nickname: "",
+      customer_id: this.dialogdata.customer_id,
+      user_name: this.dialogdata.user_name,
+      user_password: this.dialogdata.user_password,
+      error_text_id: "",
+      error_text_pass: "",
+      error_text_user_name: "",
       enablelist_edit_user: [true, true, true],
     };
   },
+  created() {
+    if (this.open_for_invalid_creds) {
+      this.error_text_id = "Invalid Customer ID, Username, or Password";
+      this.error_text_pass = "Invalid Customer ID, Username, or Password";
+      this.error_text_user_name = "Invalid Customer ID, Username, or Password";
+      this.enablelist_edit_user = [true, true, false];
+    }
+  },
   methods: {
-    on_update_uuid: function (new_value) {
-      this.error_text_uuid = TextValidation_UUIDBase57.validate(new_value);
-      this.uuid = new_value;
+    on_update_id: function (new_value) {
+      this.error_text_id = TextValidation_User.validate(new_value, "ID");
+      if (this.open_for_invalid_creds && this.error_text_id.length === 0) {
+        this.error_text_pass = "";
+        this.error_text_user_name = "";
+      }
+      this.customer_id = new_value;
       this.enable_save_button();
     },
-
-    on_update_nickname: function (new_value) {
-      this.error_text_nickname = TextValidation_Nickname.validate(new_value, "nickname");
-      this.nickname = new_value;
+    on_update_pass: function (new_value) {
+      this.error_text_pass = TextValidation_User.validate(new_value, "passkey");
+      if (this.open_for_invalid_creds && this.error_text_pass.length === 0) {
+        this.error_text_id = "";
+        this.error_text_user_name = "";
+      }
+      this.user_password = new_value;
+      this.enable_save_button();
+    },
+    on_update_user_name: function (new_value) {
+      this.error_text_user_name = TextValidation_User.validate(new_value, "user_name");
+      if (this.open_for_invalid_creds && this.error_text_user_name.length === 0) {
+        this.error_text_id = "";
+        this.error_text_pass = "";
+      }
+      this.user_name = new_value;
       this.enable_save_button();
     },
     clicked_button: function (choice) {
@@ -98,7 +135,7 @@ export default {
           this.delete_user();
           break;
         case 2:
-          this.save_edituser();
+          this.save_user();
           break;
       }
     },
@@ -106,26 +143,23 @@ export default {
       this.$emit("cancel-id");
     },
     delete_user() {
-      const delete_user = {
-        user_id: this.dataindex,
-        uuid: this.uuid,
-        nickname: this.nickname,
-      };
-      this.$emit("delete-id", delete_user);
+      this.$emit("delete-id");
     },
-    save_edituser() {
+    save_user() {
       const edit_user = {
-        user_id: this.dataindex,
-        uuid: this.uuid,
-        nickname: this.nickname,
+        customer_id: this.customer_id,
+        user_password: this.user_password,
+        user_name: this.user_name,
       };
       this.$emit("save-id", edit_user);
     },
     enable_save_button() {
-      if (this.error_text_uuid === "") {
-        if (this.error_text_nickname === "") {
-          this.enablelist_edit_user = [true, true, true];
-          return;
+      if (this.error_text_id === "") {
+        if (this.error_text_pass === "") {
+          if (this.error_text_user_name === "") {
+            this.enablelist_edit_user = [true, true, true];
+            return;
+          }
         }
       }
       this.enablelist_edit_user = [true, true, false];
@@ -142,7 +176,7 @@ export default {
   background: rgb(17, 17, 17);
   position: absolute;
   width: 500px;
-  height: 307px;
+  height: 401px;
   top: 0px;
   left: 0px;
   visibility: visible;
@@ -174,7 +208,7 @@ export default {
   text-align: center;
   z-index: 21;
 }
-.span__input-controls-content-input-txt-widget > #input-widget-field-nickname-id {
+.span__input-controls-content-input-txt-widget > #input-widget-field-username {
   font-family: Muli;
 }
 </style>

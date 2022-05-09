@@ -60,18 +60,6 @@ describe("DataAnalysisControl.vue", () => {
     expect(wrapper.vm.warning_modal_labels.msg_two).toBe(recording_message.root_recording_path);
   });
 
-  test("When the data_analysis_directory gets updated in the store, Then the anaysis_complete_modal_labels get updated with the path", async () => {
-    wrapper = mount(DataAnalysisControl, {
-      store,
-      localVue,
-    });
-
-    const expected_analysis_path = "C:\\recording\\path\\";
-
-    await store.commit(`settings/set_data_analysis_directory`, expected_analysis_path);
-    expect(wrapper.vm.anaysis_complete_modal_labels.msg_two).toBe(expected_analysis_path);
-  });
-
   test("When a user selects the Select Files button and another process is running, Then nothing will happen", async () => {
     wrapper = mount(DataAnalysisControl, {
       store,
@@ -161,7 +149,7 @@ describe("DataAnalysisControl.vue", () => {
       store,
       localVue,
     });
-    const get_url = "http://localhost:4567/get_recordings_list";
+    const get_url = "http://localhost:4567/get_recordings";
     mocked_axios
       .onGet(get_url)
       .reply(200, { root_recording_path: "C:\\test\\recording\\path", recordings_list: ["rec_1", "rec_2"] });
@@ -179,7 +167,7 @@ describe("DataAnalysisControl.vue", () => {
       store,
       localVue,
     });
-    const get_url = "http://localhost:4567/get_recordings_list";
+    const get_url = "http://localhost:4567/get_recordings";
     mocked_axios
       .onGet(get_url)
       .reply(200, { root_recording_path: "C:\\test\\recording\\path", recordings_list: [] });

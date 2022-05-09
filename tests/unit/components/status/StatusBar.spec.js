@@ -162,7 +162,7 @@ describe("StatusWidget.vue", () => {
         });
 
         await store.commit("flask/set_status_uuid", STATUS.MESSAGE[vuex_state]);
-        await wrapper.setProps({ confirmation_request: true });
+        await store.commit("settings/set_confirmation_request", true);
         expect(confirmation_spy).toHaveBeenCalledWith(1);
 
         Vue.nextTick(() => {
@@ -181,12 +181,12 @@ describe("StatusWidget.vue", () => {
         });
         await store.commit("flask/set_status_uuid", STATUS.MESSAGE[vuex_state]);
 
-        await wrapper.setProps({ confirmation_request: false });
+        await store.commit("settings/set_confirmation_request", false);
         Vue.nextTick(() => {
           expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(false);
         });
 
-        await wrapper.setProps({ confirmation_request: true });
+        await store.commit("settings/set_confirmation_request", true);
         Vue.nextTick(() => {
           expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(true);
         });
@@ -200,14 +200,32 @@ describe("StatusWidget.vue", () => {
       });
 
       await store.commit("stimulation/set_stim_play_state", true);
-      await wrapper.setProps({ confirmation_request: false });
+      await store.commit("settings/set_confirmation_request", false);
       Vue.nextTick(() => {
         expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(false);
       });
 
-      await wrapper.setProps({ confirmation_request: true });
+      await store.commit("settings/set_confirmation_request", true);
       Vue.nextTick(() => {
         expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(true);
+      });
+    });
+
+    test("When a user wants to exit the desktop app and a data analysis is active, Then the closure warning modal will not appear", async () => {
+      wrapper = mount(StatusWidget, {
+        store,
+        localVue,
+      });
+
+      await store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.ACTIVE);
+      await store.commit("settings/set_confirmation_request", false);
+      Vue.nextTick(() => {
+        expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(false);
+      });
+
+      await store.commit("settings/set_confirmation_request", true);
+      Vue.nextTick(() => {
+        expect(wrapper.find("#ops-closure-warning").isVisible()).toBe(false);
       });
     });
 
@@ -220,12 +238,12 @@ describe("StatusWidget.vue", () => {
         });
         await store.commit("flask/set_status_uuid", STATUS.MESSAGE[vuex_state]);
 
-        await wrapper.setProps({ confirmation_request: false });
+        await store.commit("settings/set_confirmation_request", false);
         Vue.nextTick(() => {
           expect(wrapper.find("#fw-closure-warning").isVisible()).toBe(false);
         });
 
-        await wrapper.setProps({ confirmation_request: true });
+        await store.commit("settings/set_confirmation_request", true);
         Vue.nextTick(() => {
           expect(wrapper.find("#fw-closure-warning").isVisible()).toBe(true);
         });

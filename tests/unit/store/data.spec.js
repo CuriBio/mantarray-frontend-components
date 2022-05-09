@@ -448,7 +448,10 @@ describe("store/data", () => {
       }
     );
     test("When a user starts a data analysis on selected recordings and they complete, Then a websocket message will be sent notifying user of completion and set directory of where to locate files", async () => {
-      const expected_message = { data_analysis_directory: "C:\\test\\analysis\\path\\" };
+      const expected_message = {
+        output_dir: "C:\\test\\analysis\\path\\",
+        failed_recordings: ["rec_1", "rec_2", "rec_3"],
+      };
 
       await new Promise((resolve) => {
         socket_server_side.emit("data_analysis_complete", JSON.stringify(expected_message), (ack) => {
@@ -456,7 +459,8 @@ describe("store/data", () => {
         });
       });
 
-      expect(store.state.settings.data_analysis_directory).toBe(expected_message.data_analysis_directory);
+      expect(store.state.settings.data_analysis_directory).toBe(expected_message.output_dir);
+      expect(store.state.settings.failed_recordings).toStrictEqual(expected_message.failed_recordings);
       expect(store.state.playback.data_analysis_state).toBe(ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
     });
 
@@ -640,7 +644,7 @@ describe("store/data", () => {
     });
     test("When backend emits prompt_user_input message with customer_creds as input type, Then ws client sets correct flag in store", async () => {
       const message = {
-        input_type: "customer_creds",
+        input_type: "user_creds",
       };
 
       // confirm precondition

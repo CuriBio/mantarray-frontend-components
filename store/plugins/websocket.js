@@ -102,17 +102,18 @@ export default function create_web_socket_plugin(socket) {
     });
     socket.on("prompt_user_input", (message_json, cb) => {
       const message = JSON.parse(message_json);
-      if (message.input_type === "customer_creds") {
+      if (message.input_type === "user_creds") {
         store.commit("settings/set_user_cred_input_needed", true);
       }
 
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
-    socket.on("mag_analysis_complete", async (message_json, cb) => {
+    socket.on("data_analysis_complete", async (message_json, cb) => {
       const message = JSON.parse(message_json);
 
       await store.commit("settings/set_data_analysis_directory", message.output_dir);
+
       if (message.failed_recordings)
         await store.commit("settings/set_failed_recordings", message.failed_recordings);
 

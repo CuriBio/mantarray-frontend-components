@@ -4,7 +4,7 @@ import { TextValidation as DistTextValidation } from "@/dist/mantarray.common";
 const TextValidation_BarcodeViewer = new TextValidation("plate_barcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
 const TextValidation_Alphanumeric = new TextValidation("alphanumeric");
-const TextValidation_user_account_id = new TextValidation("customer_account_input");
+const TextValidation_user_account = new TextValidation("user_account_input");
 const TextValidation_MyRule = new TextValidation("myrule");
 
 describe("DistTextValidation", () => {
@@ -26,9 +26,9 @@ describe("TextValidation", () => {
     const validation = TextValidation_Alphanumeric;
     expect(validation.toString()).toStrictEqual("TextValidation.alphanumeric");
   });
-  test("Given a text validation is for user_account_id, When called toString(), Then return would match the text rule of 'user_account_id' applied", () => {
-    const validation = TextValidation_user_account_id;
-    expect(validation.toString()).toStrictEqual("TextValidation.customer_account_input");
+  test("Given a text validation is for user_name, When called toString(), Then return would match the text rule of 'user_name' applied", () => {
+    const validation = TextValidation_user_account;
+    expect(validation.toString()).toStrictEqual("TextValidation.user_account_input");
   });
   test("Given a text validation is for Myrule, When called for validate, Then return would thow an error", () => {
     const validation = TextValidation_MyRule;
@@ -126,20 +126,18 @@ describe("TextValidation.validate_uuidBase_fiftyseven_encode", () => {
 //     }
 //   );
 // });
-describe("TextValidation.validate_customer_account_input", () => {
+describe("TextValidation.validate_user_account_input", () => {
   test.each([
     ["C", ""],
     ["Experiment anemia -1", ""],
     [null, "This field is required"],
     ["Experiment anemia -1234567890-1234567890", "Invalid as its more than 36 charcters"],
   ])(
-    "Given the user_account_id %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
-    (user_account_id_id, message) => {
+    "Given the user_name %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
+    (user_name_id, message) => {
       const text = message;
-      const TestValidationuser_account_id = TextValidation_user_account_id;
-      expect(TestValidationuser_account_id.validate(user_account_id_id, "user_account_id")).toStrictEqual(
-        text
-      );
+      const TestValidationuser_name = TextValidation_user_account;
+      expect(TestValidationuser_name.validate(user_name_id, "user_name")).toStrictEqual(text);
     }
   );
 });

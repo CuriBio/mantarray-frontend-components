@@ -20,7 +20,7 @@
       >
         <StatusWarningWidget
           :modal_labels="fw_updates_complete_labels"
-          @handle_confirmation="close_modals_by_id(['fw-updates-complete-messages'])"
+          @handle_confirmation="close_modals_by_id(['fw-updates-complete-message'])"
         />
       </b-modal>
       <b-modal
@@ -432,8 +432,8 @@ export default {
 #fw-closure-warning,
 #ops-closure-warning,
 #del-protocol-modal,
-#add-customer,
-#edit-customer,
+#add-user,
+#edit-user,
 #add-user,
 #edit-user,
 #short-circuit-err,

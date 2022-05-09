@@ -152,7 +152,7 @@ describe("UploadFilesWidget.vue", () => {
     expect(watch_spy).toHaveBeenCalledTimes(2);
     expect(wrapper.vm.modal_labels).toStrictEqual({
       header: "Successful Upload!",
-      msg_one: `The following recording was successfully uploaded: test_file_name_2.`,
+      msg_one: `The following recording was successfully uploaded and analyzed: test_file_name_2. It has been downloaded here:`,
       msg_two: `C:\\Users\\username\\Downloads\\test_file_name_2.xlsx`,
       button_names: ["Close"],
     });
