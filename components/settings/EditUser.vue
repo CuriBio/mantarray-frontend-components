@@ -4,7 +4,7 @@
     <span class="span__edituser-form-controls-content-title">
       Edit&nbsp;<wbr />User&nbsp;<wbr />Credentials
     </span>
-    <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
+    <div id="customer_id" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
         :title_label="'Customer ID'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"

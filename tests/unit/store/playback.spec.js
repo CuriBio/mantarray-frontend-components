@@ -451,7 +451,9 @@ describe("store/playback", () => {
         store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: test_plate_barcode });
         store.dispatch("playback/validate_barcode", { type: "stim_barcode", new_value: test_stim_barcode });
 
-        await store.dispatch("playback/start_recording");
+        const test_recording_name = "Test Name";
+
+        await store.dispatch("playback/start_recording", test_recording_name);
 
         expect(mocked_axios.history.get[0].url).toStrictEqual(`${base_url}/${api}`);
         expect(mocked_axios.history.get[0].params).toStrictEqual({
@@ -459,6 +461,7 @@ describe("store/playback", () => {
           plate_barcode: test_plate_barcode,
           stim_barcode: test_stim_barcode,
           is_hardware_test_recording: false,
+          recording_name: test_recording_name,
         });
 
         expect(store.state.playback.playback_state).toStrictEqual(

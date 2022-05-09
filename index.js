@@ -77,6 +77,7 @@ export { default as RecordingTime } from "./components/status/RecordingTime.vue"
 export { default as SimulationMode } from "./components/status/SimulationMode.vue";
 export { default as ErrorCatchWidget } from "./components/status/ErrorCatchWidget.vue";
 export { default as UploadFilesWidget } from "./components/status/UploadFilesWidget.vue";
+export { default as RecordingNameInputWidget } from "@/components/status/RecordingNameInputWidget.vue";
 export { default as GradientBar } from "./components/status/GradientBar.vue";
 export { default as StatusWarningWidget } from "./components/status/StatusWarningWidget.vue";
 export { default as StatusSpinnerWidget } from "./components/status/StatusSpinnerWidget.vue";

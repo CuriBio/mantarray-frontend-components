@@ -143,6 +143,8 @@
     >
       <SettingsForm @close_modal="close_settings_modal" />
     </b-modal>
+    <!-- TODO Tanner (5/6/22): could probably clean this up a lot by only using a single StatusWarningWidget and changing the modal labels accordingly
+     and handling the close behavior accordingly-->
     <b-modal
       id="calibration-warning"
       size="sm"
@@ -233,6 +235,21 @@
         @handle_confirmation="close_recording_limit_modal"
       />
     </b-modal>
+    <b-modal
+      id="recording-name-input-prompt-message"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <RecordingNameInputWidget
+        id="recording-name-input-prompt"
+        :default_recording_name="default_recording_name"
+        @handle_confirmation="start_recording"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -246,6 +263,7 @@ import { faPlayCircle as fa_play_circle, faSpinner as fa_spinner } from "@fortaw
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import SettingsForm from "@/components/settings/SettingsForm.vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+import RecordingNameInputWidget from "@/components/status/RecordingNameInputWidget.vue";
 
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
@@ -300,7 +318,13 @@ library.add(fa_spinner);
  */
 export default {
   name: "DesktopPlayerControls",
-  components: { PlayerControlsSettingsButton, FontAwesomeIcon, SettingsForm, StatusWarningWidget },
+  components: {
+    PlayerControlsSettingsButton,
+    FontAwesomeIcon,
+    SettingsForm,
+    StatusWarningWidget,
+    RecordingNameInputWidget,
+  },
   data: function () {
     return {
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES, // Eli (5/8/20): (this seems) needed to give access to the imported playback_module the v-show directives
@@ -311,6 +335,7 @@ export default {
       record_title: "Record",
       settings_tooltip_text: "Edit account settings",
       schedule_tooltip_text: "(Not Yet Available)",
+      default_recording_name: "",
       recording_timer: null,
       calibration_modal_labels: {
         header: "Warning!",
@@ -504,15 +529,35 @@ export default {
   methods: {
     on_activate_record_click: function () {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
-        this.$store.dispatch("playback/start_recording");
-
-        this.recording_timer = setTimeout(() => {
-          if (this.playback_state === this.playback_state_enums.RECORDING) {
-            this.$bvModal.show("recording-limit-warning");
-            this.on_stop_record_click();
-          }
-        }, 5 * 60e3);
+        this.default_recording_name = this.generate_default_recording_name();
+        this.$bvModal.show("recording-name-input-prompt-message");
       }
+    },
+    generate_default_recording_name() {
+      const barcode = this.barcodes.plate_barcode.value;
+
+      const now = new Date();
+      const utc_year = now.getUTCFullYear();
+      const utc_month = (now.getUTCMonth() + 1).toString().padStart(2, "0"); // UTC Month is zero-based for some reason
+      const utc_day = now.getUTCDate().toString().padStart(2, "0");
+      const utc_hour = now.getUTCHours().toString().padStart(2, "0");
+      const utc_min = now.getUTCMinutes().toString().padStart(2, "0");
+      const utc_sec = now.getUTCSeconds().toString().padStart(2, "0");
+
+      const default_name = `${barcode}__${utc_year}_${utc_month}_${utc_day}_${utc_hour}${utc_min}${utc_sec}`;
+      return default_name;
+    },
+    start_recording: function (file_name) {
+      this.$bvModal.hide("recording-name-input-prompt-message");
+
+      this.$store.dispatch("playback/start_recording", file_name);
+
+      this.recording_timer = setTimeout(() => {
+        if (this.playback_state === this.playback_state_enums.RECORDING) {
+          this.$bvModal.show("recording-limit-warning");
+          this.on_stop_record_click();
+        }
+      }, 5 * 60e3);
     },
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
@@ -746,7 +791,8 @@ export default {
 #user-input-prompt-message,
 #fw-update-available-message,
 #five-min-warning,
-#one-min-warning {
+#one-min-warning,
+#recording-name-input-prompt-message {
   position: fixed;
   margin: 5% auto;
   top: 15%;

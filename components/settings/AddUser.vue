@@ -2,7 +2,7 @@
   <div>
     <div class="div__AddUser-form-controls"></div>
     <span class="span__AddUser-form-controls-content-title"> Add&nbsp;<wbr />New&nbsp;<wbr />User </span>
-    <div id="uuid" style="top: 50px; left: 50px; position: absolute; z-index: 24">
+    <div id="customer_id" style="top: 50px; left: 50px; position: absolute; z-index: 24">
       <InputWidget
         :title_label="'Enter Customer ID'"
         :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
