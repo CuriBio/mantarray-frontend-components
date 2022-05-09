@@ -2,6 +2,15 @@ Changelog for Mantarray Frontend Components
 ===========================================
 
 
+0.7.1 (2022-05-09)
+------------------
+
+Added:
+^^^^^^
+
+- RecordingNameInputWidget modal pop up after start recording button pressed
+
+
 0.7.0 (2022-05-05)
 ------------------
 
