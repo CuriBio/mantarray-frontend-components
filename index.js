@@ -44,8 +44,11 @@ export { default as DesktopPlayerControls } from "./components/playback/controls
 export { default as PlayerControlsSettingsButton } from "./components/playback/controls/player/PlayerControlsSettingsButton.vue";
 export { default as BarcodeViewer } from "./components/playback/controls/BarcodeViewer.vue";
 export { default as StimulationControls } from "./components/playback/controls/StimulationControls.vue";
+
+// Data Analysis Components
 export { default as DataAnalysisWidget } from "./components/playback/controls/data_analysis/DataAnalysisWidget.vue";
 export { default as DataAnalysisControl } from "./components/playback/controls/data_analysis/DataAnalysisControl.vue";
+export { default as DataAnalysisCompleteWidget } from "./components/playback/controls/data_analysis/DataAnalysisCompleteWidget.vue";
 
 // Settings Components
 export { default as SettingsForm } from "./components/settings/SettingsForm.vue";

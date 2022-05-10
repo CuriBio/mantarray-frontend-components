@@ -43,7 +43,7 @@ describe("DataAnalysisWidget.vue", () => {
       localVue,
     });
     expect(wrapper.find(".span__data-analysis-label").text()).toBe("Start analysis");
-    expect(wrapper.find(".div__data-analysis-background").attributes().style).toContain("height: 420px;");
+    expect(wrapper.find(".div__data-analysis-background").attributes().style).toContain("height: 450px;");
     expect(wrapper.find(".div__data-analysis-button-container").isVisible()).toBe(true);
   });
 
@@ -64,9 +64,8 @@ describe("DataAnalysisWidget.vue", () => {
 
       expect(wrapper.vm.selected_recordings).toStrictEqual([]);
 
-      await wrapper.findAll(".custom-control-input").at(0).trigger("click");
-
-      await wrapper.findAll(".custom-control-input").at(3).trigger("click");
+      await wrapper.findAll(".div__recording-list-item").at(0).trigger("click");
+      await wrapper.findAll(".div__recording-list-item").at(3).trigger("click");
 
       expect(wrapper.vm.selected_recordings).toStrictEqual(["rec_1", "rec_4"]);
 
@@ -77,6 +76,36 @@ describe("DataAnalysisWidget.vue", () => {
     }
   );
 
+  test("When a user selects multiple recordings and selects Run, Then all recording be emitted to start analyses", async () => {
+    // set up directories in state
+    const recording_message = {
+      root_recording_path: "C:\\recording\\path\\",
+      recordings_list: [
+        { name: "rec_1" },
+        { name: "rec_2" },
+        { name: "rec_3" },
+        { name: "rec_4" },
+        { name: "rec_5" },
+      ],
+    };
+    await store.commit(`settings/set_recording_dirs`, recording_message);
+
+    wrapper = mount(DataAnalysisWidget, {
+      store,
+      localVue,
+    });
+
+    await wrapper.findAll(".div__recording-list-item").at(1).trigger("click");
+    await wrapper.findAll(".div__recording-list-item").at(4).trigger("click");
+
+    // click cancel
+    await wrapper.findAll(".span__button_label").at(2).trigger("click");
+
+    expect(wrapper.emitted("send_confirmation")).toStrictEqual([
+      [{ idx: 2, selected_recordings: ["rec_2", "rec_5"] }],
+    ]);
+  });
+
   test("When data_analysis_state is not READY, Then buttons will not be visible, modal height will change, and spinner will appear", async () => {
     wrapper = mount(DataAnalysisWidget, {
       store,
@@ -84,7 +113,7 @@ describe("DataAnalysisWidget.vue", () => {
     });
 
     expect(wrapper.find(".span__data-analysis-label").text()).toBe("Start analysis");
-    expect(wrapper.find(".div__data-analysis-background").attributes().style).toContain("height: 420px;");
+    expect(wrapper.find(".div__data-analysis-background").attributes().style).toContain("height: 450px;");
     expect(wrapper.find(".div__data-analysis-button-container").isVisible()).toBe(true);
     expect(store.state.playback.data_analysis_state).toBe(ENUMS.DATA_ANALYSIS_STATE.READY);
 

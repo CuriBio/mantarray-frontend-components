@@ -1,29 +1,25 @@
 <template>
   <div>
-    <DataAnalysisWidget />
+    <DataAnalysisCompleteWidget />
     <button class="update-button" @click="update_directories">Update directories</button>
   </div>
 </template>
 
 <script>
-// import { DataAnalysisWidget } from "../../../../dist/mantarray.common";
-import DataAnalysisWidget from "@/components/playback/controls/data_analysis/DataAnalysisWidget.vue";
+import DataAnalysisCompleteWidget from "@/components/playback/controls/data_analysis/DataAnalysisCompleteWidget.vue";
 
 export default {
   components: {
-    DataAnalysisWidget,
+    DataAnalysisCompleteWidget,
   },
   methods: {
     update_directories: function () {
       const recordings = {
-        root_recording_path: "C:\\recording\\path\\users\\MantarrayController\recordings",
-        recordings_list: [
-          { name: "rec_1000000000000000000000000000000000000000000", creation_time: "01-01-2022 11:59.59" },
-          { name: "rec_2", creation_time: "01-01-2023 11:59.59" },
-          { name: "rec_3", creation_time: "01-01-2024 11:59.59" },
-        ],
+        data_analysis_path: "C:\\recording\\path\\users\\MantarrayController\\time_force_data",
+        recordings_list: ["rec_1", "rec_2", "rec3", "rec_1", "rec_2", "rec3", "rec_1", "rec_2", "rec3"],
       };
-      this.$store.commit("settings/set_recording_dirs", recordings);
+      this.$store.commit("settings/set_failed_recordings", recordings.recordings_list);
+      this.$store.commit("settings/set_data_analysis_directory", recordings.data_analysis_path);
     },
   },
 };

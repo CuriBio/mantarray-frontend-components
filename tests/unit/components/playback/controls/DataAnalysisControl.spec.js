@@ -1,7 +1,6 @@
 import { mount, shallowMount } from "@vue/test-utils";
 const wait_for_expect = require("wait-for-expect");
 import Vuex from "vuex";
-import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import { createLocalVue } from "@vue/test-utils";
@@ -10,7 +9,7 @@ import DataAnalysisControl from "@/components/playback/controls/data_analysis/Da
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import { ENUMS } from "@/store/modules/playback/enums";
 import * as axios_helpers from "@/js_utils/axios_helpers.js";
-
+import Vue from "vue";
 const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(VueAxios, axios);
@@ -58,18 +57,6 @@ describe("DataAnalysisControl.vue", () => {
 
     await store.commit(`settings/set_recording_dirs`, recording_message);
     expect(wrapper.vm.warning_modal_labels.msg_two).toBe(recording_message.root_recording_path);
-  });
-
-  test("When the data_analysis_directory gets updated in the store, Then the anaysis_complete_modal_labels get updated with the path", async () => {
-    wrapper = mount(DataAnalysisControl, {
-      store,
-      localVue,
-    });
-
-    const expected_analysis_path = "C:\\recording\\path\\";
-
-    await store.commit(`settings/set_data_analysis_directory`, expected_analysis_path);
-    expect(wrapper.vm.anaysis_complete_modal_labels.msg_two).toBe(expected_analysis_path);
   });
 
   test("When a user selects the Select Files button and another process is running, Then nothing will happen", async () => {
@@ -161,7 +148,7 @@ describe("DataAnalysisControl.vue", () => {
       store,
       localVue,
     });
-    const get_url = "http://localhost:4567/get_recordings_list";
+    const get_url = "http://localhost:4567/get_recordings";
     mocked_axios
       .onGet(get_url)
       .reply(200, { root_recording_path: "C:\\test\\recording\\path", recordings_list: ["rec_1", "rec_2"] });
@@ -174,12 +161,38 @@ describe("DataAnalysisControl.vue", () => {
       expect(wrapper.findAll(".div__checkbox-background")).toHaveLength(2);
     });
   });
+
+  test.each([
+    ["ACTIVE", true],
+    ["COMPLETE", false],
+    ["ERROR", false],
+    ["READY", false],
+  ])(
+    "When a user selects to close the window, Then the confirmation modal will appear only if the data analysis state is ACTIVE",
+    async (state, bool) => {
+      wrapper = mount(DataAnalysisControl, {
+        store,
+        localVue,
+      });
+
+      await store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE[state]);
+      await store.commit("settings/set_confirmation_request", true);
+
+      Vue.nextTick(() => {
+        expect(wrapper.find("#analysis-closure-warning").isVisible()).toBe(bool);
+        wrapper.find(".span__button_label").trigger("click");
+      });
+
+      wrapper.vm.handle_confirmation(0);
+      expect(wrapper.emitted("send_confirmation")).toStrictEqual([[0]]);
+    }
+  );
   test("When a user selects the Select Files button, Then a modal will appear warning user that there were no recordings found if an empty array is returned from BE", async () => {
     wrapper = mount(DataAnalysisControl, {
       store,
       localVue,
     });
-    const get_url = "http://localhost:4567/get_recordings_list";
+    const get_url = "http://localhost:4567/get_recordings";
     mocked_axios
       .onGet(get_url)
       .reply(200, { root_recording_path: "C:\\test\\recording\\path", recordings_list: [] });

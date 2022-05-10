@@ -110,9 +110,13 @@ export default function create_web_socket_plugin(socket) {
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
     socket.on("data_analysis_complete", async (message_json, cb) => {
-      const { data_analysis_directory } = JSON.parse(message_json);
+      const message = JSON.parse(message_json);
 
-      await store.commit("settings/set_data_analysis_directory", data_analysis_directory);
+      await store.commit("settings/set_data_analysis_directory", message.output_dir);
+
+      if (message.failed_recordings)
+        await store.commit("settings/set_failed_recordings", message.failed_recordings);
+
       await store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
 
       /* istanbul ignore else */

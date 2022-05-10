@@ -214,7 +214,7 @@ describe("store/settings", () => {
       }
     );
     test("When a user selects Select Files to start a new data analysis, Then a request to the BE is made returning list of local directories and root path", async () => {
-      const get_url = "http://localhost:4567/get_recordings_list";
+      const get_url = "http://localhost:4567/get_recordings";
       const test_recordings = {
         recordings_list: ["rec_1", "rec_2", "rec_3"],
         root_recording_path: "C\\test\\recording\\path\\",

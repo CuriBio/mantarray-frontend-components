@@ -43,9 +43,7 @@
       :static="true"
       :no-close-on-backdrop="true"
     >
-      <StatusWarningWidget
-        :include_filepath="true"
-        :modal_labels="anaysis_complete_modal_labels"
+      <DataAnalysisCompleteWidget
         @handle_confirmation="close_analysis_complete_modal('data-analysis-complete')"
       />
     </b-modal>
@@ -63,12 +61,24 @@
         @handle_confirmation="close_analysis_complete_modal('data-analysis-error')"
       />
     </b-modal>
+    <b-modal
+      id="analysis-closure-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget @handle_confirmation="handle_confirmation" />
+    </b-modal>
   </div>
 </template>
 <script>
 import { ENUMS } from "@/store/modules/playback/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import DataAnalysisWidget from "@/components/playback/controls/data_analysis/DataAnalysisWidget.vue";
+import DataAnalysisCompleteWidget from "@/components/playback/controls/data_analysis/DataAnalysisCompleteWidget.vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 
 import BootstrapVue from "bootstrap-vue";
@@ -81,10 +91,11 @@ Vue.component("BModal", BModal);
 Vue.directive("b-popover", VBPopover);
 
 export default {
-  name: "MagFindAnalysisControl",
+  name: "DataAnalysisControl",
   components: {
     DataAnalysisWidget,
     StatusWarningWidget,
+    DataAnalysisCompleteWidget,
   },
   data: function () {
     return {
@@ -92,12 +103,6 @@ export default {
         header: "No Recordings Found!",
         msg_one: `There were no recordings found. Please ensure that they are located in the correct directory: `,
         msg_two: "C:\\recording\\path\\placeholder",
-        button_names: ["Close"],
-      },
-      anaysis_complete_modal_labels: {
-        header: "Complete!",
-        msg_one: `All analyses complete. They can be found at: `,
-        msg_two: "C:\\analysis\\path\\placeholder",
         button_names: ["Close"],
       },
       anaysis_error_modal_labels: {
@@ -109,7 +114,12 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["recordings_list", "root_recording_path", "data_analysis_directory"]),
+    ...mapState("settings", [
+      "recordings_list",
+      "root_recording_path",
+      "data_analysis_directory",
+      "confirmation_request",
+    ]),
     ...mapState("playback", ["data_analysis_state", "playback_state"]),
     ...mapState("stimulation", ["stim_status"]),
     is_data_analysis_enabled: function () {
@@ -147,8 +157,10 @@ export default {
         this.$bvModal.show("data-analysis-error");
       }
     },
-    data_analysis_directory: function (new_dir, _) {
-      this.anaysis_complete_modal_labels.msg_two = new_dir;
+    confirmation_request: function (new_val, _) {
+      if (new_val && this.data_analysis_state === ENUMS.DATA_ANALYSIS_STATE.ACTIVE) {
+        this.$bvModal.show("analysis-closure-warning");
+      }
     },
   },
   methods: {
@@ -167,6 +179,11 @@ export default {
     close_analysis_complete_modal: function (id) {
       this.$bvModal.hide(id);
       this.$store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.READY);
+      this.$store.commit("settings/set_failed_recordings", []);
+      this.$store.commit("playback/set_selected_recordings", []);
+    },
+    handle_confirmation: function (idx) {
+      this.$emit("send_confirmation", idx);
     },
   },
 };
@@ -195,7 +212,8 @@ export default {
   margin-top: 15px;
   font-size: 15px;
 }
-#start-data-analysis {
+#start-data-analysis,
+#data-analysis-complete {
   position: fixed;
   margin: 5% auto;
   top: 10%;
@@ -203,8 +221,8 @@ export default {
   right: 0;
 }
 
+#analysis-closure-warning,
 #no-recordings-warning,
-#data-analysis-complete,
 #data-analysis-error {
   position: fixed;
   margin: 5% auto;

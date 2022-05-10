@@ -144,10 +144,6 @@ export default {
     StimQCSummary,
   },
   props: {
-    confirmation_request: {
-      type: Boolean,
-      default: false,
-    },
     stim_specific: {
       type: Boolean,
       default: false,
@@ -207,6 +203,7 @@ export default {
       "software_update_available",
       "allow_sw_update_install",
       "firmware_update_dur_mins",
+      "confirmation_request",
     ]),
     fw_update_in_progress_labels: function () {
       let duration = `${this.firmware_update_dur_mins} minute`;
@@ -244,16 +241,19 @@ export default {
         this.status_uuid === STATUS.MESSAGE.CALIBRATING ||
         this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS ||
         this.stim_play_state ||
-        this.total_uploaded_files.length < this.total_file_count ||
-        this.data_analysis_state === ENUMS.DATA_ANALYSIS_STATE.ACTIVE;
+        this.total_uploaded_files.length < this.total_file_count;
+
+      const data_analysis_in_progress = this.data_analysis_state === ENUMS.DATA_ANALYSIS_STATE.ACTIVE;
+
       const fw_update_in_progress =
         this.status_uuid === STATUS.MESSAGE.DOWNLOADING_UPDATES ||
         this.status_uuid === STATUS.MESSAGE.INSTALLING_UPDATES;
 
-      if (this.confirmation_request && !this.stim_specific) {
+      if (this.confirmation_request && !this.stim_specific && !data_analysis_in_progress) {
         if (fw_update_in_progress) this.$bvModal.show("fw-closure-warning");
-        else if (sensitive_ops_in_progress) this.$bvModal.show("ops-closure-warning");
-        else this.handle_confirmation(1);
+        else if (sensitive_ops_in_progress) {
+          this.$bvModal.show("ops-closure-warning");
+        } else this.handle_confirmation(1);
       }
     },
   },
@@ -345,6 +345,7 @@ export default {
       // Tanner (1/19/22): skipping automatic closure cancellation since this method gaurantees
       // send_confirmation will be emitted, either immediately or after closing sw-update-message
       this.close_modals_by_id(["ops-closure-warning", "fw-closure-warning"], false);
+
       // if a SW update is available, show message before confirming closure
       if (idx === 1 && this.software_update_available && this.allow_sw_update_install) {
         this.$bvModal.show("sw-update-message");
