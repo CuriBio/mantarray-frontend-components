@@ -66,7 +66,7 @@ export default {
       return Math.ceil(((this.data_analysis_directory.length * 1.0) / 40).toFixed(1));
     },
     dynamic_modal_height: function () {
-      return this.failed_recordings.length > 0 ? "500px;" : "250px;";
+      return this.failed_recordings.length > 0 ? "500px" : "250px";
     },
     analysis_success_stat: function () {
       const successful_analyses =

@@ -9,7 +9,14 @@ Added:
 ^^^^^^
 
 - RecordingNameInputWidget modal pop up after start recording button pressed
+- DataAnalysisCompleteWidget modal pops up after completed data analyses and include failed recordings if any occurred
 
+
+Changed
+^^^^^^^
+- DataAnalysisWidget will show list recording with creation timestamps
+    - Removed CheckBoxWidget from DataAnalysisWidget component
+- DataAnalysisControl component handles own window closure when analysis is active
 
 0.7.0 (2022-05-05)
 ------------------
@@ -20,7 +27,7 @@ Added:
 - Components:
 
   - DataAnalysisControl component
-  - DataAnalysisWidget
+  - DataAnalysisWidget component
 
 - Routes:
 
@@ -28,6 +35,7 @@ Added:
   - POST route to start the analyses
 
 - Websocket handler to receive data analysis statuses
+- Data analysis state enums to handle global analysis state
 
 Changed
 ^^^^^^^

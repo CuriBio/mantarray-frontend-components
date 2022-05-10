@@ -79,11 +79,6 @@ export default {
     compute_number_of_rows: function () {
       return Math.ceil(((this.root_recording_path.length * 1.0) / 30).toFixed(1));
     },
-    formatted_recordings_list: function () {
-      return this.recordings_list.map((rec) => {
-        return [{ text: rec.name, value: rec.name }];
-      });
-    },
     dynamic_modal_height: function () {
       return this.data_analysis_state == ENUMS.DATA_ANALYSIS_STATE.READY
         ? "height: 450px;"
