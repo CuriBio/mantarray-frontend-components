@@ -111,7 +111,6 @@ export default function create_web_socket_plugin(socket) {
     });
     socket.on("data_analysis_complete", async (message_json, cb) => {
       const message = JSON.parse(message_json);
-
       await store.commit("settings/set_data_analysis_directory", message.output_dir);
 
       if (message.failed_recordings)

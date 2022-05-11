@@ -18,8 +18,8 @@
       </div>
       <p v-if="failed_recordings.length > 0" class="p__failed-recording-label">{{ msg_three }}</p>
       <div v-if="failed_recordings.length > 0" class="div__recording-list-container">
-        <div v-for="rec_name in failed_recordings" :key="rec_name" class="div__recording-list-item">
-          <div class="div__recording-name-container">{{ rec_name }}</div>
+        <div v-for="rec_name in failed_recordings" :key="rec_name.name" class="div__recording-list-item">
+          <div class="div__recording-name-container">{{ rec_name.name }}</div>
         </div>
       </div>
       <div class="div__data-analysis-button" :style="`top: ${dynamic_modal_height}`">

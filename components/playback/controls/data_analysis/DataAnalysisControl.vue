@@ -183,6 +183,7 @@ export default {
       this.$store.commit("playback/set_selected_recordings", []);
     },
     handle_confirmation: function (idx) {
+      this.$bvModal.hide("analysis-closure-warning");
       this.$emit("send_confirmation", idx);
     },
   },
