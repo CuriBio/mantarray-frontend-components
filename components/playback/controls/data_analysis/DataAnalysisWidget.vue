@@ -104,14 +104,12 @@ export default {
   },
   methods: {
     handle_click: function (idx) {
-      if (idx === 0) {
-        this.$emit("send_confirmation", { idx, selected_recordings: [] });
-        this.selected_recordings = [];
-      } else if (idx === 1) this.selected_recordings = [];
+      if (idx === 0) this.$emit("send_confirmation", { idx, selected_recordings: [] });
       else if (idx === 2 && this.selected_recordings.length > 0) {
         const rec_names = this.selected_recordings.map((rec) => rec.name);
         this.$emit("send_confirmation", { idx, selected_recordings: rec_names });
       }
+      this.selected_recordings = [];
     },
     handle_selected_recordings: function (rec_name) {
       // need to check  if recording is already present in stored  list to track if a user is selecting or unselecting an option

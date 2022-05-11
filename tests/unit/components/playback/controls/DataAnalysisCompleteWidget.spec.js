@@ -52,7 +52,11 @@ describe("DataAnalysisCompleteWidget.vue", () => {
       localVue,
     });
 
-    await store.commit("settings/set_failed_recordings", ["rec_1", "rec_2", "rec_3"]);
+    await store.commit("settings/set_failed_recordings", [
+      { name: "rec_1" },
+      { name: "rec_2" },
+      { name: "rec_3" },
+    ]);
 
     const header_span = wrapper.find(".span__data-analysis-label");
     const background_div = wrapper.find(".div__data-analysis-background");
