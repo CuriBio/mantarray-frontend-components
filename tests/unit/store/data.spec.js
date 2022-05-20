@@ -522,6 +522,29 @@ describe("store/data", () => {
       expect(stim_status).toBe(STIM_STATUS.SHORT_CIRCUIT_ERROR);
     });
 
+    test("When backend emits stimulator_circuit_status message with error status, Then ws client updates stim status to short circuit error", async () => {
+      // confirm precondition
+      const initial_statuses = store.state.data.stimulator_circuit_statuses;
+      expect(initial_statuses).toHaveLength(0);
+
+      const stimulator_statuses = new Array(24)
+        .fill("open", 0, 10)
+        .fill("media", 10, 20)
+        .fill("error", 20, 24);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(stimulator_statuses), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      const updated_statuses = store.state.data.stimulator_circuit_statuses;
+      const stim_status = store.state.stimulation.stim_status;
+
+      expect(updated_statuses).toStrictEqual(initial_statuses);
+      expect(stim_status).toBe(STIM_STATUS.SHORT_CIRCUIT_ERROR);
+    });
+
     test("When backend emits stimulator_circuit_status message with no short  errors, Then ws client updates stim status to config check complete and set indices to data state", async () => {
       // confirm precondition
       const initial_statuses = store.state.data.stimulator_circuit_statuses;

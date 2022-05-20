@@ -93,10 +93,10 @@ export default {
   },
   check_stimulator_circuit_statuses({ commit }, stimulator_statuses) {
     // incoming_array = [stimulator_status_0, stimulator_status_1, ...]
-    // possible status values: open, short, media
+    // possible status values: open, short, media, error
 
     // check if statuses include a short circuit status and set error status
-    if (stimulator_statuses.includes("short")) {
+    if (stimulator_statuses.includes("short") || stimulator_statuses.includes("error")) {
       this.commit("stimulation/reset_state");
       this.commit("stimulation/set_stim_status", STIM_STATUS.SHORT_CIRCUIT_ERROR);
     } else {

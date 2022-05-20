@@ -1,20 +1,29 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-0.7.2 (2022-11-09)
+
+0.7.3 (2022-05-19)
 ------------------
 
 Added:
 ^^^^^^
 
-- Components
-    - DataAnalysisCompleteWidget component pops up after completed data analyses with/without failed recordings if any occurred
+- Handling to treat "error" stim status the same as "short"
+
+
+0.7.2 (2022-05-11)
+------------------
+
+Added:
+^^^^^^
+
+- DataAnalysisCompleteWidget component pops up after completed data analyses with/without failed recordings if any occurred
 
 Changed
 ^^^^^^^
 
 - DataAnalysisWidget will show list recording with creation timestamps
-    - Removed CheckBoxWidget from DataAnalysisWidget component
+- Removed CheckBoxWidget from DataAnalysisWidget component
 - DataAnalysisControl component handles own window closure when analysis is active
 
 
