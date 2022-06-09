@@ -3,8 +3,6 @@ import { createLocalVue } from "@vue/test-utils";
 import * as axios_helpers from "@/js_utils/axios_helpers.js";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
-const MockAxiosAdapter = require("axios-mock-adapter");
-import axios from "axios";
 import { STIM_STATUS } from "../../../store/modules/stimulation/enums";
 
 describe("store/stimulation", () => {
@@ -267,6 +265,7 @@ describe("store/stimulation", () => {
       await store.commit("stimulation/apply_selected_protocol", protocol_list[2]);
 
       expect(store.state.stimulation.protocol_assignments).toStrictEqual(test_assignment);
+      expect(store.state.stimulation.stim_status).toBe(STIM_STATUS.CONFIG_CHECK_NEEDED);
     });
     test("When chagnes the stim studios x-axis unit, Then the coordinate values in the store will be changed accordingly", async () => {
       const test_ms_coordinates = {
@@ -458,15 +457,19 @@ describe("store/stimulation", () => {
       await store.dispatch("stimulation/handle_selected_wells", test_wells.SELECTED);
       await store.commit("stimulation/apply_selected_protocol", selected_protocol);
 
+      const previous_status = store.state.stimulation.stim_status;
       let protocol_assignments = store.state.stimulation.protocol_assignments;
       const pre_assignment_name = protocol_assignments[0].protocol.name;
       expect(pre_assignment_name).toBe(old_name);
+
       await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
       await store.commit("stimulation/set_protocol_name", new_name);
       await store.dispatch("stimulation/add_saved_protocol");
+
       protocol_assignments = store.state.stimulation.protocol_assignments; // have to get this value again since it is reassigned inside the store
       const post_assignment_name = protocol_assignments[0].protocol.name;
       expect(post_assignment_name).toBe(new_name);
+      expect(previous_status).toBe(store.state.stimulation.stim_status); // shouldn't change if only editing existing assignment
     });
 
     test("When a user wants to delete an existing protocol by clicking on trash icon, Then the selected protocol will be removed from the list of available protocols, removed from any assigned wells, and the editor will be reset", async () => {
