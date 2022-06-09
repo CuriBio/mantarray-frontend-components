@@ -1,6 +1,6 @@
 import { mount, shallowMount } from "@vue/test-utils";
 const wait_for_expect = require("wait-for-expect");
-import Vuex from "vuex";
+import Vuex, { Store } from "vuex";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import { createLocalVue } from "@vue/test-utils";
@@ -29,6 +29,7 @@ describe("DataAnalysisControl.vue", () => {
     jest.restoreAllMocks();
     store = await NuxtStore.createStore();
     mocked_axios = new MockAxiosAdapter(axios);
+    store.state.stimulation.protocol_assignments = { 1: {} };
   });
 
   afterEach(() => {

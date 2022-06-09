@@ -212,14 +212,15 @@ export default {
         // only need to take these conditions into account when additional controls are enabled and not stimulating
         is_enabled =
           is_enabled &&
-          Object.keys(this.protocol_assignments).length !== 0 &&
           this.assigned_open_circuits.length === 0 &&
           this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING &&
           ![
             STIM_STATUS.ERROR,
+            STIM_STATUS.NO_PROTOCOLS_ASSIGNED,
             STIM_STATUS.CONFIG_CHECK_NEEDED,
             STIM_STATUS.CONFIG_CHECK_IN_PROGRESS,
             STIM_STATUS.SHORT_CIRCUIT_ERROR,
+            STIM_STATUS.CALIBRATION_NEEDED,
           ].includes(this.stim_status);
       }
       return is_enabled;
@@ -231,15 +232,15 @@ export default {
       );
     },
     start_stim_label: function () {
-      if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR) {
+      if (this.stim_status === STIM_STATUS.ERROR || this.stim_status === STIM_STATUS.SHORT_CIRCUIT_ERROR) {
         return "Cannot start a stimulation with error";
       } else if (
-        this.stim_status == STIM_STATUS.CONFIG_CHECK_NEEDED ||
-        this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
+        this.stim_status === STIM_STATUS.CONFIG_CHECK_NEEDED ||
+        this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
       ) {
         return "Configuration check needed";
       } else if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
-      else if (Object.keys(this.protocol_assignments).length === 0) {
+      else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED) {
         return "No protocols have been assigned";
       } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING) {
         return "Cannot start stimulation while recording is active";
@@ -268,12 +269,7 @@ export default {
     },
     is_config_check_button_enabled: function () {
       return (
-        ![
-          STIM_STATUS.ERROR,
-          STIM_STATUS.SHORT_CIRCUIT_ERROR,
-          STIM_STATUS.CALIBRATION_NEEDED,
-          STIM_STATUS.STIM_ACTIVE,
-        ].includes(this.stim_status) &&
+        [STIM_STATUS.CONFIG_CHECK_NEEDED, STIM_STATUS.READY].includes(this.stim_status) &&
         this.barcodes.stim_barcode.valid &&
         this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED
       );
@@ -289,11 +285,13 @@ export default {
         return "Can only run a configuration check if device is calibrated. Please ensure no other processes are running.";
       else if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR)
         return "Cannot run a configuration check with error";
+      else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED)
+        return "Cannot run configuration check until protocols have been assigned.";
       else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_NEEDED) return "Start configuration check";
       else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS)
-        return "Configuration check in progress";
+        return "Configuration check in progress...";
       else if (this.stim_status == STIM_STATUS.STIM_ACTIVE)
-        return "Cannot run a configuration check while stimulation is active";
+        return "Cannot run a configuration check while stimulation is active.";
       else return "Configuration check complete. Click to rerun.";
     },
     config_check_in_progress: function () {
@@ -392,7 +390,7 @@ body {
   position: relative;
   color: #2f2f2f;
   grid-column: 4;
-  height: 30px;
+  height: 29px;
   width: 20px;
   font-size: 20px;
 }

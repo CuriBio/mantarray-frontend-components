@@ -81,6 +81,7 @@ export default {
     },
     enable_controls() {
       this.set_enable_stim_controls(true);
+      console.log(this.$store.state.stimulation.stim_status);
     },
   },
 };

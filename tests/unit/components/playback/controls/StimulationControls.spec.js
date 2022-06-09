@@ -67,6 +67,8 @@ describe("store/stimulation", () => {
       );
 
       store.state.stimulation.protocol_assignments = { test: "assignment" };
+      await store.commit("stimulation/set_stim_status", STIM_STATUS.STIM_ACTIVE);
+
       const wrapper = mount(StimulationControls, {
         store,
         localVue,
@@ -83,7 +85,7 @@ describe("store/stimulation", () => {
         localVue,
       });
 
-      wrapper.vm.play_state = false;
+      // await store.commit("stimulation/set_stim_play_state", false);
       await wrapper.find(".span__stimulation-controls-play-stop-button--disabled").trigger("click");
       expect(wrapper.vm.play_state).toBe(false);
     });
@@ -95,6 +97,7 @@ describe("store/stimulation", () => {
       );
 
       store.state.stimulation.protocol_assignments = { test: "assignment" };
+      await store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
       const wrapper = mount(StimulationControls, {
         store,
         localVue,
@@ -124,12 +127,48 @@ describe("store/stimulation", () => {
       ["CONFIG_CHECK_NEEDED", "Configuration check needed"],
       ["CONFIG_CHECK_IN_PROGRESS", "Configuration check needed"],
     ])(
-      "When Vuex's stim_status changes state to %s, Then the stim start tooltip will have an updated message %s",
+      "When Vuex's stim_status changes state to %s and protocols are assigned to wells, Then the stim start tooltip will have an updated message %s",
       async (status, expected_message) => {
         const wrapper = mount(StimulationControls, {
           store,
           localVue,
         });
+
+        await store.commit("playback/set_barcode", {
+          type: "stim_barcode",
+          new_value: "MS2022001000",
+          is_valid: true,
+        });
+
+        store.state.stimulation.protocol_assignments = { 1: {} };
+
+        await store.commit("stimulation/set_stim_play_state", false);
+        await store.commit("stimulation/set_stim_status", STIM_STATUS[status]);
+
+        expect(wrapper.find("#start-popover-msg").text()).toBe(expected_message);
+        expect(wrapper.vm.play_state).toBe(false);
+      }
+    );
+
+    test.each([
+      ["ERROR", "Cannot start a stimulation with error"],
+      ["SHORT_CIRCUIT_ERROR", "Cannot start a stimulation with error"],
+      ["CONFIG_CHECK_NEEDED", "No protocols have been assigned"],
+      ["NO_PROTOCOLS_ASSIGNED", "No protocols have been assigned"],
+    ])(
+      "When Vuex's stim_status changes state to %s and no protocols have been assigned, Then the stim start tooltip will have an updated message %s",
+      async (status, expected_message) => {
+        const wrapper = mount(StimulationControls, {
+          store,
+          localVue,
+        });
+
+        await store.commit("playback/set_barcode", {
+          type: "stim_barcode",
+          new_value: "MS2022001000",
+          is_valid: true,
+        });
+
         await store.commit("stimulation/set_stim_play_state", false);
         await store.commit("stimulation/set_stim_status", STIM_STATUS[status]);
 
@@ -219,7 +258,9 @@ describe("store/stimulation", () => {
           store,
           localVue,
         });
-
+        store.state.stimulation.protocol_assignments = {
+          4: {},
+        };
         await store.commit("stimulation/set_stim_status", STIM_STATUS[stim_status]);
         await store.commit("stimulation/set_stim_play_state", play_state);
         await store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);

@@ -226,6 +226,9 @@ describe("store/stimulation", () => {
       store = await NuxtStore.createStore();
       store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
     });
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
 
     test("When stimulation store is initialized, Then default selected wells should be an empty array", () => {
       const { selected_wells } = store.state.stimulation;
@@ -628,9 +631,11 @@ describe("store/stimulation", () => {
         const axios_status_spy = jest
           .spyOn(axios_helpers, "call_axios_post_from_vuex")
           .mockImplementation(() => response);
+
+        store.state.stimulation.protocol_assignments = { 1: {} };
         await store.dispatch("stimulation/start_stim_configuration");
 
-        expect(axios_status_spy).toHaveBeenCalledWith("/start_stim_checks");
+        expect(axios_status_spy).toHaveBeenCalledWith("/start_stim_checks", { well_indices: ["1"] });
         expect(store.state.stimulation.stim_status).toBe(STIM_STATUS[status]);
       }
     );

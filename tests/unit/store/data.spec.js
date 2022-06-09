@@ -706,7 +706,7 @@ describe("store/data", () => {
           });
         });
 
-        const stim_config_state = store.state.stimulation.stim_status === STIM_STATUS.CONFIG_CHECK_NEEDED;
+        const stim_config_state = store.state.stimulation.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED;
 
         expect(store.state.playback.barcodes[barcode_type].value).toBe(valid_barcode);
         expect(stim_config_state).toBe(true);
