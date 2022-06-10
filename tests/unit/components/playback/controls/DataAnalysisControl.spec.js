@@ -1,6 +1,6 @@
 import { mount, shallowMount } from "@vue/test-utils";
 const wait_for_expect = require("wait-for-expect");
-import Vuex, { Store } from "vuex";
+import Vuex from "vuex";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import { createLocalVue } from "@vue/test-utils";

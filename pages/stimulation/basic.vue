@@ -188,7 +188,6 @@ export default {
         new_value: "MS2022001000",
       });
       this.$store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
-      // this.$store.dispatch("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_NEEDED);
     },
     mock_config_check() {
       //   this.set_stim_status(STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
