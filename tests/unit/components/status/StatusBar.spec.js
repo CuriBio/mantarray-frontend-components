@@ -252,23 +252,27 @@ describe("StatusWidget.vue", () => {
   });
   describe("stim_status", () => {
     test.each([
-      ["CALIBRATION_NEEDED", "Stim status: Calibration Needed"],
-      ["CONFIG_CHECK_NEEDED", "Stim status: Configuration Check Needed"],
-      ["CONFIG_CHECK_IN_PROGRESS", "Stim status: Configuration Check in Progress..."],
-      ["CONFIG_CHECK_COMPLETE", "Stim status: Configuration Check Complete"],
-      ["READY", "Stim status: Ready"],
-      ["STIM_ACTIVE", "Stim status: Stimulating..."],
-      ["SHORT_CIRCUIT_ERROR", "Stim status: Short Circuit Error"],
-      ["ERROR", "Stim status: Error Occurred"],
+      ["CALIBRATION_NEEDED", "Stim status: Calibration Needed", { 1: {} }],
+      ["NO_PROTOCOLS_ASSIGNED", "Stim status: No protocols have been assigned", {}],
+      ["CONFIG_CHECK_NEEDED", "Stim status: Configuration Check Needed", { 1: {} }],
+      ["CONFIG_CHECK_IN_PROGRESS", "Stim status: Configuration Check in Progress...", { 1: {} }],
+      ["CONFIG_CHECK_COMPLETE", "Stim status: Configuration Check Complete", { 1: {} }],
+      ["READY", "Stim status: Ready", { 1: {} }],
+      ["STIM_ACTIVE", "Stim status: Stimulating...", { 1: {} }],
+      ["SHORT_CIRCUIT_ERROR", "Stim status: Short Circuit Error", {}],
+      ["ERROR", "Stim status: Error Occurred", {}],
     ])(
       "When stim's stim_status gets mutated to %s, Then the status text should update to be: %s",
-      async (vuex_state, expected_text) => {
+      async (vuex_state, expected_text, assignments) => {
         const propsData = { stim_specific: true };
         wrapper = mount(StatusWidget, {
           propsData,
           store,
           localVue,
         });
+
+        store.state.stimulation.protocol_assignments = assignments;
+
         await store.commit("stimulation/set_stim_status", STIM_STATUS[vuex_state]);
         expect(wrapper.find(text_selector).text()).toBe(expected_text);
       }
@@ -282,7 +286,7 @@ describe("StatusWidget.vue", () => {
         store,
         localVue,
       });
-      expect(wrapper.find(text_selector).text()).toBe("Stim status: Configuration Check Needed");
+      expect(wrapper.find(text_selector).text()).toBe("Stim status: No protocols have been assigned");
     });
   });
 });
