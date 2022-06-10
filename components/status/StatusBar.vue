@@ -110,6 +110,34 @@
           @handle_confirmation="close_modals_by_id(['success-qc-check'])"
         />
       </b-modal>
+      <b-modal
+        id="active-processes-warning"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
+        <StatusWarningWidget
+          :modal_labels="active_processes_modal_labels"
+          @handle_confirmation="close_da_check_modal"
+        />
+      </b-modal>
+      <b-modal
+        id="initializing-warning"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
+        <StatusWarningWidget
+          :modal_labels="initializing_modal_labels"
+          @handle_confirmation="close_da_check_modal"
+        />
+      </b-modal>
     </span>
   </div>
 </template>
@@ -145,6 +173,10 @@ export default {
   },
   props: {
     stim_specific: {
+      type: Boolean,
+      default: false,
+    },
+    da_check: {
       type: Boolean,
       default: false,
     },
@@ -185,6 +217,18 @@ export default {
         msg_two: "You can now run this stimulation.",
         button_names: ["Okay"],
       },
+      active_processes_modal_labels: {
+        header: "Warning!",
+        msg_one: "Data analysis cannot be performed while other processes are running.",
+        msg_two: "Active processes will be automatically stopped if you choose to continue.",
+        button_names: ["Cancel", "Continue"],
+      },
+      initializing_modal_labels: {
+        header: "Warning!",
+        msg_one: "Data analysis cannot be performed while the instrument is initializing or calibrating.",
+        msg_two: "It will become available shortly.",
+        button_names: ["Close"],
+      },
     };
   },
   computed: {
@@ -223,6 +267,25 @@ export default {
         Object.keys(this.protocol_assignments).includes(well.toString())
       );
     },
+    is_playback_active: function () {
+      return [STATUS.MESSAGE.LIVE_VIEW_ACTIVE, STATUS.MESSAGE.RECORDING, STATUS.MESSAGE.BUFFERING].includes(
+        this.status_uuid
+      );
+    },
+    is_initializing: function () {
+      return [
+        STATUS.MESSAGE.SERVER_READY,
+        STATUS.MESSAGE.SERVER_STILL_INITIALIZING,
+        STATUS.MESSAGE.INITIALIZING_INSTRUMENT,
+        STATUS.MESSAGE.CALIBRATING,
+        STATUS.MESSAGE.CHECKING_FOR_UPDATES,
+        STATUS.MESSAGE.INSTALLING_UPDATES,
+        STATUS.MESSAGE.DOWNLOADING_UPDATES,
+      ].includes(this.status_uuid);
+    },
+    is_data_analysis_enabled: function () {
+      return !this.stim_play_state && !this.is_playback_active && !this.is_initializing;
+    },
   },
   watch: {
     status_uuid: function (new_status) {
@@ -235,9 +298,7 @@ export default {
     },
     confirmation_request: function () {
       const sensitive_ops_in_progress =
-        this.status_uuid === STATUS.MESSAGE.BUFFERING ||
-        this.status_uuid === STATUS.MESSAGE.LIVE_VIEW_ACTIVE ||
-        this.status_uuid === STATUS.MESSAGE.RECORDING ||
+        this.is_playback_active ||
         this.status_uuid === STATUS.MESSAGE.CALIBRATING ||
         this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS ||
         this.stim_play_state ||
@@ -254,6 +315,17 @@ export default {
         else if (sensitive_ops_in_progress) {
           this.$bvModal.show("ops-closure-warning");
         } else this.handle_confirmation(1);
+      }
+    },
+    da_check: function (new_val, _) {
+      if (new_val) {
+        if (!this.is_data_analysis_enabled) {
+          this.is_initializing
+            ? this.$bvModal.show("initializing-warning")
+            : this.$bvModal.show("active-processes-warning");
+        } else {
+          this.$emit("close_da_check_modal", 1);
+        }
       }
     },
   },
@@ -382,6 +454,17 @@ export default {
         return;
       }
     },
+    close_da_check_modal: function (idx) {
+      this.$bvModal.hide("active-processes-warning");
+      this.$bvModal.hide("initializing-warning");
+
+      if (idx === 1) {
+        if (this.stim_play_state) this.$store.dispatch("stimulation/stop_stimulation");
+        if (this.is_playback_active) this.$store.dispatch("playback/stop_active_processes");
+      }
+
+      this.$emit("close_da_check_modal", idx);
+    },
   },
 };
 </script>
@@ -436,6 +519,8 @@ export default {
 #edit-user,
 #add-user,
 #edit-user,
+#active-processes-warning,
+#initializing-warning,
 #short-circuit-err,
 #success-qc-check {
   position: fixed;

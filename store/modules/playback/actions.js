@@ -228,4 +228,11 @@ export default {
     });
     if (response) await commit("set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.ERROR);
   },
+  async stop_active_processes({ dispatch, state }) {
+    if (state.playback_state === ENUMS.PLAYBACK_STATES.RECORDING) {
+      await dispatch("stop_recording");
+      await dispatch("stop_live_view");
+    } else if (state.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE)
+      await dispatch("stop_live_view");
+  },
 };
