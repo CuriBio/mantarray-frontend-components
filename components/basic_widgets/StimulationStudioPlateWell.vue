@@ -15,9 +15,9 @@
         :circle_x="38"
         :circle_y="35"
         :radius="26"
-        :strk="disable ? 'none' : stroke"
+        :strk="disable ? 'rgb(228, 4, 4)' : stroke"
         :plate_fill="protocol_fill"
-        :stroke_wdth="disable ? 0 : stroke_wdth"
+        :stroke_wdth="stroke_wdth"
         :index="index"
         :fill-opacity="fill_opacity"
       />

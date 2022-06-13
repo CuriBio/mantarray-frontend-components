@@ -29,6 +29,7 @@ describe("DataAnalysisControl.vue", () => {
     jest.restoreAllMocks();
     store = await NuxtStore.createStore();
     mocked_axios = new MockAxiosAdapter(axios);
+    store.state.stimulation.protocol_assignments = { 1: {} };
   });
 
   afterEach(() => {

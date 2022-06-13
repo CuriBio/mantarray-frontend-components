@@ -473,7 +473,7 @@ describe("DesktopPlayerControls.vue", () => {
         localVue,
       });
       const target_button = wrapper.find(".svg__playback-desktop-player-controls-calibrate-button");
-
+      store.state.stimulation.protocol_assignments = { 1: {} };
       store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED);
       store.commit("stimulation/set_stim_status", STIM_STATUS.STIM_ACTIVE);
       await wrapper.vm.$nextTick(); // wait for update

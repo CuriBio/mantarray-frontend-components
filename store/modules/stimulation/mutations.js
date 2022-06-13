@@ -1,3 +1,5 @@
+import { STIM_STATUS } from "./enums";
+
 export default {
   set_selected_wells(state, wells) {
     state.selected_wells = wells;
@@ -6,13 +8,20 @@ export default {
     state.selected_wells.map((well) => {
       state.protocol_assignments[well] = protocol;
     });
-    // Tanner (11/1/21): For some reason the whole object needs to be reassigned for Vuex to recognize that an update occurred
+
+    const previous_state = state.protocol_assignments;
     state.protocol_assignments = { ...state.protocol_assignments };
+
+    if (Object.keys(previous_state) !== Object.keys(state.protocol_assignments))
+      // checks if indices are different because this mutation gets called when existing assignments get edited
+      state.stim_status = STIM_STATUS.CONFIG_CHECK_NEEDED;
   },
   clear_selected_protocol(state) {
     state.selected_wells.map((well) => delete state.protocol_assignments[well]);
-    // Tanner (11/1/21): For some reason the whole object needs to be reassigned for Vuex to recognize that an update occurred
     state.protocol_assignments = { ...state.protocol_assignments };
+
+    if (Object.keys(state.protocol_assignments).length === 0)
+      state.stim_status = STIM_STATUS.NO_PROTOCOLS_ASSIGNED;
   },
   set_protocol_name({ protocol_editor }, name) {
     protocol_editor.name = name;
@@ -81,6 +90,7 @@ export default {
       y_axis_scale: 120,
       delay_blocks: [],
       x_axis_time_idx: 0,
+      stim_status: STIM_STATUS.NO_PROTOCOLS_ASSIGNED,
       edit_mode: { status: false, letter: "", label: "" },
     };
     Object.assign(state, replace_state);
@@ -119,7 +129,14 @@ export default {
     state.stim_play_state = bool;
   },
   set_stim_status(state, status) {
-    state.stim_status = status;
+    if (
+      Object.keys(state.protocol_assignments).length === 0 &&
+      ![STIM_STATUS.ERROR, STIM_STATUS.SHORT_CIRCUIT_ERROR, STIM_STATUS.CONFIG_CHECK_COMPLETE].includes(
+        status
+      )
+    )
+      state.stim_status = STIM_STATUS.NO_PROTOCOLS_ASSIGNED;
+    else state.stim_status = status;
   },
   set_edit_mode({ edit_mode }, { label, letter }) {
     edit_mode.status = true;

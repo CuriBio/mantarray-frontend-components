@@ -9,6 +9,7 @@
 <script>
 import { mapMutations } from "vuex";
 import { StimulationControls } from "@/dist/mantarray.common";
+import { STIM_STATUS } from "../../../../store/modules/stimulation/enums";
 // import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
 
 export default {
@@ -78,6 +79,7 @@ export default {
         },
       };
       this.$store.state.stimulation.protocol_assignments = test_assignment;
+      this.$store.state.stimulation.stim_status = STIM_STATUS.READY;
     },
     enable_controls() {
       this.set_enable_stim_controls(true);
