@@ -281,6 +281,9 @@ export default {
         STATUS.MESSAGE.CHECKING_FOR_UPDATES,
         STATUS.MESSAGE.INSTALLING_UPDATES,
         STATUS.MESSAGE.DOWNLOADING_UPDATES,
+        STATUS.MESSAGE.UPDATES_NEEDED,
+        STATUS.MESSAGE.UPDATES_COMPLETE,
+        STATUS.MESSAGE.UPDATE_ERROR,
       ].includes(this.status_uuid);
     },
     is_data_analysis_enabled: function () {
