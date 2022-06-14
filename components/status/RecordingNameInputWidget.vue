@@ -113,7 +113,7 @@ export default {
           replace_existing: true,
         });
         this.$emit("handle_confirmation", this.recording_name);
-      }
+      } else this.error_message = "Name already exists";
     },
   },
 };
