@@ -713,7 +713,7 @@ describe("store/playback", () => {
       const post_url = "http://localhost:4567/start_data_analysis";
 
       const spied_helper = jest.spyOn(axios_helpers, "call_axios_post_from_vuex");
-      mocked_axios.onPost(post_url).reply(200);
+      mocked_axios.onPost(post_url).reply(204);
 
       await store.dispatch("playback/start_data_analysis", test_recordings);
 

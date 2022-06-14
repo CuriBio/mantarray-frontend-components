@@ -320,9 +320,9 @@ export default {
   async start_stim_configuration({ commit, state }) {
     const url = `/start_stim_checks`;
     const well_indices = Object.keys(state.protocol_assignments);
-    const error = await call_axios_post_from_vuex(url, { well_indices });
+    const res = await call_axios_post_from_vuex(url, { well_indices });
 
-    if (error) commit("set_stim_status", STIM_STATUS.ERROR);
+    if (res && res.status !== 200) commit("set_stim_status", STIM_STATUS.ERROR);
     else commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
   },
 };

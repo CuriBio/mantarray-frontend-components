@@ -626,8 +626,8 @@ describe("store/stimulation", () => {
     });
 
     test.each([
-      ["ERROR", "ERROR"],
-      [null, "CONFIG_CHECK_IN_PROGRESS"],
+      [{ status: 400 }, "ERROR"],
+      [{ status: 200 }, "CONFIG_CHECK_IN_PROGRESS"],
     ])(
       "When a user clicks icon to start a stim configuration check, Then action will post to BE and update stim_status",
       async (response, status) => {

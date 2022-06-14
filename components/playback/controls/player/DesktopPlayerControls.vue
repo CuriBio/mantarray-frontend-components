@@ -6,7 +6,7 @@
       v-b-popover.hover.bottomright="settings_tooltip_text"
       :title="settings_title"
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
-      @click="open_settings_form()"
+      @click="$bvModal.show('settings-form')"
     >
       <PlayerControlsSettingsButton /><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
     </div>
@@ -232,7 +232,7 @@
       <StatusWarningWidget
         id="recording-limit"
         :modal_labels="recording_limit_labels"
-        @handle_confirmation="close_recording_limit_modal"
+        @handle_confirmation="$bvModal.hide('recording-limit-warning')"
       />
     </b-modal>
     <b-modal
@@ -247,7 +247,7 @@
       <RecordingNameInputWidget
         id="recording-name-input-prompt"
         :default_recording_name="default_recording_name"
-        @handle_confirmation="start_recording"
+        @handle_confirmation="$bvModal.hide('recording-name-input-prompt-message')"
       />
     </b-modal>
   </div>
@@ -530,7 +530,7 @@ export default {
     on_activate_record_click: function () {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
         this.default_recording_name = this.generate_default_recording_name();
-        this.$bvModal.show("recording-name-input-prompt-message");
+        this.start_recording();
       }
     },
     generate_default_recording_name() {
@@ -547,10 +547,8 @@ export default {
       const default_name = `${barcode}__${utc_year}_${utc_month}_${utc_day}_${utc_hour}${utc_min}${utc_sec}`;
       return default_name;
     },
-    start_recording: function (file_name) {
-      this.$bvModal.hide("recording-name-input-prompt-message");
-
-      this.$store.dispatch("playback/start_recording", file_name);
+    start_recording: function () {
+      this.$store.dispatch("playback/start_recording", this.default_recording_name);
 
       this.recording_timer = setTimeout(() => {
         if (this.playback_state === this.playback_state_enums.RECORDING) {
@@ -562,6 +560,8 @@ export default {
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
       this.$store.dispatch("playback/stop_recording");
+      this.$bvModal.show("recording-name-input-prompt-message");
+
       if (this.auto_upload) {
         this.$store.commit("settings/set_total_file_count");
       }
@@ -588,9 +588,6 @@ export default {
         else this.$store.dispatch("playback/start_calibration");
       }
     },
-    open_settings_form: function () {
-      this.$bvModal.show("settings-form");
-    },
     close_settings_modal: function (save) {
       this.$bvModal.hide("settings-form");
       if (save) {
@@ -609,9 +606,6 @@ export default {
     close_user_input_prompt_modal() {
       this.$bvModal.hide("user-input-prompt-message");
       this.$bvModal.show("settings-form");
-    },
-    close_recording_limit_modal() {
-      this.$bvModal.hide("recording-limit-warning");
     },
     close_five_min_modal(idx) {
       this.$bvModal.hide("five-min-warning");
@@ -792,7 +786,8 @@ export default {
 #fw-update-available-message,
 #five-min-warning,
 #one-min-warning,
-#recording-name-input-prompt-message {
+#recording-name-input-prompt-message,
+#existing-recording-warning {
   position: fixed;
   margin: 5% auto;
   top: 15%;

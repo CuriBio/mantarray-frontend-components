@@ -20,23 +20,41 @@
           :button_widget_height="50"
           :button_widget_top="0"
           :button_widget_left="0"
-          :button_names="['Start Recording']"
+          :button_names="['Confirm']"
           :enabled_color="'#B7B7B7'"
           :is_enabled="[is_enabled]"
-          :hover_color="['#bd4932', '#19ac8a']"
+          :hover_color="['#19ac8a']"
           @btn-click="handle_click"
         />
       </div>
     </div>
+    <b-modal
+      id="existing-recording-warning"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        :modal_labels="existing_recording_labels"
+        @handle_confirmation="close_warning_modal"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
+import Vue from "vue";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+import { BModal } from "bootstrap-vue";
+Vue.component("BModal", BModal);
 
 export default {
   name: "RecordingNameInputWidget",
-  components: { InputWidget, ButtonWidget },
+  components: { InputWidget, ButtonWidget, StatusWarningWidget },
   props: {
     modal_labels: {
       type: Object,
@@ -53,6 +71,12 @@ export default {
     return {
       recording_name: this.default_recording_name,
       error_message: "",
+      existing_recording_labels: {
+        header: "Warning!",
+        msg_one: "The name you chose already exists.",
+        msg_two: "Would you like to replace the existing recording with this one?",
+        button_names: ["Cancel", "Yes"],
+      },
     };
   },
   computed: {
@@ -63,16 +87,38 @@ export default {
   methods: {
     check_recording_name: function (recording_name) {
       this.recording_name = recording_name;
+
       if (!recording_name) this.error_message = "Please enter a name";
       else this.error_message = "";
     },
-    handle_click: function () {
-      if (this.is_enabled) this.$emit("handle_confirmation", this.recording_name);
+    handle_click: async function () {
+      if (this.is_enabled) {
+        const res = await this.$store.dispatch("playback/handle_recording_name", {
+          recording_name: this.recording_name,
+          default_name: this.default_recording_name,
+          replace_existing: false,
+        });
+        res === 403
+          ? this.$bvModal.show("existing-recording-warning")
+          : this.$emit("handle_confirmation", this.recording_name);
+      }
+    },
+    close_warning_modal: async function (idx) {
+      this.$bvModal.hide("existing-recording-warning");
+
+      if (idx === 1) {
+        await this.$store.dispatch("playback/handle_recording_name", {
+          new_name: this.recording_name,
+          default_name: this.default_recording_name,
+          replace_existing: true,
+        });
+        this.$emit("handle_confirmation", this.recording_name);
+      }
     },
   },
 };
 </script>
-<style scoped>
+<style>
 .div__recording-name-input-background {
   pointer-events: all;
   transform: rotate(0deg);
