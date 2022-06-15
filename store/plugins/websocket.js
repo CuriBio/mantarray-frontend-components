@@ -121,5 +121,13 @@ export default function create_web_socket_plugin(socket) {
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
+
+    socket.on("error", async (message_json, cb) => {
+      const message = JSON.parse(message_json);
+      await store.commit("data/set_error_message", message);
+
+      /* istanbul ignore else */
+      if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
+    });
   };
 }
