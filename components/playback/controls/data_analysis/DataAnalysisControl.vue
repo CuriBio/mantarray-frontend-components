@@ -76,7 +76,6 @@
 </template>
 <script>
 import { ENUMS } from "@/store/modules/playback/enums";
-import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import DataAnalysisWidget from "@/components/playback/controls/data_analysis/DataAnalysisWidget.vue";
 import DataAnalysisCompleteWidget from "@/components/playback/controls/data_analysis/DataAnalysisCompleteWidget.vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
@@ -122,26 +121,11 @@ export default {
     ]),
     ...mapState("playback", ["data_analysis_state", "playback_state"]),
     ...mapState("stimulation", ["stim_status"]),
-    is_data_analysis_enabled: function () {
-      // system and stim states where a data analysis is enabled
-      return (
-        [ENUMS.PLAYBACK_STATES.CALIBRATED, ENUMS.PLAYBACK_STATES.CALIBRATION_NEEDED].includes(
-          this.playback_state
-        ) &&
-        [STIM_STATUS.CALIBRATION_NEEDED, STIM_STATUS.READY, STIM_STATUS.CONFIG_CHECK_NEEDED].includes(
-          this.stim_status
-        )
-      );
-    },
     analysis_tooltip_text: function () {
-      return this.is_data_analysis_enabled
-        ? "Run analysis on existing recordings."
-        : "Unable to run analysis while instrument is initializing or other processes are active.";
+      return "Run analysis on existing recordings.";
     },
     dynamic_button_class: function () {
-      return this.is_data_analysis_enabled
-        ? "button__data-analysis-button--enabled"
-        : "button__data-analysis-button--disabled";
+      return "button__data-analysis-button";
     },
   },
   watch: {
@@ -165,12 +149,10 @@ export default {
   },
   methods: {
     check_analysis_requirements: async function () {
-      if (this.is_data_analysis_enabled) {
-        await this.$store.dispatch("settings/get_recording_dirs");
+      await this.$store.dispatch("settings/get_recording_dirs");
 
-        if (this.recordings_list.length > 0) this.$bvModal.show("start-data-analysis");
-        else this.$bvModal.show("no-recordings-warning");
-      }
+      if (this.recordings_list.length > 0) this.$bvModal.show("start-data-analysis");
+      else this.$bvModal.show("no-recordings-warning");
     },
     close_analysis_modal: async function ({ idx, selected_recordings }) {
       if (idx === 2) await this.$store.dispatch("playback/start_data_analysis", selected_recordings);
@@ -190,7 +172,7 @@ export default {
 };
 </script>
 <style>
-.button__data-analysis-button--enabled {
+.button__data-analysis-button {
   background: #b7b7b7;
   border: 1px solid #b7b7b7;
   left: 28px;
@@ -199,20 +181,11 @@ export default {
   margin-top: 15px;
   font-size: 15px;
 }
-.button__data-analysis-button--enabled:hover {
+.button__data-analysis-button:hover {
   background: #b7b7b7c9;
   cursor: pointer;
 }
-.button__data-analysis-button--disabled {
-  background: #b7b7b7c9;
-  border: 1px solid #b7b7b7c9;
-  color: #6e6f72;
-  left: 28px;
-  width: 230px;
-  position: relative;
-  margin-top: 15px;
-  font-size: 15px;
-}
+
 #start-data-analysis,
 #data-analysis-complete {
   position: fixed;

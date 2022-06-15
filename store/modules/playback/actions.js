@@ -226,6 +226,21 @@ export default {
     const response = await call_axios_post_from_vuex(post_endpoint, {
       selected_recordings,
     });
-    if (response) await commit("set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.ERROR);
+    if (response && response.status !== 204)
+      await commit("set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.ERROR);
+  },
+  async stop_active_processes({ dispatch, state }) {
+    if (state.playback_state === ENUMS.PLAYBACK_STATES.RECORDING) {
+      await dispatch("stop_recording");
+      await dispatch("stop_live_view");
+    } else if (state.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE)
+      await dispatch("stop_live_view");
+  },
+  async handle_recording_name(_, { recording_name, default_name, replace_existing }) {
+    const post_endpoint = replace_existing
+      ? `/update_recording_name?new_name=${recording_name}&default_name=${default_name}&replace_existing=${replace_existing}`
+      : `/update_recording_name?new_name=${recording_name}&default_name=${default_name}`;
+    const res = await call_axios_post_from_vuex(post_endpoint);
+    return res;
   },
 };

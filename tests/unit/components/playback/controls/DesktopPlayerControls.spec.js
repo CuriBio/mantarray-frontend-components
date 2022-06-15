@@ -290,7 +290,7 @@ describe("DesktopPlayerControls.vue", () => {
           });
         }
       );
-      test("Given Vuex in playback state LIVE_VIEW_ACTIVE, When start recording button is clicked and recording name is confirmed, Then Vuex transitions playback state to RECORDING", async () => {
+      test("Given Vuex in playback state RECORDING, When stop recording button is clicked and recording name is confirmed, Then Vuex transitions playback state to LIVE_VIEW_ACTIVE", async () => {
         const propsData = {};
         wrapper = mount(component_to_test, {
           propsData,
@@ -298,30 +298,16 @@ describe("DesktopPlayerControls.vue", () => {
           localVue,
         });
         // set initial state
-        store.commit(
-          "playback/set_playback_state",
-          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
-        );
+        await store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]);
         await wrapper.vm.$nextTick(); // wait for update
 
         // start recording
-        const record_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--inactive");
+        const record_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--active");
         await record_button.trigger("click");
-
-        // confirm recording name
-        Vue.nextTick(() => {
-          expect(wrapper.find("#recording-name-input-prompt-message").isVisible()).toBe(true);
-        });
-
-        await wrapper.findAll(".span__button_label").at(-1).trigger("click");
-
-        // wait for the axios promises to resolve
-        await wait_for_expect(() => {
-          // Tanner (5/9/22): The index of the span__button_label component above is hardcoded. If this test fails, the index may need to change. Not sure why all buttons are active
-          expect(store.state.playback.playback_state).toEqual(
-            playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]
-          );
-        });
+        await wrapper.findAll(".span__button_label").at(10).trigger("click");
+        expect(store.state.playback.playback_state).toBe(
+          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
+        );
       });
     });
     test("When a user starts a recording and doesn't manually stop it within 30 seconds, Then a recording will get stopped regardless at that time point", async () => {
@@ -336,13 +322,7 @@ describe("DesktopPlayerControls.vue", () => {
       );
 
       await wrapper.find(".svg__playback-desktop-player-controls-record-button--inactive").trigger("click");
-      Vue.nextTick(() => {
-        expect(wrapper.find("#recording-name-input-prompt-message").isVisible()).toBe(true);
-      });
-      await wrapper.findAll(".span__button_label").at(-1).trigger("click");
-
       await wait_for_expect(() => {
-        // Tanner (5/9/22): The index of the span__button_label component above is hardcoded. If this test fails, the index may need to change. Not sure why all buttons are active
         expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]);
       });
 
