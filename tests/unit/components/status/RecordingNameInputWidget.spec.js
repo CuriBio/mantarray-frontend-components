@@ -172,7 +172,6 @@ describe("RecordingNameInputWidget.vue", () => {
     });
 
     await button_widget.at(2).trigger("click");
-
     expect(wrapper.emitted("handle_confirmation")).toStrictEqual([["new_name"]]);
   });
 });

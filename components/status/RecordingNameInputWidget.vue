@@ -118,7 +118,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .div__recording-name-input-background {
   pointer-events: all;
   transform: rotate(0deg);
