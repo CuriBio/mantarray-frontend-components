@@ -509,10 +509,19 @@ describe("store/data", () => {
         .fill("media", 10, 20)
         .fill("short", 20, 24);
 
+      const stimulator_statuses_obj = {};
+      stimulator_statuses.map((status, well_idx) => {
+        stimulator_statuses_obj[`${well_idx}`] = status;
+      });
+
       await new Promise((resolve) => {
-        socket_server_side.emit("stimulator_circuit_statuses", JSON.stringify(stimulator_statuses), (ack) => {
-          resolve(ack);
-        });
+        socket_server_side.emit(
+          "stimulator_circuit_statuses",
+          JSON.stringify(stimulator_statuses_obj),
+          (ack) => {
+            resolve(ack);
+          }
+        );
       });
 
       const updated_statuses = store.state.data.stimulator_circuit_statuses;
