@@ -1,6 +1,27 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+0.7.5 (unreleased)
+------------------
+
+Added:
+^^^^^^
+
+- Added ability to stop active processes when user selects 'Data Analysis' tab. Modal will appear asking to stop or continue.
+- Data Analysis tab will not be enabled until no processes are running and system is initialized.
+
+- Routes:
+
+  - POST route to update a recording name
+
+Changed
+^^^^^^^
+
+- Wells with open-circuit will have white fille color when selected instead of red.
+- RecordingNameInputWidget will pop up after stop recording is selected.
+
+  - Selecting 'Confirm' will now send request to check if name already exists. If so, warning modal will appear and ask user if they want to replace existing or choose again.
+
 
 0.7.4 (2022-06-15)
 ------------------
