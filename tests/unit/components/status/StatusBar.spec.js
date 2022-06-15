@@ -249,6 +249,113 @@ describe("StatusWidget.vue", () => {
         });
       }
     );
+
+    test.each([
+      ["SERVER_READY", "initializing"],
+      ["SERVER_STILL_INITIALIZING", "initializing"],
+      ["INITIALIZING_INSTRUMENT", "initializing"],
+      ["CALIBRATING", "initializing"],
+      ["CHECKING_FOR_UPDATES", "initializing"],
+      ["DOWNLOADING_UPDATES", "initializing"],
+      ["INSTALLING_UPDATES", "initializing"],
+      ["UPDATES_NEEDED", "initializing"],
+      ["UPDATES_COMPLETE", "initializing"],
+      ["UPDATE_ERROR", "initializing"],
+      ["LIVE_VIEW_ACTIVE", "active-processes"],
+      ["RECORDING", "active-processes"],
+      ["BUFFERING", "active-processes"],
+    ])(
+      "When the desktop app is in state %s and the da_check prop changes to true, Then the %s modal will appear that data analysis cannot be performed at this time",
+      async (system_status, modal) => {
+        wrapper = mount(StatusWidget, {
+          store,
+          localVue,
+        });
+        await store.commit("flask/set_status_uuid", STATUS.MESSAGE[system_status]);
+        await wrapper.setProps({ da_check: true });
+
+        Vue.nextTick(() => {
+          expect(wrapper.find(`#${modal}-warning`).isVisible()).toBe(true);
+        });
+      }
+    );
+    test.each(["CALIBRATION_NEEDED", "CALIBRATED"])(
+      "When the desktop app is in state %s and the da_check prop changes to true, Then close_da_check_modal event will be emitted with 1",
+      async (system_status) => {
+        wrapper = mount(StatusWidget, {
+          store,
+          localVue,
+        });
+        await store.commit("flask/set_status_uuid", STATUS.MESSAGE[system_status]);
+        await wrapper.setProps({ da_check: true });
+
+        expect(wrapper.emitted("close_da_check_modal")).toStrictEqual([[1]]);
+
+        // assert no second call gets made
+        await wrapper.setProps({ da_check: false });
+        expect(wrapper.emitted("close_da_check_modal")).toStrictEqual([[1]]);
+      }
+    );
+
+    test("When user closes warning that processes are active by selecting button at index 1 'Continue' and both stim and playback states are active, Then both actions will be dispatched to stop all corresponding processes", async () => {
+      wrapper = mount(StatusWidget, {
+        store,
+        localVue,
+      });
+      const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
+      await store.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING);
+      await store.commit("stimulation/set_stim_play_state", true);
+      await wrapper.vm.close_da_check_modal(1);
+
+      expect(action_spy).toHaveBeenCalledWith("stimulation/stop_stimulation");
+      expect(action_spy).toHaveBeenCalledWith("playback/stop_active_processes");
+      expect(wrapper.emitted("close_da_check_modal")).toStrictEqual([[1]]);
+    });
+
+    test.each([
+      [
+        "stimulation/set_stim_play_state",
+        true,
+        "stimulation/stop_stimulation",
+        "playback/stop_active_processes",
+      ],
+      [
+        "flask/set_status_uuid",
+        STATUS.MESSAGE.RECORDING,
+        "playback/stop_active_processes",
+        "stimulation/stop_stimulation",
+      ],
+    ])(
+      "When user closes warning that processes are active by selecting button at index 1 'Continue', Then one action will be dispatched to stop all corresponding processes",
+      async (initial_action, state, expected_call, not_expected_call) => {
+        wrapper = mount(StatusWidget, {
+          store,
+          localVue,
+        });
+        const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
+        await store.commit(initial_action, state);
+        await wrapper.vm.close_da_check_modal(1);
+
+        expect(action_spy).toHaveBeenCalledWith(expected_call);
+        expect(action_spy).not.toHaveBeenCalledWith(not_expected_call);
+        expect(wrapper.emitted("close_da_check_modal")).toStrictEqual([[1]]);
+      }
+    );
+
+    test("When user closes warning that processes are active by selecting button at index 0 'Cancel', Then actions will not be called to stop active processes", async () => {
+      wrapper = mount(StatusWidget, {
+        store,
+        localVue,
+      });
+      const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
+      await store.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING);
+      await store.commit("stimulation/set_stim_play_state", true);
+      await wrapper.vm.close_da_check_modal(0);
+
+      expect(action_spy).not.toHaveBeenCalledWith("stimulation/stop_stimulation");
+      expect(action_spy).not.toHaveBeenCalledWith("playback/stop_active_processes");
+      expect(wrapper.emitted("close_da_check_modal")).toStrictEqual([[0]]);
+    });
   });
   describe("stim_status", () => {
     test.each([

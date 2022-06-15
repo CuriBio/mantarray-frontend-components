@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import { RecordingNameInputWidget } from "@/dist/mantarray.common";
-// import RecordingNameInputWidget from "@/components/status/RecordingNameInputWidget.vue";
+// import { RecordingNameInputWidget } from "@/dist/mantarray.common";
+import RecordingNameInputWidget from "@/components/status/RecordingNameInputWidget.vue";
 
 export default {
   components: {

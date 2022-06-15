@@ -52,7 +52,7 @@ const inactive_record_button = Selector(".svg__playback-desktop-player-controls-
 const active_record_button = Selector(".svg__playback-desktop-player-controls-record-button--active");
 const title_text = Selector(".span__playback-desktop-player-controls-text");
 const update_customer_idx_button = Selector(".update-idx-button");
-const confirm_recording_name_button = Selector(".span__button_label").withExactText("Start Recording");
+const confirm_recording_name_button = Selector(".span__button_label").withExactText("Confirm");
 
 fixture`playback/controls/player/desktop-player/basic`.page(
   // declare the fixture
@@ -104,7 +104,6 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await t.wait(3000); // wait for status pinging to fully stop
 
   await t.click(inactive_record_button);
-  await t.click(confirm_recording_name_button);
   await t.hover(title_text);
   await t.pressKey("a"); // Press a key to stop the status pinging
   await t.wait(3000); // wait for status pinging to fully stop
@@ -113,6 +112,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(active_record_button);
+  await t.click(confirm_recording_name_button);
   await t.hover(title_text);
   await t.pressKey("a"); // Press a key to stop the status pinging
   await t.wait(3000); // wait for status pinging to fully stop
@@ -121,7 +121,6 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(inactive_record_button);
-  await t.click(confirm_recording_name_button);
   await t.hover(title_text);
   await t.pressKey("a"); // Press a key to stop the status pinging
   await t.wait(3000); // wait for status pinging to fully stop
@@ -130,6 +129,7 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
   await testcafe_page_visual_regression(t, screenshot_path);
 
   await t.click(active_record_button);
+  await t.click(confirm_recording_name_button);
   await t.hover(title_text);
   await t.pressKey("a"); // Press a key to stop the status pinging
   await t.wait(3000); // wait for status pinging to fully stop

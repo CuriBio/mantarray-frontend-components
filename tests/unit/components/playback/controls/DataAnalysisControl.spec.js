@@ -37,17 +37,6 @@ describe("DataAnalysisControl.vue", () => {
     mocked_axios.restore();
   });
 
-  test("When mounting DataAnalysisControl is initially rendered, Then it loads the button successfully", () => {
-    const propsData = {};
-    wrapper = shallowMount(DataAnalysisControl, {
-      propsData,
-      store,
-      localVue,
-    });
-    const target_span = wrapper.find(".button__data-analysis-button--disabled");
-    expect(target_span.text()).toBe("Select Recordings...");
-  });
-
   test("When the root_recording_path gets updated in the store, Then the warning_modal_labels get updated with the path", async () => {
     wrapper = mount(DataAnalysisControl, {
       store,
@@ -60,16 +49,6 @@ describe("DataAnalysisControl.vue", () => {
     expect(wrapper.vm.warning_modal_labels.msg_two).toBe(recording_message.root_recording_path);
   });
 
-  test("When a user selects the Select Files button and another process is running, Then nothing will happen", async () => {
-    wrapper = mount(DataAnalysisControl, {
-      store,
-      localVue,
-    });
-    const store_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
-    await wrapper.find(".button__data-analysis-button--disabled").trigger("click");
-
-    expect(store_spy).not.toHaveBeenCalledWith("settings/get_recording_dirs");
-  });
   test("When a user select Select Files button and it is enabled, Then the action will be dispatched to get files from BE", async () => {
     wrapper = mount(DataAnalysisControl, {
       store,
@@ -80,7 +59,7 @@ describe("DataAnalysisControl.vue", () => {
     await store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
 
     const store_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
-    await wrapper.find(".button__data-analysis-button--enabled").trigger("click");
+    await wrapper.find(".button__data-analysis-button").trigger("click");
 
     expect(store_spy).toHaveBeenCalledWith("settings/get_recording_dirs");
   });
@@ -129,7 +108,7 @@ describe("DataAnalysisControl.vue", () => {
       localVue,
     });
 
-    await wrapper.find(".button__data-analysis-button--enabled").trigger("click");
+    await wrapper.find(".button__data-analysis-button").trigger("click");
 
     wait_for_expect(() => {
       expect(wrapper.find("start-data-analysis").isVisible()).toBe(true);
@@ -158,7 +137,7 @@ describe("DataAnalysisControl.vue", () => {
     await store.commit("playback/set_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
 
     wait_for_expect(() => {
-      wrapper.find(".button__data-analysis-button--enabled").trigger("click");
+      wrapper.find(".button__data-analysis-button").trigger("click");
       expect(wrapper.findAll(".div__checkbox-background")).toHaveLength(2);
     });
   });

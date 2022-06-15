@@ -429,6 +429,19 @@ describe("store/playback", () => {
       expect(store.state.playback.playback_progression_interval_id).toStrictEqual(expected_interval_id);
       expect(store.state.playback.timestamp_of_beginning_of_progression).not.toBeUndefined();
     });
+
+    test.each(["RECORDING", "LIVE_VIEW_ACTIVE"])(
+      "When playback_state is %s and user selects to stop all processes to run a data analysis, Then playback state will return to CALIBRATED",
+      async (active_state) => {
+        await store.dispatch("playback/transition_playback_state", ENUMS.PLAYBACK_STATES[active_state]);
+
+        expect(store.state.playback.playback_state).toBe(ENUMS.PLAYBACK_STATES[active_state]);
+        await store.dispatch("playback/stop_active_processes");
+
+        expect(store.state.playback.playback_state).toBe(ENUMS.PLAYBACK_STATES.CALIBRATED);
+      }
+    );
+
     describe("Given all axios requests are mocked to return status 200", () => {
       beforeEach(() => {
         mocked_axios.onGet(all_mantarray_commands_regexp).reply(200);
@@ -700,7 +713,7 @@ describe("store/playback", () => {
       const post_url = "http://localhost:4567/start_data_analysis";
 
       const spied_helper = jest.spyOn(axios_helpers, "call_axios_post_from_vuex");
-      mocked_axios.onPost(post_url).reply(200);
+      mocked_axios.onPost(post_url).reply(204);
 
       await store.dispatch("playback/start_data_analysis", test_recordings);
 

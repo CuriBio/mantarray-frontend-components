@@ -15,7 +15,7 @@
         :circle_x="38"
         :circle_y="35"
         :radius="26"
-        :strk="disable ? 'rgb(228, 4, 4)' : stroke"
+        :strk="stroke"
         :plate_fill="protocol_fill"
         :stroke_wdth="stroke_wdth"
         :index="index"
@@ -29,7 +29,7 @@
         viewBox="0 0 77 77"
       >
         <path
-          class="svg__open-circuit"
+          :style="svg__open_circuit_outer__dynamic_class"
           d="M30.9,3.9a27,27,0,1,1-27,27,27,27,0,0,1,27-27m0-3.9A30.9,30.9,0,1,0,61.8,30.9,30.9,30.9,0,0,0,30.9,0Z"
         />
         <path
@@ -122,6 +122,9 @@ export default {
       if (this.disable) return 0.3;
       else if (this.protocol_type) return 0.7;
       else return 1;
+    },
+    svg__open_circuit_outer__dynamic_class: function () {
+      return this.stroke_wdth !== 0 ? "fill: #FFFFFF;" : "fill: rgb(228, 4, 4);";
     },
   },
   methods: {

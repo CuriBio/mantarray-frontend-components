@@ -222,7 +222,7 @@ describe("axios_helper.stim_studio", () => {
     const status_code = 200;
     mocked_axios.onPost(whole_url).reply(status_code);
     const response = await call_axios_post_from_vuex(endpoint, sample_message);
-    expect(response).toBeUndefined();
+    expect(response.status).toBe(200);
   });
 
   test("Given axios is mocked to return status code 500 when posting Stim status update, When the function is called, Then it returns the status code of the axios request and logs", async () => {
@@ -241,6 +241,6 @@ describe("axios_helper.stim_studio", () => {
     const status_code = 200;
     mocked_axios.onPost(whole_url).reply(status_code);
     const response = await call_axios_post_from_vuex(endpoint);
-    expect(response).toBeUndefined();
+    expect(response.status).toBe(200);
   });
 });
