@@ -2,6 +2,15 @@ Changelog for Mantarray Frontend Components
 ===========================================
 
 
+0.7.4 (2022-06-15)
+------------------
+
+Changed
+^^^^^^^
+
+- Stim QC message handling
+
+
 0.7.3 (2022-05-19)
 ------------------
 
