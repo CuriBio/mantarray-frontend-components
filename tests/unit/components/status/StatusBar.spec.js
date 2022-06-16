@@ -9,6 +9,7 @@ import { createLocalVue } from "@vue/test-utils";
 import { STATUS } from "@/store/modules/flask/enums";
 import { ENUMS } from "@/store/modules/playback/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
+import { ERRORS } from "@/store/modules/settings/enums";
 
 let wrapper = null;
 
@@ -80,6 +81,24 @@ describe("StatusWidget.vue", () => {
       expect(wrapper.find(text_selector).text()).toBe("System status: Calibrating...");
     });
 
+    test.each([
+      "InstrumentCreateConnectionError",
+      "InstrumentConnectionLostError",
+      "InstrumentBadDataError",
+      "InstrumentBadDataError",
+    ])(
+      "When unique shutdown error gets set to %s in Vuex, Then it will override any status text present before error modal appears",
+      async (error_type) => {
+        wrapper = mount(StatusWidget, {
+          store,
+          localVue,
+        });
+        expect(wrapper.find(text_selector).text()).toBe("System status: Connecting..."); // initial status
+        await store.commit("settings/set_shutdown_error_status", error_type);
+        expect(wrapper.find(text_selector).text()).toBe(`System status: ${ERRORS[error_type]}`);
+      }
+    );
+
     test("When Vuex is mutated to an unknown UUID, Then the status text should update to include that UUID", async () => {
       const propsData = {};
       wrapper = mount(StatusWidget, {
@@ -111,7 +130,6 @@ describe("StatusWidget.vue", () => {
       expect(wrapper.find(text_selector).text()).toBe("System status: Error Occurred");
       Vue.nextTick(() => {
         expect(modal.isVisible()).toBe(true);
-        done();
       });
     });
     test("When Vuex is mutated to an UPDATE ERROR UUID, Then the status text should update as 'Error During Firmware Update' and the the dialog of ErrorCatchWidget is visible", async () => {

@@ -1,6 +1,7 @@
 import actions from "./actions";
 import getters from "./getters";
 import mutations from "./mutations";
+import { ERRORS } from "./enums";
 
 const default_state = {
   auto_upload: false,
@@ -20,6 +21,7 @@ const default_state = {
   upload_error: false,
   total_uploaded_files: [],
   shutdown_error_message: "Mantarray software is about to shut down.",
+  shutdown_error_status: "",
   beta_2_mode: false,
   software_update_available: false,
   firmware_update_available: false,
@@ -37,4 +39,5 @@ export default {
   actions,
   mutations,
   getters,
+  ERRORS,
 };

@@ -3,7 +3,6 @@
 import actions from "./actions";
 import getters from "./getters";
 import mutations from "./mutations";
-
 const waveforms_entry_template = { x_data_points: [], y_data_points: [] };
 
 const maximum_number_of_wells_in_any_plate = 96;
