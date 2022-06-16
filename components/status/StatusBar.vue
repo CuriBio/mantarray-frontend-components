@@ -417,7 +417,6 @@ export default {
 
           this.alert_txt = "Error Occurred";
           this.$bvModal.show("error-catch");
-
           break;
         default:
           this.alert_txt = status;
