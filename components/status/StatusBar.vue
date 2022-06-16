@@ -241,6 +241,7 @@ export default {
     ...mapState("settings", [
       "log_path",
       "shutdown_error_message",
+      "shutdown_error_status",
       "total_uploaded_files",
       "total_file_count",
       "beta_2_mode",
@@ -277,24 +278,24 @@ export default {
         STATUS.MESSAGE.SERVER_READY,
         STATUS.MESSAGE.SERVER_STILL_INITIALIZING,
         STATUS.MESSAGE.INITIALIZING_INSTRUMENT,
-        STATUS.MESSAGE.CALIBRATING,
+        STATUS.MESSAGE.CALIBRATING, // this is added to be included in specific modal
+      ].includes(this.status_uuid);
+    },
+    is_updating: function () {
+      return [
         STATUS.MESSAGE.CHECKING_FOR_UPDATES,
         STATUS.MESSAGE.INSTALLING_UPDATES,
         STATUS.MESSAGE.DOWNLOADING_UPDATES,
-        STATUS.MESSAGE.UPDATES_NEEDED,
-        STATUS.MESSAGE.UPDATES_COMPLETE,
-        STATUS.MESSAGE.UPDATE_ERROR,
       ].includes(this.status_uuid);
     },
     is_data_analysis_enabled: function () {
-      return !this.stim_play_state && !this.is_playback_active && !this.is_initializing;
+      return !this.stim_play_state && !this.is_playback_active && !this.is_initializing && !this.is_updating;
     },
   },
   watch: {
     status_uuid: function (new_status) {
       // set message for stimulation status and system status if error occurs
-      if (new_status == STATUS.MESSAGE.ERROR) this.alert_txt = `Error Occurred`;
-      if (!this.stim_specific) this.set_system_specific_status(new_status);
+      if (!this.stim_specific && !this.shutdown_error_status) this.set_system_specific_status(new_status);
     },
     stim_status: function (new_status) {
       if (this.stim_specific) this.set_stim_specific_status(new_status);
@@ -323,12 +324,18 @@ export default {
     da_check: function (new_val, _) {
       if (new_val) {
         if (!this.is_data_analysis_enabled) {
-          this.is_initializing
+          this.is_initializing || this.is_updating
             ? this.$bvModal.show("initializing-warning")
             : this.$bvModal.show("active-processes-warning");
         } else {
           this.$emit("close_da_check_modal", 1);
         }
+      }
+    },
+    shutdown_error_status: function (new_val, _) {
+      if (new_val) {
+        this.alert_txt = new_val;
+        this.$bvModal.show("error-catch");
       }
     },
   },
@@ -402,12 +409,13 @@ export default {
           this.$bvModal.show("error-catch");
           break;
         case STATUS.MESSAGE.ERROR:
-          this.shutdown_request();
           this.close_modals_by_id([
             "fw-updates-in-progress-message",
             "fw-closure-warning",
             "ops-closure-warning",
           ]);
+
+          this.alert_txt = "Error Occurred";
           this.$bvModal.show("error-catch");
           break;
         default:
@@ -432,6 +440,7 @@ export default {
       for (const id of ids) {
         this.$bvModal.hide(id);
       }
+
       // Tanner (1/19/22): if one of the closure warning modals is given here while there is an unresolved
       // closure confirmation, need to respond with cancel value. If this step is skipped, need to make sure
       // send_confirmation will definitely be emitted, or the window will essentially be locked open
@@ -441,9 +450,9 @@ export default {
         (ids.includes("ops-closure-warning") || ids.includes("fw-closure-warning"))
       ) {
         this.$emit("send_confirmation", 0);
-      }
-      if (ids.includes("failed-qc-check") || ids.includes("success-qc-check"))
+      } else if (ids.includes("failed-qc-check") || ids.includes("success-qc-check"))
         this.$store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
+      else if (ids.includes("error-catch")) this.shutdown_request();
     },
     close_sw_update_modal: function () {
       this.$bvModal.hide("sw-update-message");

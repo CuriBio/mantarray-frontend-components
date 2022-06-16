@@ -1,7 +1,7 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-0.7.5 (unreleased)
+0.7.5 (2022-06-16)
 ------------------
 
 Added:
@@ -9,6 +9,8 @@ Added:
 
 - Added ability to stop active processes when user selects 'Data Analysis' tab. Modal will appear asking to stop or continue.
 - Data Analysis tab will not be enabled until no processes are running and system is initialized.
+- Added WS handler for incoming error messages
+- Added error enums to store sent through WS
 
 - Routes:
 

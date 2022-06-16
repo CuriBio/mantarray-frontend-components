@@ -9,6 +9,7 @@ import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import { socket as socket_client_side } from "@/store/plugins/websocket";
 import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
 import { ping_system_status } from "@/store/modules/flask/actions";
+import { ERRORS } from "../../../store/modules/settings/enums.js";
 
 const valid_plate_barcode = "ML2022001000";
 const valid_stim_barcode = "MS2022001000";
@@ -742,6 +743,25 @@ describe("store/data", () => {
           });
         });
         expect(store.state.playback.barcodes[barcode_type].value).toBeNull();
+      }
+    );
+    test.each([
+      "InstrumentCreateConnectionError",
+      "InstrumentConnectionLostError",
+      "InstrumentBadDataError",
+      "InstrumentFirmwareError",
+    ])(
+      "When backend emits error messages %s, Then it will update the shutdown error status in settings state",
+      async (error_type) => {
+        expect(store.state.settings.shutdown_error_status).toBe("");
+
+        await new Promise((resolve) => {
+          socket_server_side.emit("error", JSON.stringify({ error_type }), (ack) => {
+            resolve(ack);
+          });
+        });
+
+        expect(store.state.settings.shutdown_error_status).toBe(ERRORS[error_type]);
       }
     );
   });
