@@ -406,7 +406,7 @@ export default {
           this.$bvModal.show("error-catch");
           break;
         case STATUS.MESSAGE.ERROR:
-          this.alert_txt = "Error Occurred";
+          if (!this.shutdown_error_status) this.alert_txt = "Error Occurred";
           this.close_modals_by_id([
             "fw-updates-in-progress-message",
             "fw-closure-warning",
