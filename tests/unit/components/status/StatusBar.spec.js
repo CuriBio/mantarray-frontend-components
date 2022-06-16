@@ -82,20 +82,21 @@ describe("StatusWidget.vue", () => {
     });
 
     test.each([
-      "InstrumentCreateConnectionError",
-      "InstrumentConnectionLostError",
-      "InstrumentBadDataError",
-      "InstrumentBadDataError",
+      ["InstrumentCreateConnectionError", ERRORS["InstrumentCreateConnectionError"]],
+      ["InstrumentConnectionLostError", ERRORS["InstrumentConnectionLostError"]],
+      ["InstrumentBadDataError", ERRORS["InstrumentBadDataError"]],
+      ["InstrumentBadDataError", ERRORS["InstrumentBadDataError"]],
+      ["UnknownError", "Connecting..."], // original state
     ])(
       "When unique shutdown error gets set to %s in Vuex, Then it will override any status text present before error modal appears",
-      async (error_type) => {
+      async (error_type, status_msg) => {
         wrapper = mount(StatusWidget, {
           store,
           localVue,
         });
         expect(wrapper.find(text_selector).text()).toBe("System status: Connecting..."); // initial status
         await store.commit("settings/set_shutdown_error_status", error_type);
-        expect(wrapper.find(text_selector).text()).toBe(`System status: ${ERRORS[error_type]}`);
+        expect(wrapper.find(text_selector).text()).toBe(`System status: ${status_msg}`);
       }
     );
 
@@ -131,6 +132,21 @@ describe("StatusWidget.vue", () => {
       Vue.nextTick(() => {
         expect(modal.isVisible()).toBe(true);
       });
+    });
+    test("When Vuex is mutated to an ERROR UUID and shutdown status was set to known error, Then the status text should not update to 'Error Occurred'", async () => {
+      const propsData = {};
+      wrapper = mount(StatusWidget, {
+        propsData,
+        store,
+        localVue,
+        attachToDocument: true,
+      });
+
+      await store.commit("settings/set_shutdown_error_status", "InstrumentCreateConnectionError");
+      store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
+      expect(wrapper.find(text_selector).text()).toBe(
+        `System status: ${ERRORS["InstrumentCreateConnectionError"]}`
+      );
     });
     test("When Vuex is mutated to an UPDATE ERROR UUID, Then the status text should update as 'Error During Firmware Update' and the the dialog of ErrorCatchWidget is visible", async () => {
       const propsData = {};

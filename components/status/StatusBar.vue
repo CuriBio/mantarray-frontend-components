@@ -333,7 +333,7 @@ export default {
       }
     },
     shutdown_error_status: function (new_val, _) {
-      this.alert_txt = new_val;
+      if (new_val) this.alert_txt = new_val;
     },
   },
   created() {

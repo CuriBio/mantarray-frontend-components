@@ -125,7 +125,6 @@ export default function create_web_socket_plugin(socket) {
     socket.on("error", async (message_json, cb) => {
       const { error_type } = JSON.parse(message_json);
       await store.commit("settings/set_shutdown_error_status", error_type);
-
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
