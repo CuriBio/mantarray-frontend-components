@@ -295,7 +295,7 @@ export default {
   watch: {
     status_uuid: function (new_status) {
       // set message for stimulation status and system status if error occurs
-      if (!this.stim_specific) this.set_system_specific_status(new_status);
+      if (!this.stim_specific && !this.shutdown_error_status) this.set_system_specific_status(new_status);
     },
     stim_status: function (new_status) {
       if (this.stim_specific) this.set_stim_specific_status(new_status);
@@ -333,7 +333,10 @@ export default {
       }
     },
     shutdown_error_status: function (new_val, _) {
-      if (new_val) this.alert_txt = new_val;
+      if (new_val) {
+        this.alert_txt = new_val;
+        this.$bvModal.show("error-catch");
+      }
     },
   },
   created() {
@@ -406,13 +409,15 @@ export default {
           this.$bvModal.show("error-catch");
           break;
         case STATUS.MESSAGE.ERROR:
-          if (!this.shutdown_error_status) this.alert_txt = "Error Occurred";
           this.close_modals_by_id([
             "fw-updates-in-progress-message",
             "fw-closure-warning",
             "ops-closure-warning",
           ]);
+
+          this.alert_txt = "Error Occurred";
           this.$bvModal.show("error-catch");
+
           break;
         default:
           this.alert_txt = status;
