@@ -5,7 +5,7 @@ Changelog for Mantarray Frontend Components
 Added:
 
 - Added a test file for the new h5 warning in pages
-- added front-end h5 warning 
+- added front-end h5 warning
 
 0.7.5 (2022-06-16)
 ------------------
