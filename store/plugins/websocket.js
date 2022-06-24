@@ -122,6 +122,12 @@ export default function create_web_socket_plugin(socket) {
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
 
+    socket.on("corrupt_files_alert", async (_, cb) => {
+      await store.commit("data/h5_warning");
+
+      if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
+    });
+
     socket.on("error", async (message_json, cb) => {
       const { error_type } = JSON.parse(message_json);
       await store.commit("settings/set_shutdown_error_status", error_type);

@@ -73,4 +73,8 @@ export default {
   set_stimulator_circuit_statuses(state, stimulator_statuses) {
     state.stimulator_circuit_statuses = [...stimulator_statuses];
   },
+  h5_warning(state) {
+    console.log(state.h5_warning + " mutations.js");
+    state.h5_warning = !state.h5_warning;
+  },
 };

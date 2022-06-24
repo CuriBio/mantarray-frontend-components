@@ -24,6 +24,20 @@
         />
       </b-modal>
       <b-modal
+        id="h5_warning"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
+        <StatusWarningWidget
+          :modal_labels="h5_warning_label"
+          @handle_confirmation="close_modals_by_id(['h5_warning'])"
+        />
+      </b-modal>
+      <b-modal
         id="short-circuit-err"
         size="sm"
         hide-footer
@@ -229,6 +243,12 @@ export default {
         msg_two: "It will become available shortly.",
         button_names: ["Close"],
       },
+      h5_warning_label: {
+        header: "Warning!",
+        msg_one: "Corrupt h5 files found",
+        msg_two: "",
+        button_names: ["Close"],
+      },
     };
   },
   computed: {
@@ -237,7 +257,7 @@ export default {
     }),
     ...mapState("playback", ["data_analysis_state"]),
     ...mapState("stimulation", ["protocol_assignments", "stim_play_state", "stim_status"]),
-    ...mapState("data", ["stimulator_circuit_statuses"]),
+    ...mapState("data", ["stimulator_circuit_statuses", "h5_warning"]),
     ...mapState("settings", [
       "log_path",
       "shutdown_error_message",
@@ -336,6 +356,12 @@ export default {
       if (new_val) {
         this.alert_txt = new_val;
         this.$bvModal.show("error-catch");
+      }
+    },
+    h5_warning: function (new_val, _) {
+      if (new_val) {
+        this.$bvModal.show("h5_warning");
+        this.$store.commit("data/h5_warning");
       }
     },
   },
@@ -534,7 +560,8 @@ export default {
 #active-processes-warning,
 #initializing-warning,
 #short-circuit-err,
-#success-qc-check {
+#success-qc-check,
+#h5_warning {
   position: fixed;
   margin: 5% auto;
   top: 15%;
