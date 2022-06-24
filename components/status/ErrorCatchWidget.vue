@@ -47,6 +47,7 @@
 </template>
 <script>
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
+import { mapState } from "vuex";
 export default {
   name: "ErrorCatchWidget",
   components: {
@@ -54,9 +55,9 @@ export default {
   },
   props: {
     log_filepath: { type: String, default: "" },
-    shutdown_error_message: { type: String, default: "" },
   },
   computed: {
+    ...mapState("settings", ["shutdown_error_message"]),
     compute_number_of_rows: function () {
       return Math.ceil(((this.log_filepath.length * 1.0) / 30).toFixed(1));
     },
@@ -71,6 +72,11 @@ export default {
     },
     error_catch_button_cssprops: function () {
       return "top: " + (220 + this.compute_number_of_rows * 12) + "px; left: 0px; position: absolute";
+    },
+  },
+  watch: {
+    shutdown_error_message: function (newVal) {
+      console.log(newVal);
     },
   },
   methods: {
