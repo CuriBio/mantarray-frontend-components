@@ -236,7 +236,6 @@ export default {
     ...mapState("data", ["stimulator_circuit_statuses"]),
     ...mapState("settings", [
       "log_path",
-      "shutdown_error_message",
       "shutdown_error_status",
       "total_uploaded_files",
       "total_file_count",

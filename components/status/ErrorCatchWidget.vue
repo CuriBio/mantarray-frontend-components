@@ -62,7 +62,7 @@ export default {
       return Math.ceil(((this.log_filepath.length * 1.0) / 30).toFixed(1));
     },
     error_background_cssprops: function () {
-      return "height: " + (290 + this.compute_number_of_rows * 12) + "px;";
+      return "height: " + (250 + this.compute_number_of_rows * 12) + "px;";
     },
     textarea__error_cssprops: function () {
       return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";

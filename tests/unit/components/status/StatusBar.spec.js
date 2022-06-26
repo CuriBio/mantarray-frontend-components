@@ -82,21 +82,20 @@ describe("StatusWidget.vue", () => {
     });
 
     test.each([
-      ["InstrumentCreateConnectionError", ERRORS["InstrumentCreateConnectionError"]],
-      ["InstrumentConnectionLostError", ERRORS["InstrumentConnectionLostError"]],
-      ["InstrumentBadDataError", ERRORS["InstrumentBadDataError"]],
-      ["InstrumentBadDataError", ERRORS["InstrumentBadDataError"]],
-      ["UnknownError", "Connecting..."], // original state
+      "InstrumentCreateConnectionError",
+      "InstrumentConnectionLostError",
+      "InstrumentBadDataError",
+      "InstrumentFirmwareError",
     ])(
       "When unique shutdown error gets set to %s in Vuex, Then it will override any status text present before error modal appears",
-      async (error_type, status_msg) => {
+      async (error_type) => {
         wrapper = mount(StatusWidget, {
           store,
           localVue,
         });
         expect(wrapper.find(text_selector).text()).toBe("System status: Connecting..."); // initial status
         await store.commit("settings/set_shutdown_error_status", error_type);
-        expect(wrapper.find(text_selector).text()).toBe(`System status: ${status_msg}`);
+        expect(wrapper.find(text_selector).text()).toBe(`System status: Error Occurred`);
       }
     );
 
@@ -144,9 +143,7 @@ describe("StatusWidget.vue", () => {
 
       await store.commit("settings/set_shutdown_error_status", "InstrumentCreateConnectionError");
       store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
-      expect(wrapper.find(text_selector).text()).toBe(
-        `System status: ${ERRORS["InstrumentCreateConnectionError"]}`
-      );
+      expect(wrapper.find(text_selector).text()).toBe(`System status: Error Occurred`);
     });
     test("When Vuex is mutated to an UPDATE ERROR UUID, Then the status text should update as 'Error During Firmware Update' and the the dialog of ErrorCatchWidget is visible", async () => {
       const propsData = {};
