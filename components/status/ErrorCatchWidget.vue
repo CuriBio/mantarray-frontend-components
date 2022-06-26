@@ -62,21 +62,16 @@ export default {
       return Math.ceil(((this.log_filepath.length * 1.0) / 30).toFixed(1));
     },
     error_background_cssprops: function () {
-      return "height: " + (220 + this.compute_number_of_rows * 12) + "px;";
+      return "height: " + (290 + this.compute_number_of_rows * 12) + "px;";
     },
     textarea__error_cssprops: function () {
       return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";
     },
     next_step_cssprops: function () {
-      return "top: " + (160 + this.compute_number_of_rows * 12) + "px;";
+      return "top: " + (180 + this.compute_number_of_rows * 12) + "px;";
     },
     error_catch_button_cssprops: function () {
-      return "top: " + (220 + this.compute_number_of_rows * 12) + "px; left: 0px; position: absolute";
-    },
-  },
-  watch: {
-    shutdown_error_message: function (newVal) {
-      console.log(newVal);
+      return "top: " + (250 + this.compute_number_of_rows * 12) + "px; left: 0px; position: absolute";
     },
   },
   methods: {
@@ -168,7 +163,7 @@ a:hover {
   color: rgb(183, 183, 183);
   font-family: Courier New;
   position: absolute;
-  top: 122px;
+  top: 145px;
   left: 56px;
   width: 338px;
   background: rgb(17, 17, 17);
