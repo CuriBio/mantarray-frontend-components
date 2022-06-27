@@ -99,6 +99,19 @@ describe("StatusWidget.vue", () => {
       }
     );
 
+    test("When unknownn error type gets sent through WS, Then the error modal will not appear", async () => {
+      const propsData = {};
+      wrapper = mount(StatusWidget, {
+        propsData,
+        store,
+        localVue,
+      });
+
+      expect(wrapper.find(text_selector).text()).toBe("System status: Connecting..."); // initial status
+      await store.commit("settings/set_shutdown_error_status", "UnknownError");
+      expect(wrapper.find(text_selector).text()).toBe("System status: Connecting...");
+    });
+
     test("When Vuex is mutated to an unknown UUID, Then the status text should update to include that UUID", async () => {
       const propsData = {};
       wrapper = mount(StatusWidget, {
