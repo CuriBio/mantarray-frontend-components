@@ -266,7 +266,6 @@ describe("store/data", () => {
   });
 
   describe("websocket", () => {
-    // windows CI is having issues
     let http_server;
     let ws_server;
     let socket_server_side;
