@@ -40,7 +40,7 @@ describe("StatusWidget.vue", () => {
     mocked_axios.restore();
   });
   describe("system_status", () => {
-    test("When BE signals corrupt h5 detected test that the widget appears and disappear when button is clicked", async () => {
+    test("When BE signals corrupt h5 detected, Then show user the error", async () => {
       const propsData = {};
       wrapper = mount(StatusWidget, {
         propsData,
@@ -53,9 +53,10 @@ describe("StatusWidget.vue", () => {
       Vue.nextTick(() => {
         expect(wrapper.find(text_selector_h5).isVisible()).toBe(true)
         const h5_exit_button = wrapper.findAll(".span__button_label").at(0);
-        //test modal visiblity with button click at end to close it.
+        //check we have the correct button
         expect(h5_exit_button.text()).toBe([])
-        // activate the button and then check that widget is not visible
+        h5_exit_button.trigger("click")
+        expect(wrapper.find(text_selector_h5).isVisible()).toBe(false)
       });
     });
     //add test to check that false = not visible
