@@ -547,7 +547,7 @@ export default {
       const default_name = `${barcode}__${utc_year}_${utc_month}_${utc_day}_${utc_hour}${utc_min}${utc_sec}`;
       return default_name;
     },
-    start_recording: function () {
+    start_recording: async function () {
       this.$store.dispatch("playback/start_recording", this.default_recording_name);
 
       this.recording_timer = setTimeout(() => {
@@ -555,7 +555,8 @@ export default {
           this.on_stop_record_click();
           this.$bvModal.show("recording-limit-warning");
         }
-      }, 5 * 60e3);
+        // }, 5 * 60e3);
+      }, 1000);
     },
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
