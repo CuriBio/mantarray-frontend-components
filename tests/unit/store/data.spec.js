@@ -267,7 +267,7 @@ describe("store/data", () => {
 
   describe("websocket", () => {
     // windows CI is having issues
-    //if (process.platform == "win32") {return;}
+    if (process.platform == "win32") {return;}
     let http_server;
     let ws_server;
     let socket_server_side;
