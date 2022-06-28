@@ -312,6 +312,22 @@ describe("store/data", () => {
         socket_server_side.send(expected_message);
       });
     });
+
+    /*test("Check state of the h5 store", async () => {
+      // empty array to represent the corrupt files.
+      const expected_message = {"data_type":"corrupt_files_alert","data_json":[]};
+      expect(store.state.data.h5_warning).toEqual(false)
+
+      await new Promise((resolve) => {
+        socket_client_side.on("corrupt_files_alert", (message) => {
+          expect(message).toEqual(expected_message);
+          resolve();
+        });
+        socket_server_side.send(expected_message);
+      });
+      expect(store.state.data.h5_warning).toEqual(true)
+    });
+*/
     test.each([
       ["live_view_active", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE],
       ["recording", ENUMS.PLAYBACK_STATES.RECORDING],

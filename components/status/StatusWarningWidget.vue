@@ -3,7 +3,7 @@
     <div class="div__status-warning-background" :style="`height: ${dynamic_modal_height}px;`">
       <span class="span__status-warning-label">{{ modal_labels.header }}</span>
       <div ref="message_area" class="span__status-warning-message">
-        <p>{{ modal_labels.msg_one }}</p>
+        <p id="p__status_warning_msg1">{{ modal_labels.msg_one }}</p>
         <p v-show="!include_filepath">
           {{ modal_labels.msg_two }}
           <a

@@ -2,7 +2,14 @@
   <div class="div__status-bar">
     <span class="span__status-bar-text">{{ status_label }}: {{ alert_txt }}</span>
     <span>
-      <b-modal id="error-catch" size="sm" hide-footer hide-header hide-header-close :static="true">
+      <b-modal
+        id="error-catch"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+      >
         <ErrorCatchWidget
           :log_filepath="log_path"
           :shutdown_error_message="shutdown_error_message"
@@ -72,7 +79,10 @@
         :static="true"
         :no-close-on-backdrop="true"
       >
-        <StatusWarningWidget :modal_labels="sw_update_labels" @handle_confirmation="close_sw_update_modal" />
+        <StatusWarningWidget
+          :modal_labels="sw_update_labels"
+          @handle_confirmation="close_sw_update_modal"
+        />
       </b-modal>
       <b-modal
         id="fw-closure-warning"
@@ -234,17 +244,19 @@ export default {
       active_processes_modal_labels: {
         header: "Warning!",
         msg_one: "Data analysis cannot be performed while other processes are running.",
-        msg_two: "Active processes will be automatically stopped if you choose to continue.",
+        msg_two:
+          "Active processes will be automatically stopped if you choose to continue.",
         button_names: ["Cancel", "Continue"],
       },
       initializing_modal_labels: {
         header: "Warning!",
-        msg_one: "Data analysis cannot be performed while the instrument is initializing or calibrating.",
+        msg_one:
+          "Data analysis cannot be performed while the instrument is initializing or calibrating.",
         msg_two: "It will become available shortly.",
         button_names: ["Close"],
       },
       h5_warning_label: {
-        header: "Warning!",
+        header: "Error!",
         msg_one: "Corrupt h5 files found",
         msg_two: "",
         button_names: ["Close"],
@@ -256,7 +268,11 @@ export default {
       status_uuid: "flask/status_id",
     }),
     ...mapState("playback", ["data_analysis_state"]),
-    ...mapState("stimulation", ["protocol_assignments", "stim_play_state", "stim_status"]),
+    ...mapState("stimulation", [
+      "protocol_assignments",
+      "stim_play_state",
+      "stim_status",
+    ]),
     ...mapState("data", ["stimulator_circuit_statuses", "h5_warning"]),
     ...mapState("settings", [
       "log_path",
@@ -276,7 +292,8 @@ export default {
       return {
         header: "Important!",
         msg_one: `The firmware update is in progress. It will take about ${duration} to complete.`,
-        msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
+        msg_two:
+          "Do not close the Mantarray software or power off the Mantarray instrument.",
       };
     },
     status_label: function () {
@@ -289,9 +306,11 @@ export default {
       );
     },
     is_playback_active: function () {
-      return [STATUS.MESSAGE.LIVE_VIEW_ACTIVE, STATUS.MESSAGE.RECORDING, STATUS.MESSAGE.BUFFERING].includes(
-        this.status_uuid
-      );
+      return [
+        STATUS.MESSAGE.LIVE_VIEW_ACTIVE,
+        STATUS.MESSAGE.RECORDING,
+        STATUS.MESSAGE.BUFFERING,
+      ].includes(this.status_uuid);
     },
     is_initializing: function () {
       return [
@@ -309,13 +328,19 @@ export default {
       ].includes(this.status_uuid);
     },
     is_data_analysis_enabled: function () {
-      return !this.stim_play_state && !this.is_playback_active && !this.is_initializing && !this.is_updating;
+      return (
+        !this.stim_play_state &&
+        !this.is_playback_active &&
+        !this.is_initializing &&
+        !this.is_updating
+      );
     },
   },
   watch: {
     status_uuid: function (new_status) {
       // set message for stimulation status and system status if error occurs
-      if (!this.stim_specific && !this.shutdown_error_status) this.set_system_specific_status(new_status);
+      if (!this.stim_specific && !this.shutdown_error_status)
+        this.set_system_specific_status(new_status);
     },
     stim_status: function (new_status) {
       if (this.stim_specific) this.set_stim_specific_status(new_status);
@@ -328,13 +353,18 @@ export default {
         this.stim_play_state ||
         this.total_uploaded_files.length < this.total_file_count;
 
-      const data_analysis_in_progress = this.data_analysis_state === ENUMS.DATA_ANALYSIS_STATE.ACTIVE;
+      const data_analysis_in_progress =
+        this.data_analysis_state === ENUMS.DATA_ANALYSIS_STATE.ACTIVE;
 
       const fw_update_in_progress =
         this.status_uuid === STATUS.MESSAGE.DOWNLOADING_UPDATES ||
         this.status_uuid === STATUS.MESSAGE.INSTALLING_UPDATES;
 
-      if (this.confirmation_request && !this.stim_specific && !data_analysis_in_progress) {
+      if (
+        this.confirmation_request &&
+        !this.stim_specific &&
+        !data_analysis_in_progress
+      ) {
         if (fw_update_in_progress) this.$bvModal.show("fw-closure-warning");
         else if (sensitive_ops_in_progress) {
           this.$bvModal.show("ops-closure-warning");
@@ -359,10 +389,7 @@ export default {
       }
     },
     h5_warning: function (new_val, _) {
-      if (new_val) {
-        this.$bvModal.show("h5_warning");
-        this.$store.commit("data/h5_warning");
-      }
+      this.$bvModal.show("h5_warning");
     },
   },
   created() {
@@ -378,7 +405,8 @@ export default {
         this.assigned_open_circuits.length > 0
           ? this.$bvModal.show("failed-qc-check")
           : this.$bvModal.show("success-qc-check");
-      else if (status === STIM_STATUS.SHORT_CIRCUIT_ERROR) this.$bvModal.show("short-circuit-err");
+      else if (status === STIM_STATUS.SHORT_CIRCUIT_ERROR)
+        this.$bvModal.show("short-circuit-err");
     },
     set_system_specific_status: function (status) {
       switch (status) {
@@ -424,14 +452,23 @@ export default {
           break;
         case STATUS.MESSAGE.UPDATES_COMPLETE:
           this.alert_txt = `Firmware Updates Complete`;
-          this.close_modals_by_id(["fw-updates-in-progress-message", "fw-closure-warning"]);
+          this.close_modals_by_id([
+            "fw-updates-in-progress-message",
+            "fw-closure-warning",
+          ]);
           this.$bvModal.show("fw-updates-complete-message");
           break;
         case STATUS.MESSAGE.UPDATE_ERROR:
           this.alert_txt = `Error During Firmware Update`;
-          this.close_modals_by_id(["fw-updates-in-progress-message", "fw-closure-warning"]);
+          this.close_modals_by_id([
+            "fw-updates-in-progress-message",
+            "fw-closure-warning",
+          ]);
           this.$store.commit("flask/stop_status_pinging");
-          this.$store.commit("settings/set_shutdown_error_message", "Error during firmware update.");
+          this.$store.commit(
+            "settings/set_shutdown_error_message",
+            "Error during firmware update."
+          );
           this.$bvModal.show("error-catch");
           break;
         case STATUS.MESSAGE.ERROR:
@@ -498,7 +535,8 @@ export default {
 
       if (idx === 1) {
         if (this.stim_play_state) this.$store.dispatch("stimulation/stop_stimulation");
-        if (this.is_playback_active) this.$store.dispatch("playback/stop_active_processes");
+        if (this.is_playback_active)
+          this.$store.dispatch("playback/stop_active_processes");
       }
 
       this.$emit("close_da_check_modal", idx);
