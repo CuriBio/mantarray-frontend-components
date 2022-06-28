@@ -339,7 +339,7 @@ export default {
       recording_timer: null,
       calibration_modal_labels: {
         header: "Warning!",
-        msg_one: "Please ensure no plate is present on device.",
+        msg_one: "Please ensure no plate is present on device and the stimulation lid is not plugged in.",
         msg_two: "Do you wish to continue?",
         button_names: ["Cancel", "Yes"],
       },

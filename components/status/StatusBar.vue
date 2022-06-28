@@ -15,6 +15,8 @@
           :shutdown_error_message="shutdown_error_message"
           @ok-clicked="close_modals_by_id(['error-catch'])"
         />
+      <b-modal id="error-catch" size="sm" hide-footer hide-header hide-header-close :static="true">
+        <ErrorCatchWidget :log_filepath="log_path" @ok-clicked="close_modals_by_id(['error-catch'])" />
       </b-modal>
       <b-modal
         id="fw-updates-complete-message"
@@ -276,7 +278,6 @@ export default {
     ...mapState("data", ["stimulator_circuit_statuses", "h5_warning"]),
     ...mapState("settings", [
       "log_path",
-      "shutdown_error_message",
       "shutdown_error_status",
       "total_uploaded_files",
       "total_file_count",
@@ -384,7 +385,7 @@ export default {
     },
     shutdown_error_status: function (new_val, _) {
       if (new_val) {
-        this.alert_txt = new_val;
+        this.alert_txt = "Error Occurred";
         this.$bvModal.show("error-catch");
       }
     },
