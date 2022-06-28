@@ -78,7 +78,7 @@ export default {
     },
     dynamic_modal_height: function () {
       const msg_rows = Math.ceil(
-        ((this.modal_labels.msg_one.length + this.modal_labels.msg_two.length) / 50).toFixed(1)
+        this.modal_labels.msg_one.length / 54 + 1 + (this.modal_labels.msg_two.length / 54 + 1)
       );
       return msg_rows * 18 + 125;
     },
