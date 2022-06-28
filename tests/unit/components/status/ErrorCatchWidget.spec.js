@@ -92,18 +92,18 @@ describe("ErrorCatchWidget.vue", () => {
       localVue,
     });
     const target_background_div = wrapper.find(".div__status-error-catch-background");
-    expect(target_background_div.attributes().style).toBe("height: 232px;");
+    expect(target_background_div.attributes().style).toBe("height: 262px;");
     const target_text_area = wrapper.find(".textarea__error-file-path");
     expect(target_text_area.attributes().style).toBe("height: 37px;");
     const target_error_button = wrapper.find(".div__error-button");
-    expect(target_error_button.attributes().style).toBe("top: 232px; left: 0px; position: absolute;");
+    expect(target_error_button.attributes().style).toBe("top: 262px; left: 0px; position: absolute;");
     /* A run time update of prop occured below then observe that height value and top is updated */
     await wrapper.setProps({
       log_filepath: "C:UsersMantarrayAppDataRoamingMantarrayControllerlogs_flask",
     });
-    expect(target_background_div.attributes().style).toBe("height: 244px;");
+    expect(target_background_div.attributes().style).toBe("height: 274px;");
     expect(target_text_area.attributes().style).toBe("height: 49px;");
-    expect(target_error_button.attributes().style).toBe("top: 244px; left: 0px; position: absolute;");
+    expect(target_error_button.attributes().style).toBe("top: 274px; left: 0px; position: absolute;");
   });
   test("Given that ErrorCatchWidget is mounted, When the ErrorCatchWidget is visible, Then click on 'Okay' results in an event 'ok-clicked' to be emitted", async () => {
     const propsData = {
