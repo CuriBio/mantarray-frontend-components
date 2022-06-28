@@ -26,8 +26,8 @@
     ></textarea>
     <div class="div_status-error-catch-next-step-txt" :style="next_step_cssprops">
       <p>
-        Please restart the computer, unplug and plug back in the <br />
-        power for the Mantarray before attempting to use again
+        Please turn the instrument off and wait 10 seconds <br />
+        before attempting to use again
       </p>
     </div>
     <div class="div__error-button" :style="error_catch_button_cssprops">
