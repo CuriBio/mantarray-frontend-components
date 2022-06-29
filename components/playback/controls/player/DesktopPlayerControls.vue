@@ -552,8 +552,8 @@ export default {
 
       this.recording_timer = setTimeout(() => {
         if (this.playback_state === this.playback_state_enums.RECORDING) {
-          this.$bvModal.show("recording-limit-warning");
           this.on_stop_record_click();
+          this.$bvModal.show("recording-limit-warning");
         }
       }, 5 * 60e3);
     },
