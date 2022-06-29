@@ -1,11 +1,19 @@
 Changelog for Mantarray Frontend Components
 ===========================================
-0.7.6 (2022-06-24)
+0.7.6 (2022-06-29)
 
 Added:
+^^^^^^
 
-- Added a test file for the new h5 warning in pages
-- added front-end h5 warning
+- Added WS handler for h5 corruption error
+- Added popup error modal when h5_warning state changes
+
+Changed
+^^^^^^^
+
+- Fixed bug that failed to close firmware modals on system error
+- Error enums will now be shown on ErrorCatchWidget modal instead of in the StatusBar component
+- Minor style changes to status modals
 
 0.7.5 (2022-06-16)
 ------------------
