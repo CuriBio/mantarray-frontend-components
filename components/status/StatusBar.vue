@@ -12,11 +12,11 @@
       >
         <ErrorCatchWidget
           :log_filepath="log_path"
-          :shutdown_error_message="shutdown_error_message"
           @ok-clicked="close_modals_by_id(['error-catch'])"
         />
       <b-modal id="error-catch" size="sm" hide-footer hide-header hide-header-close :static="true">
         <ErrorCatchWidget :log_filepath="log_path" @ok-clicked="close_modals_by_id(['error-catch'])" />
+      </b-modal>
       </b-modal>
       <b-modal
         id="fw-updates-complete-message"
