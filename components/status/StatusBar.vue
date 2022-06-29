@@ -382,6 +382,11 @@ export default {
     },
     shutdown_error_status: function (new_val, _) {
       if (new_val) {
+        this.close_modals_by_id([
+          "fw-updates-in-progress-message",
+          "fw-closure-warning",
+          "ops-closure-warning",
+        ]);
         this.alert_txt = "Error Occurred";
         this.$bvModal.show("error-catch");
       }

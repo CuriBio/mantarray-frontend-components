@@ -1,11 +1,11 @@
 <template>
   <!-- <StatusWarningWidget :email_error="true" :modal_labels="short_circuit_labels" /> -->
   <!-- <StatusWarningWidget id="upload-modal" :modal_labels="sw_update_labels" /> -->
-  <StatusWarningWidget id="upload-modal" :success_status="true" :modal_labels="success_labels" />
+  <StatusWarningWidget id="upload-modal" :modal_labels="barcode_manual_labels" />
 </template>
 <script>
-// import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
-import { StatusWarningWidget } from "@/dist/mantarray.common";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+// import { StatusWarningWidget } from "@/dist/mantarray.common";
 
 export default {
   components: {
@@ -50,6 +50,13 @@ export default {
         header: "Warning!",
         msg_one: "Please ensure no plate is present on device.",
         msg_two: "Do you wish to continue?",
+        button_names: ["Cancel", "Yes"],
+      },
+      barcode_manual_labels: {
+        header: "Warning!",
+        msg_one: "Do you want to enable manual barcode editing?",
+        msg_two:
+          "Once enabled, all barcodes must be entered manually. This should only be done if the barcode scanner is malfunctioning. Scanning cannot be re-enabled until software is restarted.",
         button_names: ["Cancel", "Yes"],
       },
     };
