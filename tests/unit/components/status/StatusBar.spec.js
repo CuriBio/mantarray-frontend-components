@@ -40,6 +40,26 @@ describe("StatusWidget.vue", () => {
     mocked_axios.restore();
   });
   describe("system_status", () => {
+    test("When BE signals corrupt h5 detected, Then show user the error", async () => {
+      const propsData = {};
+      wrapper = mount(StatusWidget, {
+        propsData,
+        store,
+        localVue,
+      });
+      const text_selector_h5 = "#h5_warning";
+      await store.commit("data/h5_warning");
+      //select the correct button
+      Vue.nextTick(() => {
+        expect(wrapper.find(text_selector_h5).isVisible()).toBe(true);
+        const h5_exit_button = wrapper.findAll(".span__button_label").at(0);
+        //check we have the correct button
+        expect(h5_exit_button.text()).toBe([]);
+        h5_exit_button.trigger("click");
+        expect(wrapper.find(text_selector_h5).isVisible()).toBe(false);
+      });
+    });
+    //add test to check that false = not visible
     test.each([
       ["SERVER_STILL_INITIALIZING", "System status: Connecting..."],
       ["SERVER_READY", "System status: Connecting..."],

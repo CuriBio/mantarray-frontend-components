@@ -73,4 +73,7 @@ export default {
   set_stimulator_circuit_statuses(state, stimulator_statuses) {
     state.stimulator_circuit_statuses = [...stimulator_statuses];
   },
+  h5_warning(state) {
+    state.h5_warning = !state.h5_warning;
+  },
 };

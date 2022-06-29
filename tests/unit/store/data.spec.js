@@ -266,10 +266,6 @@ describe("store/data", () => {
   });
 
   describe("websocket", () => {
-    // windows CI is having issues
-    if (process.platform == "win32" && process.env.TEST_ENV === "CI") {
-      return;
-    }
     let http_server;
     let ws_server;
     let socket_server_side;
@@ -312,6 +308,19 @@ describe("store/data", () => {
         socket_server_side.send(expected_message);
       });
     });
+    test("When h5 files are detected by desktop app, Then client show error", async () => {
+      // empty array to represent the corrupt files.
+      const expected_message = JSON.stringify([]);
+      expect(store.state.data.h5_warning).toBe(false);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("corrupt_files_alert", expected_message, (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.data.h5_warning).toBe(true);
+    });
+
     test.each([
       ["live_view_active", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE],
       ["recording", ENUMS.PLAYBACK_STATES.RECORDING],
