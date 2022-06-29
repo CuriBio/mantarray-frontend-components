@@ -12,7 +12,7 @@
     "dev": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa",
     "build-dev": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && npm run build && cross-env-shell NODE_ENV=development nuxt dev --spa",
     "build": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && vue-cli-service build --target lib --name mantarray ./index.js",
-    "test:unit-no-prebuild": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell TEST_ENV=CI jest -c jest.config.js",
+    "test:unit-no-prebuild": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && jest -c jest.config.js",
     "test:unit": "npm run build && jest -c jest.config.js",
     "test:e2e": "npm run build && npm run _test:e2e -- --app 'npm run dev' --app-init-delay 35000",
     "test:e2e-parallel-no-prebuild": "npm run _test:e2e-parallel -- --app 'npm run dev' --app-init-delay 35000",
