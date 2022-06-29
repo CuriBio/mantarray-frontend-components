@@ -37,8 +37,8 @@ export default {
   computed: {
     compute_number_of_rows: function () {
       return (
-        Math.ceil(((this.modal_labels.msg_one.length * 1.0) / 40).toFixed(1)) +
-        Math.ceil(((this.modal_labels.msg_two.length * 1.0) / 40).toFixed(1))
+        Math.ceil(((this.modal_labels.msg_one.length * 1.0) / 40 + 1).toFixed(1)) +
+        Math.ceil(((this.modal_labels.msg_two.length * 1.0) / 40 + 1).toFixed(1))
       );
     },
     modal_height: function () {
