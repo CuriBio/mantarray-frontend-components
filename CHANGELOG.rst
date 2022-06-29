@@ -14,6 +14,7 @@ Changed
 - Fixed bug that failed to close firmware modals on system error
 - Error enums will now be shown on ErrorCatchWidget modal instead of in the StatusBar component
 - Minor style changes to status modals
+- Fixed bug that prevented default recording name from being used
 
 0.7.5 (2022-06-16)
 ------------------

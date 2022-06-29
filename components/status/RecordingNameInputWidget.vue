@@ -96,11 +96,9 @@ export default {
         const res = await this.$store.dispatch("playback/handle_recording_name", {
           recording_name: this.recording_name,
           default_name: this.default_recording_name,
-          replace_existing: false,
+          replace_existing: this.recording_name === this.default_recording_name,
         });
-        res === 403
-          ? this.$bvModal.show("existing-recording-warning")
-          : this.$emit("handle_confirmation", this.recording_name);
+        res === 403 ? this.$bvModal.show("existing-recording-warning") : this.$emit("handle_confirmation");
       }
     },
     close_warning_modal: async function (idx) {
@@ -108,11 +106,11 @@ export default {
 
       if (idx === 1) {
         await this.$store.dispatch("playback/handle_recording_name", {
-          new_name: this.recording_name,
+          recording_name: this.recording_name,
           default_name: this.default_recording_name,
           replace_existing: true,
         });
-        this.$emit("handle_confirmation", this.recording_name);
+        this.$emit("handle_confirmation");
       } else this.error_message = "Name already exists";
     },
   },
