@@ -51,12 +51,12 @@ describe("StatusWidget.vue", () => {
       await store.commit("data/h5_warning");
       //select the correct button
       Vue.nextTick(() => {
-        expect(wrapper.find(text_selector_h5).isVisible()).toBe(true)
+        expect(wrapper.find(text_selector_h5).isVisible()).toBe(true);
         const h5_exit_button = wrapper.findAll(".span__button_label").at(0);
         //check we have the correct button
-        expect(h5_exit_button.text()).toBe([])
-        h5_exit_button.trigger("click")
-        expect(wrapper.find(text_selector_h5).isVisible()).toBe(false)
+        expect(h5_exit_button.text()).toBe([]);
+        h5_exit_button.trigger("click");
+        expect(wrapper.find(text_selector_h5).isVisible()).toBe(false);
       });
     });
     //add test to check that false = not visible

@@ -313,13 +313,13 @@ describe("store/data", () => {
       const expected_message = JSON.stringify([]);
       expect(store.state.data.h5_warning).toBe(false);
 
-      await new Promise(resolve => {
-        socket_server_side.emit("corrupt_files_alert", expected_message, ack => {
+      await new Promise((resolve) => {
+        socket_server_side.emit("corrupt_files_alert", expected_message, (ack) => {
           resolve(ack);
         });
       });
       expect(store.state.data.h5_warning).toBe(true);
-    })
+    });
 
     test.each([
       ["live_view_active", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE],
