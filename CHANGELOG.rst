@@ -1,6 +1,6 @@
 Changelog for Mantarray Frontend Components
 ===========================================
-0.7.6 (2022-06-29)
+0.7.6 (2022-06-30)
 
 Added:
 ^^^^^^
