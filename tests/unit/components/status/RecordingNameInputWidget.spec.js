@@ -124,7 +124,7 @@ describe("RecordingNameInputWidget.vue", () => {
     await input_widget.trigger("input");
     await button_widget.trigger("click");
 
-    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([["new_name"]]);
+    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[]]);
   });
   test("When a user choses an existing recording name and  wants to select a new name instead of overriding, Then warning modal will close and show error message for existing name", async () => {
     const propsData = { default_recording_name: "test_recording_name" };
@@ -172,6 +172,6 @@ describe("RecordingNameInputWidget.vue", () => {
     });
 
     await button_widget.at(2).trigger("click");
-    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([["new_name"]]);
+    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[]]);
   });
 });
