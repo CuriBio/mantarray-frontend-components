@@ -240,7 +240,7 @@ export default {
     const post_endpoint = replace_existing
       ? `/update_recording_name?new_name=${recording_name}&default_name=${default_name}&replace_existing=${replace_existing}`
       : `/update_recording_name?new_name=${recording_name}&default_name=${default_name}`;
-    const res = await call_axios_post_from_vuex(post_endpoint);
-    return res;
+
+    return await call_axios_post_from_vuex(post_endpoint);
   },
 };
