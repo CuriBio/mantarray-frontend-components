@@ -1,20 +1,28 @@
 Changelog for Mantarray Frontend Components
 ===========================================
-0.7.6 (2022-06-30)
+
+
+1.0.0 (2022-06-30)
+------------------
 
 Added:
 ^^^^^^
 
-- Added WS handler for h5 corruption error
-- Added popup error modal when h5_warning state changes
+- WS handler for h5 corruption error
+- Popup error modal when h5_warning state changes
 
 Changed
 ^^^^^^^
 
-- Fixed bug that failed to close firmware modals on system error
 - Error enums will now be shown on ErrorCatchWidget modal instead of in the StatusBar component
 - Minor style changes to status modals
-- Fixed bug that prevented default recording name from being used
+
+
+Fixed
+^^^^^
+
+- Bug that failed to close firmware modals on system error
+- Bug that prevented default recording name from being used
 
 0.7.5 (2022-06-16)
 ------------------
