@@ -193,12 +193,8 @@ export default {
   },
   async validate_barcode({ commit, state, dispatch }, { type, new_value }) {
     const result = TextValidation_plate_barcode.validate(new_value);
-    let is_valid = result == "";
+    const is_valid = result == "" && !this.state.flask.barcode_manual_mode;
 
-    // if the barcode was created in manual mode then is should be invalid
-    if (this.state.flask.barcode_manual_mode) {
-      is_valid = false;
-    }
     // stop all running processes if either barcode changes regardless of validity
     if (this.state.stimulation.stim_play_state) {
       await this.dispatch("stimulation/stop_stimulation");
