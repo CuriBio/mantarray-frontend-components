@@ -195,7 +195,8 @@ describe("BarcodeViewer.vue", () => {
     wrapper.find("input").setValue("ML2022053000"); // test case will fail on delating if (barcode_len >= 10 && barcode_len < 12) in API validateBarcodeViewer()
     await wrapper.vm.$nextTick(); // wait for update
     // confirm pre-condition
-    expect(store.state.playback.barcodes.plate_barcode.valid).toBe(true);
+    //this should always be false due to barcode entered in manually
+    expect(store.state.playback.barcodes.plate_barcode.valid).toBe(false);
     wrapper.find("input").setValue("ML20220530003");
     await wrapper.vm.$nextTick(); // wait for update
     expect(store.state.playback.barcodes.plate_barcode.valid).toBe(false);
