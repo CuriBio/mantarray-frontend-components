@@ -202,6 +202,13 @@ export class TextValidation {
     return barcode_err;
   }
 
+  /**
+   * Returns the feedback text for the plate barcode validation
+   *
+   * @param  {string}  barcode The barcode string to validate
+   * @return {string} "" if barcode is valid, " " otherwise
+   *
+   */
   _check_new_barcode(barcode) {
     // check if dash is in correct location
     if (barcode[10] !== "-") {
@@ -228,7 +235,13 @@ export class TextValidation {
     }
     return "";
   }
-
+  /**
+   * Returns the feedback text for the plate barcode validation
+   *
+   * @param  {string}  barcode The barcode string to validate
+   * @return {string} "" if barcode is valid, " " otherwise
+   *
+   */
   _check_old_barcode(barcode) {
     // check year is at least 2021 [4 characters]
     const year_code = barcode.slice(2, 6);
