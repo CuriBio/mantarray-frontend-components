@@ -193,6 +193,43 @@ export class TextValidation {
         return " ";
       }
     }
+    let barcode_err = "";
+    if (barcode.includes("-")) {
+      barcode_err = this._check_new_barcode(barcode);
+    } else {
+      barcode_err = this._check_old_barcode(barcode);
+    }
+    return barcode_err;
+  }
+
+  _check_new_barcode(barcode) {
+    // check if dash is in correct location
+    if (barcode[10] !== "-") {
+      return " ";
+    }
+    // check if the year is 2022 or later
+    if (parseInt(barcode.slice(2, 4)) < 22) {
+      return " ";
+    }
+    // check if the day is between 1 and 365 inclusive
+    if (parseInt(barcode.slice(4, 7)) < 1 || parseInt(barcode.slice(4, 7) > 365)) {
+      return " ";
+    }
+    // check that ### is between 0 and 299 inclusive
+    if (parseInt(barcode.slice(7, 10)) < 0 || parseInt(barcode.slice(7, 10) > 299)) {
+      return " ";
+    }
+    // check if in beta one or two mode. if invalid * marker then mark the barcode as invalid
+    if (
+      (this.state.settings.beta_2_mode && barcode[10] !== "2") ||
+      (!this.state.settings.beta_2_mode && barcode[10] !== "1")
+    ) {
+      return " ";
+    }
+    return "";
+  }
+
+  _check_old_barcode(barcode) {
     // check year is at least 2021 [4 characters]
     const year_code = barcode.slice(2, 6);
     const year = parseInt(year_code);

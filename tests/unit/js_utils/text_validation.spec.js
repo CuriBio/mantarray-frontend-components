@@ -141,3 +141,24 @@ describe("TextValidation.validate_user_account_input", () => {
     }
   );
 });
+describe("Test validation for new barcode type", () => {
+  test.each([
+    ["", "empty"],
+    [null, "null"],
+    [undefined, "undefined"],
+    ["ML22123099-1hh", "length over 12"],
+    ["ML34-", "length under 12"],
+    ["MA22123099-1", "invalid header 'MA'"],
+    ["MB22123099-1", "invalid header 'MB'"],
+    ["ME22123099-1", "invalid header 'ME'"],
+    ["ML20123099-1", "invalid year '2020'"],
+    ["ML22444099-1", "day is not between 1 and 365"],
+    ["ML22123300-1", "invalid ###"],
+  ])(
+    "When valid barcode %s with %s is passed to validate function, Then '' is returned",
+    (plate_barcode, diff) => {
+      const TestBarcodeViewer = TextValidation_BarcodeViewer;
+      expect(TestBarcodeViewer.validate(plate_barcode)).toStrictEqual(" ");
+    }
+  );
+});
