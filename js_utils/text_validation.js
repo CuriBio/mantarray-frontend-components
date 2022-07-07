@@ -168,7 +168,7 @@ export class TextValidation {
    * Returns the feedback text for the plate barcode validation
    *
    * @param  {string}  barcode The barcode string to validate
-   * @param {bool} beta2_mode True if in bet 2 mode false if in beta 1 mode
+   * @param {bool} beta_2_mode True if in bet 2 mode false if in beta 1 mode
    * @return {string} "" if barcode is valid, " " otherwise
    *
    */

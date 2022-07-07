@@ -1,10 +1,5 @@
-import Vuex from "vuex";
-import BarcodeViewer from "@/components/playback/controls/BarcodeViewer.vue";
 import { TextValidation } from "@/js_utils/text_validation.js";
 import { TextValidation as DistTextValidation } from "@/dist/mantarray.common";
-import { createLocalVue } from "@vue/test-utils";
-import { mount } from "@vue/test-utils";
-import { tree } from "d3";
 
 const TextValidation_BarcodeViewer = new TextValidation("plate_barcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
@@ -147,18 +142,6 @@ describe("TextValidation.validate_user_account_input", () => {
   );
 });
 describe("Test new scheme for barcode", () => {
-  const localVue = createLocalVue();
-  localVue.use(Vuex);
-  let NuxtStore;
-  let store;
-  beforeAll(async () => {
-    // note the store will mutate across tests, so make sure to re-create it in beforeEach
-    const storePath = `${process.env.buildDir}/store.js`;
-    NuxtStore = await import(storePath);
-  });
-  beforeEach(async () => {
-    store = await NuxtStore.createStore();
-  });
   test.each([
     ["", "empty"],
     [null, "null"],
