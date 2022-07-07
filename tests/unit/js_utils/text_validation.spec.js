@@ -1,5 +1,10 @@
+import Vuex from "vuex";
+import BarcodeViewer from "@/components/playback/controls/BarcodeViewer.vue";
 import { TextValidation } from "@/js_utils/text_validation.js";
 import { TextValidation as DistTextValidation } from "@/dist/mantarray.common";
+import { createLocalVue } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
+import { tree } from "d3";
 
 const TextValidation_BarcodeViewer = new TextValidation("plate_barcode");
 const TextValidation_UUIDBase57 = new TextValidation("uuidBase57encode");
@@ -141,7 +146,19 @@ describe("TextValidation.validate_user_account_input", () => {
     }
   );
 });
-describe("Test validation for new barcode type", () => {
+describe("Test new scheme for barcode", () => {
+  const localVue = createLocalVue();
+  localVue.use(Vuex);
+  let NuxtStore;
+  let store;
+  beforeAll(async () => {
+    // note the store will mutate across tests, so make sure to re-create it in beforeEach
+    const storePath = `${process.env.buildDir}/store.js`;
+    NuxtStore = await import(storePath);
+  });
+  beforeEach(async () => {
+    store = await NuxtStore.createStore();
+  });
   test.each([
     ["", "empty"],
     [null, "null"],
@@ -153,12 +170,24 @@ describe("Test validation for new barcode type", () => {
     ["ME22123099-1", "invalid header 'ME'"],
     ["ML20123099-1", "invalid year '2020'"],
     ["ML22444099-1", "day is not between 1 and 365"],
-    ["ML22123300-1", "invalid ###"],
+    ["ML22123311-1", "invalid ###"],
   ])(
-    "When valid barcode %s with %s is passed to validate function, Then '' is returned",
+    "When invalid barcode %s with %s is passed to validate function, Then ' ' is returned",
     (plate_barcode, diff) => {
       const TestBarcodeViewer = TextValidation_BarcodeViewer;
       expect(TestBarcodeViewer.validate(plate_barcode)).toStrictEqual(" ");
     }
   );
+  test("Test valid barcodes for beta 1 and beta 2 modes", async () => {
+    //check valid beta 1 mode
+    const TestBarcodeViewer = TextValidation_BarcodeViewer;
+    expect(TestBarcodeViewer.validate("ML22123099-1", "", false)).toStrictEqual("");
+    //check invalid beta 1 mode
+    expect(TestBarcodeViewer.validate("ML22123099-3", "", false)).toStrictEqual(" ");
+
+    //check valid beta 2 mode
+    expect(TestBarcodeViewer.validate("ML22123099-2", "", true)).toStrictEqual("");
+    //check invalid beta 2 mode
+    expect(TestBarcodeViewer.validate("ML22123099-1", "", true)).toStrictEqual(" ");
+  });
 });
