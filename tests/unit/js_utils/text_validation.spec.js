@@ -154,6 +154,8 @@ describe("Test new scheme for barcode", () => {
     ["ML20123099-1", "invalid year '2020'"],
     ["ML22444099-1", "day is not between 1 and 365"],
     ["ML22123311-1", "invalid ###"],
+    ["MLh2123099-1", "none numeric values"],
+    ["ML221230991-", "dash in wrong place"],
   ])(
     "When invalid barcode %s with %s is passed to validate function, Then ' ' is returned",
     (plate_barcode, diff) => {
