@@ -190,7 +190,7 @@ export class TextValidation {
     if (barcode.includes("-")) {
       barcode_err = this._check_new_barcode(barcode, beta_2_mode);
     } else {
-      barcode_err = this._check_old_barcode(barcode, beta_2_mode);
+      barcode_err = this._check_old_barcode(barcode);
     }
     return barcode_err;
   }
@@ -199,15 +199,14 @@ export class TextValidation {
    * Returns the feedback text for the new plate barcode validation
    *
    * @param  {string}  barcode The barcode string to validate
-   * @param {bool} beta_2_mode True if in bet 2 mode false if in beta 1 mode
+   * @param  {bool}    beta_2_mode True if in bet 2 mode false if in beta 1 mode
    * @return {string} "" if barcode is valid, " " otherwise
    *
    */
   _check_new_barcode(barcode, beta_2_mode) {
-    // check that charecters are alpha numeric exept the dash
-    const barcode_without_dash = barcode.slice(0, 10) + barcode[11];
-    const regEx = /^[0-9a-zA-Z]+$/;
-    if (!barcode_without_dash.match(regEx)) {
+    // check that barcode is numeric exept for header and dash
+    const numeric_barcode = barcode.slice(2, 10) + barcode[11];
+    if (isNaN(numeric_barcode)) {
       return " ";
     }
     // check if dash is in correct location
@@ -222,11 +221,11 @@ export class TextValidation {
     if (parseInt(barcode.slice(4, 7)) < 1 || parseInt(barcode.slice(4, 7)) > 365) {
       return " ";
     }
-    // check that ### is between 0 and 299 inclusive
+    // check that experiment code is between 0 and 299 inclusive
     if (parseInt(barcode.slice(7, 10)) < 0 || parseInt(barcode.slice(7, 10)) > 299) {
       return " ";
     }
-    // check if in beta one or two mode. if invalid * marker then mark the barcode as invalid
+    // check if in beta one or two mode. if last digit invalid then mark the barcode as invalid
     if ((beta_2_mode && barcode[11] !== "2") || (!beta_2_mode && barcode[11] !== "1")) {
       return " ";
     }
@@ -240,11 +239,6 @@ export class TextValidation {
    *
    */
   _check_old_barcode(barcode) {
-    // check that barcode is a valid length
-    const plate_barcode_len = barcode.length;
-    if (plate_barcode_len !== 12) {
-      return " ";
-    }
     for (let i = 2; i < plate_barcode_len; i++) {
       const scan_ascii = barcode.charCodeAt(i);
       // check that remaining characters are numeric
