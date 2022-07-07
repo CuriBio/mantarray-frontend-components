@@ -141,3 +141,38 @@ describe("TextValidation.validate_user_account_input", () => {
     }
   );
 });
+describe("Test new scheme for barcode", () => {
+  test.each([
+    ["", "empty"],
+    [null, "null"],
+    [undefined, "undefined"],
+    ["ML22123099-1hh", "length over 12"],
+    ["ML34-", "length under 12"],
+    ["MA22123099-1", "invalid header 'MA'"],
+    ["MB22123099-1", "invalid header 'MB'"],
+    ["ME22123099-1", "invalid header 'ME'"],
+    ["ML20123099-1", "invalid year '2020'"],
+    ["ML22444099-1", "day is not between 1 and 365"],
+    ["ML22123311-1", "invalid ###"],
+    ["MLh2123099-1", "none numeric values"],
+    ["ML221230991-", "dash in wrong place"],
+  ])(
+    "When invalid barcode %s with %s is passed to validate function, Then ' ' is returned",
+    (plate_barcode, diff) => {
+      const TestBarcodeViewer = TextValidation_BarcodeViewer;
+      expect(TestBarcodeViewer.validate(plate_barcode)).toStrictEqual(" ");
+    }
+  );
+  test("Test valid barcodes for beta 1 and beta 2 modes", async () => {
+    //check valid beta 1 mode
+    const TestBarcodeViewer = TextValidation_BarcodeViewer;
+    expect(TestBarcodeViewer.validate("ML22123099-1", "", false)).toStrictEqual("");
+    //check invalid beta 1 mode
+    expect(TestBarcodeViewer.validate("ML22123099-3", "", false)).toStrictEqual(" ");
+
+    //check valid beta 2 mode
+    expect(TestBarcodeViewer.validate("ML22123099-2", "", true)).toStrictEqual("");
+    //check invalid beta 2 mode
+    expect(TestBarcodeViewer.validate("ML22123099-1", "", true)).toStrictEqual(" ");
+  });
+});

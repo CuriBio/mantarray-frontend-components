@@ -191,8 +191,8 @@ export default {
       context.commit("set_one_min_warning", true);
     }, 1 * 60e3);
   },
-  async validate_barcode({ commit, state, dispatch }, { type, new_value }) {
-    const result = TextValidation_plate_barcode.validate(new_value);
+  async validate_barcode({ commit, state, dispatch }, { type, new_value, beta_2_mode }) {
+    const result = TextValidation_plate_barcode.validate(new_value, type, beta_2_mode);
     const is_valid = result == "";
 
     // stop all running processes if either barcode changes regardless of validity

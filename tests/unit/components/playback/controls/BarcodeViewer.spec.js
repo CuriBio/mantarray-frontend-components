@@ -101,7 +101,7 @@ describe("BarcodeViewer.vue", () => {
   });
 
   test("Given that its in manual mode and no plate barcode has been entered (default state), When Playback State is mutated to CALIBRATING, Then the text of the Barcode Input field should be empty string (not cause error or say null)", async () => {
-    // confirm pre-condition
+    // Confirm pre-condition
     store.commit("flask/set_barcode_manual_mode", true);
     expect(store.state.playback.barcodes.plate_barcode.value).toBeNull();
     store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING);
@@ -136,7 +136,7 @@ describe("BarcodeViewer.vue", () => {
 
     await wrapper.vm.handle_manual_mode_choice(true);
     wrapper.find("input").setValue(test_barcode);
-    expect(spied_text_validator).toHaveBeenCalledWith(test_barcode);
+    expect(spied_text_validator).toHaveBeenCalledWith(test_barcode, false);
     expect(store.state.playback.barcodes.plate_barcode.value).toBe(test_barcode);
   });
   test("Given that its in manual mode and a valid barcode has been entered and playback state is BUFFERING, When Playback State is mutated to BUFFERING, Then the text of the Barcode Input remains as the valid barcode instead of becoming blank", async () => {

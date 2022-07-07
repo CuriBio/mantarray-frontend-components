@@ -1,5 +1,4 @@
 "use strict";
-
 // dependencies
 const uuidBase62 = require("@tofandel/uuid-base62"); // External library depenency of @tofandel/uuid-base62
 /* eslint-disable new-cap */
@@ -29,16 +28,16 @@ export class TextValidation {
    *
    * @param  {string}  text The text on which the validation rules are verified
    * @param  {string}  type The type of value being checked: ID, passkey, or user_name
-
+   * @param  {bool}    beta_2_mode True if in beta2 mode false if in beta 1 mode
    * @return {string} The string is either empty on valid and <space> or <invalid meessage>
    */
-  validate(text, type) {
+  validate(text, type, beta_2_mode) {
     let feedback = "";
     const obj = {};
     try {
       switch (this.rule) {
         case "plate_barcode":
-          feedback = this.validate_plate_barcode(text);
+          feedback = this.validate_plate_barcode(text, beta_2_mode);
           break;
         case "uuidBase57encode":
           feedback = this.validate_uuidBase_fiftyseven_encode(text);
@@ -169,10 +168,11 @@ export class TextValidation {
    * Returns the feedback text for the plate barcode validation
    *
    * @param  {string}  barcode The barcode string to validate
+   * @param {bool} beta_2_mode True if in bet 2 mode false if in beta 1 mode
    * @return {string} "" if barcode is valid, " " otherwise
    *
    */
-  validate_plate_barcode(barcode) {
+  validate_plate_barcode(barcode, beta_2_mode) {
     if (barcode == null) {
       return " ";
     }
@@ -186,6 +186,60 @@ export class TextValidation {
     if (barcode_header !== "ML" && barcode_header !== "MS") {
       return " ";
     }
+    let barcode_err = "";
+    if (barcode.includes("-")) {
+      barcode_err = this._check_new_barcode(barcode, beta_2_mode);
+    } else {
+      barcode_err = this._check_old_barcode(barcode);
+    }
+    return barcode_err;
+  }
+
+  /**
+   * Returns the feedback text for the new plate barcode validation
+   *
+   * @param  {string}  barcode The barcode string to validate
+   * @param  {bool}    beta_2_mode True if in bet 2 mode false if in beta 1 mode
+   * @return {string} "" if barcode is valid, " " otherwise
+   *
+   */
+  _check_new_barcode(barcode, beta_2_mode) {
+    // check that barcode is numeric exept for header and dash
+    const numeric_barcode = barcode.slice(2, 10) + barcode[11];
+    if (isNaN(numeric_barcode)) {
+      return " ";
+    }
+    // check if dash is in correct location
+    if (barcode[10] !== "-") {
+      return " ";
+    }
+    // check if the year is 2022 or later
+    if (parseInt(barcode.slice(2, 4)) < 22) {
+      return " ";
+    }
+    // check if the day is between 1 and 365 inclusive
+    if (parseInt(barcode.slice(4, 7)) < 1 || parseInt(barcode.slice(4, 7)) > 365) {
+      return " ";
+    }
+    // check that experiment code is between 0 and 299 inclusive
+    if (parseInt(barcode.slice(7, 10)) < 0 || parseInt(barcode.slice(7, 10)) > 299) {
+      return " ";
+    }
+    // check if in beta one or two mode. if last digit invalid then mark the barcode as invalid
+    if ((beta_2_mode && barcode[11] !== "2") || (!beta_2_mode && barcode[11] !== "1")) {
+      return " ";
+    }
+    return "";
+  }
+  /**
+   * Returns the feedback text for the old plate barcode validation
+   *
+   * @param  {string}  barcode The barcode string to validate
+   * @return {string} "" if barcode is valid, " " otherwise
+   *
+   */
+  _check_old_barcode(barcode) {
+    const plate_barcode_len = barcode.length;
     for (let i = 2; i < plate_barcode_len; i++) {
       const scan_ascii = barcode.charCodeAt(i);
       // check that remaining characters are numeric
