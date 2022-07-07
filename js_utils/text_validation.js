@@ -239,6 +239,7 @@ export class TextValidation {
    *
    */
   _check_old_barcode(barcode) {
+    const plate_barcode_len = barcode.length;
     for (let i = 2; i < plate_barcode_len; i++) {
       const scan_ascii = barcode.charCodeAt(i);
       // check that remaining characters are numeric
