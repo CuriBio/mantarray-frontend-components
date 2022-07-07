@@ -136,7 +136,7 @@ describe("BarcodeViewer.vue", () => {
 
     await wrapper.vm.handle_manual_mode_choice(true);
     wrapper.find("input").setValue(test_barcode);
-    expect(spied_text_validator).toHaveBeenCalledWith(test_barcode);
+    expect(spied_text_validator).toHaveBeenCalledWith(test_barcode, false);
     expect(store.state.playback.barcodes.plate_barcode.value).toBe(test_barcode);
   });
   test("Given that its in manual mode and a valid barcode has been entered and playback state is BUFFERING, When Playback State is mutated to BUFFERING, Then the text of the Barcode Input remains as the valid barcode instead of becoming blank", async () => {
