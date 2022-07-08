@@ -27,8 +27,6 @@ const default_state = {
   tooltips_delay: 2000,
   timestamp_of_beginning_of_progression: undefined,
   num_milliseconds_to_fast_forward_if_delayed: 400,
-  five_min_warning: false,
-  one_min_warning: false,
   barcode_warning: false,
   data_analysis_state: ENUMS.DATA_ANALYSIS_STATE.READY,
 };

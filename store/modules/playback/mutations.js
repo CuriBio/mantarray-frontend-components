@@ -44,12 +44,6 @@ export default {
   set_tooltips_delay(state, new_value) {
     state.tooltips_delay = new_value;
   },
-  set_five_min_warning(state, bool) {
-    state.five_min_warning = bool;
-  },
-  set_one_min_warning(state, bool) {
-    state.one_min_warning = bool;
-  },
   set_barcode_warning(state, bool) {
     state.barcode_warning = bool;
   },

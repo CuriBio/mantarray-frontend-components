@@ -304,13 +304,13 @@ describe("DesktopPlayerControls.vue", () => {
         // start recording
         const record_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--active");
         await record_button.trigger("click");
-        await wrapper.findAll(".span__button_label").at(10).trigger("click");
+        await wrapper.findAll(".span__button_label").at(8).trigger("click");
         expect(store.state.playback.playback_state).toBe(
           playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
         );
       });
     });
-    test("When a user starts a recording and doesn't manually stop it within 30 seconds, Then a recording will get stopped regardless at that time point", async () => {
+    test("When a user starts a recording and doesn't manually stop it within 2 minutes, Then a recording will get stopped regardless at that time point", async () => {
       jest.useFakeTimers();
       wrapper = mount(component_to_test, {
         store,
@@ -326,7 +326,7 @@ describe("DesktopPlayerControls.vue", () => {
         expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]);
       });
 
-      jest.advanceTimersByTime(5 * 60e3);
+      jest.advanceTimersByTime(2 * 60e3);
       await wait_for_expect(() => {
         expect(store.state.playback.playback_state).toBe(
           playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
@@ -558,29 +558,6 @@ describe("DesktopPlayerControls.vue", () => {
       expect(action_spy).toHaveBeenCalledWith("playback/start_calibration");
     });
 
-    test.each(["one", "five"])(
-      "When a timer goes off to display live view warning, Then the corresponding modal appears with one min or five min labels",
-      async (type) => {
-        const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
-        wrapper = mount(component_to_test, {
-          store,
-          localVue,
-        });
-
-        store.commit(`playback/set_${type}_min_warning`, true);
-
-        Vue.nextTick(() => {
-          expect(wrapper.find(`#${type}-min-warning`).isVisible()).toBe(true);
-        });
-
-        await wrapper.findAll(".span__button_label").at(0).trigger("click");
-
-        Vue.nextTick(() => {
-          expect(wrapper.find(`#${type}-min-warning`).isVisible()).toBe(false);
-          expect(action_spy).toHaveBeenCalledWith("playback/stop_live_view");
-        });
-      }
-    );
     test("When recording limit has been reached, Then the recording limit modal will be visible", async () => {
       const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
       jest.useFakeTimers();
@@ -594,7 +571,7 @@ describe("DesktopPlayerControls.vue", () => {
       );
       await wrapper.find(".svg__playback-desktop-player-controls-record-button").trigger("click");
 
-      jest.advanceTimersByTime(7 * 60e3);
+      jest.advanceTimersByTime(2 * 60e3);
       jest.runAllTicks();
       Vue.nextTick(() => {
         expect(wrapper.find("#recording-limit").isVisible()).toBe(true);
