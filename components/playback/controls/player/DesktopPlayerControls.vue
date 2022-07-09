@@ -191,36 +191,6 @@
       />
     </b-modal>
     <b-modal
-      id="five-min-warning"
-      size="sm"
-      hide-footer
-      hide-header
-      hide-header-close
-      :static="true"
-      :no-close-on-backdrop="true"
-    >
-      <StatusWarningWidget
-        id="five-min"
-        :modal_labels="time_warning_labels.five"
-        @handle_confirmation="close_five_min_modal"
-      />
-    </b-modal>
-    <b-modal
-      id="one-min-warning"
-      size="sm"
-      hide-footer
-      hide-header
-      hide-header-close
-      :static="true"
-      :no-close-on-backdrop="true"
-    >
-      <StatusWarningWidget
-        id="one-min"
-        :modal_labels="time_warning_labels.one"
-        @handle_confirmation="close_one_min_modal"
-      />
-    </b-modal>
-    <b-modal
       id="recording-limit-warning"
       size="sm"
       hide-footer
@@ -343,20 +313,6 @@ export default {
         msg_two: "Do you wish to continue?",
         button_names: ["Cancel", "Yes"],
       },
-      time_warning_labels: {
-        one: {
-          header: "Warning!",
-          msg_one: "Live View has been active for over five minutes.",
-          msg_two: "Do you wish to continue?",
-          button_names: ["No", "Yes"],
-        },
-        five: {
-          header: "Warning!",
-          msg_one: "Live View has been active for five minutes.",
-          msg_two: "Do you wish to continue?",
-          button_names: ["No", "Yes"],
-        },
-      },
       user_input_prompt_labels: {
         header: "Important!",
         msg_one: "Downloading the firmware update requires your user credentials.",
@@ -372,13 +328,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("playback", [
-      "playback_state",
-      "barcodes",
-      "tooltips_delay",
-      "one_min_warning",
-      "five_min_warning",
-    ]),
+    ...mapState("playback", ["playback_state", "barcodes", "tooltips_delay"]),
     ...mapState("settings", [
       "auto_upload",
       "beta_2_mode",
@@ -510,15 +460,6 @@ export default {
     },
   },
   watch: {
-    one_min_warning() {
-      if (this.one_min_warning) {
-        this.$bvModal.show("one-min-warning");
-        this.$store.commit("playback/set_one_min_warning", false); // reset to false to ensure new timer starts
-      }
-    },
-    five_min_warning() {
-      if (this.five_min_warning) this.$bvModal.show("five-min-warning");
-    },
     firmware_update_available() {
       if (this.firmware_update_available) this.$bvModal.show("fw-update-available-message");
     },
@@ -555,7 +496,7 @@ export default {
           this.on_stop_record_click();
           this.$bvModal.show("recording-limit-warning");
         }
-      }, 5 * 60e3);
+      }, 2 * 60e3);
     },
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
@@ -606,16 +547,6 @@ export default {
     close_user_input_prompt_modal() {
       this.$bvModal.hide("user-input-prompt-message");
       this.$bvModal.show("settings-form");
-    },
-    close_five_min_modal(idx) {
-      this.$bvModal.hide("five-min-warning");
-
-      if (idx === 0) this.$store.dispatch("playback/stop_live_view");
-      else this.$store.dispatch("playback/set_one_min_timer");
-    },
-    close_one_min_modal(idx) {
-      this.$bvModal.hide("one-min-warning");
-      if (idx === 0) this.$store.dispatch("playback/stop_live_view");
     },
   },
 };

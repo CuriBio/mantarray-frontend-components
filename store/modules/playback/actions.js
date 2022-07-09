@@ -23,8 +23,6 @@ const TextValidation_plate_barcode = new TextValidation("plate_barcode");
 // =========================================================================
 
 export const micros_per_milli = 1000;
-let five_min_timer = null;
-let one_min_timer = null;
 /**
  * Function to progress the time_index
  * @return {void}
@@ -109,12 +107,6 @@ export default {
     context.commit("stop_playback_progression");
     context.commit("data/clear_heatmap_values", null, { root: true });
 
-    // stop any timers from running
-    clearInterval(one_min_timer);
-    clearTimeout(five_min_timer);
-    context.commit("set_one_min_warning", false);
-    context.commit("set_five_min_warning", false);
-
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
     //   context.commit("set_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
@@ -167,9 +159,6 @@ export default {
     }
   },
   async start_live_view(context) {
-    // reset to default state and then set new timer
-    context.dispatch("set_five_min_timer");
-
     const url = "http://localhost:4567/start_managed_acquisition";
     await call_axios_get_from_vuex(url, context);
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.BUFFERING);
@@ -180,16 +169,6 @@ export default {
       root: true,
     });
     context.dispatch("flask/start_status_pinging", null, { root: true });
-  },
-  set_five_min_timer(context) {
-    five_min_timer = setTimeout(() => {
-      context.commit("set_five_min_warning", true);
-    }, 5 * 60e3);
-  },
-  set_one_min_timer(context) {
-    one_min_timer = setInterval(() => {
-      context.commit("set_one_min_warning", true);
-    }, 1 * 60e3);
   },
   async validate_barcode({ commit, state, dispatch }, { type, new_value, beta_2_mode }) {
     const result = TextValidation_plate_barcode.validate(new_value, type, beta_2_mode);

@@ -243,36 +243,6 @@ describe("store/playback", () => {
       );
     });
   });
-  describe("timed_live_view_actions", () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-    test("When live view is started, Then five minute timer will begin", async () => {
-      const commit_spy = jest.spyOn(store, "commit");
-      await store.dispatch("playback/start_live_view");
-      jest.advanceTimersByTime(5 * 60e3);
-
-      Vue.nextTick(() => expect(commit_spy).toHaveBeenCalledWith("playback/set_five_min_warning", true));
-    });
-
-    test("When one minute is started, Then a mutation to one_min_warning will continue every minute until it's cleared", async () => {
-      const commit_spy = jest.spyOn(store, "commit");
-      await store.dispatch("playback/set_one_min_timer");
-      jest.advanceTimersByTime(5 * 60e3);
-
-      Vue.nextTick(() => {
-        expect(commit_spy).toHaveBeenCalledWith("playback/set_one_min_warning", true);
-        expect(commit_spy).toHaveBeenCalledTimes(5);
-      });
-
-      await store.dispatch("playback/stop_live_view");
-      jest.advanceTimersByTime(5 * 60e3);
-
-      Vue.nextTick(() => {
-        expect(commit_spy).toHaveBeenCalledTimes(5);
-      });
-    });
-  });
   describe("actions", () => {
     describe("Given timers are mocked", () => {
       beforeEach(() => {
