@@ -1,7 +1,7 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.0.1 (Unreleased)
+1.0.1 (2022-07-11)
 ------------------
 
 Changed
@@ -9,7 +9,7 @@ Changed
 
 - Removed five minute and one minute live view active warnings
 - Updated recording time limit to 2 minutes from 5 minutes
-
+- Updated barcode scheme
 
 1.0.0 (2022-06-30)
 ------------------

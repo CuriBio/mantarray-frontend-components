@@ -186,13 +186,10 @@ export class TextValidation {
     if (barcode_header !== "ML" && barcode_header !== "MS") {
       return " ";
     }
-    let barcode_err = "";
-    if (barcode.includes("-")) {
-      barcode_err = this._check_new_barcode(barcode, beta_2_mode);
-    } else {
-      barcode_err = this._check_old_barcode(barcode);
-    }
-    return barcode_err;
+
+    return barcode.includes("-")
+      ? this._check_new_barcode(barcode, beta_2_mode)
+      : this._check_old_barcode(barcode);
   }
 
   /**
