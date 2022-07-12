@@ -87,7 +87,6 @@ export default {
   computed: {
     ...mapState("playback", ["playback_state", "barcodes", "barcode_warning"]),
     ...mapState("flask", ["barcode_manual_mode"]),
-    ...mapState("settings", ["beta_2_mode"]),
     barcode_info: function () {
       return this.barcodes[this.barcode_type];
     },
@@ -116,7 +115,6 @@ export default {
       this.$store.dispatch("playback/validate_barcode", {
         type: this.barcode_type,
         new_value: event.target.value,
-        beta_2_mode: this.beta_2_mode,
       });
     },
     close_warning_modal() {

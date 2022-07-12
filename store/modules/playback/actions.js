@@ -170,8 +170,8 @@ export default {
     });
     context.dispatch("flask/start_status_pinging", null, { root: true });
   },
-  async validate_barcode({ commit, state, dispatch }, { type, new_value, beta_2_mode }) {
-    const result = TextValidation_plate_barcode.validate(new_value, type, beta_2_mode);
+  async validate_barcode({ commit, state, dispatch }, { type, new_value }) {
+    const result = TextValidation_plate_barcode.validate(new_value, type, this.state.settings.beta_2_mode);
     const is_valid = result == "";
 
     // stop all running processes if either barcode changes regardless of validity
