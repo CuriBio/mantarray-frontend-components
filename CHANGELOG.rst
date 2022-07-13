@@ -1,6 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.0.2 (2022-07-12)
+------------------
+
+Fixed
+^^^^^
+
+- Issue with final protocol markers not being displayed correctly when stopping stim
+- Issue with scanned Beta 2 barcodes coming from the BE being considered invalid
+
+
 1.0.1 (2022-07-11)
 ------------------
 
