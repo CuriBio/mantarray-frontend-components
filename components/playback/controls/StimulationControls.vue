@@ -281,8 +281,13 @@ export default {
     },
     configuration_message: function () {
       if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
+      else if (
+        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE ||
+        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING
+      )
+        return "Cannot run configuration check while recording or live view is active.";
       else if (this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED)
-        return "Can only run a configuration check if device is calibrated. Please ensure no other processes are running.";
+        return "Can only run a configuration check if device is calibrated.";
       else if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR)
         return "Cannot run a configuration check with error";
       else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED)
@@ -456,9 +461,7 @@ body {
 .svg__waveform-icon {
   fill: #b7b7b7;
 }
-.svg__waveform-icon:hover {
-  fill: #ffffff;
-}
+
 .svg__waveform-container {
   height: 44px;
   top: 32px;

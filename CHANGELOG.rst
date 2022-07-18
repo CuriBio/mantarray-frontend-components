@@ -1,6 +1,20 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.0.3 (Unreleased)
+------------------
+
+Added:
+^^^^^^
+
+- Additional tooltip message on configuration check icon that notifies user that check cannot be run while live view or a recording is active
+
+Fixed
+^^^^^
+
+- Issue with waveform tile overflow in stimulation studio with long protocols
+
+
 1.0.2 (2022-07-12)
 ------------------
 
