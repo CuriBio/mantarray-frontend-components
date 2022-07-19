@@ -8,12 +8,17 @@ Added:
 ^^^^^^
 
 - Additional tooltip message on configuration check icon that notifies user that check cannot be run while live view or a recording is active
+- Added tooltip to barcode input and icon that notifies user it's disabled when live view is active.
+
+Changed
+^^^^^^^
+
+- Frequency in pulse settings modal can now be positive non-integers instead of only positive integers
 
 Fixed
 ^^^^^
 
 - Issue with waveform tile overflow in stimulation studio with long protocols
-
 
 1.0.2 (2022-07-12)
 ------------------
