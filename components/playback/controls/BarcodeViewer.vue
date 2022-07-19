@@ -5,12 +5,7 @@
     >
     <input
       id="plateinfo"
-      :disabled="
-        playback_state === playback_state_enums.RECORDING ||
-        playback_state === playback_state_enums.BUFFERING ||
-        playback_state === playback_state_enums.LIVE_VIEW_ACTIVE ||
-        !barcode_manual_mode
-      "
+      :disabled="is_disabled"
       type="text"
       spellcheck="false"
       onpaste="return false;"
@@ -22,9 +17,20 @@
       :value="barcode_info.value"
       @input="set_barcode_manually"
     />
-    <div v-show="!barcode_manual_mode" class="input__plate-barcode-manual-entry-enable">
+    <div
+      v-if="barcode_manual_mode && active_processes"
+      v-b-popover.hover.top="tooltip_text"
+      :title="barcode_label"
+      class="div__disabled-input-popover"
+    />
+    <div
+      v-show="!barcode_manual_mode"
+      v-b-popover.hover.top="tooltip_text"
+      :title="barcode_label"
+      class="input__plate-barcode-manual-entry-enable"
+    >
       <span class="input__plate-barcode-manual-entry-enable-icon">
-        <div id="edit-plate-barcode" v-b-modal.edit-plate-barcode-modal>
+        <div id="edit-plate-barcode" @click="active_processes || $bvModal.show('edit-plate-barcode-modal')">
           <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
         </div>
       </span>
@@ -50,6 +56,9 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+import Vue from "vue";
+import { VBPopover } from "bootstrap-vue";
+Vue.directive("b-popover", VBPopover);
 
 library.add(faPencilAlt);
 /**
@@ -98,6 +107,19 @@ export default {
     },
     dynamic_entry_style: function () {
       return this.barcode_type == "plate_barcode" ? "width: 110px;" : "width: 105px;";
+    },
+    tooltip_text: function () {
+      return this.active_processes ? "Cannot edit barcodes while live view is active." : "Click to edit";
+    },
+    active_processes: function () {
+      return (
+        this.playback_state === this.playback_state_enums.RECORDING ||
+        this.playback_state === this.playback_state_enums.BUFFERING ||
+        this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE
+      );
+    },
+    is_disabled: function () {
+      return this.active_processes || !this.barcode_manual_mode;
     },
   },
   watch: {
@@ -189,6 +211,14 @@ export default {
   border: none;
   position: absolute;
   height: 24px;
+  top: 3px;
+  right: 27px;
+}
+
+.div__disabled-input-popover {
+  position: absolute;
+  height: 24px;
+  width: 100px;
   top: 3px;
   right: 27px;
 }
