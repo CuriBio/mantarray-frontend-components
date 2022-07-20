@@ -462,13 +462,25 @@ img {
   position: absolute;
   top: 460px;
   width: 1301px;
-  height: 100px;
+  height: 107px;
   right: 312px;
-  overflow-x: scroll;
   background: rgb(17, 17, 17);
-  overflow: visible;
+  overflow-x: scroll;
+  overflow-y: hidden;
   z-index: 1;
   white-space: nowrap;
+}
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 8px;
+  overflow: visible;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #2f2f2f;
+  overflow: visible;
+}
+::-webkit-scrollbar-track {
+  background-color: #1c1c1c;
   overflow: visible;
 }
 .span__stimulationstudio-drag-drop-header-label {

@@ -354,6 +354,7 @@ export default {
       regex: {
         charge: new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"),
         duration: new RegExp("^[0-9][0-9]*d*$"),
+        frequency: new RegExp("^([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"),
       },
       is_enabled_array: [false, true, true],
       all_valid: false,
@@ -488,7 +489,7 @@ export default {
     check_pulse_frequency(value, label) {
       if (value === "") {
         this.err_msg[label] = this.invalid_err_msg.required;
-      } else if (!this.regex.duration.test(value) || value == 0 || value > 100) {
+      } else if (!this.regex.frequency.test(value) || value == 0 || value > 100) {
         this.err_msg[label] = this.invalid_err_msg.frequency;
       } else {
         this.err_msg[label] = this.invalid_err_msg.valid;
