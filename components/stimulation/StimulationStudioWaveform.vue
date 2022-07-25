@@ -46,7 +46,9 @@ import { mapState } from "vuex";
  * @vue-data {Object} y_axis_node         - An Object which is used to create Y Axis node
  * @vue-data {Object} y_axis_scale        - An Object which is used to process the Y Axis scale
  * @vue-data {Object} waveform_line_node  - An Object which is used to plot the line graph
- * @vue-data {Object} div__waveform_graph__dynamic_style - An CSS property to hold the dynamic value
+ * @vue-data {Object} highlight_line_node - An Object which is used to plot the line graph to fill when hovered over
+ * @vue-computed {Object} hovered_pulse       - State Object used to fill background of hovered over pulse in stim studio
+ * @vue-computed {Object} div__waveform_graph__dynamic_style - An CSS property to hold the dynamic value
  * @vue-event {Event} x_axis_min           - A Function  is invoked when x_axis_min prop is modified
  * @vue-event {Event} x_axis_sample_length - A Function  is invoked when x_axis_sample_length prop is modified
  * @vue-event {Event} y_min                - A Function  is invoked when y_min prop is modified
@@ -284,22 +286,7 @@ export default {
       const y_axis_scale = this.y_axis_scale;
 
       this.waveform_line_node.selectAll("*").remove();
-      // this.waveform_line_node
-      //   .append("path")
-      //   .datum(data_to_plot)
-      //   .attr("fill", "none")
-      //   .attr("stroke", this.line_color)
-      //   .attr("stroke-width", 1.5)
-      //   .attr(
-      //     "d",
-      //     d3_line()
-      //       .x(function (d) {
-      //         return x_axis_scale(d[0]);
-      //       })
-      //       .y(function (d) {
-      //         return y_axis_scale(d[1]);
-      //       })
-      //   );
+
       for (const color in this.repeat_colors) {
         if (this.repeat_colors !== {}) {
           // repetitive, but eslint errors without a conditional inside the loop

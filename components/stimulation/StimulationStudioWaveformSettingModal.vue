@@ -271,9 +271,9 @@ library.add(faBalanceScale, faQuestionCircle);
 /**
  * @vue-props {String} stimulation_type - Current type of stimulation
  * @vue-props {String} pulse_type - Type of pulse for modal
- * @vue-props {Array} button_labels - Array of button labels for modal
  * @vue-props {Object} selected_pulse_settings - Settings passed to modal if it's selected to edit
  * @vue-props {Object} selected_stim_settings - Stim block settings passed to modal if it's selected to edit
+ * @vue-props {Object} open_modal_for_edit - Boolean to determine if modal is open with existing settings
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
  * @vue-data {Object} pulse_settings - Model for new inputs to be assigned
  * @vue-data {Object} stim_settings - Model for new inputs to be assigned
@@ -286,6 +286,8 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-data {Integer} delay_interval_idx - Used to input current delay interval setting to dropdown when open for edit
  * @vue-data {Integer} active_duration_idx - Used to input current active duration setting to dropdown when open for edit
  * @vue-computed {String} check_max_type - Computes last label for disabled input field
+ * @vue-computed {Array} button_labels - Array of button labels for modal
+ * @vue-computed {Array} hovered_button_colors - Array of colors that the text will be when a button is hovered over
  * @vue-method {event} close - emits close of modal and data to parent component
  * @vue-method {event} check_validity - calls appropriate validation checks based on changes to inputs
  * @vue-method {event} handle_all_valid - checks if all inputs are valid numbers only and not empty

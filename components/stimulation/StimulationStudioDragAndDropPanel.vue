@@ -122,6 +122,7 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 /**
  * @vue-props {String} stimulation_type - Current selected stimulation type user selects from drowdown
  * @vue-data {Array} icon_type - The source for the draggable pulse tiles
+ * @vue-data {Array} is_dragging - Boolean to determine if user is currently dragging a tile in the scrollable window
  * @vue-data {Array} time_units_array - Available units of time for drop down in settings panel
  * @vue-data {Object} selected_pulse_settings - This is the saved setting for a pulse that changes when a user opens a modal to edit a pulse
  * @vue-data {Array} protocol_order -  This is the complete order of pulses/delays/repeats in the entire new protocol
@@ -134,7 +135,7 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
  * @vue-data {String} current_repeat_delay_input - Saved input for a delay block that changes depending on which delay block is opened for edit
  * @vue-data {Boolean} cloned - Determines if a placed tile in protocol order is new and needs a modal to open appear to set settings or just an order rearrangement of existing tiles
  * @vue-data {Int} new_cloned_idx - If tile placed in protocol order is new, this index allows settings to be saved to correct index in order
- * @vue-data {Boolean} modal_open_for_edit - Determines if existing delay input should appear in modal for a reedit or if it's a new delay block with blank settings
+ * @vue-data {Boolean} modal_open_for_edit - Determines if existing modal inputs should appear in modal for a reedit or if it's a new delay block with blank settings
  * @vue-data {Int} time_units_idx - Index for selected unit in dropdown, used to reset dropdown when editor is reset
  * @vue-data {Boolean} disable_dropdown - Determines if the dropdown is disabled or not dependent on the stop stim setting selected
  * @vue-event {Event} check_type - Checks if tile placed is new or existing and opens corresponding modal for settings or commits change in protocol order to state

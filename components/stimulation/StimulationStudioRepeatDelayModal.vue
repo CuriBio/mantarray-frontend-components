@@ -49,15 +49,16 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
  * @vue-props {String} current_repeat_delay_input - Current input if modal is open for editing
  * @vue-props {String} current_repeat_delay_unit - The current unit selected when a delay block is opened to edit
  * @vue-props {String} modal_type - Determines if delay or repeat styling is assigned to modal
- * @vue-props {Boolean} modal_open_for_edit - States if delay modal is open for a reedit
+ * @vue-props {Boolean} modal_open_for_edit - States if delay modal is open for editing
  * @vue-data {String} input_value - Value input into modal
  * @vue-data {String} invalid_text - Validity check for input
- * @vue-data {Array} button_labels - Button labels for modal
+ * @vue-computed {Array} button_labels - Button labels for modal
  * @vue-data {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
+ * @vue-computed {Array} button_hover_colors - Array of what color the text in the button will be when hovered over
  * @vue-data {Array} time_units - Array of possible options in the unit dropdown menu
  * @vue-data {Int} time_unit_idx - Index of currently selected time unit from dropdown
  * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
- * @vue-data {Boolean} is_valid - True if input passes the validation check and allows Save button to become enabled
+ * @vue-watch {Boolean} is_valid - True if input passes the validation check and allows Save button to become enabled
  * @vue-computed {String} get_modal_title - Title dependent on if its a repeat or delay modal
  * @vue-computed {String} get_input_description - Subtitle dependent on if its a repeat or delay modal
  * @vue-computed {Array} button_labels - Button array dependent on if its a reedit or not
