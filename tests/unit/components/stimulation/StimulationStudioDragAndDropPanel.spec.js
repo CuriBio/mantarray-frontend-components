@@ -10,11 +10,11 @@ const test_protocol_order = [
   {
     type: "Biphasic",
     src: "placeholder",
-    nest_protocols: [],
+    nested_protocols: [],
     stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 1,
-      color: "fffff",
+      color: "#fffff",
     },
     pulse_settings: {
       phase_one_duration: 300,
@@ -42,7 +42,7 @@ const test_protocol_order = [
         nested_protocols: [],
         repeat: {
           number_of_repeats: 1,
-          color: "fffff",
+          color: "#ffff1",
         },
         pulse_settings: {
           phase_one_duration: 100,
@@ -65,7 +65,7 @@ const test_protocol_order = [
     ],
     repeat: {
       number_of_repeats: 1,
-      color: "fffff",
+      color: "#ffff1",
     },
     pulse_settings: {
       phase_one_duration: 300,
@@ -86,7 +86,7 @@ const test_protocol_order = [
     stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 1,
-      color: "fffff",
+      color: "#ffff2",
     },
     pulse_settings: {
       phase_one_duration: 3000,
@@ -110,7 +110,7 @@ const test_protocol_order = [
     nested_protocols: [],
     repeat: {
       number_of_repeats: 1,
-      color: "fffff",
+      color: "#ffff3",
     },
     pulse_settings: {
       phase_one_duration: 300,
@@ -389,6 +389,86 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     wrapper.vm.protocol_order = test_protocol_order;
     await wrapper.vm.handle_repeat({ removed: "test" }, 1);
     expect(wrapper.vm.protocol_order[1].repeat.number_of_repeats).toBe(0);
+  });
+
+  test("When a user hovers over a waveform tile, Then the pulse settings will be added to state", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({
+      idx: null,
+      indices: [],
+      color: null,
+    });
+
+    await wrapper.setData({ protocol_order: test_protocol_order });
+    await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
+    await wrapper.vm.on_pulse_enter(1);
+
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({
+      idx: 1,
+      indices: [3, 4],
+      color: "#ffff1",
+    });
+  });
+
+  test("When a user hovers over a waveform tile, but it's because the user is dragging a tile above, Then the pulse settings not be added", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    const default_state = {
+      idx: null,
+      indices: [],
+      color: null,
+    };
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual(default_state);
+
+    await wrapper.setData({ protocol_order: test_protocol_order, is_dragging: true });
+    await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
+    await wrapper.vm.on_pulse_enter(1);
+
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual(default_state);
+  });
+
+  test("When a user leaves hover over a waveform tile, Then the pulse settings will be reset", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
+    await wrapper.vm.on_pulse_enter(1);
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({
+      idx: 1,
+      indices: [3, 4],
+      color: "#ffff1",
+    });
+
+    await wrapper.vm.on_pulse_leave();
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({
+      idx: null,
+      indices: [],
+      color: null,
+    });
+  });
+
+  test("When a user selects 'Duplicate' in  waveform modal, Then the current pulse settings will be added into the pulse order right after selected pulse", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: test_protocol_order });
+    expect(wrapper.vm.protocol_order).toHaveLength(4);
+    await wrapper.vm.open_modal_for_edit("Monophasic", 3);
+
+    const duplicate_button = wrapper.findAll(".span__button_label").at(1);
+    await duplicate_button.trigger("click");
+
+    expect(wrapper.vm.protocol_order).toHaveLength(5);
   });
 
   test("When a selects the Stimulate Until Complete option in the protocol editor, Then the time unit dropdown should become disabled", async () => {

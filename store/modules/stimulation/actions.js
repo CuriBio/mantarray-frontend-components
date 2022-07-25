@@ -85,7 +85,7 @@ export default {
       const ending_repeat_idx = x_values.length;
       color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
     });
-    console.log(JSON.stringify(color_assignments));
+
     commit("set_repeat_color_assignments", color_assignments);
     commit("set_pulses", { pulses, new_pulse_order });
     dispatch("handle_rest_duration", {

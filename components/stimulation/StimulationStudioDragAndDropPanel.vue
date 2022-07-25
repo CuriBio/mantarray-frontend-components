@@ -56,6 +56,7 @@
                 </div>
               </div>
               <img
+                id="img__waveform-tile"
                 :src="require(`@/assets/img/${types.type}.png`)"
                 @dblclick="open_modal_for_edit(types.type, idx)"
                 @mouseenter="on_pulse_enter(idx)"

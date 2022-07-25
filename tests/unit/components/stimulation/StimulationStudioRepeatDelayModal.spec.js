@@ -59,13 +59,33 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
     expect(wrapper.emitted("delay_close")).toBeTruthy();
   });
 
-  test("When a user opens the delay modal to edit existing values, Then button labels should include ability to delete delay", async () => {
-    const get_button_array = StimulationStudioRepeatDelayModal.computed.button_labels.call({
-      modal_type: "Delay",
-      modal_open_for_edit: true,
-    });
-    expect(get_button_array).toStrictEqual(["Save", "Duplicate", "Delete", "Cancel"]);
-  });
+  test.each([
+    [true, ["Save", "Duplicate", "Delete", "Cancel"]],
+    [false, ["Save", "Cancel"]],
+  ])(
+    "When a user opens the delay modal and editing is %s, Then button labels should be %s",
+    async (modal_open_for_edit, expected_button_labels) => {
+      const button_labels = StimulationStudioRepeatDelayModal.computed.button_labels.call({
+        modal_type: "Delay",
+        modal_open_for_edit,
+      });
+      expect(button_labels).toStrictEqual(expected_button_labels);
+    }
+  );
+
+  test.each([
+    [true, ["#19ac8a", "#19ac8a", "#bd4932", "#bd4932"]],
+    [false, ["#19ac8a", "#bd4932"]],
+  ])(
+    "When a user opens the delay modal and editing is %s, Then button hover colors should be %s",
+    async (modal_open_for_edit, expected_button_colors) => {
+      const button_labels = StimulationStudioRepeatDelayModal.computed.button_hover_colors.call({
+        modal_type: "Delay",
+        modal_open_for_edit,
+      });
+      expect(button_labels).toStrictEqual(expected_button_colors);
+    }
+  );
 
   test("When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
     const wrapper = mount(StimulationStudioRepeatDelayModal, {
