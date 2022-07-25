@@ -162,7 +162,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       },
     });
 
-    const expected_enabled_array = [true, true, true];
+    const expected_enabled_array = [true, true];
     const expected_settings = {
       phase_one_duration: 15,
       phase_one_charge: 50,

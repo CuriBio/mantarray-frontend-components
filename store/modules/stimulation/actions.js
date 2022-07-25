@@ -25,7 +25,6 @@ export default {
     const y_values = [0];
     const color_assignments = {};
     const pulses = [];
-
     const get_last = (array) => array[array.length - 1];
     const helper = (setting, remaining_pulse_dur) => {
       // Add values for phase 1
@@ -86,7 +85,7 @@ export default {
       const ending_repeat_idx = x_values.length;
       color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
     });
-
+    console.log(JSON.stringify(color_assignments));
     commit("set_repeat_color_assignments", color_assignments);
     commit("set_pulses", { pulses, new_pulse_order });
     dispatch("handle_rest_duration", {
@@ -324,5 +323,13 @@ export default {
 
     if (res && res.status !== 200) commit("set_stim_status", STIM_STATUS.ERROR);
     else commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
+  },
+  async on_pulse_mouseenter({ state }, idx) {
+    const hovered_pulse = Object.entries(state.repeat_colors)[idx];
+    state.hovered_pulse = {
+      idx,
+      indices: hovered_pulse[1],
+      color: hovered_pulse[0],
+    };
   },
 };

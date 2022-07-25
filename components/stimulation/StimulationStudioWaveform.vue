@@ -25,6 +25,7 @@
 import { axisBottom, axisLeft, line as d3_line, select as d3_select, scaleLinear } from "d3";
 import StimulationStudioZoomControls from "@/components/stimulation/StimulationStudioZoomControls.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+import { mapState } from "vuex";
 
 /**
  * @vue-prop {String} title - Current title of the waveform
@@ -106,12 +107,14 @@ export default {
       y_axis_node: null,
       y_axis_scale: null,
       waveform_line_node: null,
+      highlight_line_node: null,
       frequency_of_y_ticks: 5,
       time_units: ["milliseconds", "seconds"],
       active_duration_idx: 0,
     };
   },
   computed: {
+    ...mapState("stimulation", ["hovered_pulse"]),
     div__waveform_graph__dynamic_style: function () {
       return { width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px" };
     },
@@ -140,6 +143,38 @@ export default {
 
       this.render_plot();
     },
+    hovered_pulse: function (new_pulse) {
+      this.highlight_line_node.selectAll("*").remove();
+      const x_axis_scale = this.x_axis_scale;
+      const y_axis_scale = this.y_axis_scale;
+
+      if (new_pulse.idx != null) {
+        const starting_x = this.data_points[new_pulse.indices[0]][0];
+        const ending_x = this.data_points[new_pulse.indices[1] - 1][0];
+
+        const starting_coord = [starting_x, this.y_max];
+        const ending_coord = [ending_x, this.y_max];
+        // in order to fill entire height of graph, need minimum y to max y
+        const data_to_fill = [[starting_x, this.y_min], starting_coord, ending_coord, [ending_x, this.y_min]];
+
+        this.highlight_line_node
+          .append("path")
+          .datum(data_to_fill)
+          .attr("fill", new_pulse.color)
+          .attr("stroke", new_pulse.color)
+          .attr("opacity", ".15")
+          .attr(
+            "d",
+            d3_line()
+              .x(function (d) {
+                return x_axis_scale(d[0]);
+              })
+              .y(function (d) {
+                return y_axis_scale(d[1]);
+              })
+          );
+      }
+    },
   },
   mounted: function () {
     // Eli (2/2/2020): having the svg be appended in the `data` function didn't work, so moved it to here
@@ -153,6 +188,11 @@ export default {
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
       .attr("id", "svg_of_waveform")
       .attr("font-family", "Muli");
+
+    this.highlight_line_node = this.the_svg
+      .append("g")
+      .attr("id", "highlight_line_node")
+      .attr("class", "highlight_line_node");
 
     this.waveform_line_node = this.the_svg
       .append("g")
@@ -244,22 +284,22 @@ export default {
       const y_axis_scale = this.y_axis_scale;
 
       this.waveform_line_node.selectAll("*").remove();
-      this.waveform_line_node
-        .append("path")
-        .datum(data_to_plot)
-        .attr("fill", "none")
-        .attr("stroke", this.line_color)
-        .attr("stroke-width", 1.5)
-        .attr(
-          "d",
-          d3_line()
-            .x(function (d) {
-              return x_axis_scale(d[0]);
-            })
-            .y(function (d) {
-              return y_axis_scale(d[1]);
-            })
-        );
+      // this.waveform_line_node
+      //   .append("path")
+      //   .datum(data_to_plot)
+      //   .attr("fill", "none")
+      //   .attr("stroke", this.line_color)
+      //   .attr("stroke-width", 1.5)
+      //   .attr(
+      //     "d",
+      //     d3_line()
+      //       .x(function (d) {
+      //         return x_axis_scale(d[0]);
+      //       })
+      //       .y(function (d) {
+      //         return y_axis_scale(d[1]);
+      //       })
+      //   );
       for (const color in this.repeat_colors) {
         if (this.repeat_colors !== {}) {
           // repetitive, but eslint errors without a conditional inside the loop

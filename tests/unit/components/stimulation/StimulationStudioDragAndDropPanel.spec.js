@@ -407,7 +407,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.disable_dropdown).toBe(false);
   });
 
-  test("When a user shift+clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
+  test("When a user double clicks a delay block to edit duration, Then the new value should be saved upon close", async () => {
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
       store,
       localVue,

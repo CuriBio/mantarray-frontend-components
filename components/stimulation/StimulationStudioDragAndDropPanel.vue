@@ -36,6 +36,8 @@
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
+            @start="is_dragging = true"
+            @end="is_dragging = false"
           >
             <div
               v-for="(types, idx) in protocol_order"
@@ -56,8 +58,9 @@
               <img
                 :src="require(`@/assets/img/${types.type}.png`)"
                 @dblclick="open_modal_for_edit(types.type, idx)"
+                @mouseenter="on_pulse_enter(idx)"
+                @mouseleave="on_pulse_leave"
               />
-
               <draggable
                 v-model="types.nested_protocols"
                 class="dropzone"
@@ -88,9 +91,7 @@
       <StimulationStudioWaveformSettingModal
         :stimulation_type="stimulation_type"
         :pulse_type="modal_type"
-        :button_names="
-          shift_click_img_idx !== null ? button_labels.delete_option : button_labels.no_delete_option
-        "
+        :modal_open_for_edit="modal_open_for_edit"
         :selected_pulse_settings="selected_pulse_settings"
         :selected_stim_settings="selected_stim_settings"
         :frequency="selected_frequency"
@@ -99,7 +100,7 @@
     </div>
     <div v-if="repeat_delay_modal !== null" class="modal-container">
       <StimulationStudioRepeatDelayModal
-        :delay_open_for_edit="delay_open_for_edit"
+        :modal_open_for_edit="modal_open_for_edit"
         :repeat_idx="repeat_idx"
         :modal_type="repeat_delay_modal"
         :current_repeat_delay_input="current_repeat_delay_input"
@@ -121,7 +122,6 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 /**
  * @vue-props {String} stimulation_type - Current selected stimulation type user selects from drowdown
  * @vue-data {Array} icon_type - The source for the draggable pulse tiles
- * @vue-data {Object} button_labels - Available button labels for modals
  * @vue-data {Array} time_units_array - Available units of time for drop down in settings panel
  * @vue-data {Object} selected_pulse_settings - This is the saved setting for a pulse that changes when a user opens a modal to edit a pulse
  * @vue-data {Array} protocol_order -  This is the complete order of pulses/delays/repeats in the entire new protocol
@@ -134,7 +134,7 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
  * @vue-data {String} current_repeat_delay_input - Saved input for a delay block that changes depending on which delay block is opened for edit
  * @vue-data {Boolean} cloned - Determines if a placed tile in protocol order is new and needs a modal to open appear to set settings or just an order rearrangement of existing tiles
  * @vue-data {Int} new_cloned_idx - If tile placed in protocol order is new, this index allows settings to be saved to correct index in order
- * @vue-data {Boolean} delay_open_for_edit - Determines if existing delay input should appear in modal for a reedit or if it's a new delay block with blank settings
+ * @vue-data {Boolean} modal_open_for_edit - Determines if existing delay input should appear in modal for a reedit or if it's a new delay block with blank settings
  * @vue-data {Int} time_units_idx - Index for selected unit in dropdown, used to reset dropdown when editor is reset
  * @vue-data {Boolean} disable_dropdown - Determines if the dropdown is disabled or not dependent on the stop stim setting selected
  * @vue-event {Event} check_type - Checks if tile placed is new or existing and opens corresponding modal for settings or commits change in protocol order to state
@@ -163,10 +163,6 @@ export default {
   data() {
     return {
       icon_types: ["Monophasic", "Biphasic", "Delay"],
-      button_labels: {
-        no_delete_option: ["Save", "Cancel"],
-        delete_option: ["Save", "Delete", "Cancel"],
-      },
       time_units_array: ["milliseconds", "seconds"],
       selected_pulse_settings: {},
       selected_stim_settings: {},
@@ -181,18 +177,26 @@ export default {
       current_repeat_delay_unit: "milliseconds",
       cloned: false,
       new_cloned_idx: null,
-      delay_open_for_edit: false, // TODO Luci, clean up state management and constant names
+      modal_open_for_edit: false, // TODO Luci, clean up state management and constant names
       time_units_idx: 0,
       disable_dropdown: false,
       selected_frequency: null,
       color_idx: 0,
+      is_dragging: false,
     };
   },
   computed: {
     ...mapState("stimulation", {
       time_unit: (state) => state.protocol_editor.time_unit,
       stop_setting: (state) => state.protocol_editor.stop_setting,
+      detailed_pulses: (state) => state.protocol_editor.detailed_pulses,
     }),
+  },
+  watch: {
+    is_dragging: function () {
+      // reset so old position/idx isn't highlighted once moved
+      this.on_pulse_mouseleave();
+    },
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
@@ -204,9 +208,7 @@ export default {
       }
 
       if (mutation.type === "stimulation/set_edit_mode") {
-        this.protocol_order = JSON.parse(
-          JSON.stringify(this.$store.state.stimulation.protocol_editor.detailed_pulses)
-        );
+        this.protocol_order = JSON.parse(JSON.stringify(this.detailed_pulses));
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       }
       if (mutation.type === "stimulation/set_stop_setting") {
@@ -220,8 +222,8 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    ...mapActions("stimulation", ["handle_protocol_order"]),
-    ...mapMutations("stimulation", ["set_time_unit"]),
+    ...mapActions("stimulation", ["handle_protocol_order", "on_pulse_mouseenter"]),
+    ...mapMutations("stimulation", ["set_time_unit", "on_pulse_mouseleave"]),
 
     check_type(e) {
       if (e.added && this.cloned) {
@@ -242,35 +244,44 @@ export default {
     on_modal_close(button, pulse_settings, stim_settings, frequency) {
       this.modal_type = null;
       this.repeat_delay_modal = null;
-      this.delay_open_for_edit = false;
+      this.modal_open_for_edit = false;
       this.selected_frequency = null;
       this.current_repeat_delay_input = null;
       this.current_repeat_delay_unit = "milliseconds";
       const new_pulse = this.protocol_order[this.new_cloned_idx];
       const edited_pulse = this.protocol_order[this.shift_click_img_idx];
+      // needs to not edit original pulse, edited_pulse does
+      const duplicate_pulse =
+        this.shift_click_img_idx !== null
+          ? JSON.parse(JSON.stringify(this.protocol_order[this.shift_click_img_idx]))
+          : null;
 
-      if (button === "Save") {
-        if (this.new_cloned_idx !== null) {
-          new_pulse.pulse_settings = pulse_settings;
-          new_pulse.stim_settings = stim_settings;
-          new_pulse.repeat.number_of_repeats = frequency;
-        }
-        if (this.shift_click_img_idx !== null && this.shift_click_nested_img_idx === null) {
-          Object.assign(edited_pulse.pulse_settings, pulse_settings);
-          Object.assign(edited_pulse.stim_settings, stim_settings);
-          edited_pulse.repeat.number_of_repeats = frequency;
-        }
+      switch (button) {
+        case "Save":
+          if (this.new_cloned_idx !== null) {
+            new_pulse.pulse_settings = pulse_settings;
+            new_pulse.stim_settings = stim_settings;
+            new_pulse.repeat.number_of_repeats = frequency;
+          } else if (this.shift_click_img_idx !== null) {
+            Object.assign(edited_pulse.pulse_settings, pulse_settings);
+            Object.assign(edited_pulse.stim_settings, stim_settings);
+            edited_pulse.repeat.number_of_repeats = frequency;
+          }
+          break;
+        case "Duplicate":
+          // change color and insert after original pulse
+          duplicate_pulse.repeat.color = generate_random_color(true);
+          this.protocol_order.splice(this.shift_click_img_idx + 1, 0, duplicate_pulse);
+          break;
+        case "Delete":
+          if (this.shift_click_nested_img_idx !== null)
+            edited_pulse.nested_protocols.splice(this.shift_click_nested_img_idx, 1);
+          else this.protocol_order.splice(this.shift_click_img_idx, 1);
+          break;
+        case "Cancel":
+          if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
       }
 
-      if (button === "Delete") {
-        if (this.shift_click_nested_img_idx !== null)
-          edited_pulse.nested_protocols.splice(this.shift_click_nested_img_idx, 1);
-        if (this.shift_click_nested_img_idx === null) this.protocol_order.splice(this.shift_click_img_idx, 1);
-      }
-
-      if (button === "Cancel") {
-        if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
-      }
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.shift_click_nested_img_idx = null;
@@ -279,6 +290,7 @@ export default {
     open_modal_for_edit(type, idx, nested_idx) {
       const pulse = this.protocol_order[idx];
       this.shift_click_img_idx = idx;
+      this.modal_open_for_edit = true;
 
       if (nested_idx !== undefined) {
         this.shift_click_nested_img_idx = nested_idx;
@@ -296,11 +308,16 @@ export default {
       if (type === "Delay") {
         this.current_repeat_delay_input = this.selected_stim_settings.total_active_duration.duration.toString();
         this.current_repeat_delay_unit = this.selected_stim_settings.total_active_duration.unit.toString();
-        this.delay_open_for_edit = true;
         this.repeat_delay_modal = "Delay";
       }
     },
-
+    on_pulse_enter(idx) {
+      // if tile is being dragged, the pulse underneath the dragged tile will highlight even though the user is dragging a different tile
+      if (!this.is_dragging) this.on_pulse_mouseenter(idx);
+    },
+    on_pulse_leave() {
+      this.on_pulse_mouseleave();
+    },
     handle_time_unit(idx) {
       const unit = this.time_units_array[idx];
       this.time_units_idx = idx;
@@ -336,9 +353,7 @@ export default {
       if (e.added) {
         this.repeat_delay_modal = "Repeat";
         this.repeat_idx = idx;
-      }
-
-      if (e.removed) {
+      } else if (e.removed) {
         this.protocol_order[idx].repeat.number_of_repeats = 0;
         this.handle_protocol_order(this.protocol_order);
       }
@@ -356,8 +371,7 @@ export default {
 
       if (res.button_label === "Save")
         this.protocol_order[this.repeat_idx].repeat.number_of_repeats = res.number_of_repeats;
-
-      if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
+      else if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
 
       this.repeat_idx = null;
       this.current_repeat_delay_input = null;

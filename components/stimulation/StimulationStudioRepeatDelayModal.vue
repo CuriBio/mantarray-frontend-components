@@ -32,8 +32,8 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="-1"
-        :button_names="get_button_array"
-        :hover_color="['#19ac8a', '#bd4932']"
+        :button_names="button_labels"
+        :hover_color="button_hover_colors"
         :is_enabled="is_enabled_array"
         @btn-click="close"
       />
@@ -49,7 +49,7 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
  * @vue-props {String} current_repeat_delay_input - Current input if modal is open for editing
  * @vue-props {String} current_repeat_delay_unit - The current unit selected when a delay block is opened to edit
  * @vue-props {String} modal_type - Determines if delay or repeat styling is assigned to modal
- * @vue-props {Boolean} delay_open_for_edit - States if delay modal is open for a reedit
+ * @vue-props {Boolean} modal_open_for_edit - States if delay modal is open for a reedit
  * @vue-data {String} input_value - Value input into modal
  * @vue-data {String} invalid_text - Validity check for input
  * @vue-data {Array} button_labels - Button labels for modal
@@ -60,7 +60,7 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
  * @vue-data {Boolean} is_valid - True if input passes the validation check and allows Save button to become enabled
  * @vue-computed {String} get_modal_title - Title dependent on if its a repeat or delay modal
  * @vue-computed {String} get_input_description - Subtitle dependent on if its a repeat or delay modal
- * @vue-computed {Array} get_button_array - Button array dependent on if its a reedit or not
+ * @vue-computed {Array} button_labels - Button array dependent on if its a reedit or not
  * @vue-method {event} close - emits close of modal and data to parent component
  * @vue-method {event} check_validity - checks if inputs are valid numbers only and not empty
  * @vue-method {event} handle_unit_change - Saves current selected index in time unit dropdown
@@ -90,7 +90,7 @@ export default {
       type: String,
       required: true,
     },
-    delay_open_for_edit: {
+    modal_open_for_edit: {
       type: Boolean,
       default: false,
     },
@@ -99,7 +99,6 @@ export default {
     return {
       input_value: null,
       invalid_text: "Required",
-      button_labels: [],
       invalid_err_msg: {
         num_err: "Must be a (+) number",
         required: "Required",
@@ -107,41 +106,37 @@ export default {
       },
       time_units: ["milliseconds", "seconds"],
       time_unit_idx: 0,
-      is_enabled_array: [false, true, true],
+      is_enabled_array: [false, true],
       is_valid: false,
     };
   },
   computed: {
     get_modal_title() {
-      let title;
-      if (this.modal_type === "Repeat") title = "Sequence Mode";
-      if (this.modal_type === "Delay") title = "Delay";
-      return title;
+      return this.modal_type === "Repeat" ? "Sequence Mode" : "Delay";
     },
     get_input_description() {
-      let description;
-      if (this.modal_type === "Repeat") description = "Number of Repeats:";
-      if (this.modal_type === "Delay") description = "Duration:";
-      return description;
+      return this.modal_type === "Repeat" ? "Number of Repeats:" : "Duration:";
     },
-    get_button_array() {
-      let button_names;
-      if (this.delay_open_for_edit === false) button_names = ["Save", "Cancel"];
-      if (this.delay_open_for_edit === true) button_names = ["Save", "Delete", "Cancel"];
-      return button_names;
+    button_labels() {
+      return this.modal_open_for_edit ? ["Save", "Duplicate", "Delete", "Cancel"] : ["Save", "Cancel"];
+    },
+    button_hover_colors: function () {
+      return this.modal_open_for_edit ? ["#19ac8a", "#19ac8a", "#bd4932", "#bd4932"] : ["#19ac8a", "#bd4932"];
     },
   },
   watch: {
     is_valid() {
-      this.is_enabled_array = [this.is_valid, true, true];
+      // disabled duplicate and save button if not valid inputs
+      this.is_enabled_array = this.modal_open_for_edit
+        ? [this.is_valid, this.is_valid, true, true]
+        : [this.is_valid, true];
     },
   },
   created() {
     this.input_value = this.current_repeat_delay_input;
     this.time_unit_idx = this.time_units.indexOf(this.current_repeat_delay_unit);
-
+    this.is_enabled_array = this.modal_open_for_edit ? [true, true, true, true] : [false, true];
     if (this.current_repeat_delay_input !== null) this.check_validity(this.input_value);
-    this.button_labels = this.get_button_array;
   },
   methods: {
     close(idx) {
@@ -154,7 +149,7 @@ export default {
       };
       if (this.modal_type === "Repeat")
         this.$emit("repeat_close", { button_label, number_of_repeats: this.input_value });
-      if (this.modal_type === "Delay") {
+      else if (this.modal_type === "Delay") {
         const selected_unit = this.time_units[this.time_unit_idx];
         const converted_input = Number(this.input_value) * unit_converstion[selected_unit];
         const delay_settings = {

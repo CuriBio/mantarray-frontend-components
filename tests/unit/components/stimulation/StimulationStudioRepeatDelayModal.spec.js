@@ -60,11 +60,11 @@ describe("StimulationStudioRepeatDelayModal.vue", () => {
   });
 
   test("When a user opens the delay modal to edit existing values, Then button labels should include ability to delete delay", async () => {
-    const get_button_array = StimulationStudioRepeatDelayModal.computed.get_button_array.call({
+    const get_button_array = StimulationStudioRepeatDelayModal.computed.button_labels.call({
       modal_type: "Delay",
-      delay_open_for_edit: true,
+      modal_open_for_edit: true,
     });
-    expect(get_button_array).toStrictEqual(["Save", "Delete", "Cancel"]);
+    expect(get_button_array).toStrictEqual(["Save", "Duplicate", "Delete", "Cancel"]);
   });
 
   test("When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {

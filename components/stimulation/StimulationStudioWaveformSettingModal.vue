@@ -249,8 +249,8 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
-        :button_names="button_names"
-        :hover_color="['#19ac8a', '#bd4932', '#bd4932']"
+        :button_names="button_labels"
+        :hover_color="button_hover_colors"
         :is_enabled="is_enabled_array"
         @btn-click="close"
       />
@@ -271,7 +271,7 @@ library.add(faBalanceScale, faQuestionCircle);
 /**
  * @vue-props {String} stimulation_type - Current type of stimulation
  * @vue-props {String} pulse_type - Type of pulse for modal
- * @vue-props {Array} button_names - Array of button labels for modal
+ * @vue-props {Array} button_labels - Array of button labels for modal
  * @vue-props {Object} selected_pulse_settings - Settings passed to modal if it's selected to edit
  * @vue-props {Object} selected_stim_settings - Stim block settings passed to modal if it's selected to edit
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
@@ -307,12 +307,7 @@ export default {
   props: {
     stimulation_type: { type: String, default: "Current" },
     pulse_type: { type: String, default: "Biphasic" },
-    button_names: {
-      type: Array,
-      default() {
-        return ["Save", "Cancel"];
-      },
-    },
+    modal_open_for_edit: { type: Boolean, default: false },
     selected_pulse_settings: {
       type: Object,
       required: true,
@@ -386,10 +381,19 @@ export default {
     stim_unit: function () {
       return this.stimulation_type.includes("C") ? "mA" : "V";
     },
+    button_hover_colors: function () {
+      return this.modal_open_for_edit ? ["#19ac8a", "#19ac8a", "#bd4932", "#bd4932"] : ["#19ac8a", "#bd4932"];
+    },
+    button_labels: function () {
+      return this.modal_open_for_edit ? ["Save", "Duplicate", "Delete", "Cancel"] : ["Save", "Cancel"];
+    },
   },
   watch: {
     all_valid() {
-      this.is_enabled_array = [this.all_valid, true, true];
+      // disabled duplicate and save button if not valid inputs
+      this.is_enabled_array = this.modal_open_for_edit
+        ? [this.all_valid, this.all_valid, true, true]
+        : [this.all_valid, true];
     },
   },
   created() {
@@ -421,7 +425,7 @@ export default {
   },
   methods: {
     close(idx) {
-      const button_label = this.button_names[idx];
+      const button_label = this.button_labels[idx];
       this.stim_settings.repeat_delay_interval = this.calculated_delay;
       this.$emit("close", button_label, this.pulse_settings, this.stim_settings, this.input_pulse_frequency);
     },
