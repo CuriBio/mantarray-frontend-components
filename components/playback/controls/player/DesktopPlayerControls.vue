@@ -348,9 +348,9 @@ export default {
       if (this.firmware_update_dur_mins !== 1) duration += "s";
       return {
         header: "Important!",
-        msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete.`,
+        msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete. Declining it will prevent automatic software updating.`,
         msg_two:
-          "Declining it will prevent automatic software updating. Would you like to download and install the update?",
+          "If you accept, please make sure there is no stim lid connected to the instrument. Would you like to download and install the update?",
         button_names: ["No", "Yes"],
       };
     },
