@@ -194,6 +194,7 @@ export default {
       }
 
       if ((e.added && !this.cloned) || e.moved || e.removed) this.handle_protocol_order(this.protocol_order);
+      // reset
       this.cloned = false;
     },
     on_modal_close(button, pulse_settings, stim_settings, frequency) {

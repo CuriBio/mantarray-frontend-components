@@ -148,8 +148,26 @@ const test_protocol_list = [
     },
   },
 ];
-const new_test_element = {
+const new_mono_test_element = {
   type: "Monophasic",
+  repeat: { color: "", number_of_repeats: 0 },
+  pulse_settings: {
+    phase_one_duration: "",
+    phase_one_charge: "",
+    interphase_interval: "",
+    phase_two_duration: "",
+    phase_two_charge: "",
+  },
+  stim_settings: {
+    delay_interval: "",
+    total_active_duration: {
+      duration: "",
+      unit: "milliseconds",
+    },
+  },
+};
+const new_bi_test_element = {
+  type: "Biphasic",
   repeat: { color: "", number_of_repeats: 0 },
   pulse_settings: {
     phase_one_duration: "",
@@ -211,7 +229,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.clone({ type: "Monophasic", src: "test" });
     await wrapper.vm.check_type({
       added: {
-        element: new_test_element,
+        element: new_mono_test_element,
         newIndex: 4,
       },
     });
@@ -276,19 +294,38 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(test_protocol_order)) });
     expect(wrapper.vm.protocol_order).toHaveLength(4);
 
-    await wrapper.vm.clone({ type: "Monophasic", src: "test" });
+    await wrapper.vm.clone({ type: "Biphasic", src: "test" });
     expect(wrapper.vm.cloned).toBe(true);
     await wrapper.vm.check_type({
       added: {
-        element: new_test_element,
+        element: new_bi_test_element,
         newIndex: 4,
       },
     });
+
+    expect(wrapper.vm.modal_type).toBe("Biphasic");
 
     const cancel_button = wrapper.findAll(".span__button_label").at(1);
     await cancel_button.trigger("click");
 
     expect(wrapper.vm.protocol_order).toHaveLength(4);
+  });
+  test("When changes the order of waveform tiles in scrollable component, Then no modal should appear", async () => {
+    wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(test_protocol_order)) });
+    expect(wrapper.vm.protocol_order).toHaveLength(4);
+
+    await wrapper.vm.check_type({
+      moved: {
+        element: {},
+        newIndex: 2,
+      },
+    });
+
+    expect(wrapper.vm.modal_type).toBeNull();
   });
 
   test("When a user clicks save on the settings for a waveform, Then the setting should save to the corresponding index depending on if it is a new waveform or an edited", async () => {
