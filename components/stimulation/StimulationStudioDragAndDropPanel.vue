@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="modal_type !== null || repeat_delay_modal !== null ? 'modal_overlay' : null">
+    <div :class="modal_type !== null || open_delay_modal ? 'modal_overlay' : null">
       <div>
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
@@ -39,22 +39,7 @@
             @start="is_dragging = true"
             @end="is_dragging = false"
           >
-            <div
-              v-for="(types, idx) in protocol_order"
-              :key="idx"
-              :class="'repeat_container'"
-              :style="get_style(types)"
-            >
-              <div v-if="types.nested_protocols.length > 0" :class="'repeat_label_container'">
-                <div
-                  class="circle"
-                  @click.shift.exact="open_repeat_modal_for_edit(types.repeat.number_of_repeats, idx)"
-                >
-                  <span :class="'repeat_label'">
-                    {{ types.repeat.number_of_repeats }}
-                  </span>
-                </div>
-              </div>
+            <div v-for="(types, idx) in protocol_order" :key="idx" class="div__tile-container">
               <img
                 id="img__waveform-tile"
                 :src="require(`@/assets/img/${types.type}.png`)"
@@ -62,27 +47,6 @@
                 @mouseenter="on_pulse_enter(idx)"
                 @mouseleave="on_pulse_leave"
               />
-              <draggable
-                v-model="types.nested_protocols"
-                class="dropzone"
-                style="height: 100px; display: flex"
-                :group="{ name: 'order' }"
-                :ghost-class="'ghost'"
-                :emptyInsertThreshold="40"
-                :disabled="true"
-                @change="
-                  [types.nested_protocols.length <= 1 ? handle_repeat($event, idx) : handle_internal_repeat()]
-                "
-              >
-                <div
-                  v-for="(nested_types, nested_idx) in types.nested_protocols"
-                  :key="nested_idx"
-                  :style="'position: relative;'"
-                  @dblclick="open_modal_for_edit(nested_types.type, idx, nested_idx)"
-                >
-                  <img :src="require(`@/assets/img/${nested_types.type}.png`)" :style="'margin-top: 4px;'" />
-                </div>
-              </draggable>
             </div>
           </draggable>
         </div>
@@ -99,14 +63,11 @@
         @close="on_modal_close"
       />
     </div>
-    <div v-if="repeat_delay_modal !== null" class="modal-container">
-      <StimulationStudioRepeatDelayModal
+    <div v-if="open_delay_modal" class="modal-container delay-container">
+      <StimulationStudioDelayModal
         :modal_open_for_edit="modal_open_for_edit"
-        :repeat_idx="repeat_idx"
-        :modal_type="repeat_delay_modal"
-        :current_repeat_delay_input="current_repeat_delay_input"
-        :current_repeat_delay_unit="current_repeat_delay_unit"
-        @repeat_close="on_repeat_modal_close"
+        :current_delay_unit="current_delay_unit"
+        :current_delay_input="current_delay_input"
         @delay_close="on_modal_close"
       />
     </div>
@@ -116,7 +77,7 @@
 import draggable from "vuedraggable";
 import { mapState, mapActions, mapMutations } from "vuex";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
-import StimulationStudioRepeatDelayModal from "@/components/stimulation/StimulationStudioRepeatDelayModal.vue";
+import StimulationStudioDelayModal from "@/components/stimulation/StimulationStudioDelayModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 
@@ -130,10 +91,8 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
  * @vue-data {String} modal_type - Tracks which modal should open based on pulse type
  * @vue-data {String} setting_type - This is the stimulation type that user selects from drop down in settings panel
  * @vue-data {Int} shift_click_img_idx - Index of selected pulse to edit in order to save new settings to correct pulse
- * @vue-data {Int} shift_click_nested_img_idx - Index of selected nested pulse to edit in order to save new settings to correct pulse
- * @vue-data {String} repeat_delay_modal - Tracks which modal should open based on if it is a repeat or delay
- * @vue-data {Int} repeat_idx - Index of new repeat block to add settings to correct pulse
- * @vue-data {String} current_repeat_delay_input - Saved input for a delay block that changes depending on which delay block is opened for edit
+ * @vue-data {String} open_delay_modal - Tracks which modal should open based on if it is a repeat or delay
+ * @vue-data {String} current_delay_input - Saved input for a delay block that changes depending on which delay block is opened for edit
  * @vue-data {Boolean} cloned - Determines if a placed tile in protocol order is new and needs a modal to open appear to set settings or just an order rearrangement of existing tiles
  * @vue-data {Int} new_cloned_idx - If tile placed in protocol order is new, this index allows settings to be saved to correct index in order
  * @vue-data {Boolean} modal_open_for_edit - Determines if existing modal inputs should appear in modal for a reedit or if it's a new delay block with blank settings
@@ -144,10 +103,6 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
  * @vue-event {Event} open_modal_for_edit - Assigns selected pulse settings to modal for reedit and saves current selected index
  * @vue-event {Event} handle_time_unit - Tracks which unit of time has been selected from dropdown in settings panel
  * @vue-event {Event} clone - Creates blank properties for new pulse placed in protocol order so that each pulse has unique properties and is not affected by one another, a side effect from VueDraggable
- * @vue-event {Event} handle_repeat - Opens repeat modal and saves selected index or if user removes last tile from repeat block, it commits change to state
- * @vue-event {Event} handle_internal_repeat - If user changes order of pulses inside of repeat block, this commits the change to state
- * @vue-event {Event} open_repeat_for_edit - Assigns current repeat input of selected block to be opened with modal for edit
- * @vue-event {Event} on_repeat_modal_close - Handles close of repeat block according to button selected and commits change to state
  * @vue-event {Event} get_style - If a repeat block is created, this returns corresponding colored border
  */
 
@@ -156,7 +111,7 @@ export default {
   components: {
     draggable,
     StimulationStudioWaveformSettingModal,
-    StimulationStudioRepeatDelayModal,
+    StimulationStudioDelayModal,
     SmallDropDown,
   },
   props: {
@@ -172,11 +127,9 @@ export default {
       modal_type: null,
       setting_type: "Current",
       shift_click_img_idx: null,
-      shift_click_nested_img_idx: null,
-      repeat_delay_modal: null,
-      repeat_idx: null,
-      current_repeat_delay_input: null,
-      current_repeat_delay_unit: "milliseconds",
+      open_delay_modal: false,
+      current_delay_input: null,
+      current_delay_unit: "milliseconds",
       cloned: false,
       new_cloned_idx: null,
       modal_open_for_edit: false, // TODO Luci, clean up state management and constant names
@@ -237,7 +190,7 @@ export default {
 
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
-        else if (element.type === "Delay") this.repeat_delay_modal = "Delay";
+        else if (element.type === "Delay") this.open_delay_modal = true;
       }
 
       if ((e.added && !this.cloned) || e.moved || e.removed) this.handle_protocol_order(this.protocol_order);
@@ -245,11 +198,11 @@ export default {
     },
     on_modal_close(button, pulse_settings, stim_settings, frequency) {
       this.modal_type = null;
-      this.repeat_delay_modal = null;
+      this.open_delay_modal = false;
       this.modal_open_for_edit = false;
       this.selected_frequency = null;
-      this.current_repeat_delay_input = null;
-      this.current_repeat_delay_unit = "milliseconds";
+      this.current_delay_input = null;
+      this.current_delay_unit = "milliseconds";
       const new_pulse = this.protocol_order[this.new_cloned_idx];
       const edited_pulse = this.protocol_order[this.shift_click_img_idx];
       // needs to not edit original pulse, edited_pulse does
@@ -264,7 +217,8 @@ export default {
             new_pulse.pulse_settings = pulse_settings;
             new_pulse.stim_settings = stim_settings;
             new_pulse.repeat.number_of_repeats = frequency;
-          } else if (this.shift_click_img_idx !== null) {
+          }
+          if (this.shift_click_img_idx !== null) {
             Object.assign(edited_pulse.pulse_settings, pulse_settings);
             Object.assign(edited_pulse.stim_settings, stim_settings);
             edited_pulse.repeat.number_of_repeats = frequency;
@@ -276,9 +230,7 @@ export default {
           this.protocol_order.splice(this.shift_click_img_idx + 1, 0, duplicate_pulse);
           break;
         case "Delete":
-          if (this.shift_click_nested_img_idx !== null)
-            edited_pulse.nested_protocols.splice(this.shift_click_nested_img_idx, 1);
-          else this.protocol_order.splice(this.shift_click_img_idx, 1);
+          this.protocol_order.splice(this.shift_click_img_idx, 1);
           break;
         case "Cancel":
           if (this.new_cloned_idx !== null) this.protocol_order.splice(this.new_cloned_idx, 1);
@@ -286,31 +238,23 @@ export default {
 
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
-      this.shift_click_nested_img_idx = null;
       this.handle_protocol_order(this.protocol_order);
     },
-    open_modal_for_edit(type, idx, nested_idx) {
+    open_modal_for_edit(type, idx) {
       const pulse = this.protocol_order[idx];
       this.shift_click_img_idx = idx;
       this.modal_open_for_edit = true;
 
-      if (nested_idx !== undefined) {
-        this.shift_click_nested_img_idx = nested_idx;
-        this.selected_pulse_settings = pulse.nested_protocols[nested_idx].pulse_settings;
-        this.selected_stim_settings = pulse.nested_protocols[nested_idx].stim_settings;
-        this.selected_frequency = pulse.nested_protocols[nested_idx].repeat.number_of_repeats;
-      } else if (nested_idx === undefined) {
-        this.selected_pulse_settings = pulse.pulse_settings;
-        this.selected_stim_settings = pulse.stim_settings;
-        this.selected_frequency = pulse.repeat.number_of_repeats;
-      }
+      this.selected_pulse_settings = pulse.pulse_settings;
+      this.selected_stim_settings = pulse.stim_settings;
+      this.selected_frequency = pulse.repeat.number_of_repeats;
 
       if (type === "Monophasic") this.modal_type = "Monophasic";
       if (type === "Biphasic") this.modal_type = "Biphasic";
       if (type === "Delay") {
-        this.current_repeat_delay_input = this.selected_stim_settings.total_active_duration.duration.toString();
-        this.current_repeat_delay_unit = this.selected_stim_settings.total_active_duration.unit.toString();
-        this.repeat_delay_modal = "Delay";
+        this.current_delay_input = this.selected_stim_settings.total_active_duration.duration.toString();
+        this.current_delay_unit = this.selected_stim_settings.total_active_duration.unit.toString();
+        this.open_delay_modal = true;
       }
     },
     on_pulse_enter(idx) {
@@ -333,7 +277,6 @@ export default {
 
       return {
         type,
-        nested_protocols: [],
         repeat: { color: `${random_color}`, number_of_repeats: 0 },
         pulse_settings: {
           phase_one_duration: "",
@@ -351,37 +294,6 @@ export default {
         },
       };
     },
-    handle_repeat(e, idx) {
-      if (e.added) {
-        this.repeat_delay_modal = "Repeat";
-        this.repeat_idx = idx;
-      } else if (e.removed) {
-        this.protocol_order[idx].repeat.number_of_repeats = 0;
-        this.handle_protocol_order(this.protocol_order);
-      }
-    },
-    handle_internal_repeat() {
-      this.handle_protocol_order(this.protocol_order);
-    },
-    open_repeat_modal_for_edit(number, idx) {
-      this.current_repeat_delay_input = number;
-      this.repeat_delay_modal = "Repeat";
-      this.repeat_idx = idx;
-    },
-    on_repeat_modal_close(res) {
-      this.repeat_delay_modal = null;
-
-      if (res.button_label === "Save")
-        this.protocol_order[this.repeat_idx].repeat.number_of_repeats = res.number_of_repeats;
-      else if (res.button_label === "Cancel") this.protocol_order[this.repeat_idx].nested_protocols = [];
-
-      this.repeat_idx = null;
-      this.current_repeat_delay_input = null;
-      this.handle_protocol_order(this.protocol_order);
-    },
-    get_style(type) {
-      if (type.nested_protocols.length > 0) return "border: 2px solid " + type.repeat.color;
-    },
   },
 };
 </script>
@@ -397,7 +309,7 @@ export default {
   justify-content: center;
   justify-self: flex-end;
 }
-.repeat_container {
+.div__tile-container {
   display: flex;
   align-items: center;
 }
@@ -442,12 +354,6 @@ img {
   background: #b7b7b7;
   cursor: pointer;
 }
-.repeat_label_container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-}
 .draggable_tile_container {
   display: grid;
   width: 80%;
@@ -457,14 +363,6 @@ img {
   align-items: center;
   margin-top: 80px;
 }
-.repeat_label {
-  font-size: 12px;
-  font-weight: bold;
-  position: relative;
-  font-family: Muli;
-  color: rgb(17, 17, 17);
-}
-
 .modal_overlay {
   width: 1629px;
   height: 885px;
@@ -526,5 +424,8 @@ img {
 
 .dropzone {
   visibility: visible;
+}
+.delay-container {
+  top: 15%;
 }
 </style>

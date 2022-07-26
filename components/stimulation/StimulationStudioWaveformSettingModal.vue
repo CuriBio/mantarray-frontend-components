@@ -353,7 +353,7 @@ export default {
         duration: new RegExp("^[0-9][0-9]*d*$"),
         frequency: new RegExp("^([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"),
       },
-      is_enabled_array: [false, true, true],
+      is_enabled_array: [false, false, true, true],
       all_valid: false,
       active_duration_idx: 0,
       input_pulse_frequency: "",
