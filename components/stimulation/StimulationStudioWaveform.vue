@@ -158,7 +158,6 @@ export default {
         const ending_coord = [ending_x, this.y_max];
         // in order to fill entire height of graph, need minimum y to max y
         const data_to_fill = [[starting_x, this.y_min], starting_coord, ending_coord, [ending_x, this.y_min]];
-
         this.highlight_line_node
           .append("path")
           .datum(data_to_fill)

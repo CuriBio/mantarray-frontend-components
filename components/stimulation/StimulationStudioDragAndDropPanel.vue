@@ -33,6 +33,7 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
+            :disabled="true"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
@@ -103,7 +104,6 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
  * @vue-event {Event} open_modal_for_edit - Assigns selected pulse settings to modal for reedit and saves current selected index
  * @vue-event {Event} handle_time_unit - Tracks which unit of time has been selected from dropdown in settings panel
  * @vue-event {Event} clone - Creates blank properties for new pulse placed in protocol order so that each pulse has unique properties and is not affected by one another, a side effect from VueDraggable
- * @vue-event {Event} get_style - If a repeat block is created, this returns corresponding colored border
  */
 
 export default {
