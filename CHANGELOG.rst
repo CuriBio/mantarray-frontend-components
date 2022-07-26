@@ -9,11 +9,15 @@ Added:
 
 - Additional tooltip message on configuration check icon that notifies user that check cannot be run while live view or a recording is active
 - Added tooltip to barcode input and icon that notifies user it's disabled when live view is active.
+- Added ability to copy pulses in stim studio by double clicking waveform tile and then selecting 'Duplicate'.
+- Added colored background to stim studio waveform graph that corresponds to the waveform tile when hovered over.
 
 Changed
 ^^^^^^^
 
 - Frequency in pulse settings modal can now be positive non-integers instead of only positive integers
+- Removed repeat feature in stimulation studio in place of duplicate pulse feature
+- Renamed StimulationStudioRepeatDelayModal to StimulationStudioDelayModal
 
 Fixed
 ^^^^^

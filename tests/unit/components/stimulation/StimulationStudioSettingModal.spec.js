@@ -162,7 +162,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       },
     });
 
-    const expected_enabled_array = [true, true, true];
+    const expected_enabled_array = [true, true];
     const expected_settings = {
       phase_one_duration: 15,
       phase_one_charge: 50,
@@ -366,4 +366,32 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     await wrapper.vm.close(0);
     expect(wrapper.vm.stim_settings.repeat_delay_interval).toBe(95);
   });
+
+  test.each([
+    [true, ["Save", "Duplicate", "Delete", "Cancel"]],
+    [false, ["Save", "Cancel"]],
+  ])(
+    "When a user opens the delay modal and editing is %s, Then button labels should be %s",
+    async (modal_open_for_edit, expected_button_labels) => {
+      const button_labels = StimulationStudioWaveformSettingModal.computed.button_labels.call({
+        modal_type: "Monophasic",
+        modal_open_for_edit,
+      });
+      expect(button_labels).toStrictEqual(expected_button_labels);
+    }
+  );
+
+  test.each([
+    [true, ["#19ac8a", "#19ac8a", "#bd4932", "#bd4932"]],
+    [false, ["#19ac8a", "#bd4932"]],
+  ])(
+    "When a user opens the delay modal and editing is %s, Then button hover colors should be %s",
+    async (modal_open_for_edit, expected_button_colors) => {
+      const button_labels = StimulationStudioWaveformSettingModal.computed.button_hover_colors.call({
+        modal_type: "Monophasic",
+        modal_open_for_edit,
+      });
+      expect(button_labels).toStrictEqual(expected_button_colors);
+    }
+  );
 });
