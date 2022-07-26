@@ -16,6 +16,8 @@ Changed
 ^^^^^^^
 
 - Frequency in pulse settings modal can now be positive non-integers instead of only positive integers
+- Removed repeat feature in stimulation studio in place of duplicate pulse feature
+- Renamed StimulationStudioRepeatDelayModal to StimulationStudioDelayModal
 
 Fixed
 ^^^^^
