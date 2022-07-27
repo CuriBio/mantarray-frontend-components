@@ -9,11 +9,10 @@ export default {
 
     appended_waveforms.map((x, idx) => {
       const { x_data_points } = x;
-      const payload = {
-        x: x_data_points[x_data_points.length - 1],
-        idx,
-      };
-      commit("update_fill_assignments", payload);
+      // support for long subprotocols. this pulls the marker out to the last tissue data point.
+      const well_assignments = state.stim_fill_assignments[idx];
+      if (well_assignments.length > 0)
+        well_assignments[well_assignments.length - 1][1][1][0] = x_data_points[x_data_points.length - 1];
     });
 
     dispatch("remove_old_waveform_data");
@@ -59,7 +58,7 @@ export default {
           state.stim_waveforms[well_idx].x_data_points.push(x);
           state.stim_waveforms[well_idx].y_data_points.push(101000);
 
-          if (next_x || new_well_values.length == 1 || protocol_flags[idx] == 255)
+          if (next_x || new_well_values.length == 1 || protocol_flags[idx] == 255) {
             state.stim_fill_assignments[well_idx].push([
               protocol_flags[idx],
               [
@@ -67,7 +66,16 @@ export default {
                 [next_x, 101000],
               ],
             ]);
-          else state.last_protocol_flag[well_idx] = [x, protocol_flags[idx]];
+
+            const well_assignments = state.stim_fill_assignments[well_idx];
+            // fixes issue when stopping stimulation in live view, second to last subprotocol drags out past stop timepoint. this corrects it to match.
+            if (well_assignments.length > 1) {
+              well_assignments[well_assignments.length - 2][1][1][0] =
+                well_assignments[well_assignments.length - 1][1][0][0];
+            }
+          } else {
+            state.last_protocol_flag[well_idx] = [x, protocol_flags[idx]];
+          }
 
           idx++;
         }

@@ -11,8 +11,10 @@ import { arry, new_arry } from "../js_utils/waveform_data_provider.js";
 import { ping_system_status } from "@/store/modules/flask/actions";
 import { ERRORS } from "../../../store/modules/settings/enums.js";
 
-const valid_plate_barcode = "ML2022001000";
-const valid_stim_barcode = "MS2022001000";
+const valid_plate_barcode_old = "ML2022001000";
+const valid_plate_barcode_beta_1 = "ML22001000-1";
+const valid_plate_barcode_beta_2 = "ML22001000-2";
+const valid_stim_barcode_old = "MS2022001000";
 
 const http = require("http");
 const io_server = require("socket.io");
@@ -263,6 +265,40 @@ describe("store/data", () => {
       x_data_points: [211, 212],
       y_data_points: [101000, 101000],
     });
+  });
+  test("Given stim_fill_assignments already has values for at least one subprotocol for a well, When a data for a single new subprotocol is appended, Then the end timepoint of the first subprotocol is updated to the start timepoint of the new subprotocol", async () => {
+    store.dispatch("data/append_stim_waveforms", { 0: [[0], [0]] });
+
+    // confirm precondition
+    expect(store.state.data.stim_fill_assignments[0]).toStrictEqual([
+      [
+        0,
+        [
+          [0, 101000],
+          [0, 101000],
+        ],
+      ],
+    ]);
+
+    store.dispatch("data/append_stim_waveforms", { 0: [[10], [1]] });
+
+    // make sure new valadded to stim_fill_assignments and prev val updated correctly
+    expect(store.state.data.stim_fill_assignments[0]).toStrictEqual([
+      [
+        0,
+        [
+          [0, 101000],
+          [10, 101000],
+        ],
+      ],
+      [
+        1,
+        [
+          [10, 101000],
+          [10, 101000],
+        ],
+      ],
+    ]);
   });
 
   describe("websocket", () => {
@@ -701,14 +737,17 @@ describe("store/data", () => {
     });
 
     test.each([
-      ["plate_barcode", "ML2022002001", valid_plate_barcode],
-      ["stim_barcode", "MS2022002001", valid_stim_barcode],
+      ["plate_barcode", "ML2022002001", valid_plate_barcode_old, true],
+      ["plate_barcode", "ML2022002001", valid_plate_barcode_beta_2, true],
+      ["plate_barcode", "ML2022002001", valid_plate_barcode_beta_1, false],
+      ["stim_barcode", "MS2022002001", valid_stim_barcode_old, true],
     ])(
       "Given barcode is not in manual mode, When backend emits barcode message with valid %s, Then ws client updates correct barcode in store",
-      async (barcode_type, old_barcode, valid_barcode) => {
+      async (barcode_type, old_barcode, valid_barcode, beta_2_mode) => {
         const message = {
           [barcode_type]: valid_barcode,
         };
+        await store.commit("settings/set_beta_2_mode", beta_2_mode);
         await store.commit("flask/set_barcode_manual_mode", false);
         await store.commit("playback/set_barcode", {
           type: barcode_type,
@@ -728,12 +767,13 @@ describe("store/data", () => {
         const stim_config_state = store.state.stimulation.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED;
 
         expect(store.state.playback.barcodes[barcode_type].value).toBe(valid_barcode);
+        expect(store.state.playback.barcodes[barcode_type].valid).toBe(true);
         expect(stim_config_state).toBe(true);
       }
     );
     test.each([
-      ["plate_barcode", valid_plate_barcode],
-      ["stim_barcode", valid_stim_barcode],
+      ["plate_barcode", valid_plate_barcode_old],
+      ["stim_barcode", valid_stim_barcode_old],
     ])(
       "Given barcode is in manual mode, When backend emits barcode message with valid %s, Then ws client does not set new barcode in store",
       async (barcode_type, valid_barcode) => {

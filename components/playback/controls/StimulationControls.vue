@@ -278,22 +278,24 @@ export default {
     configuration_message: function () {
       if (!this.barcodes.stim_barcode.valid) {
         return "Must have a valid Stimulation Lid Barcode";
+      } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE) {
+        return "Cannot run configuration check while Live View is active.";
       } else if (this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED) {
-        return "Cannot run a configuration check while other features (such as Live View) are active.";
+        return "Cannot run a configuration check while other processes are active.";
       } else if (
         this.stim_status == STIM_STATUS.ERROR ||
         this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR
       ) {
-        return "Cannot run a configuration on this stim lid as a short circuit or other issue has been detected with it";
+        return "Cannot run a configuration on this stim lid as a short has been detected on it";
       } else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED) {
         return "Cannot run configuration check until protocols have been assigned.";
       } else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_NEEDED) {
         return "Start configuration check";
       } else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS) {
         return "Configuration check in progress...";
-      } else if (this.stim_status == STIM_STATUS.STIM_ACTIVE)
+      } else if (this.stim_status == STIM_STATUS.STIM_ACTIVE) {
         return "Cannot run a configuration check while stimulation is active.";
-      else {
+      } else {
         return "Configuration check complete. Click to rerun.";
       }
     },
@@ -473,10 +475,6 @@ body {
 
 .svg__waveform-icon {
   fill: #b7b7b7;
-}
-
-.svg__waveform-icon:hover {
-  fill: #ffffff;
 }
 
 .svg__waveform-container {
