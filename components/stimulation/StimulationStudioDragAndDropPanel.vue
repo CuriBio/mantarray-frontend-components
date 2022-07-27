@@ -33,7 +33,6 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
-            :disabled="true"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
@@ -310,10 +309,12 @@ export default {
   justify-content: center;
   justify-self: flex-end;
 }
+
 .div__tile-container {
   display: flex;
   align-items: center;
 }
+
 .img__icon-container {
   cursor: pointer;
   height: 93px;
@@ -329,21 +330,25 @@ img {
 .ghost {
   padding: 0 7px 7px 7px;
 }
+
 .modal-container {
   left: 22%;
   position: absolute;
 }
+
 .dropdown-container {
   position: absolute;
   z-index: 2;
   top: 412px;
   left: 1184px;
 }
+
 .dragArea {
   height: 100px;
   display: flex;
   padding-top: 4px;
 }
+
 .circle {
   width: 30px;
   height: 30px;
@@ -355,6 +360,7 @@ img {
   background: #b7b7b7;
   cursor: pointer;
 }
+
 .draggable_tile_container {
   display: grid;
   width: 80%;
@@ -364,6 +370,7 @@ img {
   align-items: center;
   margin-top: 80px;
 }
+
 .modal_overlay {
   width: 1629px;
   height: 885px;
@@ -373,6 +380,7 @@ img {
   z-index: 5;
   opacity: 0.6;
 }
+
 .div__scroll-container {
   position: absolute;
   top: 460px;
@@ -385,19 +393,23 @@ img {
   z-index: 1;
   white-space: nowrap;
 }
+
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   height: 8px;
   overflow: visible;
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: #2f2f2f;
   overflow: visible;
 }
+
 ::-webkit-scrollbar-track {
   background-color: #1c1c1c;
   overflow: visible;
 }
+
 .span__stimulationstudio-drag-drop-header-label {
   pointer-events: all;
   line-height: 100%;
@@ -411,6 +423,7 @@ img {
   color: rgb(255, 255, 255);
   text-align: center;
 }
+
 .canvas__stimulationstudio-header-separator {
   transform: rotate(0deg);
   pointer-events: all;
@@ -426,6 +439,7 @@ img {
 .dropzone {
   visibility: visible;
 }
+
 .delay-container {
   top: 15%;
 }
