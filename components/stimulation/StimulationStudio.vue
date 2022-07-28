@@ -19,8 +19,8 @@
     />
     <div class="button-background">
       <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
-        <div :class="'btn-container'">
-          <span :class="'btn-label'">{{ value }}</span>
+        <div :class="get_btn_class()">
+          <span :class="get_btn_label_class()">{{ value }}</span>
         </div>
       </div>
     </div>
@@ -89,6 +89,10 @@ export default {
   },
   methods: {
     async handle_click(idx) {
+      if (this.disable_edits) {
+        return;
+      }
+
       if (idx === 0) {
         await this.$store.dispatch("stimulation/add_saved_protocol");
         this.$store.dispatch("stimulation/handle_protocol_editor_reset");
@@ -106,6 +110,12 @@ export default {
 
     handle_selection_change(protocol) {
       this.selected_protocol = protocol;
+    },
+    get_btn_class() {
+      return this.disable_edits ? "btn-container-disable" : "btn-container";
+    },
+    get_btn_label_class() {
+      return this.disable_edits ? "btn-label-disable" : "btn-label";
     },
   },
 };
@@ -144,11 +154,6 @@ body {
   text-align: center;
 }
 
-.btn-container:hover {
-  background: #b7b7b7c9;
-  cursor: pointer;
-}
-
 .button-background {
   width: 60%;
   display: flex;
@@ -157,6 +162,17 @@ body {
   top: 93%;
   height: 60px;
   position: absolute;
+}
+
+.btn-container-disable {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  position: relative;
+  width: 90%;
+  height: 45px;
+  margin: 0 40px 0 40px;
+  background: #b7b7b7c9;
 }
 
 .btn-container {
@@ -170,12 +186,25 @@ body {
   background: #b7b7b7;
 }
 
+.btn-container:hover {
+  background: #b7b7b7c9;
+  cursor: pointer;
+}
+
 .btn-label {
   transform: translateZ(0px);
   line-height: 45px;
   font-family: Muli;
   font-size: 16px;
   color: rgb(0, 0, 0);
+}
+
+.btn-label-disable {
+  transform: translateZ(0px);
+  line-height: 45px;
+  font-family: Muli;
+  font-size: 16px;
+  color: #6e6f72;
 }
 
 .stimulationstudio_widget-container {
