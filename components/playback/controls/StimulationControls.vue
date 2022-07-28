@@ -278,7 +278,13 @@ export default {
     configuration_message: function () {
       if (!this.barcodes.stim_barcode.valid) {
         return "Must have a valid Stimulation Lid Barcode";
-      } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE) {
+      } else if (
+        [
+          playback_module.ENUMS.PLAYBACK_STATES.BUFFERING,
+          playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,
+          playback_module.ENUMS.PLAYBACK_STATES.RECORDING,
+        ].includes(this.playback_state)
+      ) {
         return "Cannot run configuration check while Live View is active.";
       } else if (this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED) {
         return "Cannot run a configuration check while other processes are active.";
