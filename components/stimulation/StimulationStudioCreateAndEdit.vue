@@ -63,16 +63,18 @@ export default {
   components: {
     SelectDropDown,
   },
+  props: {
+    disable_edits: { type: Boolean, default: false }, // TODO actually pass this prop in
+  },
   data() {
     return {
       btn_labels: {
         "Apply to Selection": " left: 19%; top: 49%; ",
         "Clear Selection": " left: 51%; top: 49%; ",
-        "Use Active Stimulation Settings": " left: 3%; top: 76%; width: 40%; ",
       },
       import_export_btn_labels: {
-        "Import Protocol": " left: 45%; top: 76%; width: 25%;",
-        "Export Protocol": " left: 72%; top: 76%; width: 25%;",
+        "Import Protocol": " left: 19%; top: 76%; width: 30%;",
+        "Export Protocol": " left: 51%; top: 76%; width: 30%;",
       },
       selected_protocol_idx: 0,
       input_height: 45,
@@ -122,24 +124,37 @@ export default {
 
       this.$emit("handle_selection_change", selected_protocol);
     },
+    disable_selection_btn(idx) {
+      return this.disable_edits || (this.selected_protocol_idx === 0 && idx === 0);
+    },
     handle_click(idx) {
-      const selected_protocol = this.protocol_list[this.selected_protocol_idx];
-      if (idx === 0 && this.selected_protocol_idx === 0) return;
-      if (idx === 0 && this.selected_protocol_idx !== 0) this.apply_selected_protocol(selected_protocol);
-      else if (idx === 1) this.clear_selected_protocol();
+      if (this.disable_selection_btn(idx)) {
+        return;
+      }
+
+      if (idx === 0) {
+        const selected_protocol = this.protocol_list[this.selected_protocol_idx];
+        this.apply_selected_protocol(selected_protocol);
+      } else if (idx === 1) {
+        this.clear_selected_protocol();
+      }
     },
     get_class(idx) {
-      if (this.selected_protocol_idx === 0 && idx === 0)
-        return "div__stimulationstudio-btn-container-disable";
-      else return "div__stimulationstudio-btn-container";
+      return this.disable_selection_btn(idx)
+        ? "div__stimulationstudio-btn-container-disable"
+        : "div__stimulationstudio-btn-container";
     },
     get_label_class(idx) {
-      if (this.selected_protocol_idx === 0 && idx === 0) return "span__stimulationstudio-btn-label-disable";
-      else return "span__stimulationstudio-btn-label";
+      return this.disable_selection_btn(idx)
+        ? "span__stimulationstudio-btn-label-disable"
+        : "span__stimulationstudio-btn-label";
     },
     handle_import_export(idx) {
-      if (idx === 0) this.$refs.file[idx].click();
-      if (idx === 1) this.handle_export();
+      if (idx === 0) {
+        this.$refs.file[idx].click();
+      } else if (idx === 1) {
+        this.handle_export();
+      }
     },
     handle_import(file) {
       this.handle_import_protocol(file[0]);
@@ -166,6 +181,7 @@ export default {
   pointer-events: all;
   z-index: 3;
 }
+
 .span__stimulationstudio-layout-create_edit-header-label {
   pointer-events: all;
   line-height: 100%;
@@ -180,6 +196,7 @@ export default {
   color: rgb(255, 255, 255);
   text-align: center;
 }
+
 .span__stimulationstudio-layout-subheader-label {
   pointer-events: all;
   line-height: 100%;
@@ -196,6 +213,7 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
 }
+
 .div__stimulationstudio-select-dropdown-container {
   pointer-events: all;
   line-height: 100%;
@@ -208,6 +226,7 @@ export default {
   padding: 5px;
   z-index: 3;
 }
+
 .div__stimulationstudio-select-dropdown-container > .div__input-dropdown-background {
   background: none;
   border: none;
