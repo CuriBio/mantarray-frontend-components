@@ -9,6 +9,7 @@
     <StimulationStudioDragAndDropPanel
       class="stimulationstudio_draganddroppanel-container"
       :stimulation_type="stimulation_type"
+      :disable_edits="disable_edits"
     />
     <StimulationStudioBlockViewEditor class="stimulationstudio_blockvieweditor-container" />
     <StimulationStudioProtocolViewer
@@ -31,6 +32,9 @@ import StimulationStudioWidget from "@/components/plate_based_widgets/stimulatio
 import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
 import StimulationStudioBlockViewEditor from "@/components/stimulation/StimulationStudioBlockViewEditor.vue";
 import StimulationStudioProtocolViewer from "@/components/stimulation/StimulationStudioProtocolViewer.vue";
+import { mapState } from "vuex";
+import playback_module from "@/store/modules/playback";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 
 /**
  * @vue-data {Array} btn_labels - button labels for base of stim studio component
@@ -55,6 +59,16 @@ export default {
       stimulation_type: "Current",
       selected_protocol: { label: "Create New", color: "", letter: "" },
     };
+  },
+  computed: {
+    ...mapState("playback", ["playback_state"]),
+    ...mapState("stimulation", ["stim_status"]),
+    disable_edits: function () {
+      return (
+        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING ||
+        this.stim_status === STIM_STATUS.STIM_ACTIVE
+      );
+    },
   },
   created: async function () {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
@@ -100,6 +114,7 @@ export default {
 body {
   user-select: none;
 }
+
 .div__stimulationstudio-layout-background {
   box-sizing: border-box;
   padding: 0px;
@@ -127,10 +142,12 @@ body {
   color: rgb(255, 255, 255);
   text-align: center;
 }
+
 .btn-container:hover {
   background: #b7b7b7c9;
   cursor: pointer;
 }
+
 .button-background {
   width: 60%;
   display: flex;
@@ -140,6 +157,7 @@ body {
   height: 60px;
   position: absolute;
 }
+
 .btn-container {
   display: flex;
   justify-content: center;
@@ -150,6 +168,7 @@ body {
   margin: 0 40px 0 40px;
   background: #b7b7b7;
 }
+
 .btn-label {
   transform: translateZ(0px);
   line-height: 45px;
@@ -157,10 +176,12 @@ body {
   font-size: 16px;
   color: rgb(0, 0, 0);
 }
+
 .stimulationstudio_widget-container {
   top: 77px;
   left: 132px;
 }
+
 .stimulationstudio_createandedit-container {
   top: 77px;
   left: 563px;
@@ -169,10 +190,12 @@ body {
 .stimulationstudio_draganddroppanel-container {
   top: 0px;
 }
+
 .stimulationstudio_blockvieweditor-container {
   top: 375px;
   left: 6px;
 }
+
 .stimulationstudio_protocolviewer-container {
   top: 570px;
   left: 6px;

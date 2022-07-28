@@ -6,7 +6,7 @@
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
           <canvas class="canvas__stimulationstudio-header-separator" />
           <div
-            v-if="is_recording"
+            v-if="disable_edits"
             v-b-popover.hover.bottom="sidebar_block_label"
             class="div__sidebar-block"
           />
@@ -14,7 +14,7 @@
             v-model="icon_types"
             tag="div"
             class="draggable_tile_container"
-            :disabled="is_recording"
+            :disabled="disable_edits"
             :group="{ name: 'order', pull: 'clone', put: false }"
             :clone="clone"
           >
@@ -39,7 +39,7 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
-            :disabled="is_recording"
+            :disabled="disable_edits"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
@@ -87,7 +87,6 @@ import StimulationStudioWaveformSettingModal from "@/components/stimulation/Stim
 import StimulationStudioDelayModal from "@/components/stimulation/StimulationStudioDelayModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import { generate_random_color } from "@/js_utils/waveform_data_formatter";
-import playback_module from "@/store/modules/playback";
 
 /**
  * @vue-props {String} stimulation_type - Current selected stimulation type user selects from drowdown
@@ -123,6 +122,7 @@ export default {
   },
   props: {
     stimulation_type: { type: String, default: "Voltage" },
+    disable_edits: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -153,10 +153,6 @@ export default {
       stop_setting: (state) => state.protocol_editor.stop_setting,
       detailed_pulses: (state) => state.protocol_editor.detailed_pulses,
     }),
-    ...mapState("playback", ["playback_state"]),
-    is_recording: function () {
-      return this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
-    },
   },
   watch: {
     is_dragging: function () {
