@@ -5,11 +5,16 @@
         <div class="div__DragAndDdrop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
           <canvas class="canvas__stimulationstudio-header-separator" />
+          <div
+            v-if="is_recording"
+            v-b-popover.hover.bottom="sidebar_block_label"
+            class="div__sidebar-block"
+          />
           <draggable
             v-model="icon_types"
             tag="div"
             class="draggable_tile_container"
-            :disabled="disable_drag"
+            :disabled="is_recording"
             :group="{ name: 'order', pull: 'clone', put: false }"
             :clone="clone"
           >
@@ -34,7 +39,7 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
-            :disabled="disable_drag"
+            :disabled="is_recording"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
@@ -149,7 +154,7 @@ export default {
       detailed_pulses: (state) => state.protocol_editor.detailed_pulses,
     }),
     ...mapState("playback", ["playback_state"]),
-    disable_drag: function () {
+    is_recording: function () {
       return this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
     },
   },
@@ -305,6 +310,18 @@ export default {
 };
 </script>
 <style scoped>
+.div__sidebar-block {
+  z-index: 999;
+  background: black;
+  position: absolute;
+  opacity: 0.6;
+  height: 885px;
+  width: 300px;
+  left: 1329px;
+  top: 0px;
+  left: 0px;
+}
+
 .div__DragAndDdrop-panel {
   background: rgb(17, 17, 17);
   position: absolute;
