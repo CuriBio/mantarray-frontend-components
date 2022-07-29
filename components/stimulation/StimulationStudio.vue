@@ -19,7 +19,7 @@
     />
     <div class="button-background">
       <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
-        <div :class="get_btn_class()">
+        <div v-b-popover.hover.top="btn_hover" :class="get_btn_class()">
           <span :class="get_btn_label_class()">{{ value }}</span>
         </div>
       </div>
@@ -69,6 +69,12 @@ export default {
         this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING ||
         this.stim_status === STIM_STATUS.STIM_ACTIVE
       );
+    },
+    btn_hover: function () {
+      return {
+        content: "Cannot make changes to stim settings while actively stimulating or recording",
+        disabled: !this.disable_edits,
+      };
     },
   },
   created: async function () {
