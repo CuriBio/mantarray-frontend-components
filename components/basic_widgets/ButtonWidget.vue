@@ -147,7 +147,6 @@ body {
 
 .span__button_label {
   pointer-events: all;
-  line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;

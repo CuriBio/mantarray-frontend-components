@@ -33,7 +33,6 @@
           <draggable
             v-model="protocol_order"
             class="dragArea"
-            :disabled="true"
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"

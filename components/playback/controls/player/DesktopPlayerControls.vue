@@ -6,7 +6,6 @@
       v-b-popover.hover.bottomright="settings_tooltip_text"
       :title="settings_title"
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
-      @click="$bvModal.show('settings-form')"
     >
       <PlayerControlsSettingsButton /><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
     </div>
@@ -16,6 +15,7 @@
       class="svg__playback-desktop-player-controls-button svg__playback-desktop-player-controls-schedule-button span__playback-desktop-player-controls--available"
       viewBox="0 0 72 72"
       :title="schedule_title"
+      @click="$bvModal.show('recording-name-input-prompt-message')"
     >
       <!-- original mockflow ID: id="cmpD5e8bf5701514a91630d619c1a308f43d"-->
 
@@ -217,8 +217,30 @@
       <RecordingNameInputWidget
         id="recording-name-input-prompt"
         :default_recording_name="default_recording_name"
-        @handle_confirmation="$bvModal.hide('recording-name-input-prompt-message')"
+        @handle_confirmation="close_recording_name_input"
       />
+    </b-modal>
+    <b-modal
+      id="analysis-in-progress-modal"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusSpinnerWidget id="analysis-in-progress" :modal_labels="analysis_in_progress_labels" />
+    </b-modal>
+    <b-modal
+      id="recording-check"
+      size="xl"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <RecordingSnapshotWidget @close_modal="$bvModal.hide('recording-check')" />
     </b-modal>
   </div>
 </template>
@@ -234,6 +256,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import SettingsForm from "@/components/settings/SettingsForm.vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 import RecordingNameInputWidget from "@/components/status/RecordingNameInputWidget.vue";
+import StatusSpinnerWidget from "@/components/status/StatusSpinnerWidget.vue";
+import RecordingSnapshotWidget from "@/components/status/RecordingSnapshotWidget.vue";
 
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
@@ -293,7 +317,9 @@ export default {
     FontAwesomeIcon,
     SettingsForm,
     StatusWarningWidget,
+    StatusSpinnerWidget,
     RecordingNameInputWidget,
+    RecordingSnapshotWidget,
   },
   data: function () {
     return {
@@ -325,6 +351,11 @@ export default {
         msg_two: "Your recording has been stopped.",
         button_names: ["Okay"],
       },
+      analysis_in_progress_labels: {
+        header: "Important!",
+        msg_one: "Data analysis is in progress for the recording snapshot. This won't take long.",
+        msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
+      },
     };
   },
   computed: {
@@ -336,6 +367,7 @@ export default {
       "firmware_update_available",
       "firmware_update_dur_mins",
     ]),
+    ...mapState("data", ["recording_snapshot_data"]),
     ...mapState("stimulation", ["stim_status"]),
     ...mapGetters({
       status_uuid: "flask/status_id",
@@ -466,6 +498,12 @@ export default {
     user_cred_input_needed() {
       if (this.user_cred_input_needed) this.$bvModal.show("user-input-prompt-message");
     },
+    recording_snapshot_data(new_data) {
+      if (new_data.length === 24) {
+        this.$bvModal.hide("analysis-in-progress-modal");
+        this.$bvModal.show("recording-check");
+      }
+    },
   },
   methods: {
     on_activate_record_click: function () {
@@ -547,6 +585,14 @@ export default {
     close_user_input_prompt_modal() {
       this.$bvModal.hide("user-input-prompt-message");
       this.$bvModal.show("settings-form");
+    },
+    close_recording_name_input() {
+      this.$bvModal.hide("recording-name-input-prompt-message");
+      this.$bvModal.show("analysis-in-progress-modal");
+
+      setTimeout(() => {
+        this.$store.dispatch("data/dispatch_recording_snapshot_data");
+      }, 3000);
     },
   },
 };
@@ -724,5 +770,12 @@ export default {
   top: 15%;
   left: 0;
   right: 0;
+}
+#analysis-in-progress-modal {
+  /* position: fixed; */
+  top: 15%;
+  left: -100;
+  right: 0;
+  margin: 0;
 }
 </style>
