@@ -306,7 +306,6 @@ export default {
 }
 
 .div__waveform {
-  max-width: 390px;
   background: #000000;
   top: 0px;
   left: 0px;
@@ -427,6 +426,7 @@ export default {
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
   margin-bottom: 5px;
+  /* height: 400px; */
 }
 
 .g__waveform-x-axis {

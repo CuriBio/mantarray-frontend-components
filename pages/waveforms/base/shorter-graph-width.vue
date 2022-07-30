@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="div__waveform-container">
     <Waveform
       :title="'B03'"
       :tissue_line_color="'#0000FF'"
@@ -25,3 +25,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.div__waveform-container {
+  width: 521px;
+  height: 419px;
+  background: #000000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+</style>

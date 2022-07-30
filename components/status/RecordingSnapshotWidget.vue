@@ -17,13 +17,13 @@
             :samples_per_second="100"
             :x_axis_sample_length="500"
             :x_axis_min="0"
-            :y_max="y_max_min_values[well_idx].max"
-            :y_min="y_max_min_values[well_idx].min"
             :plot_area_pixel_height="150"
             :plot_area_pixel_width="200"
             :show_labels="false"
             :ticks="5"
             :x_axis_factor="1"
+            :y_max="y_max_min_values[well_idx].max"
+            :y_min="y_max_min_values[well_idx].min"
           />
         </div>
       </div>
