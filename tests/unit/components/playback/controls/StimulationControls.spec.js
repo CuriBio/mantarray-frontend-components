@@ -200,7 +200,6 @@ describe("store/stimulation", () => {
     );
 
     test.each([
-      ["RECORDING", "Cannot start stimulation while recording is active"],
       ["CALIBRATING", "Cannot start stimulation while calibrating instrument"],
       ["CALIBRATED", "Start Stimulation"],
     ])(
@@ -228,10 +227,7 @@ describe("store/stimulation", () => {
       }
     );
 
-    test.each([
-      ["RECORDING", "Cannot stop stimulation while recording is active"],
-      ["CALIBRATED", "Stop Stimulation"],
-    ])(
+    test.each([["CALIBRATED", "Stop Stimulation"]])(
       "When a recording is active, Then the stim stop tooltip will have an updated message %s",
       async (status, expected_message) => {
         const wrapper = mount(StimulationControls, {

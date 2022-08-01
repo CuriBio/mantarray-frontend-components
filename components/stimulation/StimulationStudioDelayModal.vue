@@ -148,7 +148,7 @@ export default {
       };
 
       const stim_settings = {
-        delay_interval: 0,
+        repeat_delay_interval: 0,
         total_active_duration: {
           duration: Number(this.input_value),
           unit: selected_unit,
@@ -201,6 +201,7 @@ export default {
   display: flex;
   justify-content: center;
 }
+
 .span__stimulationstudio-current-settings-title {
   pointer-events: all;
   line-height: 100%;
