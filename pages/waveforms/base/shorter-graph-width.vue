@@ -10,8 +10,8 @@
 </template>
 
 <script>
-// import { Waveform } from "@/dist/mantarray.common"; // Eli (4/8/20) apparently the braces in the import statement are CRITICAL. I don't know why, but it fails without them
-import Waveform from "@/components/playback/waveform/Waveform.vue";
+import { Waveform } from "@/dist/mantarray.common"; // Eli (4/8/20) apparently the braces in the import statement are CRITICAL. I don't know why, but it fails without them
+// import Waveform from "@/components/playback/waveform/Waveform.vue";
 
 import { convert_x_y_arrays_to_d3_array } from "@/js_utils/waveform_data_formatter.js";
 export default {
