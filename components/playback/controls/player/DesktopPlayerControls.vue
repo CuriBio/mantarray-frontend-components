@@ -763,18 +763,12 @@ export default {
 #five-min-warning,
 #one-min-warning,
 #recording-name-input-prompt-message,
+#analysis-in-progress-modal,
 #existing-recording-warning {
   position: fixed;
   margin: 5% auto;
   top: 15%;
   left: 0;
   right: 0;
-}
-#analysis-in-progress-modal {
-  /* position: fixed; */
-  top: 15%;
-  left: -100;
-  right: 0;
-  margin: 0;
 }
 </style>
