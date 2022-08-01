@@ -54,7 +54,7 @@
     "@curi-bio/frontend-test-utils": "~0.1.1",
     "@fortawesome/fontawesome-free": "~6.1.1",
     "@fortawesome/fontawesome-svg-core": "~1.2.27",
-    "@fortawesome/free-brands-svg-icons": "~5.15.1",
+    "@fortawesome/free-brands-svg-icons": "~6.1.2",
     "@fortawesome/free-regular-svg-icons": "~5.15.1",
     "@fortawesome/free-solid-svg-icons": "~5.15.1",
     "@vue/cli-service": "^4.4.6",
