@@ -383,9 +383,9 @@ export default {
       if (this.firmware_update_dur_mins !== 1) duration += "s";
       return {
         header: "Important!",
-        msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete.`,
+        msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete. Declining it will prevent automatic software updating.`,
         msg_two:
-          "Declining it will prevent automatic software updating. Would you like to download and install the update?",
+          "If you accept, please make sure there is no stim lid connected to the instrument. Would you like to download and install the update?",
         button_names: ["No", "Yes"],
       };
     },
@@ -415,9 +415,9 @@ export default {
         this.playback_state == this.playback_state_enums.BUFFERING ||
         this.playback_state == this.playback_state_enums.RECORDING
       ) {
-        return "Cannot calibrate while Mantarray is in use.";
+        return "Cannot calibrate while Live View is active.";
       }
-      return "Cannot calibrate while Mantarray initializing.";
+      return "Cannot calibrate while Mantarray is initializing.";
     },
     liveview_tooltip_text: function () {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
@@ -620,6 +620,7 @@ export default {
   color: #b7b7b7;
   fill: #b7b7b7;
 }
+
 .span__playback-desktop-player-controls--active {
   color: #ffffff;
   fill: #ffffff;
@@ -666,10 +667,13 @@ export default {
       var(--span__playback-desktop-player-controls-button--LeftSeparation) * 2
   );
 }
+
 .span__playback-desktop-player-controls-calibrating,
 .span__playback-desktop-player-controls-buffering {
-  z-index: 1; /* Ensure that the animation is displayed over the top of the regular icon */
+  z-index: 1;
+  /* Ensure that the animation is displayed over the top of the regular icon */
 }
+
 .svg__playback-desktop-player-controls-live-view-button,
 .span__playback-desktop-player-controls-buffering {
   left: calc(
@@ -677,6 +681,7 @@ export default {
       var(--span__playback-desktop-player-controls-button--LeftSeparation) * 3
   );
 }
+
 .svg__playback-desktop-player-controls-record-button {
   left: calc(
     var(--span__playback-desktop-player-controls-button--LeftmostLeft) +

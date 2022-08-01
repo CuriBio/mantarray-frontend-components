@@ -31,8 +31,8 @@
           :initial_value="selected_pulse_settings.phase_one_duration.toString()"
           @update:value="check_validity($event, 'phase_one_duration')"
         />
-        ></span
-      >
+        >
+      </span>
     </div>
     <span
       id="cmpDad40b728ec40e75944b1291803f7785b"
@@ -353,8 +353,8 @@ export default {
         duration: new RegExp("^[0-9][0-9]*d*$"),
         frequency: new RegExp("^([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"),
       },
-      is_enabled_array: [false, false, true, true],
       all_valid: false,
+      is_enabled_array: [false, true],
       active_duration_idx: 0,
       input_pulse_frequency: "",
       max_pulse_duration_for_freq: 50,
@@ -392,10 +392,7 @@ export default {
   },
   watch: {
     all_valid() {
-      // disabled duplicate and save button if not valid inputs
-      this.is_enabled_array = this.modal_open_for_edit
-        ? [this.all_valid, this.all_valid, true, true]
-        : [this.all_valid, true];
+      this.set_is_enabled_array();
     },
   },
   created() {
@@ -424,8 +421,15 @@ export default {
 
     this.check_validity(this.input_pulse_frequency, "pulse_frequency");
     this.check_validity(duration, "total_active_duration");
+    this.set_is_enabled_array();
   },
   methods: {
+    set_is_enabled_array() {
+      // disabled duplicate and save button if not valid inputs
+      this.is_enabled_array = this.modal_open_for_edit
+        ? [this.all_valid, this.all_valid, true, true]
+        : [this.all_valid, true];
+    },
     close(idx) {
       const button_label = this.button_labels[idx];
       this.stim_settings.repeat_delay_interval = this.calculated_delay;
@@ -626,6 +630,7 @@ canvas {
   color: rgb(183, 183, 183);
   text-align: right;
 }
+
 .span__stimulationstudio-current-settings-label-right {
   pointer-events: all;
   line-height: 100%;
@@ -646,6 +651,7 @@ canvas {
   text-align: left;
   z-index: 4;
 }
+
 .span__stimulationstudio-input {
   white-space: nowrap;
   text-align: left;
@@ -695,6 +701,7 @@ canvas {
   left: 540px;
   top: 110px;
 }
+
 .div__waveform-preview-title {
   position: absolute;
   user-select: none;
