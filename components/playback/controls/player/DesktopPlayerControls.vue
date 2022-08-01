@@ -240,7 +240,10 @@
       :static="true"
       :no-close-on-backdrop="true"
     >
-      <RecordingSnapshotWidget @close_modal="$bvModal.hide('recording-check')" />
+      <RecordingSnapshotWidget
+        id="recording-snapshot-widget"
+        @close_modal="$bvModal.hide('recording-check')"
+      />
     </b-modal>
   </div>
 </template>
@@ -589,10 +592,6 @@ export default {
     close_recording_name_input() {
       this.$bvModal.hide("recording-name-input-prompt-message");
       this.$bvModal.show("analysis-in-progress-modal");
-
-      setTimeout(() => {
-        this.$store.dispatch("data/dispatch_recording_snapshot_data");
-      }, 3000);
     },
   },
 };
