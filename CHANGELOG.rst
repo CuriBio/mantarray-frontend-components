@@ -6,9 +6,11 @@ Changelog for Mantarray Frontend Components
 
 Added:
 ^^^^^^
-- Additional tooltip message on configuration check icon that notifies user that check cannot be run while live view or a recording is active
+- Tooltip message on configuration check icon that notifies user that check cannot be run while live view or a recording is active
+- Ability to copy pulses in stim studio by double clicking waveform tile and then selecting 'Duplicate'.
+- RecordingSnapshotWidget that appear after a recording is stopped with the first five seconds of analysis graphed for each well
+- Recording_snapshot websocket handler to recieve five second analysis data
 - Tooltip to barcode input and icon that notifies user it's disabled when live view is active
-- Ability to copy pulses in stim studio by double clicking waveform tile and then selecting 'Duplicate'
 - Colored background to stim studio waveform graph that corresponds to the waveform tile when hovered over
 - Prevention of edits to stimulation settings while either recording or actively stimulating
 - Warning to unplug stim lid before proceeding with a firmware update

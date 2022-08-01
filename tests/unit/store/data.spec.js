@@ -510,6 +510,42 @@ describe("store/data", () => {
       expect(store.state.playback.data_analysis_state).toBe(ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
     });
 
+    test("When recording snapshot data gets sent through websocket after a recording stops, Then the handler will dispatch a data action with parsed data", async () => {
+      const example_message = {
+        time: [0, 1, 2, 3, 4, 5],
+        force: [
+          [10, 15, 20, 25, 20, 15],
+          [300, 400, 300, 500, 600, 300],
+        ],
+      };
+
+      const expected_coordinates = [
+        [
+          [0, 10],
+          [1, 15],
+          [2, 20],
+          [3, 25],
+          [4, 20],
+          [5, 15],
+        ],
+        [
+          [0, 300],
+          [1, 400],
+          [2, 300],
+          [3, 500],
+          [4, 600],
+          [5, 300],
+        ],
+      ];
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("recording_snapshot", JSON.stringify(example_message), (ack) => {
+          resolve(ack);
+        });
+      });
+      expect(store.state.data.recording_snapshot_data).toStrictEqual(expected_coordinates);
+    });
+
     test("When backend emits stimulation message, Then ws client updates stim_waveforms", async () => {
       store.commit("data/set_stim_waveforms", [
         { x_data_points: [1], y_data_points: [2] },

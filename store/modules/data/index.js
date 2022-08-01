@@ -25,7 +25,7 @@ const default_state = {
   stim_fill_assignments: [],
   last_protocol_flag: [],
   stimulator_circuit_statuses: [],
-
+  recording_snapshot_data: [],
   h5_warning: false,
 };
 

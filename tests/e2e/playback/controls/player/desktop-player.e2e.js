@@ -110,64 +110,6 @@ test("DesktopPlayerControls UI updates transitioning through 'needs calibration'
 
   screenshot_path = path.join(this_base_screenshot_path, "recording");
   await testcafe_page_visual_regression(t, screenshot_path);
-
-  await t.click(active_record_button);
-  await t.click(confirm_recording_name_button);
-  await t.hover(title_text);
-  await t.pressKey("a"); // Press a key to stop the status pinging
-  await t.wait(3000); // wait for status pinging to fully stop
-
-  screenshot_path = path.join(this_base_screenshot_path, "live-view-after-recording");
-  await testcafe_page_visual_regression(t, screenshot_path);
-
-  await t.click(inactive_record_button);
-  await t.hover(title_text);
-  await t.pressKey("a"); // Press a key to stop the status pinging
-  await t.wait(3000); // wait for status pinging to fully stop
-
-  screenshot_path = path.join(this_base_screenshot_path, "recording-second-time");
-  await testcafe_page_visual_regression(t, screenshot_path);
-
-  await t.click(active_record_button);
-  await t.click(confirm_recording_name_button);
-  await t.hover(title_text);
-  await t.pressKey("a"); // Press a key to stop the status pinging
-  await t.wait(3000); // wait for status pinging to fully stop
-
-  screenshot_path = path.join(this_base_screenshot_path, "live-view-after-second-recording");
-  await testcafe_page_visual_regression(t, screenshot_path);
-
-  await t.click(live_view_button);
-  await t.hover(title_text);
-  await t.pressKey("a"); // Press a key to stop the status pinging
-  await t.wait(3000); // wait for status pinging to fully stop
-
-  screenshot_path = path.join(this_base_screenshot_path, "calibrated-after-playing");
-  await testcafe_page_visual_regression(t, screenshot_path);
-
-  await t.click(live_view_button);
-  await t.hover(title_text);
-
-  // wait for 'buffering' state to complete
-  await t.wait(3000);
-
-  screenshot_path = path.join(this_base_screenshot_path, "live-view-second-time-after-calibrated");
-  await testcafe_page_visual_regression(t, screenshot_path);
-
-  await t.click(live_view_button);
-  await t.hover(title_text);
-
-  screenshot_path = path.join(this_base_screenshot_path, "calibrated-after-second-initiation-of-live-view");
-  await testcafe_page_visual_regression(t, screenshot_path);
-
-  await t.click(calibrate_button);
-  await t.hover(title_text);
-
-  // wait for 'calibrating' state to complete
-  await t.wait(msec_to_wait_for_calibration_to_complete);
-
-  screenshot_path = path.join(this_base_screenshot_path, "calibrated-after-second-live-view");
-  await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 // the fixture declares what we are testing
