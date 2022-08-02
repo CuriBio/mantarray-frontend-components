@@ -4,9 +4,7 @@
     <div class="div__heatmap-layout-background" />
 
     <!--  original mockflow ID:  cmpDc41b1cc426d26a92a64089e70f3d6d88 -->
-    <div class="div__heatmap-layout-twitch-metric-label">
-      {{ display_option }} ({{ unit }})
-    </div>
+    <div class="div__heatmap-layout-twitch-metric-label">{{ display_option }} ({{ unit }})</div>
 
     <!--  original mockflow ID:  cmpDeb75716be024c38385f1f940d7d0551d -->
     <div class="div__heatmap-layout-heatmap-editor-widget">
@@ -15,26 +13,18 @@
 
     <!-- Tanner (7/28/21): Could probably combine the following 4 components -->
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
-    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">
-      No Wells Selected
-    </div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">No Wells Selected</div>
 
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
     <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value" />
 
     <!-- original mockflow ID: cmpD0f9518f2e3b32a8fd2907a6c9167ed79 -->
-    <div
-      v-show="is_mean_value_active"
-      class="div__heatmap-layout-heatmap-mean-well-label"
-    >
+    <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-well-label">
       Mean of {{ selected_wells.length }} Wells ({{ unit }}):
     </div>
 
     <!-- original mockflow ID: cmpDbf7507b833445c460899c3735fd95527 -->
-    <div
-      v-show="is_mean_value_active"
-      class="div__heatmap-layout-heatmap-mean-value-well-label"
-    >
+    <div v-show="is_mean_value_active" class="div__heatmap-layout-heatmap-mean-value-well-label">
       {{ mean_value }}
     </div>
 
@@ -120,11 +110,7 @@
     </div>
 
     <!-- original mockflow ID: cmpDc08190eb24c68e02c278bde19882becb -->
-    <canvas
-      class="canvas__heatmap-settings-color-scheme-separator"
-      width="212"
-      height="2"
-    />
+    <canvas class="canvas__heatmap-settings-color-scheme-separator" width="212" height="2" />
 
     <!-- original mockflow ID: cmpD03029ea224291e6817f40d3ac9f24b19 -->
     <span class="span__heatmap-settings-color-scheme-label"> Color Scheme</span>
@@ -171,12 +157,7 @@
       <canvas class="canvas__heatmap-settings-reset-btn-container" />
 
       <!-- original mockflow ID : cmpD2f909255bf15b8f4daa88ed03c6a8300_txt -->
-      <span
-        class="span__heatmap-settings-reset-btn-label"
-        @click="reset_heatmap_settings"
-      >
-        Reset
-      </span>
+      <span class="span__heatmap-settings-reset-btn-label" @click="reset_heatmap_settings"> Reset </span>
     </div>
   </div>
 </template>
@@ -241,12 +222,7 @@ export default {
     metric_names: function () {
       return Object.keys(this.well_values);
     },
-    ...mapState("gradient", [
-      "gradients",
-      "gradient_theme_idx",
-      "gradient_range_min",
-      "gradient_range_max",
-    ]),
+    ...mapState("gradient", ["gradients", "gradient_theme_idx", "gradient_range_min", "gradient_range_max"]),
     ...mapGetters("gradient", {
       gradient_map: "gradient_color_mapping",
     }),
@@ -257,7 +233,9 @@ export default {
     },
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
-        const color = this.gradient_map(well.slice(-1)[0]);
+        const total = well.reduce((a, b) => a + b, 0);
+        const mean = total / well.length;
+        const color = this.gradient_map(mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
     },
@@ -284,23 +262,13 @@ export default {
       );
     },
     auto_max_min: function () {
-      const max_value_array = this.well_values[this.display_option].data.map((well) =>
-        Math.max(...well)
-      );
-      const min_value_array = this.well_values[this.display_option].data.map((well) =>
-        Math.min(...well)
-      );
+      const max_value_array = this.well_values[this.display_option].data.map((well) => Math.max(...well));
+      const min_value_array = this.well_values[this.display_option].data.map((well) => Math.min(...well));
 
       // conditional protects against when autoscale is true and a user selects apply when live view is off
       const range = {
-        max:
-          Math.max(...max_value_array) == -Infinity
-            ? this.upper
-            : Math.max(...max_value_array).toFixed(3),
-        min:
-          Math.min(...min_value_array) == Infinity
-            ? this.lower
-            : Math.min(...min_value_array).toFixed(3),
+        max: Math.max(...max_value_array) == -Infinity ? this.upper : Math.max(...max_value_array).toFixed(3),
+        min: Math.min(...min_value_array) == Infinity ? this.lower : Math.min(...min_value_array).toFixed(3),
       };
 
       if (range.max === range.min) range.max = (Number(range.max) + 0.001).toString(); // guard against edge case where the max/min are the same
@@ -319,8 +287,7 @@ export default {
     },
     playback_state: function (_, old_value) {
       // cleans up settings when live view becomes inactive
-      if (old_value == this.playback_state_enums.LIVE_VIEW_ACTIVE)
-        this.reset_heatmap_settings();
+      if (old_value == this.playback_state_enums.LIVE_VIEW_ACTIVE) this.reset_heatmap_settings();
     },
   },
   mounted() {
@@ -411,10 +378,7 @@ export default {
       if (this.is_apply_set) {
         this.$store.commit("heatmap/set_auto_scale", this.autoscale);
         this.$store.commit("heatmap/set_display_option_idx", this.metric_selection_idx);
-        this.$store.commit(
-          "heatmap/set_display_option",
-          this.metric_names[this.metric_selection_idx]
-        );
+        this.$store.commit("heatmap/set_display_option", this.metric_names[this.metric_selection_idx]);
         this.$store.commit("gradient/set_gradient_theme_idx", this.color_theme_idx);
         this.$store.commit("gradient/set_gradient_range", {
           min: this.autoscale ? this.auto_max_min.min : this.lower,
@@ -429,10 +393,7 @@ export default {
 
       // reset display dropdown
       this.metric_selection_changed(0);
-      this.$store.commit(
-        "heatmap/set_display_option",
-        this.metric_names[this.metric_selection_idx]
-      );
+      this.$store.commit("heatmap/set_display_option", this.metric_names[this.metric_selection_idx]);
       this.$store.commit("heatmap/set_display_option_idx", this.metric_selection_idx);
 
       // reset gradient theme, radio button is subscribed to this mutation and will reset itself
