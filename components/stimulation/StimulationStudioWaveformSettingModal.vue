@@ -31,8 +31,8 @@
           :initial_value="selected_pulse_settings.phase_one_duration.toString()"
           @update:value="check_validity($event, 'phase_one_duration')"
         />
-        ></span
-      >
+        >
+      </span>
     </div>
     <span
       id="cmpDad40b728ec40e75944b1291803f7785b"
@@ -249,8 +249,8 @@
         :button_widget_height="50"
         :button_widget_top="0"
         :button_widget_left="0"
-        :button_names="button_names"
-        :hover_color="['#19ac8a', '#bd4932', '#bd4932']"
+        :button_names="button_labels"
+        :hover_color="button_hover_colors"
         :is_enabled="is_enabled_array"
         @btn-click="close"
       />
@@ -271,9 +271,9 @@ library.add(faBalanceScale, faQuestionCircle);
 /**
  * @vue-props {String} stimulation_type - Current type of stimulation
  * @vue-props {String} pulse_type - Type of pulse for modal
- * @vue-props {Array} button_names - Array of button labels for modal
  * @vue-props {Object} selected_pulse_settings - Settings passed to modal if it's selected to edit
  * @vue-props {Object} selected_stim_settings - Stim block settings passed to modal if it's selected to edit
+ * @vue-props {Object} open_modal_for_edit - Boolean to determine if modal is open with existing settings
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
  * @vue-data {Object} pulse_settings - Model for new inputs to be assigned
  * @vue-data {Object} stim_settings - Model for new inputs to be assigned
@@ -286,6 +286,8 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-data {Integer} delay_interval_idx - Used to input current delay interval setting to dropdown when open for edit
  * @vue-data {Integer} active_duration_idx - Used to input current active duration setting to dropdown when open for edit
  * @vue-computed {String} check_max_type - Computes last label for disabled input field
+ * @vue-computed {Array} button_labels - Array of button labels for modal
+ * @vue-computed {Array} hovered_button_colors - Array of colors that the text will be when a button is hovered over
  * @vue-method {event} close - emits close of modal and data to parent component
  * @vue-method {event} check_validity - calls appropriate validation checks based on changes to inputs
  * @vue-method {event} handle_all_valid - checks if all inputs are valid numbers only and not empty
@@ -307,12 +309,7 @@ export default {
   props: {
     stimulation_type: { type: String, default: "Current" },
     pulse_type: { type: String, default: "Biphasic" },
-    button_names: {
-      type: Array,
-      default() {
-        return ["Save", "Cancel"];
-      },
-    },
+    modal_open_for_edit: { type: Boolean, default: false },
     selected_pulse_settings: {
       type: Object,
       required: true,
@@ -356,8 +353,8 @@ export default {
         duration: new RegExp("^[0-9][0-9]*d*$"),
         frequency: new RegExp("^([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"),
       },
-      is_enabled_array: [false, true, true],
       all_valid: false,
+      is_enabled_array: [false, true],
       active_duration_idx: 0,
       input_pulse_frequency: "",
       max_pulse_duration_for_freq: 50,
@@ -386,10 +383,16 @@ export default {
     stim_unit: function () {
       return this.stimulation_type.includes("C") ? "mA" : "V";
     },
+    button_hover_colors: function () {
+      return this.modal_open_for_edit ? ["#19ac8a", "#19ac8a", "#bd4932", "#bd4932"] : ["#19ac8a", "#bd4932"];
+    },
+    button_labels: function () {
+      return this.modal_open_for_edit ? ["Save", "Duplicate", "Delete", "Cancel"] : ["Save", "Cancel"];
+    },
   },
   watch: {
     all_valid() {
-      this.is_enabled_array = [this.all_valid, true, true];
+      this.set_is_enabled_array();
     },
   },
   created() {
@@ -418,10 +421,17 @@ export default {
 
     this.check_validity(this.input_pulse_frequency, "pulse_frequency");
     this.check_validity(duration, "total_active_duration");
+    this.set_is_enabled_array();
   },
   methods: {
+    set_is_enabled_array() {
+      // disabled duplicate and save button if not valid inputs
+      this.is_enabled_array = this.modal_open_for_edit
+        ? [this.all_valid, this.all_valid, true, true]
+        : [this.all_valid, true];
+    },
     close(idx) {
-      const button_label = this.button_names[idx];
+      const button_label = this.button_labels[idx];
       this.stim_settings.repeat_delay_interval = this.calculated_delay;
       this.$emit("close", button_label, this.pulse_settings, this.stim_settings, this.input_pulse_frequency);
     },
@@ -620,6 +630,7 @@ canvas {
   color: rgb(183, 183, 183);
   text-align: right;
 }
+
 .span__stimulationstudio-current-settings-label-right {
   pointer-events: all;
   line-height: 100%;
@@ -640,6 +651,7 @@ canvas {
   text-align: left;
   z-index: 4;
 }
+
 .span__stimulationstudio-input {
   white-space: nowrap;
   text-align: left;
@@ -689,6 +701,7 @@ canvas {
   left: 540px;
   top: 110px;
 }
+
 .div__waveform-preview-title {
   position: absolute;
   user-select: none;

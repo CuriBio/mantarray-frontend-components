@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="div__waveform-container">
     <Waveform :title="'A01'" :tissue_data_points="temp_datapoints"></Waveform>
   </div>
 </template>
@@ -20,3 +20,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.div__waveform-container {
+  width: 521px;
+  height: 419px;
+  background: #000000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+</style>

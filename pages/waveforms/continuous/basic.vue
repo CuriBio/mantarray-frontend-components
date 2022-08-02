@@ -1,11 +1,13 @@
 <template>
-  <ContinuousWaveform
-    :display_waveform_idx="0"
-    :x_axis_sample_length="1e6"
-    :y_label="'Kelvin'"
-    :x_label="'Time (hours)'"
-  >
-  </ContinuousWaveform>
+  <div class="div__waveform-container">
+    <ContinuousWaveform
+      :display_waveform_idx="0"
+      :x_axis_sample_length="1e6"
+      :y_label="'Kelvin'"
+      :x_label="'Time (hours)'"
+    >
+    </ContinuousWaveform>
+  </div>
 </template>
 
 <script>
@@ -42,3 +44,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.div__waveform-container {
+  width: 521px;
+  height: 419px;
+  background: #000000;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+</style>

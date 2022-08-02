@@ -25,7 +25,6 @@ export default {
     const y_values = [0];
     const color_assignments = {};
     const pulses = [];
-
     const get_last = (array) => array[array.length - 1];
     const helper = (setting, remaining_pulse_dur) => {
       // Add values for phase 1
@@ -45,7 +44,6 @@ export default {
       // Add values for delay
       components_to_add.x.push(setting.repeat_delay_interval);
       components_to_add.y.push(0);
-
       const num_components_to_add = components_to_add.x.length;
       // add components until all are added or the total active duration is reached
       for (let i = 0; i < num_components_to_add; i++) {
@@ -60,7 +58,6 @@ export default {
       y_values.push(0);
       return remaining_pulse_dur;
     };
-
     await new_pulse_order.map(async (pulse) => {
       const { color } = pulse.repeat;
       const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
@@ -109,7 +106,6 @@ export default {
     if (rest_duration == 0) {
       delay_block = [NaN, NaN];
     }
-
     commit("set_delay_axis_values", delay_block);
     commit("set_axis_values", { x_values, y_values });
   },
@@ -324,5 +320,14 @@ export default {
 
     if (res && res.status !== 200) commit("set_stim_status", STIM_STATUS.ERROR);
     else commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
+  },
+  async on_pulse_mouseenter({ state }, idx) {
+    const hovered_pulse = Object.entries(state.repeat_colors)[idx];
+
+    state.hovered_pulse = {
+      idx,
+      indices: hovered_pulse[1],
+      color: hovered_pulse[0],
+    };
   },
 };

@@ -80,6 +80,17 @@ describe("Waveform.vue", () => {
     expect(wrapper.find(".div__waveform-well-title").text()).toStrictEqual(new_expected_value);
   });
 
+  test.each([true, false])(
+    "When mounted with show_labels prop as %s, Then existence of axis and title elements will be %s",
+    (bool) => {
+      wrapper = shallowMount(Waveform, { store, localVue, propsData: { show_labels: bool } });
+
+      expect(wrapper.find(".div__waveform-well-title").exists()).toBe(bool);
+      expect(wrapper.find(".div__waveform-x-axis-title").exists()).toBe(bool);
+      expect(wrapper.find(".div__waveform-y-axis-title").exists()).toBe(bool);
+    }
+  );
+
   describe("x-axis", () => {
     const propsData = {
       title: "C12",

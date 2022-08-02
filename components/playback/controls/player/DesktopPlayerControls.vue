@@ -6,7 +6,6 @@
       v-b-popover.hover.bottomright="settings_tooltip_text"
       :title="settings_title"
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
-      @click="$bvModal.show('settings-form')"
     >
       <PlayerControlsSettingsButton /><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
     </div>
@@ -16,6 +15,7 @@
       class="svg__playback-desktop-player-controls-button svg__playback-desktop-player-controls-schedule-button span__playback-desktop-player-controls--available"
       viewBox="0 0 72 72"
       :title="schedule_title"
+      @click="$bvModal.show('recording-name-input-prompt-message')"
     >
       <!-- original mockflow ID: id="cmpD5e8bf5701514a91630d619c1a308f43d"-->
 
@@ -217,7 +217,32 @@
       <RecordingNameInputWidget
         id="recording-name-input-prompt"
         :default_recording_name="default_recording_name"
-        @handle_confirmation="$bvModal.hide('recording-name-input-prompt-message')"
+        @handle_confirmation="close_recording_name_input"
+      />
+    </b-modal>
+    <b-modal
+      id="analysis-in-progress-modal"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusSpinnerWidget id="analysis-in-progress" :modal_labels="analysis_in_progress_labels" />
+    </b-modal>
+    <b-modal
+      id="recording-check"
+      size="xl"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <RecordingSnapshotWidget
+        id="recording-snapshot-widget"
+        @close_modal="$bvModal.hide('recording-check')"
       />
     </b-modal>
   </div>
@@ -234,6 +259,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import SettingsForm from "@/components/settings/SettingsForm.vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 import RecordingNameInputWidget from "@/components/status/RecordingNameInputWidget.vue";
+import StatusSpinnerWidget from "@/components/status/StatusSpinnerWidget.vue";
+import RecordingSnapshotWidget from "@/components/status/RecordingSnapshotWidget.vue";
 
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
@@ -293,7 +320,9 @@ export default {
     FontAwesomeIcon,
     SettingsForm,
     StatusWarningWidget,
+    StatusSpinnerWidget,
     RecordingNameInputWidget,
+    RecordingSnapshotWidget,
   },
   data: function () {
     return {
@@ -325,6 +354,11 @@ export default {
         msg_two: "Your recording has been stopped.",
         button_names: ["Okay"],
       },
+      analysis_in_progress_labels: {
+        header: "Important!",
+        msg_one: "Data analysis is in progress for the recording snapshot. This won't take long.",
+        msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
+      },
     };
   },
   computed: {
@@ -336,6 +370,7 @@ export default {
       "firmware_update_available",
       "firmware_update_dur_mins",
     ]),
+    ...mapState("data", ["recording_snapshot_data"]),
     ...mapState("stimulation", ["stim_status"]),
     ...mapGetters({
       status_uuid: "flask/status_id",
@@ -348,9 +383,9 @@ export default {
       if (this.firmware_update_dur_mins !== 1) duration += "s";
       return {
         header: "Important!",
-        msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete.`,
+        msg_one: `A firmware update is required for this Mantarray instrument. It will take about ${duration} to complete. Declining it will prevent automatic software updating.`,
         msg_two:
-          "Declining it will prevent automatic software updating. Would you like to download and install the update?",
+          "If you accept, please make sure there is no stim lid connected to the instrument. Would you like to download and install the update?",
         button_names: ["No", "Yes"],
       };
     },
@@ -380,9 +415,9 @@ export default {
         this.playback_state == this.playback_state_enums.BUFFERING ||
         this.playback_state == this.playback_state_enums.RECORDING
       ) {
-        return "Cannot calibrate while Mantarray is in use.";
+        return "Cannot calibrate while Live View is active.";
       }
-      return "Cannot calibrate while Mantarray initializing.";
+      return "Cannot calibrate while Mantarray is initializing.";
     },
     liveview_tooltip_text: function () {
       if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
@@ -466,6 +501,12 @@ export default {
     user_cred_input_needed() {
       if (this.user_cred_input_needed) this.$bvModal.show("user-input-prompt-message");
     },
+    recording_snapshot_data(new_data) {
+      if (new_data.length === 24) {
+        this.$bvModal.hide("analysis-in-progress-modal");
+        this.$bvModal.show("recording-check");
+      }
+    },
   },
   methods: {
     on_activate_record_click: function () {
@@ -548,6 +589,10 @@ export default {
       this.$bvModal.hide("user-input-prompt-message");
       this.$bvModal.show("settings-form");
     },
+    close_recording_name_input() {
+      this.$bvModal.hide("recording-name-input-prompt-message");
+      this.$bvModal.show("analysis-in-progress-modal");
+    },
   },
 };
 </script>
@@ -575,6 +620,7 @@ export default {
   color: #b7b7b7;
   fill: #b7b7b7;
 }
+
 .span__playback-desktop-player-controls--active {
   color: #ffffff;
   fill: #ffffff;
@@ -621,10 +667,13 @@ export default {
       var(--span__playback-desktop-player-controls-button--LeftSeparation) * 2
   );
 }
+
 .span__playback-desktop-player-controls-calibrating,
 .span__playback-desktop-player-controls-buffering {
-  z-index: 1; /* Ensure that the animation is displayed over the top of the regular icon */
+  z-index: 1;
+  /* Ensure that the animation is displayed over the top of the regular icon */
 }
+
 .svg__playback-desktop-player-controls-live-view-button,
 .span__playback-desktop-player-controls-buffering {
   left: calc(
@@ -632,6 +681,7 @@ export default {
       var(--span__playback-desktop-player-controls-button--LeftSeparation) * 3
   );
 }
+
 .svg__playback-desktop-player-controls-record-button {
   left: calc(
     var(--span__playback-desktop-player-controls-button--LeftmostLeft) +
@@ -718,6 +768,7 @@ export default {
 #five-min-warning,
 #one-min-warning,
 #recording-name-input-prompt-message,
+#analysis-in-progress-modal,
 #existing-recording-warning {
   position: fixed;
   margin: 5% auto;

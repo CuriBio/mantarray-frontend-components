@@ -137,6 +137,29 @@ describe("DesktopPlayerControls.vue", () => {
     });
   });
 
+  test.each([
+    [Array(24).fill([]), true],
+    [[], false],
+    [Array(23).fill([]), false],
+  ])(
+    "When recording_snapshot_data changes to have a length of %s, Then the visibility of the recording snapshot modal will be %s",
+    async (data, bool) => {
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+
+      // confirm precondition
+      expect(wrapper.find("#recording-snapshot-widget").isVisible()).toBe(false);
+
+      store.commit("data/set_recording_snapshot_data", data);
+
+      Vue.nextTick(() => {
+        expect(wrapper.find("#recording-snapshot-widget").isVisible()).toBe(bool);
+      });
+    }
+  );
+
   test.each([0, 1])(
     "When firmware_update_available is set to true, Then firmware update available message is displayed and send_firmware_update_confirmation is emitted upon closure",
     async (close_idx) => {

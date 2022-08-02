@@ -29,7 +29,7 @@ export default {
       console.log(idx);
     },
     test_warning: function () {
-      this.$store.commit("data/h5_warning");
+      this.$store.commit("data/set_h5_warning");
     },
   },
 };

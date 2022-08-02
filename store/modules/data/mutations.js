@@ -62,7 +62,10 @@ export default {
   set_stimulator_circuit_statuses(state, stimulator_statuses) {
     state.stimulator_circuit_statuses = [...stimulator_statuses];
   },
-  h5_warning(state) {
+  set_h5_warning(state) {
     state.h5_warning = !state.h5_warning;
+  },
+  set_recording_snapshot_data(state, data) {
+    state.recording_snapshot_data = [...data];
   },
 };

@@ -206,14 +206,13 @@ export default {
     ...mapState("playback", ["playback_state", "enable_stim_controls", "barcodes"]),
     ...mapState("data", ["stimulator_circuit_statuses"]),
     is_start_stop_button_enabled: function () {
-      // Tanner (11/1/21): need to prevent manually starting/stopping stim while recording until BE can support it. BE may already be able to support stopping stim manually during a recording if needed
-      let is_enabled = this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
       if (!this.play_state) {
-        // only need to take these conditions into account when additional controls are enabled and not stimulating
-        is_enabled =
-          is_enabled &&
-          this.assigned_open_circuits.length === 0 &&
+        // if starting stim make sure initial magnetometer calibration has been completed and
+        // no additional calibrations are running, stim checks have completed, there are no short or
+        // open circuits, and that there are no other errors with stim lid
+        return (
           this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING &&
+          this.assigned_open_circuits.length === 0 &&
           ![
             STIM_STATUS.ERROR,
             STIM_STATUS.NO_PROTOCOLS_ASSIGNED,
@@ -221,9 +220,11 @@ export default {
             STIM_STATUS.CONFIG_CHECK_IN_PROGRESS,
             STIM_STATUS.SHORT_CIRCUIT_ERROR,
             STIM_STATUS.CALIBRATION_NEEDED,
-          ].includes(this.stim_status);
+          ].includes(this.stim_status)
+        );
       }
-      return is_enabled;
+      // currently, stop button should always be enabled
+      return true;
     },
     assigned_open_circuits: function () {
       // filter for matching indices
@@ -242,8 +243,6 @@ export default {
       } else if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
       else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED) {
         return "No protocols have been assigned";
-      } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING) {
-        return "Cannot start stimulation while recording is active";
       } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING) {
         return "Cannot start stimulation while calibrating instrument";
       } else if (this.assigned_open_circuits.length !== 0) {
@@ -253,15 +252,12 @@ export default {
       }
     },
     stop_stim_label: function () {
-      if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING) {
-        return "Cannot stop stimulation while recording is active";
-      } else {
-        return "Stop Stimulation";
-      }
+      // Tanner (7/27/22): there used to be multiple values, so leaving this as a function in case more values get added in future
+      return "Stop Stimulation";
     },
     svg__stimulation_controls_play_stop_button__dynamic_class: function () {
       // Tanner (2/1/22): This is only necessary so that the this button is shaded the same as the rest of
-      // the additional controls buttons when the controls block is displayed. The button is
+      // the stim controls buttons when the controls block is displayed. The button is
       // not actually active here. If the controls block is removed, this branch can likely be removed too.
       return this.is_start_stop_button_enabled || !this.enable_stim_controls
         ? "span__stimulation-controls-play-stop-button--enabled"
@@ -280,24 +276,34 @@ export default {
         : "svg__stimulation-controls-config-check-button--disabled";
     },
     configuration_message: function () {
-      if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
-      else if (
-        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE ||
-        this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.RECORDING
-      )
-        return "Cannot run configuration check while recording or live view is active.";
-      else if (this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED)
-        return "Can only run a configuration check if device is calibrated.";
-      else if (this.stim_status == STIM_STATUS.ERROR || this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR)
-        return "Cannot run a configuration check with error";
-      else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED)
+      if (!this.barcodes.stim_barcode.valid) {
+        return "Must have a valid Stimulation Lid Barcode";
+      } else if (
+        [
+          playback_module.ENUMS.PLAYBACK_STATES.BUFFERING,
+          playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE,
+          playback_module.ENUMS.PLAYBACK_STATES.RECORDING,
+        ].includes(this.playback_state)
+      ) {
+        return "Cannot run configuration check while Live View is active.";
+      } else if (this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATED) {
+        return "Cannot run a configuration check while other processes are active.";
+      } else if (
+        this.stim_status == STIM_STATUS.ERROR ||
+        this.stim_status == STIM_STATUS.SHORT_CIRCUIT_ERROR
+      ) {
+        return "Cannot run a configuration on this stim lid as a short has been detected on it";
+      } else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED) {
         return "Cannot run configuration check until protocols have been assigned.";
-      else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_NEEDED) return "Start configuration check";
-      else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS)
+      } else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_NEEDED) {
+        return "Start configuration check";
+      } else if (this.stim_status == STIM_STATUS.CONFIG_CHECK_IN_PROGRESS) {
         return "Configuration check in progress...";
-      else if (this.stim_status == STIM_STATUS.STIM_ACTIVE)
+      } else if (this.stim_status == STIM_STATUS.STIM_ACTIVE) {
         return "Cannot run a configuration check while stimulation is active.";
-      else return "Configuration check complete. Click to rerun.";
+      } else {
+        return "Configuration check complete. Click to rerun.";
+      }
     },
     config_check_in_progress: function () {
       return this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS;
@@ -351,6 +357,7 @@ export default {
 body {
   user-select: none;
 }
+
 .div__stimulation-controls-container {
   position: relative;
   background: black;
@@ -361,6 +368,7 @@ body {
   top: 0px;
   left: 0px;
 }
+
 .div__controls-block {
   position: absolute;
   z-index: 999;
@@ -372,11 +380,13 @@ body {
   top: 0px;
   left: 0px;
 }
+
 .span__additional-controls-header {
   color: rgb(255, 255, 255);
   position: absolute;
   font-size: 16px;
 }
+
 .div__border-container {
   position: absolute;
   border: 3px solid rgb(17, 17, 17);
@@ -399,6 +409,7 @@ body {
   width: 20px;
   font-size: 20px;
 }
+
 .span__stimulation-controls-play-stop-button--enabled {
   position: relative;
   color: #b7b7b7;
@@ -407,10 +418,12 @@ body {
   width: 20px;
   font-size: 20px;
 }
+
 .span__stimulation-controls-play-stop-button--enabled:hover {
   color: #ffffff;
   cursor: pointer;
 }
+
 .svg__stimulation-controls-loop-button {
   position: relative;
   fill: #b7b7b7;
@@ -418,26 +431,31 @@ body {
   width: 20px;
   grid-column: 3/4;
 }
+
 .svg__stimulation-active-button {
   position: relative;
   color: #b7b7b7;
   grid-column: 2/3;
 }
+
 .img__temp-icon {
   cursor: pointer;
   position: relative;
   height: 55px;
 }
+
 .img__waveform-icon {
   position: absolute;
   top: 27px;
   height: 60px;
   left: 2px;
 }
+
 .fontawesome_icon_class {
   height: 20px;
   width: 20px;
 }
+
 .span__spinner {
   position: absolute;
   font-size: 34px;
@@ -449,15 +467,18 @@ body {
   background-color: #000;
   opacity: 0.85;
 }
+
 .svg__config-check-container {
   height: 67px;
   left: 20px;
 }
+
 .div__config-check-container {
   top: 26px;
   left: 60px;
   position: absolute;
 }
+
 .svg__waveform-icon {
   fill: #b7b7b7;
 }
@@ -475,6 +496,7 @@ body {
   position: relative;
   stroke-width: 6px;
 }
+
 .svg__stimulation-controls-config-check-button--enabled {
   fill: #b7b7b7;
   stroke: #b7b7b7;
@@ -482,6 +504,7 @@ body {
   stroke-width: 6px;
   cursor: pointer;
 }
+
 .svg__stimulation-controls-config-check-button--enabled:hover {
   fill: #ffffff;
   stroke: #ffffff;
@@ -492,6 +515,7 @@ body {
   stroke-width: 6;
   fill: none;
 }
+
 .svg__inner-circle {
   stroke: black;
   stroke-width: 8;
