@@ -1,5 +1,9 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+1.1.1 (2022-08-02)
+------------------
+- fixed mean calculation on heatmap well
+- added mean calculation to heatmap well color
 
 1.1.0 (2022-08-01)
 ------------------
