@@ -1,14 +1,14 @@
 <template>
   <div class="div__waveform">
-    <div class="div__waveform-well-title">
+    <div v-if="show_labels" class="div__waveform-well-title">
       <span>{{ title }}</span>
     </div>
     <div class="div__waveform-graph" :style="div__waveform_graph__dynamic_style"></div>
-    <div class="div__waveform-y-axis-title">
+    <div v-if="show_labels" class="div__waveform-y-axis-title">
       <span> {{ y_axis_label }}</span>
     </div>
 
-    <div class="div__waveform-x-axis-title">
+    <div v-if="show_labels" class="div__waveform-x-axis-title">
       <span> {{ x_axis_label }}</span>
     </div>
   </div>
@@ -47,7 +47,7 @@ export default {
   name: "Waveform",
   components: {},
   props: {
-    title: { type: String, required: true },
+    title: { type: String, default: "" },
     samples_per_second: { type: Number, default: 1e6 },
     x_axis_sample_length: { type: Number, default: 1e6 },
     x_axis_min: { type: Number, default: 0 },
@@ -84,6 +84,18 @@ export default {
     stim_fill_assignments: {
       type: Array,
       default: () => [],
+    },
+    show_labels: {
+      type: Boolean,
+      default: true,
+    },
+    ticks: {
+      type: Number,
+      default: 10,
+    },
+    x_axis_factor: {
+      type: Number,
+      default: 1e6,
     },
   },
   data: function () {
@@ -196,7 +208,8 @@ export default {
       .append("g")
       .attr("id", "y_axis_node")
       .attr("stroke", "#b7b7b7")
-      .attr("class", "g__waveform-y-axis");
+      .attr("class", "g__waveform-y-axis")
+      .attr("width", 1);
 
     this.render_plot();
   },
@@ -224,10 +237,10 @@ export default {
         .range([this.plot_area_pixel_height, 0]);
     },
     display_x_axis: function () {
-      this.x_axis_node.call(axisBottom(this.x_axis_scale));
+      this.x_axis_node.call(axisBottom(this.x_axis_scale).ticks(this.ticks));
     },
     display_y_axis: function () {
-      this.y_axis_node.call(axisLeft(this.y_axis_scale));
+      this.y_axis_node.call(axisLeft(this.y_axis_scale).ticks(this.ticks));
     },
     plot_stim_data() {
       const x_axis_scale = this.x_axis_scale;
@@ -272,7 +285,7 @@ export default {
           "d",
           d3_line()
             .x((d) => {
-              return x_axis_scale(d[0] / 1e6);
+              return x_axis_scale(d[0] / this.x_axis_factor);
             })
             .y((d) => {
               return y_axis_scale(d[1]);
@@ -293,10 +306,7 @@ export default {
 }
 
 .div__waveform {
-  width: 521px;
-  height: 419px;
   background: #000000;
-  position: absolute;
   top: 0px;
   left: 0px;
   z-index: 0;
@@ -409,13 +419,14 @@ export default {
 .div__waveform-graph {
   overflow: hidden;
   user-select: none;
-  position: absolute;
-  height: 400px;
+  position: relative;
   top: 18px;
   left: 14px;
   z-index: 1;
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
+  margin-bottom: 5px;
+  /* height: 400px; */
 }
 
 .g__waveform-x-axis {

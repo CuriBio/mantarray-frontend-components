@@ -1,5 +1,5 @@
 <template>
-  <div style="top: 21px; left: 34px; position: absolute">
+  <div class="div__waveform-container">
     <ContinuousWaveform
       :display_waveform_idx="1"
       :x_axis_sample_length="1e6"
@@ -43,3 +43,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.div__waveform-container {
+  width: 521px;
+  height: 419px;
+  background: #000000;
+  position: absolute;
+  top: 21px;
+  left: 34px;
+}
+</style>

@@ -1,5 +1,9 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-import { append_well_data, find_closest_array_idx } from "../../../js_utils/waveform_data_formatter.js";
+import {
+  append_well_data,
+  find_closest_array_idx,
+  convert_x_y_arrays_to_d3_array,
+} from "../../../js_utils/waveform_data_formatter.js";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 
 export default {
@@ -118,5 +122,12 @@ export default {
       commit("set_stimulator_circuit_statuses", filtered_statuses);
       this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
     }
+  },
+  format_recording_snapshot_data({ commit }, { time, force }) {
+    const formatted_data = force.map((y_values) => {
+      return convert_x_y_arrays_to_d3_array(time, y_values);
+    });
+
+    commit("set_recording_snapshot_data", formatted_data);
   },
 };

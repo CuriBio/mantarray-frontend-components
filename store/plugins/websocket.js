@@ -37,6 +37,19 @@ export default function create_web_socket_plugin(socket) {
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
+    socket.on("recording_snapshot", (data_json, cb) => {
+      /*
+       example data_json = {
+        time: [array of timepoints],
+        force: [[array of 24 arrays of force data for each well] * 24]
+       }
+      */
+      store.dispatch("data/format_recording_snapshot_data", JSON.parse(data_json));
+
+      /* istanbul ignore else */
+      if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback
+    });
+
     socket.on("stimulation", (stim_json, cb) => {
       // TODO change this message type to stimulation_data
       // Tanner (12/20/21): may want to put the same checks here as are in the waveform_data handler once stim waveforms are sent instead of subprotocol indices
@@ -123,7 +136,7 @@ export default function create_web_socket_plugin(socket) {
     });
 
     socket.on("corrupt_files_alert", async (_, cb) => {
-      await store.commit("data/h5_warning");
+      await store.commit("data/set_h5_warning");
 
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });

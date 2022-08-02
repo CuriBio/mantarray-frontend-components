@@ -82,6 +82,7 @@ export { default as GradientBar } from "./components/status/GradientBar.vue";
 export { default as StatusWarningWidget } from "./components/status/StatusWarningWidget.vue";
 export { default as StatusSpinnerWidget } from "./components/status/StatusSpinnerWidget.vue";
 export { default as StimQCSummary } from "./components/status/StimQCSummary.vue";
+export { default as RecordingSnapshotWidget } from "./components/status/RecordingSnapshotWidget.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
@@ -92,7 +93,7 @@ export { default as StimulationStudioCreateAndEdit } from "./components/stimulat
 export { default as StimulationStudioDragAndDropPanel } from "./components/stimulation/StimulationStudioDragAndDropPanel.vue";
 export { default as StimulationStudioBlockViewEditor } from "./components/stimulation/StimulationStudioBlockViewEditor.vue";
 export { default as StimulationStudioWaveformSettingModal } from "./components/stimulation/StimulationStudioWaveformSettingModal.vue";
-export { default as StimulationStudioRepeatDelayModal } from "./components/stimulation/StimulationStudioRepeatDelayModal.vue";
+export { default as StimulationStudioDelayModal } from "./components/stimulation/StimulationStudioDelayModal.vue";
 export { default as StimulationStudioProtocolViewer } from "./components/stimulation/StimulationStudioProtocolViewer.vue";
 export { default as StimulationStudioWaveform } from "./components/stimulation/StimulationStudioWaveform.vue";
 export { default as StimulationStudioZoomControls } from "./components/stimulation/StimulationStudioZoomControls.vue";

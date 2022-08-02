@@ -152,4 +152,11 @@ export default {
   set_x_axis_time_idx(state, idx) {
     state.x_axis_time_idx = idx;
   },
+  on_pulse_mouseleave(state) {
+    state.hovered_pulse = {
+      idx: null,
+      indices: [],
+      color: null,
+    };
+  },
 };

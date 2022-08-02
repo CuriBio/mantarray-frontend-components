@@ -48,7 +48,7 @@ describe("StatusWidget.vue", () => {
         localVue,
       });
       const text_selector_h5 = "#h5_warning";
-      await store.commit("data/h5_warning");
+      await store.commit("data/set_h5_warning");
       //select the correct button
       Vue.nextTick(() => {
         expect(wrapper.find(text_selector_h5).isVisible()).toBe(true);
