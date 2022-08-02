@@ -233,7 +233,9 @@ export default {
     },
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
-        const color = this.gradient_map(well.slice(-1)[0]);
+        const total = well.reduce((a, b) => a + b, 0);
+        const mean = total / well.length;
+        const color = this.gradient_map(mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
     },
@@ -243,7 +245,7 @@ export default {
     mean_value: function () {
       let total = 0;
       this.selected_wells.map((well_idx) => {
-        total += this.well_values[this.display_option].data[well_idx].slice(-1)[0];
+        total += parseFloat(this.well_values[this.display_option].data[well_idx][0]);
       });
       return (total / this.selected_wells.length).toFixed(3);
     },
@@ -277,7 +279,10 @@ export default {
     auto_max_min: function (new_value) {
       if (this.autoscale) {
         this.$store.commit("gradient/set_gradient_range", new_value);
-        this.max_min_placeholder = { min: Math.floor(new_value.min), max: Math.ceil(new_value.max) }; // the input box width cuts off decimal places so rounding vals
+        this.max_min_placeholder = {
+          min: Math.floor(new_value.min),
+          max: Math.ceil(new_value.max),
+        }; // the input box width cuts off decimal places so rounding vals
       }
     },
     playback_state: function (_, old_value) {
