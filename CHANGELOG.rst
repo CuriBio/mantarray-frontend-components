@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.1.1 (2022-08-02)
+------------------
+
+Fixed:
+^^^^^^
+- Allowing subprotocol durations that are too long.
+
+
 1.1.0 (2022-08-01)
 ------------------
 
@@ -15,25 +23,25 @@ Added:
 - Prevention of edits to stimulation settings while either recording or actively stimulating
 - Warning to unplug stim lid before proceeding with a firmware update
 
-Changed
-^^^^^^^
+Changed:
+^^^^^^^^
 - Frequency in pulse settings modal can now be positive non-integers instead of only positive integers
 - Renamed StimulationStudioRepeatDelayModal to StimulationStudioDelayModal
 
-Fixed
-^^^^^
+Fixed:
+^^^^^^
 - Issue with waveform tile overflow in stimulation studio with long protocols
 
-Removed
-^^^^^^^
+Removed:
+^^^^^^^^
 - Prevention from starting or stopping stimulation while recording
 - Repeat feature in stimulation studio in favor of duplicate pulse feature
 
 1.0.2 (2022-07-12)
 ------------------
 
-Fixed
-^^^^^
+Fixed:
+^^^^^^
 
 - Issue with final protocol markers not being displayed correctly when stopping stim
 - Issue with scanned Beta 2 barcodes coming from the BE being considered invalid
