@@ -98,7 +98,7 @@ export default {
         num_err: "Must be a (+) number",
         required: "Required",
         valid: "",
-        max_duration: "Duration must be <= 1hr",
+        max_duration: "Duration must be <= 24hrs",
       },
       time_units: ["milliseconds", "seconds"],
       time_unit_idx: 0,
