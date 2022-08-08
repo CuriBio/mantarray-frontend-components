@@ -53,7 +53,7 @@
             @selection-changed="handle_stop_setting"
           />
           <span class="span__settings-label">every</span>
-          <div class="number-input-container">
+          <div v-b-popover.hover.bottom="rest_input_hover" class="number-input-container">
             <InputWidget
               :style="'position: relative;'"
               :initial_value="rest_duration"
@@ -178,6 +178,12 @@ export default {
       "get_protocols",
       "get_next_protocol",
     ]),
+    rest_input_hover: function () {
+      return {
+        content: 'Cannot set this value if using "Stimulate Until Complete"',
+        disabled: !this.disabled_time,
+      };
+    },
   },
   watch: {
     rest_time_unit() {
