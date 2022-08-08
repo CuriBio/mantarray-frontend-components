@@ -4,9 +4,10 @@ import { call_axios_post_from_vuex } from "../../../js_utils/axios_helpers";
 import { STIM_STATUS } from "./enums";
 
 const time_conversion = {
-  seconds: 1000,
   milliseconds: 1,
+  seconds: 1000,
   minutes: 60000,
+  hours: 3600000,
 };
 
 export default {

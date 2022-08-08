@@ -127,7 +127,7 @@ export default {
   data() {
     return {
       icon_types: ["Monophasic", "Biphasic", "Delay"],
-      time_units_array: ["milliseconds", "seconds"],
+      time_units_array: ["milliseconds", "seconds", "minutes", "hours"],
       selected_pulse_settings: {},
       selected_stim_settings: {},
       protocol_order: [],

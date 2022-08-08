@@ -100,7 +100,7 @@ export default {
         valid: "",
         max_duration: "Duration must be <= 24hrs",
       },
-      time_units: ["milliseconds", "seconds"],
+      time_units: ["milliseconds", "seconds", "minutes", "hours"],
       time_unit_idx: 0,
       is_enabled_array: [false, true],
       is_valid: false,

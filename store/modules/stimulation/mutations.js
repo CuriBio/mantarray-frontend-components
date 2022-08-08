@@ -90,8 +90,8 @@ export default {
   set_delay_axis_values(state, delay) {
     const { rest_duration, pulses, time_unit } = state.protocol_editor;
     const delay_conversion = {
-      seconds: 1000,
       milliseconds: 1,
+      seconds: 1000,
       minutes: 60000,
       hours: 3600000,
     };
