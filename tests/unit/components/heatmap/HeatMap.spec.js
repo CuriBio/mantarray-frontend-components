@@ -138,7 +138,6 @@ describe("HeatMap.vue", () => {
 
     await wrapper.find("#input-widget-field-heatmap-max").setValue("15");
     await wrapper.find("#input-widget-field-heatmap-min").setValue("0");
-
     // apply changes
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
 

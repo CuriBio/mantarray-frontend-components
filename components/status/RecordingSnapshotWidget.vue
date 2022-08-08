@@ -2,8 +2,8 @@
   <div class="div__recording-check-background">
     <div class="div__recording-check-header">Recording Snapshot</div>
     <div class="div__recording-check-message">
-      Here is a quick look at the first five seconds of this recording. <br />Calibration data is being used
-      for accuracy. If something looks wrong, try recalibrating and try again.
+      Here is a quick look at this recording. <br />If it looks different from live view or high level of
+      noise is present in the data, please recalibrate and record the data, again.
     </div>
     <div v-if="recording_snapshot_data.length === 24" class="div__scrollable-container">
       <div class="div__waveform-grid">

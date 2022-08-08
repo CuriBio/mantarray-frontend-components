@@ -395,7 +395,7 @@ describe("store/data", () => {
         });
 
         let data_validator = (well, idx) => {
-          let expected_length = idx != 1 ? 3 : 0;
+          let expected_length = idx != 1 ? 2 : 0;
           expect(well).toHaveLength(expected_length);
         };
         stored_metrics["Twitch Force"].data.map(data_validator);
