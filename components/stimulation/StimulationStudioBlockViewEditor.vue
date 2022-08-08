@@ -268,6 +268,9 @@ export default {
         this.invalid_rest_dur_text = "";
         this.handle_new_rest_duration(this.rest_duration);
       }
+
+      const rest_dur_is_valid = this.invalid_rest_dur_text === "";
+      this.$emit("new-rest-dur", rest_dur_is_valid);
     },
     get_dur_in_ms(value) {
       return this.rest_time_unit === "milliseconds" ? value : value * 1000;
