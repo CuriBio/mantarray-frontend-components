@@ -127,6 +127,20 @@ describe("DesktopPlayerControls.vue", () => {
     expect(store_spy).toHaveBeenCalledWith("playback/stop_live_view");
   });
 
+  test("When a user confirms recording name, recording snapshot is false and false in store, Then live view will not be stopped", async () => {
+    wrapper = mount(component_to_test, {
+      store,
+      localVue,
+    });
+
+    jest.spyOn(store, "dispatch").mockImplementation(() => null);
+    store.state.playback.playback_state = playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE;
+
+    wrapper.find(RecordingNameInputWidget).vm.$emit("handle_confirmation", false);
+
+    expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
+  });
+
   test("When user_cred_input_needed is set to true, Then user input prompt message is displayed and settings form is opened upon closing modal", async () => {
     wrapper = mount(component_to_test, {
       store,
@@ -327,6 +341,30 @@ describe("DesktopPlayerControls.vue", () => {
           });
         }
       );
+      test.each([
+        [true, "CALIBRATED"],
+        [false, "LIVE_VIEW_ACTIVE"],
+      ])(
+        "When stops a recording and the snapshot setting is set to %s, Then playback state will be %s",
+        async (state, playback_state) => {
+          wrapper = mount(component_to_test, {
+            store,
+            localVue,
+          });
+
+          await store.commit("settings/set_recording_snapshot_state", state);
+          await store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.RECORDING);
+
+          // stop recording
+          await wrapper.find(".svg__playback-desktop-player-controls-record-button--active").trigger("click");
+          await wait_for_expect(() => {
+            expect(store.state.playback.playback_state).toBe(
+              playback_module.ENUMS.PLAYBACK_STATES[playback_state]
+            );
+          });
+        }
+      );
+
       test("Given Vuex in playback state RECORDING, When stop recording button is clicked and recording name is confirmed, Then Vuex transitions playback state to LIVE_VIEW_ACTIVE", async () => {
         const propsData = {};
         wrapper = mount(component_to_test, {
