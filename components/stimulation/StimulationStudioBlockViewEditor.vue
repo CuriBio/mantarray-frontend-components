@@ -56,8 +56,9 @@
           <div class="number-input-container">
             <InputWidget
               :style="'position: relative;'"
+              :initial_value="rest_duration"
               :placeholder="'0'"
-              :dom_id_suffix="'rest'"
+              :dom_id_suffix="'protocol-rest'"
               :invalid_text="invalid_rest_dur_text"
               :disabled="disabled_time"
               :input_width="100"
@@ -205,8 +206,7 @@ export default {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
         this.rest_duration = this.get_rest_duration;
-        this.stimulation_type_idx = (this.stimulation_type === "V") | 0;
-        this.stop_option_idx = +(this.stop_setting === "Stimulate Until Complete");
+        this.stimulation_type_idx = +(this.stimulation_type === "V");
 
         const stim_until_complete = this.stop_setting === "Stimulate Until Complete";
         this.stop_option_idx = +stim_until_complete;
@@ -256,7 +256,6 @@ export default {
       this.set_stop_setting(setting);
     },
     handle_rest_duration(time) {
-      console.log("handle_rest_duration", time);
       const time_int = +time;
 
       this.rest_duration = time;
