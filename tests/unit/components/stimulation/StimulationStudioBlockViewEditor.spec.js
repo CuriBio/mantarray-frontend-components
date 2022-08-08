@@ -127,9 +127,8 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    const input = wrapper.find(".number_input");
-    input.element.value = "5";
-    await input.trigger("change");
+
+    await wrapper.find("#input-widget-field-protocol-rest").setValue("5");
     expect(wrapper.vm.rest_duration).toBe("5");
   });
 
