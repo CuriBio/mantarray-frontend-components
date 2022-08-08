@@ -14,6 +14,15 @@
           @update:value="check_recording_name($event)"
         ></InputWidget>
       </div>
+      <div class="div__toggle-container">
+        <ToggleWidget
+          id="recording_snapshot_toggle"
+          :checked_state="recording_snapshot_state"
+          :label="'recording_snapshot'"
+          @handle_toggle_state="handle_toggle_state"
+        />
+        <span>Show Snapshot For This Recording</span>
+      </div>
       <div class="div__confirm-button-container">
         <ButtonWidget
           :button_widget_width="420"
@@ -49,12 +58,14 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import Vue from "vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
+import ToggleWidget from "@/components/basic_widgets/ToggleWidget.vue";
 import { BModal } from "bootstrap-vue";
+import { mapState } from "vuex";
 Vue.component("BModal", BModal);
 
 export default {
   name: "RecordingNameInputWidget",
-  components: { InputWidget, ButtonWidget, StatusWarningWidget },
+  components: { InputWidget, ButtonWidget, StatusWarningWidget, ToggleWidget },
   props: {
     modal_labels: {
       type: Object,
@@ -77,12 +88,17 @@ export default {
         msg_two: "Would you like to replace the existing recording with this one?",
         button_names: ["Cancel", "Yes"],
       },
+      recording_snapshot_state: true,
     };
   },
   computed: {
+    ...mapState("settings", ["recording_snapshot"]),
     is_enabled: function () {
       return !this.error_message;
     },
+  },
+  created() {
+    this.recording_snapshot_state = this.recording_snapshot;
   },
   methods: {
     check_recording_name: function (recording_name) {
@@ -97,8 +113,11 @@ export default {
           recording_name: this.recording_name,
           default_name: this.default_recording_name,
           replace_existing: this.recording_name === this.default_recording_name,
+          snapshot_enabled: this.recording_snapshot_state,
         });
-        res === 403 ? this.$bvModal.show("existing-recording-warning") : this.$emit("handle_confirmation");
+        res === 403
+          ? this.$bvModal.show("existing-recording-warning")
+          : this.$emit("handle_confirmation", this.recording_snapshot_state);
       }
     },
     close_warning_modal: async function (idx) {
@@ -109,9 +128,13 @@ export default {
           recording_name: this.recording_name,
           default_name: this.default_recording_name,
           replace_existing: true,
+          snapshot_enabled: this.recording_snapshot_state,
         });
-        this.$emit("handle_confirmation");
+        this.$emit("handle_confirmation", this.recording_snapshot_state);
       } else this.error_message = "Name already exists";
+    },
+    handle_toggle_state: function (state) {
+      this.recording_snapshot_state = state;
     },
   },
 };
@@ -121,7 +144,7 @@ export default {
   pointer-events: all;
   transform: rotate(0deg);
   position: absolute;
-  height: 200px;
+  height: 240px;
   width: 420px;
   top: 0;
   left: 0;
@@ -158,8 +181,20 @@ export default {
   z-index: 24;
 }
 .div__confirm-button-container {
-  top: 150px;
+  top: 200px;
   left: 0px;
   position: absolute;
+}
+.div__toggle-container {
+  font-family: Muli;
+  font-size: 16px;
+  color: rgb(183, 183, 183);
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  position: absolute;
+  width: 420px;
+  top: 154px;
 }
 </style>

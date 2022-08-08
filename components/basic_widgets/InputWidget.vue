@@ -140,7 +140,7 @@ body {
 }
 .span__input-content-label {
   pointer-events: all;
-  align: center;
+  text-align: center;
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;

@@ -124,7 +124,41 @@ describe("RecordingNameInputWidget.vue", () => {
     await input_widget.trigger("input");
     await button_widget.trigger("click");
 
-    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[]]);
+    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[true]]);
+  });
+
+  test("When component mounts, Then the recording snapshot toggle will be switched to what has been stored globally", async () => {
+    const propsData = { default_recording_name: "test_recording_name" };
+    wrapper = mount(RecordingNameInputWidget, {
+      propsData,
+      store,
+      localVue,
+    });
+
+    const stored_state = store.state.settings.recording_snapshot;
+    expect(stored_state).toBe(true);
+
+    expect(wrapper.vm.recording_snapshot_state).toBe(stored_state);
+  });
+
+  test("When user toggles the recording snapshot switch, Then the value will be emitted to parent with handle_confirmation", async () => {
+    const propsData = { default_recording_name: "test_recording_name" };
+    wrapper = mount(RecordingNameInputWidget, {
+      propsData,
+      store,
+      localVue,
+    });
+
+    expect(wrapper.vm.recording_snapshot_state).toBe(true);
+
+    jest.spyOn(store, "dispatch").mockImplementation(() => 200);
+    const toggle_input = wrapper.find("#toggle_input");
+    const button_widget = wrapper.findAll(".span__button_label");
+
+    await toggle_input.trigger("click");
+    await button_widget.at(2).trigger("click");
+
+    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[false]]);
   });
   test("When a user choses an existing recording name and  wants to select a new name instead of overriding, Then warning modal will close and show error message for existing name", async () => {
     const propsData = { default_recording_name: "test_recording_name" };
@@ -172,6 +206,6 @@ describe("RecordingNameInputWidget.vue", () => {
     });
 
     await button_widget.at(2).trigger("click");
-    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[]]);
+    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[true]]);
   });
 });

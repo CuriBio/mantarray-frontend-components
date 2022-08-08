@@ -282,7 +282,7 @@ describe("DesktopPlayerControls.vue", () => {
 
       test.each([
         ["LIVE_VIEW_ACTIVE", ".svg__playback-desktop-player-controls-live-view-button", "CALIBRATED"],
-        ["RECORDING", ".svg__playback-desktop-player-controls-record-button--active", "LIVE_VIEW_ACTIVE"],
+        ["RECORDING", ".svg__playback-desktop-player-controls-record-button--active", "CALIBRATED"],
         ["NEEDS_CALIBRATION", ".svg__playback-desktop-player-controls-calibrate-button", "CALIBRATING"],
         ["CALIBRATED", ".svg__playback-desktop-player-controls-calibrate-button", "CALIBRATING"],
         ["CALIBRATED", ".svg__playback-desktop-player-controls-live-view-button", "BUFFERING"],
@@ -328,9 +328,7 @@ describe("DesktopPlayerControls.vue", () => {
         const record_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--active");
         await record_button.trigger("click");
         await wrapper.findAll(".span__button_label").at(8).trigger("click");
-        expect(store.state.playback.playback_state).toBe(
-          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
-        );
+        expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["CALIBRATED"]);
       });
     });
     test("When a user starts a recording and doesn't manually stop it within 2 minutes, Then a recording will get stopped regardless at that time point", async () => {
@@ -351,9 +349,7 @@ describe("DesktopPlayerControls.vue", () => {
 
       jest.advanceTimersByTime(2 * 60e3);
       await wait_for_expect(() => {
-        expect(store.state.playback.playback_state).toBe(
-          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
-        );
+        expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["CALIBRATED"]);
       });
     });
     test.each([

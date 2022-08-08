@@ -369,6 +369,7 @@ export default {
       "user_cred_input_needed",
       "firmware_update_available",
       "firmware_update_dur_mins",
+      "recording_snapshot",
     ]),
     ...mapState("data", ["recording_snapshot_data"]),
     ...mapState("stimulation", ["stim_status"]),
@@ -544,6 +545,10 @@ export default {
       this.$store.dispatch("playback/stop_recording");
       this.$bvModal.show("recording-name-input-prompt-message");
 
+      if (this.recording_snapshot) {
+        this.$store.dispatch("playback/stop_live_view");
+      }
+
       if (this.auto_upload) {
         this.$store.commit("settings/set_total_file_count");
       }
@@ -589,9 +594,16 @@ export default {
       this.$bvModal.hide("user-input-prompt-message");
       this.$bvModal.show("settings-form");
     },
-    close_recording_name_input() {
+    close_recording_name_input(temp_snapshot_state) {
       this.$bvModal.hide("recording-name-input-prompt-message");
-      this.$bvModal.show("analysis-in-progress-modal");
+
+      if (temp_snapshot_state) {
+        this.$bvModal.show("analysis-in-progress-modal");
+        // if new state enables snapshot against a false  global state, then stop live view
+        if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
+          this.$store.dispatch("playback/stop_live_view");
+        }
+      }
     },
   },
 };
