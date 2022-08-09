@@ -146,7 +146,7 @@ export default {
       .append("svg")
       .attr("width", this.plot_area_pixel_width + this.margin.left + this.margin.right)
       .attr("height", this.plot_area_pixel_height + this.margin.bottom + 10)
-      .attr("overflow", "visible")
+      .attr("style", "overflow: visible")
       .attr("background-color", "black")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
