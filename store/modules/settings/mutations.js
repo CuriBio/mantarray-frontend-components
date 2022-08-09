@@ -80,4 +80,7 @@ export default {
   set_confirmation_request(state, bool) {
     state.confirmation_request = bool;
   },
+  set_recording_snapshot_state(state, bool) {
+    state.recording_snapshot = bool;
+  },
 };

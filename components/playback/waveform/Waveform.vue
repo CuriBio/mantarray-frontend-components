@@ -1,6 +1,6 @@
 <template>
   <div class="div__waveform">
-    <div v-if="show_labels" class="div__waveform-well-title">
+    <div class="div__waveform-well-title" :style="title__dynamic_style">
       <span>{{ title }}</span>
     </div>
     <div class="div__waveform-graph" :style="div__waveform_graph__dynamic_style"></div>
@@ -66,7 +66,7 @@ export default {
     margin: {
       type: Object,
       default: () => {
-        return { top: 10, right: 20, bottom: 30, left: 60 };
+        return { top: 0, right: 20, bottom: 30, left: 60 };
       },
     },
     plot_area_pixel_height: {
@@ -97,6 +97,10 @@ export default {
       type: Number,
       default: 1e6,
     },
+    title_left: {
+      type: Number,
+      default: 5,
+    },
   },
   data: function () {
     return {
@@ -111,6 +115,11 @@ export default {
         width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px",
       },
     };
+  },
+  computed: {
+    title__dynamic_style: function () {
+      return `left: ${this.title_left}px`;
+    },
   },
   watch: {
     x_axis_min() {
@@ -136,8 +145,9 @@ export default {
       .select(".div__waveform-graph")
       .append("svg")
       .attr("width", this.plot_area_pixel_width + this.margin.left + this.margin.right)
-      .attr("height", this.plot_area_pixel_height + this.margin.top + this.margin.bottom)
-      .attr("style", "background-color: black")
+      .attr("height", this.plot_area_pixel_height + this.margin.bottom + 10)
+      .attr("style", "overflow: visible")
+      .attr("background-color", "black")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
       .attr("id", "svg_of_waveform")
@@ -333,11 +343,10 @@ export default {
   color: rgb(255, 255, 255);
   text-align: left;
   user-select: none;
-  position: absolute;
+  position: relative;
   width: 51px;
   height: 32px;
   top: 0px;
-  left: 5px;
   z-index: 99;
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
@@ -393,7 +402,7 @@ export default {
   font-family: Muli;
   font-weight: bold;
   position: absolute;
-  top: 395px;
+  top: 400px;
   left: 69px;
   width: 430px;
   height: 29px;
@@ -417,10 +426,9 @@ export default {
 }
 
 .div__waveform-graph {
-  overflow: hidden;
+  overflow: visible;
   user-select: none;
   position: relative;
-  top: 18px;
   left: 14px;
   z-index: 1;
   -webkit-box-sizing: content-box;

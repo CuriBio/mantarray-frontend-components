@@ -81,12 +81,12 @@ describe("SettingsForm.vue", () => {
       const expected_state = {
         entrykey_user: "",
         auto_delete: false,
-        auto_upload: true,
+        auto_upload: false,
       };
 
       await wrapper.find("#input-dropdown-widget-user-account-").setValue("User account -2");
 
-      const reset_btn = await wrapper.find(".span__settings-tool-tip-reset-btn-txt-enable");
+      const reset_btn = wrapper.find(".span__settings-tool-tip-reset-btn-txt-enable");
       expect(reset_btn.isVisible()).toBe(true);
       await reset_btn.trigger("click");
 

@@ -60,7 +60,7 @@ export default {
     margin: {
       type: Object,
       default: function () {
-        return { top: 10, right: 20, bottom: 30, left: 60 };
+        return { top: 0, right: 20, bottom: 30, left: 60 };
       },
     },
     plot_area_pixel_height: {

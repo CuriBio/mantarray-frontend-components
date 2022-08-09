@@ -6,6 +6,7 @@
       v-b-popover.hover.bottomright="settings_tooltip_text"
       :title="settings_title"
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
+      @click="$bvModal.show('settings-form')"
     >
       <PlayerControlsSettingsButton /><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
     </div>
@@ -369,6 +370,7 @@ export default {
       "user_cred_input_needed",
       "firmware_update_available",
       "firmware_update_dur_mins",
+      "recording_snapshot",
     ]),
     ...mapState("data", ["recording_snapshot_data"]),
     ...mapState("stimulation", ["stim_status"]),
@@ -589,9 +591,12 @@ export default {
       this.$bvModal.hide("user-input-prompt-message");
       this.$bvModal.show("settings-form");
     },
-    close_recording_name_input() {
+    close_recording_name_input(temp_snapshot_state) {
       this.$bvModal.hide("recording-name-input-prompt-message");
-      this.$bvModal.show("analysis-in-progress-modal");
+
+      if (temp_snapshot_state) {
+        this.$bvModal.show("analysis-in-progress-modal");
+      }
     },
   },
 };
@@ -773,6 +778,13 @@ export default {
   position: fixed;
   margin: 5% auto;
   top: 15%;
+  left: 0;
+  right: 0;
+}
+#recording-check {
+  position: fixed;
+  margin: 0%;
+  top: 0%;
   left: 0;
   right: 0;
 }

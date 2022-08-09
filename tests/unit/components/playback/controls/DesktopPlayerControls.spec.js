@@ -12,6 +12,7 @@ import VueAxios from "vue-axios";
 import { createLocalVue } from "@vue/test-utils";
 const MockAxiosAdapter = require("axios-mock-adapter");
 import SettingsForm from "@/components/settings/SettingsForm.vue";
+import RecordingNameInputWidget from "@/components/status/RecordingNameInputWidget.vue";
 import { STATUS } from "@/store/modules/flask/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import { system_status_regexp, all_mantarray_commands_regexp } from "@/store/modules/flask/url_regex";
@@ -108,9 +109,23 @@ describe("DesktopPlayerControls.vue", () => {
     await wrapper.find(".div__playback-desktop-player-controls-settings-button").trigger("click");
     expect(wrapper.find("#settings-form")).toBeTruthy();
 
-    await wrapper.find(SettingsForm).vm.$emit("close_modal", false);
+    wrapper.find(SettingsForm).vm.$emit("close_modal", false);
     expect(close_spy).toHaveBeenCalledWith(false);
     expect(wrapper.emitted("save_customer_id")).toBeFalsy();
+  });
+
+  test("When a user confirms recording name, recording snapshot is false and false in store, Then live view will not be stopped", async () => {
+    wrapper = mount(component_to_test, {
+      store,
+      localVue,
+    });
+
+    jest.spyOn(store, "dispatch").mockImplementation(() => null);
+    store.state.playback.playback_state = playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE;
+
+    wrapper.find(RecordingNameInputWidget).vm.$emit("handle_confirmation", false);
+
+    expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
   });
 
   test("When user_cred_input_needed is set to true, Then user input prompt message is displayed and settings form is opened upon closing modal", async () => {
@@ -307,12 +322,13 @@ describe("DesktopPlayerControls.vue", () => {
 
           await wait_for_expect(() => {
             // wait for the axios promises to resolve
-            expect(store.state.playback.playback_state).toEqual(
+            expect(store.state.playback.playback_state).toBe(
               playback_module.ENUMS.PLAYBACK_STATES[ending_playback_state_enum]
             );
           });
         }
       );
+
       test("Given Vuex in playback state RECORDING, When stop recording button is clicked and recording name is confirmed, Then Vuex transitions playback state to LIVE_VIEW_ACTIVE", async () => {
         const propsData = {};
         wrapper = mount(component_to_test, {
@@ -324,15 +340,16 @@ describe("DesktopPlayerControls.vue", () => {
         await store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]);
         await wrapper.vm.$nextTick(); // wait for update
 
-        // start recording
-        const record_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--active");
-        await record_button.trigger("click");
+        // stop recording
+        const stop_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--active");
+        await stop_button.trigger("click");
         await wrapper.findAll(".span__button_label").at(8).trigger("click");
         expect(store.state.playback.playback_state).toBe(
           playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
         );
       });
     });
+
     test("When a user starts a recording and doesn't manually stop it within 2 minutes, Then a recording will get stopped regardless at that time point", async () => {
       jest.useFakeTimers();
       wrapper = mount(component_to_test, {

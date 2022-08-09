@@ -1,8 +1,10 @@
 <template>
   <div>
-    <button @click="$bvModal.show('recording-check')">Show Modal</button>
+    <button @click="open = !open">Show Modal</button>
     <b-modal
+      v-if="open"
       id="recording-check"
+      v-model="open"
       size="sm"
       hide-footer
       hide-header
@@ -28,6 +30,14 @@ Vue.component("BModal", BModal);
 export default {
   components: {
     RecordingSnapshotWidget,
+  },
+  data() {
+    return {
+      open: false,
+    };
+  },
+  created() {
+    this.$store.commit("data/set_recording_snapshot_data", Array(24).fill([]));
   },
 };
 </script>

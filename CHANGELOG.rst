@@ -1,22 +1,27 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.1.1 (unreleased)
+1.1.1 (2022-10-08)
 ------------------
 
 Added:
 ^^^^^^
+- Toggle switch to Settings Form for disabling recording snapshot feature globally
+- Toggle switch to RecordingNameInputWidget for disabling recording snapshot feature for single recording
+
+Changed
+^^^^^^^
+- fixed mean calculation on heatmap well
+- added mean calculation to heatmap well color
+- switched append_metric_data to replace old well data instead of actully appending it to the old data
 - Minutes and hours options for time units in stim studio
+- ``append_metric_data`` now replaces old well data instead of appending it to the old data
 
 Fixed:
 ^^^^^^
 - No prevention against subprotocol durations that are too long
 - Mean calculation on heatmap well and well color
 - Bug preventing stim subprotocol blocks to update correctly when switching between stim protocols
-
-Changed:
-^^^^^^^^
-- ``append_metric_data`` now replaces old well data instead of appending it to the old data
 
 
 1.1.0 (2022-08-01)
