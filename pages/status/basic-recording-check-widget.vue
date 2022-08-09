@@ -29,6 +29,9 @@ export default {
   components: {
     RecordingSnapshotWidget,
   },
+  created() {
+    this.$store.commit("data/set_recording_snapshot_data", Array(24).fill([]));
+  },
 };
 </script>
 <style scoped>

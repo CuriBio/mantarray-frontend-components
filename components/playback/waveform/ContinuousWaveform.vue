@@ -10,7 +10,7 @@
     :y_axis_label="y_label"
     :x_axis_label="x_label"
     :tissue_line_color="tissue_line_color"
-    :margin="margin"
+    :margin="{ top: 0, right: 20, bottom: 30, left: 60 }"
     :plot_area_pixel_height="plot_area_pixel_height"
     :plot_area_pixel_width="plot_area_pixel_width"
     :stim_fill_assignments="fill_assignments"
@@ -60,7 +60,7 @@ export default {
     margin: {
       type: Object,
       default: function () {
-        return { top: 10, right: 20, bottom: 30, left: 60 };
+        return { top: 0, right: 20, bottom: 30, left: 60 };
       },
     },
     plot_area_pixel_height: {

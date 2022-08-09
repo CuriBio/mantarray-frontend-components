@@ -335,7 +335,7 @@ describe("DesktopPlayerControls.vue", () => {
 
           await wait_for_expect(() => {
             // wait for the axios promises to resolve
-            expect(store.state.playback.playback_state).toEqual(
+            expect(store.state.playback.playback_state).toBe(
               playback_module.ENUMS.PLAYBACK_STATES[ending_playback_state_enum]
             );
           });

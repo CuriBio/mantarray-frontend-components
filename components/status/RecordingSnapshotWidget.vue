@@ -17,8 +17,10 @@
             :samples_per_second="100"
             :x_axis_sample_length="500"
             :x_axis_min="0"
+            :title_left="40"
             :plot_area_pixel_height="150"
             :plot_area_pixel_width="200"
+            :title="well_names[well_idx]"
             :show_labels="false"
             :ticks="5"
             :x_axis_factor="1"
@@ -28,11 +30,15 @@
         </div>
       </div>
     </div>
+    <canvas class="canvas__vertical-line" />
+    <canvas class="canvas__common-horizontal-line" />
+    <span class="span__x-axis-label">Time (seconds)</span>
+    <span class="span__y-axis-label">Absolute Force (μN)</span>
     <ButtonWidget
       :button_names="['Close']"
-      :button_widget_width="1850"
+      :button_widget_width="1900"
       :button_widget_height="60"
-      :button_widget_top="800"
+      :button_widget_top="900"
       :hover_color="['#bd4932', '#19ac8a']"
       @btn-click="close_modal"
     />
@@ -42,6 +48,8 @@
 import Waveform from "@/components/playback/waveform/Waveform.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { mapState } from "vuex";
+import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
+const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 
 export default {
   name: "RecordingSnapshotWidget",
@@ -59,6 +67,11 @@ export default {
         return { max, min };
       });
     },
+    well_names: function () {
+      return Array(24)
+        .fill()
+        .map((_, idx) => twenty_four_well_plate_definition.get_well_name_from_well_index(idx, true));
+    },
   },
   methods: {
     close_modal: function () {
@@ -74,9 +87,8 @@ export default {
   pointer-events: all;
   position: absolute;
   top: 0;
-  left: -355px;
-  height: 800px;
-  width: 1850px;
+  height: 900px;
+  width: 1900px;
   border-color: #000000;
   background: rgb(17, 17, 17);
   z-index: 3;
@@ -110,9 +122,10 @@ export default {
 .div__scrollable-container {
   position: relative;
   width: 1800px;
-  height: 820px;
+  height: 720px;
   overflow-y: scroll;
   background: black;
+  left: 20px;
 }
 ::-webkit-scrollbar {
   -webkit-appearance: none;
@@ -126,5 +139,47 @@ export default {
 ::-webkit-scrollbar-track {
   background-color: #1c1c1c;
   overflow: visible;
+}
+.canvas__vertical-line {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  width: 2px;
+  height: 330px;
+  top: 546px;
+  left: 36px;
+  background-color: rgb(255, 255, 255);
+}
+
+.span__x-axis-label {
+  font-family: Muli;
+  font-size: 16px;
+  position: absolute;
+  color: rgb(255, 255, 255);
+  top: 865px;
+  overflow: hidden;
+}
+
+.span__y-axis-label {
+  transform: rotate(-90deg);
+  font-family: Muli;
+  font-size: 16px;
+  position: absolute;
+  color: rgb(255, 255, 255);
+  top: 440px;
+  left: -37px;
+  overflow: hidden;
+}
+
+.canvas__common-horizontal-line {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: relative;
+  height: 2px;
+  top: 0px;
+  left: -500px;
+  width: 825px;
+  margin: 20px;
+  background-color: rgb(255, 255, 255);
 }
 </style>
