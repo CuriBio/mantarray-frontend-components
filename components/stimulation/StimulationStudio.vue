@@ -12,15 +12,18 @@
       :stimulation_type="stimulation_type"
       :disable_edits="disable_edits"
     />
-    <StimulationStudioBlockViewEditor class="stimulationstudio_blockvieweditor-container" />
+    <StimulationStudioBlockViewEditor
+      class="stimulationstudio_blockvieweditor-container"
+      @new-rest-dur="new_rest_dur"
+    />
     <StimulationStudioProtocolViewer
       class="stimulationstudio_protocolviewer-container"
       :stimulation_type="stimulation_type"
     />
     <div class="button-background">
       <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
-        <div v-b-popover.hover.top="btn_hover" :class="get_btn_class()">
-          <span :class="get_btn_label_class()">{{ value }}</span>
+        <div v-b-popover.hover.top="btn_hover" :class="get_btn_class(idx)">
+          <span :class="get_btn_label_class(idx)">{{ value }}</span>
         </div>
       </div>
     </div>
@@ -59,6 +62,7 @@ export default {
       btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
       stimulation_type: "Current",
       selected_protocol: { label: "Create New", color: "", letter: "" },
+      rest_dur_is_valid: true,
     };
   },
   computed: {
@@ -102,26 +106,31 @@ export default {
       if (idx === 0) {
         await this.$store.dispatch("stimulation/add_saved_protocol");
         this.$store.dispatch("stimulation/handle_protocol_editor_reset");
-
         this.selected_protocol = { label: "Create New", color: "", letter: "" };
+      } else if (idx === 1) {
+        this.$store.commit("stimulation/reset_state");
+      } else if (idx === 2) {
+        if (this.selected_protocol.label === "Create New") {
+          this.$store.commit("stimulation/reset_protocol_editor");
+        } else {
+          this.$store.dispatch("stimulation/edit_selected_protocol", this.selected_protocol);
+        }
       }
-
-      if (idx === 1) this.$store.commit("stimulation/reset_state");
-
-      if (idx === 2 && this.selected_protocol.label !== "Create New") {
-        this.$store.dispatch("stimulation/edit_selected_protocol", this.selected_protocol);
-      } else if (idx === 2 && this.selected_protocol.label === "Create New")
-        this.$store.commit("stimulation/reset_protocol_editor");
+    },
+    new_rest_dur(is_valid) {
+      this.rest_dur_is_valid = is_valid;
     },
 
     handle_selection_change(protocol) {
       this.selected_protocol = protocol;
     },
-    get_btn_class() {
-      return this.disable_edits ? "btn-container-disable" : "btn-container";
+    get_btn_class(idx) {
+      return this.disable_edits || (idx === 0 && !this.rest_dur_is_valid)
+        ? "btn-container-disable"
+        : "btn-container";
     },
-    get_btn_label_class() {
-      return this.disable_edits ? "btn-label-disable" : "btn-label";
+    get_btn_label_class(idx) {
+      return this.disable_edits || (idx === 0 && !this.rest_dur_is_valid) ? "btn-label-disable" : "btn-label";
     },
   },
 };

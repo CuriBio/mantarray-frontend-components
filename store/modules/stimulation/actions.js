@@ -4,9 +4,10 @@ import { call_axios_post_from_vuex } from "../../../js_utils/axios_helpers";
 import { STIM_STATUS } from "./enums";
 
 const time_conversion = {
-  seconds: 1000,
   milliseconds: 1,
+  seconds: 1000,
   minutes: 60000,
+  hours: 3600000,
 };
 
 export default {
@@ -111,11 +112,14 @@ export default {
   },
 
   async handle_new_rest_duration({ dispatch, state, commit }, time) {
-    const { detailed_pulses } = state.protocol_editor;
+    // need to grab these values before committing set_rest_duration
+    let { detailed_pulses } = state.protocol_editor;
+    detailed_pulses = detailed_pulses || [];
 
     if (time === "") time = "0";
-
     await commit("set_rest_duration", time);
+
+    // commit this after committing set_rest_duration
     dispatch("handle_protocol_order", detailed_pulses);
   },
 

@@ -2,15 +2,10 @@
   <div>
     <div
       class="div__input-background"
-      :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
+      :style="`width: ${input_width_background}px; height: ${input_height_background}px;`"
     >
-      <span
-        v-if="title_label !== ''"
-        class="span__input-content-label"
-        :style="'width: ' + input_width + 'px;'"
-      >
+      <span v-if="title_label !== ''" class="span__input-content-label" :style="`width: ${input_width}px;`">
         {{ title_label }}
-        <!--  original mockflow ID: cmpDb072c1da7a823374cbee04cb1666edb1   -->
       </span>
 
       <div
@@ -20,9 +15,12 @@
             ? 'div__input-controls-content-widget--invalid'
             : 'div__input-controls-content-widget--valid',
         ]"
-        :style="'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;'"
+        :style="`width: ${input_width}px; height: ${input_height}px; top: ${input_widget_top}px;`"
       >
-        <span class="span__input-controls-content-input-txt-widget" :style="'width: ' + input_width + 'px;'">
+        <span
+          class="span__input-controls-content-input-txt-widget"
+          :style="`width: ${input_width}px; height: ${input_height}px; line-height: ${input_height}px;`"
+        >
           <b-form-input
             :id="'input-widget-field-' + dom_id_suffix"
             v-model="input_value"
@@ -41,9 +39,9 @@
       </div>
       <div
         v-show="display_text_message"
-        :id="'input-widget-feedback-' + dom_id_suffix"
+        :id="`input-widget-feedback-${dom_id_suffix}`"
         class="div__input-controls-content-feedback"
-        :style="'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'"
+        :style="`width: ${input_width}px; top: ${input_feedback_top}px;`"
       >
         {{ invalid_text }}
       </div>
@@ -73,7 +71,9 @@ export default {
     invalid_text: { type: String, default: "" }, // invalid_text (str)
     spellcheck: { type: Boolean, default: true }, // spellcheck (optional bool=True)
     initial_value: { type: String, default: "" }, // field_value (str) (optional, defaults to empty string "")
+    top_adjust: { type: Number, default: 0 },
     input_width: { type: Number, default: 0 }, // textbox_width (int)  [pixels]
+    input_height: { type: Number, default: 45 }, // textbox_width (int)  [pixels]
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     dom_id_suffix: { type: String, default: "" }, // TODO (Eli 11/3/20): consider defaulting this to a random UUID if no value supplied
     display_text_message: { type: Boolean, default: true }, // display_text_message (boolean) if set to false would not render invalid_text
@@ -83,8 +83,7 @@ export default {
   data() {
     return {
       input_value: this.initial_value,
-      input_width_background: this.input_width + 4, // This is required as the red/green boxes around the input widget requirement based on feedback introduced the need its not in Mockflow
-      // very essential else the input box would appear poping out on the right side outside the background, request to consult Eli or Raghu
+      input_width_background: this.input_width + 4, // required for the red/green boxes around the input widget
     };
   },
   computed: {
@@ -95,16 +94,18 @@ export default {
       return this.title_label !== "" ? 100 : 60;
     },
     input_widget_top: function () {
-      return this.title_label !== "" ? 40 : 0;
+      const base = this.title_label !== "" ? 40 : 0;
+      return base + this.top_adjust;
     },
     input_feedback_top: function () {
-      return this.title_label !== "" ? 88 : 48;
+      return this.input_height + this.top_adjust + 4 + (this.title_label !== "" ? 40 : 0);
     },
   },
   watch: {
     initial_value() {
-      this.input_value =
-        this.dom_id_suffix.includes("heatmap") && isNaN(this.initial_value) ? "" : this.initial_value;
+      if (this.dom_id_suffix.includes("heatmap") || this.dom_id_suffix.includes("protocol-rest")) {
+        this.input_value = isNaN(this.initial_value) ? "" : this.initial_value;
+      }
       this.$emit("update:value", this.input_value);
     },
     disabled(bool) {
@@ -122,6 +123,7 @@ export default {
 body {
   user-select: none;
 }
+
 .div__input-background {
   transform: rotate(0deg);
   box-sizing: border-box;
@@ -138,6 +140,7 @@ body {
   z-index: 3;
   pointer-events: all;
 }
+
 .span__input-content-label {
   pointer-events: all;
   align: center;
@@ -160,6 +163,7 @@ body {
   text-align: center;
   z-index: 25;
 }
+
 .span__input-controls-content-input-txt-widget {
   padding-left: 0px;
   padding-right: 0px;
@@ -169,8 +173,6 @@ body {
   font-weight: normal;
   transform: translateZ(0px);
   position: absolute;
-  height: 45px;
-  line-height: 45px;
   top: 0px;
   left: 0px;
   user-select: none;
@@ -181,27 +183,30 @@ body {
   color: rgb(255, 255, 255);
   background-color: #2f2f2f;
 }
+
 .div__input-controls-content-widget {
   pointer-events: all;
   transform: rotate(0deg);
   overflow: hidden;
   position: absolute;
-  height: 45px;
   left: 0px;
   visibility: visible;
   z-index: 7;
   background-color: #1c1c1c;
 }
+
 .div__input-controls-content-widget--invalid {
   border-width: thin;
   border-style: solid;
   border-color: #bd3532;
 }
+
 .div__input-controls-content-widget--valid {
   border-width: thin;
   border-style: solid;
   border-color: #19ac8a;
 }
+
 .div__input-controls-content-feedback {
   line-height: 1;
   transform: rotate(0deg);
@@ -224,10 +229,12 @@ body {
   z-index: 17;
   pointer-events: all;
 }
+
 /* Over ride the bootstrap default color for  valid (tick) alert from #28a745 to the one matching the mockflow value #19ac8a */
 .form-control.is-valid {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath fill='%2319ac8a' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
 }
+
 /* Over ride the bootstrap default color for  valid (stop exclamatory) alert from #dc3545 to the one matching the mockflow value #bd3532 */
 .form-control.is-invalid {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23bd3532' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23bd3532' stroke='none'/%3e%3c/svg%3e");

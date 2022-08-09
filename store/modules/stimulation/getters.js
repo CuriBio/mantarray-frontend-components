@@ -1,4 +1,18 @@
 import { generate_random_color } from "@/js_utils/waveform_data_formatter";
+
+// eslint-disable-next-line require-jsdoc
+export function get_default_protocol_editor_state() {
+  return {
+    name: "",
+    stop_setting: "Stimulate Until Stopped",
+    stimulation_type: "C",
+    rest_duration: 0,
+    time_unit: "milliseconds",
+    pulses: [],
+    detailed_pulses: [],
+  };
+}
+
 export default {
   get_protocols({ protocol_list }) {
     return protocol_list;

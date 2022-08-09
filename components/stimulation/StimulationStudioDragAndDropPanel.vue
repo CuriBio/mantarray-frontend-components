@@ -127,7 +127,7 @@ export default {
   data() {
     return {
       icon_types: ["Monophasic", "Biphasic", "Delay"],
-      time_units_array: ["milliseconds", "seconds"],
+      time_units_array: ["milliseconds", "seconds", "minutes", "hours"],
       selected_pulse_settings: {},
       selected_stim_settings: {},
       protocol_order: [],
@@ -167,16 +167,11 @@ export default {
         mutation.type === "stimulation/reset_protocol_editor"
       ) {
         this.protocol_order = [];
-      }
-
-      if (mutation.type === "stimulation/set_edit_mode") {
+      } else if (mutation.type === "stimulation/set_edit_mode") {
         this.protocol_order = JSON.parse(JSON.stringify(this.detailed_pulses));
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
-      }
-      if (mutation.type === "stimulation/set_stop_setting") {
-        this.stop_setting.includes("Complete")
-          ? (this.disable_dropdown = true)
-          : (this.disable_dropdown = false);
+      } else if (mutation.type === "stimulation/set_stop_setting") {
+        this.disable_dropdown = this.stop_setting.includes("Complete");
       }
     });
   },

@@ -162,11 +162,13 @@ describe("InputWidget.vue", () => {
     const input_title_label = wrapper.find(".span__input-content-label");
     expect(input_title_label.attributes("style")).toStrictEqual("width: 390px;");
     const input_bounded_div = wrapper.find(".div__input-controls-content-widget");
-    expect(input_bounded_div.attributes("style")).toStrictEqual("width: 390px; top: 40px;");
+    expect(input_bounded_div.attributes("style")).toStrictEqual("width: 390px; height: 45px; top: 40px;");
     const input_text_entry_span = wrapper.find(".span__input-controls-content-input-txt-widget");
-    expect(input_text_entry_span.attributes("style")).toStrictEqual("width: 390px;");
+    expect(input_text_entry_span.attributes("style")).toStrictEqual(
+      "width: 390px; height: 45px; line-height: 45px;"
+    );
     const input_text_entry_feedback = wrapper.find(".div__input-controls-content-feedback");
-    expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 88px;");
+    expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 89px;");
   });
   test("When the component is mounted, Then the widget width is modified in proption to that of the value set from the props value 'entry_width' in the event of title being empty the height is modified without a hole", async () => {
     const propsData = {
@@ -189,11 +191,13 @@ describe("InputWidget.vue", () => {
     expect(input_title_label.exists()).toBe(false);
 
     const input_bounded_div = wrapper.find(".div__input-controls-content-widget");
-    expect(input_bounded_div.attributes("style")).toStrictEqual("width: 390px; top: 0px;");
+    expect(input_bounded_div.attributes("style")).toStrictEqual("width: 390px; height: 45px; top: 0px;");
     const input_text_entry_span = wrapper.find(".span__input-controls-content-input-txt-widget");
-    expect(input_text_entry_span.attributes("style")).toStrictEqual("width: 390px;");
+    expect(input_text_entry_span.attributes("style")).toStrictEqual(
+      "width: 390px; height: 45px; line-height: 45px;"
+    );
     const input_text_entry_feedback = wrapper.find(".div__input-controls-content-feedback");
-    expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 48px;");
+    expect(input_text_entry_feedback.attributes("style")).toStrictEqual("width: 390px; top: 49px;");
   });
   test("When the component is mounted with the display_text_message prop set to false, Then the invalid_text is not rendered", async () => {
     const propsData = {

@@ -1,5 +1,7 @@
 import { STIM_STATUS } from "./enums";
 
+import { get_default_protocol_editor_state } from "./getters";
+
 export default {
   set_selected_wells(state, wells) {
     state.selected_wells = wells;
@@ -51,16 +53,10 @@ export default {
     if (axis === "y-axis") state.y_axis_scale *= 1.5;
   },
   reset_protocol_editor(state) {
+    // Tanner (8/8/22): could probably use this mutation in reset_state to remove duplicate code
     const replace_state = {
       ...state,
-      protocol_editor: {
-        name: "",
-        stimulation_type: "C",
-        stop_setting: "Stimulate Until Stopped",
-        rest_duration: 0,
-        time_unit: "seconds",
-        pulses: [],
-      },
+      protocol_editor: get_default_protocol_editor_state(),
       x_axis_values: [],
       y_axis_values: [],
       repeat_colors: {},
@@ -76,14 +72,7 @@ export default {
       ...state,
       selected_wells: [],
       protocol_assignments: {},
-      protocol_editor: {
-        name: "",
-        stimulation_type: "C",
-        stop_setting: "Stimulate Until Stopped",
-        rest_duration: 0,
-        time_unit: "seconds",
-        pulses: [],
-      },
+      protocol_editor: get_default_protocol_editor_state(),
       x_axis_values: [],
       y_axis_values: [],
       repeat_colors: {},
@@ -101,8 +90,8 @@ export default {
   set_delay_axis_values(state, delay) {
     const { rest_duration, pulses, time_unit } = state.protocol_editor;
     const delay_conversion = {
-      seconds: 1000,
       milliseconds: 1,
+      seconds: 1000,
       minutes: 60000,
       hours: 3600000,
     };

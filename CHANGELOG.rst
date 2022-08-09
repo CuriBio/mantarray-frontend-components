@@ -1,10 +1,23 @@
 Changelog for Mantarray Frontend Components
 ===========================================
-1.1.1 (2022-08-02)
+
+1.1.1 (unreleased)
 ------------------
-- fixed mean calculation on heatmap well
-- added mean calculation to heatmap well color
-- switched append_metric_data to replace old well data instead of actully appending it to the old data
+
+Added:
+^^^^^^
+- Minutes and hours options for time units in stim studio
+
+Fixed:
+^^^^^^
+- No prevention against subprotocol durations that are too long
+- Mean calculation on heatmap well and well color
+- Bug preventing stim subprotocol blocks to update correctly when switching between stim protocols
+
+Changed:
+^^^^^^^^
+- ``append_metric_data`` now replaces old well data instead of appending it to the old data
+
 
 1.1.0 (2022-08-01)
 ------------------
@@ -20,25 +33,26 @@ Added:
 - Prevention of edits to stimulation settings while either recording or actively stimulating
 - Warning to unplug stim lid before proceeding with a firmware update
 
-Changed
-^^^^^^^
+Changed:
+^^^^^^^^
 - Frequency in pulse settings modal can now be positive non-integers instead of only positive integers
 - Renamed StimulationStudioRepeatDelayModal to StimulationStudioDelayModal
 
-Fixed
-^^^^^
+Fixed:
+^^^^^^
 - Issue with waveform tile overflow in stimulation studio with long protocols
 
-Removed
-^^^^^^^
+Removed:
+^^^^^^^^
 - Prevention from starting or stopping stimulation while recording
 - Repeat feature in stimulation studio in favor of duplicate pulse feature
+
 
 1.0.2 (2022-07-12)
 ------------------
 
-Fixed
-^^^^^
+Fixed:
+^^^^^^
 
 - Issue with final protocol markers not being displayed correctly when stopping stim
 - Issue with scanned Beta 2 barcodes coming from the BE being considered invalid
@@ -47,53 +61,54 @@ Fixed
 1.0.1 (2022-07-11)
 ------------------
 
-Changed
-^^^^^^^
+Added:
+^^^^^^
+- Support for new barcode scheme
 
-- Removed five minute and one minute live view active warnings
+Changed:
+^^^^^^^^
 - Updated recording time limit to 2 minutes from 5 minutes
-- Updated barcode scheme
+
+
+Removed:
+^^^^^^^^
+- Five minute and one minute live view active warnings
+
 
 1.0.0 (2022-06-30)
 ------------------
 
 Added:
 ^^^^^^
-
 - WS handler for h5 corruption error
 - Popup error modal when h5_warning state changes
 
-Changed
-^^^^^^^
-
+Changed:
+^^^^^^^^
 - Error enums will now be shown on ErrorCatchWidget modal instead of in the StatusBar component
 - Minor style changes to status modals
 
-
-Fixed
-^^^^^
-
+Fixed:
+^^^^^^
 - Bug that failed to close firmware modals on system error
 - Bug that prevented default recording name from being used
+
 
 0.7.5 (2022-06-16)
 ------------------
 
 Added:
 ^^^^^^
-
 - Added ability to stop active processes when user selects 'Data Analysis' tab. Modal will appear asking to stop or continue.
 - Data Analysis tab will not be enabled until no processes are running and system is initialized.
 - Added WS handler for incoming error messages
-- Added error enums to store sent through WS
-
+- Added error enums to store sent through websocket
 - Routes:
 
   - POST route to update a recording name
 
-Changed
-^^^^^^^
-
+Changed:
+^^^^^^^^
 - Wells with open-circuit will have white fille color when selected instead of red.
 - RecordingNameInputWidget will pop up after stop recording is selected.
 
@@ -103,9 +118,8 @@ Changed
 0.7.4 (2022-06-15)
 ------------------
 
-Changed
-^^^^^^^
-
+Changed:
+^^^^^^^^
 - Stim QC message handling
 
 
@@ -114,7 +128,6 @@ Changed
 
 Added:
 ^^^^^^
-
 - Handling to treat "error" stim status the same as "short"
 
 
@@ -123,12 +136,10 @@ Added:
 
 Added:
 ^^^^^^
-
 - DataAnalysisCompleteWidget component pops up after completed data analyses with/without failed recordings if any occurred
 
-Changed
-^^^^^^^
-
+Changed:
+^^^^^^^^
 - DataAnalysisWidget will show list recording with creation timestamps
 - Removed CheckBoxWidget from DataAnalysisWidget component
 - DataAnalysisControl component handles own window closure when analysis is active
@@ -139,7 +150,6 @@ Changed
 
 Added:
 ^^^^^^
-
 - RecordingNameInputWidget modal pop up after start recording button pressed
 
 
@@ -148,7 +158,6 @@ Added:
 
 Added:
 ^^^^^^
-
 - Components:
 
   - DataAnalysisControl component
@@ -162,9 +171,8 @@ Added:
 - Websocket handler to receive data analysis statuses
 - Data analysis state enums to handle global analysis state
 
-Changed
-^^^^^^^
-
+Changed:
+^^^^^^^^
 - SettingsForm component
 
 

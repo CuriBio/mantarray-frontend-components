@@ -10,7 +10,7 @@
           :dom_id_suffix="'delay'"
           :invalid_text="invalid_text"
           :input_width="100"
-          :initial_value="current_delay_input !== null ? current_delay_input : ''"
+          :initial_value="current_value !== null ? current_value : ''"
           @update:value="check_validity($event)"
         />
       </span>
@@ -44,9 +44,10 @@
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+import { MAX_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
 
 /**
- * @vue-props {String} current_delay_input - Current input if modal is open for editing
+ * @vue-props {String} current_value - Current input if modal is open for editing
  * @vue-props {String} current_delay_unit - The current unit selected when a delay block is opened to edit
  * @vue-props {String} modal_type - Determines if delay or repeat styling is assigned to modal
  * @vue-props {Boolean} modal_open_for_edit - States if delay modal is open for editing
@@ -90,14 +91,16 @@ export default {
   },
   data() {
     return {
+      current_value: this.current_delay_input,
       input_value: null,
       invalid_text: "Required",
       invalid_err_msg: {
         num_err: "Must be a (+) number",
         required: "Required",
         valid: "",
+        max_duration: "Duration must be <= 24hrs",
       },
-      time_units: ["milliseconds", "seconds"],
+      time_units: ["milliseconds", "seconds", "minutes", "hours"],
       time_unit_idx: 0,
       is_enabled_array: [false, true],
       is_valid: false,
@@ -122,10 +125,10 @@ export default {
     },
   },
   created() {
-    this.input_value = this.current_delay_input;
+    this.input_value = this.current_value;
     this.time_unit_idx = this.time_units.indexOf(this.current_delay_unit);
     this.is_enabled_array = this.modal_open_for_edit ? [true, true, true, true] : [false, true];
-    if (this.current_delay_input !== null) this.check_validity(this.input_value);
+    if (this.current_value !== null) this.check_validity(this.input_value);
   },
   methods: {
     close(idx) {
@@ -162,20 +165,30 @@ export default {
     check_validity(value) {
       const number_regex = new RegExp("^([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
 
-      if (!number_regex.test(value) && value !== "") {
-        this.invalid_text = this.invalid_err_msg.num_err;
-        this.is_valid = false;
-      } else if (value === "") {
+      this.current_value = value;
+
+      if (value === "") {
         this.invalid_text = this.invalid_err_msg.required;
-        this.is_valid = false;
-      } else if (number_regex.test(value) && value !== "") {
+      } else if (!number_regex.test(value)) {
+        this.invalid_text = this.invalid_err_msg.num_err;
+      } else if (this.get_dur_in_ms(value) > MAX_SUBPROTOCOL_DURATION_MS) {
+        this.invalid_text = this.invalid_err_msg.max_duration;
+      } else {
         this.invalid_text = this.invalid_err_msg.valid;
+        // Only want to update input_value here so it is only ever set to a valid value.
+        // This means that if a user enters an invalid value and then presses cancel, the most recent
+        // valid value will be committed to the store instead of the invalid value
         this.input_value = value;
-        this.is_valid = true;
       }
+
+      this.is_valid = this.invalid_text === this.invalid_err_msg.valid;
+    },
+    get_dur_in_ms(value) {
+      return this.time_units[this.time_unit_idx] === "milliseconds" ? value : value * 1000;
     },
     handle_unit_change(idx) {
       this.time_unit_idx = idx;
+      this.check_validity(this.current_value);
     },
   },
 };
