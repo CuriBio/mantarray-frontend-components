@@ -73,9 +73,6 @@ export default {
         .map((_, idx) => twenty_four_well_plate_definition.get_well_name_from_well_index(idx, true));
     },
   },
-  created() {
-    console.log("hi");
-  },
   methods: {
     close_modal: function () {
       this.$emit("close_modal");

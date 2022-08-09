@@ -103,9 +103,9 @@ export default {
   },
   watch: {
     initial_value() {
-      if (this.dom_id_suffix.includes("heatmap") || this.dom_id_suffix.includes("protocol-rest")) {
-        this.input_value = isNaN(this.initial_value) ? "" : this.initial_value;
-      }
+      const special_id_suffix =
+        this.dom_id_suffix.includes("heatmap") || this.dom_id_suffix.includes("protocol-rest");
+      this.input_value = special_id_suffix && isNaN(this.initial_value) ? "" : this.initial_value;
       this.$emit("update:value", this.input_value);
     },
     disabled(bool) {
