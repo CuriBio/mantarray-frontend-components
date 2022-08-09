@@ -85,7 +85,7 @@ describe("Waveform.vue", () => {
     (bool) => {
       wrapper = shallowMount(Waveform, { store, localVue, propsData: { show_labels: bool } });
 
-      expect(wrapper.find(".div__waveform-well-title").exists()).toBe(bool);
+      expect(wrapper.find(".div__waveform-well-title").exists()).toBe(true);
       expect(wrapper.find(".div__waveform-x-axis-title").exists()).toBe(bool);
       expect(wrapper.find(".div__waveform-y-axis-title").exists()).toBe(bool);
     }

@@ -114,19 +114,6 @@ describe("DesktopPlayerControls.vue", () => {
     expect(wrapper.emitted("save_customer_id")).toBeFalsy();
   });
 
-  test("When a user confirms recording name, recording snapshot is true, but false in store and live view is active, Then live view will be stopped automatically", async () => {
-    wrapper = mount(component_to_test, {
-      store,
-      localVue,
-    });
-
-    const store_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
-    store.state.playback.playback_state = playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE;
-    wrapper.find(RecordingNameInputWidget).vm.$emit("handle_confirmation", true);
-
-    expect(store_spy).toHaveBeenCalledWith("playback/stop_live_view");
-  });
-
   test("When a user confirms recording name, recording snapshot is false and false in store, Then live view will not be stopped", async () => {
     wrapper = mount(component_to_test, {
       store,
@@ -310,7 +297,7 @@ describe("DesktopPlayerControls.vue", () => {
 
       test.each([
         ["LIVE_VIEW_ACTIVE", ".svg__playback-desktop-player-controls-live-view-button", "CALIBRATED"],
-        ["RECORDING", ".svg__playback-desktop-player-controls-record-button--active", "CALIBRATED"],
+        ["RECORDING", ".svg__playback-desktop-player-controls-record-button--active", "LIVE_VIEW_ACTIVE"],
         ["NEEDS_CALIBRATION", ".svg__playback-desktop-player-controls-calibrate-button", "CALIBRATING"],
         ["CALIBRATED", ".svg__playback-desktop-player-controls-calibrate-button", "CALIBRATING"],
         ["CALIBRATED", ".svg__playback-desktop-player-controls-live-view-button", "BUFFERING"],
@@ -341,29 +328,6 @@ describe("DesktopPlayerControls.vue", () => {
           });
         }
       );
-      test.each([
-        [true, "CALIBRATED"],
-        [false, "LIVE_VIEW_ACTIVE"],
-      ])(
-        "When stops a recording and the snapshot setting is set to %s, Then playback state will be %s",
-        async (state, playback_state) => {
-          wrapper = mount(component_to_test, {
-            store,
-            localVue,
-          });
-
-          await store.commit("settings/set_recording_snapshot_state", state);
-          await store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.RECORDING);
-
-          // stop recording
-          await wrapper.find(".svg__playback-desktop-player-controls-record-button--active").trigger("click");
-          await wait_for_expect(() => {
-            expect(store.state.playback.playback_state).toBe(
-              playback_module.ENUMS.PLAYBACK_STATES[playback_state]
-            );
-          });
-        }
-      );
 
       test("Given Vuex in playback state RECORDING, When stop recording button is clicked and recording name is confirmed, Then Vuex transitions playback state to LIVE_VIEW_ACTIVE", async () => {
         const propsData = {};
@@ -376,13 +340,16 @@ describe("DesktopPlayerControls.vue", () => {
         await store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]);
         await wrapper.vm.$nextTick(); // wait for update
 
-        // start recording
-        const record_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--active");
-        await record_button.trigger("click");
+        // stop recording
+        const stop_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--active");
+        await stop_button.trigger("click");
         await wrapper.findAll(".span__button_label").at(8).trigger("click");
-        expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["CALIBRATED"]);
+        expect(store.state.playback.playback_state).toBe(
+          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
+        );
       });
     });
+
     test("When a user starts a recording and doesn't manually stop it within 2 minutes, Then a recording will get stopped regardless at that time point", async () => {
       jest.useFakeTimers();
       wrapper = mount(component_to_test, {
@@ -401,7 +368,9 @@ describe("DesktopPlayerControls.vue", () => {
 
       jest.advanceTimersByTime(2 * 60e3);
       await wait_for_expect(() => {
-        expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["CALIBRATED"]);
+        expect(store.state.playback.playback_state).toBe(
+          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
+        );
       });
     });
     test.each([

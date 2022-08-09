@@ -29,7 +29,7 @@ describe("RecordingNameInputWidget.vue", () => {
   afterEach(() => wrapper.destroy());
 
   test("When RecordingNameInputWidget is mounted, Then the correct labels will be rendered", () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: true, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -42,7 +42,7 @@ describe("RecordingNameInputWidget.vue", () => {
     expect(wrapper.find("#input-widget-feedback-recording-name").text()).toStrictEqual("");
   });
   test("When input field is empty, Then the error message with say 'Please enter a name'", async () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: true, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -60,7 +60,7 @@ describe("RecordingNameInputWidget.vue", () => {
     expect(error_msg.text()).toStrictEqual("");
   });
   test("When an error message is present, Then a user will not be able to confirm the new name", async () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: true, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -85,11 +85,11 @@ describe("RecordingNameInputWidget.vue", () => {
 
     await button_widget.trigger("click");
     expect(wrapper.vm.is_enabled).toBe(true);
-    expect(action_spy).toHaveBeenCalledTimes(1);
+    expect(action_spy).toHaveBeenCalledTimes(2);
   });
 
   test("When a 403 status code gets returned when checking if name already exists, Then new warning will pop up asking user to confirm", async () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: true, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -109,7 +109,7 @@ describe("RecordingNameInputWidget.vue", () => {
     });
   });
   test("When a 200 status code gets returned when checking if name already exists, Then handle_confirmation is emitted to close modal", async () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: true, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -128,7 +128,7 @@ describe("RecordingNameInputWidget.vue", () => {
   });
 
   test("When component mounts, Then the recording snapshot toggle will be switched to what has been stored globally", async () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: true, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -142,7 +142,7 @@ describe("RecordingNameInputWidget.vue", () => {
   });
 
   test("When user toggles the recording snapshot switch, Then the value will be emitted to parent with handle_confirmation", async () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: true, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -161,7 +161,7 @@ describe("RecordingNameInputWidget.vue", () => {
     expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[false]]);
   });
   test("When a user choses an existing recording name and  wants to select a new name instead of overriding, Then warning modal will close and show error message for existing name", async () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: true, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -186,7 +186,7 @@ describe("RecordingNameInputWidget.vue", () => {
   });
 
   test("When a user choses an existing recording name and confirms to override existing recording, Then warning modal will close and emit closure to parent component", async () => {
-    const propsData = { default_recording_name: "test_recording_name" };
+    const propsData = { default_recording_snapshot: false, default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
       store,
@@ -206,6 +206,6 @@ describe("RecordingNameInputWidget.vue", () => {
     });
 
     await button_widget.at(2).trigger("click");
-    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[true]]);
+    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[false]]);
   });
 });
