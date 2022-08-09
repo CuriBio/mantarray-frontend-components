@@ -59,8 +59,8 @@ import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import Vue from "vue";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 import ToggleWidget from "@/components/basic_widgets/ToggleWidget.vue";
-import { BModal } from "bootstrap-vue";
 import { mapState } from "vuex";
+import { BModal } from "bootstrap-vue";
 Vue.component("BModal", BModal);
 
 export default {
@@ -77,6 +77,7 @@ export default {
       },
     },
     default_recording_name: { type: String, default: "" },
+    default_recording_snapshot: { type: Boolean, required: true },
   },
   data: function () {
     return {
@@ -88,7 +89,7 @@ export default {
         msg_two: "Would you like to replace the existing recording with this one?",
         button_names: ["Cancel", "Yes"],
       },
-      recording_snapshot_state: true,
+      recording_snapshot_state: this.default_recording_snapshot,
     };
   },
   computed: {
@@ -96,9 +97,6 @@ export default {
     is_enabled: function () {
       return !this.error_message;
     },
-  },
-  created() {
-    this.recording_snapshot_state = this.recording_snapshot;
   },
   methods: {
     check_recording_name: function (recording_name) {
@@ -109,15 +107,20 @@ export default {
     },
     handle_click: async function () {
       if (this.is_enabled) {
+        if (this.recording_snapshot_state) this.$store.dispatch("playback/stop_live_view");
+
         const res = await this.$store.dispatch("playback/handle_recording_name", {
           recording_name: this.recording_name,
           default_name: this.default_recording_name,
           replace_existing: this.recording_name === this.default_recording_name,
           snapshot_enabled: this.recording_snapshot_state,
         });
-        res === 403
-          ? this.$bvModal.show("existing-recording-warning")
-          : this.$emit("handle_confirmation", this.recording_snapshot_state);
+
+        if (res === 403) this.$bvModal.show("existing-recording-warning");
+        else {
+          this.$emit("handle_confirmation", this.recording_snapshot_state);
+          this.recording_snapshot_state = this.recording_snapshot;
+        }
       }
     },
     close_warning_modal: async function (idx) {
@@ -131,6 +134,7 @@ export default {
           snapshot_enabled: this.recording_snapshot_state,
         });
         this.$emit("handle_confirmation", this.recording_snapshot_state);
+        this.recording_snapshot_state = this.recording_snapshot;
       } else this.error_message = "Name already exists";
     },
     handle_toggle_state: function (state) {

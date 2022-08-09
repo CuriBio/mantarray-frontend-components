@@ -2,8 +2,8 @@
   <div class="div__recording-check-background">
     <div class="div__recording-check-header">Recording Snapshot</div>
     <div class="div__recording-check-message">
-      Here is a quick look at this recording. <br />If it looks different from live view or high level of
-      noise is present in the data, please recalibrate and record the data, again.
+      Here is a quick look at this recording. If the snapshot looks abnormal compared to expected contraction
+      waveforms, please recalibrate and record the data again.
     </div>
     <div v-if="recording_snapshot_data.length === 24" class="div__scrollable-container">
       <div class="div__waveform-grid">
@@ -38,7 +38,7 @@
       :button_names="['Close']"
       :button_widget_width="1900"
       :button_widget_height="60"
-      :button_widget_top="900"
+      :button_widget_top="840"
       :hover_color="['#bd4932', '#19ac8a']"
       @btn-click="close_modal"
     />
@@ -73,6 +73,9 @@ export default {
         .map((_, idx) => twenty_four_well_plate_definition.get_well_name_from_well_index(idx, true));
     },
   },
+  created() {
+    console.log("hi");
+  },
   methods: {
     close_modal: function () {
       this.$emit("close_modal");
@@ -86,8 +89,9 @@ export default {
 .div__recording-check-background {
   pointer-events: all;
   position: absolute;
-  top: 0;
-  height: 900px;
+  top: -5px;
+  height: 850px;
+  left: -385px;
   width: 1900px;
   border-color: #000000;
   background: rgb(17, 17, 17);
@@ -122,7 +126,7 @@ export default {
 .div__scrollable-container {
   position: relative;
   width: 1800px;
-  height: 720px;
+  height: 680px;
   overflow-y: scroll;
   background: black;
   left: 20px;
@@ -145,8 +149,8 @@ export default {
   pointer-events: all;
   position: absolute;
   width: 2px;
-  height: 330px;
-  top: 546px;
+  height: 281px;
+  top: 541px;
   left: 36px;
   background-color: rgb(255, 255, 255);
 }
@@ -156,7 +160,7 @@ export default {
   font-size: 16px;
   position: absolute;
   color: rgb(255, 255, 255);
-  top: 865px;
+  top: 809px;
   overflow: hidden;
 }
 

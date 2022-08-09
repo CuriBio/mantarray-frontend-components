@@ -44,7 +44,6 @@ export default function create_web_socket_plugin(socket) {
         force: [[array of 24 arrays of force data for each well] * 24]
        }
       */
-      console.log("DATA: ", data_json);
       store.dispatch("data/format_recording_snapshot_data", JSON.parse(data_json));
 
       /* istanbul ignore else */

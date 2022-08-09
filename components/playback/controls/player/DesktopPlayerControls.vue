@@ -6,6 +6,7 @@
       v-b-popover.hover.bottomright="settings_tooltip_text"
       :title="settings_title"
       class="div__playback-desktop-player-controls-settings-button svg__playback-desktop-player-controls-button"
+      @click="$bvModal.show('settings-form')"
     >
       <PlayerControlsSettingsButton /><!-- original mockflow ID: id="cmpD237ca46010539bffd0dce8076a207641"-->
     </div>
@@ -217,6 +218,7 @@
       <RecordingNameInputWidget
         id="recording-name-input-prompt"
         :default_recording_name="default_recording_name"
+        :default_recording_snapshot="recording_snapshot"
         @handle_confirmation="close_recording_name_input"
       />
     </b-modal>
@@ -545,10 +547,6 @@ export default {
       this.$store.dispatch("playback/stop_recording");
       this.$bvModal.show("recording-name-input-prompt-message");
 
-      if (this.recording_snapshot) {
-        this.$store.dispatch("playback/stop_live_view");
-      }
-
       if (this.auto_upload) {
         this.$store.commit("settings/set_total_file_count");
       }
@@ -599,10 +597,6 @@ export default {
 
       if (temp_snapshot_state) {
         this.$bvModal.show("analysis-in-progress-modal");
-        // if new state enables snapshot against a false  global state, then stop live view
-        if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
-          this.$store.dispatch("playback/stop_live_view");
-        }
       }
     },
   },
@@ -785,6 +779,13 @@ export default {
   position: fixed;
   margin: 5% auto;
   top: 15%;
+  left: 0;
+  right: 0;
+}
+#recording-check {
+  position: fixed;
+  margin: 0%;
+  top: 0%;
   left: 0;
   right: 0;
 }

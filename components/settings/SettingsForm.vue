@@ -109,7 +109,7 @@
       <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_txt -->
       <ToggleWidget
         id="recording_snapshot_switch"
-        :checked_state="recording_snapshot"
+        :checked_state="recording_snapshot_state"
         :label="'recording_snapshot'"
         @handle_toggle_state="handle_toggle_state"
       />
@@ -215,11 +215,16 @@ export default {
       auto_upload: false,
       auto_delete: false,
       disable_toggle: false,
-      recording_snapshot: true,
+      recording_snapshot_state: true,
     };
   },
   computed: {
-    ...mapState("settings", ["user_accounts", "active_user_index", "stored_customer_id"]),
+    ...mapState("settings", [
+      "user_accounts",
+      "active_user_index",
+      "stored_customer_id",
+      "recording_snapshot",
+    ]),
     get_user_names: function () {
       return this.user_accounts.map((user_account) => user_account.user_name);
     },
@@ -240,6 +245,7 @@ export default {
       this.user_focus_idx = this.active_user_index;
       this.disable_edit_user = false;
       this.user_found = true;
+      this.recording_snapshot_state = this.recording_snapshot;
     }
   },
   methods: {
@@ -248,7 +254,7 @@ export default {
         this.$store.commit("settings/set_active_user_index", this.user_focus_idx);
         this.$store.commit("settings/set_auto_upload", this.auto_upload);
         this.$store.commit("settings/set_auto_delete", this.auto_delete);
-        this.$store.commit("settings/set_recording_snapshot_state", this.recording_snapshot);
+        this.$store.commit("settings/set_recording_snapshot_state", this.recording_snapshot_state);
 
         const { status } = await this.$store.dispatch("settings/update_settings");
 
@@ -267,7 +273,7 @@ export default {
       this.entrykey_user = "";
       this.auto_delete = false;
       this.auto_upload = false;
-      this.recording_snapshot = true;
+      this.recording_snapshot_state = true;
 
       this.$store.commit("settings/reset_to_default");
     },
