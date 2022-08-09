@@ -218,7 +218,6 @@
       <RecordingNameInputWidget
         id="recording-name-input-prompt"
         :default_recording_name="default_recording_name"
-        :default_recording_snapshot="recording_snapshot"
         @handle_confirmation="close_recording_name_input"
       />
     </b-modal>
@@ -545,7 +544,6 @@ export default {
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
       this.$store.dispatch("playback/stop_recording");
-      console.log("HERE", this.recording_snapshot);
       this.$bvModal.show("recording-name-input-prompt-message");
 
       if (this.auto_upload) {
