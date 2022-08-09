@@ -17,3 +17,5 @@ export const STIM_STATUS = {
   SHORT_CIRCUIT_ERROR: "Short Circuit Error",
   ERROR: "Error Occurred",
 };
+
+export const MAX_SUBPROTOCOL_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours

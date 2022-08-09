@@ -1,5 +1,5 @@
 import mutations from "./mutations";
-import getters from "./getters";
+import { default as getters, get_default_protocol_editor_state } from "./getters";
 import actions from "./actions";
 import { STIM_STATUS } from "./enums";
 
@@ -7,15 +7,7 @@ const state = () => ({
   selected_wells: [],
   protocol_list: [{ letter: "", color: "", label: "Create New" }],
   protocol_assignments: {},
-  protocol_editor: {
-    name: "",
-    stop_setting: "Stimulate Until Stopped",
-    stimulation_type: "C",
-    rest_duration: 0,
-    time_unit: "milliseconds",
-    pulses: [],
-    detailed_pulses: [],
-  },
+  protocol_editor: get_default_protocol_editor_state(),
   current_assignment: { letter: "", color: "" },
   x_axis_values: [],
   y_axis_values: [],

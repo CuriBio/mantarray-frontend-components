@@ -347,7 +347,7 @@ export default {
         pulse_frequency: "",
         total_active_duration: "",
       },
-      time_units: ["milliseconds", "seconds", "minutes"],
+      time_units: ["milliseconds", "seconds", "minutes", "hours"],
       regex: {
         charge: new RegExp("^-?([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$"),
         duration: new RegExp("^[0-9][0-9]*d*$"),

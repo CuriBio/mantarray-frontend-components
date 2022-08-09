@@ -245,21 +245,20 @@ export default {
       this.user_focus_idx = this.active_user_index;
       this.disable_edit_user = false;
       this.user_found = true;
-      this.recording_snapshot_state = this.recording_snapshot;
     }
   },
   methods: {
     async save_changes() {
       if (this.user_found) {
         this.$store.commit("settings/set_active_user_index", this.user_focus_idx);
-        this.$store.commit("settings/set_auto_upload", this.auto_upload);
-        this.$store.commit("settings/set_auto_delete", this.auto_delete);
-        this.$store.commit("settings/set_recording_snapshot_state", this.recording_snapshot_state);
-
         const { status } = await this.$store.dispatch("settings/update_settings");
 
         // Currently, error-handling by resetting inputs to force user to try again if axios request fails
         if (status === 200) {
+          this.$store.commit("settings/set_auto_upload", this.auto_upload);
+          this.$store.commit("settings/set_auto_delete", this.auto_delete);
+          this.$store.commit("settings/set_recording_snapshot_state", this.recording_snapshot_state);
+
           this.$emit("close_modal", true);
         } else if (status == 401) {
           this.open_for_invalid_creds = true;

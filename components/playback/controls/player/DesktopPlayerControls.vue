@@ -545,6 +545,7 @@ export default {
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
       this.$store.dispatch("playback/stop_recording");
+      console.log("HERE", this.recording_snapshot);
       this.$bvModal.show("recording-name-input-prompt-message");
 
       if (this.auto_upload) {
