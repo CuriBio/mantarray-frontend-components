@@ -76,7 +76,7 @@ export default {
 }
 
 input:checked + .slider {
-  background-color: #a7a8a9;
+  background-color: #00c465;
 }
 
 input:focus + .slider {

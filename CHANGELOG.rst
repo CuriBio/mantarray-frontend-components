@@ -1,6 +1,13 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.1.2 (2022-18-08)
+------------------
+
+Changed
+^^^^^^^
+- Changed Toggle switch background to green when enabled
+
 1.1.1 (2022-10-08)
 ------------------
 
@@ -11,9 +18,9 @@ Added:
 
 Changed
 ^^^^^^^
-- fixed mean calculation on heatmap well
-- added mean calculation to heatmap well color
-- switched append_metric_data to replace old well data instead of actully appending it to the old data
+- Fixed mean calculation on heatmap well
+- Added mean calculation to heatmap well color
+- Switched append_metric_data to replace old well data instead of actully appending it to the old data
 - Minutes and hours options for time units in stim studio
 - ``append_metric_data`` now replaces old well data instead of appending it to the old data
 
