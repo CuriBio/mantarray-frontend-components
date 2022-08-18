@@ -224,12 +224,14 @@ export default {
         const { stimulation_type, pulses, stop_setting, detailed_pulses } = protocol_assignments[
           well
         ].protocol;
+
         const { letter } = protocol_assignments[well];
 
         const fill_color_payload = {
           stim_fill_colors: detailed_pulses.map((pulse) => pulse.repeat.color),
           well,
         };
+
         this.commit("data/set_fill_colors", fill_color_payload);
         // add protocol to list of unique protocols if it has not been entered yet
         if (!unique_protocol_ids.has(letter)) {
@@ -252,6 +254,7 @@ export default {
             run_until_stopped: stop_setting.includes("Stopped"),
             subprotocols: converted_pulses,
           };
+
           message.protocols.push(protocol_model);
         }
         // asign letter to well number
