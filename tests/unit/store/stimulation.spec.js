@@ -15,6 +15,117 @@ describe("store/stimulation", () => {
     UNSELECTED: [false, true, false, false, false],
   };
 
+  const test_stim_json = JSON.stringify({
+    protocols: [
+      {
+        color: "hsla(51, 90%, 40%, 1)",
+        letter: "A",
+        label: "",
+        protocol: {
+          name: "test_proto_1",
+          stop_setting: "Stimulate Until Stopped",
+          stimulation_type: "C",
+          rest_duration: 0,
+          time_unit: "milliseconds",
+          pulses: [
+            {
+              phase_one_duration: 333,
+              phase_one_charge: 0,
+              interphase_interval: 0,
+              phase_two_duration: 0,
+              phase_two_charge: 0,
+              repeat_delay_interval: 0,
+              total_active_duration: 333,
+            },
+          ],
+          detailed_pulses: [
+            {
+              type: "Delay",
+              repeat: { color: "hsla(69, 92%, 45%, 1)", number_of_repeats: 1 },
+              pulse_settings: {
+                phase_one_duration: 333,
+                phase_one_charge: 0,
+                interphase_interval: 0,
+                phase_two_duration: 0,
+                phase_two_charge: 0,
+              },
+              stim_settings: {
+                repeat_delay_interval: 0,
+                total_active_duration: { duration: 333, unit: "milliseconds" },
+              },
+            },
+          ],
+        },
+      },
+      {
+        color: "hsla(334, 95%, 53%, 1)",
+        letter: "B",
+        label: "",
+        protocol: {
+          name: "test_proto_2",
+          stop_setting: "Stimulate Until Stopped",
+          stimulation_type: "C",
+          rest_duration: 0,
+          time_unit: "milliseconds",
+          pulses: [
+            {
+              phase_one_duration: 333,
+              phase_one_charge: 0,
+              interphase_interval: 0,
+              phase_two_duration: 0,
+              phase_two_charge: 0,
+              repeat_delay_interval: 0,
+              total_active_duration: 333,
+            },
+          ],
+          detailed_pulses: [
+            {
+              type: "Delay",
+              repeat: { color: "hsla(69, 92%, 45%, 1)", number_of_repeats: 1 },
+              pulse_settings: {
+                phase_one_duration: 333,
+                phase_one_charge: 0,
+                interphase_interval: 0,
+                phase_two_duration: 0,
+                phase_two_charge: 0,
+              },
+              stim_settings: {
+                repeat_delay_interval: 0,
+                total_active_duration: { duration: 333, unit: "milliseconds" },
+              },
+            },
+          ],
+        },
+      },
+    ],
+    protocol_assignments: {
+      A1: null,
+      B1: null,
+      C1: null,
+      D1: null,
+      A2: null,
+      B2: null,
+      C2: null,
+      D2: null,
+      A3: null,
+      B3: null,
+      C3: null,
+      D3: null,
+      A4: "B",
+      B4: "B",
+      C4: "B",
+      D4: "B",
+      A5: "A",
+      B5: "A",
+      C5: "A",
+      D5: "A",
+      A6: null,
+      B6: null,
+      C6: null,
+      D6: null,
+    },
+  });
+
   const test_protocol_order = [
     {
       type: "Biphasic",
@@ -309,7 +420,7 @@ describe("store/stimulation", () => {
         readAsText: jest.fn(),
         onload: jest.fn(),
         onerror: jest.fn(),
-        result: JSON.stringify({ name: "TEST" }),
+        result: test_stim_json,
       };
       jest.spyOn(global, "FileReader").mockImplementation(() => reader);
       await store.dispatch("stimulation/handle_import_protocol", file);
@@ -321,26 +432,26 @@ describe("store/stimulation", () => {
     test("When a user clicks to export current protocol, Then json document will be downloaded locally", async () => {
       window.webkitURL.createObjectURL = function () {};
       const mock_create_element = jest.spyOn(document, "createElement");
+
       await store.dispatch("stimulation/handle_export_protocol");
       expect(mock_create_element).toHaveBeenCalledTimes(1);
       expect(mock_create_element).toHaveBeenCalledWith("a");
 
       window.URL.createObjectURL = function () {};
       window.webkitURL = null;
+
       await store.dispatch("stimulation/handle_export_protocol");
       expect(mock_create_element).toHaveBeenCalledTimes(2);
     });
 
     test("When protocol file has been read, Then it will be given a new color/letter assignment and added to protocol list in state", async () => {
-      const test_protocol = { name: "mock_name" };
-      const test_letter = "B";
-
-      await store.dispatch("stimulation/add_imported_protocol", test_protocol);
+      const parsed_stim_data = JSON.parse(test_stim_json);
+      await store.dispatch("stimulation/add_imported_protocol", parsed_stim_data);
 
       const expected_name = store.state.stimulation.protocol_list[2].label;
       const expected_letter = store.state.stimulation.protocol_list[2].letter;
-      expect(expected_name).toBe(test_protocol.name);
-      expect(expected_letter).toBe(test_letter);
+      expect(expected_name).toBe(parsed_stim_data.protocols[0].protocol.name);
+      expect(expected_letter).toBe("B"); // imported letter assignments won't be used, will always be next in line
     });
 
     test("When a user selects wells with a protocol applied, Then the selected wells should be cleared of any protocol assignments with specified protocol", async () => {

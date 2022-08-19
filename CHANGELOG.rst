@@ -1,14 +1,23 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.1.2 (2022-18-08)
+1.1.3 (2022-08-19)
+------------------
+
+Changed
+^^^^^^^
+- Exported stim data contains all protocol settings and well assignments
+- Can import multiple protocols with one json file with new export functionality
+
+
+1.1.2 (2022-08-18)
 ------------------
 
 Changed
 ^^^^^^^
 - Changed Toggle switch background to green when enabled
 
-1.1.1 (2022-10-08)
+1.1.1 (2022-08-10)
 ------------------
 
 Added:

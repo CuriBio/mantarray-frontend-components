@@ -73,8 +73,8 @@ export default {
         "Clear Selection": " left: 51%; top: 49%; ",
       },
       import_export_btn_labels: {
-        "Import Protocol": " left: 19%; top: 76%; width: 30%;",
-        "Export Protocol": " left: 51%; top: 76%; width: 30%;",
+        "Import Protocol(s)": " left: 19%; top: 76%; width: 30%;",
+        "Export Protocol(s)": " left: 51%; top: 76%; width: 30%;",
       },
       selected_protocol_idx: 0,
       input_height: 45,
