@@ -1,6 +1,15 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.1.3 (unreleased)
+------------------
+
+Changed
+^^^^^^^
+- Exported stim data contains all protocol settings and well assignments
+- Can import multiple protocols with one json file with new export functionality
+
+
 1.1.2 (2022-18-08)
 ------------------
 
