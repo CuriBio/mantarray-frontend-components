@@ -139,11 +139,35 @@ export default {
   },
 
   async handle_export_protocol({ state }) {
-    const { protocol_editor } = state;
-    const text_to_write = JSON.stringify(protocol_editor);
-    const text_file_blob = new Blob([text_to_write], { type: "application/json" });
-    const file_name_to_save = protocol_editor.name;
+    const { protocol_assignments, protocol_list } = state;
 
+    const protocol_copy = JSON.parse(JSON.stringify(protocol_list));
+    const message = { protocols: protocol_copy.slice(1), protocol_assignments: {} };
+
+    for (const well_idx of Array(24).keys()) {
+      const letter = protocol_assignments[well_idx] ? protocol_assignments[well_idx].letter : null;
+
+      // asign letter to well number
+      const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well_idx, false);
+      message.protocol_assignments[well_number] = letter;
+    }
+
+    const text_to_write = JSON.stringify(message);
+    const text_file_blob = new Blob([text_to_write], { type: "application/json" });
+    // get new file name of datetime
+    const current_date = new Date();
+    const datetime =
+      current_date.getFullYear() +
+      "_" +
+      (current_date.getMonth() + 1) +
+      "_" +
+      current_date.getDate() +
+      "__" +
+      current_date.getHours() +
+      current_date.getMinutes() +
+      current_date.getSeconds();
+
+    const file_name_to_save = "stim_settings__" + datetime;
     const download_link = document.createElement("a");
     download_link.download = file_name_to_save;
     download_link.innerHTML = "Download File";
@@ -160,17 +184,18 @@ export default {
     download_link.remove();
   },
 
-  async add_imported_protocol({ commit, getters }, protocol) {
+  async add_imported_protocol({ commit, dispatch, getters }, { protocols }) {
     await commit("set_edit_mode_off");
 
-    const assignment = await getters["get_next_protocol"];
-    const { color, letter } = assignment;
-    const imported_protocol = { color, letter, label: protocol.name, protocol };
+    for (const { protocol } of protocols) {
+      const assignment = await getters["get_next_protocol"];
+      const { color, letter } = assignment;
+      const imported_protocol = { color, letter, label: protocol.name, protocol };
 
-    await commit("set_edit_mode", { label: protocol.name, letter });
-    commit("set_imported_protocol", imported_protocol);
+      await commit("set_imported_protocol", imported_protocol);
+    }
+    await dispatch("edit_selected_protocol", protocols[protocols.length - 1]);
   },
-
   async add_saved_protocol({ commit, state, dispatch }) {
     const { protocol_editor, edit_mode, protocol_list } = state;
     const { letter, color } = state.current_assignment;

@@ -211,7 +211,7 @@ export default {
       } else if (mutation.type === "stimulation/set_edit_mode") {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
-        this.rest_duration = this.get_rest_duration;
+        this.rest_duration = JSON.stringify(this.get_rest_duration);
         this.stimulation_type_idx = +(this.stimulation_type === "V");
 
         const stim_until_complete = this.stop_setting === "Stimulate Until Complete";
