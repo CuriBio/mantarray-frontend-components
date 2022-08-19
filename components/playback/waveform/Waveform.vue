@@ -426,7 +426,7 @@ export default {
 }
 
 .div__waveform-graph {
-  overflow: visible;
+  overflow: hidden;
   user-select: none;
   position: relative;
   left: 14px;
