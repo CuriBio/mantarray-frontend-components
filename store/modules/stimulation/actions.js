@@ -3,7 +3,7 @@ const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 import { call_axios_post_from_vuex } from "../../../js_utils/axios_helpers";
 import { STIM_STATUS } from "./enums";
 
-const time_conversion = {
+const TIME_CONVERSION = {
   milliseconds: 1,
   seconds: 1000,
   minutes: 60000,
@@ -66,7 +66,7 @@ export default {
 
       const starting_repeat_idx = x_values.length - 1;
       const converted_total_active =
-        total_active_duration.duration * time_conversion[total_active_duration.unit];
+        total_active_duration.duration * TIME_CONVERSION[total_active_duration.unit];
 
       setting = {
         ...setting,
@@ -98,7 +98,7 @@ export default {
     let delay_block;
 
     if (rest_duration !== 0) {
-      const converted_delay = rest_duration * time_conversion[time_unit];
+      const converted_delay = rest_duration * TIME_CONVERSION[time_unit];
       const last_x_value = x_values[x_values.length - 1];
       const next_x_value = last_x_value + converted_delay;
       delay_block = [last_x_value, next_x_value];
