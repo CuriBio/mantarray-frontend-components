@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.1.4 (2022-08-19)
+------------------
+
+Fixed
+^^^^^^^
+- Fixed stim protocol marker overflow in live view
+
+
 1.1.3 (2022-08-19)
 ------------------
 
