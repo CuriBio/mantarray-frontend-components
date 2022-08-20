@@ -393,10 +393,10 @@ describe("Waveform.vue", () => {
       expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(10);
 
       this_blocker_node = blocker_node.find("#margin_blocker_bottom");
-      expect(parseInt(this_blocker_node.attributes("x"))).toStrictEqual(0);
+      expect(parseInt(this_blocker_node.attributes("x"))).toStrictEqual(-10);
       expect(parseInt(this_blocker_node.attributes("y"))).toStrictEqual(360);
-      expect(parseInt(this_blocker_node.attributes("width"))).toStrictEqual(371);
-      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(30);
+      expect(parseInt(this_blocker_node.attributes("width"))).toStrictEqual(420);
+      expect(parseInt(this_blocker_node.attributes("height"))).toStrictEqual(40);
     });
 
     test("When component is mounted, Then the line is drawn based on the initial props", async () => {
