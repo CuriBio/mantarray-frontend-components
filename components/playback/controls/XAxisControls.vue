@@ -165,6 +165,8 @@ export default {
   background-color: #1c1c1c;
   position: absolute;
   text-align: center;
+  overflow: hidden;
+  z-index: 5;
 }
 .div__playback-x-axis-controls-elements {
   height: 45px;

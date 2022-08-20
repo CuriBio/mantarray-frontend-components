@@ -201,11 +201,12 @@ export default {
     margin_blockers_node
       .append("rect")
       .attr("id", "margin_blocker_bottom")
-      .attr("x", 0)
+      .attr("x", -10)
       .attr("y", this.plot_area_pixel_height)
-      .attr("width", this.plot_area_pixel_width + 1)
-      .attr("height", margin.bottom)
-      .attr("fill", blocker_color);
+      .attr("width", this.plot_area_pixel_width + 50)
+      .attr("height", 40)
+      .attr("fill", blocker_color)
+      .attr("style", "overflow: visible");
 
     this.x_axis_node = the_svg
       .append("g")
@@ -434,7 +435,6 @@ export default {
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
   margin-bottom: 5px;
-  /* height: 400px; */
 }
 
 .g__waveform-x-axis {
