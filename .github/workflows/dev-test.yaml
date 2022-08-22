@@ -74,7 +74,7 @@ jobs:
           chromedriver --version
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.8
         env:
           cache-name: cache-node-modules
         with:
@@ -84,7 +84,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
 
       - name: Cache Python modules # needed for pre-commit
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.8
         env:
           cache-name: cache-python-modules
         with:
@@ -94,7 +94,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-
 
       - name: Cache Pre-commit hooks
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.8
         env:
           cache-name: cache-pre-commit-hooks
         if: matrix.IS_FASTEST_JOB == true
