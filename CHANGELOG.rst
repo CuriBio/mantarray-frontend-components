@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.1.5 (Unreleased)
+------------------
+
+Changed
+^^^^^^^
+- Location of wells in recording snapshot are the same as location on plate
+
+
 1.1.4 (2022-08-19)
 ------------------
 
