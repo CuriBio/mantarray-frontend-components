@@ -10,7 +10,7 @@
         <div
           v-for="well_idx in Array(24).keys()"
           :key="well_idx"
-          :style="`grid-area: ${well_idx / 6} / ${well_idx % 7}`"
+          :style="`grid-area: ${well_names[well_idx]}`"
         >
           <Waveform
             :tissue_data_points="recording_snapshot_data[well_idx]"
@@ -119,6 +119,11 @@ export default {
   grid-template-columns: repeat(6, 200);
   grid-template-rows: repeat(4, 80);
   background: black;
+  grid-template-areas:
+    "A01 A02 A03 A04 A05 A06"
+    "B01 B02 B03 B04 B05 B06"
+    "C01 C02 C03 C04 C05 C06"
+    "D01 D02 D03 D04 D05 D06";
 }
 .div__scrollable-container {
   position: relative;
