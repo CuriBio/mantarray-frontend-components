@@ -5,29 +5,32 @@ Changelog for Mantarray Frontend Components
 1.2.0 (unreleased)
 ------------------
 
+Fixed:
+^^^^^^
+- Recording snapshot no longer available in Beta 1 mode
 
 
 1.1.5 (2022-09-08)
 ------------------
 
-Changed
-^^^^^^^
+Changed:
+^^^^^^^^
 - Location of wells in recording snapshot are the same as location on plate
 
 
 1.1.4 (2022-08-19)
 ------------------
 
-Fixed
-^^^^^^^
+Fixed:
+^^^^^^
 - Fixed stim protocol marker overflow in live view
 
 
 1.1.3 (2022-08-19)
 ------------------
 
-Changed
-^^^^^^^
+Changed:
+^^^^^^^^
 - Exported stim data contains all protocol settings and well assignments
 - Can import multiple protocols with one json file with new export functionality
 
@@ -35,8 +38,8 @@ Changed
 1.1.2 (2022-08-18)
 ------------------
 
-Changed
-^^^^^^^
+Changed:
+^^^^^^^^
 - Changed Toggle switch background to green when enabled
 
 1.1.1 (2022-08-10)
@@ -47,8 +50,8 @@ Added:
 - Toggle switch to Settings Form for disabling recording snapshot feature globally
 - Toggle switch to RecordingNameInputWidget for disabling recording snapshot feature for single recording
 
-Changed
-^^^^^^^
+Changed:
+^^^^^^^^
 - Fixed mean calculation on heatmap well
 - Added mean calculation to heatmap well color
 - Switched append_metric_data to replace old well data instead of actully appending it to the old data
