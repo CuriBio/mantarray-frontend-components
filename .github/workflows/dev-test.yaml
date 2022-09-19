@@ -8,7 +8,6 @@ on:
   push:
     branches:
       - main
-      - development
   pull_request:
 
 jobs:
@@ -17,11 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "ubuntu-18.04"
-          - "ubuntu-20.04"
-          - "windows-2019"
+          - "ubuntu-22.04"
+          - "windows-2022"
         node-version:
-          - 14
+          - 16
         e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
           - "tests/e2e/playback"
           - "tests/e2e/status"
@@ -34,8 +32,8 @@ jobs:
 
         include:
           # only enable coverage on the fastest job
-          - os: "ubuntu-20.04"
-            node-version: "14"
+          - os: "ubuntu-22.04"
+            node-version: "16"
             e2e-tests: "tests/e2e/status"
             IS_FASTEST_JOB: true
           - e2e-tests: "tests/e2e/status"

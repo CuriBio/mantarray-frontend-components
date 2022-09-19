@@ -15,9 +15,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "ubuntu-20.04"
+          - "windows-2022"
         node-version:
-          - 14
+          - 16
 
     name: Test code before publishing in Node ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -172,9 +172,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "ubuntu-20.04"
+          - "ubuntu-22.04"
         node-version:
-          - 14
+          - 16
     name: Publish to NPM using ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -246,11 +246,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "ubuntu-18.04"
-          - "ubuntu-20.04"
-          - "windows-2019"
+          - "windows-2022"
         node-version:
-          - 14
+          - 16
     name: Test installation from NPM for Node ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -307,7 +305,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "ubuntu-20.04"
+          - "ubuntu-22.04"
     name: Creating tag on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
