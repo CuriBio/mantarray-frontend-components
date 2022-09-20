@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { SettingsForm } from "@/dist/mantarray.common";
-// import SettingsForm from "@/components/settings/SettingsForm.vue";
+// import { SettingsForm } from "@/dist/mantarray.common";
+import SettingsForm from "@/components/settings/SettingsForm.vue";
 
 export default {
   components: {
@@ -28,6 +28,7 @@ export default {
     ];
     this.$store.commit("settings/set_user_accounts", array_of_user_accounts);
     this.$store.commit("settings/set_active_user_index", 0);
+    this.$store.commit("settings/set_pulse3d_versions", ["12.34.56", "0.24.6", "1.0.0"]);
   },
 };
 </script>

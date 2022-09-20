@@ -217,32 +217,7 @@ export default {
       return this.data_analysis_visibility ? "div__accordian-tabs-visible" : "div__accordian-tabs";
     },
   },
-  watch: {
-    // allow_sw_update_install: function() {
-    //   ipcRenderer.send("set_sw_update_auto_install", this.allow_sw_update_install);
-    // },
-  },
   created: async function () {
-    // ipcRenderer.on("logs_flask_dir_response", (e, log_dir_name) => {
-    //   this.$store.commit("settings/set_log_path", log_dir_name);
-    //   this.log_dir_name = log_dir_name;
-    //   const filename_prefix = path.basename(log_dir_name);
-
-    //   // Only way to create a custom file path for the renderer process logs
-    //   log.transports.file.resolvePath = () => {
-    //     const filename = filename_prefix + "_renderer.txt";
-    //     return path.join(this.log_dir_name, filename);
-    //   };
-
-    //   console.log = log.log;
-    //   console.error = log.error;
-    //   console.log("Initial view has been rendered"); // allow-log
-    // });
-
-    // if (this.log_dir_name === undefined) {
-    //   ipcRenderer.send("logs_flask_dir_request");
-    // }
-
     // init store values needed in pages here since this side bar is only created once
     this.$store.commit("data/set_heatmap_values", {
       "Twitch Force": { data: [...Array(24)].map((_) => Array(0)) },
