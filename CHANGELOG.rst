@@ -2,8 +2,12 @@ Changelog for Mantarray Frontend Components
 ===========================================
 
 
-1.2.0 (unreleased)
+1.2.0 (2022-09-20)
 ------------------
+
+Added:
+^^^^^^
+- Ability to select which Pulse3d version to use in analysis of auto-upload files
 
 Fixed:
 ^^^^^^
