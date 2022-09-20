@@ -569,9 +569,9 @@ export default {
   top: 327px;
   left: calc(1026px - 775.511px);
   visibility: visible;
-  opacity: 50%;
+  opacity: 0.5;
   background-color: black;
-  z-index: 1000;
+  z-index: 100;
 }
 
 .span__settingsform_pulse3d-version-settings {
