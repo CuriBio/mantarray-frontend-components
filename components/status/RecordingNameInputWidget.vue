@@ -14,7 +14,7 @@
           @update:value="check_recording_name($event)"
         ></InputWidget>
       </div>
-      <div class="div__toggle-container">
+      <div v-if="beta_2_mode" class="div__toggle-container">
         <ToggleWidget
           id="current_recording_snapshot"
           :checked_state="current_recording_snapshot"
@@ -92,7 +92,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["recording_snapshot"]),
+    ...mapState("settings", ["recording_snapshot", "beta_2_mode"]),
     is_enabled: function () {
       return !this.error_message;
     },
@@ -112,19 +112,20 @@ export default {
     },
     handle_click: async function () {
       if (this.is_enabled) {
-        if (this.current_recording_snapshot) this.$store.dispatch("playback/stop_live_view");
+        const run_shapshot = this.beta_2_mode && this.current_recording_snapshot;
+        if (run_shapshot) this.$store.dispatch("playback/stop_live_view");
 
         const res = await this.$store.dispatch("playback/handle_recording_name", {
           recording_name: this.recording_name,
           default_name: this.default_recording_name,
           replace_existing: this.recording_name === this.default_recording_name,
-          snapshot_enabled: this.current_recording_snapshot,
+          snapshot_enabled: run_shapshot,
         });
 
         if (res === 403) this.$bvModal.show("existing-recording-warning");
         else {
-          this.$emit("handle_confirmation", this.current_recording_snapshot);
-          this.current_recording_snapshot = this.recording_snapshot;
+          this.$emit("handle_confirmation", run_shapshot);
+          this.current_recording_snapshot = this.beta_2_mode && this.recording_snapshot;
         }
       }
     },
@@ -132,14 +133,15 @@ export default {
       this.$bvModal.hide("existing-recording-warning");
 
       if (idx === 1) {
+        const run_shapshot = this.beta_2_mode && this.current_recording_snapshot;
         await this.$store.dispatch("playback/handle_recording_name", {
           recording_name: this.recording_name,
           default_name: this.default_recording_name,
           replace_existing: true,
-          snapshot_enabled: this.current_recording_snapshot,
+          snapshot_enabled: run_shapshot,
         });
-        this.$emit("handle_confirmation", this.current_recording_snapshot);
-        this.current_recording_snapshot = this.recording_snapshot;
+        this.$emit("handle_confirmation", run_shapshot);
+        this.current_recording_snapshot = this.beta_2_mode && this.recording_snapshot;
       } else this.error_message = "Name already exists";
     },
     handle_snapshot_toggle: function (state) {

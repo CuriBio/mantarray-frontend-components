@@ -100,13 +100,10 @@
       />
     </div>
 
-    <span class="span__settingsform-show-recording-snapshot-text"
+    <span v-if="beta_2_mode" class="span__settingsform-show-recording-snapshot-text"
       >Show&nbsp;<wbr />Snapshot&nbsp;<wbr />After&nbsp;<wbr />Recording</span
     >
-    <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1 -->
-    <div class="div__settingsform-toggle-icon-3" width="62" height="34">
-      <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_cvs -->
-      <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_txt -->
+    <div v-if="beta_2_mode" class="div__settingsform-toggle-icon-3" width="62" height="34">
       <ToggleWidget
         id="recording_snapshot_switch"
         :checked_state="recording_snapshot_state"
@@ -115,15 +112,10 @@
       />
     </div>
 
-    <!-- origonal MockFlow ID : cmpD4873e2fa8d693fa244b11bc36eaee8e1 -->
     <canvas class="canvas__settings-file-upload-separator" width="512" height="22"> </canvas>
-    <!-- original Mockflow ID : cmpD1df116abcab5b13231c5616233d6cc30 -->
-    <!-- original MockFlow ID : cmpD98658345877fb84ac42a8c93722c3fe9 -->
     <div class="div__settings-tool-tip-cancel-btn" width="180" height="55" @click="cancel_changes">
-      <!-- original MockFlow ID : cmpD98658345877fb84ac42a8c93722c3fe9_txt -->
       <span class="span__settings-tool-tip-cancel-btn-txt">Cancel</span>
     </div>
-    <!-- original MockFlow ID : cmpDdd160f09d8a297b9e907b79d42e302de -->
     <div
       class="div__settings-tool-tip-reset-btn"
       :class="[
@@ -132,7 +124,6 @@
       width="180"
       height="55"
     >
-      <!-- original MockFlow ID : cmpDdd160f09d8a297b9e907b79d42e302de_txt -->
       <span
         class="span__settings-tool-tip-reset-btn-txt"
         :class="[
@@ -220,6 +211,7 @@ export default {
   },
   computed: {
     ...mapState("settings", [
+      "beta_2_mode",
       "user_accounts",
       "active_user_index",
       "stored_customer_id",

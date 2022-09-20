@@ -8,7 +8,6 @@ on:
   push:
     branches:
       - main
-      - development
   pull_request:
 
 jobs:
@@ -17,11 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "ubuntu-18.04"
-          - "ubuntu-20.04"
-          - "windows-2019"
+          - "ubuntu-22.04"
+          - "windows-2022"
         node-version:
-          - 14
+          - 16
         e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
           - "tests/e2e/playback"
           - "tests/e2e/status"
@@ -34,8 +32,8 @@ jobs:
 
         include:
           # only enable coverage on the fastest job
-          - os: "ubuntu-20.04"
-            node-version: "14"
+          - os: "ubuntu-22.04"
+            node-version: "16"
             e2e-tests: "tests/e2e/status"
             IS_FASTEST_JOB: true
           - e2e-tests: "tests/e2e/status"
@@ -136,7 +134,7 @@ jobs:
         uses: CuriBio/testcafe-action@v0.0.4
         with:
           skip-install: true
-          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 45000'
+          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/check-engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 45000'
 
       - name: Confirm Sphinx Docs build correctly
         # only check Sphinx docs build on the fastest job

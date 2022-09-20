@@ -12,6 +12,8 @@ export default {
   components: {
     SettingsForm,
   },
-  created: function () {},
+  created: function () {
+    this.$store.commit("settings/set_beta_2_mode", true);
+  },
 };
 </script>

@@ -1,6 +1,6 @@
 {
   "name": "@curi-bio/mantarray-frontend-components",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "shared components between web and desktop app.",
   "main": "./dist/mantarray.common.js",
   "author": "Curi Bio <contact@curibio.com> (http://www.curibio.com/)",
@@ -9,25 +9,25 @@
     "url": "https://github.com/CuriBio/mantarray-frontend-components.git"
   },
   "scripts": {
-    "dev": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa",
-    "build-dev": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && npm run build && cross-env-shell NODE_ENV=development nuxt dev --spa",
-    "build": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && vue-cli-service build --target lib --name mantarray ./index.js",
-    "test:unit-no-prebuild": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && jest -c jest.config.js",
+    "dev": "check-engines && cross-env-shell NODE_ENV=development nuxt dev --spa",
+    "build-dev": "check-engines && npm run build && cross-env-shell NODE_ENV=development nuxt dev --spa",
+    "build": "check-engines && vue-cli-service build --target lib --name mantarray ./index.js",
+    "test:unit-no-prebuild": "check-engines && jest -c jest.config.js",
     "test:unit": "npm run build && jest -c jest.config.js",
     "test:e2e": "npm run build && npm run _test:e2e -- --app 'npm run dev' --app-init-delay 35000",
     "test:e2e-parallel-no-prebuild": "npm run _test:e2e-parallel -- --app 'npm run dev' --app-init-delay 35000",
-    "test:e2e-no-prebuild": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && npm run _test:e2e",
-    "test:e2e-no-prebuild-github": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && npm run _test:e2e -- --app 'npm run dev' --app-init-delay 45000",
+    "test:e2e-no-prebuild": "check-engines && npm run _test:e2e",
+    "test:e2e-no-prebuild-github": "check-engines && npm run _test:e2e -- --app 'npm run dev' --app-init-delay 45000",
     "test:e2e-no-prebuild-windows-github": "npm run _test:e2e",
     "_test:e2e": "testcafe \"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;\" ./tests/e2e --screenshots path=./tests/e2e/screenshots",
     "_test:e2e-parallel": "testcafe -c 2 \"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;\" ./tests/e2e --screenshots path=./tests/e2e/screenshots",
     "prepare": "pip install -r requirements-dev.txt && pre-commit install && npx npm-merge-driver install",
-    "nuxt-start": "node ./node_modules/@curi-bio/frontend-test-utils/src/check_engines.js && nuxt start",
+    "nuxt-start": "check-engines && nuxt start",
     "lint": "eslint .",
     "docs": "jsdoc -c jsdoc.json"
   },
   "engines": {
-    "node": ">=12.13.0"
+    "node": ">=16.17.0"
   },
   "files": [
     "dist/*",
@@ -51,7 +51,7 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@curi-bio/frontend-test-utils": "~0.1.1",
+    "@curi-bio/frontend-test-utils": "~0.2.2",
     "@fortawesome/fontawesome-free": "~6.1.1",
     "@fortawesome/fontawesome-svg-core": "~1.2.27",
     "@fortawesome/free-brands-svg-icons": "~5.15.1",
