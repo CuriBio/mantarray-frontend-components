@@ -11,15 +11,15 @@ fixture`playback/controls/stimulation-controls/basic`
 
 const status_btn_active = Selector(".span__stimulation-controls-play-stop-button--enabled");
 
+const screenshot_path_base = path.join("playback", "controls", "stimulation-controls");
+
 test("testing the StimulationControls layout on initialization", async (t) => {
-  const screenshot_path_base = path.join("playback", "controls", "stimulation-controls");
   const screenshot_path = path.join(screenshot_path_base, "basic-init-disabled");
 
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
 test("testing the StimulationControls layout after enabled", async (t) => {
-  const screenshot_path_base = path.join("playback", "controls", "stimulation-controls");
   const screenshot_path = path.join(screenshot_path_base, "basic-init-enabled");
   await t.click(enable_button);
 
@@ -27,7 +27,6 @@ test("testing the StimulationControls layout after enabled", async (t) => {
 });
 
 test("testing the StimulationControls layout when stimulation is active", async (t) => {
-  const screenshot_path_base = path.join("playback", "controls", "stimulation-controls");
   const screenshot_path = path.join(screenshot_path_base, "basic-active");
   await t.click(enable_button).click(update_button).click(status_btn_active).wait(1000);
 
