@@ -15,11 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - "windows-2022"
+          - "ubuntu-22.04"
         node-version:
           - 16
 
-    name: Test code before publishing in Node ${{ matrix.node-version }} on ${{ matrix.os }}
+    name: Check package before publishing in Node ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -158,13 +158,6 @@ jobs:
         with:
           name: dist--${{ matrix.os }}--${{ matrix.node-version }}
           path: dist/*
-
-      - name: Archive visual regression
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node }}
-          path: "tests/e2e/screenshots/**/*"
 
   publish_package:
     needs: [test]
