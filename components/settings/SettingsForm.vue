@@ -1,13 +1,9 @@
 <template>
   <div>
-    <!-- original mockflow ID: mfPageDa717da1e7012d5f9c379a2ac828b5766 -->
     <div class="div__settingsform-controls">
-      <!--  original mockflow ID : cmpD6f871b37d5c9f6c0c0715f4f6ab99523 -->
       <span class="span__settingsform-title">Settings</span>
-      <!-- original mockflow ID : cmpD698ee7f9b579fcf64ee501697ea75af9 -->
-      <!-- original mockflow ID : cmpDd8b22bfae4d2a9945a94972384dacecd -->
       <span class="span__settingsform-user-sub-title">Select&nbsp;<wbr />User</span>
-      <!-- original mockflow ID : cmpD5a52d34b430ce573300ed527a7b6a37d -->
+
       <div class="div__settingsform-editor-input">
         <InputDropDown
           :title_label="label_user"
@@ -46,7 +42,6 @@
         >
       </div>
     </div>
-    <!-- original MockFlow ID : cmpD428472c72868527900568f8e5efe599b original mockflow ID span cmpD428472c72868527900568f8e5efe599b_txt -->
     <div class="div__settingsform-user-add-btn" width="285" height="45">
       <span class="span__settingsform-user-add-btn_txt">
         <b-button
@@ -64,17 +59,13 @@
       </span>
     </div>
     <canvas class="canvas__settings-title-separator" width="510" height="20"> </canvas>
-    <!-- original MockFlow ID : cmpDf4cc1d0d47ffb031f42612730c3a717c -->
-    <span class="span__settingsform-record-file-settings"
-      >Recorded&nbsp;<wbr />File&nbsp;<wbr />Settings</span
+    <span class="span__settingsform-record-file-settings">
+      Recorded&nbsp;<wbr />File&nbsp;<wbr />Settings</span
     >
-    <!-- original MockFlow ID : cmpDf8363fa3bd10c31b09518d79cb6ceed1 -->
     <span class="span__settingsform_auto-upload-settings"
       >Auto&nbsp;<wbr />Upload&nbsp;<wbr />Files&nbsp;<wbr />to&nbsp;<wbr />Cloud</span
     >
-    <!-- original MockFlow ID : cmpDc1d6c7119032e462ae6a2f490ceaac70 -->
     <div class="div__settingsform-toggle-icon" width="62" height="34">
-      <!-- original MockFlow ID : cmpDc1d6c7119032e462ae6a2f490ceaac70_txt -->
       <ToggleWidget
         id="auto_upload_switch"
         :checked_state="auto_upload"
@@ -83,14 +74,23 @@
         @handle_toggle_state="handle_toggle_state"
       />
     </div>
-    <!-- original MockFlow ID : cmpDc445eb537e28e967cb44657eed1baf4f -->
+    <div v-show="!auto_upload" class="div__pulse3d-input-blocker"></div>
+    <span class="span__settingsform_pulse3d-version-settings">Pulse3D&nbsp;<wbr />Version</span>
+    <div class="div__settingsform-dropdown">
+      <SmallDropDown
+        :input_height="25"
+        :input_width="80"
+        :disable_selection="false"
+        :options_text="sorted_pulse3d_versions"
+        :options_idx="pulse3d_focus_idx"
+        :dom_id_suffix="'pulse3d_version'"
+        @selection-changed="handle_pulse3d_selection_change"
+      />
+    </div>
     <span class="span__settingsform-delete-local-files-after-upload_txt"
       >Delete&nbsp;<wbr />Local&nbsp;<wbr />Files&nbsp;<wbr />After&nbsp;<wbr />Uploaded&nbsp;<wbr />to&nbsp;<wbr />Cloud</span
     >
-    <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1 -->
     <div class="div__settingsform-toggle-icon-2" width="62" height="34">
-      <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_cvs -->
-      <!-- original MockFlow ID : cmpD450eb0f3ab55b0dd9f6000a68eada1a1_txt -->
       <ToggleWidget
         id="auto_delete_switch"
         :checked_state="auto_delete"
@@ -135,7 +135,6 @@
         >Reset&nbsp;<wbr />to&nbsp;<wbr />Defaults</span
       >
     </div>
-    <!-- original MockFlow ID : cmpD9ff91bc518ff5a785be6857efab128a0 -->
     <div
       class="div__settings-tool-tip-save-btn"
       :class="[
@@ -144,9 +143,7 @@
       width="180"
       height="55"
     >
-      <!-- original Mockflow ID : cmpD9ff91bc518ff5a785be6857efab128a0_cvs -->
       <canvas class="canvas__settings-tool-tip-save-btn" width="180" height="55"> </canvas>
-      <!-- original Mockflow ID : cmpD9ff91bc518ff5a785be6857efab128a0_txt -->
       <span
         class="span__settings-tool-tip-save-btn-txt"
         :class="[
@@ -177,6 +174,9 @@ import AddUser from "@/components/settings/AddUser.vue";
 import EditUser from "@/components/settings/EditUser.vue";
 import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 import ToggleWidget from "@/components/basic_widgets/ToggleWidget.vue";
+import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+
+import semver_sort from "semver-sort";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
@@ -190,6 +190,7 @@ export default {
     EditUser,
     InputDropDown,
     ToggleWidget,
+    SmallDropDown,
   },
   data() {
     return {
@@ -204,6 +205,7 @@ export default {
       user_found: false,
       open_for_invalid_creds: false,
       auto_upload: false,
+      pulse3d_focus_idx: 0,
       auto_delete: false,
       disable_toggle: false,
       recording_snapshot_state: true,
@@ -216,9 +218,14 @@ export default {
       "active_user_index",
       "stored_customer_id",
       "recording_snapshot",
+      "pulse3d_versions",
+      "pulse3d_version_selection_index",
     ]),
     get_user_names: function () {
       return this.user_accounts.map((user_account) => user_account.user_name);
+    },
+    sorted_pulse3d_versions: function () {
+      return semver_sort.desc(this.pulse3d_versions);
     },
   },
   watch: {
@@ -238,6 +245,7 @@ export default {
       this.disable_edit_user = false;
       this.user_found = true;
     }
+    this.pulse3d_focus_idx = this.pulse3d_version_selection_index;
   },
   methods: {
     async save_changes() {
@@ -246,6 +254,7 @@ export default {
         this.$store.commit("settings/set_auto_upload", this.auto_upload);
         this.$store.commit("settings/set_auto_delete", this.auto_delete);
         this.$store.commit("settings/set_recording_snapshot_state", this.recording_snapshot_state);
+        this.$store.commit("settings/set_pulse3d_version_selection_index", this.pulse3d_focus_idx);
 
         const { status } = await this.$store.dispatch("settings/update_settings");
 
@@ -303,6 +312,9 @@ export default {
     handle_toggle_state: function (state, label) {
       this[label] = state;
     },
+    handle_pulse3d_selection_change: function (idx) {
+      this.pulse3d_focus_idx = idx;
+    },
   },
 };
 </script>
@@ -312,7 +324,7 @@ export default {
   left: 0px;
   background-color: rgba(0, 0, 0);
   width: 700px;
-  height: 525px;
+  height: 545px;
   position: absolute;
   overflow: hidden;
   pointer-events: none;
@@ -550,6 +562,54 @@ export default {
   color: white;
 }
 
+.div__pulse3d-input-blocker {
+  position: absolute;
+  width: 285px;
+  height: 30px;
+  top: 327px;
+  left: calc(1026px - 775.511px);
+  visibility: visible;
+  opacity: 0.5;
+  background-color: black;
+  z-index: 100;
+}
+
+.span__settingsform_pulse3d-version-settings {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: absolute;
+  width: 285px;
+  height: 30px;
+  top: 327px;
+  left: calc(1026px - 775.511px);
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(183, 183, 183);
+  text-align: left;
+  z-index: 41;
+}
+.div__settingsform-dropdown {
+  pointer-events: all;
+  transform: rotate(0deg);
+  /* overflow: hidden; */
+  position: absolute;
+  width: 80px;
+  height: 34px;
+  top: 327px;
+  left: calc(961px - 566px);
+  visibility: visible;
+  z-index: 57;
+  color: white;
+}
+
 .span__settingsform-delete-local-files-after-upload_txt {
   pointer-events: all;
   line-height: 100%;
@@ -558,7 +618,7 @@ export default {
   position: absolute;
   width: 360px;
   height: 30px;
-  top: 327px;
+  top: 363px;
   left: calc(1026px - 775.511px);
   padding: 5px;
   visibility: visible;
@@ -579,7 +639,7 @@ export default {
   position: absolute;
   width: 360px;
   height: 30px;
-  top: 363px;
+  top: 399px;
   left: calc(1026px - 775.511px);
   padding: 5px;
   visibility: visible;
@@ -600,7 +660,7 @@ export default {
   position: absolute;
   width: 62px;
   height: 34px;
-  top: 328px;
+  top: 364px;
   left: calc(961px - 775.511px);
   visibility: visible;
   z-index: 45;
@@ -613,7 +673,7 @@ export default {
   position: absolute;
   width: 62px;
   height: 34px;
-  top: 363px;
+  top: 399px;
   left: calc(961px - 775.511px);
   visibility: visible;
   z-index: 45;
@@ -626,7 +686,7 @@ export default {
   position: absolute;
   width: 180px;
   height: 55px;
-  top: 450px;
+  top: 475px;
   left: 450px;
   visibility: visible;
   z-index: 55;
@@ -661,7 +721,7 @@ export default {
   position: absolute;
   width: 180px;
   height: 55px;
-  top: 450px;
+  top: 475px;
   left: 260px;
   visibility: visible;
   z-index: 55;
@@ -694,7 +754,7 @@ export default {
   position: absolute;
   width: 180px;
   height: 55px;
-  top: 450px;
+  top: 475px;
   left: 70px;
   visibility: visible;
   z-index: 55;
@@ -765,7 +825,7 @@ export default {
   position: absolute;
   width: 512px;
   height: 1px;
-  top: 427px;
+  top: 454px;
   left: 95px;
   visibility: visible;
   background-color: #878d99;

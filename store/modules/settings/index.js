@@ -30,6 +30,8 @@ const default_state = {
   allow_sw_update_install: false,
   user_cred_input_needed: false,
   confirmation_request: false,
+  pulse3d_versions: ["Error"],
+  pulse3d_version_selection_index: 0,
 };
 
 const state = () => JSON.parse(JSON.stringify(default_state));

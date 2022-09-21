@@ -76,15 +76,17 @@ export default {
   },
   watch: {
     chosen_option: function () {
-      this.options_list = this.dropdown_options.filter((option) => {
-        if (option !== this.chosen_option) return option;
-      });
+      this.update_options_list();
     },
     options_idx: function () {
       this.get_preselected_option();
     },
     disable_toggle: function () {
       if (this.disable_toggle) this.visible = false;
+    },
+    options_text: function () {
+      this.update_options_list();
+      this.get_preselected_option();
     },
   },
   created() {
@@ -105,6 +107,9 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    update_options_list() {
+      this.options_list = this.dropdown_options.filter((option) => option !== this.chosen_option);
+    },
     get_preselected_option() {
       this.chosen_option = this.dropdown_options[this.options_idx];
     },

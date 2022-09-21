@@ -2,16 +2,27 @@ import { call_axios_get_from_vuex, call_axios_post_from_vuex } from "@/js_utils/
 
 export default {
   async update_settings(context) {
-    const { active_user_index, user_accounts, auto_upload, auto_delete } = this.state.settings;
+    const {
+      active_user_index,
+      user_accounts,
+      auto_upload,
+      auto_delete,
+      pulse3d_version_selection_index,
+      pulse3d_versions,
+    } = this.state.settings;
     const { customer_id, user_password, user_name } = user_accounts[active_user_index];
+
+    let selected_pulse3d_version = pulse3d_versions[pulse3d_version_selection_index];
+    if (selected_pulse3d_version === "Error") selected_pulse3d_version = null;
 
     const url = "http://localhost:4567/update_settings";
     const params = {
       customer_id,
       user_name,
-      user_password: user_password,
+      user_password,
       auto_upload,
       auto_delete,
+      pulse3d_version: selected_pulse3d_version,
     };
 
     const response = await call_axios_get_from_vuex(url, context, params);
