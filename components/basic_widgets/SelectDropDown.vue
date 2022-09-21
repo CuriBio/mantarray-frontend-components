@@ -130,9 +130,7 @@ export default {
       this.dropdown_options = list;
     },
     filter_options() {
-      this.options_list = this.dropdown_options.filter((option) => {
-        if (option !== this.chosen_option) return option;
-      });
+      this.options_list = this.dropdown_options.filter((option) => option !== this.chosen_option);
     },
   },
 };

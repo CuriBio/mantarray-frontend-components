@@ -108,9 +108,7 @@ export default {
   },
   methods: {
     update_options_list() {
-      this.options_list = this.dropdown_options.filter((option) => {
-        if (option !== this.chosen_option) return option;
-      });
+      this.options_list = this.dropdown_options.filter((option) => option !== this.chosen_option);
     },
     get_preselected_option() {
       this.chosen_option = this.dropdown_options[this.options_idx];
