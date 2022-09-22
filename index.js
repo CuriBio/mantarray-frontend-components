@@ -25,7 +25,11 @@ export { default as stimulation_store_module } from "./store/modules/stimulation
 export { default as heatmap_store_module } from "./store/modules/heatmap";
 export { default as gradient_store_module } from "./store/modules/gradient";
 export { TWITCH as DATA_ENUMS } from "./store/modules/data/enums";
-export { STIM_STATUS, MAX_SUBPROTOCOL_DURATION_MS } from "./store/modules/stimulation/enums";
+export {
+  STIM_STATUS,
+  MAX_SUBPROTOCOL_DURATION_MS,
+  MIN_SUBPROTOCOL_DURATION_MS,
+} from "./store/modules/stimulation/enums";
 export { ENUMS as PLAYBACK_ENUMS } from "./store/modules/playback/enums";
 export { STATUS as FLASK_STATUS_ENUMS } from "./store/modules/flask/enums";
 export { METRIC_UNITS as HEATMAP_METRIC_UNITS } from "./store/modules/heatmap/enums";

@@ -18,4 +18,12 @@ export const STIM_STATUS = {
   ERROR: "Error Occurred",
 };
 
+export const MIN_SUBPROTOCOL_DURATION_MS = 100;
 export const MAX_SUBPROTOCOL_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+export const TIME_CONVERSION_TO_MILLIS = {
+  milliseconds: 1,
+  seconds: 1000,
+  minutes: 60000,
+  hours: 3600000,
+};
