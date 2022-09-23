@@ -219,6 +219,18 @@
         @selection-changed="handle_total_duration_unit_change"
       />
     </span>
+    <div
+      class="div__stimulationstudio-checkbox-container"
+      :style="pulse_type === 'Monophasic' ? 'top: 400px;' : 'top:  636.5px'"
+    >
+      <CheckBoxWidget
+        :checkbox_options="checkbox_options"
+        :reset="checkbox_reset"
+        :initial_selected="checkbox_state"
+        @checkbox-selected="set_use_num_cycles"
+      />
+      <span>Use Num Cycles instead of Active Duration</span>
+    </div>
     <canvas
       :class="
         pulse_type === 'Monophasic'
@@ -261,6 +273,7 @@
 import Vue from "vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
+import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
@@ -306,6 +319,7 @@ export default {
     InputWidget,
     ButtonWidget,
     SmallDropDown,
+    CheckBoxWidget,
   },
   props: {
     stimulation_type: { type: String, default: "Current" },
@@ -366,6 +380,9 @@ export default {
           "F. Total Active Duration",
         ],
       },
+      checkbox_options: [{ text: "", value: "autoscale" }],
+      checkbox_reset: false,
+      checkbox_state: false,
     };
   },
   computed: {
@@ -536,6 +553,7 @@ export default {
       this.check_active_duration();
       this.handle_all_valid();
     },
+    set_use_num_cycles(bool) {},
   },
 };
 </script>
@@ -658,6 +676,27 @@ canvas {
   color: rgb(183, 183, 183);
   text-align: left;
   z-index: 4;
+}
+
+.div__stimulationstudio-checkbox-container {
+  pointer-events: all;
+  line-height: 100%;
+  transform: rotate(0deg);
+  overflow: visible;
+  position: absolute;
+  width: 365px;
+  height: 30px;
+  left: calc(900px - 852px);
+  padding: 5px;
+  visibility: visible;
+  user-select: none;
+  font-family: Muli;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  font-size: 17px;
+  color: rgb(183, 183, 183);
+  text-align: right;
 }
 
 .span__stimulationstudio-input {
