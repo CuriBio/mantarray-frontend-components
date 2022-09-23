@@ -199,6 +199,7 @@
         <InputWidget
           :placeholder="'1000'"
           :dom_id_suffix="'total-active-duration'"
+          :disabled="use_num_cycles"
           :invalid_text="err_msgs.total_active_duration"
           :input_width="142"
           :initial_value="selected_stim_settings.total_active_duration.duration.toString()"
@@ -230,6 +231,27 @@
         @checkbox-selected="set_use_num_cycles"
       />
       <span>Use Num Cycles instead of Active Duration</span>
+    </div>
+    <span
+      class="span__stimulationstudio-current-settings-label-left"
+      :style="pulse_type === 'Monophasic' ? 'top: 446px;' : 'top: 636.5px;'"
+      >Num Cycles</span
+    >
+    <div
+      class="div__stimulationstudio-input-container"
+      :style="pulse_type === 'Monophasic' ? 'top: 430px;' : 'top: 623px;'"
+    >
+      <span class="span__stimulationstudio-input">
+        <InputWidget
+          :placeholder="use_num_cycles ? '' : calculated_num_cycles.toString()"
+          :dom_id_suffix="'num-cycles'"
+          :disabled="!use_num_cycles"
+          :invalid_text="err_msgs.num_cycles"
+          :input_width="142"
+          :initial_value="use_num_cycles ? calculated_num_cycles.toString() : ''"
+          @update:value="use_num_cycles ? check_validity($event, 'num_cycles') : null"
+        />
+      </span>
     </div>
     <canvas
       :class="
@@ -279,7 +301,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { VBPopover } from "bootstrap-vue";
 import { MIN_SUBPROTOCOL_DURATION_MS, TIME_CONVERSION_TO_MILLIS } from "@/store/modules/stimulation/enums";
-import { isNaN } from "lodash";
+import { MAX_SUBPROTOCOL_DURATION_MS } from "../../store/modules/stimulation/enums";
 Vue.directive("popover", VBPopover);
 library.add(faBalanceScale, faQuestionCircle);
 
@@ -353,6 +375,7 @@ export default {
         max_current: "Must be within +/- 100",
         max_voltage: "Must be within +/- 1200",
         frequency: "Must be a non-zero value <= 100",
+        num_cycles: "Must be a whole number",
       },
       err_msgs: {
         phase_one_duration: "",
@@ -362,6 +385,7 @@ export default {
         phase_two_charge: "",
         pulse_frequency: "",
         total_active_duration: "",
+        num_cycles: "",
       },
       time_units: ["milliseconds", "seconds", "minutes", "hours"],
       all_valid: false,
@@ -380,7 +404,8 @@ export default {
           "F. Total Active Duration",
         ],
       },
-      checkbox_options: [{ text: "", value: "autoscale" }],
+      use_num_cycles: false,
+      checkbox_options: [{ text: "", value: "use_num_cycles" }],
       checkbox_reset: false,
       checkbox_state: false,
     };
@@ -403,10 +428,31 @@ export default {
     button_labels: function () {
       return this.modal_open_for_edit ? ["Save", "Duplicate", "Delete", "Cancel"] : ["Save", "Cancel"];
     },
+    calculated_num_cycles: function () {
+      const default_value = "-";
+
+      if (
+        !this.stim_settings.total_active_duration ||
+        this.stim_settings.total_active_duration.duration === "" ||
+        this.input_pulse_frequency === ""
+      ) {
+        return default_value;
+      }
+
+      const selected_unit = this.time_units[this.active_duration_idx];
+      const duration_in_secs =
+        this.stim_settings.total_active_duration.duration * (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
+
+      const num_cycles = duration_in_secs / this.input_pulse_frequency;
+      return isFinite(num_cycles) ? num_cycles : default_value;
+    },
   },
   watch: {
     all_valid() {
       this.set_is_enabled_array();
+    },
+    calculated_num_cycles() {
+      this.check_num_cycles(this.calculated_num_cycles);
     },
   },
   created() {
@@ -511,8 +557,13 @@ export default {
 
       if (valueStr === "") {
         this.err_msgs[label] = this.invalid_err_msg.required;
-      } else if (isNaN(value) || value_in_millis < min_dur_allowed) {
-        this.err_msgs[label] = `Must be a number >= ${min_dur_allowed}ms`;
+      } else if (isNaN(value)) {
+        this.err_msgs[label] = "Invalid number";
+      } else if (value_in_millis < min_dur_allowed) {
+        this.err_msgs[label] = `Must be >= ${min_dur_allowed}ms`;
+      } else if (value_in_millis > MAX_SUBPROTOCOL_DURATION_MS) {
+        const max_in_hrs = MAX_SUBPROTOCOL_DURATION_MS / TIME_CONVERSION_TO_MILLIS.hours;
+        this.err_msgs[label] = `Must be <= ${max_in_hrs}hrs`;
       } else {
         this.err_msgs[label] = this.invalid_err_msg.valid;
         this.stim_settings[label].duration = value;
@@ -548,12 +599,19 @@ export default {
         this.pulse_settings[label] = value;
       }
     },
+    check_num_cycles(num_cycles) {
+      this.err_msgs["num_cycles"] = this.invalid_err_msg[
+        Number.isInteger(num_cycles) ? "valid" : "num_cycles"
+      ];
+    },
     handle_total_duration_unit_change(idx) {
       this.active_duration_idx = idx;
       this.check_active_duration();
       this.handle_all_valid();
     },
-    set_use_num_cycles(bool) {},
+    set_use_num_cycles(new_value) {
+      this.use_num_cycles = new_value == "use_num_cycles";
+    },
   },
 };
 </script>
