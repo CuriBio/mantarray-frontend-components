@@ -404,6 +404,7 @@ export default {
           "F. Total Active Duration",
         ],
       },
+      calculated_active_dur: "",
       calculated_num_cycles: "",
       num_cycles: "",
       use_num_cycles: false,
@@ -480,20 +481,46 @@ export default {
     update_freq(new_value) {
       this.check_validity(new_value, "pulse_frequency");
       if (this.use_num_cycles) {
-        // this.update_activate_duration();  // TODO
+        // this.update_calculated_activate_dur();  // TODO
       } else {
         this.update_calculated_num_cycles();
       }
     },
     update_active_duration(new_value) {
       this.check_validity(new_value, "total_active_duration");
-      this.update_calculated_num_cycles();
+      if (!this.use_num_cycles) {
+        this.update_calculated_num_cycles();
+      }
     },
     update_num_cycles(new_value) {
       this.check_validity(new_value, "num_cycles");
       if (this.use_num_cycles) {
-        // this.update_activate_duration();  // TODO
+        // this.update_calculated_activate_dur();  // TODO
       }
+    },
+    update_calculated_activate_dur() {
+      const default_value = "-";
+
+      const is_num_cycles_missing = this.num_cycles === "";
+      const is_freq_missing = this.input_pulse_frequency === "";
+
+      let updated_val;
+      if (is_num_cycles_missing && is_freq_missing) {
+        // if no values have been entered, return empty string so that the placeholder value is used
+        updated_val = "";
+      } else if (is_num_cycles_missing || is_freq_missing) {
+        // if only one of the values needed to calculate the active dur has been entered, return "-"
+        updated_val = default_value;
+      } else {
+        const duration_in_secs = this.num_cycles / this.input_pulse_frequency;
+
+        const selected_unit = this.time_units[this.active_duration_idx];
+        const dur_in_selected_units = (duration_in_secs / 1000) * TIME_CONVERSION_TO_MILLIS[selected_unit];
+
+        updated_val = Number.isInteger(dur_in_selected_units) ? dur_in_selected_units : default_value;
+      }
+
+      this.calculated_active_dur = updated_val;
     },
     update_calculated_num_cycles() {
       const default_value = "-";
@@ -502,20 +529,24 @@ export default {
         !this.stim_settings.total_active_duration || this.stim_settings.total_active_duration.duration === "";
       const is_freq_missing = this.input_pulse_frequency === "";
 
+      let updated_val;
       if (is_active_dur_missing && is_freq_missing) {
         // if no values have been entered, return empty string so that the placeholder value is used
-        return "";
+        updated_val = this.calculated_num_cycles = "";
       } else if (is_active_dur_missing || is_freq_missing) {
         // if only one of the values needed to calculate the number of cycles has been entered, return "-"
-        return default_value;
+        updated_val = this.calculated_num_cycles = default_value;
+      } else {
+        const selected_unit = this.time_units[this.active_duration_idx];
+        const duration_in_secs =
+          this.stim_settings.total_active_duration.duration *
+          (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
+
+        const num_cycles = duration_in_secs / this.input_pulse_frequency;
+        updated_val = isFinite(num_cycles) ? num_cycles : default_value;
       }
 
-      const selected_unit = this.time_units[this.active_duration_idx];
-      const duration_in_secs =
-        this.stim_settings.total_active_duration.duration * (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
-
-      const num_cycles = duration_in_secs / this.input_pulse_frequency;
-      this.calculated_num_cycles = isFinite(num_cycles) ? num_cycles : default_value;
+      this.calculated_num_cycles = updated_val;
     },
     check_validity(value, label) {
       if (label === "num_cycles") {
@@ -534,7 +565,8 @@ export default {
         } else if (label.includes("charge")) {
           this.check_charge_validity(value, label);
         } else if (label.includes("frequency")) {
-          this.check_pulse_frequency(value, "pulse_frequency");
+          this.input_pulse_frequency = value;
+          this.check_pulse_frequency();
         }
       }
       this.handle_all_valid();
@@ -596,8 +628,12 @@ export default {
         this.stim_settings[label].unit = this.time_units[this.active_duration_idx];
       }
     },
-    check_pulse_frequency(valueStr, label) {
+    check_pulse_frequency() {
+      const label = "pulse_frequency";
+
+      const valueStr = this.input_pulse_frequency;
       const value = +valueStr;
+
       if (valueStr === "") {
         this.err_msgs[label] = this.invalid_err_msg.required;
       } else if (isNaN(value) || value <= 0 || value > 100) {
@@ -639,7 +675,7 @@ export default {
     handle_total_duration_unit_change(idx) {
       this.active_duration_idx = idx;
       if (this.use_num_cycles) {
-        // TODO
+        // this.update_calculated_activate_dur();  // TODO
       } else {
         this.update_calculated_num_cycles();
       }
