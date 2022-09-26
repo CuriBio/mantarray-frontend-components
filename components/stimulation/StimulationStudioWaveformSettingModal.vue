@@ -177,7 +177,7 @@
           :invalid_text="err_msgs.pulse_frequency"
           :input_width="142"
           :initial_value="input_pulse_frequency.toString()"
-          @update:value="check_validity($event, 'pulse_frequency')"
+          @update:value="update_freq($event)"
         />
       </span>
     </div>
@@ -197,13 +197,13 @@
     >
       <span class="span__stimulationstudio-input">
         <InputWidget
-          :placeholder="'1000'"
+          :placeholder="use_num_cycles ? '-' : '1000'"
           :dom_id_suffix="'total-active-duration'"
           :disabled="use_num_cycles"
           :invalid_text="err_msgs.total_active_duration"
           :input_width="142"
           :initial_value="selected_stim_settings.total_active_duration.duration.toString()"
-          @update:value="check_validity($event, 'total_active_duration')"
+          @update:value="update_active_duration($event)"
         />
       </span>
     </div>
@@ -243,13 +243,13 @@
     >
       <span class="span__stimulationstudio-input">
         <InputWidget
-          :placeholder="use_num_cycles ? '' : calculated_num_cycles.toString()"
+          :placeholder="use_num_cycles ? '100' : '-'"
           :dom_id_suffix="'num-cycles'"
           :disabled="!use_num_cycles"
           :invalid_text="err_msgs.num_cycles"
           :input_width="142"
-          :initial_value="use_num_cycles ? calculated_num_cycles.toString() : ''"
-          @update:value="use_num_cycles ? check_validity($event, 'num_cycles') : null"
+          :initial_value="calculated_num_cycles.toString()"
+          @update:value="update_num_cycles($event)"
         />
       </span>
     </div>
@@ -404,6 +404,8 @@ export default {
           "F. Total Active Duration",
         ],
       },
+      calculated_num_cycles: "",
+      num_cycles: "",
       use_num_cycles: false,
       checkbox_options: [{ text: "", value: "use_num_cycles" }],
       checkbox_reset: false,
@@ -428,31 +430,10 @@ export default {
     button_labels: function () {
       return this.modal_open_for_edit ? ["Save", "Duplicate", "Delete", "Cancel"] : ["Save", "Cancel"];
     },
-    calculated_num_cycles: function () {
-      const default_value = "-";
-
-      if (
-        !this.stim_settings.total_active_duration ||
-        this.stim_settings.total_active_duration.duration === "" ||
-        this.input_pulse_frequency === ""
-      ) {
-        return default_value;
-      }
-
-      const selected_unit = this.time_units[this.active_duration_idx];
-      const duration_in_secs =
-        this.stim_settings.total_active_duration.duration * (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
-
-      const num_cycles = duration_in_secs / this.input_pulse_frequency;
-      return isFinite(num_cycles) ? num_cycles : default_value;
-    },
   },
   watch: {
     all_valid() {
       this.set_is_enabled_array();
-    },
-    calculated_num_cycles() {
-      this.check_num_cycles(this.calculated_num_cycles);
     },
   },
   created() {
@@ -481,6 +462,7 @@ export default {
 
     this.check_validity(this.input_pulse_frequency, "pulse_frequency");
     this.check_validity(duration, "total_active_duration");
+    this.check_validity(this.num_cycles, "num_cycles");
     this.set_is_enabled_array();
   },
   methods: {
@@ -495,22 +477,66 @@ export default {
       this.stim_settings.repeat_delay_interval = this.calculated_delay;
       this.$emit("close", button_label, this.pulse_settings, this.stim_settings, this.input_pulse_frequency);
     },
+    update_freq(new_value) {
+      this.check_validity(new_value, "pulse_frequency");
+      if (this.use_num_cycles) {
+        // this.update_activate_duration();  // TODO
+      } else {
+        this.update_calculated_num_cycles();
+      }
+    },
+    update_active_duration(new_value) {
+      this.check_validity(new_value, "total_active_duration");
+      this.update_calculated_num_cycles();
+    },
+    update_num_cycles(new_value) {
+      this.check_validity(new_value, "num_cycles");
+      if (this.use_num_cycles) {
+        // this.update_activate_duration();  // TODO
+      }
+    },
+    update_calculated_num_cycles() {
+      const default_value = "-";
+
+      const is_active_dur_missing =
+        !this.stim_settings.total_active_duration || this.stim_settings.total_active_duration.duration === "";
+      const is_freq_missing = this.input_pulse_frequency === "";
+
+      if (is_active_dur_missing && is_freq_missing) {
+        // if no values have been entered, return empty string so that the placeholder value is used
+        return "";
+      } else if (is_active_dur_missing || is_freq_missing) {
+        // if only one of the values needed to calculate the number of cycles has been entered, return "-"
+        return default_value;
+      }
+
+      const selected_unit = this.time_units[this.active_duration_idx];
+      const duration_in_secs =
+        this.stim_settings.total_active_duration.duration * (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
+
+      const num_cycles = duration_in_secs / this.input_pulse_frequency;
+      this.calculated_num_cycles = isFinite(num_cycles) ? num_cycles : default_value;
+    },
     check_validity(value, label) {
-      if (label.includes("phase")) {
-        this.pulse_settings[label] = value;
-      } else if (label.includes("active")) {
-        this.stim_settings.total_active_duration.duration = value;
-      }
+      if (label === "num_cycles") {
+        this.num_cycles = value;
+        this.check_num_cycles();
+      } else {
+        if (label.includes("phase")) {
+          this.pulse_settings[label] = value;
+        } else if (label.includes("active")) {
+          this.stim_settings.total_active_duration.duration = value;
+        }
 
-      if (label.includes("duration") || label.includes("interval")) {
-        this.check_pulse_duration_validity();
-        this.check_active_duration();
-      } else if (label.includes("charge")) {
-        this.check_charge_validity(value, label);
-      } else if (label.includes("frequency")) {
-        this.check_pulse_frequency(value, "pulse_frequency");
+        if (label.includes("duration") || label.includes("interval")) {
+          this.check_pulse_duration_validity();
+          this.check_active_duration();
+        } else if (label.includes("charge")) {
+          this.check_charge_validity(value, label);
+        } else if (label.includes("frequency")) {
+          this.check_pulse_frequency(value, "pulse_frequency");
+        }
       }
-
       this.handle_all_valid();
     },
     check_pulse_duration_validity() {
@@ -599,13 +625,24 @@ export default {
         this.pulse_settings[label] = value;
       }
     },
-    check_num_cycles(num_cycles) {
-      this.err_msgs["num_cycles"] = this.invalid_err_msg[
-        Number.isInteger(num_cycles) ? "valid" : "num_cycles"
-      ];
+    check_num_cycles() {
+      const num_cycles_as_num = +this.num_cycles;
+      let error_msg_label;
+      if (this.num_cycles === "" || !Number.isInteger(num_cycles_as_num)) {
+        error_msg_label = "num_cycles";
+      } else {
+        error_msg_label = "valid";
+        this.num_cycles = num_cycles_as_num;
+      }
+      this.err_msgs["num_cycles"] = this.invalid_err_msg[error_msg_label];
     },
     handle_total_duration_unit_change(idx) {
       this.active_duration_idx = idx;
+      if (this.use_num_cycles) {
+        // TODO
+      } else {
+        this.update_calculated_num_cycles();
+      }
       this.check_active_duration();
       this.handle_all_valid();
     },
