@@ -14,7 +14,7 @@ export default {
     commit("set_selected_wells", well_values);
   },
 
-  async handle_protocol_order({ commit, dispatch }, new_pulse_order) {
+  async handle_protocol_order({ commit, dispatch, state }, new_pulse_order) {
     const x_values = [0];
     const y_values = [0];
     const color_assignments = {};
@@ -77,6 +77,13 @@ export default {
       const ending_repeat_idx = x_values.length;
       color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
     });
+
+    // convert x_values to correct unit
+    console.log("@@@", state.x_axis_unit_name, TIME_CONVERSION_TO_MILLIS[state.x_axis_unit_name]);
+    x_values.forEach((val, idx) => {
+      x_values[idx] = val / TIME_CONVERSION_TO_MILLIS[state.x_axis_unit_name];
+    });
+    console.log("$$$", x_values);
 
     commit("set_repeat_color_assignments", color_assignments);
     commit("set_pulses", { pulses, new_pulse_order });
@@ -326,7 +333,9 @@ export default {
     }
     commit("reset_protocol_editor");
   },
-  handle_x_axis_unit({ commit, dispatch, state }, idx) {
+  handle_x_axis_unit({ commit, dispatch, state }, { idx, unit_name }) {
+    console.log("!!!", unit_name);
+    state.x_axis_unit_name = unit_name;
     const { x_axis_values, y_axis_values, x_axis_time_idx } = state;
     if (idx !== x_axis_time_idx) {
       const converted_x_values = x_axis_values.map((val) => (idx === 1 ? val * 1e-3 : val * 1e3));
@@ -343,8 +352,11 @@ export default {
     const well_indices = Object.keys(state.protocol_assignments);
     const res = await call_axios_post_from_vuex(url, { well_indices });
 
-    if (res && res.status !== 200) commit("set_stim_status", STIM_STATUS.ERROR);
-    else commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
+    if (res && res.status !== 200) {
+      commit("set_stim_status", STIM_STATUS.ERROR);
+    } else {
+      commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
+    }
   },
   async on_pulse_mouseenter({ state }, idx) {
     const hovered_pulse = Object.entries(state.repeat_colors)[idx];
