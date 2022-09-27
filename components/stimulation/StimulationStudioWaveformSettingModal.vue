@@ -202,7 +202,7 @@
           :disabled="use_num_cycles"
           :invalid_text="err_msgs.total_active_duration"
           :input_width="142"
-          :initial_value="selected_stim_settings.total_active_duration.duration.toString()"
+          :initial_value="calculated_active_dur.toString()"
           @update:value="update_active_duration($event)"
         />
       </span>
@@ -375,7 +375,7 @@ export default {
         max_current: "Must be within +/- 100",
         max_voltage: "Must be within +/- 1200",
         frequency: "Must be a non-zero value <= 100",
-        num_cycles: "Must be a whole number",
+        num_cycles: "Must be a whole number > 0",
       },
       err_msgs: {
         phase_one_duration: "",
@@ -445,6 +445,8 @@ export default {
     const { unit, duration } = this.stim_settings.total_active_duration;
     this.active_duration_idx = this.time_units.indexOf(unit);
 
+    // this.calculated_active_dur = duration;  // TODO
+
     if (this.pulse_type === "Monophasic") {
       this.pulse_settings = {
         ...this.pulse_settings,
@@ -481,7 +483,7 @@ export default {
     update_freq(new_value) {
       this.check_validity(new_value, "pulse_frequency");
       if (this.use_num_cycles) {
-        // this.update_calculated_activate_dur();  // TODO
+        this.update_calculated_activate_dur(); // TODO test
       } else {
         this.update_calculated_num_cycles();
       }
@@ -495,7 +497,7 @@ export default {
     update_num_cycles(new_value) {
       this.check_validity(new_value, "num_cycles");
       if (this.use_num_cycles) {
-        // this.update_calculated_activate_dur();  // TODO
+        this.update_calculated_activate_dur(); // TODO test
       }
     },
     update_calculated_activate_dur() {
@@ -509,15 +511,16 @@ export default {
         // if no values have been entered, return empty string so that the placeholder value is used
         updated_val = "";
       } else if (is_num_cycles_missing || is_freq_missing) {
+        // TODO could try checking the error messages here instead
         // if only one of the values needed to calculate the active dur has been entered, return "-"
         updated_val = default_value;
       } else {
-        const duration_in_secs = this.num_cycles / this.input_pulse_frequency;
-
         const selected_unit = this.time_units[this.active_duration_idx];
-        const dur_in_selected_units = (duration_in_secs / 1000) * TIME_CONVERSION_TO_MILLIS[selected_unit];
 
-        updated_val = Number.isInteger(dur_in_selected_units) ? dur_in_selected_units : default_value;
+        const duration_in_secs = this.num_cycles / this.input_pulse_frequency;
+        const dur_in_selected_units = (duration_in_secs * 1000) / TIME_CONVERSION_TO_MILLIS[selected_unit];
+
+        updated_val = isFinite(dur_in_selected_units) ? dur_in_selected_units : default_value;
       }
 
       this.calculated_active_dur = updated_val;
@@ -534,6 +537,7 @@ export default {
         // if no values have been entered, return empty string so that the placeholder value is used
         updated_val = this.calculated_num_cycles = "";
       } else if (is_active_dur_missing || is_freq_missing) {
+        // TODO could try checking the error messages here instead
         // if only one of the values needed to calculate the number of cycles has been entered, return "-"
         updated_val = this.calculated_num_cycles = default_value;
       } else {
@@ -542,7 +546,7 @@ export default {
           this.stim_settings.total_active_duration.duration *
           (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
 
-        const num_cycles = duration_in_secs / this.input_pulse_frequency;
+        const num_cycles = duration_in_secs * this.input_pulse_frequency;
         updated_val = isFinite(num_cycles) ? num_cycles : default_value;
       }
 
@@ -664,7 +668,7 @@ export default {
     check_num_cycles() {
       const num_cycles_as_num = +this.num_cycles;
       let error_msg_label;
-      if (this.num_cycles === "" || !Number.isInteger(num_cycles_as_num)) {
+      if (this.num_cycles === "" || !Number.isInteger(num_cycles_as_num) || num_cycles_as_num <= 0) {
         error_msg_label = "num_cycles";
       } else {
         error_msg_label = "valid";
@@ -675,7 +679,7 @@ export default {
     handle_total_duration_unit_change(idx) {
       this.active_duration_idx = idx;
       if (this.use_num_cycles) {
-        // this.update_calculated_activate_dur();  // TODO
+        this.update_calculated_activate_dur();
       } else {
         this.update_calculated_num_cycles();
       }
@@ -684,6 +688,11 @@ export default {
     },
     set_use_num_cycles(new_value) {
       this.use_num_cycles = new_value == "use_num_cycles";
+      if (this.use_num_cycles) {
+        this.update_calculated_activate_dur();
+      } else {
+        this.update_calculated_num_cycles();
+      }
     },
   },
 };

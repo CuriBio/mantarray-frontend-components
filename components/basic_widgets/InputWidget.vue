@@ -109,7 +109,9 @@ export default {
       this.$emit("update:value", this.input_value);
     },
     disabled(bool) {
-      this.input_value = bool ? "" : this.initial_value;
+      if (this.dom_id_suffix !== "total-active-duration" && this.dom_id_suffix !== "num-cycles") {
+        this.input_value = bool ? "" : this.initial_value;
+      }
     },
   },
   methods: {
