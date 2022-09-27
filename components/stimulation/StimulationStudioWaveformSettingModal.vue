@@ -2,7 +2,7 @@
   <div
     id="cmpD2f15f130a7c848b6dfa50e77a7bd35ad"
     class="div__stimulationstudio-current-settings-background"
-    :style="pulse_type === 'Monophasic' ? 'height: 550px; margin-top: 100px;' : 'height: 710px;'"
+    :style="pulse_type === 'Monophasic' ? 'height: 550px; margin-top: 100px;' : 'height: 840px;'"
   >
     <span id="cmpD5b2290fff52de686574ddc4481707a03" class="span__stimulationstudio-current-settings-title"
       >{{ pulse_type }}&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
@@ -163,12 +163,12 @@
     <canvas :style="pulse_type === 'Monophasic' ? 'top: 240px;' : 'top: 533px;'" />
     <span
       class="span__stimulationstudio-current-settings-label-left"
-      :style="pulse_type === 'Monophasic' ? 'top: 267.5px;' : 'top: 566.5px;'"
+      :style="pulse_type === 'Monophasic' ? 'top: 267.5px;' : 'top: 553.5px;'"
       >Pulse Frequency</span
     >
     <div
       class="div__stimulationstudio-input-container"
-      :style="pulse_type === 'Monophasic' ? 'top: 253px;' : 'top: 553px;'"
+      :style="pulse_type === 'Monophasic' ? 'top: 253px;' : 'top: 540px;'"
     >
       <span class="span__stimulationstudio-input">
         <InputWidget
@@ -183,17 +183,17 @@
     </div>
     <span
       class="span__stimulationstudio-current-settings-label-right"
-      :style="pulse_type === 'Monophasic' ? 'top: 267.5px;' : 'top: 566.5px;'"
+      :style="pulse_type === 'Monophasic' ? 'top: 267.5px;' : 'top: 553.5px;'"
       >Hz</span
     >
     <span
       class="span__stimulationstudio-current-settings-label-left"
-      :style="pulse_type === 'Monophasic' ? 'top: 337.5px;' : 'top: 636.5px;'"
+      :style="pulse_type === 'Monophasic' ? 'top: 337.5px;' : 'top: 623.5px;'"
       >Active Duration</span
     >
     <div
       class="div__stimulationstudio-input-container"
-      :style="pulse_type === 'Monophasic' ? 'top: 323px;' : 'top: 623px;'"
+      :style="pulse_type === 'Monophasic' ? 'top: 323px;' : 'top: 610px;'"
     >
       <span class="span__stimulationstudio-input">
         <InputWidget
@@ -209,7 +209,7 @@
     </div>
     <span
       class="span__stimulationstudio-current-settings-label-right"
-      :style="pulse_type === 'Monophasic' ? 'top: 337.5px;' : 'top:  636.5px'"
+      :style="pulse_type === 'Monophasic' ? 'top: 337.5px;' : 'top:  623.5px'"
     >
       <SmallDropDown
         :input_height="25"
@@ -222,7 +222,7 @@
     </span>
     <div
       class="div__stimulationstudio-checkbox-container"
-      :style="pulse_type === 'Monophasic' ? 'top: 400px;' : 'top:  636.5px'"
+      :style="pulse_type === 'Monophasic' ? 'top: 400px;' : 'top:  684px'"
     >
       <CheckBoxWidget
         :checkbox_options="checkbox_options"
@@ -234,12 +234,12 @@
     </div>
     <span
       class="span__stimulationstudio-current-settings-label-left"
-      :style="pulse_type === 'Monophasic' ? 'top: 446px;' : 'top: 636.5px;'"
+      :style="pulse_type === 'Monophasic' ? 'top: 446px;' : 'top: 730px;'"
       >Num Cycles</span
     >
     <div
       class="div__stimulationstudio-input-container"
-      :style="pulse_type === 'Monophasic' ? 'top: 430px;' : 'top: 623px;'"
+      :style="pulse_type === 'Monophasic' ? 'top: 430px;' : 'top: 714px;'"
     >
       <span class="span__stimulationstudio-input">
         <InputWidget
@@ -276,7 +276,7 @@
         <li v-for="key in diagram_keys[pulse_type]" :key="key">{{ key }}</li>
       </ol>
     </div>
-    <div class="button-container" :style="pulse_type === 'Monophasic' ? 'top: 543px;' : 'top: 703px;'">
+    <div class="button-container" :style="pulse_type === 'Monophasic' ? 'top: 543px;' : 'top: 790px;'">
       <ButtonWidget
         :id="'button-widget-id'"
         :button_widget_width="950"
@@ -866,9 +866,9 @@ canvas {
 
 .canvas__biphasic-vertical-divider {
   transform: rotate(90deg);
-  left: 220px;
-  top: 375px;
-  width: 600px;
+  left: 170px;
+  top: 425px;
+  width: 695px;
 }
 
 .canvas__monophasic-vertical-divider {
