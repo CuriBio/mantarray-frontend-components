@@ -445,8 +445,6 @@ export default {
     const { unit, duration } = this.stim_settings.total_active_duration;
     this.active_duration_idx = this.time_units.indexOf(unit);
 
-    // this.calculated_active_dur = duration;  // TODO
-
     if (this.pulse_type === "Monophasic") {
       this.pulse_settings = {
         ...this.pulse_settings,
@@ -455,6 +453,11 @@ export default {
         phase_two_charge: 0,
       };
     }
+
+    // Tanner (9/27/22): Currently this modal will always load with use_num_cycles set to false, so need to set these specific values
+    this.calculated_active_dur = duration;
+    this.update_calculated_num_cycles();
+    this.num_cycles = this.calculated_num_cycles;
 
     for (const input in this.pulse_settings) {
       if (this.pulse_settings !== {}) {
