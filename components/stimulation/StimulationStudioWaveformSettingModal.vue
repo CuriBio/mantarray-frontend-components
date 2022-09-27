@@ -438,9 +438,13 @@ export default {
     },
   },
   created() {
-    this.pulse_settings = this.selected_pulse_settings;
-    this.stim_settings = this.selected_stim_settings;
-    if (this.frequency !== 0) this.input_pulse_frequency = this.frequency;
+    // Need to copy these values so that the original values won't be edited in case the user cancels an edit
+    this.pulse_settings = JSON.parse(JSON.stringify(this.selected_pulse_settings));
+    this.stim_settings = JSON.parse(JSON.stringify(this.selected_stim_settings));
+
+    if (this.frequency !== 0) {
+      this.input_pulse_frequency = this.frequency;
+    }
 
     const { unit, duration } = this.stim_settings.total_active_duration;
     this.active_duration_idx = this.time_units.indexOf(unit);
