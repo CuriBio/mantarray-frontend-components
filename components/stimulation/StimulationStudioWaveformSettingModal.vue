@@ -482,11 +482,7 @@ export default {
     },
     update_freq(new_value) {
       this.check_validity(new_value, "pulse_frequency");
-      if (this.use_num_cycles) {
-        this.update_calculated_activate_dur(); // TODO test
-      } else {
-        this.update_calculated_num_cycles();
-      }
+      this.update_current_calculated_value();
     },
     update_active_duration(new_value) {
       this.check_validity(new_value, "total_active_duration");
@@ -497,7 +493,7 @@ export default {
     update_num_cycles(new_value) {
       this.check_validity(new_value, "num_cycles");
       if (this.use_num_cycles) {
-        this.update_calculated_activate_dur(); // TODO test
+        this.update_calculated_activate_dur();
       }
     },
     update_calculated_activate_dur() {
@@ -552,6 +548,13 @@ export default {
 
       this.calculated_num_cycles = updated_val;
     },
+    update_current_calculated_value() {
+      if (this.use_num_cycles) {
+        this.update_calculated_activate_dur();
+      } else {
+        this.update_calculated_num_cycles();
+      }
+    },
     check_validity(value, label) {
       if (label === "num_cycles") {
         this.num_cycles = value;
@@ -583,7 +586,7 @@ export default {
       }
     },
     handle_all_valid() {
-      for (const msg in Object.entries(this.err_msgs)) {
+      for (const msg of Object.values(this.err_msgs)) {
         if (msg !== "") {
           this.all_valid = false;
           return;
@@ -678,21 +681,13 @@ export default {
     },
     handle_total_duration_unit_change(idx) {
       this.active_duration_idx = idx;
-      if (this.use_num_cycles) {
-        this.update_calculated_activate_dur();
-      } else {
-        this.update_calculated_num_cycles();
-      }
+      this.update_current_calculated_value();
       this.check_active_duration();
       this.handle_all_valid();
     },
     set_use_num_cycles(new_value) {
       this.use_num_cycles = new_value == "use_num_cycles";
-      if (this.use_num_cycles) {
-        this.update_calculated_activate_dur();
-      } else {
-        this.update_calculated_num_cycles();
-      }
+      this.update_current_calculated_value();
     },
   },
 };
