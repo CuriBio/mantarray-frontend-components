@@ -1,6 +1,13 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.2.1 (unreleased)
+------------------
+
+Changed:
+^^^^^^^^
+- Subprotocols can now be defined in terms of number of cycles or active duration.
+
 
 1.2.0 (2022-09-20)
 ------------------
