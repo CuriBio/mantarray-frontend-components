@@ -12,8 +12,7 @@ export default {
     } = this.state.settings;
     const { customer_id, user_password, user_name } = user_accounts[active_user_index];
 
-    let selected_pulse3d_version = pulse3d_versions[pulse3d_version_selection_index];
-    if (selected_pulse3d_version === "Error") selected_pulse3d_version = null;
+    const selected_pulse3d_version = pulse3d_versions[pulse3d_version_selection_index];
 
     const url = "http://localhost:4567/update_settings";
     const params = {
