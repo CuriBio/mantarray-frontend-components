@@ -79,11 +79,9 @@ export default {
     });
 
     // convert x_values to correct unit
-    console.log("@@@", state.x_axis_unit_name, TIME_CONVERSION_TO_MILLIS[state.x_axis_unit_name]);
     x_values.forEach((val, idx) => {
       x_values[idx] = val / TIME_CONVERSION_TO_MILLIS[state.x_axis_unit_name];
     });
-    console.log("$$$", x_values);
 
     commit("set_repeat_color_assignments", color_assignments);
     commit("set_pulses", { pulses, new_pulse_order });
@@ -334,7 +332,6 @@ export default {
     commit("reset_protocol_editor");
   },
   handle_x_axis_unit({ commit, dispatch, state }, { idx, unit_name }) {
-    console.log("!!!", unit_name);
     state.x_axis_unit_name = unit_name;
     const { x_axis_values, y_axis_values, x_axis_time_idx } = state;
     if (idx !== x_axis_time_idx) {
