@@ -1,5 +1,6 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioDelayModal from "@/components/stimulation/StimulationStudioDelayModal.vue";
+import { MIN_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -23,7 +24,7 @@ describe("StimulationStudioDelayModal.vue", () => {
       localVue,
     });
 
-    await wrapper.find("#input-widget-field-delay").setValue("3");
+    await wrapper.find("#input-widget-field-delay").setValue(MIN_SUBPROTOCOL_DURATION_MS.toString());
     await wrapper.findAll(".span__button_label").at(0).trigger("click");
 
     expect(wrapper.emitted("delay_close")).toBeTruthy();

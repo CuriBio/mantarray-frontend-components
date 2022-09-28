@@ -206,28 +206,28 @@ export default {
       this.selected_frequency = null;
       this.current_delay_input = null;
       this.current_delay_unit = "milliseconds";
-      const new_pulse = this.protocol_order[this.new_cloned_idx];
-      const edited_pulse = this.protocol_order[this.shift_click_img_idx];
-      // needs to not edit original pulse, edited_pulse does
-      const duplicate_pulse =
-        this.shift_click_img_idx !== null
-          ? JSON.parse(JSON.stringify(this.protocol_order[this.shift_click_img_idx]))
-          : null;
 
       switch (button) {
         case "Save":
           if (this.new_cloned_idx !== null) {
+            const new_pulse = this.protocol_order[this.new_cloned_idx];
             new_pulse.pulse_settings = pulse_settings;
             new_pulse.stim_settings = stim_settings;
             new_pulse.repeat.number_of_repeats = frequency;
           }
           if (this.shift_click_img_idx !== null) {
+            const edited_pulse = this.protocol_order[this.shift_click_img_idx];
             Object.assign(edited_pulse.pulse_settings, pulse_settings);
             Object.assign(edited_pulse.stim_settings, stim_settings);
             edited_pulse.repeat.number_of_repeats = frequency;
           }
           break;
         case "Duplicate":
+          // eslint-disable-next-line no-case-declarations
+          const duplicate_pulse = // needs to not edit original pulse, edited_pulse does
+            this.shift_click_img_idx !== null
+              ? JSON.parse(JSON.stringify(this.protocol_order[this.shift_click_img_idx]))
+              : null;
           // change color and insert after original pulse
           duplicate_pulse.repeat.color = generate_random_color(true);
           this.protocol_order.splice(this.shift_click_img_idx + 1, 0, duplicate_pulse);

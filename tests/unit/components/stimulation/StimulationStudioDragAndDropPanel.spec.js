@@ -12,20 +12,20 @@ const test_protocol_order = [
     src: "placeholder",
     stop_setting: "Stimulate Until Complete",
     repeat: {
-      number_of_repeats: 1,
+      number_of_repeats: 2,
       color: "#fffff",
     },
     pulse_settings: {
-      phase_one_duration: 3,
+      phase_one_duration: 20,
       phase_one_charge: 2,
-      interphase_interval: 5,
-      phase_two_duration: 1,
+      interphase_interval: 10,
+      phase_two_duration: 20,
       phase_two_charge: -5,
     },
     stim_settings: {
       delay_interval: 0,
       total_active_duration: {
-        duration: 20,
+        duration: 100,
         unit: "milliseconds",
       },
     },
@@ -35,17 +35,17 @@ const test_protocol_order = [
     src: "placeholder",
     stop_setting: "Stimulate Until Complete",
     repeat: {
-      number_of_repeats: 1,
+      number_of_repeats: 10,
       color: "#ffff1",
     },
     pulse_settings: {
-      phase_one_duration: 3,
-      phase_one_charge: 2,
+      phase_one_duration: 20,
+      phase_one_charge: 3,
     },
     stim_settings: {
       delay_interval: 0,
       total_active_duration: {
-        duration: 0,
+        duration: 200,
         unit: "milliseconds",
       },
     },
@@ -59,7 +59,7 @@ const test_protocol_order = [
       color: "#ffff2",
     },
     pulse_settings: {
-      phase_one_duration: 3,
+      phase_one_duration: 300,
       phase_one_charge: 0,
       interphase_interval: 0,
       phase_two_duration: 0,
@@ -68,7 +68,7 @@ const test_protocol_order = [
     stim_settings: {
       delay_interval: 0,
       total_active_duration: {
-        duration: 3,
+        duration: 300,
         unit: "seconds",
       },
     },
@@ -78,17 +78,17 @@ const test_protocol_order = [
     src: "placeholder",
     stop_setting: "Stimulate Until Complete",
     repeat: {
-      number_of_repeats: 1,
+      number_of_repeats: 40,
       color: "#ffff3",
     },
     pulse_settings: {
-      phase_one_duration: 3,
+      phase_one_duration: 10,
       phase_one_charge: 2,
     },
     stim_settings: {
       delay_interval: 0,
       total_active_duration: {
-        duration: 20,
+        duration: 400,
         unit: "milliseconds",
       },
     },
@@ -385,7 +385,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     expect(store.state.stimulation.hovered_pulse).toStrictEqual({
       idx: 1,
-      indices: [9, 10],
+      indices: [9, 15],
       color: "#ffff1",
     });
   });
@@ -422,7 +422,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.on_pulse_enter(1);
     expect(store.state.stimulation.hovered_pulse).toStrictEqual({
       idx: 1,
-      indices: [9, 10],
+      indices: [9, 15],
       color: "#ffff1",
     });
 

@@ -378,7 +378,7 @@ describe("store/stimulation", () => {
       expect(store.state.stimulation.protocol_assignments).toStrictEqual(test_assignment);
       expect(store.state.stimulation.stim_status).toBe(STIM_STATUS.CONFIG_CHECK_NEEDED);
     });
-    test("When chagnes the stim studios x-axis unit, Then the coordinate values in the store will be changed accordingly", async () => {
+    test("When changes the stim studios x-axis unit, Then the coordinate values in the store will be changed accordingly", async () => {
       const test_ms_coordinates = {
         x_values: [0, 5000, 10000, 15000],
         y_values: [50, 55, 60, 65],
@@ -388,23 +388,26 @@ describe("store/stimulation", () => {
         y_values: [50, 55, 60, 65],
       };
 
+      const ms_obj = { idx: 0, unit_name: "milliseconds" };
+      const sec_obj = { idx: 1, unit_name: "seconds" };
+
       await store.commit("stimulation/set_axis_values", test_ms_coordinates);
 
-      await store.dispatch("stimulation/handle_x_axis_unit", 1);
+      await store.dispatch("stimulation/handle_x_axis_unit", sec_obj);
       expect(store.state.stimulation.x_axis_values).toStrictEqual(test_sec_coordinates.x_values);
       expect(store.state.stimulation.y_axis_values).toStrictEqual(test_sec_coordinates.y_values);
 
-      // test to ensure it won't happen twice in a row, will only occur when the index value is changes
-      await store.dispatch("stimulation/handle_x_axis_unit", 1);
+      // test to ensure it won't happen twice in a row, will only occur when the index value is changed
+      await store.dispatch("stimulation/handle_x_axis_unit", sec_obj);
       expect(store.state.stimulation.x_axis_values).toStrictEqual(test_sec_coordinates.x_values);
       expect(store.state.stimulation.y_axis_values).toStrictEqual(test_sec_coordinates.y_values);
 
-      await store.dispatch("stimulation/handle_x_axis_unit", 0);
+      await store.dispatch("stimulation/handle_x_axis_unit", ms_obj);
       expect(store.state.stimulation.x_axis_values).toStrictEqual(test_ms_coordinates.x_values);
       expect(store.state.stimulation.y_axis_values).toStrictEqual(test_ms_coordinates.y_values);
 
-      // test to ensure it won't happen twice in a row, will only occur when the index value is changes
-      await store.dispatch("stimulation/handle_x_axis_unit", 0);
+      // test to ensure it won't happen twice in a row, will only occur when the index value is changed
+      await store.dispatch("stimulation/handle_x_axis_unit", ms_obj);
       expect(store.state.stimulation.x_axis_values).toStrictEqual(test_ms_coordinates.x_values);
       expect(store.state.stimulation.y_axis_values).toStrictEqual(test_ms_coordinates.y_values);
     });
