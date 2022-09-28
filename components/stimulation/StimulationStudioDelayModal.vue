@@ -161,15 +161,15 @@ export default {
 
       this.$emit("delay_close", button_label, delay_settings, stim_settings, frequency);
     },
-    check_validity(valueStr) {
-      this.current_value = valueStr;
+    check_validity(value_str) {
+      this.current_value = value_str;
 
-      const value = +valueStr;
+      const value = +value_str;
 
       const selected_unit = this.time_units[this.time_unit_idx];
       const value_in_millis = value * TIME_CONVERSION_TO_MILLIS[selected_unit];
 
-      if (valueStr === "") {
+      if (value_str === "") {
         this.invalid_text = this.invalid_err_msg.required;
       } else if (isNaN(value)) {
         this.invalid_text = this.invalid_err_msg.num_err;

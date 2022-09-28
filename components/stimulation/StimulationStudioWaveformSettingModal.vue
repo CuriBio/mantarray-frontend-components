@@ -602,9 +602,9 @@ export default {
       this.all_valid = true;
     },
     check_pulse_duration(label) {
-      const valueStr = this.pulse_settings[label];
-      const value = +valueStr;
-      if (valueStr === "") {
+      const value_str = this.pulse_settings[label];
+      const value = +value_str;
+      if (value_str === "") {
         this.err_msgs[label] = this.invalid_err_msg.required;
       } else if (isNaN(value) || value < 0) {
         this.err_msgs[label] = this.invalid_err_msg.min_num_err;
@@ -616,8 +616,8 @@ export default {
       }
     },
     check_active_duration() {
-      const valueStr = this.stim_settings.total_active_duration.duration;
-      const value = +valueStr;
+      const value_str = this.stim_settings.total_active_duration.duration;
+      const value = +value_str;
 
       const selected_unit = this.time_units[this.active_duration_idx];
       const value_in_millis = value * TIME_CONVERSION_TO_MILLIS[selected_unit];
@@ -627,7 +627,7 @@ export default {
 
       const label = "total_active_duration";
 
-      if (valueStr === "") {
+      if (value_str === "") {
         this.err_msgs[label] = this.invalid_err_msg.required;
       } else if (isNaN(value)) {
         this.err_msgs[label] = "Invalid number";
@@ -645,10 +645,10 @@ export default {
     check_pulse_frequency() {
       const label = "pulse_frequency";
 
-      const valueStr = this.input_pulse_frequency;
-      const value = +valueStr;
+      const value_str = this.input_pulse_frequency;
+      const value = +value_str;
 
-      if (valueStr === "") {
+      if (value_str === "") {
         this.err_msgs[label] = this.invalid_err_msg.required;
       } else if (isNaN(value) || value <= 0 || value > 100) {
         this.err_msgs[label] = this.invalid_err_msg.frequency;
@@ -660,9 +660,9 @@ export default {
         this.check_pulse_duration_validity(); // Need to recheck pulse dur after a new valid frequency is entered
       }
     },
-    check_charge_validity(valueStr, label) {
-      const value = +valueStr;
-      if (valueStr === "") {
+    check_charge_validity(value_str, label) {
+      const value = +value_str;
+      if (value_str === "") {
         this.err_msgs[label] = this.invalid_err_msg.required;
       } else if (isNaN(value)) {
         this.err_msgs[label] = this.invalid_err_msg.num_err;
