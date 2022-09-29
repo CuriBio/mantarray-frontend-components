@@ -10,7 +10,8 @@ Changed:
 
 Fixed:
 ^^^^^^
-- Now sends ``"Error"`` for pulse3d_version when no pulse3d_versions found
+- Now sends ``"Error"`` for pulse3d_version if no real pulse3d versions stored
+
 
 1.2.0 (2022-09-20)
 ------------------
