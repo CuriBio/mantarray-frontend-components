@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.2.2 (unreleased)
+------------------
+
+Fixed:
+^^^^^^
+- 'Stimulate until complete' will now update stim_status to correct stopped state upon completion
+
+
 1.2.1 (2022-09-28)
 ------------------
 
