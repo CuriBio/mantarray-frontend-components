@@ -15,6 +15,7 @@ const state = () => ({
   y_axis_scale: 120,
   delay_blocks: [],
   stim_play_state: false,
+  x_axis_unit_name: "milliseconds",
   x_axis_time_idx: 0,
   edit_mode: { status: false, protocol: "", label: "", color: "" },
   stim_status: STIM_STATUS.CALIBRATION_NEEDED,

@@ -1,6 +1,7 @@
 import { mount, shallowMount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
 import { StimulationStudioWaveformSettingModal as dist_StimulationStudioWaveformSettingModal } from "@/dist/mantarray.common";
+import { MIN_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
 import Vuex from "vuex";
 
 let wrapper = null;
@@ -21,7 +22,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
   });
 
   test("When mounting StimulationStudioWaveformSettingModal from the build dist file, Then the title text `Biphasic Pulse Details` loads correctly and initial error messages for each input", () => {
-    const expected_err_msg = {
+    const expected_err_msgs = {
       phase_one_duration: "Required",
       phase_one_charge: "Required",
       interphase_interval: "Required",
@@ -29,6 +30,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       phase_two_charge: "Required",
       pulse_frequency: "Required",
       total_active_duration: "Required",
+      num_cycles: "Must be a whole number > 0",
     };
     wrapper = mount(dist_StimulationStudioWaveformSettingModal, {
       store,
@@ -53,7 +55,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     });
 
     const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
-    expect(wrapper.vm.err_msg).toStrictEqual(expected_err_msg);
+    expect(wrapper.vm.err_msgs).toStrictEqual(expected_err_msgs);
 
     expect(target_span).toBeTruthy();
   });
@@ -164,16 +166,18 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
 
     const expected_enabled_array = [true, true];
     const expected_settings = {
-      phase_one_duration: 15,
+      phase_one_duration: 10,
       phase_one_charge: 50,
       interphase_interval: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
     };
-    await wrapper.find("#input-widget-field-duration").setValue("15");
+    await wrapper.find("#input-widget-field-duration").setValue("10");
     await wrapper.find("#input-widget-field-charge").setValue("50");
-    await wrapper.find("#input-widget-field-pulse-frequency").setValue("2");
-    await wrapper.find("#input-widget-field-total-active-duration").setValue("30");
+    await wrapper.find("#input-widget-field-pulse-frequency").setValue("20");
+    await wrapper
+      .find("#input-widget-field-total-active-duration")
+      .setValue(MIN_SUBPROTOCOL_DURATION_MS.toString());
 
     expect(wrapper.vm.all_valid).toBe(true);
     expect(wrapper.vm.is_enabled_array).toStrictEqual(expected_enabled_array);
@@ -210,13 +214,13 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     const target_input_field = wrapper.find("#input-widget-field-duration");
 
     await target_input_field.setValue("test");
-    expect(wrapper.vm.err_msg.phase_one_duration).toBe("Must be a positive number");
+    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Must be a positive number");
 
     await target_input_field.setValue("1500");
-    expect(wrapper.vm.err_msg.phase_one_duration).toBe("Duration must be <= 50ms");
+    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Duration must be <= 50ms");
 
     await target_input_field.setValue("");
-    expect(wrapper.vm.err_msg.phase_one_duration).toBe("Required");
+    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Required");
   });
   test("Given that a high frequency is selected, When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
     const wrapper = mount(StimulationStudioWaveformSettingModal, {
@@ -244,10 +248,10 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     });
     const target_input_field = wrapper.find("#input-widget-field-duration");
     await target_input_field.setValue("11");
-    expect(wrapper.vm.err_msg.phase_one_duration).toBe("Duration must be <= 10ms");
+    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Duration must be <= 10ms");
   });
 
-  test("When a user adds a value to the total active duration, Then the value must be a number greater than the sum of the phase durations", async () => {
+  test("When a user adds a value to the total active duration, Then the value must be a number greater than the min allowed subprotocol duration", async () => {
     const wrapper = mount(StimulationStudioWaveformSettingModal, {
       store,
       localVue,
@@ -273,17 +277,17 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     });
     const target_input_field = wrapper.find("#input-widget-field-total-active-duration");
 
-    await target_input_field.setValue("29");
-    expect(wrapper.vm.err_msg.total_active_duration).toBe("Must be a number >= 30ms");
+    await target_input_field.setValue((MIN_SUBPROTOCOL_DURATION_MS - 1).toString());
+    expect(wrapper.vm.err_msgs.total_active_duration).toBe(`Must be >= ${MIN_SUBPROTOCOL_DURATION_MS}ms`);
 
-    await target_input_field.setValue("-29");
-    expect(wrapper.vm.err_msg.total_active_duration).toBe("Must be a number >= 30ms");
+    await target_input_field.setValue((-(MIN_SUBPROTOCOL_DURATION_MS - 1)).toString());
+    expect(wrapper.vm.err_msgs.total_active_duration).toBe(`Must be >= ${MIN_SUBPROTOCOL_DURATION_MS}ms`);
 
-    await target_input_field.setValue("30");
-    expect(wrapper.vm.err_msg.total_active_duration).toBe("");
+    await target_input_field.setValue(MIN_SUBPROTOCOL_DURATION_MS.toString());
+    expect(wrapper.vm.err_msgs.total_active_duration).toBe("");
 
     await target_input_field.setValue("");
-    expect(wrapper.vm.err_msg.total_active_duration).toBe("Required");
+    expect(wrapper.vm.err_msgs.total_active_duration).toBe("Required");
   });
 
   test("When a user changes a the unit of time in the setting modal, Then the change will trigger a new validation check and record new selected index", async () => {

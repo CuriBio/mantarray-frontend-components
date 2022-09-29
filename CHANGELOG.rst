@@ -1,6 +1,17 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.2.1 (unreleased)
+------------------
+
+Changed:
+^^^^^^^^
+- Subprotocols can now be defined in terms of number of cycles or active duration
+
+Fixed:
+^^^^^^
+- Now sends ``"Error"`` for pulse3d_version if no real pulse3d versions stored
+
 
 1.2.0 (2022-09-20)
 ------------------

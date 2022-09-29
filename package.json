@@ -1,6 +1,6 @@
 {
   "name": "@curi-bio/mantarray-frontend-components",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "shared components between web and desktop app.",
   "main": "./dist/mantarray.common.js",
   "author": "Curi Bio <contact@curibio.com> (http://www.curibio.com/)",
@@ -27,7 +27,7 @@
     "docs": "jsdoc -c jsdoc.json"
   },
   "engines": {
-    "node": ">=16.17.0"
+    "node": "^16.17.0"
   },
   "files": [
     "dist/*",
@@ -52,7 +52,7 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@curi-bio/frontend-test-utils": "~0.2.2",
+    "@curi-bio/frontend-test-utils": "~0.2.3",
     "@fortawesome/fontawesome-free": "~6.1.1",
     "@fortawesome/fontawesome-svg-core": "~1.2.27",
     "@fortawesome/free-brands-svg-icons": "~5.15.1",

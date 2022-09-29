@@ -253,7 +253,8 @@ export default {
   methods: {
     handle_total_duration_unit_change(idx) {
       this.active_duration_idx = idx;
-      this.$store.dispatch("stimulation/handle_x_axis_unit", idx);
+      const unit_name = this.time_units[idx];
+      this.$store.dispatch("stimulation/handle_x_axis_unit", { idx, unit_name });
     },
     render_plot: function () {
       this.create_x_axis_scale();
@@ -285,22 +286,6 @@ export default {
       const y_axis_scale = this.y_axis_scale;
 
       this.waveform_line_node.selectAll("*").remove();
-      // this.waveform_line_node
-      //   .append("path")
-      //   .datum(data_to_plot)
-      //   .attr("fill", "none")
-      //   .attr("stroke", this.line_color)
-      //   .attr("stroke-width", 1.5)
-      //   .attr(
-      //     "d",
-      //     d3_line()
-      //       .x(function(d) {
-      //         return x_axis_scale(d[0]);
-      //       })
-      //       .y(function(d) {
-      //         return y_axis_scale(d[1]);
-      //       })
-      //   );
       for (const color in this.repeat_colors) {
         if (this.repeat_colors !== {}) {
           // repetitive, but eslint errors without a conditional inside the loop

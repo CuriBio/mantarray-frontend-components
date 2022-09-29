@@ -44,7 +44,11 @@
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
-import { MAX_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
+import {
+  MAX_SUBPROTOCOL_DURATION_MS,
+  MIN_SUBPROTOCOL_DURATION_MS,
+  TIME_CONVERSION_TO_MILLIS,
+} from "@/store/modules/stimulation/enums";
 
 /**
  * @vue-props {String} current_value - Current input if modal is open for editing
@@ -98,6 +102,7 @@ export default {
         num_err: "Must be a (+) number",
         required: "Required",
         valid: "",
+        min_duration: `Duration must be >=${MIN_SUBPROTOCOL_DURATION_MS}ms`,
         max_duration: "Duration must be <= 24hrs",
       },
       time_units: ["milliseconds", "seconds", "minutes", "hours"],
@@ -133,15 +138,9 @@ export default {
   methods: {
     close(idx) {
       const button_label = this.button_labels[idx];
-      const unit_converstion = {
-        milliseconds: 1,
-        seconds: 1000,
-        minutes: 60000,
-        hours: 3600000,
-      };
 
       const selected_unit = this.time_units[this.time_unit_idx];
-      const converted_input = Number(this.input_value) * unit_converstion[selected_unit];
+      const converted_input = Number(this.input_value) * TIME_CONVERSION_TO_MILLIS[selected_unit];
       const delay_settings = {
         phase_one_duration: converted_input,
         phase_one_charge: 0,
@@ -162,16 +161,21 @@ export default {
 
       this.$emit("delay_close", button_label, delay_settings, stim_settings, frequency);
     },
-    check_validity(value) {
-      const number_regex = new RegExp("^([0]{1}.{1}[0-9]+|[1-9]{1}[0-9]*.{1}[0-9]+|[0-9]+|0)$");
+    check_validity(value_str) {
+      this.current_value = value_str;
 
-      this.current_value = value;
+      const value = +value_str;
 
-      if (value === "") {
+      const selected_unit = this.time_units[this.time_unit_idx];
+      const value_in_millis = value * TIME_CONVERSION_TO_MILLIS[selected_unit];
+
+      if (value_str === "") {
         this.invalid_text = this.invalid_err_msg.required;
-      } else if (!number_regex.test(value)) {
+      } else if (isNaN(value)) {
         this.invalid_text = this.invalid_err_msg.num_err;
-      } else if (this.get_dur_in_ms(value) > MAX_SUBPROTOCOL_DURATION_MS) {
+      } else if (value_in_millis < MIN_SUBPROTOCOL_DURATION_MS) {
+        this.invalid_text = this.invalid_err_msg.min_duration;
+      } else if (value_in_millis > MAX_SUBPROTOCOL_DURATION_MS) {
         this.invalid_text = this.invalid_err_msg.max_duration;
       } else {
         this.invalid_text = this.invalid_err_msg.valid;
@@ -182,9 +186,6 @@ export default {
       }
 
       this.is_valid = this.invalid_text === this.invalid_err_msg.valid;
-    },
-    get_dur_in_ms(value) {
-      return this.time_units[this.time_unit_idx] === "milliseconds" ? value : value * 1000;
     },
     handle_unit_change(idx) {
       this.time_unit_idx = idx;
