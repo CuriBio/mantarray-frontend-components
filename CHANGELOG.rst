@@ -1,8 +1,12 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.2.2 (unreleased)
+1.2.2 (2022-10-11)
 ------------------
+
+Added:
+^^^^^^
+- Plate barcode now sent in /start_managed_acquisition
 
 Fixed:
 ^^^^^^

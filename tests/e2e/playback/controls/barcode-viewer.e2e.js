@@ -49,7 +49,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog and click on 'Yes' and valid plate-platecode", async (t) => {
+test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog and click on 'Yes' and valid plate barcode", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-valid-plate-barcode");
 
   await t.click(barcode_pencil_click);
@@ -61,7 +61,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
   await testcafe_page_visual_regression(t, screenshot_path);
 });
 
-test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog, click on 'Yes' and invalid plate-platecode", async (t) => {
+test("Plate Barcode with no input field and click on the Pencil to Show Manual Edit Dialog, click on 'Yes' and invalid plate barcode", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-invalid-plate-barcode");
 
   await t.click(barcode_pencil_click);
