@@ -52,10 +52,10 @@ export default {
     const url = "http://localhost:4567/start_recording";
     const params = {
       time_index,
-      plate_barcode,
-      is_hardware_test_recording: false,
-      stim_barcode,
       recording_name,
+      plate_barcode,
+      stim_barcode,
+      is_hardware_test_recording: false,
     };
     context.commit("set_recording_start_time", time_index);
     await call_axios_get_from_vuex(url, context, params);
@@ -159,8 +159,9 @@ export default {
     }
   },
   async start_live_view(context) {
+    const plate_barcode = this.state.playback.barcodes.plate_barcode.value;
     const url = "http://localhost:4567/start_managed_acquisition";
-    await call_axios_get_from_vuex(url, context);
+    await call_axios_get_from_vuex(url, context, { plate_barcode });
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.BUFFERING);
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.CALIBRATED, {
       root: true,
