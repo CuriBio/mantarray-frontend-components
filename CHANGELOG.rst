@@ -6,7 +6,8 @@ Changelog for Mantarray Frontend Components
 
 Changed:
 ^^^^^^^^
-- Include installer download when FE version does not match VE version
+- SW auto update message on app close
+- Include installer download when FE version does not match BE version
 - Websocket handlers now look for "stimulation_data" instead of "stimulation"
 
 
