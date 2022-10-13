@@ -565,7 +565,7 @@ describe("store/data", () => {
       };
 
       await new Promise((resolve) => {
-        socket_server_side.emit("stimulation", JSON.stringify(new_stim_data), (ack) => {
+        socket_server_side.emit("stimulation_data", JSON.stringify(new_stim_data), (ack) => {
           resolve(ack);
         });
       });
