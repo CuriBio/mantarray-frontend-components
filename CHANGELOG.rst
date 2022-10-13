@@ -9,7 +9,6 @@ Changed:
 - Websocket handlers now look for "stimulation_data" instead of "stimulation"
 
 
-
 1.2.2 (2022-10-11)
 ------------------
 
