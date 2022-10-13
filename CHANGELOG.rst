@@ -6,6 +6,7 @@ Changelog for Mantarray Frontend Components
 
 Changed:
 ^^^^^^^^
+- Include installer download when FE version does not match VE version
 - Websocket handlers now look for "stimulation_data" instead of "stimulation"
 
 
