@@ -211,7 +211,8 @@ export default {
       sw_update_labels: {
         header: "Important!",
         msg_one: "A software update will be installed after exiting.",
-        msg_two: "Please wait a few minutes before starting the software again.",
+        msg_two:
+          "The installer may prompt you to take action while it is running. Please watch it after this software closes.",
         button_names: ["Okay"],
       },
       short_circuit_labels: {
