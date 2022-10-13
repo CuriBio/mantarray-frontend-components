@@ -212,7 +212,7 @@ export default {
         header: "Important!",
         msg_one: "A software update will be installed after exiting.",
         msg_two:
-          "The installer may prompt you take action while it is running. Please watch it after this software closes.",
+          "The installer may prompt you to take action while it is running. Please watch it after this software closes.",
         button_names: ["Okay"],
       },
       short_circuit_labels: {
