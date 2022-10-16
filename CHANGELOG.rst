@@ -1,6 +1,13 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.2.2 (unreleased)
+------------------
+
+Changed:
+^^^^^^^^
+- Removed randomization from the pulse color generator in a stim protocols to prevent similar colors next to each other
+
 1.2.1 (2022-09-28)
 ------------------
 
