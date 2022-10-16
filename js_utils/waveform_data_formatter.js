@@ -190,23 +190,42 @@ function append_well_data(arr, new_arr) {
 /**
  * Function to that returns a random, high-contrast color.
  * @param   {boolean} non_green request to remove non-green hues or not from random color generator
+ * @param   {string} previous_hue used to ensure previous color is different enough in hue to new random color
  * @return  {string} string hsla value
  */
-function generate_random_color(non_green) {
+function generate_random_color(non_green, previous_hue) {
+  let selected_hue;
+
   // remove green hues from color range 70-170
   const non_green_ranges = [...Array(71).keys(), ...[...Array(360).keys()].splice(170)];
-  const color_idx = Math.floor(261 * Math.random());
-  const non_green_hue = non_green_ranges[color_idx];
 
-  // if green is allowed then just generate random color
-  const random_hue = 1 + Math.floor(359 * Math.random());
+  if (non_green && previous_hue) {
+    // this case is when the previous pulse color needs to be considered in next selection
+    const int_hue = Number(previous_hue);
+    const hue_idx = non_green_ranges.indexOf(int_hue);
 
-  const selected_hue = non_green ? non_green_hue : random_hue;
-  const random_sat = 90 + Math.floor(10 * Math.random());
-  const random_light = 40 + Math.floor(20 * Math.random());
+    // 80 will prevent too similar of purple/blue and red/pink next to each other
+    let opposite_idx = hue_idx + 80;
 
-  // Random non-green with high saturation, around 50% lightness to remove black and whites, and 100% opacity.
-  return `hsla(${selected_hue}, ${random_sat}%, ${random_light}%, 1)`;
+    if (!non_green_ranges[opposite_idx]) {
+      // using 210 instead of 260 (the total length of non-green hues) to prevent only alternating 4 colors
+      opposite_idx -= 210;
+    }
+
+    selected_hue = non_green_ranges[opposite_idx];
+  } else if (non_green && !previous_hue) {
+    // this is for the first pulse in a stimulation protocol when there is no previous color to consider
+    // select random color from the non-green hues
+    const random_non_green_idx = Math.floor(261 * Math.random());
+    selected_hue = non_green_ranges[random_non_green_idx];
+  } else {
+    // if green is allowed then just generate random color
+    // this is used in the protocol letter and well assignment color, not any pulse colors
+    selected_hue = 1 + Math.floor(359 * Math.random());
+  }
+
+  // Random non-green with high saturation, 50% lightness, and 100% opacity
+  return `hsla(${selected_hue}, 100%, 50%, 1)`;
 }
 
 exports.convert_from_json_of_sample_idx_and_value = convert_from_json_of_sample_idx_and_value;

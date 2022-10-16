@@ -228,8 +228,12 @@ export default {
             this.shift_click_img_idx !== null
               ? JSON.parse(JSON.stringify(this.protocol_order[this.shift_click_img_idx]))
               : null;
+
           // change color and insert after original pulse
-          duplicate_pulse.repeat.color = generate_random_color(true);
+          // eslint-disable-next-line no-case-declarations
+          const last_pulse_hue = this.get_pulse_hue(this.shift_click_img_idx);
+
+          duplicate_pulse.repeat.color = generate_random_color(true, last_pulse_hue);
           this.protocol_order.splice(this.shift_click_img_idx + 1, 0, duplicate_pulse);
           break;
         case "Delete":
@@ -278,9 +282,20 @@ export default {
       this.set_time_unit(unit);
       this.handle_protocol_order(this.protocol_order);
     },
+    get_pulse_hue(idx) {
+      // duplicated pulses are not always in last index
+      const pulse_idx = idx ? idx : this.protocol_order.length - 1;
+
+      const last_pulse_hsla = this.protocol_order[pulse_idx].repeat.color;
+      return last_pulse_hsla.split("(")[1].split(",")[0];
+    },
     clone(type) {
       this.cloned = true;
-      const random_color = generate_random_color(true);
+
+      const random_color =
+        this.protocol_order.length > 0
+          ? generate_random_color(true, this.get_pulse_hue())
+          : generate_random_color(true);
 
       return {
         type,
