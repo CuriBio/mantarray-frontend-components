@@ -1,12 +1,34 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.2.2 (unreleased)
+1.2.4 (unreleased)
 ------------------
 
 Changed:
 ^^^^^^^^
 - Removed randomization from the pulse color generator in a stim protocols to prevent similar colors next to each other
+
+1.2.3 (2022-10-13)
+------------------
+
+Changed:
+^^^^^^^^
+- SW auto update message on app close
+- Include installer download when FE version does not match BE version
+- Websocket handlers now look for "stimulation_data" instead of "stimulation"
+
+
+1.2.2 (2022-10-11)
+------------------
+
+Added:
+^^^^^^
+- Plate barcode now sent in /start_managed_acquisition
+
+Fixed:
+^^^^^^
+- 'Stimulate until complete' will now update stim_status to correct stopped state upon completion
+
 
 1.2.1 (2022-09-28)
 ------------------

@@ -235,9 +235,9 @@ describe("store/playback", () => {
         ["ML2021366144", "julian date '366'", true],
       ])(
         "Given a plate barcode scanned results in value %s, When validation rule FAILS  or PASSES due %s, Then validation results set valid to %s",
-        async (platecode, reason, valid) => {
+        async (plate_barcode, reason, valid) => {
           // testing with plate barcode here but the functionality is exactly the same for stim barcodes
-          store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: platecode });
+          store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: plate_barcode });
           expect(store.state.playback.barcodes.plate_barcode.valid).toBe(valid);
         }
       );
@@ -658,11 +658,15 @@ describe("store/playback", () => {
         playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
       );
 
+      const plate_barcode = "ML22001000-2";
+      store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: plate_barcode });
+
       await store.dispatch("playback/start_live_view");
 
       const request_to_start_acquisition = mocked_axios.history.get[0];
 
       expect(request_to_start_acquisition.url).toMatch(`${base_url}/${api}`);
+      expect(request_to_start_acquisition.params).toStrictEqual({ plate_barcode });
 
       expect(store.state.playback.playback_state).toStrictEqual(
         playback_module.ENUMS.PLAYBACK_STATES.BUFFERING
