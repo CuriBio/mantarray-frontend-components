@@ -1,6 +1,5 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioBlockViewEditor from "@/components/stimulation/StimulationStudioBlockViewEditor.vue";
-import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();

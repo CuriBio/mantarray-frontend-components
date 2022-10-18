@@ -22,10 +22,13 @@ describe("StimulationStudioDelayModal.vue", () => {
     const wrapper = mount(StimulationStudioDelayModal, {
       store,
       localVue,
+      propsData: {
+        current_color: "hsla(50, 100%, 50%, 1)",
+      },
     });
 
     await wrapper.find("#input-widget-field-delay").setValue(MIN_SUBPROTOCOL_DURATION_MS.toString());
-    await wrapper.findAll(".span__button_label").at(0).trigger("click");
+    await wrapper.findAll(".span__button_label").at(1).trigger("click");
 
     expect(wrapper.emitted("delay_close")).toBeTruthy();
   });
@@ -60,6 +63,9 @@ describe("StimulationStudioDelayModal.vue", () => {
     const wrapper = mount(StimulationStudioDelayModal, {
       store,
       localVue,
+      propsData: {
+        current_color: "hsla(50, 100%, 50%, 1)",
+      },
     });
     const target_input_field = wrapper.find("#input-widget-field-delay");
 
@@ -79,6 +85,7 @@ describe("StimulationStudioDelayModal.vue", () => {
       localVue,
       propsData: {
         modal_type: "Delay",
+        current_color: "hsla(50, 100%, 50%, 1)",
       },
     });
     await wrapper.find("#input-widget-field-delay").setValue("5000");
@@ -91,6 +98,9 @@ describe("StimulationStudioDelayModal.vue", () => {
     const wrapper = mount(StimulationStudioDelayModal, {
       store,
       localVue,
+      propsData: {
+        current_color: "hsla(50, 100%, 50%, 1)",
+      },
     });
 
     await wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");

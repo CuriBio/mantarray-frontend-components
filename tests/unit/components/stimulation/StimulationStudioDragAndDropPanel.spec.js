@@ -255,7 +255,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.find(".modal_overlay")).toBeTruthy();
 
     const modal_buttons = wrapper.findAll(".span__button_label");
-    await modal_buttons.at(2).trigger("click");
+    await modal_buttons.at(3).trigger("click");
 
     expect(wrapper.vm.protocol_order).toHaveLength(3);
     expect(wrapper.vm.modal_type).toBeNull();
@@ -444,7 +444,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.protocol_order).toHaveLength(4);
     await wrapper.vm.open_modal_for_edit("Monophasic", 3);
 
-    const duplicate_button = wrapper.findAll(".span__button_label").at(1);
+    const duplicate_button = wrapper.findAll(".span__button_label").at(2);
     await duplicate_button.trigger("click");
 
     expect(wrapper.vm.protocol_order).toHaveLength(5);
