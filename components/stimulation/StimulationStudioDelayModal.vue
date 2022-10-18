@@ -339,7 +339,11 @@ export default {
   z-index: 5;
 }
 
-.modal-backdrop {
+#change-color-modal-two___BV_modal_backdrop_ {
+  background-color: rgb(0, 0, 0, 0);
+}
+
+#change-color-modal___BV_modal_backdrop_ {
   background-color: rgb(0, 0, 0, 0);
 }
 
