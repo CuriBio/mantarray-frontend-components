@@ -162,7 +162,7 @@ jobs:
 
       - name: Archive visual regression
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node-version }}
           path: "tests/e2e/screenshots/**/*"
