@@ -3,6 +3,7 @@ import {
   find_closest_array_idx,
   get_array_slice_to_display,
   append_well_data,
+  generate_random_color,
 } from "@/js_utils/waveform_data_formatter.js";
 
 import data_store_module from "@/store/modules/data";
