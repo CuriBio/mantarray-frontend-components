@@ -514,7 +514,7 @@ describe("store/stimulation", () => {
     test("When a user makes changes to the protocol order, Then new x and y coordinates will be established and mutated to state", async () => {
       const x_values = [0, 0, 100, 100, 110, 110, 113, 113, 118, 118];
       const y_values = [0, 200, 200, 0, 0, 200, 200, 0, 0, 0];
-      const colors = { b7b7b7: [0, 10] };
+      const colors = [["b7b7b7", [0, 10]]];
 
       await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
       const { x_axis_values, y_axis_values, repeat_colors } = store.state.stimulation;

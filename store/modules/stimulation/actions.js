@@ -17,7 +17,7 @@ export default {
   async handle_protocol_order({ commit, dispatch, state }, new_pulse_order) {
     const x_values = [0];
     const y_values = [0];
-    const color_assignments = {};
+    const color_assignments = [];
     const pulses = [];
     const get_last = (array) => array[array.length - 1];
     const helper = (setting, remaining_pulse_dur) => {
@@ -75,7 +75,7 @@ export default {
       }
 
       const ending_repeat_idx = x_values.length;
-      color_assignments[color] = [starting_repeat_idx, ending_repeat_idx];
+      color_assignments.push([color, [starting_repeat_idx, ending_repeat_idx]]);
     });
 
     // convert x_values to correct unit
@@ -356,7 +356,7 @@ export default {
     }
   },
   async on_pulse_mouseenter({ state }, idx) {
-    const hovered_pulse = Object.entries(state.repeat_colors)[idx];
+    const hovered_pulse = state.repeat_colors[idx];
 
     state.hovered_pulse = {
       idx,

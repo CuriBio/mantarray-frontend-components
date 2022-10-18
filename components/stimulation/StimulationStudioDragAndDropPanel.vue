@@ -208,6 +208,7 @@ export default {
       this.selected_frequency = null;
       this.current_delay_input = null;
       this.current_delay_unit = "milliseconds";
+      this.selected_color = null;
 
       switch (button) {
         case "Save":
@@ -217,13 +218,16 @@ export default {
             new_pulse.stim_settings = stim_settings;
             new_pulse.repeat.number_of_repeats = frequency;
             new_pulse.repeat.color = selected_color;
+            Object.assign(this.protocol_order[this.new_cloned_idx], new_pulse);
           }
           if (this.shift_click_img_idx !== null) {
             const edited_pulse = this.protocol_order[this.shift_click_img_idx];
+
             Object.assign(edited_pulse.pulse_settings, pulse_settings);
             Object.assign(edited_pulse.stim_settings, stim_settings);
-            edited_pulse.repeat.number_of_repeats = frequency;
-            edited_pulse.repeat.color = selected_color;
+            Object.assign(edited_pulse.repeat, { number_of_repeats: frequency, color: selected_color });
+
+            Object.assign(this.protocol_order[this.shift_click_img_idx], edited_pulse);
           }
           break;
         case "Duplicate":
@@ -235,7 +239,14 @@ export default {
 
           // change color and insert after original pulse
           // eslint-disable-next-line no-case-declarations
-          duplicate_pulse.repeat.color = generate_random_color(true);
+          const previous_hue = this.get_pulse_hue(this.shift_click_img_idx);
+          // eslint-disable-next-line no-case-declarations
+          const next_hue =
+            this.shift_click_img_idx < this.protocol_order.length - 1
+              ? this.get_pulse_hue(this.shift_click_img_idx + 1)
+              : undefined;
+
+          duplicate_pulse.repeat.color = generate_random_color(true, previous_hue, next_hue);
           this.protocol_order.splice(this.shift_click_img_idx + 1, 0, duplicate_pulse);
           break;
         case "Delete":
@@ -246,7 +257,6 @@ export default {
             this.protocol_order.splice(this.new_cloned_idx, 1);
           }
       }
-      this.selected_color = null;
       this.new_cloned_idx = null;
       this.shift_click_img_idx = null;
       this.handle_protocol_order(this.protocol_order);

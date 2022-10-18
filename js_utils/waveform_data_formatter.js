@@ -189,11 +189,14 @@ function append_well_data(arr, new_arr) {
 
 /**
  * Function to that returns a random, high-contrast color.
+ * Currently, if a user duplicates a single pulse more than 4 times, it will start to rotate similar colors.
+ * Similarly, if a user duplicates a pulse with two succeeding pulses after, the next color will be the same as the pulse two ahead of the duplicated pulse.
  * @param   {boolean} non_green request to remove non-green hues or not from random color generator
  * @param   {string} previous_hue used to ensure previous color is different enough in hue to new random color
+ * @param   {string} next_hue used to ensure succeeding color is different enough in hue to new random color
  * @return  {string} string hsla value
  */
-function generate_random_color(non_green, previous_hue) {
+function generate_random_color(non_green, previous_hue, next_hue) {
   let selected_hue;
 
   // remove green hues from color range 70-170
@@ -201,7 +204,7 @@ function generate_random_color(non_green, previous_hue) {
 
   if (non_green && previous_hue) {
     // this case is when the previous pulse color needs to be considered in next selection
-    const int_hue = Number(previous_hue);
+    const int_hue = next_hue ? Number(next_hue) : Number(previous_hue);
     const hue_idx = non_green_ranges.indexOf(int_hue);
 
     // 80 will prevent too similar of purple/blue and red/pink next to each other
@@ -212,6 +215,7 @@ function generate_random_color(non_green, previous_hue) {
       opposite_idx -= 210;
     }
 
+    // assign selected hue
     selected_hue = non_green_ranges[opposite_idx];
   } else if (non_green && !previous_hue) {
     // this is for the first pulse in a stimulation protocol when there is no previous color to consider
