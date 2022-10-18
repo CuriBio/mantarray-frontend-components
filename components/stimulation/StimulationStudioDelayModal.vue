@@ -1,6 +1,18 @@
 <template>
   <div class="div__stimulationstudio-current-settings-background">
-    <span class="span__stimulationstudio-current-settings-title">{{ modal_title }}</span>
+    <span class="span__stimulationstudio-current-settings-title"
+      >{{ modal_title }}
+      <div class="div__color-block" :style="color_to_display" />
+      <div class="div__color-label" @click="$bvModal.show('change-color-modal-two')">Change color</div></span
+    >
+    <span>
+      <b-modal id="change-color-modal-two" size="sm" hide-footer hide-header hide-header-close :static="true">
+        <StimulationStudioColorModal
+          :current_color="selected_color"
+          @change_pulse_color="change_pulse_color"
+        />
+      </b-modal>
+    </span>
     <canvas class="canvas__stimulationstudio-horizontal-line-separator"> </canvas>
     <div class="div__stimulationstudio-body-container">
       <span>{{ input_description }}</span>
@@ -44,12 +56,20 @@
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
+import StimulationStudioColorModal from "@/components/stimulation/StimulationStudioColorModal.vue";
 import {
   MAX_SUBPROTOCOL_DURATION_MS,
   MIN_SUBPROTOCOL_DURATION_MS,
   TIME_CONVERSION_TO_MILLIS,
 } from "@/store/modules/stimulation/enums";
+import Vue from "vue";
+import BootstrapVue from "bootstrap-vue";
 
+import { BModal } from "bootstrap-vue";
+import { VBPopover } from "bootstrap-vue";
+Vue.directive("b-popover", VBPopover);
+Vue.component("BModal", BModal);
+Vue.use(BootstrapVue);
 /**
  * @vue-props {String} current_value - Current input if modal is open for editing
  * @vue-props {String} current_delay_unit - The current unit selected when a delay block is opened to edit
@@ -78,6 +98,7 @@ export default {
     InputWidget,
     ButtonWidget,
     SmallDropDown,
+    StimulationStudioColorModal,
   },
   props: {
     current_delay_input: {
@@ -91,6 +112,10 @@ export default {
     modal_open_for_edit: {
       type: Boolean,
       default: false,
+    },
+    current_color: {
+      type: String,
+      default: null,
     },
   },
   data() {
@@ -111,6 +136,7 @@ export default {
       is_valid: false,
       modal_title: "Delay",
       input_description: "Duration:",
+      selected_color: this.current_color,
     };
   },
   computed: {
@@ -119,6 +145,9 @@ export default {
     },
     button_hover_colors: function () {
       return this.modal_open_for_edit ? ["#19ac8a", "#19ac8a", "#bd4932", "#bd4932"] : ["#19ac8a", "#bd4932"];
+    },
+    color_to_display: function () {
+      return "background-color: " + this.selected_color;
     },
   },
   watch: {
@@ -159,7 +188,7 @@ export default {
 
       const frequency = 1;
 
-      this.$emit("delay_close", button_label, delay_settings, stim_settings, frequency);
+      this.$emit("delay_close", button_label, delay_settings, stim_settings, frequency, this.selected_color);
     },
     check_validity(value_str) {
       this.current_value = value_str;
@@ -191,10 +220,14 @@ export default {
       this.time_unit_idx = idx;
       this.check_validity(this.current_value);
     },
+    change_pulse_color(color) {
+      this.$bvModal.hide("change-color-modal-two");
+      this.selected_color = color;
+    },
   },
 };
 </script>
-<style scoped>
+<style>
 .div__stimulationstudio-current-settings-background {
   transform: rotate(0deg);
   box-sizing: border-box;
@@ -225,7 +258,7 @@ export default {
   width: 500px;
   height: 30px;
   top: calc(72px - 55px);
-  left: calc(863px - 852px);
+  left: calc(863px - 872px);
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -265,6 +298,30 @@ export default {
   margin-left: 140px;
 }
 
+.div__color-block {
+  height: 14px;
+  width: 14px;
+  top: 7px;
+  left: 370px;
+  position: absolute;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.div__color-label {
+  font-style: italic;
+  color: rgb(255, 255, 255);
+  position: absolute;
+  font-size: 13px;
+  left: 395px;
+  top: 5px;
+  cursor: pointer;
+}
+
+.div__color-label:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .div__stimulationstudio-body-container {
   display: flex;
   justify-content: center;
@@ -280,5 +337,20 @@ export default {
   font-size: 17px;
   color: rgb(183, 183, 183);
   z-index: 5;
+}
+
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0);
+}
+
+.modal-content {
+  background-color: rgb(0, 0, 0, 0);
+}
+
+#change-color-modal-two {
+  position: fixed;
+  top: 10%;
+  left: 65%;
+  height: 300px;
 }
 </style>

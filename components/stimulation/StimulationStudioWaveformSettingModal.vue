@@ -5,8 +5,18 @@
     :style="pulse_type === 'Monophasic' ? 'height: 550px; margin-top: 100px;' : 'height: 840px;'"
   >
     <span id="cmpD5b2290fff52de686574ddc4481707a03" class="span__stimulationstudio-current-settings-title"
-      >{{ pulse_type }}&nbsp;<wbr />Pulse&nbsp;<wbr />Details</span
-    >
+      >{{ pulse_type }}&nbsp;<wbr />Pulse&nbsp;<wbr />Details
+    </span>
+    <div class="div__color-block" :style="color_to_display" />
+    <div class="div__color-label" @click="$bvModal.show('change-color-modal')">Change color</div>
+    <span>
+      <b-modal id="change-color-modal" size="sm" hide-footer hide-header hide-header-close :static="true">
+        <StimulationStudioColorModal
+          :current_color="selected_color"
+          @change_pulse_color="change_pulse_color"
+        />
+      </b-modal>
+    </span>
     <canvas id="cmpD1bd9abe7f57064ecc21010fe87aa8e0a" :style="'top: 59px; width: 900px'" />
     <span id="cmpD334cd34b00ad111c21b729fee2b1def2" class="span__stimulationstudio-current-settings-sub-title"
       >Phase&nbsp;<wbr />1</span
@@ -296,12 +306,18 @@ import Vue from "vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import CheckBoxWidget from "@/components/basic_widgets/CheckBoxWidget.vue";
+import StimulationStudioColorModal from "@/components/stimulation/StimulationStudioColorModal.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { VBPopover } from "bootstrap-vue";
 import { MIN_SUBPROTOCOL_DURATION_MS, TIME_CONVERSION_TO_MILLIS } from "@/store/modules/stimulation/enums";
 import { MAX_SUBPROTOCOL_DURATION_MS } from "../../store/modules/stimulation/enums";
+import BootstrapVue from "bootstrap-vue";
+import { BModal } from "bootstrap-vue";
+Vue.directive("b-popover", VBPopover);
+Vue.component("BModal", BModal);
+Vue.use(BootstrapVue);
 Vue.directive("popover", VBPopover);
 library.add(faBalanceScale, faQuestionCircle);
 
@@ -342,6 +358,7 @@ export default {
     ButtonWidget,
     SmallDropDown,
     CheckBoxWidget,
+    StimulationStudioColorModal,
   },
   props: {
     stimulation_type: { type: String, default: "Current" },
@@ -358,6 +375,10 @@ export default {
     frequency: {
       type: Number,
       required: true,
+    },
+    current_color: {
+      type: String,
+      default: null,
     },
   },
   data() {
@@ -411,6 +432,7 @@ export default {
       checkbox_options: [{ text: "", value: "use_num_cycles" }],
       checkbox_reset: false,
       checkbox_state: false,
+      selected_color: this.current_color,
     };
   },
   computed: {
@@ -430,6 +452,9 @@ export default {
     },
     button_labels: function () {
       return this.modal_open_for_edit ? ["Save", "Duplicate", "Delete", "Cancel"] : ["Save", "Cancel"];
+    },
+    color_to_display: function () {
+      return "background-color: " + this.selected_color;
     },
   },
   watch: {
@@ -485,7 +510,14 @@ export default {
     close(idx) {
       const button_label = this.button_labels[idx];
       this.stim_settings.repeat_delay_interval = this.calculated_delay;
-      this.$emit("close", button_label, this.pulse_settings, this.stim_settings, this.input_pulse_frequency);
+      this.$emit(
+        "close",
+        button_label,
+        this.pulse_settings,
+        this.stim_settings,
+        this.input_pulse_frequency,
+        this.selected_color
+      );
     },
     update_freq(new_value) {
       this.check_validity(new_value, "pulse_frequency");
@@ -696,6 +728,10 @@ export default {
       this.use_num_cycles = new_value == "use_num_cycles";
       this.update_current_calculated_value();
     },
+    change_pulse_color(color) {
+      this.$bvModal.hide("change-color-modal");
+      this.selected_color = color;
+    },
   },
 };
 </script>
@@ -841,6 +877,24 @@ canvas {
   text-align: right;
 }
 
+.div__color-block {
+  height: 14px;
+  width: 14px;
+  top: 24px;
+  left: 450px;
+  position: absolute;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.div__color-label {
+  font-style: italic;
+  color: rgb(255, 255, 255);
+  position: absolute;
+  font-size: 13px;
+  left: 475px;
+  top: 22px;
+  cursor: pointer;
+}
 .span__stimulationstudio-input {
   white-space: nowrap;
   text-align: left;
@@ -925,5 +979,12 @@ canvas {
 .div__mononphasic-diagram-descriptors {
   top: 430px;
   font-size: 14px;
+}
+
+#change-color-modal {
+  position: fixed;
+  top: 5%;
+  left: 30%;
+  height: 300px;
 }
 </style>
