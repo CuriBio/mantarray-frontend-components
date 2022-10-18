@@ -108,4 +108,20 @@ describe("StimulationStudioDelayModal.vue", () => {
 
     expect(wrapper.vm.time_unit_idx).toBe(1);
   });
+
+  test("When a user clicks on a new color for delay block, Then the color will be set to state to be emitted to parent component", async () => {
+    const wrapper = mount(StimulationStudioDelayModal, {
+      store,
+      localVue,
+      propsData: {
+        current_color: "hsla(50, 100%, 50%, 1)",
+      },
+    });
+
+    await wrapper.find(".div__color-label").trigger("click");
+
+    await wrapper.findAll(".individual_color_block").at(0).trigger("click");
+
+    expect(wrapper.vm.selected_color).toBe("hsla(0, 100%, 50%, 1)");
+  });
 });
