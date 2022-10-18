@@ -89,9 +89,9 @@ export default {
       default: 1200,
     },
     repeat_colors: {
-      type: Object,
+      type: Array,
       default: function () {
-        return {};
+        return [];
       },
     },
     delay_blocks: {
@@ -286,30 +286,28 @@ export default {
       const y_axis_scale = this.y_axis_scale;
 
       this.waveform_line_node.selectAll("*").remove();
-      for (const color in this.repeat_colors) {
-        if (this.repeat_colors !== {}) {
-          // repetitive, but eslint errors without a conditional inside the loop
-          const starting_idx = this.repeat_colors[color][0];
-          const ending_idx = this.repeat_colors[color][1];
-          const sliced_data_array = data_to_plot.slice(starting_idx, ending_idx);
+      for (const assignment of this.repeat_colors) {
+        // repetitive, but eslint errors without a conditional inside the loop
+        const starting_idx = assignment[1][0];
+        const ending_idx = assignment[1][1];
+        const sliced_data_array = data_to_plot.slice(starting_idx, ending_idx);
 
-          this.waveform_line_node
-            .append("path")
-            .datum(sliced_data_array)
-            .attr("fill", "none")
-            .attr("stroke", color)
-            .attr("stroke-width", 1.5)
-            .attr(
-              "d",
-              d3_line()
-                .x(function (d) {
-                  return x_axis_scale(d[0]);
-                })
-                .y(function (d) {
-                  return y_axis_scale(d[1]);
-                })
-            );
-        }
+        this.waveform_line_node
+          .append("path")
+          .datum(sliced_data_array)
+          .attr("fill", "none")
+          .attr("stroke", assignment[0])
+          .attr("stroke-width", 1.5)
+          .attr(
+            "d",
+            d3_line()
+              .x(function (d) {
+                return x_axis_scale(d[0]);
+              })
+              .y(function (d) {
+                return y_axis_scale(d[1]);
+              })
+          );
       }
       for (const block of this.delay_blocks) {
         // repetitive, but eslint errors without a conditional inside the loop

@@ -1,6 +1,17 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.2.4 (unreleased)
+------------------
+
+Added:
+^^^^^^
+- Ability to select a new color in the stim studio for pulse and delay blocks from setting modals.
+
+Changed:
+^^^^^^^^
+- Removed randomization from the pulse color generator in a stim protocols to prevent similar colors next to each other
+
 1.2.3 (2022-10-13)
 ------------------
 

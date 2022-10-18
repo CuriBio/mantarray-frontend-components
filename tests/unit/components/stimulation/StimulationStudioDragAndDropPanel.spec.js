@@ -13,7 +13,7 @@ const test_protocol_order = [
     stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 2,
-      color: "#fffff",
+      color: "hsla(15, 100%, 50%, 1)",
     },
     pulse_settings: {
       phase_one_duration: 20,
@@ -36,7 +36,7 @@ const test_protocol_order = [
     stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 10,
-      color: "#ffff1",
+      color: "hsla(205, 100%, 50%, 1)",
     },
     pulse_settings: {
       phase_one_duration: 20,
@@ -56,7 +56,7 @@ const test_protocol_order = [
     stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 1,
-      color: "#ffff2",
+      color: "hsla(5, 100%, 50%, 1)",
     },
     pulse_settings: {
       phase_one_duration: 300,
@@ -79,7 +79,7 @@ const test_protocol_order = [
     stop_setting: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 40,
-      color: "#ffff3",
+      color: "hsla(190, 100%, 50%, 1)",
     },
     pulse_settings: {
       phase_one_duration: 10,
@@ -128,7 +128,7 @@ const test_protocol_list = [
           type: "Delay",
           src: "/delay-tile.png",
           stop_setting: "Stimulate Until Complete",
-          repeat: { color: "d822f9", number_of_repeats: 1 },
+          repeat: { color: "hsla(65, 100%, 50%, 1)", number_of_repeats: 1 },
           pulse_settings: {
             phase_one_duration: 15,
             phase_one_charge: 0,
@@ -255,7 +255,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.find(".modal_overlay")).toBeTruthy();
 
     const modal_buttons = wrapper.findAll(".span__button_label");
-    await modal_buttons.at(2).trigger("click");
+    await modal_buttons.at(3).trigger("click");
 
     expect(wrapper.vm.protocol_order).toHaveLength(3);
     expect(wrapper.vm.modal_type).toBeNull();
@@ -386,7 +386,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(store.state.stimulation.hovered_pulse).toStrictEqual({
       idx: 1,
       indices: [9, 15],
-      color: "#ffff1",
+      color: "hsla(205, 100%, 50%, 1)",
     });
   });
 
@@ -423,7 +423,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(store.state.stimulation.hovered_pulse).toStrictEqual({
       idx: 1,
       indices: [9, 15],
-      color: "#ffff1",
+      color: "hsla(205, 100%, 50%, 1)",
     });
 
     await wrapper.vm.on_pulse_leave();
@@ -444,7 +444,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.protocol_order).toHaveLength(4);
     await wrapper.vm.open_modal_for_edit("Monophasic", 3);
 
-    const duplicate_button = wrapper.findAll(".span__button_label").at(1);
+    const duplicate_button = wrapper.findAll(".span__button_label").at(2);
     await duplicate_button.trigger("click");
 
     expect(wrapper.vm.protocol_order).toHaveLength(5);

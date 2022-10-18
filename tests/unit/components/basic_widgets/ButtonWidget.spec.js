@@ -58,6 +58,7 @@ describe("ButtonWidget.vue", () => {
       button_widget_height: 50,
       button_widget_top: 0,
       button_widget_left: 0,
+      button_background_color: "rgb(255, 255, 255)",
     };
     wrapper = mount(ComponentToTest, {
       propsData,
@@ -65,7 +66,9 @@ describe("ButtonWidget.vue", () => {
       localVue,
     });
     const target_background_div = wrapper.find(".div__button-background");
-    expect(target_background_div.attributes().style).toBe("width: 500px; height: 50px; top: 0px; left: 0px;");
+    expect(target_background_div.attributes().style).toBe(
+      "width: 500px; height: 50px; top: 0px; left: 0px; background: rgb(255, 255, 255);"
+    );
   });
   test("When that ButtonWidget is mounted, Then it loads the button background, button label, visible, focus color and greyed color the values provided from the props as visible is true so focus color text is rendred", () => {
     const propsData = {

@@ -11,7 +11,7 @@ const state = () => ({
   current_assignment: { letter: "", color: "" },
   x_axis_values: [],
   y_axis_values: [],
-  repeat_colors: {},
+  repeat_colors: [],
   y_axis_scale: 120,
   delay_blocks: [],
   stim_play_state: false,

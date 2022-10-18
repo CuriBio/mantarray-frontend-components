@@ -51,6 +51,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 0,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
 
@@ -79,6 +80,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 0,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
     const target_span = wrapper.find(".span__stimulationstudio-current-settings-title");
@@ -104,6 +106,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 0,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
     await wrapper.vm.close(0);
@@ -131,9 +134,10 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 0,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
-    const title = wrapper.findAll("span").at(5).text();
+    const title = wrapper.findAll("span").at(6).text();
     expect(title).toBe("Voltage");
     const interphase_label = wrapper.findAll("span").at(8);
     expect(interphase_label).toBeTruthy();
@@ -161,6 +165,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 0,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
 
@@ -209,6 +214,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 0,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
     const target_input_field = wrapper.find("#input-widget-field-duration");
@@ -244,6 +250,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 100,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
     const target_input_field = wrapper.find("#input-widget-field-duration");
@@ -273,6 +280,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 5,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
     const target_input_field = wrapper.find("#input-widget-field-total-active-duration");
@@ -312,6 +320,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 2,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
     expect(wrapper.vm.all_valid).toBe(true);
@@ -346,6 +355,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           },
         },
         frequency: 0,
+        current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
     wrapper.setData({
@@ -398,4 +408,37 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       expect(button_labels).toStrictEqual(expected_button_colors);
     }
   );
+
+  test("When a user clicks on a new color for a waveform pulse, Then the color will be set to state to be emitted to parent component", async () => {
+    const wrapper = mount(StimulationStudioWaveformSettingModal, {
+      store,
+      localVue,
+      propsData: {
+        stimulation_type: "Voltage",
+        pulse_type: "Monophasic",
+        selected_pulse_settings: {
+          phase_one_duration: "",
+          phase_one_charge: "",
+          interphase_interval: "",
+          phase_two_duration: "",
+          phase_two_charge: "",
+        },
+        selected_stim_settings: {
+          repeat_delay_interval: "",
+          total_active_duration: {
+            duration: "",
+            unit: "milliseconds",
+          },
+        },
+        frequency: 0,
+        current_color: "hsla(100, 100%, 50%, 1)",
+      },
+    });
+
+    await wrapper.find(".div__color-label").trigger("click");
+
+    await wrapper.findAll(".individual_color_block").at(0).trigger("click");
+
+    expect(wrapper.vm.selected_color).toBe("hsla(0, 100%, 50%, 1)");
+  });
 });
