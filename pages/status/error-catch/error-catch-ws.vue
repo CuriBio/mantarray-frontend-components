@@ -1,36 +1,56 @@
 <template>
   <div>
     <ComponentToTest log_filepath="C:\Users\Mantarray\AppData\Roaming\MantarrayController\logs_flask" />
-    <button class="update-button" @click="commit_error('InstrumentCreateConnectionError')">
+    <button class="update-button" @click="commit_error({ error_type: 'InstrumentCreateConnectionError' })">
       InstrumentCreateConnectionError
     </button>
     <button
       class="update-button"
       :style="'top: 300px;'"
-      @click="commit_error('InstrumentConnectionLostError')"
+      @click="commit_error({ error_type: 'InstrumentConnectionLostError' })"
     >
       InstrumentConnectionLostError
     </button>
-    <button class="update-button" :style="'top: 500px;'" @click="commit_error('InstrumentBadDataError')">
+    <button
+      class="update-button"
+      :style="'top: 500px;'"
+      @click="commit_error({ error_type: 'InstrumentBadDataError' })"
+    >
       InstrumentBadDataError
     </button>
-    <button class="update-button" :style="'top: 700px;'" @click="commit_error('InstrumentFirmwareError')">
+    <button
+      class="update-button"
+      :style="'top: 700px;'"
+      @click="commit_error({ error_type: 'InstrumentFirmwareError' })"
+    >
       InstrumentFirmwareError
+    </button>
+    <button
+      class="update-button"
+      :style="'top: 900px;'"
+      @click="
+        commit_error({
+          error_type: 'FirmwareAndSoftwareNotCompatibleError',
+          latest_compatible_sw_version: '1.2.3',
+        })
+      "
+    >
+      FirmwareAndSoftwareNotCompatibleError
     </button>
   </div>
 </template>
 
 <script>
-import { ErrorCatchWidget as ComponentToTest } from "@/dist/mantarray.common";
-// import ComponentToTest from "@/components/status/ErrorCatchWidget.vue";
+// import { ErrorCatchWidget as ComponentToTest } from "@/dist/mantarray.common";
+import ComponentToTest from "@/components/status/ErrorCatchWidget.vue";
 
 export default {
   components: {
     ComponentToTest,
   },
   methods: {
-    commit_error: function (err) {
-      this.$store.commit("settings/set_shutdown_error_status", err);
+    commit_error: function (err_info) {
+      this.$store.commit("settings/set_shutdown_error_status", err_info);
     },
   },
 };

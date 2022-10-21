@@ -23,6 +23,7 @@ const default_state = {
   total_uploaded_files: [],
   shutdown_error_message: "Mantarray software is about to shut down.",
   shutdown_error_status: "",
+  installer_link: null,
   beta_2_mode: false,
   software_update_available: false,
   firmware_update_available: false,

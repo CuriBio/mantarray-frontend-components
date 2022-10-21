@@ -114,7 +114,7 @@ describe("StatusWidget.vue", () => {
           localVue,
         });
         expect(wrapper.find(text_selector).text()).toBe("System status: Connecting..."); // initial status
-        await store.commit("settings/set_shutdown_error_status", error_type);
+        await store.commit("settings/set_shutdown_error_status", { error_type });
         expect(wrapper.find(text_selector).text()).toBe(`System status: Error Occurred`);
       }
     );
@@ -128,7 +128,7 @@ describe("StatusWidget.vue", () => {
       });
 
       expect(wrapper.find(text_selector).text()).toBe("System status: Connecting..."); // initial status
-      await store.commit("settings/set_shutdown_error_status", "UnknownError");
+      await store.commit("settings/set_shutdown_error_status", { error_type: "UnknownError" });
       expect(wrapper.find(text_selector).text()).toBe("System status: Connecting...");
     });
 
@@ -174,7 +174,9 @@ describe("StatusWidget.vue", () => {
         attachToDocument: true,
       });
 
-      await store.commit("settings/set_shutdown_error_status", "InstrumentCreateConnectionError");
+      await store.commit("settings/set_shutdown_error_status", {
+        error_type: "InstrumentCreateConnectionError",
+      });
       store.commit("flask/set_status_uuid", STATUS.MESSAGE.ERROR);
       expect(wrapper.find(text_selector).text()).toBe(`System status: Error Occurred`);
     });

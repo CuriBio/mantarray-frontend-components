@@ -125,8 +125,9 @@ export default function create_web_socket_plugin(socket) {
       const message = JSON.parse(message_json);
       await store.commit("settings/set_data_analysis_directory", message.output_dir);
 
-      if (message.failed_recordings)
+      if (message.failed_recordings) {
         await store.commit("settings/set_failed_recordings", message.failed_recordings);
+      }
 
       await store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
 
@@ -136,13 +137,13 @@ export default function create_web_socket_plugin(socket) {
 
     socket.on("corrupt_files_alert", async (_, cb) => {
       await store.commit("data/set_h5_warning");
-
+      /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
 
     socket.on("error", async (message_json, cb) => {
-      const { error_type } = JSON.parse(message_json);
-      await store.commit("settings/set_shutdown_error_status", error_type);
+      const message = JSON.parse(message_json);
+      await store.commit("settings/set_shutdown_error_status", message);
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
