@@ -6,8 +6,8 @@ Changelog for Mantarray Frontend Components
 
 Added:
 ^^^^^^
-- Ability to select a new color in the stim studio for pulse and delay blocks from setting modals.
-- Error message if MA Controller version is not compatible with the instrument firmware version.
+- Ability to select a new color in the stim studio for pulse and delay blocks from setting modals
+- Error message if MA Controller version is not compatible with the instrument firmware version
 
 Changed:
 ^^^^^^^^

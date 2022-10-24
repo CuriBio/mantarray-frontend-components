@@ -835,18 +835,30 @@ describe("store/data", () => {
       "InstrumentConnectionLostError",
       "InstrumentBadDataError",
       "InstrumentFirmwareError",
+      "FirmwareAndSoftwareNotCompatibleError",
     ])(
       "When backend emits error messages %s, Then it will update the shutdown error status in settings state",
       async (error_type) => {
         expect(store.state.settings.shutdown_error_status).toBe("");
 
+        const latest_compatible_sw_version =
+          error_type === "FirmwareAndSoftwareNotCompatibleError" ? "1.2.3" : null;
+
         await new Promise((resolve) => {
-          socket_server_side.emit("error", JSON.stringify({ error_type }), (ack) => {
-            resolve(ack);
-          });
+          socket_server_side.emit(
+            "error",
+            JSON.stringify({ error_type, latest_compatible_sw_version }),
+            (ack) => {
+              resolve(ack);
+            }
+          );
         });
 
-        expect(store.state.settings.shutdown_error_status).toBe(ERRORS[error_type]);
+        const additional_text = latest_compatible_sw_version
+          ? ". Please download the installer for the correct version here:"
+          : ". Mantarray Controller is about to shutdown.";
+
+        expect(store.state.settings.shutdown_error_status).toBe(ERRORS[error_type] + additional_text);
       }
     );
   });

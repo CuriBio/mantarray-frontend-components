@@ -54,12 +54,15 @@ describe("ErrorCatchWidget.vue", () => {
     const target_alert_div = wrapper.find(".div_status-error-catch-alert-txt");
     const target_alert_div_p = target_alert_div.findAll("p");
     expect(target_alert_div_p.at(0).text()).toStrictEqual("Mantarray software is about to shut down.");
-    expect(target_alert_div_p.at(1)).toMatchInlineSnapshot(`
+
+    const target_email_div_p = wrapper.find(".div_status-email-txt").findAll("p");
+    expect(target_email_div_p.at(0)).toMatchInlineSnapshot(`
       <p>
         Please send the folder shown below to
         <a id="error_contact" href="mailto:support@curibio.com ? subject = Mantarray Error log">support@curibio.com</a>
       </p>
     `);
+
     await wrapper.vm.$nextTick(); // wait for update
     const target_text_area = wrapper.find(".textarea__error-file-path");
     expect(target_text_area.element.value).toStrictEqual("C:\test_file_log.txt");
@@ -94,7 +97,7 @@ describe("ErrorCatchWidget.vue", () => {
     const target_background_div = wrapper.find(".div__status-error-catch-background");
     expect(target_background_div.attributes().style).toBe("height: 262px;");
     const target_text_area = wrapper.find(".textarea__error-file-path");
-    expect(target_text_area.attributes().style).toBe("height: 37px;");
+    expect(target_text_area.attributes().style).toBe("height: 37px; top: 145px;");
     const target_error_button = wrapper.find(".div__error-button");
     expect(target_error_button.attributes().style).toBe("top: 262px; left: 0px; position: absolute;");
     /* A run time update of prop occured below then observe that height value and top is updated */
@@ -102,7 +105,7 @@ describe("ErrorCatchWidget.vue", () => {
       log_filepath: "C:UsersMantarrayAppDataRoamingMantarrayControllerlogs_flask",
     });
     expect(target_background_div.attributes().style).toBe("height: 274px;");
-    expect(target_text_area.attributes().style).toBe("height: 49px;");
+    expect(target_text_area.attributes().style).toBe("height: 49px; top: 145px;");
     expect(target_error_button.attributes().style).toBe("top: 274px; left: 0px; position: absolute;");
   });
   test("Given that ErrorCatchWidget is mounted, When the ErrorCatchWidget is visible, Then click on 'Okay' results in an event 'ok-clicked' to be emitted", async () => {
