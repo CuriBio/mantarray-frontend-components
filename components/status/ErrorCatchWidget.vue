@@ -1,12 +1,21 @@
 <template>
   <div>
-    <!-- original mockflow ID: id="cmpDd7c4156bb0 839a33f5be9502418562bf" -->
     <div class="div__status-error-catch-background" :style="error_background_cssprops"></div>
-    <!-- original mockflow ID: id="cmpD94339a6591e3ead19b4308b3a8b0cb68" -->
     <span class="div_status-error-catch-title-label">An&nbsp;<wbr />error&nbsp;<wbr />occurred. </span>
-    <!-- original mockflow ID: id="cmpD7504e31fab5b6799a0bbf3fe2514622e" -->
-    <div class="div_status-error-catch-alert-txt">
+    <div class="div_status-error-catch-alert-txt" :style="error_catch_alert">
       <p>{{ shutdown_error_message }}</p>
+      <textarea
+        v-if="installer_link"
+        class="textarea__installer-link"
+        name="error_file"
+        :rows="2"
+        cols="75"
+        spellcheck="false"
+        :value.prop="installer_link"
+        :disabled="true"
+      ></textarea>
+    </div>
+    <div class="div_status-email-txt" :style="email_text_cssprops">
       <p>
         Please send the folder shown below to
         <a id="error_contact" href="mailto:support@curibio.com ? subject = Mantarray Error log"
@@ -57,21 +66,42 @@ export default {
     log_filepath: { type: String, default: "" },
   },
   computed: {
-    ...mapState("settings", ["shutdown_error_message"]),
+    ...mapState("settings", ["shutdown_error_message", "installer_link"]),
     compute_number_of_rows: function () {
       return Math.ceil(((this.log_filepath.length * 1.0) / 30).toFixed(1));
     },
     error_background_cssprops: function () {
-      return "height: " + (250 + this.compute_number_of_rows * 12) + "px;";
+      let height = 250 + this.compute_number_of_rows * 12;
+      if (this.installer_link) {
+        height += 25;
+      }
+      return `height: ${height}px;`;
+    },
+    error_catch_alert: function () {
+      const height = this.installer_link ? 130 : 75;
+      return `height: ${height}px;`;
     },
     textarea__error_cssprops: function () {
-      return "height: " + (25 + this.compute_number_of_rows * 12) + "px;";
+      const top = this.installer_link ? 195 : 145;
+      return `height: ${25 + this.compute_number_of_rows * 12}px; top: ${top}px;`;
     },
     next_step_cssprops: function () {
-      return "top: " + (180 + this.compute_number_of_rows * 12) + "px;";
+      let top = 180 + this.compute_number_of_rows * 12;
+      if (this.installer_link) {
+        top += 35;
+      }
+      return `top: ${top}px;`;
     },
     error_catch_button_cssprops: function () {
-      return "top: " + (250 + this.compute_number_of_rows * 12) + "px; left: 0px; position: absolute";
+      let top = 250 + this.compute_number_of_rows * 12;
+      if (this.installer_link) {
+        top += 25;
+      }
+      return `top: ${top}px; left: 0px; position: absolute`;
+    },
+    email_text_cssprops: function () {
+      const top = this.installer_link ? 175 : 107;
+      return `top: ${top}px`;
     },
   },
   methods: {
@@ -139,7 +169,29 @@ a:hover {
   top: 57.6407px;
   left: 0px;
   width: 450px;
-  height: 90px;
+  overflow: hidden;
+  visibility: visible;
+  user-select: none;
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: normal;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  z-index: 5;
+  pointer-events: all;
+}
+.div_status-email-txt {
+  line-height: 1.2;
+  transform: rotate(0deg);
+  padding: 0px;
+  margin: 0px;
+  overflow-wrap: break-word;
+  color: rgb(183, 183, 183);
+  font-family: Muli;
+  position: absolute;
+  left: 0px;
+  width: 450px;
   overflow: hidden;
   visibility: visible;
   user-select: none;
@@ -163,9 +215,40 @@ a:hover {
   color: rgb(183, 183, 183);
   font-family: Courier New;
   position: absolute;
-  top: 145px;
   left: 56px;
   width: 338px;
+  background: rgb(17, 17, 17);
+  border: 2px solid rgb(17, 17, 17);
+  border-radius: 0px;
+  box-shadow: none;
+  overflow: hidden;
+  visibility: visible;
+  user-select: none;
+  vertical-align: top;
+  text-align: left;
+  font-size: 15px;
+  letter-spacing: normal;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  resize: none;
+  z-index: 5;
+  pointer-events: all;
+}
+
+.textarea__installer-link {
+  line-height: 1.2;
+  transform: rotate(0deg);
+  padding: 0px;
+  margin: 0px;
+  word-break: break-all;
+  outline: none;
+  color: rgb(183, 183, 183);
+  font-family: Courier New;
+  position: absolute;
+  top: 59px;
+  left: 20px;
+  width: 406px;
   background: rgb(17, 17, 17);
   border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;

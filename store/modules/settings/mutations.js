@@ -10,9 +10,17 @@ export default {
   set_shutdown_error_message(state, new_value) {
     state.shutdown_error_message = new_value;
   },
-  set_shutdown_error_status(state, new_value) {
-    state.shutdown_error_status = ERRORS[new_value];
-    state.shutdown_error_message = `${ERRORS[new_value]}. Mantarray is about to shutdown.`;
+  set_shutdown_error_status(state, { error_type, latest_compatible_sw_version }) {
+    let error = `${ERRORS[error_type]}.`;
+    if (latest_compatible_sw_version) {
+      state.installer_link = `https://downloads.curibio.com/software/MantarrayController-Setup-prod-${latest_compatible_sw_version}.exe`;
+      error += " Please download the installer for the correct version here:";
+    } else {
+      state.installer_link = null;
+      error += " Mantarray Controller is about to shutdown.";
+    }
+    state.shutdown_error_status = error;
+    state.shutdown_error_message = error;
   },
   set_user_accounts(state, new_value) {
     state.user_accounts = new_value;
