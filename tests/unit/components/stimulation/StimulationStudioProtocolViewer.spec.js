@@ -25,7 +25,7 @@ const test_protocol_order = [
       phase_two_charge: -5,
     },
     stim_settings: {
-      repeat_delay_interval: 10,
+      postphase_interval: 10,
       total_active_duration: {
         duration: 2000,
         unit: "milliseconds",
@@ -47,7 +47,7 @@ const test_protocol_order = [
       phase_two_charge: 0,
     },
     stim_settings: {
-      repeat_delay_interval: 20,
+      postphase_interval: 20,
       total_active_duration: {
         duration: 1000,
         unit: "milliseconds",
@@ -69,7 +69,7 @@ const test_protocol_order = [
       phase_two_charge: 0,
     },
     stim_settings: {
-      repeat_delay_interval: 20,
+      postphase_interval: 20,
       total_active_duration: {
         duration: 1300,
         unit: "seconds",
@@ -91,7 +91,7 @@ const test_protocol_order = [
       phase_two_charge: 0,
     },
     stim_settings: {
-      repeat_delay_interval: 10,
+      postphase_interval: 10,
       total_active_duration: {
         duration: 2000,
         unit: "milliseconds",

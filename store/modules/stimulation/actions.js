@@ -14,64 +14,70 @@ export default {
     commit("set_selected_wells", well_values);
   },
 
-  async handle_protocol_order({ commit, dispatch, state }, new_pulse_order) {
+  async handle_protocol_order({ commit, dispatch, state }, new_subprotocol_order) {
     const x_values = [0];
     const y_values = [0];
     const color_assignments = [];
-    const pulses = [];
+    const subprotocols = [];
     const get_last = (array) => array[array.length - 1];
-    const helper = (setting, remaining_pulse_dur) => {
-      // Add values for phase 1
-      const components_to_add = {
-        x: [setting.phase_one_duration],
-        y: [setting.phase_one_charge],
-      };
-      // If biphasic, handle remaining pulse components
-      if (setting.phase_two_duration > 0) {
-        // Add values for interphase interval
-        components_to_add.x.push(setting.interphase_interval);
+    const helper = (setting, type) => {
+      let components_to_add = [];
+      if (type === "Delay") {
+        components_to_add = {
+          x: [setting.duration * TIME_CONVERSION_TO_MILLIS[setting.unit]],
+          y: [0],
+        };
+      } else {
+        // Add values for phase 1
+        components_to_add = {
+          x: [setting.phase_one_duration],
+          y: [setting.phase_one_charge],
+        };
+        // If biphasic, handle remaining pulse components
+        if (setting.interphase_interval) {
+          // Add values for interphase interval
+          components_to_add.x.push(setting.interphase_interval);
+          components_to_add.y.push(0);
+          // Add values for phase 2
+          components_to_add.x.push(setting.phase_two_duration);
+          components_to_add.y.push(setting.phase_two_charge);
+        }
+        // Add values for delay
+        components_to_add.x.push(setting.postphase_interval);
         components_to_add.y.push(0);
-        // Add values for phase 2
-        components_to_add.x.push(setting.phase_two_duration);
-        components_to_add.y.push(setting.phase_two_charge);
       }
-      // Add values for delay
-      components_to_add.x.push(setting.repeat_delay_interval);
-      components_to_add.y.push(0);
       const num_components_to_add = components_to_add.x.length;
       // add components until all are added or the total active duration is reached
       for (let i = 0; i < num_components_to_add; i++) {
-        const component_duration = Math.min(components_to_add.x[i], remaining_pulse_dur);
+        const component_duration = components_to_add.x[i];
+
         x_values.push(get_last(x_values), component_duration + get_last(x_values));
         y_values.push(components_to_add.y[i], components_to_add.y[i]);
-        remaining_pulse_dur -= component_duration;
-        if (remaining_pulse_dur == 0) break;
       }
       // set final value to zero in case the pulse was cut off in the middle of either phase
       x_values.push(get_last(x_values));
       y_values.push(0);
-      return remaining_pulse_dur;
     };
-    await new_pulse_order.map(async (pulse) => {
+
+    await new_subprotocol_order.map(async (pulse) => {
       const { color } = pulse.repeat;
-      const { total_active_duration, repeat_delay_interval } = pulse.stim_settings;
-      let setting = pulse.pulse_settings;
+      let settings = pulse.pulse_settings;
 
       const starting_repeat_idx = x_values.length - 1;
-      const converted_total_active =
-        total_active_duration.duration * TIME_CONVERSION_TO_MILLIS[total_active_duration.unit];
 
-      setting = {
-        ...setting,
-        repeat_delay_interval,
-        total_active_duration: converted_total_active,
+      settings = {
+        type: pulse.type,
+        ...settings,
       };
-      pulses.push(setting);
 
-      let remaining_pulse_dur = setting.total_active_duration;
-      while (remaining_pulse_dur > 0) {
-        // Tanner (11/2/21): could move this outer loop into helper so remaining_pulse_dur can be tracked more clearly
-        remaining_pulse_dur = helper(setting, remaining_pulse_dur);
+      subprotocols.push(settings);
+
+      // num_cycles defaults to 0 and delay will never update unless run through once
+      let remaining_pulse_cycles = pulse.type === "Delay" ? 1 : settings.num_cycles;
+
+      while (remaining_pulse_cycles > 0) {
+        helper(settings, pulse.type);
+        remaining_pulse_cycles--;
       }
 
       const ending_repeat_idx = x_values.length;
@@ -84,7 +90,7 @@ export default {
     });
 
     commit("set_repeat_color_assignments", color_assignments);
-    commit("set_pulses", { pulses, new_pulse_order });
+    commit("set_subprotocols", { subprotocols, new_subprotocol_order });
     dispatch("handle_rest_duration", {
       x_values,
       y_values,
@@ -111,14 +117,14 @@ export default {
 
   async handle_new_rest_duration({ dispatch, state, commit }, time) {
     // need to grab these values before committing set_rest_duration
-    let { detailed_pulses } = state.protocol_editor;
-    detailed_pulses = detailed_pulses || [];
+    let { detailed_subprotocols } = state.protocol_editor;
+    detailed_subprotocols = detailed_subprotocols || [];
 
     if (time === "") time = "0";
     await commit("set_rest_duration", time);
 
     // commit this after committing set_rest_duration
-    dispatch("handle_protocol_order", detailed_pulses);
+    dispatch("handle_protocol_order", detailed_subprotocols);
   },
 
   async handle_import_protocol({ dispatch }, file) {
@@ -140,7 +146,9 @@ export default {
     const { protocol_assignments, protocol_list } = state;
 
     const protocol_copy = JSON.parse(JSON.stringify(protocol_list));
+    console.log("1: ", protocol_copy);
     const message = { protocols: protocol_copy.slice(1), protocol_assignments: {} };
+    console.log("1: ", message.protocols);
 
     for (const well_idx of Array(24).keys()) {
       const letter = protocol_assignments[well_idx] ? protocol_assignments[well_idx].letter : null;
@@ -233,8 +241,6 @@ export default {
     const { protocol_assignments } = state;
     const { stimulator_circuit_statuses } = this.state.data;
 
-    const charge_conversion = { C: 1000, V: 1 };
-
     for (let well_idx = 0; well_idx < 24; well_idx++) {
       const well_name = twenty_four_well_plate_definition.get_well_name_from_well_index(well_idx, false);
       message.protocol_assignments[well_name] = null;
@@ -244,14 +250,17 @@ export default {
     for (const well in protocol_assignments) {
       // remove open circuit wells
       if (!stimulator_circuit_statuses.includes(Number(well))) {
-        const { stimulation_type, pulses, stop_setting, detailed_pulses } = protocol_assignments[
-          well
-        ].protocol;
+        const {
+          stimulation_type,
+          subprotocols,
+          run_until_stopped,
+          detailed_subprotocols,
+        } = protocol_assignments[well].protocol;
 
         const { letter } = protocol_assignments[well];
 
         const fill_color_payload = {
-          stim_fill_colors: detailed_pulses.map((pulse) => pulse.repeat.color),
+          stim_fill_colors: detailed_subprotocols.map((pulse) => pulse.repeat.color),
           well,
         };
 
@@ -259,33 +268,22 @@ export default {
         // add protocol to list of unique protocols if it has not been entered yet
         if (!unique_protocol_ids.has(letter)) {
           unique_protocol_ids.add(letter);
-          const converted_pulses = pulses.map((pulse) => {
-            return {
-              phase_one_duration: pulse.phase_one_duration * 1000, // sent in µs
-              phase_one_charge: pulse.phase_one_charge * charge_conversion[stimulation_type], // sent in mV or µA
-              interphase_interval: pulse.interphase_interval * 1000, // sent in µs
-              phase_two_charge: pulse.phase_two_charge * charge_conversion[stimulation_type], // sent in mV or µA
-              phase_two_duration: pulse.phase_two_duration * 1000, // sent in µs
-              repeat_delay_interval: Math.round(pulse.repeat_delay_interval * 1000), // sent in µs, also needs to be an integer value
-              total_active_duration: pulse.total_active_duration, // sent in ms
-            };
-          });
-
+          // this needs to be converted before sent because stim type changes independently of pulse settings
+          const converted_subprotocols = await _get_converted_settings(subprotocols, stimulation_type);
           const protocol_model = {
             protocol_id: letter,
             stimulation_type,
-            run_until_stopped: stop_setting.includes("Stopped"),
-            subprotocols: converted_pulses,
+            run_until_stopped,
+            subprotocols: converted_subprotocols,
           };
 
           message.protocols.push(protocol_model);
         }
-        // asign letter to well number
+        // assign letter to well number
         const well_number = twenty_four_well_plate_definition.get_well_name_from_well_index(well, false);
         message.protocol_assignments[well_number] = letter;
       }
     }
-
     const message_url = `/set_protocols`;
     const body = { data: JSON.stringify(message) };
     await call_axios_post_from_vuex(message_url, body);
@@ -303,15 +301,21 @@ export default {
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {
     const { label, letter, color } = protocol;
-    const { stimulation_type, time_unit, rest_duration, detailed_pulses, stop_setting } = protocol.protocol;
+    const {
+      stimulation_type,
+      time_unit,
+      rest_duration,
+      detailed_subprotocols,
+      run_until_stopped,
+    } = protocol.protocol;
     state.current_assignment = { letter, color };
 
     await commit("set_protocol_name", label);
     await commit("set_stimulation_type", stimulation_type);
     await commit("set_time_unit", time_unit);
     await commit("set_rest_duration", rest_duration);
-    await commit("set_stop_setting", stop_setting);
-    await dispatch("handle_protocol_order", detailed_pulses);
+    await commit("set_stop_setting", run_until_stopped);
+    await dispatch("handle_protocol_order", detailed_subprotocols);
 
     commit("set_edit_mode", protocol);
   },
@@ -364,4 +368,35 @@ export default {
       color: hovered_pulse[0],
     };
   },
+};
+
+const _get_converted_settings = async (subprotocols, stim_type) => {
+  const charge_conversion = { C: 1000, V: 1 };
+  const conversion = charge_conversion[stim_type];
+  return subprotocols.map((pulse) => {
+    let type_specific_settings = {};
+    if (pulse.type === "Delay")
+      type_specific_settings.duration = pulse.duration * TIME_CONVERSION_TO_MILLIS[pulse.unit] * 1000;
+    // sent in µs
+    else
+      type_specific_settings = {
+        num_cycles: pulse.num_cycles,
+        postphase_interval: Math.round(pulse.postphase_interval * 1000), // sent in µs, also needs to be an integer value
+        phase_one_duration: pulse.phase_one_duration * 1000, // sent in µs
+        phase_one_charge: pulse.phase_one_charge * conversion, // sent in mV
+      };
+
+    if (pulse.type === "Biphasic")
+      type_specific_settings = {
+        ...type_specific_settings,
+        interphase_interval: pulse.interphase_interval * 1000, // sent in µs
+        phase_two_charge: pulse.phase_two_charge * conversion, // sent in mV or µA
+        phase_two_duration: pulse.phase_two_duration * 1000,
+      };
+
+    return {
+      type: pulse.type,
+      ...type_specific_settings,
+    };
+  });
 };

@@ -18,8 +18,8 @@ const test_protocol_list = [
       stimulation_type: "V",
       rest_duration: 20,
       time_unit: "milliseconds",
-      stop_setting: "Stimulate Until Stopped",
-      pulses: [
+      run_until_stopped: "Stimulate Until Stopped",
+      subprotocols: [
         {
           phase_one_duration: 15,
           phase_one_charge: 0,
@@ -35,7 +35,7 @@ const test_protocol_list = [
           phase_two_charge: 0,
         },
       ],
-      detailed_pulses: [
+      detailed_subprotocols: [
         {
           type: "Delay",
           src: "/delay-tile.png",
@@ -49,7 +49,7 @@ const test_protocol_list = [
             phase_two_charge: 0,
           },
           stim_settings: {
-            repeat_delay_interval: 0,
+            postphase_interval: 0,
             total_active_duration: {
               unit: "milliseconds",
               duration: 15000,
@@ -98,11 +98,11 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       protocol: {
         name: "mock_tester",
         stimulation_type: "C",
-        stop_setting: "Stimulate Until Complete",
+        run_until_stopped: "Stimulate Until Complete",
         rest_duration: 40,
         time_unit: "milliseconds",
-        pulses: [],
-        detailed_pulses: [],
+        subprotocols: [],
+        detailed_subprotocols: [],
       },
     };
 

@@ -35,17 +35,17 @@ export default {
         protocol: {
           name: "mock",
           stimulation_type: "C",
-          stop_setting: "Stimulate Until Complete",
+          run_until_stopped: "Stimulate Until Complete",
           rest_duration: 0,
           time_unit: "seconds",
-          pulses: [
+          subprotocols: [
             {
               phase_one_duration: 3,
               phase_one_charge: 40,
               interphase_interval: 1,
               phase_two_duration: 3,
               phase_two_charge: -40,
-              repeat_delay_interval: 1,
+              postphase_interval: 1,
               total_active_duration: 50,
             },
             {
@@ -54,7 +54,7 @@ export default {
               interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
-              repeat_delay_interval: 0,
+              postphase_interval: 0,
               total_active_duration: 50,
             },
             {
@@ -63,11 +63,11 @@ export default {
               interphase_interval: 1,
               phase_two_duration: 4,
               phase_two_charge: -10,
-              repeat_delay_interval: 1,
+              postphase_interval: 1,
               total_active_duration: 50,
             },
           ],
-          detailed_pulses: [
+          detailed_subprotocols: [
             {
               type: "Biphasic",
               src: "/Biphasic.png",
@@ -81,7 +81,7 @@ export default {
                 phase_two_charge: -40,
               },
               stim_settings: {
-                repeat_delay_interval: { duration: 1, unit: "milliseconds" },
+                postphase_interval: { duration: 1, unit: "milliseconds" },
                 total_active_duration: { duration: 50, unit: "milliseconds" },
               },
             },
@@ -98,7 +98,7 @@ export default {
                 phase_two_charge: 0,
               },
               stim_settings: {
-                repeat_delay_interval: { duration: 0, unit: "milliseconds" },
+                postphase_interval: { duration: 0, unit: "milliseconds" },
                 total_active_duration: { duration: 50, unit: "milliseconds" },
               },
             },
@@ -115,7 +115,7 @@ export default {
                 phase_two_charge: -10,
               },
               stim_settings: {
-                repeat_delay_interval: { duration: 1, unit: "milliseconds" },
+                postphase_interval: { duration: 1, unit: "milliseconds" },
                 total_active_duration: { duration: 50, unit: "milliseconds" },
               },
             },
@@ -129,17 +129,17 @@ export default {
         protocol: {
           name: "mock_protocol_2",
           stimulation_type: "V",
-          stop_setting: "Stimulate Until Stopped",
+          run_until_stopped: "Stimulate Until Stopped",
           rest_duration: 1,
           time_unit: "seconds",
-          pulses: [
+          subprotocols: [
             {
               phase_one_duration: 5,
               phase_one_charge: 200,
               interphase_interval: 0,
               phase_two_duration: 5,
               phase_two_charge: -200,
-              repeat_delay_interval: 0,
+              postphase_interval: 0,
               total_active_duration: 1000,
             },
             {
@@ -148,11 +148,11 @@ export default {
               interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
-              repeat_delay_interval: 0,
+              postphase_interval: 0,
               total_active_duration: 1000,
             },
           ],
-          detailed_pulses: [
+          detailed_subprotocols: [
             {
               type: "Biphasic",
               src: "/Biphasic.png",
@@ -166,7 +166,7 @@ export default {
                 phase_two_charge: -200,
               },
               stim_settings: {
-                repeat_delay_interval: { duration: 0, unit: "milliseconds" },
+                postphase_interval: { duration: 0, unit: "milliseconds" },
                 total_active_duration: { duration: 1, unit: "seconds" },
               },
             },

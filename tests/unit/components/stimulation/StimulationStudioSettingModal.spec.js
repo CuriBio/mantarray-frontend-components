@@ -44,7 +44,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -73,7 +73,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -99,7 +99,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -127,7 +127,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -158,7 +158,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -207,7 +207,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -243,7 +243,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -273,7 +273,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "-100",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "20",
+          postphase_interval: "20",
           total_active_duration: {
             duration: "30",
             unit: "milliseconds",
@@ -313,7 +313,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "-10",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "2",
+          postphase_interval: "2",
           total_active_duration: {
             duration: "3",
             unit: "seconds",
@@ -348,7 +348,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -360,7 +360,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     });
     wrapper.setData({
       stim_settings: {
-        repeat_delay_interval: "",
+        postphase_interval: "",
         total_active_duration: {
           duration: "1",
           unit: "seconds",
@@ -378,7 +378,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       all_valid: true,
     });
     await wrapper.vm.close(0);
-    expect(wrapper.vm.stim_settings.repeat_delay_interval).toBe(95);
+    expect(wrapper.vm.stim_settings.postphase_interval).toBe(95);
   });
 
   test.each([
@@ -424,7 +424,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
           phase_two_charge: "",
         },
         selected_stim_settings: {
-          repeat_delay_interval: "",
+          postphase_interval: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",

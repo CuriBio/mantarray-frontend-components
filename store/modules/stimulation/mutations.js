@@ -35,9 +35,9 @@ export default {
   set_time_unit({ protocol_editor }, unit) {
     protocol_editor.time_unit = unit;
   },
-  set_pulses({ protocol_editor }, { pulses, new_pulse_order }) {
-    protocol_editor.pulses = pulses;
-    protocol_editor.detailed_pulses = new_pulse_order;
+  set_subprotocols({ protocol_editor }, { subprotocols, new_subprotocol_order }) {
+    protocol_editor.subprotocols = subprotocols;
+    protocol_editor.detailed_subprotocols = new_subprotocol_order;
   },
   set_axis_values(state, { x_values, y_values }) {
     state.x_axis_values = x_values;
@@ -88,7 +88,7 @@ export default {
     protocol_editor.rest_duration = Number(time);
   },
   set_delay_axis_values(state, delay) {
-    const { rest_duration, pulses, time_unit } = state.protocol_editor;
+    const { rest_duration, subprotocols, time_unit } = state.protocol_editor;
     const delay_conversion = {
       milliseconds: 1,
       seconds: 1000,
@@ -102,11 +102,12 @@ export default {
       interphase_interval: 0,
       phase_two_duration: 0,
       phase_two_charge: 0,
-      repeat_delay_interval: 0,
+      postphase_interval: 0,
       total_active_duration: converted_delay_duration,
     };
     state.delay_blocks = [delay];
-    if (!isNaN(converted_delay_duration) && converted_delay_duration !== 0) pulses.push(delay_pulse_model);
+    if (!isNaN(converted_delay_duration) && converted_delay_duration !== 0)
+      subprotocols.push(delay_pulse_model);
   },
   set_new_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
@@ -142,7 +143,7 @@ export default {
     edit_mode.status = false;
   },
   set_stop_setting({ protocol_editor }, setting) {
-    protocol_editor.stop_setting = setting;
+    protocol_editor.run_until_stopped = setting;
   },
   set_x_axis_time_idx(state, idx) {
     state.x_axis_time_idx = idx;

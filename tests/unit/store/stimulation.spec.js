@@ -23,22 +23,22 @@ describe("store/stimulation", () => {
         label: "",
         protocol: {
           name: "test_proto_1",
-          stop_setting: "Stimulate Until Stopped",
+          run_until_stopped: "Stimulate Until Stopped",
           stimulation_type: "C",
           rest_duration: 0,
           time_unit: "milliseconds",
-          pulses: [
+          subprotocols: [
             {
               phase_one_duration: 333,
               phase_one_charge: 0,
               interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
-              repeat_delay_interval: 0,
+              postphase_interval: 0,
               total_active_duration: 333,
             },
           ],
-          detailed_pulses: [
+          detailed_subprotocols: [
             {
               type: "Delay",
               repeat: { color: "hsla(69, 92%, 45%, 1)", number_of_repeats: 1 },
@@ -50,7 +50,7 @@ describe("store/stimulation", () => {
                 phase_two_charge: 0,
               },
               stim_settings: {
-                repeat_delay_interval: 0,
+                postphase_interval: 0,
                 total_active_duration: { duration: 333, unit: "milliseconds" },
               },
             },
@@ -63,22 +63,22 @@ describe("store/stimulation", () => {
         label: "",
         protocol: {
           name: "test_proto_2",
-          stop_setting: "Stimulate Until Stopped",
+          run_until_stopped: "Stimulate Until Stopped",
           stimulation_type: "C",
           rest_duration: 0,
           time_unit: "milliseconds",
-          pulses: [
+          subprotocols: [
             {
               phase_one_duration: 333,
               phase_one_charge: 0,
               interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
-              repeat_delay_interval: 0,
+              postphase_interval: 0,
               total_active_duration: 333,
             },
           ],
-          detailed_pulses: [
+          detailed_subprotocols: [
             {
               type: "Delay",
               repeat: { color: "hsla(69, 92%, 45%, 1)", number_of_repeats: 1 },
@@ -90,7 +90,7 @@ describe("store/stimulation", () => {
                 phase_two_charge: 0,
               },
               stim_settings: {
-                repeat_delay_interval: 0,
+                postphase_interval: 0,
                 total_active_duration: { duration: 333, unit: "milliseconds" },
               },
             },
@@ -141,7 +141,7 @@ describe("store/stimulation", () => {
         phase_two_charge: 200,
       },
       stim_settings: {
-        repeat_delay_interval: 5,
+        postphase_interval: 5,
         total_active_duration: {
           duration: 118,
           unit: "milliseconds",
@@ -163,7 +163,7 @@ describe("store/stimulation", () => {
             phase_two_charge: -2,
           },
           stim_settings: {
-            repeat_delay_interval: 0,
+            postphase_interval: 0,
             total_active_duration: {
               duration: 3,
               unit: "seconds",
@@ -186,14 +186,14 @@ describe("store/stimulation", () => {
         stimulation_type: "V",
         rest_duration: 20,
         time_unit: "milliseconds",
-        pulses: [
+        subprotocols: [
           {
             phase_one_duration: 15,
             phase_one_charge: 0,
             interphase_interval: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
-            repeat_delay_interval: 0,
+            postphase_interval: 0,
             total_active_duration: 15,
           },
           {
@@ -202,11 +202,11 @@ describe("store/stimulation", () => {
             interphase_interval: 0,
             phase_two_duration: 0,
             phase_two_charge: 0,
-            repeat_delay_interval: 0,
+            postphase_interval: 0,
             total_active_duration: 20,
           },
         ],
-        detailed_pulses: [
+        detailed_subprotocols: [
           {
             type: "Delay",
             src: "/delay-tile.png",
@@ -218,11 +218,11 @@ describe("store/stimulation", () => {
               interphase_interval: 0,
               phase_two_duration: 0,
               phase_two_charge: 0,
-              repeat_delay_interval: 3000,
+              postphase_interval: 3000,
               total_active_duration: 15000,
             },
             stim_settings: {
-              repeat_delay_interval: 3,
+              postphase_interval: 3,
               total_active_duration: {
                 duration: 15,
                 unit: "milliseconds",
@@ -472,17 +472,17 @@ describe("store/stimulation", () => {
 
     test("When a user requests to delete the current stimulation by using the trash icon, Then it should reset just the Protocol Viewer and Block View Editor components", async () => {
       await store.commit("stimulation/reset_protocol_editor");
-      expect(store.state.stimulation.protocol_editor.pulses).toStrictEqual([]);
+      expect(store.state.stimulation.protocol_editor.subprotocols).toStrictEqual([]);
     });
 
     test("When a user requests to delete the all of their current changes to entire stim studio, Then it should reset the entire state", async () => {
       store.state.stimulation.protocol_assignments = { test: "test" };
-      store.state.stimulation.protocol_editor.pulses = ["test", "test1"];
+      store.state.stimulation.protocol_editor.subprotocols = ["test", "test1"];
 
       await store.commit("stimulation/reset_state");
 
       expect(store.state.stimulation.protocol_assignments).toStrictEqual({});
-      expect(store.state.stimulation.protocol_editor.pulses).toStrictEqual([]);
+      expect(store.state.stimulation.protocol_editor.subprotocols).toStrictEqual([]);
     });
 
     test("When a user selects a new stimulation type to Current Stimulation Type, Then it should mutate state Current", async () => {
@@ -617,19 +617,19 @@ describe("store/stimulation", () => {
         label: "test_1",
         protocol: {
           stimulation_type: "C",
-          stop_setting: "Stimulate Until Stopped",
-          pulses: [
+          run_until_stopped: "Stimulate Until Stopped",
+          subprotocols: [
             {
               phase_one_duration: 15,
               phase_one_charge: 500,
               interphase_interval: 0,
               phase_two_charge: 0,
               phase_two_duration: 0,
-              repeat_delay_interval: 3,
+              postphase_interval: 3,
               total_active_duration: 50,
             },
           ],
-          detailed_pulses: [
+          detailed_subprotocols: [
             {
               repeat: {
                 color: "hsla(45, 90%, 40%, 1)",
@@ -644,19 +644,19 @@ describe("store/stimulation", () => {
         label: "test_2",
         protocol: {
           stimulation_type: "V",
-          stop_setting: "Stimulate Until Complete",
-          pulses: [
+          run_until_stopped: "Stimulate Until Complete",
+          subprotocols: [
             {
               phase_one_duration: 20,
               phase_one_charge: 400,
               interphase_interval: 10,
               phase_two_charge: -400,
               phase_two_duration: 20,
-              repeat_delay_interval: 0,
+              postphase_interval: 0,
               total_active_duration: 100,
             },
           ],
-          detailed_pulses: [
+          detailed_subprotocols: [
             {
               repeat: {
                 color: "hsla(309, 50%, 60%, 1)",
@@ -684,7 +684,7 @@ describe("store/stimulation", () => {
                 interphase_interval: 0,
                 phase_two_charge: 0,
                 phase_two_duration: 0,
-                repeat_delay_interval: 3000,
+                postphase_interval: 3000,
                 total_active_duration: 50,
               },
             ],
@@ -700,7 +700,7 @@ describe("store/stimulation", () => {
                 interphase_interval: 10000,
                 phase_two_charge: -400,
                 phase_two_duration: 20000,
-                repeat_delay_interval: 0,
+                postphase_interval: 0,
                 total_active_duration: 100,
               },
             ],

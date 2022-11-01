@@ -43,8 +43,8 @@ export default {
             stimulation_type: "V",
             rest_duration: 1,
             time_unit: "milliseconds",
-            stop_setting: "Stimulate Until Stopped",
-            pulses: [
+            run_until_stopped: "Stimulate Until Stopped",
+            subprotocols: [
               {
                 phase_one_duration: 15,
                 phase_one_charge: 0,
@@ -60,7 +60,7 @@ export default {
                 phase_two_charge: 0,
               },
             ],
-            detailed_pulses: [
+            detailed_subprotocols: [
               {
                 type: "Delay",
                 src: "/delay-tile.png",

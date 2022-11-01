@@ -10,7 +10,7 @@ const test_protocol_order = [
   {
     type: "Biphasic",
     src: "placeholder",
-    stop_setting: "Stimulate Until Complete",
+    run_until_stopped: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 2,
       color: "hsla(15, 100%, 50%, 1)",
@@ -33,7 +33,7 @@ const test_protocol_order = [
   {
     type: "Monophasic",
     src: "placeholder",
-    stop_setting: "Stimulate Until Complete",
+    run_until_stopped: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 10,
       color: "hsla(205, 100%, 50%, 1)",
@@ -53,7 +53,7 @@ const test_protocol_order = [
   {
     type: "Delay",
     src: "placeholder",
-    stop_setting: "Stimulate Until Complete",
+    run_until_stopped: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 1,
       color: "hsla(5, 100%, 50%, 1)",
@@ -76,7 +76,7 @@ const test_protocol_order = [
   {
     type: "Monophasic",
     src: "placeholder",
-    stop_setting: "Stimulate Until Complete",
+    run_until_stopped: "Stimulate Until Complete",
     repeat: {
       number_of_repeats: 40,
       color: "hsla(190, 100%, 50%, 1)",
@@ -104,10 +104,10 @@ const test_protocol_list = [
     protocol: {
       name: "Tester",
       stimulation_type: "V",
-      stop_setting: "Stimulate Until Complete",
+      run_until_stopped: "Stimulate Until Complete",
       rest_duration: 20,
       time_unit: "milliseconds",
-      pulses: [
+      subprotocols: [
         {
           phase_one_duration: 15,
           phase_one_charge: 0,
@@ -123,11 +123,11 @@ const test_protocol_list = [
           phase_two_charge: 0,
         },
       ],
-      detailed_pulses: [
+      detailed_subprotocols: [
         {
           type: "Delay",
           src: "/delay-tile.png",
-          stop_setting: "Stimulate Until Complete",
+          run_until_stopped: "Stimulate Until Complete",
           repeat: { color: "hsla(65, 100%, 50%, 1)", number_of_repeats: 1 },
           pulse_settings: {
             phase_one_duration: 15,
@@ -279,7 +279,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     const expected_idx = 0;
     const selected_protocol = store.state.stimulation.protocol_list[1];
-    const expected_pulse_order = store.state.stimulation.protocol_list[1].protocol.detailed_pulses;
+    const expected_pulse_order = store.state.stimulation.protocol_list[1].protocol.detailed_subprotocols;
     await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
 
     expect(wrapper.vm.time_units_idx).toBe(expected_idx);

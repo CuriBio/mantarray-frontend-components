@@ -65,7 +65,6 @@
         :pulse_type="modal_type"
         :modal_open_for_edit="modal_open_for_edit"
         :selected_pulse_settings="selected_pulse_settings"
-        :selected_stim_settings="selected_stim_settings"
         :frequency="selected_frequency"
         :current_color="selected_color"
         @close="on_modal_close"
@@ -131,7 +130,6 @@ export default {
       icon_types: ["Monophasic", "Biphasic", "Delay"],
       time_units_array: ["milliseconds", "seconds", "minutes", "hours"],
       selected_pulse_settings: {},
-      selected_stim_settings: {},
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
@@ -152,8 +150,8 @@ export default {
   computed: {
     ...mapState("stimulation", {
       time_unit: (state) => state.protocol_editor.time_unit,
-      stop_setting: (state) => state.protocol_editor.stop_setting,
-      detailed_pulses: (state) => state.protocol_editor.detailed_pulses,
+      run_until_stopped: (state) => state.protocol_editor.run_until_stopped,
+      detailed_subprotocols: (state) => state.protocol_editor.detailed_subprotocols,
     }),
   },
   watch: {
@@ -170,10 +168,10 @@ export default {
       ) {
         this.protocol_order = [];
       } else if (mutation.type === "stimulation/set_edit_mode") {
-        this.protocol_order = JSON.parse(JSON.stringify(this.detailed_pulses));
+        this.protocol_order = JSON.parse(JSON.stringify(this.detailed_subprotocols));
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       } else if (mutation.type === "stimulation/set_stop_setting") {
-        this.disable_dropdown = this.stop_setting.includes("Complete");
+        this.disable_dropdown = !this.run_until_stopped;
       }
     });
   },
@@ -189,7 +187,6 @@ export default {
         const { element, newIndex } = e.added;
         this.new_cloned_idx = newIndex;
         this.selected_pulse_settings = element.pulse_settings;
-        this.selected_stim_settings = element.stim_settings;
         this.selected_frequency = element.repeat.number_of_repeats;
 
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
@@ -201,7 +198,7 @@ export default {
       // reset
       this.cloned = false;
     },
-    on_modal_close(button, pulse_settings, stim_settings, frequency, selected_color) {
+    on_modal_close(button, pulse_settings, frequency, selected_color) {
       this.modal_type = null;
       this.open_delay_modal = false;
       this.modal_open_for_edit = false;
@@ -215,7 +212,6 @@ export default {
           if (this.new_cloned_idx !== null) {
             const new_pulse = this.protocol_order[this.new_cloned_idx];
             new_pulse.pulse_settings = pulse_settings;
-            new_pulse.stim_settings = stim_settings;
             new_pulse.repeat.number_of_repeats = frequency;
             new_pulse.repeat.color = selected_color;
             Object.assign(this.protocol_order[this.new_cloned_idx], new_pulse);
@@ -224,7 +220,6 @@ export default {
             const edited_pulse = this.protocol_order[this.shift_click_img_idx];
 
             Object.assign(edited_pulse.pulse_settings, pulse_settings);
-            Object.assign(edited_pulse.stim_settings, stim_settings);
             Object.assign(edited_pulse.repeat, { number_of_repeats: frequency, color: selected_color });
 
             Object.assign(this.protocol_order[this.shift_click_img_idx], edited_pulse);
@@ -267,7 +262,6 @@ export default {
       this.modal_open_for_edit = true;
 
       this.selected_pulse_settings = pulse.pulse_settings;
-      this.selected_stim_settings = pulse.stim_settings;
       this.selected_frequency = pulse.repeat.number_of_repeats;
       this.selected_color = pulse.repeat.color;
 
@@ -276,8 +270,9 @@ export default {
       } else if (type === "Biphasic") {
         this.modal_type = "Biphasic";
       } else if (type === "Delay") {
-        this.current_delay_input = this.selected_stim_settings.total_active_duration.duration.toString();
-        this.current_delay_unit = this.selected_stim_settings.total_active_duration.unit.toString();
+        const { duration, unit } = this.selected_pulse_settings;
+        this.current_delay_input = duration.toString();
+        this.current_delay_unit = unit.toString();
         this.open_delay_modal = true;
       }
     },
@@ -312,23 +307,33 @@ export default {
 
       this.selected_color = random_color;
 
-      return {
-        type,
-        repeat: { color: `${random_color}`, number_of_repeats: 0 },
-        pulse_settings: {
-          phase_one_duration: "",
-          phase_one_charge: "",
-          interphase_interval: "",
-          phase_two_duration: "",
-          phase_two_charge: "",
-        },
-        stim_settings: {
-          repeat_delay_interval: "",
+      let type_specific_settings = {};
+      if (type === "Delay") type_specific_settings = { duration: "", unit: "milliseconds" };
+      // sent in µs
+      else
+        type_specific_settings = {
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
           },
-        },
+          num_cycles: 0,
+          postphase_interval: "",
+          phase_one_duration: "",
+          phase_one_charge: "",
+        };
+
+      if (type === "Biphasic")
+        type_specific_settings = {
+          ...type_specific_settings,
+          interphase_interval: "",
+          phase_two_charge: "",
+          phase_two_duration: "",
+        };
+
+      return {
+        type,
+        repeat: { color: `${random_color}`, number_of_repeats: 0 },
+        pulse_settings: type_specific_settings,
       };
     },
   },

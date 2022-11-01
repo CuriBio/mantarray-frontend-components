@@ -160,6 +160,7 @@ export default {
   },
   created() {
     this.input_value = this.current_value;
+
     this.time_unit_idx = this.time_units.indexOf(this.current_delay_unit);
     this.is_enabled_array = this.modal_open_for_edit ? [true, true, true, true] : [false, true];
     if (this.current_value !== null) this.check_validity(this.input_value);
@@ -169,26 +170,15 @@ export default {
       const button_label = this.button_labels[idx];
 
       const selected_unit = this.time_units[this.time_unit_idx];
-      const converted_input = Number(this.input_value) * TIME_CONVERSION_TO_MILLIS[selected_unit];
+      const converted_input = Number(this.input_value);
       const delay_settings = {
-        phase_one_duration: converted_input,
-        phase_one_charge: 0,
-        interphase_interval: 0,
-        phase_two_duration: 0,
-        phase_two_charge: 0,
-      };
-
-      const stim_settings = {
-        repeat_delay_interval: 0,
-        total_active_duration: {
-          duration: Number(this.input_value),
-          unit: selected_unit,
-        },
+        duration: converted_input,
+        unit: selected_unit,
       };
 
       const frequency = 1;
 
-      this.$emit("delay_close", button_label, delay_settings, stim_settings, frequency, this.selected_color);
+      this.$emit("delay_close", button_label, delay_settings, frequency, this.selected_color);
     },
     check_validity(value_str) {
       this.current_value = value_str;
