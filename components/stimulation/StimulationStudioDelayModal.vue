@@ -176,9 +176,7 @@ export default {
         unit: selected_unit,
       };
 
-      const frequency = 1;
-
-      this.$emit("delay_close", button_label, delay_settings, frequency, this.selected_color);
+      this.$emit("delay_close", button_label, delay_settings, this.selected_color);
     },
     check_validity(value_str) {
       this.current_value = value_str;
