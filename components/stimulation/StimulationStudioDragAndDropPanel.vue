@@ -65,7 +65,6 @@
         :pulse_type="modal_type"
         :modal_open_for_edit="modal_open_for_edit"
         :selected_pulse_settings="selected_pulse_settings"
-        :frequency="selected_frequency"
         :current_color="selected_color"
         @close="on_modal_close"
       />
@@ -142,7 +141,6 @@ export default {
       modal_open_for_edit: false, // TODO Luci, clean up state management and constant names
       time_units_idx: 0,
       disable_dropdown: false,
-      selected_frequency: null,
       is_dragging: false,
       selected_color: null,
     };
@@ -187,7 +185,6 @@ export default {
         const { element, newIndex } = e.added;
         this.new_cloned_idx = newIndex;
         this.selected_pulse_settings = element.pulse_settings;
-        this.selected_frequency = element.repeat.number_of_repeats;
 
         if (element.type === "Monophasic") this.modal_type = "Monophasic";
         else if (element.type === "Biphasic") this.modal_type = "Biphasic";
@@ -198,11 +195,10 @@ export default {
       // reset
       this.cloned = false;
     },
-    on_modal_close(button, pulse_settings, frequency, selected_color) {
+    on_modal_close(button, pulse_settings, selected_color) {
       this.modal_type = null;
       this.open_delay_modal = false;
       this.modal_open_for_edit = false;
-      this.selected_frequency = null;
       this.current_delay_input = null;
       this.current_delay_unit = "milliseconds";
       this.selected_color = null;
@@ -212,17 +208,15 @@ export default {
           if (this.new_cloned_idx !== null) {
             const new_pulse = this.protocol_order[this.new_cloned_idx];
             new_pulse.pulse_settings = pulse_settings;
-            new_pulse.repeat.number_of_repeats = frequency;
-            new_pulse.repeat.color = selected_color;
+            new_pulse.color = selected_color;
             Object.assign(this.protocol_order[this.new_cloned_idx], new_pulse);
           }
           if (this.shift_click_img_idx !== null) {
             const edited_pulse = this.protocol_order[this.shift_click_img_idx];
 
             Object.assign(edited_pulse.pulse_settings, pulse_settings);
-            Object.assign(edited_pulse.repeat, { number_of_repeats: frequency, color: selected_color });
-
             Object.assign(this.protocol_order[this.shift_click_img_idx], edited_pulse);
+            edited_pulse.color = selected_color;
           }
           break;
         case "Duplicate":
@@ -241,7 +235,7 @@ export default {
               ? this.get_pulse_hue(this.shift_click_img_idx + 1)
               : undefined;
 
-          duplicate_pulse.repeat.color = generate_random_color(true, previous_hue, next_hue);
+          duplicate_pulse.color = generate_random_color(true, previous_hue, next_hue);
           this.protocol_order.splice(this.shift_click_img_idx + 1, 0, duplicate_pulse);
           break;
         case "Delete":
@@ -260,10 +254,8 @@ export default {
       const pulse = this.protocol_order[idx];
       this.shift_click_img_idx = idx;
       this.modal_open_for_edit = true;
-
       this.selected_pulse_settings = pulse.pulse_settings;
-      this.selected_frequency = pulse.repeat.number_of_repeats;
-      this.selected_color = pulse.repeat.color;
+      this.selected_color = pulse.color;
 
       if (type === "Monophasic") {
         this.modal_type = "Monophasic";
@@ -294,7 +286,7 @@ export default {
       // duplicated pulses are not always in last index
       const pulse_idx = idx ? idx : this.protocol_order.length - 1;
 
-      const last_pulse_hsla = this.protocol_order[pulse_idx].repeat.color;
+      const last_pulse_hsla = this.protocol_order[pulse_idx].color;
       return last_pulse_hsla.split("(")[1].split(",")[0];
     },
     clone(type) {
@@ -312,6 +304,7 @@ export default {
       // sent in µs
       else
         type_specific_settings = {
+          frequency: "",
           total_active_duration: {
             duration: "",
             unit: "milliseconds",
@@ -332,7 +325,7 @@ export default {
 
       return {
         type,
-        repeat: { color: `${random_color}`, number_of_repeats: 0 },
+        color: `${random_color}`,
         pulse_settings: type_specific_settings,
       };
     },

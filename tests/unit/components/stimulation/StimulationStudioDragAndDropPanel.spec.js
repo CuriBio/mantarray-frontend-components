@@ -10,87 +10,65 @@ const test_protocol_order = [
   {
     type: "Biphasic",
     src: "placeholder",
-    run_until_stopped: "Stimulate Until Complete",
-    repeat: {
-      number_of_repeats: 2,
-      color: "hsla(15, 100%, 50%, 1)",
-    },
+    run_until_stopped: false,
+    color: "hsla(15, 100%, 50%, 1)",
     pulse_settings: {
       phase_one_duration: 20,
       phase_one_charge: 2,
       interphase_interval: 10,
       phase_two_duration: 20,
       phase_two_charge: -5,
-    },
-    stim_settings: {
-      delay_interval: 0,
+      postphase_interval: 0,
       total_active_duration: {
-        duration: 100,
+        duration: 1000,
         unit: "milliseconds",
       },
+      num_cycles: 1,
+      frequency: 3,
     },
   },
   {
     type: "Monophasic",
     src: "placeholder",
-    run_until_stopped: "Stimulate Until Complete",
-    repeat: {
-      number_of_repeats: 10,
-      color: "hsla(205, 100%, 50%, 1)",
-    },
+    run_until_stopped: false,
+    color: "hsla(205, 100%, 50%, 1)",
     pulse_settings: {
       phase_one_duration: 20,
       phase_one_charge: 3,
-    },
-    stim_settings: {
-      delay_interval: 0,
+      postphase_interval: 0,
       total_active_duration: {
-        duration: 200,
+        duration: 2000,
         unit: "milliseconds",
       },
+      num_cycles: 2,
+      frequency: 1,
     },
   },
   {
     type: "Delay",
     src: "placeholder",
-    run_until_stopped: "Stimulate Until Complete",
-    repeat: {
-      number_of_repeats: 1,
-      color: "hsla(5, 100%, 50%, 1)",
-    },
+    run_until_stopped: false,
+    color: "hsla(5, 100%, 50%, 1)",
     pulse_settings: {
-      phase_one_duration: 300,
-      phase_one_charge: 0,
-      interphase_interval: 0,
-      phase_two_duration: 0,
-      phase_two_charge: 0,
-    },
-    stim_settings: {
-      delay_interval: 0,
-      total_active_duration: {
-        duration: 300,
-        unit: "seconds",
-      },
+      duration: 300,
+      unit: "seconds",
     },
   },
   {
     type: "Monophasic",
     src: "placeholder",
-    run_until_stopped: "Stimulate Until Complete",
-    repeat: {
-      number_of_repeats: 40,
-      color: "hsla(190, 100%, 50%, 1)",
-    },
+    run_until_stopped: false,
+    color: "hsla(190, 100%, 50%, 1)",
     pulse_settings: {
       phase_one_duration: 10,
       phase_one_charge: 2,
-    },
-    stim_settings: {
-      delay_interval: 0,
+      postphase_interval: 0,
       total_active_duration: {
-        duration: 400,
+        duration: 4000,
         unit: "milliseconds",
       },
+      num_cycles: 4,
+      frequency: 5,
     },
   },
 ];
@@ -109,18 +87,14 @@ const test_protocol_list = [
       time_unit: "milliseconds",
       subprotocols: [
         {
-          phase_one_duration: 15,
-          phase_one_charge: 0,
-          interphase_interval: 0,
-          phase_two_duration: 0,
-          phase_two_charge: 0,
+          type: "Delay",
+          duration: 15000,
+          unit: "milliseconds",
         },
         {
-          phase_one_duration: 20,
-          phase_one_charge: 0,
-          interphase_interval: 0,
-          phase_two_duration: 0,
-          phase_two_charge: 0,
+          type: "Delay",
+          duration: 20,
+          unit: "seconds",
         },
       ],
       detailed_subprotocols: [
@@ -128,20 +102,10 @@ const test_protocol_list = [
           type: "Delay",
           src: "/delay-tile.png",
           run_until_stopped: "Stimulate Until Complete",
-          repeat: { color: "hsla(65, 100%, 50%, 1)", number_of_repeats: 1 },
+          color: "hsla(65, 100%, 50%, 1)",
           pulse_settings: {
-            phase_one_duration: 15,
-            phase_one_charge: 0,
-            interphase_interval: 0,
-            phase_two_duration: 0,
-            phase_two_charge: 0,
-          },
-          stim_settings: {
-            delay_interval: 3,
-            total_active_duration: {
-              duration: 20,
-              unit: "milliseconds",
-            },
+            pduration: 15000,
+            unit: "milliseconds",
           },
         },
       ],
@@ -150,38 +114,35 @@ const test_protocol_list = [
 ];
 const new_mono_test_element = {
   type: "Monophasic",
-  repeat: { color: "", number_of_repeats: 0 },
+  color: "",
   pulse_settings: {
     phase_one_duration: "",
     phase_one_charge: "",
-    interphase_interval: "",
-    phase_two_duration: "",
-    phase_two_charge: "",
-  },
-  stim_settings: {
-    delay_interval: "",
+    postphase_interval: "",
     total_active_duration: {
       duration: "",
       unit: "milliseconds",
     },
+    num_cycles: 0,
+    frequency: "",
   },
 };
 const new_bi_test_element = {
   type: "Biphasic",
-  repeat: { color: "", number_of_repeats: 0 },
+  color: "",
   pulse_settings: {
     phase_one_duration: "",
     phase_one_charge: "",
     interphase_interval: "",
     phase_two_duration: "",
     phase_two_charge: "",
-  },
-  stim_settings: {
-    delay_interval: "",
+    postphase_interval: "",
     total_active_duration: {
       duration: "",
       unit: "milliseconds",
     },
+    num_cycles: 0,
+    frequency: "",
   },
 };
 
@@ -331,7 +292,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
   test("When a user clicks save on the settings for a waveform, Then the setting should save to the corresponding index depending on if it is a new waveform or an edited", async () => {
     const test_settings = "test";
     const test_stim_settings = {
-      delay_interval: "",
+      postphase_interval: "",
       total_active_duration: {
         duration: "",
         unit: "milliseconds",
@@ -345,7 +306,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       {
         type: "Biphasic",
         src: "test",
-        repeat: { color: "b7b7b7", number_of_repeats: 0 },
+        color: "b7b7b7",
         nested_protocols: [],
       },
     ];
@@ -385,7 +346,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     expect(store.state.stimulation.hovered_pulse).toStrictEqual({
       idx: 1,
-      indices: [9, 15],
+      indices: [9, 20],
       color: "hsla(205, 100%, 50%, 1)",
     });
   });
@@ -422,7 +383,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.on_pulse_enter(1);
     expect(store.state.stimulation.hovered_pulse).toStrictEqual({
       idx: 1,
-      indices: [9, 15],
+      indices: [9, 20],
       color: "hsla(205, 100%, 50%, 1)",
     });
 
@@ -452,8 +413,8 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
   test("When a selects the Stimulate Until Complete option in the protocol editor, Then the time unit dropdown should become disabled", async () => {
     const test_settings = {
-      complete: "Stimulate Until Complete",
-      stopped: "Stimulate Until Stopped",
+      complete: false,
+      stopped: true,
     };
     const wrapper = mount(StimulationStudioDragAndDropPanel, {
       store,
@@ -472,34 +433,18 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    const idx = 1;
+    const idx = 2;
 
     const delay_settings = {
-      phase_one_duration: 5000,
-      phase_one_charge: 0,
-      interphase_interval: 0,
-      phase_two_duration: 0,
-      phase_two_charge: 0,
-    };
-
-    const stim_settings = {
-      delay_interval: {
-        duration: 0,
-        unit: "milliseconds",
-      },
-      total_active_duration: {
-        duration: 5,
-        unit: "seconds",
-      },
+      duration: 5,
+      unit: "seconds",
     };
 
     await wrapper.setData({ protocol_order: test_protocol_order });
     await wrapper.vm.open_modal_for_edit("Delay", idx);
     expect(wrapper.vm.open_delay_modal).toBe(true);
 
-    await wrapper.vm.on_modal_close("Save", delay_settings, stim_settings);
-    expect(wrapper.vm.protocol_order[idx].pulse_settings.phase_one_duration).toBe(
-      delay_settings.phase_one_duration
-    );
+    await wrapper.vm.on_modal_close("Save", delay_settings);
+    expect(wrapper.vm.protocol_order[idx].pulse_settings.duration).toBe(delay_settings.duration);
   });
 });

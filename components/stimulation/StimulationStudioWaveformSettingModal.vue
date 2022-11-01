@@ -368,10 +368,6 @@ export default {
       type: Object,
       required: true,
     },
-    frequency: {
-      type: Number,
-      required: true,
-    },
     current_color: {
       type: String,
       default: null,
@@ -464,9 +460,7 @@ export default {
     // Need to copy these values so that the original values won't be edited in case the user cancels an edit
     this.pulse_settings = JSON.parse(JSON.stringify(this.selected_pulse_settings));
 
-    if (this.frequency !== 0) {
-      this.input_pulse_frequency = this.frequency;
-    }
+    if (this.pulse_settings.frequency !== 0) this.input_pulse_frequency = this.pulse_settings.frequency;
 
     const { unit, duration } = this.pulse_settings.total_active_duration;
     this.active_duration_idx = this.time_units.indexOf(unit);
@@ -499,7 +493,8 @@ export default {
       const button_label = this.button_labels[idx];
       this.pulse_settings.postphase_interval = this.calculated_delay;
       this.pulse_settings.num_cycles = Number(this.num_cycles);
-      this.$emit("close", button_label, this.pulse_settings, this.input_pulse_frequency, this.selected_color);
+      this.pulse_settings.frequency = this.input_pulse_frequency;
+      this.$emit("close", button_label, this.pulse_settings, this.selected_color);
     },
     update_freq(new_value) {
       this.check_validity(new_value, "pulse_frequency");

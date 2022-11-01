@@ -60,7 +60,7 @@ export default {
     };
 
     await new_subprotocol_order.map(async (pulse) => {
-      const { color } = pulse.repeat;
+      const { color } = pulse;
       let settings = pulse.pulse_settings;
 
       const starting_repeat_idx = x_values.length - 1;
@@ -260,7 +260,7 @@ export default {
         const { letter } = protocol_assignments[well];
 
         const fill_color_payload = {
-          stim_fill_colors: detailed_subprotocols.map((pulse) => pulse.repeat.color),
+          stim_fill_colors: detailed_subprotocols.map((pulse) => pulse.color),
           well,
         };
 
@@ -284,6 +284,8 @@ export default {
         message.protocol_assignments[well_number] = letter;
       }
     }
+
+    console.log("!!@@", message);
     const message_url = `/set_protocols`;
     const body = { data: JSON.stringify(message) };
     await call_axios_post_from_vuex(message_url, body);

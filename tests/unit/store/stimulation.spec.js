@@ -29,29 +29,18 @@ describe("store/stimulation", () => {
           time_unit: "milliseconds",
           subprotocols: [
             {
-              phase_one_duration: 333,
-              phase_one_charge: 0,
-              interphase_interval: 0,
-              phase_two_duration: 0,
-              phase_two_charge: 0,
-              postphase_interval: 0,
-              total_active_duration: 333,
+              type: "Delay",
+              duration: 333,
+              unit: "milliseconds",
             },
           ],
           detailed_subprotocols: [
             {
               type: "Delay",
-              repeat: { color: "hsla(69, 92%, 45%, 1)", number_of_repeats: 1 },
+              color: "hsla(69, 92%, 45%, 1)",
               pulse_settings: {
-                phase_one_duration: 333,
-                phase_one_charge: 0,
-                interphase_interval: 0,
-                phase_two_duration: 0,
-                phase_two_charge: 0,
-              },
-              stim_settings: {
-                postphase_interval: 0,
-                total_active_duration: { duration: 333, unit: "milliseconds" },
+                duration: 333,
+                unit: "milliseconds",
               },
             },
           ],
@@ -69,29 +58,18 @@ describe("store/stimulation", () => {
           time_unit: "milliseconds",
           subprotocols: [
             {
-              phase_one_duration: 333,
-              phase_one_charge: 0,
-              interphase_interval: 0,
-              phase_two_duration: 0,
-              phase_two_charge: 0,
-              postphase_interval: 0,
-              total_active_duration: 333,
+              type: "Delay",
+              duration: 15000,
+              unit: "milliseconds",
             },
           ],
           detailed_subprotocols: [
             {
               type: "Delay",
-              repeat: { color: "hsla(69, 92%, 45%, 1)", number_of_repeats: 1 },
+              color: "hsla(69, 92%, 45%, 1)",
               pulse_settings: {
-                phase_one_duration: 333,
-                phase_one_charge: 0,
-                interphase_interval: 0,
-                phase_two_duration: 0,
-                phase_two_charge: 0,
-              },
-              stim_settings: {
-                postphase_interval: 0,
-                total_active_duration: { duration: 333, unit: "milliseconds" },
+                duration: 15000,
+                unit: "milliseconds",
               },
             },
           ],
@@ -130,48 +108,21 @@ describe("store/stimulation", () => {
     {
       type: "Biphasic",
       src: "test",
-      repeat: {
-        color: "b7b7b7",
-      },
+      color: "b7b7b7",
       pulse_settings: {
         phase_one_duration: 100,
         phase_one_charge: 200,
         interphase_interval: 10,
         phase_two_duration: 3,
         phase_two_charge: 200,
-      },
-      stim_settings: {
         postphase_interval: 5,
         total_active_duration: {
-          duration: 118,
+          duration: 1000,
           unit: "milliseconds",
         },
+        num_cycles: 1,
       },
-      nested_protocols: [
-        {
-          type: "Biphasic",
-          src: "test",
-          repeat: {
-            color: "123456",
-            number_of_repeats: 1,
-          },
-          pulse_settings: {
-            phase_one_duration: 100,
-            phase_one_charge: 2,
-            interphase_interval: 200,
-            phase_two_duration: 100,
-            phase_two_charge: -2,
-          },
-          stim_settings: {
-            postphase_interval: 0,
-            total_active_duration: {
-              duration: 3,
-              unit: "seconds",
-            },
-          },
-          nested_protocols: [],
-        },
-      ],
+      nested_protocols: [],
     },
   ];
 
@@ -188,22 +139,14 @@ describe("store/stimulation", () => {
         time_unit: "milliseconds",
         subprotocols: [
           {
-            phase_one_duration: 15,
-            phase_one_charge: 0,
-            interphase_interval: 0,
-            phase_two_duration: 0,
-            phase_two_charge: 0,
-            postphase_interval: 0,
-            total_active_duration: 15,
+            type: "Delay",
+            duration: 15,
+            unit: "seconds",
           },
           {
-            phase_one_duration: 20,
-            phase_one_charge: 0,
-            interphase_interval: 0,
-            phase_two_duration: 0,
-            phase_two_charge: 0,
-            postphase_interval: 0,
-            total_active_duration: 20,
+            type: "Delay",
+            duration: 20,
+            unit: "milliseconds",
           },
         ],
         detailed_subprotocols: [
@@ -211,23 +154,8 @@ describe("store/stimulation", () => {
             type: "Delay",
             src: "/delay-tile.png",
             nested_protocols: [],
-            repeat: { color: "hsla(99, 60%, 40%, 1)", number_of_repeats: 1 },
-            pulse_settings: {
-              phase_one_duration: 15000,
-              phase_one_charge: 0,
-              interphase_interval: 0,
-              phase_two_duration: 0,
-              phase_two_charge: 0,
-              postphase_interval: 3000,
-              total_active_duration: 15000,
-            },
-            stim_settings: {
-              postphase_interval: 3,
-              total_active_duration: {
-                duration: 15,
-                unit: "milliseconds",
-              },
-            },
+            color: "hsla(99, 60%, 40%, 1)",
+            pulse_settings: { duration: 15, unit: "seconds" },
           },
         ],
       },
@@ -617,23 +545,19 @@ describe("store/stimulation", () => {
         label: "test_1",
         protocol: {
           stimulation_type: "C",
-          run_until_stopped: "Stimulate Until Stopped",
+          run_until_stopped: true,
           subprotocols: [
             {
+              type: "Monophasic",
               phase_one_duration: 15,
               phase_one_charge: 500,
-              interphase_interval: 0,
-              phase_two_charge: 0,
-              phase_two_duration: 0,
               postphase_interval: 3,
-              total_active_duration: 50,
+              num_cycles: 1,
             },
           ],
           detailed_subprotocols: [
             {
-              repeat: {
-                color: "hsla(45, 90%, 40%, 1)",
-              },
+              color: "hsla(45, 90%, 40%, 1)",
             },
           ],
         },
@@ -644,23 +568,22 @@ describe("store/stimulation", () => {
         label: "test_2",
         protocol: {
           stimulation_type: "V",
-          run_until_stopped: "Stimulate Until Complete",
+          run_until_stopped: false,
           subprotocols: [
             {
+              type: "Biphasic",
               phase_one_duration: 20,
               phase_one_charge: 400,
               interphase_interval: 10,
               phase_two_charge: -400,
               phase_two_duration: 20,
               postphase_interval: 0,
-              total_active_duration: 100,
+              num_cycles: 2,
             },
           ],
           detailed_subprotocols: [
             {
-              repeat: {
-                color: "hsla(309, 50%, 60%, 1)",
-              },
+              color: "hsla(309, 50%, 60%, 1)",
             },
           ],
         },
@@ -679,13 +602,11 @@ describe("store/stimulation", () => {
             run_until_stopped: true,
             subprotocols: [
               {
+                type: "Monophasic",
+                num_cycles: 1,
+                postphase_interval: 3000,
                 phase_one_duration: 15000,
                 phase_one_charge: 500000,
-                interphase_interval: 0,
-                phase_two_charge: 0,
-                phase_two_duration: 0,
-                postphase_interval: 3000,
-                total_active_duration: 50,
               },
             ],
           },
@@ -695,13 +616,14 @@ describe("store/stimulation", () => {
             run_until_stopped: false,
             subprotocols: [
               {
+                type: "Biphasic",
+                num_cycles: 2,
+                postphase_interval: 0,
                 phase_one_duration: 20000,
                 phase_one_charge: 400,
                 interphase_interval: 10000,
                 phase_two_charge: -400,
                 phase_two_duration: 20000,
-                postphase_interval: 0,
-                total_active_duration: 100,
               },
             ],
           },

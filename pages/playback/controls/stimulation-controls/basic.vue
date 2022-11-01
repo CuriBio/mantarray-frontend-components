@@ -43,7 +43,7 @@ export default {
             stimulation_type: "V",
             rest_duration: 1,
             time_unit: "milliseconds",
-            run_until_stopped: "Stimulate Until Stopped",
+            run_until_stopped: true,
             subprotocols: [
               {
                 phase_one_duration: 15,

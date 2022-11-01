@@ -12,6 +12,7 @@ Added:
 Changed:
 ^^^^^^^^
 - Removed randomization from the pulse color generator in a stim protocols to prevent similar colors next to each other
+- Changed format of JSON protocol message sent in /set_protocols route to start a stimulation
 
 1.2.3 (2022-10-13)
 ------------------

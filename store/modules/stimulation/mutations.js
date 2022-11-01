@@ -89,21 +89,12 @@ export default {
   },
   set_delay_axis_values(state, delay) {
     const { rest_duration, subprotocols, time_unit } = state.protocol_editor;
-    const delay_conversion = {
-      milliseconds: 1,
-      seconds: 1000,
-      minutes: 60000,
-      hours: 3600000,
-    };
-    const converted_delay_duration = rest_duration * delay_conversion[time_unit];
+
+    const converted_delay_duration = rest_duration;
     const delay_pulse_model = {
-      phase_one_duration: converted_delay_duration,
-      phase_one_charge: 0,
-      interphase_interval: 0,
-      phase_two_duration: 0,
-      phase_two_charge: 0,
-      postphase_interval: 0,
-      total_active_duration: converted_delay_duration,
+      type: "Delay",
+      duration: rest_duration,
+      unit: time_unit,
     };
     state.delay_blocks = [delay];
     if (!isNaN(converted_delay_duration) && converted_delay_duration !== 0)
