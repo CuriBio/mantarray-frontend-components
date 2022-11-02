@@ -349,4 +349,40 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
 
     expect(wrapper.vm.selected_color).toBe("hsla(0, 100%, 50%, 1)");
   });
+
+  test("When selects to use number of cycles instead of total active duration, Then total active duration will get updated as user changes number of cycles", async () => {
+    const wrapper = mount(StimulationStudioWaveformSettingModal, {
+      store,
+      localVue,
+      propsData: {
+        stimulation_type: "Voltage",
+        pulse_type: "Biphasic",
+        selected_pulse_settings: {
+          phase_one_duration: 5,
+          phase_one_charge: 30,
+          interphase_interval: 5,
+          phase_two_duration: 5,
+          phase_two_charge: -10,
+          postphase_interval: 485,
+          total_active_duration: {
+            duration: 1,
+            unit: "seconds",
+          },
+          num_cycles: 2,
+          frequency: 2,
+        },
+        current_color: "hsla(100, 100%, 50%, 1)",
+        modal_open_for_edit: true,
+      },
+    });
+
+    expect(wrapper.vm.all_valid).toBe(true);
+    expect(wrapper.vm.calculated_active_dur).toBe(1);
+
+    const target_checkbox_btn = wrapper.findAll('input[type="checkbox"]');
+    await target_checkbox_btn.at(0).setChecked(true);
+
+    await wrapper.find("#input-widget-field-num-cycles").setValue("5");
+    expect(wrapper.vm.calculated_active_dur).toBe(2.5);
+  });
 });

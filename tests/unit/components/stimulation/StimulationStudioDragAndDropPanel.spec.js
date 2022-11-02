@@ -201,6 +201,27 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     await wrapper.vm.on_modal_close("Cancel");
     expect(wrapper.vm.modal_type).toBeNull();
+
+    await wrapper.vm.clone({ type: "Delay", src: "test" });
+    await wrapper.vm.check_type({
+      added: {
+        element: {
+          type: "Delay",
+          color: "hsla(45, 100%, 50%, 1)",
+          pulse_settings: { duration: "", unit: "milliseconds" },
+        },
+        newIndex: 4,
+      },
+    });
+
+    expect(wrapper.vm.selected_pulse_settings).toStrictEqual({ duration: "", unit: "milliseconds" });
+    expect(wrapper.vm.open_delay_modal).toBe(true);
+
+    const delay_container = wrapper.find(".delay-container");
+    expect(delay_container.isVisible()).toBeTruthy();
+
+    await wrapper.vm.on_modal_close("Cancel");
+    expect(wrapper.vm.modal_type).toBeNull();
   });
 
   test("When a user opens a modal to delete waveform, Then when delete is clicked, it will delete", async () => {
