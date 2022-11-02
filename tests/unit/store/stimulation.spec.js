@@ -23,7 +23,7 @@ describe("store/stimulation", () => {
         label: "",
         protocol: {
           name: "test_proto_1",
-          run_until_stopped: "Stimulate Until Stopped",
+          run_until_stopped: true,
           stimulation_type: "C",
           rest_duration: 0,
           time_unit: "milliseconds",
@@ -52,7 +52,7 @@ describe("store/stimulation", () => {
         label: "",
         protocol: {
           name: "test_proto_2",
-          run_until_stopped: "Stimulate Until Stopped",
+          run_until_stopped: true,
           stimulation_type: "C",
           rest_duration: 0,
           time_unit: "milliseconds",

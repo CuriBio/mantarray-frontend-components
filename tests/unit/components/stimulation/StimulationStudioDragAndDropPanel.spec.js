@@ -82,7 +82,7 @@ const test_protocol_list = [
     protocol: {
       name: "Tester",
       stimulation_type: "V",
-      run_until_stopped: "Stimulate Until Complete",
+      run_until_stopped: false,
       rest_duration: 20,
       time_unit: "milliseconds",
       subprotocols: [
@@ -101,7 +101,7 @@ const test_protocol_list = [
         {
           type: "Delay",
           src: "/delay-tile.png",
-          run_until_stopped: "Stimulate Until Complete",
+          run_until_stopped: false,
           color: "hsla(65, 100%, 50%, 1)",
           pulse_settings: {
             pduration: 15000,

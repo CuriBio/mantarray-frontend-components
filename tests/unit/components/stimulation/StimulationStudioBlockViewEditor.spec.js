@@ -18,7 +18,7 @@ const test_protocol_list = [
       stimulation_type: "V",
       rest_duration: 20,
       time_unit: "milliseconds",
-      run_until_stopped: "Stimulate Until Stopped",
+      run_until_stopped: true,
       subprotocols: [
         {
           type: "Delay",

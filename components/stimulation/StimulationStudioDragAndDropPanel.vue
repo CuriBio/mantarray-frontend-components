@@ -301,7 +301,7 @@ export default {
 
       let type_specific_settings = {};
       if (type === "Delay") type_specific_settings = { duration: "", unit: "milliseconds" };
-      // sent in µs
+      // for both monophasic and biphasic
       else
         type_specific_settings = {
           frequency: "",
