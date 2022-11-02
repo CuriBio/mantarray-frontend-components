@@ -214,7 +214,7 @@ export default {
         this.rest_duration = JSON.stringify(this.get_rest_duration);
         this.stimulation_type_idx = +(this.stimulation_type === "V");
 
-        this.stop_option_idx = this.run_until_stopped ? 0 : 1;
+        this.stop_option_idx = +!this.run_until_stopped;
         this.disabled_time = !this.run_until_stopped;
       }
     });
