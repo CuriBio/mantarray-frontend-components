@@ -373,27 +373,29 @@ export default {
 };
 
 const _get_converted_settings = async (subprotocols, stim_type) => {
+  const milli_to_micro = 1e3;
   const charge_conversion = { C: 1000, V: 1 };
   const conversion = charge_conversion[stim_type];
+
   return subprotocols.map((pulse) => {
     let type_specific_settings = {};
     if (pulse.type === "Delay")
-      type_specific_settings.duration = pulse.duration * TIME_CONVERSION_TO_MILLIS[pulse.unit] * 1000;
-    // sent in µs
+      type_specific_settings.duration =
+        pulse.duration * TIME_CONVERSION_TO_MILLIS[pulse.unit] * milli_to_micro;
     else
       type_specific_settings = {
         num_cycles: pulse.num_cycles,
-        postphase_interval: Math.round(pulse.postphase_interval * 1000), // sent in µs, also needs to be an integer value
-        phase_one_duration: pulse.phase_one_duration * 1000, // sent in µs
+        postphase_interval: Math.round(pulse.postphase_interval * milli_to_micro), // sent in µs, also needs to be an integer value
+        phase_one_duration: pulse.phase_one_duration * milli_to_micro, // sent in µs
         phase_one_charge: pulse.phase_one_charge * conversion, // sent in mV
       };
 
     if (pulse.type === "Biphasic")
       type_specific_settings = {
         ...type_specific_settings,
-        interphase_interval: pulse.interphase_interval * 1000, // sent in µs
+        interphase_interval: pulse.interphase_interval * milli_to_micro, // sent in µs
         phase_two_charge: pulse.phase_two_charge * conversion, // sent in mV or µA
-        phase_two_duration: pulse.phase_two_duration * 1000,
+        phase_two_duration: pulse.phase_two_duration * milli_to_micro, // sent in µs
       };
 
     return {
