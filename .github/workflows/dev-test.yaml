@@ -42,16 +42,16 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
       - name: Set up Python for use with pre-commit
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3.1.1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - name: Display Language Dependency Versions
@@ -72,7 +72,7 @@ jobs:
           chromedriver --version
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.6
         env:
           cache-name: cache-node-modules
         with:
@@ -82,7 +82,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
 
       - name: Cache Python modules # needed for pre-commit
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.6
         env:
           cache-name: cache-python-modules
         with:
@@ -92,7 +92,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-
 
       - name: Cache Pre-commit hooks
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3.0.6
         env:
           cache-name: cache-pre-commit-hooks
         if: matrix.IS_FASTEST_JOB == true
