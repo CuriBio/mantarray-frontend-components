@@ -26,23 +26,29 @@
           d="M71.2,29.2a.5.5,0,0,0,0-.5A35.8,35.8,0,0,0,36.1.2,35.7,35.7,0,0,0,16.7,5.9L11.3,2.1A1.4,1.4,0,0,0,9.1,3.2L7,28.6A1.4,1.4,0,0,0,9,30L32.1,19.2a1.5,1.5,0,0,0,.2-2.5l-4.1-2.9a23.9,23.9,0,0,1,27.2,8.7A23.5,23.5,0,0,1,59.7,35a1.3,1.3,0,0,0,1.4,1.3h9.4a1.5,1.5,0,0,0,1.4-1.5A27.8,27.8,0,0,0,71.2,29.2Z"
         ></path>
       </svg>
-      <span :class="svg__stimulation_controls_play_stop_button__dynamic_class" @click="handle_play_stop">
-        <div
-          v-if="!play_state"
-          id="start-stim-button"
-          v-b-popover.hover.bottom="start_stim_label"
-          title="Start Stimulation"
-        >
-          <!-- this is here for testing the popover message -->
-          <span id="start-popover-msg" style="display: none">{{ start_stim_label }}</span>
-          <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
-        </div>
-        <div v-if="play_state" v-b-popover.hover.bottom="stop_stim_label" title="Stop Stimulation">
-          <!-- this is here for testing the popover message -->
-          <span id="stop-popover-msg" style="display: none">{{ stop_stim_label }}</span>
-          <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
-        </div>
-      </span>
+      <b-dropdown no-caret="true" variant="link" class="b-dropdown__container">
+        <template #button-content>
+          <span :class="svg__stimulation_controls_play_stop_button__dynamic_class" @click="handle_play_stop">
+            <div
+              v-if="!play_state"
+              id="start-stim-button"
+              v-b-popover.hover.bottom="start_stim_label"
+              title="Start Stimulation"
+            >
+              <!-- this is here for testing the popover message -->
+              <span id="start-popover-msg" style="display: none">{{ start_stim_label }}</span>
+              <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
+            </div>
+            <div v-if="play_state" v-b-popover.hover.bottom="stop_stim_label" title="Stop Stimulation">
+              <!-- this is here for testing the popover message -->
+              <span id="stop-popover-msg" style="display: none">{{ stop_stim_label }}</span>
+              <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
+            </div>
+          </span>
+        </template>
+        <b-dropdown-item href="#">Start Stimulation Only</b-dropdown-item>
+        <b-dropdown-item href="#">Start Recording and Stimulation</b-dropdown-item>
+      </b-dropdown>
     </div>
     <svg class="svg__waveform-container" viewBox="0 0 62 62">
       <path
@@ -139,9 +145,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
-import { VBPopover } from "bootstrap-vue";
+import { VBPopover, BDropdown, BDropdownItemButton } from "bootstrap-vue";
 // Note: Vue automatically prefixes the directive name with 'v-'
 Vue.directive("b-popover", VBPopover);
+Vue.directive("b-dropdown", BDropdown);
+Vue.directive("b-dropdown-item-button", BDropdownItemButton);
+
 const stateObj = playback_module.state();
 const vuex_delay = stateObj.tooltips_delay;
 const options = {
@@ -404,6 +413,14 @@ body {
 .span__stimulation-controls-play-stop-button--disabled {
   position: relative;
   color: #2f2f2f;
+  grid-column: 4;
+  height: 29px;
+  width: 20px;
+  font-size: 20px;
+}
+
+.b-dropdown__container {
+  position: relative;
   grid-column: 4;
   height: 29px;
   width: 20px;
