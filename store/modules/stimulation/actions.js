@@ -99,10 +99,14 @@ export default {
 
   handle_rest_duration({ commit, state }, { x_values, y_values }) {
     const { rest_duration, time_unit } = state.protocol_editor;
+    const { x_axis_time_idx } = state;
+    const x_axis_unit = x_axis_time_idx === 0 ? "milliseconds" : "seconds";
     let delay_block;
 
     if (rest_duration !== 0) {
-      const converted_delay = rest_duration * TIME_CONVERSION_TO_MILLIS[time_unit];
+      // find the time unit by taking rest duration unit and dividing by the graph x axis unit
+      const converted_delay =
+        rest_duration * (TIME_CONVERSION_TO_MILLIS[time_unit] / TIME_CONVERSION_TO_MILLIS[x_axis_unit]);
       const last_x_value = x_values[x_values.length - 1];
       const next_x_value = last_x_value + converted_delay;
       delay_block = [last_x_value, next_x_value];
@@ -111,6 +115,7 @@ export default {
     if (rest_duration == 0) {
       delay_block = [NaN, NaN];
     }
+
     commit("set_delay_axis_values", delay_block);
     commit("set_axis_values", { x_values, y_values });
   },
@@ -285,7 +290,6 @@ export default {
       }
     }
 
-    console.log("!!@@", message);
     const message_url = `/set_protocols`;
     const body = { data: JSON.stringify(message) };
     await call_axios_post_from_vuex(message_url, body);
@@ -340,6 +344,7 @@ export default {
   handle_x_axis_unit({ commit, dispatch, state }, { idx, unit_name }) {
     state.x_axis_unit_name = unit_name;
     const { x_axis_values, y_axis_values, x_axis_time_idx } = state;
+
     if (idx !== x_axis_time_idx) {
       const converted_x_values = x_axis_values.map((val) => (idx === 1 ? val * 1e-3 : val * 1e3));
       commit("set_x_axis_time_idx", idx);
