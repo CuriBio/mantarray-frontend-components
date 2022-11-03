@@ -277,7 +277,8 @@ export default {
     },
     handle_time_unit(idx) {
       const unit = this.time_units_array[idx];
-      this.time_units_idx = this.set_time_unit(unit);
+      this.time_units_idx = idx;
+      this.set_time_unit(unit);
       this.handle_protocol_order(this.protocol_order);
     },
     get_pulse_hue(idx) {

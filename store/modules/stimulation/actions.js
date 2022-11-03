@@ -107,6 +107,7 @@ export default {
       // find the time unit by taking rest duration unit and dividing by the graph x axis unit
       const converted_delay =
         rest_duration * (TIME_CONVERSION_TO_MILLIS[time_unit] / TIME_CONVERSION_TO_MILLIS[x_axis_unit]);
+
       const last_x_value = x_values[x_values.length - 1];
       const next_x_value = last_x_value + converted_delay;
       delay_block = [last_x_value, next_x_value];
