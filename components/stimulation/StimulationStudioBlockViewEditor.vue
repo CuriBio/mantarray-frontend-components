@@ -169,7 +169,7 @@ export default {
   computed: {
     ...mapState("stimulation", {
       stimulation_type: (state) => state.protocol_editor.stimulation_type,
-      stop_setting: (state) => state.protocol_editor.stop_setting,
+      run_until_stopped: (state) => state.protocol_editor.run_until_stopped,
       rest_time_unit: (state) => state.protocol_editor.time_unit,
     }),
     ...mapGetters("stimulation", [
@@ -214,9 +214,8 @@ export default {
         this.rest_duration = JSON.stringify(this.get_rest_duration);
         this.stimulation_type_idx = +(this.stimulation_type === "V");
 
-        const stim_until_complete = this.stop_setting === "Stimulate Until Complete";
-        this.stop_option_idx = +stim_until_complete;
-        this.disabled_time = stim_until_complete;
+        this.stop_option_idx = +!this.run_until_stopped;
+        this.disabled_time = !this.run_until_stopped;
       }
     });
   },
@@ -257,9 +256,9 @@ export default {
 
       this.disabled_time = idx === 1;
 
-      if (this.disabled_time) this.handle_rest_duration(0);
+      if (this.disabled_time) this.handle_rest_duration("0");
 
-      this.set_stop_setting(setting);
+      this.set_stop_setting(setting.includes("Stopped"));
     },
     handle_rest_duration(time) {
       const time_int = +time;
