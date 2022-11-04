@@ -13,89 +13,58 @@ const test_protocol_order = [
   {
     type: "Biphasic",
     src: "placeholder",
-    repeat: {
-      number_of_repeats: 1,
-      color: "#ffff1",
-    },
+    color: "#ffff1",
     pulse_settings: {
       phase_one_duration: 30,
       phase_one_charge: 20,
       interphase_interval: 5,
       phase_two_duration: 10,
       phase_two_charge: -5,
-    },
-    stim_settings: {
-      repeat_delay_interval: 10,
+      postphase_interval: 10,
       total_active_duration: {
         duration: 2000,
         unit: "milliseconds",
       },
+      num_cycles: 2,
     },
   },
   {
     type: "Monophasic",
     src: "placeholder",
-    repeat: {
-      number_of_repeats: 2,
-      color: "#ffff2",
-    },
+    color: "#ffff2",
     pulse_settings: {
       phase_one_duration: 30,
       phase_one_charge: 2,
-      interphase_interval: 0,
-      phase_two_duration: 0,
-      phase_two_charge: 0,
-    },
-    stim_settings: {
-      repeat_delay_interval: 20,
+      postphase_interval: 20,
       total_active_duration: {
         duration: 1000,
         unit: "milliseconds",
       },
+      num_cycles: 1,
     },
   },
   {
     type: "Delay",
     src: "placeholder",
-    repeat: {
-      number_of_repeats: 3,
-      color: "#ffff3",
-    },
+    color: "#ffff3",
     pulse_settings: {
-      phase_one_duration: 30,
-      phase_one_charge: 0,
-      interphase_interval: 0,
-      phase_two_duration: 0,
-      phase_two_charge: 0,
-    },
-    stim_settings: {
-      repeat_delay_interval: 20,
-      total_active_duration: {
-        duration: 1300,
-        unit: "seconds",
-      },
+      duration: 1300,
+      unit: "seconds",
     },
   },
   {
     type: "Monophasic",
     src: "placeholder",
-    repeat: {
-      number_of_repeats: 2,
-      color: "#ffff4",
-    },
+    color: "#ffff4",
     pulse_settings: {
       phase_one_duration: 30,
       phase_one_charge: 50,
-      interphase_interval: 0,
-      phase_two_duration: 0,
-      phase_two_charge: 0,
-    },
-    stim_settings: {
-      repeat_delay_interval: 10,
+      postphase_interval: 10,
       total_active_duration: {
         duration: 2000,
         unit: "milliseconds",
       },
+      num_cycles: 2,
     },
   },
 ];
@@ -248,7 +217,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     await store.dispatch("stimulation/handle_new_rest_duration", test_value);
 
     expect(wrapper.vm.delay_blocks).toBe(store.state.stimulation.delay_blocks);
-    expect(wrapper.vm.delay_blocks).toStrictEqual([[1305000, 1305005]]);
+    expect(wrapper.vm.delay_blocks).toStrictEqual([[1300240, 1300245]]);
   });
   describe("StimulationStudioWaveform.vue", () => {
     test("When a user the protocol, Then all datapoints should be deleted", async () => {

@@ -4,12 +4,12 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 export function get_default_protocol_editor_state() {
   return {
     name: "",
-    stop_setting: "Stimulate Until Stopped",
+    run_until_stopped: true,
     stimulation_type: "C",
     rest_duration: 0,
     time_unit: "milliseconds",
-    pulses: [],
-    detailed_pulses: [],
+    subprotocols: [],
+    detailed_subprotocols: [],
   };
 }
 

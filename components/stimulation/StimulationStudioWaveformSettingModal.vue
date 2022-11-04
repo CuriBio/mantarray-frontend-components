@@ -325,11 +325,11 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-props {String} stimulation_type - Current type of stimulation
  * @vue-props {String} pulse_type - Type of pulse for modal
  * @vue-props {Object} selected_pulse_settings - Settings passed to modal if it's selected to edit
- * @vue-props {Object} selected_stim_settings - Stim block settings passed to modal if it's selected to edit
+ * @vue-props {Object} selected_pulse_settings - Stim block settings passed to modal if it's selected to edit
  * @vue-props {Object} open_modal_for_edit - Boolean to determine if modal is open with existing settings
  * @vue-data {String} popover_message - Popover for disabled input field on hover of question mark
  * @vue-data {Object} pulse_settings - Model for new inputs to be assigned
- * @vue-data {Object} stim_settings - Model for new inputs to be assigned
+ * @vue-data {Object} pulse_settings - Model for new inputs to be assigned
  * @vue-data {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
  * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
  * @vue-data {Object} err_msgs - Object containing all initial error messages for inputs
@@ -368,14 +368,6 @@ export default {
       type: Object,
       required: true,
     },
-    selected_stim_settings: {
-      type: Object,
-      required: true,
-    },
-    frequency: {
-      type: Number,
-      required: true,
-    },
     current_color: {
       type: String,
       default: null,
@@ -385,7 +377,6 @@ export default {
     return {
       popover_message: "Not Editable: This data is displayed for informational purposes only.",
       pulse_settings: {},
-      stim_settings: {},
       invalid_err_msg: {
         num_err: "Must be a number",
         min_num_err: "Must be a positive number",
@@ -437,8 +428,11 @@ export default {
   },
   computed: {
     total_pulse_duration: function () {
-      const { phase_one_duration, phase_two_duration, interphase_interval } = this.pulse_settings;
-      return Number(phase_one_duration) + Number(phase_two_duration) + Number(interphase_interval);
+      return this.pulse_type === "Monophasic"
+        ? Number(this.pulse_settings.phase_one_duration)
+        : Number(this.pulse_settings.phase_one_duration) +
+            Number(this.pulse_settings.phase_two_duration) +
+            Number(this.pulse_settings.interphase_interval);
     },
     calculated_delay: function () {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
@@ -465,23 +459,11 @@ export default {
   created() {
     // Need to copy these values so that the original values won't be edited in case the user cancels an edit
     this.pulse_settings = JSON.parse(JSON.stringify(this.selected_pulse_settings));
-    this.stim_settings = JSON.parse(JSON.stringify(this.selected_stim_settings));
 
-    if (this.frequency !== 0) {
-      this.input_pulse_frequency = this.frequency;
-    }
+    if (this.pulse_settings.frequency !== 0) this.input_pulse_frequency = this.pulse_settings.frequency;
 
-    const { unit, duration } = this.stim_settings.total_active_duration;
+    const { unit, duration } = this.pulse_settings.total_active_duration;
     this.active_duration_idx = this.time_units.indexOf(unit);
-
-    if (this.pulse_type === "Monophasic") {
-      this.pulse_settings = {
-        ...this.pulse_settings,
-        interphase_interval: 0,
-        phase_two_duration: 0,
-        phase_two_charge: 0,
-      };
-    }
 
     // Tanner (9/27/22): Currently this modal will always load with use_num_cycles set to false, so need to set these specific values
     this.calculated_active_dur = duration;
@@ -509,15 +491,10 @@ export default {
     },
     close(idx) {
       const button_label = this.button_labels[idx];
-      this.stim_settings.repeat_delay_interval = this.calculated_delay;
-      this.$emit(
-        "close",
-        button_label,
-        this.pulse_settings,
-        this.stim_settings,
-        this.input_pulse_frequency,
-        this.selected_color
-      );
+      this.pulse_settings.postphase_interval = this.calculated_delay;
+      this.pulse_settings.num_cycles = Number(this.num_cycles);
+      this.pulse_settings.frequency = this.input_pulse_frequency;
+      this.$emit("close", button_label, this.pulse_settings, this.selected_color);
     },
     update_freq(new_value) {
       this.check_validity(new_value, "pulse_frequency");
@@ -564,7 +541,8 @@ export default {
       const default_value = "-";
 
       const is_active_dur_missing =
-        !this.stim_settings.total_active_duration || this.stim_settings.total_active_duration.duration === "";
+        !this.pulse_settings.total_active_duration ||
+        this.pulse_settings.total_active_duration.duration === "";
       const is_freq_missing = this.input_pulse_frequency === "";
 
       let updated_val;
@@ -578,7 +556,7 @@ export default {
       } else {
         const selected_unit = this.time_units[this.active_duration_idx];
         const duration_in_secs =
-          this.stim_settings.total_active_duration.duration *
+          this.pulse_settings.total_active_duration.duration *
           (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
 
         const num_cycles = duration_in_secs * this.input_pulse_frequency;
@@ -602,7 +580,7 @@ export default {
         if (label.includes("phase")) {
           this.pulse_settings[label] = value;
         } else if (label.includes("active")) {
-          this.stim_settings.total_active_duration.duration = value;
+          this.pulse_settings.total_active_duration.duration = value;
         }
 
         if (label.includes("duration") || label.includes("interval")) {
@@ -648,7 +626,7 @@ export default {
       }
     },
     check_active_duration() {
-      const value_str = this.stim_settings.total_active_duration.duration;
+      const value_str = this.pulse_settings.total_active_duration.duration;
       const value = +value_str;
 
       const selected_unit = this.time_units[this.active_duration_idx];
@@ -670,8 +648,8 @@ export default {
         this.err_msgs[label] = `Must be <= ${max_in_hrs}hrs`;
       } else {
         this.err_msgs[label] = this.invalid_err_msg.valid;
-        this.stim_settings[label].duration = value;
-        this.stim_settings[label].unit = this.time_units[this.active_duration_idx];
+        this.pulse_settings[label].duration = value;
+        this.pulse_settings[label].unit = this.time_units[this.active_duration_idx];
       }
     },
     check_pulse_frequency() {

@@ -191,7 +191,9 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
 });
 
 describe("axios_helper.stim_studio", () => {
-  const sample_message = { data: { protocol: { stimulation_type: "C", well_title: "A01", pulses: [] } } };
+  const sample_message = {
+    data: { protocol: { stimulation_type: "C", well_title: "A01", subprotocols: [] } },
+  };
   const localVue = createLocalVue();
   localVue.use(Vuex);
   let mocked_axios;
