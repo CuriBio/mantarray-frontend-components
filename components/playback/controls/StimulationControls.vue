@@ -27,18 +27,18 @@
         ></path>
       </svg>
       <b-dropdown
-        id="start_stim_dropdown"
-        :no-caret="true"
+        id="start-stim-dropdown"
         variant="link"
         class="b-dropdown__container"
-        @show="handle_dropdown_toggle"
+        no-caret
+        @show="handle_play_stop"
       >
         <template #button-content>
-          <span :class="svg__stimulation_controls_play_stop_button__dynamic_class" @click="handle_play_stop">
+          <span :class="svg__stimulation_controls_play_stop_button__dynamic_class">
             <div
               v-if="!play_state"
               id="start-stim-button"
-              v-b-popover.hover.bottom="start_stim_label"
+              v-b-popover.hover.top="start_stim_label"
               title="Start Stimulation"
             >
               <!-- this is here for testing the popover message -->
@@ -52,8 +52,25 @@
             </div>
           </span>
         </template>
-        <b-dropdown-item href="#">Start Stimulation Only</b-dropdown-item>
-        <b-dropdown-item href="#">Start Recording and Stimulation</b-dropdown-item>
+        <div
+          v-if="open_start_dropdown"
+          class="dropdown-menu"
+          aria-labelledby="dropdownMenuButton"
+          :style="`display: ${dropdown_display}`"
+        >
+          <b-dropdown-item-button
+            v-for="(option, idx) in start_stim_options"
+            :key="option"
+            href="#"
+            @click="
+              (e) => {
+                e.preventDefault();
+                handle_dropdown_select(idx);
+              }
+            "
+            >{{ option }}</b-dropdown-item-button
+          >
+        </div>
       </b-dropdown>
     </div>
     <svg class="svg__waveform-container" viewBox="0 0 62 62">
@@ -140,7 +157,7 @@
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import playback_module from "@/store/modules/playback";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
@@ -198,6 +215,7 @@ export default {
       active_gradient: ["#19ac8a", "#24524b"],
       inactive_gradient: ["#b7b7b7", "#858585"],
       current_gradient: ["#b7b7b7", "#858585"],
+      start_stim_options: ["Start Stimulation Only", "Start Recording and Stimulation"],
       controls_block_label: "Stimulation Controls are disabled until device is Calibrated",
       open_circuit_labels: {
         header: "Warning!",
@@ -214,6 +232,7 @@ export default {
         button_names: ["Continue Anyway", "Stop Stimulation"],
       },
       stim_24hr_timer: null,
+      open_start_dropdown: false,
     };
   },
   computed: {
@@ -323,6 +342,9 @@ export default {
     config_check_in_progress: function () {
       return this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS;
     },
+    dropdown_display: function () {
+      return this.open_start_dropdown ? "flex" : "none";
+    },
   },
   watch: {
     stim_play_state: function () {
@@ -335,14 +357,15 @@ export default {
     },
   },
   methods: {
-    async handle_play_stop() {
+    ...mapMutations("playback", ["set_start_recording_from_stim"]),
+    async handle_play_stop(e) {
+      e.preventDefault();
       if (this.is_start_stop_button_enabled) {
         if (this.play_state) {
           this.$store.dispatch(`stimulation/stop_stimulation`);
           clearTimeout(this.stim_24hr_timer); // clear 24 hour timer for next stimulation
         } else {
-          await this.$store.dispatch(`stimulation/create_protocol_message`);
-          this.start_24hr_timer();
+          this.open_start_dropdown = true;
         }
       }
     },
@@ -365,9 +388,17 @@ export default {
         this.$bvModal.show("stim-24hr-warning");
       }, 24 * 60 * 60e3);
     },
-    handle_dropdown_toggle(e) {
-      e.preventDefault();
-      console.log(e);
+    async handle_dropdown_select(idx) {
+      // close dropdown when option has been selected
+      // idx 0 = start stim, idx 1 = start rec and stim
+      this.open_start_dropdown = false;
+
+      // start recording first if start rec and stim was selected
+      if (idx === 1) this.set_start_recording_from_stim(true);
+
+      // always start stimulation
+      await this.$store.dispatch(`stimulation/create_protocol_message`);
+      this.start_24hr_timer();
     },
   },
 };
@@ -423,10 +454,9 @@ body {
 .span__stimulation-controls-play-stop-button--disabled {
   position: relative;
   color: #2f2f2f;
-  /* grid-column: 4;
-  height: 29px;
-  width: 20px; */
   font-size: 20px;
+  left: -13px;
+  bottom: 7px;
 }
 
 .b-dropdown__container {
@@ -434,16 +464,34 @@ body {
   grid-column: 4;
   height: 29px;
   width: 20px;
-  /* font-size: 20px; */
+}
+.dropdown-item {
+  font-size: 13px;
+  padding: 5px 9px;
+}
+
+.dropdown-item:focus {
+  background: gray;
+}
+
+.dropdown-menu {
+  position: fixed;
+  padding: 0;
+  min-width: 0px;
+  display: flex;
+  flex-direction: column;
+  height: 63px;
+  top: 295px;
+  left: 182px;
+  border: none;
 }
 
 .span__stimulation-controls-play-stop-button--enabled {
   position: relative;
   color: #b7b7b7;
-  /* grid-column: 4;
-  height: 30px;
-  width: 20px; */
   font-size: 20px;
+  left: -13px;
+  bottom: 7px;
 }
 
 .span__stimulation-controls-play-stop-button--enabled:hover {
