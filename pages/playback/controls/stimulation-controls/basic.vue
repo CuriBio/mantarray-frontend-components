@@ -3,6 +3,7 @@
     <StimulationControls />
     <button class="enable-button" @click="enable_controls">Enable Stim Controls</button>
     <button class="update-button" @click="update_protocol_assignment">Update protocol assignments</button>
+    <button class="start-button" @click="start_stim">Start</button>
   </div>
 </template>
 
@@ -84,6 +85,10 @@ export default {
     enable_controls() {
       this.set_enable_stim_controls(true);
     },
+    async start_stim() {
+      // always start stimulation
+      await this.$store.dispatch(`stimulation/create_protocol_message`);
+    },
   },
 };
 </script>
@@ -107,6 +112,22 @@ export default {
 .update-button {
   position: absolute;
   top: 100px;
+  left: 350px;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  background-color: #4ca0af;
+  z-index: 999;
+}
+.start-button {
+  position: absolute;
+  top: 155px;
   left: 350px;
   border: none;
   color: white;
