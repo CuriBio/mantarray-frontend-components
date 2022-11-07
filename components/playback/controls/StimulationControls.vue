@@ -418,6 +418,7 @@ body {
   padding-left: 20px;
   top: 0px;
   left: 0px;
+  overflow: hidden;
 }
 
 .div__controls-block {
