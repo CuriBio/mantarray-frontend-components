@@ -111,6 +111,7 @@ describe("store/stimulation", () => {
       const wrapper = mount(StimulationControls, {
         store,
         localVue,
+        attachToDocument: true,
       });
 
       // direct call to bypass bootstrap component, jest can't find bootstrap elements
@@ -121,6 +122,8 @@ describe("store/stimulation", () => {
       await wrapper.vm.handle_play_stop(test_event);
       expect(wrapper.vm.open_start_dropdown).toBe(true);
 
+      // trigger document event listener to close modal
+      await wrapper.trigger("click");
       await wrapper.vm.handle_dropdown_select(0);
 
       expect(wrapper.vm.play_state).toBe(true);
@@ -140,14 +143,18 @@ describe("store/stimulation", () => {
       const wrapper = mount(StimulationControls, {
         store,
         localVue,
+        attachToDocument: true,
       });
 
+      // trigger document event listener to close modal
+      await wrapper.trigger("click");
       // direct call to bypass bootstrap component, jest can't find bootstrap elements
       await wrapper.vm.handle_dropdown_select(1);
 
       expect(wrapper.vm.play_state).toBe(true);
       expect(dispatch_spy).toHaveBeenCalledWith("stimulation/create_protocol_message");
       expect(store.state.playback.start_recording_from_stim).toBe(true);
+      expect(wrapper.vm.open_start_dropdown).toBe(false);
     });
 
     test("When set_stim_play_state is called with different values, Then current gradient is updated correctly", async () => {

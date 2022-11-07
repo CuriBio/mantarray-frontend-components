@@ -63,7 +63,7 @@
             id="dropdown_option"
             :key="option"
             href="#"
-            :disable="idx === 1 && !start_rec_and_stim_enabled"
+            :disabled="idx === 1 && !start_rec_and_stim_enabled"
             @click="
               (e) => {
                 e.preventDefault();
@@ -362,6 +362,11 @@ export default {
         this.$bvModal.show("open-circuit-warning");
     },
   },
+  mounted() {
+    document.addEventListener("click", () => {
+      this.open_start_dropdown = false;
+    });
+  },
   methods: {
     ...mapMutations("playback", ["set_start_recording_from_stim"]),
     async handle_play_stop(e) {
@@ -395,10 +400,7 @@ export default {
       }, 24 * 60 * 60e3);
     },
     async handle_dropdown_select(idx) {
-      // close dropdown when option has been selected
       // idx 0 = start stim, idx 1 = start rec and stim
-      this.open_start_dropdown = false;
-
       // start recording first if start rec and stim was selected
       if (idx === 1) this.set_start_recording_from_stim(true);
 
