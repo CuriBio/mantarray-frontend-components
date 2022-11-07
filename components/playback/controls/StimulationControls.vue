@@ -63,6 +63,7 @@
             id="dropdown_option"
             :key="option"
             href="#"
+            :disable="idx === 1 && !start_rec_and_stim_enabled"
             @click="
               (e) => {
                 e.preventDefault();
@@ -345,6 +346,10 @@ export default {
     },
     dropdown_display: function () {
       return this.open_start_dropdown ? "flex" : "none";
+    },
+    start_rec_and_stim_enabled: function () {
+      // disable this option if state is already recording
+      return this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
     },
   },
   watch: {
