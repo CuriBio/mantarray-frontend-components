@@ -60,6 +60,7 @@
         >
           <b-dropdown-item-button
             v-for="(option, idx) in start_stim_options"
+            id="dropdown_option"
             :key="option"
             href="#"
             @click="
