@@ -265,7 +265,6 @@ import RecordingSnapshotWidget from "@/components/status/RecordingSnapshotWidget
 
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
-
 import { BButton, BModal } from "bootstrap-vue";
 import { VBPopover } from "bootstrap-vue";
 // Note: Vue automatically prefixes the directive name with 'v-'
@@ -363,7 +362,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("playback", ["playback_state", "barcodes", "tooltips_delay"]),
+    ...mapState("playback", ["playback_state", "barcodes", "tooltips_delay", "start_recording_from_stim"]),
     ...mapState("settings", [
       "auto_upload",
       "beta_2_mode",
@@ -509,6 +508,30 @@ export default {
         this.$bvModal.show("recording-check");
       }
     },
+    playback_state(new_state) {
+      // if live view had to be started from stim studio, then catch it here and then start recording after buffering state. Start recording cannot happen right after starting live view becuase of buffering state
+      if (new_state === this.playback_state_enums.LIVE_VIEW_ACTIVE && this.start_recording_from_stim) {
+        // then start recording once ensured that live view has started
+        this.on_activate_record_click();
+        // set back to false
+        this.$store.commit("playback/set_start_recording_from_stim", false);
+      }
+    },
+    async start_recording_from_stim(start_rec) {
+      // start recording if set to true
+      if (start_rec) {
+        // first start live view if it isn't already started
+        if (this.playback_state === this.playback_state_enums.CALIBRATED) {
+          await this.$store.dispatch("playback/start_live_view");
+          // else if live view is already active, just start new recording
+        } else if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
+          // then start recording once ensured that live view has started
+          this.on_activate_record_click();
+          // set back to false
+          this.$store.commit("playback/set_start_recording_from_stim", false);
+        }
+      }
+    },
   },
   methods: {
     on_activate_record_click: function () {
@@ -541,9 +564,10 @@ export default {
         }
       }, 2 * 60e3);
     },
-    on_stop_record_click: function () {
+    on_stop_record_click: async function () {
       clearTimeout(this.recording_timer);
-      this.$store.dispatch("playback/stop_recording");
+      await this.$store.dispatch("playback/stop_recording");
+      await this.$store.dispatch("playback/stop_live_view");
       this.$bvModal.show("recording-name-input-prompt-message");
 
       if (this.auto_upload) {

@@ -206,6 +206,7 @@ export default {
     const response = await call_axios_post_from_vuex(post_endpoint, {
       selected_recordings,
     });
+
     if (response && response.status !== 204)
       await commit("set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.ERROR);
   },

@@ -4,9 +4,15 @@ Changelog for Mantarray Frontend Components
 1.2.5 (unreleased)
 ------------------
 
+Added:
+^^^^^^
+- Ability to start live view, recording, and stimulation from stim studio start button
+
 Changed:
 ^^^^^^^^
 - Changed format of JSON protocol message sent in /set_protocols route to start a stimulation
+- Live view will always be stopped when a recording is stopped
+
 
 1.2.4 (2022-11-03)
 ------------------
