@@ -1,7 +1,12 @@
 <template>
   <div>
-    <div class="div__status-error-catch-background" :style="error_background_cssprops"></div>
-    <span class="div_status-error-catch-title-label">An&nbsp;<wbr />error&nbsp;<wbr />occurred. </span>
+    <div
+      class="div__status-error-catch-background"
+      :style="error_background_cssprops"
+    ></div>
+    <span class="div_status-error-catch-title-label"
+      >An&nbsp;<wbr />error&nbsp;<wbr />occurred.
+    </span>
     <div class="div_status-error-catch-alert-txt" :style="error_catch_alert">
       <p>{{ shutdown_error_message }}</p>
       <textarea
@@ -18,7 +23,9 @@
     <div class="div_status-email-txt" :style="email_text_cssprops">
       <p>
         Please send the folder shown below to
-        <a id="error_contact" href="mailto:support@curibio.com ? subject = Mantarray Error log"
+        <a
+          id="error_contact"
+          href="mailto:support@curibio.com ? subject = Mantarray Error log"
           >support@curibio.com</a
         >
       </p>
@@ -35,7 +42,9 @@
     ></textarea>
     <div class="div_status-error-catch-next-step-txt" :style="next_step_cssprops">
       <p>
-        Please turn the instrument off and wait 10 seconds <br />
+        Please turn the instrument off and disconnect the USB.<br />
+        Please wait 10 seconds
+        <br />
         before attempting to use again
       </p>
     </div>
