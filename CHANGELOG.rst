@@ -1,5 +1,8 @@
 Changelog for Mantarray Frontend Components
 ===========================================
+1.2.6 (2022-11-10)
+------------------
+- Changed error message to Please turn the instrument off, unplug from the PC, and then wait 10 seconds before attempting to use again.
 
 1.2.5 (unreleased)
 ------------------
