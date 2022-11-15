@@ -1,7 +1,15 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.2.4 (2022-11-3)
+
+1.2.5 (2022-11-15)
+------------------
+
+Changed:
+^^^^^^^^
+- Max recording duration is now 10 minutes.
+
+1.2.4 (2022-11-03)
 ------------------
 
 Added:

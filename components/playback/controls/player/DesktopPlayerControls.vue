@@ -539,7 +539,7 @@ export default {
           this.on_stop_record_click();
           this.$bvModal.show("recording-limit-warning");
         }
-      }, 2 * 60e3);
+      }, 10 * 60e3);
     },
     on_stop_record_click: function () {
       clearTimeout(this.recording_timer);
