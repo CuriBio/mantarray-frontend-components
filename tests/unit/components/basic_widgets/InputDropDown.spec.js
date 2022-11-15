@@ -141,7 +141,9 @@ describe("InputDropDown.vue", () => {
       localVue,
     });
     const background = wrapper.find(".div__input-dropdown-background");
-    expect(background.attributes("style")).toStrictEqual("width: 394px; height: 100px;");
+    expect(background.attributes("style")).toStrictEqual(
+      "width: 394px; height: 100px; background: rgb(0, 0, 0); border: 2px solid rgb(0, 0, 0);"
+    );
     const input_title_label = wrapper.find(".span__input-dropdown-content-label");
     expect(input_title_label.attributes("style")).toStrictEqual("width: 390px;");
     const input_bounded_div = wrapper.find(".div__input-dropdown-controls-content-widget");
@@ -168,7 +170,9 @@ describe("InputDropDown.vue", () => {
       localVue,
     });
     const background = wrapper.find(".div__input-dropdown-background");
-    expect(background.attributes("style")).toStrictEqual("width: 394px; height: 60px;");
+    expect(background.attributes("style")).toStrictEqual(
+      "width: 394px; height: 60px; background: rgb(0, 0, 0); border: 2px solid rgb(0, 0, 0);"
+    );
     const input_title_label = wrapper.find(".span__input-dropdown-content-label");
     expect(input_title_label.exists()).toBe(false);
 
