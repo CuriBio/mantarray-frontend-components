@@ -32,7 +32,7 @@
           :placeholder="placeholder"
           :disabled="disabled"
           class="w-100 h-100 edit-id"
-          style="border-radius: 0; background-color: #1c1c1c; border: 0px; color: #ffffff"
+          style="border-radius: 0; background-color: rgb(63, 63, 63); border: 0px; color: #ffffff"
         ></b-form-input>
         <datalist v-if="dropdown_options.length" :id="'option_list' + options_id">
           <option v-for="item in dropdown_options" :id="item.id" :key="item.id">
@@ -121,12 +121,10 @@ body {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: rgb(0, 0, 0);
   position: absolute;
   top: 0px;
   left: 0px;
   visibility: visible;
-  border: 2px solid rgb(0, 0, 0);
   border-radius: 0px;
   box-shadow: none;
   z-index: 3;

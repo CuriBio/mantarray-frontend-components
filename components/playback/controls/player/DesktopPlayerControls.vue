@@ -600,7 +600,7 @@ export default {
       this.$bvModal.hide("settings-form");
       if (save) {
         // this event is used in electron
-        this.$emit("save_customer_id");
+        this.$emit("save_account_info");
       }
     },
     close_calibration_modal(idx) {
