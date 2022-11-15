@@ -39,7 +39,7 @@ describe("AddUser", () => {
     });
     test("Given there is a stored customer ID, When mounting AddUser, Then the customer ID input is automatically populated with that value and validated", () => {
       const stored_customer_id = "test_id";
-      store.commit("settings/set_stored_customer_id", stored_customer_id);
+      store.commit("settings/set_stored_accounts", { customer_id: stored_customer_id, usernames: [] });
 
       wrapper = mount(ComponentToTest, {
         store,
@@ -71,30 +71,48 @@ describe("AddUser", () => {
       ["Cat * lab", "passkey", "passkey-id", "validate_user_account_input"],
       ["Valid", "passkey", "passkey-id", "validate_user_account_input"],
       ["Cat lab", "passkey", "passkey-id", "validate_user_account_input"],
-      ["Experiment anemia alpha cells -1", "user_name", "username", "validate_user_account_input"],
-      ["C", "user_name", "username", "validate_user_account_input"],
-      ["", "user_name", "username", "validate_user_account_input"],
     ])(
       "When the text %s (%s) is entered into the field found with the selector ID %s, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
       async (entry, test_id, selector_id_suffix, text_validation_type) => {
         const spied_text_validator = jest.spyOn(TextValidation.prototype, text_validation_type);
         const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
         const target_error_message = wrapper.find("#input-widget-feedback-" + selector_id_suffix);
+
         target_input_field.setValue(entry);
         await Vue.nextTick();
+
         expect(spied_text_validator).toHaveBeenCalledWith(entry, test_id);
         expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
       }
     );
+
+    test.each([
+      ["Experiment anemia alpha cells -1", "user_name", "validate_user_account_input"],
+      ["C", "user_name", "validate_user_account_input"],
+    ])(
+      "When the text %s (%s) is entered into the field found with the selector ID username, Then the correct text validation function (%s) is called and the error message from the validation function is rendered below the input in the DOM",
+      async (entry, test_id, text_validation_type) => {
+        const spied_text_validator = jest.spyOn(TextValidation.prototype, text_validation_type);
+        const target_input_field = wrapper.find("#input-dropdown-widget-username");
+        const target_error_message = wrapper.find("#input-dropdown-widget-feedback-username");
+
+        target_input_field.setValue(entry);
+        await Vue.nextTick();
+
+        expect(spied_text_validator).toHaveBeenCalledWith(entry, test_id);
+        expect(target_error_message.text()).toStrictEqual(spied_text_validator.mock.results[0].value);
+      }
+    );
+
     test.each([
       ["customer-id", "This field is required"],
       ["passkey-id", "This field is required"],
-      ["username", "This field is required"],
     ])(
       "Given some nonsense value in the input field with the DOM Id suffix %s, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates (%s)",
       async (selector_id_suffix, expected_message) => {
         const target_input_field = wrapper.find("#input-widget-field-" + selector_id_suffix);
         const target_error_message = wrapper.find("#input-widget-feedback-" + selector_id_suffix);
+
         target_input_field.setValue("blah");
         await Vue.nextTick();
         // confirm that the pre-condition is different
@@ -105,6 +123,24 @@ describe("AddUser", () => {
         expect(target_error_message.text()).toStrictEqual(expected_message);
       }
     );
+
+    test("Given some nonsense value in the input dropdown widget with the DOM Id suffix username, When the input field is updated to be a blank value, Then the error message below the text in the DOM matches what the business logic dictates 'This field is required'", async () => {
+      const selector_id_suffix_user_name = "username";
+      const target_input_field = wrapper.find("#input-dropdown-widget-" + selector_id_suffix_user_name);
+      const target_error_message = wrapper.find(
+        "#input-dropdown-widget-feedback-" + selector_id_suffix_user_name
+      );
+      await target_input_field.setValue("blah");
+      await Vue.nextTick();
+
+      // confirm that the pre-condition is different
+      expect(target_error_message.text()).not.toStrictEqual("This field is required");
+
+      await target_input_field.setValue("");
+      await Vue.nextTick();
+
+      expect(target_error_message.text()).toStrictEqual("This field is required");
+    });
   });
 
   describe("AddUser.enable_save_button", () => {
@@ -114,6 +150,7 @@ describe("AddUser", () => {
         localVue,
       });
     });
+
     afterEach(() => wrapper.destroy());
     test.each([
       ["0VSckkBYH2An3dqHEyfRRE", "06ad547f", "Experiment anemia -1", "color: rgb(255, 255, 255);"],
@@ -146,7 +183,7 @@ describe("AddUser", () => {
         await Vue.nextTick();
 
         const target_input_field_user_name = wrapper.find(
-          "#input-widget-field-" + selector_id_suffix_user_name
+          "#input-dropdown-widget-" + selector_id_suffix_user_name
         );
         target_input_field_user_name.setValue(user_name);
         await Vue.nextTick();
@@ -168,6 +205,7 @@ describe("AddUser", () => {
       });
     });
     afterEach(() => wrapper.destroy());
+
     test.each([["5FY8KwTsQa", "06ad547f", "Experiment anemia -1", "", "", "", "color: rgb(255, 255, 255);"]])(
       "Given an UUID(%s) , pass Key(%s), user_name(%s) for 'Add Customer' as input, When the input contains based on valid the critera or failure %s %s %s, Then display of Label 'Save ID' is visible %s, click on Cancel, an event 'cancel-id' is emmited to the parent and click on Save an event 'save-id' is emmited to parent with object containing uuid,passkey and user_name",
       async (
@@ -202,10 +240,10 @@ describe("AddUser", () => {
         await Vue.nextTick();
         expect(target_error_message_passkey.text()).toStrictEqual(invalid_passkey);
         const target_input_field_user_name = wrapper.find(
-          "#input-widget-field-" + selector_id_suffix_user_name
+          "#input-dropdown-widget-" + selector_id_suffix_user_name
         );
         const target_error_message_user_name = wrapper.find(
-          "#input-widget-feedback-" + selector_id_suffix_user_name
+          "#input-dropdown-widget-feedback-" + selector_id_suffix_user_name
         );
         target_input_field_user_name.setValue(user_name_test);
         await Vue.nextTick();

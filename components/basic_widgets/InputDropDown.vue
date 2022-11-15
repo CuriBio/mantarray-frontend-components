@@ -43,6 +43,7 @@
     </div>
     <div
       v-show="message_if_invalid"
+      :id="'input-dropdown-widget-feedback-' + options_id"
       class="div__input-dropdown-controls-content-feedback"
       :style="'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'"
     >
