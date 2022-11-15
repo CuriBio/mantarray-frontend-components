@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="div__input-dropdown-background"
-    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
-  >
+  <div class="div__input-dropdown-background" :style="dynamic_container_styles">
     <span
       v-if="title_label !== ''"
       class="span__input-dropdown-content-label"
@@ -32,7 +29,7 @@
           :placeholder="placeholder"
           :disabled="disabled"
           class="w-100 h-100 edit-id"
-          :style="`border-radius: 0; background-color: ${background_color}; border: 0px; color: #ffffff`"
+          :style="`border-radius: 0; background-color: ${input_background_color}; border: 0px; color: #ffffff`"
         ></b-form-input>
         <datalist v-if="dropdown_options.length" :id="'option_list' + options_id">
           <option v-for="item in dropdown_options" :id="item.id" :key="item.id">
@@ -70,7 +67,8 @@ export default {
     options_text: { type: Array, required: true },
     options_id: { type: String, default: "" }, // This prop is utilized by the parent component
     message_if_invalid: { type: Boolean, default: false }, // when set to true, will display a simple feedback
-    background_color: { type: String, default: "#1c1c1c" },
+    input_background_color: { type: String, default: "#1c1c1c" },
+    container_background_color: { type: String, default: "rgb(0, 0, 0)" },
   },
   data() {
     return {
@@ -101,6 +99,20 @@ export default {
     },
     input_feedback_top: function () {
       return this.title_label !== "" ? 88 : 48;
+    },
+    dynamic_container_styles: function () {
+      return (
+        "width: " +
+        this.input_width_background +
+        "px;" +
+        "height: " +
+        this.input_height_background +
+        "px; background: " +
+        this.container_background_color +
+        "; border: 2px solid " +
+        this.container_background_color +
+        ";"
+      );
     },
   },
   watch: {

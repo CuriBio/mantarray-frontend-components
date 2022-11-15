@@ -24,7 +24,8 @@
         :options_text="stored_usernames"
         :message_if_invalid="error_text_user_name != ''"
         :options_id="'username'"
-        :background_color="'rgb(63, 63, 63)'"
+        :input_background_color="'rgb(63, 63, 63)'"
+        :container_background_color="'#111'"
         :value.sync="user_name"
         @update:value="on_update_user_name($event)"
       />
