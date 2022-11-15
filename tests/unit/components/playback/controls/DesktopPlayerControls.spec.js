@@ -96,7 +96,7 @@ describe("DesktopPlayerControls.vue", () => {
 
     await wrapper.find(SettingsForm).vm.$emit("close_modal", true);
     expect(close_spy).toHaveBeenCalledWith(true);
-    expect(wrapper.emitted("save_customer_id")).toHaveLength(1);
+    expect(wrapper.emitted("save_account_info")).toHaveLength(1);
   });
 
   test("When a user selects the settings control button, Then the modal will appear and will not emit a save event when closed with cancel", async () => {
@@ -111,7 +111,7 @@ describe("DesktopPlayerControls.vue", () => {
 
     wrapper.find(SettingsForm).vm.$emit("close_modal", false);
     expect(close_spy).toHaveBeenCalledWith(false);
-    expect(wrapper.emitted("save_customer_id")).toBeFalsy();
+    expect(wrapper.emitted("save_account_info")).toBeFalsy();
   });
 
   test("When a user confirms recording name, recording snapshot is false and false in store, Then live view will not be stopped", async () => {

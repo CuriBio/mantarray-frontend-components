@@ -32,7 +32,7 @@
           :placeholder="placeholder"
           :disabled="disabled"
           class="w-100 h-100 edit-id"
-          style="border-radius: 0; background-color: rgb(63, 63, 63); border: 0px; color: #ffffff"
+          :style="`border-radius: 0; background-color: ${background_color}; border: 0px; color: #ffffff`"
         ></b-form-input>
         <datalist v-if="dropdown_options.length" :id="'option_list' + options_id">
           <option v-for="item in dropdown_options" :id="item.id" :key="item.id">
@@ -69,6 +69,7 @@ export default {
     options_text: { type: Array, required: true },
     options_id: { type: String, default: "" }, // This prop is utilized by the parent component
     message_if_invalid: { type: Boolean, default: false }, // when set to true, will display a simple feedback
+    background_color: { type: String, default: "#1c1c1c" },
   },
   data() {
     return {
