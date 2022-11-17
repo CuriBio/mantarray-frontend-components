@@ -15,15 +15,20 @@
       ></InputWidget>
     </div>
 
-    <div id="user_name" style="top: 145px; left: 50px; position: absolute; z-index: 23">
-      <InputWidget
-        :title_label="'Enter Username'"
+    <div id="user_name" style="top: 184px; left: 50px; position: absolute; z-index: 23">
+      <span class="span__input-user-title">Enter&nbsp;<wbr />Username</span>
+      <InputDropDown
         :placeholder="'Curi Bio User'"
         :invalid_text="error_text_user_name"
         :input_width="400"
-        :dom_id_suffix="'username'"
+        :options_text="stored_usernames"
+        :message_if_invalid="error_text_user_name != ''"
+        :options_id="'username'"
+        :input_background_color="'rgb(63, 63, 63)'"
+        :container_background_color="'#111'"
+        :value.sync="user_name"
         @update:value="on_update_user_name($event)"
-      ></InputWidget>
+      />
     </div>
     <div id="pass-key" style="top: 241px; left: 50px; position: absolute; z-index: 22">
       <InputWidget
@@ -66,12 +71,14 @@ Vue.component("BFormInput", BFormInput);
 Vue.component("BButton", BButton);
 import "bootstrap/dist/css/bootstrap.min.css";
 const TextValidation_User = new TextValidation("user_account_input");
+import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 
 export default {
   name: "AddUser",
   components: {
     InputWidget,
     ButtonWidget,
+    InputDropDown,
   },
   data() {
     return {
@@ -85,7 +92,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["stored_customer_id"]),
+    ...mapState("settings", ["stored_customer_id", "stored_usernames"]),
   },
   created: function () {
     if (this.stored_customer_id) this.on_update_id(this.stored_customer_id);
@@ -184,5 +191,14 @@ export default {
 }
 .span__input-controls-content-input-txt-widget > #input-widget-field-username {
   font-family: Muli;
+}
+.span__input-user-title {
+  position: absolute;
+  top: -34px;
+  color: #b7b7b7;
+  width: 400px;
+  justify-content: center;
+  display: flex;
+  font-size: 17px;
 }
 </style>

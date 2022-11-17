@@ -9,6 +9,7 @@ const default_state = {
   recording_snapshot: true,
   user_accounts: [],
   stored_customer_id: null,
+  stored_usernames: [],
   active_user_index: null,
   log_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\logs_flask",
   root_downloads_path: "C:\\Users\\username\\Downloads",

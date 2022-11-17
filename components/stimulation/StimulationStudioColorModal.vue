@@ -1,5 +1,5 @@
 <template>
-  <div class="div__modal-container">
+  <div class="div__color-modal-container">
     Select color:
     <div class="div__container-color-block">
       <div
@@ -56,7 +56,7 @@ export default {
 };
 </script>
 <style>
-.div__modal-container {
+.div__color-modal-container {
   height: 200px;
   width: 200px;
   background: #292929;

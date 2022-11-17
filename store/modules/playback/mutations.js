@@ -50,4 +50,7 @@ export default {
   set_data_analysis_state(state, new_state) {
     state.data_analysis_state = new_state;
   },
+  set_start_recording_from_stim(state, bool) {
+    state.start_recording_from_stim = bool;
+  },
 };

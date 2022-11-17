@@ -1,13 +1,28 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.2.6 (unreleased)
+------------------
+
+Added:
+^^^^^^
+- Ability to start live view, recording, and stimulation from stim studio start button
+- Ability to select from previously used usernames when logging into the SettingsForm
+
+Changed:
+^^^^^^^^
+- Changed format of JSON protocol message sent in /set_protocols route to start a stimulation
+- Live view will always be stopped when a recording is stopped
+- Changed error message to Please turn the instrument off, unplug from the PC, and then wait 10 seconds before attempting to use again
+
 
 1.2.5 (2022-11-15)
 ------------------
 
 Changed:
 ^^^^^^^^
-- Max recording duration is now 10 minutes.
+- Max recording duration is now 10 minutes
+
 
 1.2.4 (2022-11-03)
 ------------------
@@ -20,6 +35,7 @@ Added:
 Changed:
 ^^^^^^^^
 - Removed randomization from the pulse color generator in a stim protocols to prevent similar colors next to each other
+
 
 1.2.3 (2022-10-13)
 ------------------

@@ -3,6 +3,7 @@ import { createLocalVue, mount } from "@vue/test-utils";
 import StimulationControls from "@/components/playback/controls/StimulationControls.vue";
 import { ENUMS } from "@/store/modules/playback/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
+import waitForExpect from "wait-for-expect";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -67,15 +68,19 @@ describe("store/stimulation", () => {
       );
 
       store.state.stimulation.protocol_assignments = { test: "assignment" };
-      await store.commit("stimulation/set_stim_status", STIM_STATUS.STIM_ACTIVE);
 
       const wrapper = mount(StimulationControls, {
         store,
         localVue,
       });
 
+      await store.commit("stimulation/set_stim_status", STIM_STATUS.STIM_ACTIVE);
       wrapper.vm.play_state = true;
-      await wrapper.find(".span__stimulation-controls-play-stop-button--enabled").trigger("click");
+      // direct call to bypass bootstrap component, jest can't find bootstrap elements
+      const test_event = { preventDefault: jest.fn() };
+      await wrapper.vm.handle_play_stop(test_event);
+
+      expect(wrapper.vm.open_start_dropdown).toBe(false);
       expect(dispatch_spy).toHaveBeenCalledWith("stimulation/stop_stimulation");
     });
 
@@ -85,12 +90,49 @@ describe("store/stimulation", () => {
         localVue,
       });
 
-      // await store.commit("stimulation/set_stim_play_state", false);
-      await wrapper.find(".span__stimulation-controls-play-stop-button--disabled").trigger("click");
+      // direct call to bypass bootstrap component, jest can't find bootstrap elements
+      const test_event = { preventDefault: jest.fn() };
+      await wrapper.vm.handle_play_stop(test_event);
+
       expect(wrapper.vm.play_state).toBe(false);
+      expect(wrapper.vm.open_start_dropdown).toBe(false);
     });
 
-    test("Given a stimulation is inactive and there are protocol assigned wells, When a user clicks the button to turn on stimulation, Then a signal should be dispatched to BE", async () => {
+    test("Given a stimulation is inactive and there are protocol assigned wells, When a user clicks the button to turn on stimulation only, Then a signal should be dispatched to BE", async () => {
+      const dispatch_spy = jest.spyOn(store, "dispatch");
+      dispatch_spy.mockImplementation(
+        async () => await store.commit("stimulation/set_stim_play_state", true)
+      );
+
+      store.state.stimulation.protocol_assignments = {
+        test: "assignment",
+      };
+      await store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
+      const wrapper = mount(StimulationControls, {
+        store,
+        localVue,
+        attachToDocument: true,
+      });
+
+      // direct call to bypass bootstrap component, jest can't find bootstrap elements
+      const test_event = {
+        preventDefault: jest.fn(),
+      };
+
+      await wrapper.vm.handle_play_stop(test_event);
+      expect(wrapper.vm.open_start_dropdown).toBe(true);
+
+      // trigger document event listener to close modal
+      await wrapper.trigger("click");
+      await wrapper.vm.handle_dropdown_select(0);
+
+      expect(wrapper.vm.play_state).toBe(true);
+      expect(dispatch_spy).toHaveBeenCalledWith("stimulation/create_protocol_message");
+      expect(store.state.playback.start_recording_from_stim).toBe(false);
+      expect(wrapper.vm.open_start_dropdown).toBe(false);
+    });
+
+    test("Given a stimulation is inactive and there are protocol assigned wells, When a user clicks the button to turn on both stimulation and recording, Then a signal should be dispatched to BE", async () => {
       const dispatch_spy = jest.spyOn(store, "dispatch");
       dispatch_spy.mockImplementation(
         async () => await store.commit("stimulation/set_stim_play_state", true)
@@ -101,12 +143,20 @@ describe("store/stimulation", () => {
       const wrapper = mount(StimulationControls, {
         store,
         localVue,
+        attachToDocument: true,
       });
 
-      await wrapper.find(".span__stimulation-controls-play-stop-button--enabled").trigger("click");
+      // trigger document event listener to close modal
+      await wrapper.trigger("click");
+      // direct call to bypass bootstrap component, jest can't find bootstrap elements
+      await wrapper.vm.handle_dropdown_select(1);
+
       expect(wrapper.vm.play_state).toBe(true);
       expect(dispatch_spy).toHaveBeenCalledWith("stimulation/create_protocol_message");
+      expect(store.state.playback.start_recording_from_stim).toBe(true);
+      expect(wrapper.vm.open_start_dropdown).toBe(false);
     });
+
     test("When set_stim_play_state is called with different values, Then current gradient is updated correctly", async () => {
       const wrapper = mount(StimulationControls, {
         store,

@@ -96,7 +96,7 @@ describe("DesktopPlayerControls.vue", () => {
 
     await wrapper.find(SettingsForm).vm.$emit("close_modal", true);
     expect(close_spy).toHaveBeenCalledWith(true);
-    expect(wrapper.emitted("save_customer_id")).toHaveLength(1);
+    expect(wrapper.emitted("save_account_info")).toHaveLength(1);
   });
 
   test("When a user selects the settings control button, Then the modal will appear and will not emit a save event when closed with cancel", async () => {
@@ -111,7 +111,7 @@ describe("DesktopPlayerControls.vue", () => {
 
     wrapper.find(SettingsForm).vm.$emit("close_modal", false);
     expect(close_spy).toHaveBeenCalledWith(false);
-    expect(wrapper.emitted("save_customer_id")).toBeFalsy();
+    expect(wrapper.emitted("save_account_info")).toBeFalsy();
   });
 
   test("When a user confirms recording name, recording snapshot is false and false in store, Then live view will not be stopped", async () => {
@@ -297,7 +297,7 @@ describe("DesktopPlayerControls.vue", () => {
 
       test.each([
         ["LIVE_VIEW_ACTIVE", ".svg__playback-desktop-player-controls-live-view-button", "CALIBRATED"],
-        ["RECORDING", ".svg__playback-desktop-player-controls-record-button--active", "LIVE_VIEW_ACTIVE"],
+        ["RECORDING", ".svg__playback-desktop-player-controls-record-button--active", "CALIBRATED"],
         ["NEEDS_CALIBRATION", ".svg__playback-desktop-player-controls-calibrate-button", "CALIBRATING"],
         ["CALIBRATED", ".svg__playback-desktop-player-controls-calibrate-button", "CALIBRATING"],
         ["CALIBRATED", ".svg__playback-desktop-player-controls-live-view-button", "BUFFERING"],
@@ -349,8 +349,7 @@ describe("DesktopPlayerControls.vue", () => {
         );
       });
     });
-
-    test("When a user starts a recording and doesn't manually stop it within 10 minutes, Then a recording will get stopped regardless at that time point", async () => {
+    test("When a user starts a recording and doesn't manually stop it within 10 minutes, Then a recording and live view will get stopped regardless at that time point", async () => {
       jest.useFakeTimers();
       wrapper = mount(component_to_test, {
         store,
@@ -368,9 +367,7 @@ describe("DesktopPlayerControls.vue", () => {
 
       jest.advanceTimersByTime(10 * 60e3);
       await wait_for_expect(() => {
-        expect(store.state.playback.playback_state).toBe(
-          playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
-        );
+        expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["CALIBRATED"]);
       });
     });
     test.each([
@@ -618,5 +615,48 @@ describe("DesktopPlayerControls.vue", () => {
         expect(action_spy).toHaveBeenCalledWith("playback/stop_recording");
       });
     });
+
+    test("When live view becomes active from starting stimulation, Then recording will be automatically started", async () => {
+      const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+      await store.commit("playback/set_start_recording_from_stim", true);
+      await store.commit(
+        "playback/set_playback_state",
+        playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
+      );
+
+      expect(action_spy).toHaveBeenCalledWith("playback/start_recording", wrapper.vm.default_recording_name);
+      expect(store.state.playback.start_recording_from_stim).toBe(false);
+    });
+
+    test.each([
+      ["CALIBRATED", "playback/start_live_view"],
+      ["LIVE_VIEW_ACTIVE", "playback/start_recording"],
+    ])(
+      "When vuex state is %s and start_recording_from_stim is set to true, Then the %s action should be called",
+      async (playback_state, dispatched_actions) => {
+        const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
+        wrapper = mount(component_to_test, {
+          store,
+          localVue,
+        });
+        await store.commit(
+          "playback/set_playback_state",
+          playback_module.ENUMS.PLAYBACK_STATES[playback_state]
+        );
+
+        await store.commit("playback/set_start_recording_from_stim", true);
+
+        const expected_call =
+          playback_state === "LIVE_VIEW_ACTIVE"
+            ? [dispatched_actions, wrapper.vm.default_recording_name]
+            : [dispatched_actions];
+
+        expect(action_spy).toHaveBeenCalledWith(...expected_call);
+      }
+    );
   });
 });
