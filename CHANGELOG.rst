@@ -1,7 +1,7 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.2.5 (unreleased)
+1.2.6 (unreleased)
 ------------------
 
 Added:
@@ -13,7 +13,15 @@ Changed:
 ^^^^^^^^
 - Changed format of JSON protocol message sent in /set_protocols route to start a stimulation
 - Live view will always be stopped when a recording is stopped
-- Changed error message to Please turn the instrument off, unplug from the PC, and then wait 10 seconds before attempting to use again.
+- Changed error message to Please turn the instrument off, unplug from the PC, and then wait 10 seconds before attempting to use again
+
+
+1.2.5 (2022-11-15)
+------------------
+
+Changed:
+^^^^^^^^
+- Max recording duration is now 10 minutes
 
 
 1.2.4 (2022-11-03)

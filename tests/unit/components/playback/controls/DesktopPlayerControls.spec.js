@@ -349,8 +349,7 @@ describe("DesktopPlayerControls.vue", () => {
         );
       });
     });
-
-    test("When a user starts a recording and doesn't manually stop it within 2 minutes, Then a recording and live view will get stopped regardless at that time point", async () => {
+    test("When a user starts a recording and doesn't manually stop it within 10 minutes, Then a recording and live view will get stopped regardless at that time point", async () => {
       jest.useFakeTimers();
       wrapper = mount(component_to_test, {
         store,
@@ -366,7 +365,7 @@ describe("DesktopPlayerControls.vue", () => {
         expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["RECORDING"]);
       });
 
-      jest.advanceTimersByTime(2 * 60e3);
+      jest.advanceTimersByTime(10 * 60e3);
       await wait_for_expect(() => {
         expect(store.state.playback.playback_state).toBe(playback_module.ENUMS.PLAYBACK_STATES["CALIBRATED"]);
       });
@@ -609,7 +608,7 @@ describe("DesktopPlayerControls.vue", () => {
       );
       await wrapper.find(".svg__playback-desktop-player-controls-record-button").trigger("click");
 
-      jest.advanceTimersByTime(2 * 60e3);
+      jest.advanceTimersByTime(10 * 60e3);
       jest.runAllTicks();
       Vue.nextTick(() => {
         expect(wrapper.find("#recording-limit").isVisible()).toBe(true);
