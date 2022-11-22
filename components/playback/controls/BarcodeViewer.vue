@@ -1,9 +1,7 @@
 <template>
   <div class="div__plate-barcode">
     <span class="span__plate-barcode-text" :style="dynamic_label_style"
-      >{{
-        barcode_label
-      }}:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
+      >{{ barcode_label }}:<!-- original MockFlow ID: cmpDb2bac556f7cfa22b31a3731d355864c9 --></span
     >
     <input
       id="plateinfo"
@@ -13,9 +11,7 @@
       class="input__plate-barcode-entry"
       :style="dynamic_entry_style"
       :class="[
-        barcode_info.valid
-          ? `input__plate-barcode-entry-valid`
-          : `input__plate-barcode-entry-invalid`,
+        barcode_info.valid ? `input__plate-barcode-entry-valid` : `input__plate-barcode-entry-invalid`,
       ]"
       :value="barcode_info.value"
       @input="set_barcode_manually"
@@ -33,21 +29,12 @@
       class="input__plate-barcode-manual-entry-enable"
     >
       <span class="input__plate-barcode-manual-entry-enable-icon">
-        <div
-          id="edit-plate-barcode"
-          @click="active_processes || $bvModal.show('edit-plate-barcode-modal')"
-        >
+        <div id="edit-plate-barcode" @click="active_processes || $bvModal.show('edit-plate-barcode-modal')">
           <FontAwesomeIcon :icon="['fa', 'pencil-alt']" />
         </div>
       </span>
     </div>
-    <b-modal
-      id="edit-plate-barcode-modal"
-      size="sm"
-      hide-footer
-      hide-header
-      hide-header-close
-    >
+    <b-modal id="edit-plate-barcode-modal" size="sm" hide-footer hide-header hide-header-close>
       <StatusWarningWidget
         :modal_labels="barcode_manual_labels"
         @handle_confirmation="handle_manual_mode_choice"
@@ -121,9 +108,7 @@ export default {
       return this.barcode_type == "plate_barcode" ? "width: 110px;" : "width: 105px;";
     },
     tooltip_text: function () {
-      return this.active_processes
-        ? "Cannot edit barcodes while live view is active."
-        : "Click to edit";
+      return this.active_processes ? "Cannot edit barcodes while live view is active." : "Click to edit";
     },
     active_processes: function () {
       return (

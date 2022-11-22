@@ -4,11 +4,7 @@
       class="div__input-background"
       :style="`width: ${input_width_background}px; height: ${input_height_background}px;`"
     >
-      <span
-        v-if="title_label !== ''"
-        class="span__input-content-label"
-        :style="`width: ${input_width}px;`"
-      >
+      <span v-if="title_label !== ''" class="span__input-content-label" :style="`width: ${input_width}px;`">
         {{ title_label }}
       </span>
 
@@ -36,12 +32,7 @@
             :onpaste="disable_paste"
             :type="type"
             class="w-100 h-100 edit-id"
-            style="
-              border-radius: 0;
-              color: rgb(255, 255, 255);
-              background-color: #3f3f3f;
-              border: 0px;
-            "
+            style="border-radius: 0; color: rgb(255, 255, 255); background-color: #3f3f3f; border: 0px"
             @input="on_b_form_input"
           ></b-form-input>
         </span>
@@ -113,17 +104,12 @@ export default {
   watch: {
     initial_value() {
       const special_id_suffix =
-        this.dom_id_suffix.includes("heatmap") ||
-        this.dom_id_suffix.includes("protocol-rest");
-      this.input_value =
-        special_id_suffix && isNaN(this.initial_value) ? "" : this.initial_value;
+        this.dom_id_suffix.includes("heatmap") || this.dom_id_suffix.includes("protocol-rest");
+      this.input_value = special_id_suffix && isNaN(this.initial_value) ? "" : this.initial_value;
       this.$emit("update:value", this.input_value);
     },
     disabled(bool) {
-      if (
-        this.dom_id_suffix !== "total-active-duration" &&
-        this.dom_id_suffix !== "num-cycles"
-      ) {
+      if (this.dom_id_suffix !== "total-active-duration" && this.dom_id_suffix !== "num-cycles") {
         this.input_value = bool ? "" : this.initial_value;
       }
     },
