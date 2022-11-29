@@ -20,6 +20,7 @@ Fixed:
 ^^^^^^
 - Fixed heat map display bug by chaniging mean values calculation to the last 5 data points of each well
 
+
 1.2.5 (2022-11-15)
 ------------------
 
