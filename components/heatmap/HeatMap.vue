@@ -236,7 +236,6 @@ export default {
         const total = well.slice(-5).reduce((a, b) => a + b, 0);
         const mean = (total / 5).toFixed(3);
         const color = this.gradient_map(mean);
-        console.log("color mean" + mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
     },
