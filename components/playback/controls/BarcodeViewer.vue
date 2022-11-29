@@ -8,7 +8,6 @@
       :disabled="is_disabled"
       type="text"
       spellcheck="false"
-      onpaste="return false;"
       class="input__plate-barcode-entry"
       :style="dynamic_entry_style"
       :class="[

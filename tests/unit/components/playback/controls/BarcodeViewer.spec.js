@@ -223,7 +223,6 @@ describe("BarcodeViewer.vue", () => {
     wrapper.find("input").trigger("paste", mEvent);
     await wrapper.vm.$nextTick(); // wait for update
     expect(wrapper.find("input").value).toBeUndefined();
-    expect(wrapper.find("input").html()).toContain('onpaste="return false;"');
   });
   test("On Vuex Store for playback_state set to RECORDING input is set to readonly true", async () => {
     const propsData = {};
