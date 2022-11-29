@@ -14,7 +14,7 @@ Changed:
 - Changed format of JSON protocol message sent in /set_protocols route to start a stimulation
 - Live view will always be stopped when a recording is stopped
 - Changed error message to Please turn the instrument off, unplug from the PC, and then wait 10 seconds before attempting to use again
-- Mean values are now calculated using the last 5 data points of each well.
+- Fixed heat map display bug by chanign mean values calculation to the last 5 data points of each well.
 
 
 1.2.5 (2022-11-15)
