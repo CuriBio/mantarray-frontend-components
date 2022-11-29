@@ -172,6 +172,7 @@ import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
 import playback_module from "@/store/modules/playback";
 import { METRIC_UNITS } from "@/store/modules/heatmap/enums";
+const MIN_NUM_DATAPOINTS_FOR_MEAN = 5;
 
 export default {
   name: "HeatMap",
@@ -233,8 +234,8 @@ export default {
     },
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
-        const total = well.reduce((a, b) => a + b, 0);
-        const mean = total / well.length;
+        const total = well.slice(-MIN_NUM_DATAPOINTS_FOR_MEAN).reduce((a, b) => a + b, 0);
+        const mean = (total / MIN_NUM_DATAPOINTS_FOR_MEAN).toFixed(3);
         const color = this.gradient_map(mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
@@ -245,9 +246,13 @@ export default {
     mean_value: function () {
       let total = 0;
       this.selected_wells.map((well_idx) => {
-        total += parseFloat(this.well_values[this.display_option].data[well_idx][0]);
+        total += parseFloat(
+          this.well_values[this.display_option].data[well_idx]
+            .slice(-MIN_NUM_DATAPOINTS_FOR_MEAN)
+            .reduce((a, b) => a + b, 0)
+        );
       });
-      return (total / this.selected_wells.length).toFixed(3);
+      return (total / (this.selected_wells.length * MIN_NUM_DATAPOINTS_FOR_MEAN)).toFixed(3);
     },
     unit: function () {
       return METRIC_UNITS[this.display_option];
