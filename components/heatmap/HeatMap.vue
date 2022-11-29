@@ -13,7 +13,9 @@
 
     <!-- Tanner (7/28/21): Could probably combine the following 4 components -->
     <!-- original mockflow ID:   cmpD9bf89cc77f1d867d1b3f93e925ee43ce -->
-    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">No Wells Selected</div>
+    <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-label">
+      No Wells Selected
+    </div>
 
     <!-- original mockflow ID:  cmpDde968837816d0d1051ada7bf835872f8 -->
     <div v-show="!is_mean_value_active" class="div__heatmap-layout-heatmap-well-value" />
@@ -131,7 +133,7 @@
       :class="[
         !is_apply_set
           ? 'div__heatmap-settings-apply-btn-container-disable'
-          : 'div__heatmap-settings-apply-btn-container-enable',
+          : 'div__heatmap-settings-apply-btn-container-enable'
       ]"
     >
       <!-- orginal mockflow ID: cmpD7fbcf0111303239acde2553d25be53f7_cvs -->
@@ -143,7 +145,7 @@
         :class="[
           !is_apply_set
             ? 'span__heatmap-settings-apply-btn-label-disable'
-            : 'span__heatmap-settings-apply-btn-label-enable',
+            : 'span__heatmap-settings-apply-btn-label-enable'
         ]"
         @click="apply_heatmap_settings"
       >
@@ -157,7 +159,9 @@
       <canvas class="canvas__heatmap-settings-reset-btn-container" />
 
       <!-- original mockflow ID : cmpD2f909255bf15b8f4daa88ed03c6a8300_txt -->
-      <span class="span__heatmap-settings-reset-btn-label" @click="reset_heatmap_settings"> Reset </span>
+      <span class="span__heatmap-settings-reset-btn-label" @click="reset_heatmap_settings">
+        Reset
+      </span>
     </div>
   </div>
 </template>
@@ -181,7 +185,7 @@ export default {
     InputWidget,
     SelectDropDown,
     CheckBoxWidget,
-    RadioButtonWidget,
+    RadioButtonWidget
   },
   data() {
     return {
@@ -205,54 +209,57 @@ export default {
       color_theme_idx: 0,
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
       metric_selection_idx: 0,
-      max_min_placeholder: { min: 0, max: 100 },
+      max_min_placeholder: { min: 0, max: 100 }
     };
   },
   computed: {
     ...mapState("data", {
-      well_values: "heatmap_values",
+      well_values: "heatmap_values"
     }),
     ...mapState("heatmap", {
       display_option: "display_option",
       display_option_idx: "display_option_idx",
       selected_wells: "selected_wells",
-      stored_auto_scale: "auto_scale",
+      stored_auto_scale: "auto_scale"
     }),
     ...mapState("playback", ["playback_state"]),
-    metric_names: function () {
+    metric_names: function() {
       return Object.keys(this.well_values);
     },
     ...mapState("gradient", ["gradients", "gradient_theme_idx", "gradient_range_min", "gradient_range_max"]),
     ...mapGetters("gradient", {
-      gradient_map: "gradient_color_mapping",
+      gradient_map: "gradient_color_mapping"
     }),
-    gradient_theme_names: function () {
-      return this.gradients.map((t) => {
+    gradient_theme_names: function() {
+      return this.gradients.map(t => {
         return { value: t.name };
       });
     },
-    passing_plate_colors: function () {
-      return this.well_values[this.display_option].data.map((well) => {
-        const total = well.reduce((a, b) => a + b, 0);
-        const mean = total / well.length;
+    passing_plate_colors: function() {
+      return this.well_values[this.display_option].data.map(well => {
+        const total = well.slice(-5).reduce((a, b) => a + b, 0);
+        const mean = (total / 5).toFixed(3);
         const color = this.gradient_map(mean);
+        console.log("color mean" + mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
     },
-    is_mean_value_active: function () {
+    is_mean_value_active: function() {
       return this.selected_wells.length > 0;
     },
-    mean_value: function () {
+    mean_value: function() {
       let total = 0;
-      this.selected_wells.map((well_idx) => {
-        total += parseFloat(this.well_values[this.display_option].data[well_idx][0]);
+      this.selected_wells.map(well_idx => {
+        total += parseFloat(
+          this.well_values[this.display_option].data[well_idx].slice(-5).reduce((a, b) => a + b, 0)
+        );
       });
-      return (total / this.selected_wells.length).toFixed(3);
+      return (total / (this.selected_wells.length * 5)).toFixed(3);
     },
-    unit: function () {
+    unit: function() {
       return METRIC_UNITS[this.display_option];
     },
-    is_apply_set: function () {
+    is_apply_set: function() {
       return (
         this.max_value_error_msg === "" &&
         this.min_value_error_msg === "" &&
@@ -261,34 +268,34 @@ export default {
           this.playback_state == this.playback_state_enums.RECORDING)
       );
     },
-    auto_max_min: function () {
-      const max_value_array = this.well_values[this.display_option].data.map((well) => Math.max(...well));
-      const min_value_array = this.well_values[this.display_option].data.map((well) => Math.min(...well));
+    auto_max_min: function() {
+      const max_value_array = this.well_values[this.display_option].data.map(well => Math.max(...well));
+      const min_value_array = this.well_values[this.display_option].data.map(well => Math.min(...well));
 
       // conditional protects against when autoscale is true and a user selects apply when live view is off
       const range = {
         max: Math.max(...max_value_array) == -Infinity ? this.upper : Math.max(...max_value_array).toFixed(3),
-        min: Math.min(...min_value_array) == Infinity ? this.lower : Math.min(...min_value_array).toFixed(3),
+        min: Math.min(...min_value_array) == Infinity ? this.lower : Math.min(...min_value_array).toFixed(3)
       };
 
       if (range.max === range.min) range.max = (Number(range.max) + 0.001).toString(); // guard against edge case where the max/min are the same
       return range;
-    },
+    }
   },
   watch: {
-    auto_max_min: function (new_value) {
+    auto_max_min: function(new_value) {
       if (this.autoscale) {
         this.$store.commit("gradient/set_gradient_range", new_value);
         this.max_min_placeholder = {
           min: Math.floor(new_value.min),
-          max: Math.ceil(new_value.max),
+          max: Math.ceil(new_value.max)
         }; // the input box width cuts off decimal places so rounding vals
       }
     },
-    playback_state: function (_, old_value) {
+    playback_state: function(_, old_value) {
       // cleans up settings when live view becomes inactive
       if (old_value == this.playback_state_enums.LIVE_VIEW_ACTIVE) this.reset_heatmap_settings();
-    },
+    }
   },
   mounted() {
     this.autoscale = this.stored_auto_scale;
@@ -300,11 +307,11 @@ export default {
     this.upper = this.gradient_range_max;
     this.max_min_placeholder = {
       min: Math.floor(this.gradient_range_min),
-      max: Math.ceil(this.gradient_range_max),
+      max: Math.ceil(this.gradient_range_max)
     };
   },
   methods: {
-    set_auto_scale: function (new_value) {
+    set_auto_scale: function(new_value) {
       if (new_value == "autoscale") {
         this.max_value_error_msg = "";
         this.min_value_error_msg = "";
@@ -317,14 +324,14 @@ export default {
       }
     },
 
-    metric_selection_changed: function (idx) {
+    metric_selection_changed: function(idx) {
       this.metric_selection_idx = idx;
     },
 
-    radio_option_selected: function (option_value) {
+    radio_option_selected: function(option_value) {
       this.color_theme_idx = option_value.index;
     },
-    on_update_maximum: function (new_value) {
+    on_update_maximum: function(new_value) {
       this.upper = parseFloat(new_value);
       if (isNaN(this.upper)) {
         this.max_value_error_msg = "invalid";
@@ -349,7 +356,7 @@ export default {
       }
     },
 
-    on_update_minimum: function (new_value) {
+    on_update_minimum: function(new_value) {
       this.lower = parseFloat(new_value);
       if (isNaN(this.lower)) {
         this.min_value_error_msg = "invalid";
@@ -374,7 +381,7 @@ export default {
       }
     },
 
-    apply_heatmap_settings: function () {
+    apply_heatmap_settings: function() {
       if (this.is_apply_set) {
         this.$store.commit("heatmap/set_auto_scale", this.autoscale);
         this.$store.commit("heatmap/set_display_option_idx", this.metric_selection_idx);
@@ -382,12 +389,12 @@ export default {
         this.$store.commit("gradient/set_gradient_theme_idx", this.color_theme_idx);
         this.$store.commit("gradient/set_gradient_range", {
           min: this.autoscale ? this.auto_max_min.min : this.lower,
-          max: this.autoscale ? this.auto_max_min.max : this.upper,
+          max: this.autoscale ? this.auto_max_min.max : this.upper
         });
       }
     },
 
-    reset_heatmap_settings: function () {
+    reset_heatmap_settings: function() {
       // reset autoscale setting to false
       this.$store.commit("heatmap/set_auto_scale", false);
 
@@ -401,7 +408,7 @@ export default {
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range", {
         min: 0,
-        max: 100,
+        max: 100
       });
       // reset autoscale check box and disable setting for inputs
       this.on_update_maximum(100);
@@ -409,8 +416,8 @@ export default {
       this.checkbox_reset = true;
       this.autoscale = false;
       this.color_theme_idx = 0;
-    },
-  },
+    }
+  }
 };
 </script>
 
