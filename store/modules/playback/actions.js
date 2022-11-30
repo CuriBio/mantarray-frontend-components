@@ -180,7 +180,6 @@ export default {
       await this.dispatch("stimulation/stop_stimulation");
       commit("set_barcode_warning", true);
     }
-    console.log(new_value);
     if (
       (new_value && type === "plate_barcode" && !new_value.includes("ML")) ||
       (new_value && type === "stim_barcode" && !new_value.includes("MS"))
