@@ -8,6 +8,7 @@ Added:
 ^^^^^^
 - Ability to start live view, recording, and stimulation from stim studio start button
 - Ability to select from previously used usernames when logging into the SettingsForm
+- Check for type of barcode enter into inputs
 
 Changed:
 ^^^^^^^^

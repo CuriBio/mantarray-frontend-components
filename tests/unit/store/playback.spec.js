@@ -225,14 +225,14 @@ describe("store/playback", () => {
         ["ML2020172144", "error due to invalid year '2020'", false],
         ["ML2021000144", "error due to invalid Julian date '000'", false],
         ["ML2021367144", "error due to invalid Julian date '367'", false],
-        ["MS2021172000", "header 'MS'", true],
+        ["MS2021172000", "header 'MS'", false],
         ["ML2021172001", "valid kit ID '001'", true],
         ["ML2021172002", "valid kit ID '002'", true],
         ["ML2021172003", "valid kit ID '003'", true],
         ["ML2021172004", "valid kit ID '004'", true],
         ["ML9999172001", "year '9999'", true],
         ["ML2021001144", "julian date '001'", true],
-        ["ML2021366144", "julian date '366'", true],
+        ["ML2021366144", "julian date '366'", true]
       ])(
         "Given a plate barcode scanned results in value %s, When validation rule FAILS  or PASSES due %s, Then validation results set valid to %s",
         async (plate_barcode, reason, valid) => {
@@ -402,7 +402,7 @@ describe("store/playback", () => {
 
     test.each(["RECORDING", "LIVE_VIEW_ACTIVE"])(
       "When playback_state is %s and user selects to stop all processes to run a data analysis, Then playback state will return to CALIBRATED",
-      async (active_state) => {
+      async active_state => {
         await store.dispatch("playback/transition_playback_state", ENUMS.PLAYBACK_STATES[active_state]);
 
         expect(store.state.playback.playback_state).toBe(ENUMS.PLAYBACK_STATES[active_state]);
@@ -444,7 +444,7 @@ describe("store/playback", () => {
           plate_barcode: test_plate_barcode,
           stim_barcode: test_stim_barcode,
           is_hardware_test_recording: false,
-          recording_name: test_recording_name,
+          recording_name: test_recording_name
         });
 
         expect(store.state.playback.playback_state).toStrictEqual(
@@ -500,7 +500,7 @@ describe("store/playback", () => {
       test("Given the Vuex plate_waveforms state has some values, When stop_live_view is dispatched, Then the plate_waveforms x/y data points are reset to empty arrays", async () => {
         store.commit("data/set_plate_waveforms", [
           { x_data_points: [55], y_data_points: [2.3] },
-          { x_data_points: [4], y_data_points: [999] },
+          { x_data_points: [4], y_data_points: [999] }
         ]);
         await store.dispatch("playback/stop_live_view");
 
@@ -513,7 +513,7 @@ describe("store/playback", () => {
       test("Given the Vuex stim_waveforms state has some values, When stop_live_view is dispatched, Then the stim_waveforms x/y data points are reset to empty arrays", async () => {
         store.commit("data/set_stim_waveforms", [
           { x_data_points: [55], y_data_points: [2.3] },
-          { x_data_points: [4], y_data_points: [999] },
+          { x_data_points: [4], y_data_points: [999] }
         ]);
         await store.dispatch("playback/stop_live_view");
 
@@ -526,7 +526,7 @@ describe("store/playback", () => {
       test("Given the Vuex heatmap_values state has some values, When stop_live_view is dispatched, Then the heatmap_values inner arrays are all reset to empty arrays", async () => {
         store.commit("data/set_heatmap_values", {
           "Twitch Force": { data: [[0], [10]] },
-          "Twitch Frequency": { data: [[100], [110]] },
+          "Twitch Frequency": { data: [[100], [110]] }
         });
         await store.dispatch("playback/stop_live_view");
 
@@ -605,7 +605,7 @@ describe("store/playback", () => {
       });
       test.each([
         ["CALIBRATION_NEEDED", "CALIBRATION_NEEDED"],
-        ["CALIBRATED", "CALIBRATED"],
+        ["CALIBRATED", "CALIBRATED"]
       ])(
         "Given the flask status is set to %s, When start_calibration is called, Then ignore_next_system_status_if_matching_this_status is mutated to %s",
         async (expected_state_str, copy_of_expected_state_for_test_title_display) => {
