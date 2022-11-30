@@ -55,16 +55,16 @@ export default {
       recording_name,
       plate_barcode,
       stim_barcode,
-      is_hardware_test_recording: false
+      is_hardware_test_recording: false,
     };
     context.commit("set_recording_start_time", time_index);
     await call_axios_get_from_vuex(url, context, params);
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.RECORDING);
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
-      root: true
+      root: true,
     });
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.RECORDING, {
-      root: true
+      root: true,
     });
   },
 
@@ -77,10 +77,10 @@ export default {
     context.commit("set_playback_state", ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE);
     context.commit("stop_recording");
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.RECORDING, {
-      root: true
+      root: true,
     });
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
-      root: true
+      root: true,
     });
     // Eli (6/11/20): wait until we have error handling established and unit tested before conditionally doing things based on status
     // if (response.status == 200) {
@@ -99,10 +99,10 @@ export default {
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.CALIBRATED);
     context.commit("set_x_time_index", 0);
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.LIVE_VIEW_ACTIVE, {
-      root: true
+      root: true,
     });
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATED, {
-      root: true
+      root: true,
     });
     context.commit("stop_playback_progression");
     context.commit("data/clear_heatmap_values", null, { root: true });
@@ -117,11 +117,11 @@ export default {
     const url = "http://localhost:4567/start_calibration";
     await call_axios_get_from_vuex(url, context);
     context.commit("flask/ignore_next_system_status_if_matching_status", this.state.flask.status_uuid, {
-      root: true
+      root: true,
     });
 
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.CALIBRATING, {
-      root: true
+      root: true,
     });
 
     context.dispatch("flask/start_status_pinging", null, { root: true });
@@ -164,10 +164,10 @@ export default {
     await call_axios_get_from_vuex(url, context, { plate_barcode });
     context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.BUFFERING);
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.CALIBRATED, {
-      root: true
+      root: true,
     });
     context.commit("flask/set_status_uuid", STATUS.MESSAGE.BUFFERING, {
-      root: true
+      root: true,
     });
     context.dispatch("flask/start_status_pinging", null, { root: true });
   },
@@ -211,7 +211,7 @@ export default {
     const post_endpoint = "/start_data_analysis";
 
     const response = await call_axios_post_from_vuex(post_endpoint, {
-      selected_recordings
+      selected_recordings,
     });
 
     if (response && response.status !== 204)
@@ -230,5 +230,5 @@ export default {
       : `/update_recording_name?new_name=${recording_name}&default_name=${default_name}&snapshot_enabled=${snapshot_enabled}`;
 
     return await call_axios_post_from_vuex(post_endpoint);
-  }
+  },
 };
