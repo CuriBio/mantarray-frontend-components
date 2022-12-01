@@ -82,7 +82,7 @@ describe("StimulationStudioDelayModal.vue", () => {
     await target_input_field.setValue(`${MAX_SUBPROTOCOL_DURATION_MS + 1}`);
     expect(wrapper.vm.invalid_text).toBe("Duration must be <= 24hrs");
 
-    await target_input_field.setValue("1.1");
+    await target_input_field.setValue(`${MIN_SUBPROTOCOL_DURATION_MS + 0.1}`);
     expect(wrapper.vm.invalid_text).toBe("Must be a whole number of ms");
 
     // valid
