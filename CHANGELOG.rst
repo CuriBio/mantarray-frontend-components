@@ -18,7 +18,8 @@ Changed:
 
 Fixed:
 ^^^^^^
-- Heat map display bug by changing mean values calculation to use the last 5 data points of each well
+- Heatmap showing incorrect mean values. The last 5 data points of each well will now be used to calculate this value
+- Prevent stimulation delay subprotocols from having fractional millisecond values which causes the app to crash
 
 
 1.2.5 (2022-11-15)

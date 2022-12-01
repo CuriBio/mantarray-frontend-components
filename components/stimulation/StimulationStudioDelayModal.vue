@@ -129,6 +129,7 @@ export default {
         valid: "",
         min_duration: `Duration must be >=${MIN_SUBPROTOCOL_DURATION_MS}ms`,
         max_duration: "Duration must be <= 24hrs",
+        non_integer: "Must be a whole number of ms",
       },
       time_units: ["milliseconds", "seconds", "minutes", "hours"],
       time_unit_idx: 0,
@@ -194,6 +195,8 @@ export default {
         this.invalid_text = this.invalid_err_msg.min_duration;
       } else if (value_in_millis > MAX_SUBPROTOCOL_DURATION_MS) {
         this.invalid_text = this.invalid_err_msg.max_duration;
+      } else if (!Number.isInteger(value_in_millis)) {
+        this.invalid_text = this.invalid_err_msg.non_integer;
       } else {
         this.invalid_text = this.invalid_err_msg.valid;
         // Only want to update input_value here so it is only ever set to a valid value.
