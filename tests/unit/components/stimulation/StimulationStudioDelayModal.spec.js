@@ -1,6 +1,6 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioDelayModal from "@/components/stimulation/StimulationStudioDelayModal.vue";
-import { MIN_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
+import { MIN_SUBPROTOCOL_DURATION_MS, MAX_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
@@ -69,14 +69,28 @@ describe("StimulationStudioDelayModal.vue", () => {
     });
     const target_input_field = wrapper.find("#input-widget-field-delay");
 
+    // invalid
+    await target_input_field.setValue("");
+    expect(wrapper.vm.invalid_text).toBe("Required");
+
     await target_input_field.setValue("test");
     expect(wrapper.vm.invalid_text).toBe("Must be a (+) number");
 
-    await target_input_field.setValue("1500");
+    await target_input_field.setValue(`${MIN_SUBPROTOCOL_DURATION_MS - 1}`);
+    expect(wrapper.vm.invalid_text).toBe(`Duration must be >=${MIN_SUBPROTOCOL_DURATION_MS}ms`);
+
+    await target_input_field.setValue(`${MAX_SUBPROTOCOL_DURATION_MS + 1}`);
+    expect(wrapper.vm.invalid_text).toBe("Duration must be <= 24hrs");
+
+    await target_input_field.setValue(`${MIN_SUBPROTOCOL_DURATION_MS + 0.1}`);
+    expect(wrapper.vm.invalid_text).toBe("Must be a whole number of ms");
+
+    // valid
+    await target_input_field.setValue(`${MIN_SUBPROTOCOL_DURATION_MS}`);
     expect(wrapper.vm.invalid_text).toBe("");
 
-    await target_input_field.setValue("");
-    expect(wrapper.vm.invalid_text).toBe("Required");
+    await target_input_field.setValue(`${MAX_SUBPROTOCOL_DURATION_MS}`);
+    expect(wrapper.vm.invalid_text).toBe("");
   });
 
   test("When a user wants to save the delay/repeat value, Then it will only be possible once a all validation checks pass for input", async () => {
