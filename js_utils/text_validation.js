@@ -37,7 +37,7 @@ export class TextValidation {
     try {
       switch (this.rule) {
         case "plate_barcode":
-          feedback = this.validate_plate_barcode(text, beta_2_mode);
+          feedback = this.validate_barcode(text, type, beta_2_mode);
           break;
         case "uuidBase57encode":
           feedback = this.validate_uuidBase_fiftyseven_encode(text);
@@ -55,12 +55,6 @@ export class TextValidation {
     } catch (exception) {
       exception.err = "Not Supported " + exception.err;
       throw exception;
-    }
-    if (
-      (text && type === "plate_barcode" && !text.includes("ML")) ||
-      (text && type === "stim_barcode" && !text.includes("MS"))
-    ) {
-      feedback = "barcode type no match";
     }
     return feedback;
   }
@@ -174,11 +168,12 @@ export class TextValidation {
    * Returns the feedback text for the plate barcode validation
    *
    * @param  {string}  barcode The barcode string to validate
+   * @param {string} type The barcode type "stim_barcode" or "plate_barcode"
    * @param {bool} beta_2_mode True if in bet 2 mode false if in beta 1 mode
    * @return {string} "" if barcode is valid, " " otherwise
    *
    */
-  validate_plate_barcode(barcode, beta_2_mode) {
+  validate_barcode(barcode, type, beta_2_mode) {
     if (barcode == null) {
       return " ";
     }
@@ -191,6 +186,13 @@ export class TextValidation {
     const barcode_header = barcode.slice(0, 2);
     if (barcode_header !== "ML" && barcode_header !== "MS") {
       return " ";
+    }
+    // check barcode matches type
+    if (
+      (barcode && type === "plate_barcode" && !barcode.includes("ML")) ||
+      (barcode && type === "stim_barcode" && !barcode.includes("MS"))
+    ) {
+      return "barcode type no match";
     }
 
     return barcode.includes("-")
