@@ -131,13 +131,15 @@ export default {
       const bool_choice = Boolean(choice);
       this.$bvModal.hide("edit-plate-barcode-modal");
       this.$store.commit("flask/set_barcode_manual_mode", bool_choice);
+      if (bool_choice) {
+        console.log("Barcode Set Manually"); // allow-log
+      }
     },
     set_barcode_manually: function (event) {
       this.$store.dispatch("playback/validate_barcode", {
         type: this.barcode_type,
         new_value: event.target.value,
       });
-      console.log("Barcode Set Manually"); // allow-log
     },
     close_warning_modal() {
       this.$bvModal.hide("barcode-warning");

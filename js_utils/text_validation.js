@@ -56,6 +56,12 @@ export class TextValidation {
       exception.err = "Not Supported " + exception.err;
       throw exception;
     }
+    if (
+      (text && type === "plate_barcode" && !text.includes("ML")) ||
+      (text && type === "stim_barcode" && !text.includes("MS"))
+    ) {
+      feedback = "barcode type no match";
+    }
     return feedback;
   }
   /**
