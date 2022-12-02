@@ -37,7 +37,7 @@ export class TextValidation {
     try {
       switch (this.rule) {
         case "plate_barcode":
-          feedback = this.validate_plate_barcode(text, beta_2_mode);
+          feedback = this.validate_barcode(text, type, beta_2_mode);
           break;
         case "uuidBase57encode":
           feedback = this.validate_uuidBase_fiftyseven_encode(text);
@@ -168,11 +168,12 @@ export class TextValidation {
    * Returns the feedback text for the plate barcode validation
    *
    * @param  {string}  barcode The barcode string to validate
+   * @param {string} type The barcode type "stim_barcode" or "plate_barcode"
    * @param {bool} beta_2_mode True if in bet 2 mode false if in beta 1 mode
    * @return {string} "" if barcode is valid, " " otherwise
    *
    */
-  validate_plate_barcode(barcode, beta_2_mode) {
+  validate_barcode(barcode, type, beta_2_mode) {
     if (barcode == null) {
       return " ";
     }
@@ -181,9 +182,13 @@ export class TextValidation {
     if (plate_barcode_len !== 12) {
       return " ";
     }
-    // check that header is valid
+    // check barcode header
     const barcode_header = barcode.slice(0, 2);
-    if (barcode_header !== "ML" && barcode_header !== "MS") {
+    if (
+      (type === "plate_barcode" && barcode_header !== "ML") ||
+      (type === "stim_barcode" && barcode_header !== "MS") ||
+      (barcode_header !== "ML" && barcode_header !== "MS")
+    ) {
       return " ";
     }
 

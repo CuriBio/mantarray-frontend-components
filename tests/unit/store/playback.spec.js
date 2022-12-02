@@ -225,7 +225,7 @@ describe("store/playback", () => {
         ["ML2020172144", "error due to invalid year '2020'", false],
         ["ML2021000144", "error due to invalid Julian date '000'", false],
         ["ML2021367144", "error due to invalid Julian date '367'", false],
-        ["MS2021172000", "header 'MS'", true],
+        ["MS2021172000", "header 'MS'", false],
         ["ML2021172001", "valid kit ID '001'", true],
         ["ML2021172002", "valid kit ID '002'", true],
         ["ML2021172003", "valid kit ID '003'", true],

@@ -43,7 +43,7 @@ describe("TextValidation", () => {
   });
 });
 
-describe("TextValidation.validate_plate_barcode with new barcodes", () => {
+describe("TextValidation.validate_barcode with new barcodes", () => {
   test.each([
     ["", "empty"],
     [null, "null"],
