@@ -182,17 +182,14 @@ export class TextValidation {
     if (plate_barcode_len !== 12) {
       return " ";
     }
-    // check that header is valid
+    // check barcode header
     const barcode_header = barcode.slice(0, 2);
-    if (barcode_header !== "ML" && barcode_header !== "MS") {
-      return " ";
-    }
-    // check barcode matches type
     if (
-      (barcode && type === "plate_barcode" && !barcode.includes("ML")) ||
-      (barcode && type === "stim_barcode" && !barcode.includes("MS"))
+      (type === "plate_barcode" && barcode_header !== "ML") ||
+      (type === "stim_barcode" && barcode_header !== "MS") ||
+      (barcode_header !== "ML" && barcode_header !== "MS")
     ) {
-      return "barcode type no match";
+      return " ";
     }
 
     return barcode.includes("-")
