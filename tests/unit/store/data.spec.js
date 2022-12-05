@@ -539,7 +539,7 @@ describe("store/data", () => {
       ];
 
       await new Promise((resolve) => {
-        socket_server_side.emit("recording_snapshot", JSON.stringify(example_message), (ack) => {
+        socket_server_side.emit("recording_snapshot_data", JSON.stringify(example_message), (ack) => {
           resolve(ack);
         });
       });

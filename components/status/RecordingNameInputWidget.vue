@@ -16,9 +16,9 @@
       </div>
       <div v-if="beta_2_mode" class="div__toggle-container">
         <ToggleWidget
-          id="current_recording_snapshot"
-          :checked_state="current_recording_snapshot"
-          :label="'current_recording_snapshot'"
+          id="run_recording_snapshot_current"
+          :checked_state="run_recording_snapshot_current"
+          :label="'run_recording_snapshot_current'"
           @handle_toggle_state="handle_snapshot_toggle"
         />
         <span>Show Snapshot For This Recording</span>
@@ -88,31 +88,29 @@ export default {
         msg_two: "Would you like to replace the existing recording with this one?",
         button_names: ["Cancel", "Yes"],
       },
-      current_recording_snapshot: true,
+      run_recording_snapshot_current: true,
     };
   },
   computed: {
-    ...mapState("settings", ["recording_snapshot", "beta_2_mode"]),
+    ...mapState("settings", ["run_recording_snapshot_default", "beta_2_mode"]),
     is_enabled: function () {
       return !this.error_message;
     },
   },
   watch: {
-    recording_snapshot: function (n) {
+    run_recording_snapshot_default: function (new_default) {
       // required because bootstrap modals are always rendered to the page so need a way to change the value as it's changed
-      this.current_recording_snapshot = n;
+      this.run_recording_snapshot_current = new_default;
     },
   },
   methods: {
     check_recording_name: function (recording_name) {
       this.recording_name = recording_name;
-
-      if (!recording_name) this.error_message = "Please enter a name";
-      else this.error_message = "";
+      this.error_message = recording_name ? "" : "Please enter a name";
     },
     handle_click: async function () {
       if (this.is_enabled) {
-        const run_shapshot = this.beta_2_mode && this.current_recording_snapshot;
+        const run_shapshot = this.beta_2_mode && this.run_recording_snapshot_current;
         if (run_shapshot) this.$store.dispatch("playback/stop_live_view");
 
         const res = await this.$store.dispatch("playback/handle_recording_name", {
@@ -122,10 +120,12 @@ export default {
           snapshot_enabled: run_shapshot,
         });
 
-        if (res === 403) this.$bvModal.show("existing-recording-warning");
-        else {
+        if (res === 403) {
+          this.$bvModal.show("existing-recording-warning");
+        } else {
           this.$emit("handle_confirmation", run_shapshot);
-          this.current_recording_snapshot = this.beta_2_mode && this.recording_snapshot;
+          // reset this value back to the default
+          this.run_recording_snapshot_current = this.beta_2_mode && this.run_recording_snapshot_default;
         }
       }
     },
@@ -133,7 +133,8 @@ export default {
       this.$bvModal.hide("existing-recording-warning");
 
       if (idx === 1) {
-        const run_shapshot = this.beta_2_mode && this.current_recording_snapshot;
+        // TODO refactor this into a method that handle_click can also call
+        const run_shapshot = this.beta_2_mode && this.run_recording_snapshot_current;
         await this.$store.dispatch("playback/handle_recording_name", {
           recording_name: this.recording_name,
           default_name: this.default_recording_name,
@@ -141,11 +142,14 @@ export default {
           snapshot_enabled: run_shapshot,
         });
         this.$emit("handle_confirmation", run_shapshot);
-        this.current_recording_snapshot = this.beta_2_mode && this.recording_snapshot;
-      } else this.error_message = "Name already exists";
+        // reset this value back to the default
+        this.run_recording_snapshot_current = this.beta_2_mode && this.run_recording_snapshot_default;
+      } else {
+        this.error_message = "Name already exists";
+      }
     },
     handle_snapshot_toggle: function (state) {
-      this.current_recording_snapshot = state;
+      this.run_recording_snapshot_current = state;
     },
   },
 };

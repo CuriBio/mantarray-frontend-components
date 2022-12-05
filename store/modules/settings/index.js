@@ -6,7 +6,7 @@ import { ERRORS } from "./enums";
 const default_state = {
   auto_upload: false,
   auto_delete: false,
-  recording_snapshot: true,
+  run_recording_snapshot_default: true,
   user_accounts: [],
   stored_customer_id: null,
   stored_usernames: [],

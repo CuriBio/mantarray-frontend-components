@@ -369,7 +369,7 @@ export default {
       "user_cred_input_needed",
       "firmware_update_available",
       "firmware_update_dur_mins",
-      "recording_snapshot",
+      "run_recording_snapshot_default",
     ]),
     ...mapState("data", ["recording_snapshot_data"]),
     ...mapState("stimulation", ["stim_status"]),

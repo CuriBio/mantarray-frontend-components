@@ -148,10 +148,10 @@ describe("RecordingNameInputWidget.vue", () => {
       localVue,
     });
 
-    const stored_state = store.state.settings.recording_snapshot;
+    const stored_state = store.state.settings.run_recording_snapshot_default;
     expect(stored_state).toBe(true);
 
-    expect(wrapper.vm.current_recording_snapshot).toBe(stored_state);
+    expect(wrapper.vm.run_recording_snapshot_current).toBe(stored_state);
   });
 
   test("When user toggles the recording snapshot switch, Then the value will be emitted to parent with handle_confirmation", async () => {
@@ -164,12 +164,12 @@ describe("RecordingNameInputWidget.vue", () => {
 
     await store.commit("settings/set_beta_2_mode", true);
 
-    expect(wrapper.vm.current_recording_snapshot).toBe(true);
+    expect(wrapper.vm.run_recording_snapshot_current).toBe(true);
     jest.spyOn(store, "dispatch").mockImplementation(() => 200);
 
     // simulate user turning off feature
     await store.commit("settings/set_recording_snapshot_state", false);
-    expect(wrapper.vm.current_recording_snapshot).toBe(false);
+    expect(wrapper.vm.run_recording_snapshot_current).toBe(false);
 
     const toggle_input = wrapper.find("#toggle_input");
     const button_widget = wrapper.findAll(".span__button_label");

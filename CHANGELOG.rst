@@ -1,7 +1,7 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.2.6 (unreleased)
+1.3.0 (unreleased)
 ------------------
 
 Added:
@@ -9,14 +9,15 @@ Added:
 - Ability to start live view, recording, and stimulation from stim studio start button
 - Ability to select from previously used usernames when logging into the SettingsForm
 - Check for type of barcode enter into inputs
-- Added log when user set barcode manually
+- Log message when user enables manual barcode entry
 
 Changed:
 ^^^^^^^^
-- Changed format of JSON protocol message sent in /set_protocols route to start a stimulation
+- New format of JSON protocol message sent in /set_protocols route to start a stimulation
 - Live view will always be stopped when a recording is stopped
-- Changed error message to Please turn the instrument off, unplug from the PC, and then wait 10 seconds before attempting to use again
-- Enabled option for copying and pasting barcodes
+- Error message now reads: "Please turn the instrument off, unplug from the PC, and then wait 10 seconds before attempting to use again"
+- Allow pasting barcodes into barcode text box when manual entry is enabled
+- Renamed ``recording_snapshot`` websocket handler to ``recording_snapshot_data``
 
 Fixed:
 ^^^^^^
@@ -154,7 +155,7 @@ Added:
 - Tooltip message on configuration check icon that notifies user that check cannot be run while live view or a recording is active
 - Ability to copy pulses in stim studio by double clicking waveform tile and then selecting 'Duplicate'.
 - RecordingSnapshotWidget that appear after a recording is stopped with the first five seconds of analysis graphed for each well
-- Recording_snapshot websocket handler to recieve five second analysis data
+- ``recording_snapshot`` websocket handler
 - Tooltip to barcode input and icon that notifies user it's disabled when live view is active
 - Colored background to stim studio waveform graph that corresponds to the waveform tile when hovered over
 - Prevention of edits to stimulation settings while either recording or actively stimulating

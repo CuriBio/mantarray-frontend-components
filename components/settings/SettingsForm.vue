@@ -208,6 +208,7 @@ export default {
       pulse3d_focus_idx: 0,
       auto_delete: false,
       disable_toggle: false,
+      // TODO tie this to the value in the store?
       recording_snapshot_state: true,
     };
   },
@@ -217,7 +218,6 @@ export default {
       "user_accounts",
       "active_user_index",
       "stored_customer_id",
-      "recording_snapshot",
       "pulse3d_versions",
       "pulse3d_version_selection_index",
     ]),
