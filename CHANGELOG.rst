@@ -10,6 +10,7 @@ Added:
 - Ability to select from previously used usernames when logging into the SettingsForm
 - Check for type of barcode enter into inputs
 - Log message when user enables manual barcode entry
+- Closure warning when recording snapshot is running
 
 Changed:
 ^^^^^^^^
