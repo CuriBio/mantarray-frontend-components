@@ -217,7 +217,7 @@ export default {
     } else if (state.playback_state === ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE)
       await dispatch("stop_live_view");
   },
-  async handle_recording_name(_, { recording_name, default_name, replace_existing, snapshot_enabled }) {
+  async handle_recording_rename(_, { recording_name, default_name, replace_existing, snapshot_enabled }) {
     const post_endpoint = replace_existing
       ? `/update_recording_name?new_name=${recording_name}&default_name=${default_name}&snapshot_enabled=${snapshot_enabled}&replace_existing=${replace_existing}`
       : `/update_recording_name?new_name=${recording_name}&default_name=${default_name}&snapshot_enabled=${snapshot_enabled}`;

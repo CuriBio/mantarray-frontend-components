@@ -96,6 +96,9 @@ export default {
     is_enabled: function () {
       return !this.error_message;
     },
+    snapshot_enabled: function () {
+      return this.beta_2_mode && this.run_recording_snapshot_current;
+    },
   },
   watch: {
     run_recording_snapshot_default: function (new_default) {
@@ -110,42 +113,38 @@ export default {
     },
     handle_click: async function () {
       if (this.is_enabled) {
-        const run_shapshot = this.beta_2_mode && this.run_recording_snapshot_current;
-        if (run_shapshot) this.$store.dispatch("playback/stop_live_view");
-
-        const res = await this.$store.dispatch("playback/handle_recording_name", {
-          recording_name: this.recording_name,
-          default_name: this.default_recording_name,
-          replace_existing: this.recording_name === this.default_recording_name,
-          snapshot_enabled: run_shapshot,
-        });
-
-        if (res === 403) {
-          this.$bvModal.show("existing-recording-warning");
-        } else {
-          this.$emit("handle_confirmation", run_shapshot);
-          // reset this value back to the default
-          this.run_recording_snapshot_current = this.beta_2_mode && this.run_recording_snapshot_default;
+        // live view will still be running here so need to stop it if running recording snapshot after rename
+        if (this.snapshot_enabled) {
+          this.$store.dispatch("playback/stop_live_view");
         }
+
+        await this.handle_recording_rename(this.recording_name === this.default_recording_name);
       }
     },
     close_warning_modal: async function (idx) {
       this.$bvModal.hide("existing-recording-warning");
 
       if (idx === 1) {
-        // TODO refactor this into a method that handle_click can also call
-        const run_shapshot = this.beta_2_mode && this.run_recording_snapshot_current;
-        await this.$store.dispatch("playback/handle_recording_name", {
-          recording_name: this.recording_name,
-          default_name: this.default_recording_name,
-          replace_existing: true,
-          snapshot_enabled: run_shapshot,
-        });
-        this.$emit("handle_confirmation", run_shapshot);
-        // reset this value back to the default
-        this.run_recording_snapshot_current = this.beta_2_mode && this.run_recording_snapshot_default;
+        // live view will will have already been stopped by this point
+        await this.handle_recording_rename(true);
       } else {
         this.error_message = "Name already exists";
+      }
+    },
+    handle_recording_rename: async function (replace_existing) {
+      const res = await this.$store.dispatch("playback/handle_recording_rename", {
+        recording_name: this.recording_name,
+        default_name: this.default_recording_name,
+        replace_existing,
+        snapshot_enabled: this.snapshot_enabled,
+      });
+
+      if (res === 403 && !replace_existing) {
+        this.$bvModal.show("existing-recording-warning");
+      } else {
+        this.$emit("handle_confirmation", this.snapshot_enabled);
+        // reset this value back to the default
+        this.run_recording_snapshot_current = this.beta_2_mode && this.run_recording_snapshot_default;
       }
     },
     handle_snapshot_toggle: function (state) {
