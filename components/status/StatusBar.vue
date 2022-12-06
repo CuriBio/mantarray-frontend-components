@@ -252,7 +252,7 @@ export default {
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
-    ...mapState("playback", ["data_analysis_state"]),
+    ...mapState("playback", ["data_analysis_state", "is_recording_snapshot_running"]),
     ...mapState("stimulation", ["protocol_assignments", "stim_play_state", "stim_status"]),
     ...mapState("data", ["stimulator_circuit_statuses", "h5_warning"]),
     ...mapState("settings", [
@@ -322,7 +322,8 @@ export default {
         this.status_uuid === STATUS.MESSAGE.CALIBRATING ||
         this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS ||
         this.stim_play_state ||
-        this.total_uploaded_files.length < this.total_file_count;
+        this.total_uploaded_files.length < this.total_file_count ||
+        this.is_recording_snapshot_running;
 
       const data_analysis_in_progress = this.data_analysis_state === ENUMS.DATA_ANALYSIS_STATE.ACTIVE;
 
@@ -331,10 +332,13 @@ export default {
         this.status_uuid === STATUS.MESSAGE.INSTALLING_UPDATES;
 
       if (this.confirmation_request && !this.stim_specific && !data_analysis_in_progress) {
-        if (fw_update_in_progress) this.$bvModal.show("fw-closure-warning");
-        else if (sensitive_ops_in_progress) {
+        if (fw_update_in_progress) {
+          this.$bvModal.show("fw-closure-warning");
+        } else if (sensitive_ops_in_progress) {
           this.$bvModal.show("ops-closure-warning");
-        } else this.handle_confirmation(1);
+        } else {
+          this.handle_confirmation(1);
+        }
       }
     },
     da_check: function (new_val, _) {
@@ -361,6 +365,11 @@ export default {
     },
     h5_warning: function (new_val, _) {
       this.$bvModal.show("h5_warning");
+    },
+    is_recording_snapshot_running: function (new_bool) {
+      if (!new_bool) {
+        this.close_modals_by_id(["ops-closure-warning"]);
+      }
     },
   },
   created() {
@@ -474,9 +483,11 @@ export default {
         (ids.includes("ops-closure-warning") || ids.includes("fw-closure-warning"))
       ) {
         this.$emit("send_confirmation", 0);
-      } else if (ids.includes("failed-qc-check") || ids.includes("success-qc-check"))
+      } else if (ids.includes("failed-qc-check") || ids.includes("success-qc-check")) {
         this.$store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
-      else if (ids.includes("error-catch")) this.shutdown_request();
+      } else if (ids.includes("error-catch")) {
+        this.shutdown_request();
+      }
     },
     close_sw_update_modal: function () {
       this.$bvModal.hide("sw-update-message");
