@@ -46,6 +46,7 @@ export default function create_web_socket_plugin(socket) {
        }
       */
       store.dispatch("data/format_recording_snapshot_data", JSON.parse(data_json));
+      store.commit("playback/set_is_recording_snapshot_running", false); // TODO unit test this
 
       /* istanbul ignore else */
       if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback

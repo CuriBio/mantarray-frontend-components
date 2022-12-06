@@ -362,7 +362,13 @@ export default {
     };
   },
   computed: {
-    ...mapState("playback", ["playback_state", "barcodes", "tooltips_delay", "start_recording_from_stim"]),
+    ...mapState("playback", [
+      "playback_state",
+      "barcodes",
+      "tooltips_delay",
+      "start_recording_from_stim",
+      "is_recording_snapshot_running",
+    ]),
     ...mapState("settings", [
       "auto_upload",
       "beta_2_mode",
@@ -371,7 +377,6 @@ export default {
       "firmware_update_dur_mins",
       "run_recording_snapshot_default",
     ]),
-    ...mapState("data", ["recording_snapshot_data"]),
     ...mapState("stimulation", ["stim_status"]),
     ...mapGetters({
       status_uuid: "flask/status_id",
@@ -502,12 +507,6 @@ export default {
     user_cred_input_needed() {
       if (this.user_cred_input_needed) this.$bvModal.show("user-input-prompt-message");
     },
-    recording_snapshot_data(new_data) {
-      if (new_data.length === 24) {
-        this.$bvModal.hide("analysis-in-progress-modal");
-        this.$bvModal.show("recording-check");
-      }
-    },
     playback_state(new_state) {
       // if live view had to be started from stim studio, then catch it here and then start recording after buffering state. Start recording cannot happen right after starting live view becuase of buffering state
       if (new_state === this.playback_state_enums.LIVE_VIEW_ACTIVE && this.start_recording_from_stim) {
@@ -530,6 +529,14 @@ export default {
           // set back to false
           this.$store.commit("playback/set_start_recording_from_stim", false);
         }
+      }
+    },
+    is_recording_snapshot_running(new_state) {
+      if (new_state) {
+        this.$bvModal.show("analysis-in-progress-modal");
+      } else {
+        this.$bvModal.hide("analysis-in-progress-modal");
+        this.$bvModal.show("recording-check");
       }
     },
   },
@@ -615,12 +622,8 @@ export default {
       this.$bvModal.hide("user-input-prompt-message");
       this.$bvModal.show("settings-form");
     },
-    close_recording_name_input(temp_snapshot_state) {
+    close_recording_name_input() {
       this.$bvModal.hide("recording-name-input-prompt-message");
-
-      if (temp_snapshot_state) {
-        this.$bvModal.show("analysis-in-progress-modal");
-      }
     },
   },
 };

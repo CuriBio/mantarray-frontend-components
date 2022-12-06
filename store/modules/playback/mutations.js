@@ -53,4 +53,7 @@ export default {
   set_start_recording_from_stim(state, bool) {
     state.start_recording_from_stim = bool;
   },
+  set_is_recording_snapshot_running(state, bool) {
+    state.is_recording_snapshot_running = bool;
+  },
 };

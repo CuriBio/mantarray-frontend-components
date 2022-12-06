@@ -113,11 +113,6 @@ export default {
     },
     handle_click: async function () {
       if (this.is_enabled) {
-        // live view will still be running here so need to stop it if running recording snapshot after rename
-        if (this.snapshot_enabled) {
-          this.$store.dispatch("playback/stop_live_view");
-        }
-
         await this.handle_recording_rename(this.recording_name === this.default_recording_name);
       }
     },
@@ -125,7 +120,6 @@ export default {
       this.$bvModal.hide("existing-recording-warning");
 
       if (idx === 1) {
-        // live view will will have already been stopped by this point
         await this.handle_recording_rename(true);
       } else {
         this.error_message = "Name already exists";
@@ -142,7 +136,8 @@ export default {
       if (res === 403 && !replace_existing) {
         this.$bvModal.show("existing-recording-warning");
       } else {
-        this.$emit("handle_confirmation", this.snapshot_enabled);
+        this.$emit("handle_confirmation");
+        this.$store.commit("playback/set_is_recording_snapshot_running", this.snapshot_enabled);
         // reset this value back to the default
         this.run_recording_snapshot_current = this.beta_2_mode && this.run_recording_snapshot_default;
       }

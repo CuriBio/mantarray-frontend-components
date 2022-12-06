@@ -30,6 +30,7 @@ const default_state = {
   barcode_warning: false,
   data_analysis_state: ENUMS.DATA_ANALYSIS_STATE.READY,
   start_recording_from_stim: false,
+  is_recording_snapshot_running: false,
 };
 
 // adapted from https://itnext.io/eating-my-advice-efficiently-improving-on-understanding-and-using-nuxt-vuex-6d00769014a2
