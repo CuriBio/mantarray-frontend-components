@@ -96,6 +96,6 @@ export default {
     state.confirmation_request = bool;
   },
   set_recording_snapshot_state(state, bool) {
-    state.recording_snapshot = bool;
+    state.run_recording_snapshot_default = bool;
   },
 };

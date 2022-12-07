@@ -217,7 +217,6 @@ export default {
       "user_accounts",
       "active_user_index",
       "stored_customer_id",
-      "recording_snapshot",
       "pulse3d_versions",
       "pulse3d_version_selection_index",
     ]),
