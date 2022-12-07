@@ -90,7 +90,7 @@ describe("RecordingNameInputWidget.vue", () => {
 
       await button_widget.trigger("click");
       expect(wrapper.vm.is_enabled).toBe(true);
-      expect(action_spy).toHaveBeenCalledTimes(beta_2_mode ? 2 : 1);
+      expect(action_spy).toHaveBeenCalledTimes(1);
     }
   );
 
@@ -115,7 +115,7 @@ describe("RecordingNameInputWidget.vue", () => {
     });
   });
   test.each([true, false])(
-    "When a 200 status code gets returned when checking if name already exists, Then handle_confirmation is emitted to close modal",
+    "When a 200 status code gets returned when checking if name already exists, Then handle_confirmation is emitted to close modal and is_recording_snapshot_running updated correctly",
     async (beta_2_mode) => {
       const propsData = { default_recording_name: "test_recording_name" };
       wrapper = mount(RecordingNameInputWidget, {
@@ -125,8 +125,7 @@ describe("RecordingNameInputWidget.vue", () => {
       });
 
       await store.commit("settings/set_beta_2_mode", beta_2_mode);
-
-      const enable_recording_snapshot = beta_2_mode;
+      store.state.playback.is_recording_snapshot_running = false;
 
       jest.spyOn(store, "dispatch").mockImplementation(() => 200);
       const input_widget = wrapper.find("#input-widget-field-recording-name");
@@ -136,7 +135,9 @@ describe("RecordingNameInputWidget.vue", () => {
       await input_widget.trigger("input");
       await button_widget.trigger("click");
 
-      expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[enable_recording_snapshot]]);
+      expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[]]);
+
+      expect(store.state.playback.is_recording_snapshot_running).toBe(beta_2_mode);
     }
   );
 
@@ -154,7 +155,7 @@ describe("RecordingNameInputWidget.vue", () => {
     expect(wrapper.vm.run_recording_snapshot_current).toBe(stored_state);
   });
 
-  test("When user toggles the recording snapshot switch, Then the value will be emitted to parent with handle_confirmation", async () => {
+  test("When user toggles the recording snapshot switch, Then the correct value will be set in the store", async () => {
     const propsData = { default_recording_name: "test_recording_name" };
     wrapper = mount(RecordingNameInputWidget, {
       propsData,
@@ -177,7 +178,7 @@ describe("RecordingNameInputWidget.vue", () => {
     await toggle_input.trigger("click");
     await button_widget.at(2).trigger("click");
 
-    expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[true]]);
+    expect(store.state.playback.is_recording_snapshot_running).toBe(true);
   });
   test("When a user chooses an existing recording name and wants to select a new name instead of overriding, Then warning modal will close and show error message for existing name", async () => {
     const propsData = { default_recording_name: "test_recording_name" };
@@ -205,7 +206,7 @@ describe("RecordingNameInputWidget.vue", () => {
   });
 
   test.each([true, false])(
-    "When a user chooses an existing recording name and confirms to override existing recording, Then warning modal will close and emit closure to parent component",
+    "When a user chooses an existing recording name and confirms to override existing recording, Then warning modal will close, emit closure to parent component, and set is_recording_snapshot_running correctly",
     async (beta_2_mode) => {
       const propsData = { default_recording_name: "test_recording_name" };
       wrapper = mount(RecordingNameInputWidget, {
@@ -215,8 +216,7 @@ describe("RecordingNameInputWidget.vue", () => {
       });
 
       await store.commit("settings/set_beta_2_mode", beta_2_mode);
-
-      const enable_recording_snapshot = beta_2_mode;
+      store.state.playback.is_recording_snapshot_running = false;
 
       jest.spyOn(store, "dispatch").mockImplementation(() => 403);
       const input_widget = wrapper.find("#input-widget-field-recording-name");
@@ -231,7 +231,9 @@ describe("RecordingNameInputWidget.vue", () => {
       });
 
       await button_widget.at(2).trigger("click");
-      expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[enable_recording_snapshot]]);
+      expect(wrapper.emitted("handle_confirmation")).toStrictEqual([[]]);
+
+      expect(store.state.playback.is_recording_snapshot_running).toBe(beta_2_mode);
     }
   );
 });

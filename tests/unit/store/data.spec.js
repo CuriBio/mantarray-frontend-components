@@ -538,12 +538,15 @@ describe("store/data", () => {
         ],
       ];
 
+      store.state.playback.is_recording_snapshot_running = true;
+
       await new Promise((resolve) => {
         socket_server_side.emit("recording_snapshot_data", JSON.stringify(example_message), (ack) => {
           resolve(ack);
         });
       });
       expect(store.state.data.recording_snapshot_data).toStrictEqual(expected_coordinates);
+      expect(store.state.playback.is_recording_snapshot_running).toBe(false);
     });
 
     test("When backend emits stimulation message, Then ws client updates stim_waveforms", async () => {

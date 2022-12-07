@@ -38,7 +38,6 @@ export default function create_web_socket_plugin(socket) {
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
     socket.on("recording_snapshot_data", (data_json, cb) => {
-      // TODO: change the name of this event in the BE
       /*
        example data_json = {
         time: [array of timepoints],
@@ -46,7 +45,7 @@ export default function create_web_socket_plugin(socket) {
        }
       */
       store.dispatch("data/format_recording_snapshot_data", JSON.parse(data_json));
-      store.commit("playback/set_is_recording_snapshot_running", false); // TODO unit test this
+      store.commit("playback/set_is_recording_snapshot_running", false);
 
       /* istanbul ignore else */
       if (cb) cb("action done"); // this callback is only used for testing. The backend will not send a callback

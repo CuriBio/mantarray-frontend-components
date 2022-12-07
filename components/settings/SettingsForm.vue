@@ -208,7 +208,6 @@ export default {
       pulse3d_focus_idx: 0,
       auto_delete: false,
       disable_toggle: false,
-      // TODO tie this to the value in the store?
       recording_snapshot_state: true,
     };
   },
