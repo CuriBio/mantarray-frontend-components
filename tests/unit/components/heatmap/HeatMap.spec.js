@@ -41,7 +41,7 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     expect(wrapper.find(".div__heatmap-layout-background")).toBeTruthy();
-    expect(wrapper.vm.upper).toBe(1);
+    expect(wrapper.vm.upper).toBe(100);
     expect(wrapper.vm.lower).toBe(0);
     expect(wrapper.vm.autoscale).toBe(false);
     expect(wrapper.vm.color_theme_idx).toBe(0);

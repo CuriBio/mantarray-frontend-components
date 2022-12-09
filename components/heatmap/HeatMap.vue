@@ -199,14 +199,14 @@ export default {
       max_value_error_msg: "",
       min_value_error_msg: "",
       autoscale: false,
-      upper: 1,
+      upper: 100,
       lower: 0,
       checkbox_reset: false,
       checkbox_state: false,
       color_theme_idx: 0,
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
       metric_selection_idx: 0,
-      max_min_placeholder: { min: 0, max: 1 },
+      max_min_placeholder: { min: 0, max: 100 },
     };
   },
   computed: {
