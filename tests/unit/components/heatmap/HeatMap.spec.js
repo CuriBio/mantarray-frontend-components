@@ -41,7 +41,7 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     expect(wrapper.find(".div__heatmap-layout-background")).toBeTruthy();
-    expect(wrapper.vm.upper).toBe(100);
+    expect(wrapper.vm.upper).toBe(1);
     expect(wrapper.vm.lower).toBe(0);
     expect(wrapper.vm.autoscale).toBe(false);
     expect(wrapper.vm.color_theme_idx).toBe(0);
@@ -312,7 +312,7 @@ describe("HeatMap.vue", () => {
     const unselected_options = wrapper.findAll("li");
     expect(unselected_options.at(0).text()).toBe("Twitch Frequency");
     // test min and max are reset
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("100 µN");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("1 µN");
     expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("0 µN");
     // test gradient theme is reset to Warm
     expect(test_well.attributes("fill")).toStrictEqual(min_warm_rgb);
