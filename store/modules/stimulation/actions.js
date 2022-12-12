@@ -150,11 +150,8 @@ export default {
 
   async handle_export_protocol({ state }) {
     const { protocol_assignments, protocol_list } = state;
-
     const protocol_copy = JSON.parse(JSON.stringify(protocol_list));
-    console.log("1: ", protocol_copy);
     const message = { protocols: protocol_copy.slice(1), protocol_assignments: {} };
-    console.log("1: ", message.protocols);
 
     for (const well_idx of Array(24).keys()) {
       const letter = protocol_assignments[well_idx] ? protocol_assignments[well_idx].letter : null;
