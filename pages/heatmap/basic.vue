@@ -44,7 +44,7 @@ export default {
       this.interval = setInterval(this.deltaT, 500);
     },
     deltaT() {
-      let values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
+      let values = Array.from({ length: 24 }, () => Math.floor(Math.random()));
       this.$store.commit("data/set_metric_data", {
         name: "Twitch Force",
         data: values,

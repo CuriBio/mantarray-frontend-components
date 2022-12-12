@@ -41,7 +41,7 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     expect(wrapper.find(".div__heatmap-layout-background")).toBeTruthy();
-    expect(wrapper.vm.upper).toBe(100);
+    expect(wrapper.vm.upper).toBe(1);
     expect(wrapper.vm.lower).toBe(0);
     expect(wrapper.vm.autoscale).toBe(false);
     expect(wrapper.vm.color_theme_idx).toBe(0);
@@ -54,7 +54,7 @@ describe("HeatMap.vue", () => {
     });
     // Tanner (7/28/21): data store needs to be initialized with one valid metric having one well for this test to work
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [[]] },
+      "Twitch Frequency": { data: [[]] },
     });
 
     const default_text = wrapper.find(".div__heatmap-layout-heatmap-well-label");
@@ -81,10 +81,10 @@ describe("HeatMap.vue", () => {
     const init_heatmap_values = {
       "Twitch Force": {
         data: [
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(1),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(2),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(4),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(5),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
         ],
       },
       "Twitch Frequency": {
@@ -104,8 +104,8 @@ describe("HeatMap.vue", () => {
     await wrapper.find("#column_1").trigger("click");
 
     // test default metric selection (Twitch Force)
-    expect(mean_text.text()).toBe("Mean of 4 Wells (µN):");
-    expect(mean_value.text()).toBe("3.000");
+    expect(mean_text.text()).toBe("Mean of 4 Wells (Hz):");
+    expect(mean_value.text()).toBe("10.000");
     // switch to Twitch Frequency
     await wrapper.findAll("li").at(0).trigger("click");
 
@@ -113,7 +113,7 @@ describe("HeatMap.vue", () => {
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
 
     // test new values
-    expect(mean_text.text()).toBe("Mean of 4 Wells (Hz):");
+    expect(mean_text.text()).toBe("Mean of 4 Wells (µN):");
     expect(mean_value.text()).toBe("10.000");
   });
   test("When new max and min values are entered for scale bar and apply button is pressed, Then gradient bar labels update", async () => {
@@ -123,7 +123,7 @@ describe("HeatMap.vue", () => {
     });
     const store_spy = jest.spyOn(store, "commit");
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [[]] },
+      "Twitch Frequency": { data: [[]] },
     });
 
     await wrapper.find("#input-widget-field-heatmap-max").setValue("10.4");
@@ -136,8 +136,8 @@ describe("HeatMap.vue", () => {
     expect(wrapper.vm.upper).toBe(10.4);
     expect(wrapper.vm.autoscale).toBe(false);
 
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("10.4 µN");
-    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("10.3 µN");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("10.4 Hz");
+    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("10.3 Hz");
   });
 
   test("Given a single well has a single data entry, When new max and min values are entered for scale bar and apply button is pressed, Then the color for this well updates", async () => {
@@ -172,10 +172,10 @@ describe("HeatMap.vue", () => {
     });
 
     const selected_option = wrapper.find(".span__input-controls-content-dropdown-widget");
-    expect(selected_option.text()).toBe("Twitch Force");
+    expect(selected_option.text()).toBe("Twitch Frequency");
 
     const unselected_options = wrapper.findAll("li");
-    expect(unselected_options.at(0).text()).toBe("Twitch Frequency");
+    expect(unselected_options.at(0).text()).toBe("Twitch Force");
     expect(unselected_options.at(1).text()).toBe("Twitch Period");
   });
 
@@ -186,10 +186,10 @@ describe("HeatMap.vue", () => {
     });
     store.commit("data/set_heatmap_values", {
       "Twitch Force": {
-        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)],
+        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)],
       },
       "Twitch Frequency": {
-        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)],
+        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)],
       },
     });
 
@@ -229,10 +229,10 @@ describe("HeatMap.vue", () => {
     // apply changes
     await wrapper.find(".span__heatmap-settings-apply-btn-label").trigger("click");
 
-    expect(wrapper.find(".div__heatmap-layout-twitch-metric-label").text()).toBe("Twitch Frequency (Hz)");
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toContain("Hz");
-    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toContain("Hz");
-    expect(wrapper.find(".div__heatmap-layout-heatmap-mean-well-label").text()).toContain("Hz");
+    expect(wrapper.find(".div__heatmap-layout-twitch-metric-label").text()).toBe("Twitch Force (µN)");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toContain("1 µN");
+    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toContain("0 µN");
+    expect(wrapper.find(".div__heatmap-layout-heatmap-mean-well-label").text()).toContain("µN");
   });
 
   test("Given default gradient themes are loaded and a single well has data for one metric, When a radio button for a different color scheme is pressed, Then the color for this well is updated", async () => {
@@ -241,8 +241,8 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
-      "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
+      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
+      "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
     });
 
     // for some reason need to select a metric first before colors are displayed so switching to freq
@@ -270,8 +270,8 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
-      "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
+      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
+      "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
     });
 
     // set metric display to freq
@@ -294,26 +294,26 @@ describe("HeatMap.vue", () => {
     // make assertion on labels before resetting to confirm precondition
     const mean_text = wrapper.find(".div__heatmap-layout-heatmap-mean-well-label");
     const mean_value = wrapper.find(".div__heatmap-layout-heatmap-mean-value-well-label");
-    expect(mean_text.text()).toBe("Mean of 1 Wells (Hz):");
+    expect(mean_text.text()).toBe("Mean of 1 Wells (µN):");
     expect(mean_value.text()).toBe("100.000");
     expect(mean_text.isVisible()).toBe(true);
     expect(mean_value.isVisible()).toBe(true);
     // click reset btn
     await wrapper.find(".span__heatmap-settings-reset-btn-label").trigger("click");
 
-    // test selected metric is set back to force and labels are still visible
-    expect(mean_text.text()).toBe("Mean of 1 Wells (µN):");
+    // test selected metric is set back to frequency and labels are still visible
+    expect(mean_text.text()).toBe("Mean of 1 Wells (Hz):");
     expect(mean_value.text()).toBe("0.000");
     expect(mean_text.isVisible()).toBe(true);
     expect(mean_value.isVisible()).toBe(true);
     // test dropdown is reset
     const selected_option = wrapper.find(".span__input-controls-content-dropdown-widget");
-    expect(selected_option.text()).toBe("Twitch Force");
+    expect(selected_option.text()).toBe("Twitch Frequency");
     const unselected_options = wrapper.findAll("li");
-    expect(unselected_options.at(0).text()).toBe("Twitch Frequency");
+    expect(unselected_options.at(0).text()).toBe("Twitch Force");
     // test min and max are reset
-    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("100 µN");
-    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("0 µN");
+    expect(wrapper.find(".span__heatmap-scale-higher-value").text()).toBe("1 Hz");
+    expect(wrapper.find(".span__heatmap-scale-lower-value").text()).toBe("0 Hz");
     // test gradient theme is reset to Warm
     expect(test_well.attributes("fill")).toStrictEqual(min_warm_rgb);
   });
@@ -405,7 +405,7 @@ describe("HeatMap.vue", () => {
     expect(store_spy.mock.calls).toContainEqual(["heatmap/set_auto_scale", true]);
 
     await store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [[0, 10]] },
+      "Twitch Frequency": { data: [[0, 10]] },
     });
     expect(store_spy.mock.calls).toHaveLength(7);
     expect(store_spy.mock.calls).toContainEqual([
@@ -419,7 +419,7 @@ describe("HeatMap.vue", () => {
     expect(wrapper.vm.autoscale).toBe(false);
 
     await store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [[10, 15, 20]] },
+      "Twitch Frequency": { data: [[10, 15, 20]] },
     });
 
     expect(store_spy.mock.calls).toHaveLength(8);
