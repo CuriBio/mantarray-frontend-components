@@ -188,7 +188,7 @@ export default {
     return {
       checkbox_options: [{ text: "", value: "autoscale" }],
       label: "",
-      keyplaceholder: "Twitch Force",
+      keyplaceholder: "Twitch Frequency",
       error_text: "An ID is required",
       entry_width: 201,
       disallow_entry: false,
@@ -205,7 +205,7 @@ export default {
       checkbox_state: false,
       color_theme_idx: 0,
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
-      metric_selection_idx: 0,
+      metric_selection_idx: 2,
       max_min_placeholder: { min: 0, max: 1 },
     };
   },

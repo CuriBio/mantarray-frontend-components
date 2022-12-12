@@ -19,7 +19,7 @@ Changed:
 - Error message now reads: "Please turn the instrument off, unplug from the PC, and then wait 10 seconds before attempting to use again"
 - Allow pasting barcodes into barcode text box when manual entry is enabled
 - Renamed ``recording_snapshot`` websocket handler to ``recording_snapshot_data``
-- Heatmap default change from 100hz to 1hz
+- Heatmap default range change from 100hz to 1hz and changed default metric to Twitch Frequency
 
 Fixed:
 ^^^^^^
