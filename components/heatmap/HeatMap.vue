@@ -397,7 +397,7 @@ export default {
       this.$store.commit("heatmap/set_auto_scale", false);
 
       // reset display dropdown
-      this.metric_selection_changed(0);
+      this.metric_selection_changed(2);
       this.$store.commit("heatmap/set_display_option", this.metric_names[this.metric_selection_idx]);
       this.$store.commit("heatmap/set_display_option_idx", this.metric_selection_idx);
 
@@ -406,10 +406,10 @@ export default {
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range", {
         min: 0,
-        max: 100,
+        max: 1,
       });
       // reset autoscale check box and disable setting for inputs
-      this.on_update_maximum(100);
+      this.on_update_maximum(1);
       this.on_update_minimum(0);
       this.checkbox_reset = true;
       this.autoscale = false;
