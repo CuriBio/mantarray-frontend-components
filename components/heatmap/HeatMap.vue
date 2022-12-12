@@ -406,7 +406,7 @@ export default {
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range", {
         min: 0,
-        max: 1,
+        max: 100,
       });
       // reset autoscale check box and disable setting for inputs
       this.on_update_maximum(1);
