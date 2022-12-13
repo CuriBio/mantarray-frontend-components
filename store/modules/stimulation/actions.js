@@ -34,7 +34,7 @@ export default {
           y: [setting.phase_one_charge],
         };
         // If biphasic, handle remaining pulse components
-        if (setting.interphase_interval) {
+        if (setting.phase_two_duration || setting.phase_two_duration == 0) {
           // Add values for interphase interval
           components_to_add.x.push(setting.interphase_interval);
           components_to_add.y.push(0);
