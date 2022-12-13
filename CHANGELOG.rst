@@ -1,7 +1,15 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.3.0 (unreleased)
+1.3.1 (2022-12-13)
+------------------
+
+Fixed:
+^^^^^^
+- Fixed biphasic pulses being shown as monophasic pulses when interphase interval was set to 0 ms
+
+
+1.3.0 (2022-12-07)
 ------------------
 
 Added:
