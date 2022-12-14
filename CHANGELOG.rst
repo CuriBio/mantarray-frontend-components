@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.3.2 (unreleased)
+------------------
+
+Fixed:
+^^^^^^
+- Fixed websocket handler to match the data_type returned from BE for local data analysis
+
+
 1.3.1 (2022-12-13)
 ------------------
 

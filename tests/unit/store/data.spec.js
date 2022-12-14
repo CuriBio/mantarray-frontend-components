@@ -500,7 +500,7 @@ describe("store/data", () => {
       };
 
       await new Promise((resolve) => {
-        socket_server_side.emit("data_analysis_complete", JSON.stringify(expected_message), (ack) => {
+        socket_server_side.emit("local_analysis", JSON.stringify(expected_message), (ack) => {
           resolve(ack);
         });
       });
