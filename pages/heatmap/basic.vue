@@ -29,12 +29,12 @@ export default {
     ];
 
     const heatmap_values = {
-      "Twitch Force": { data: [[0]] },
+      "Twitch Frequency": { data: [[1]] },
+      "Twitch Force": { data: [[1]] },
       "Twitch Period": { data: data[1] },
-      "Twitch Frequency": { data: [[100]] },
-      "Twitch Width 80": { data: data[3] },
-      "Contraction Velocity": { data: data[4] },
-      "Relaxation Velocity": { data: data[5] },
+      "Twitch Width 80": { data: data[1] },
+      "Contraction Velocity": { data: data[1] },
+      "Relaxation Velocity": { data: data[1] },
     };
     this.$store.commit("data/set_heatmap_values", heatmap_values);
   },
@@ -44,37 +44,36 @@ export default {
       this.interval = setInterval(this.deltaT, 500);
     },
     deltaT() {
-      let values = Array.from({ length: 24 }, () => Math.floor(Math.random()));
+      let values = Array.from({ length: 24 }, () => Math.random());
+      this.$store.commit("data/set_metric_data", {
+        name: "Twitch Frequency",
+        data: values,
+      });
+      values = Array.from({ length: 24 }, () => Math.random());
       this.$store.commit("data/set_metric_data", {
         name: "Twitch Force",
         data: values,
       });
 
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 200));
+      values = Array.from({ length: 24 }, () => Math.random());
       this.$store.commit("data/set_metric_data", {
         name: "Twitch Period",
         data: values,
       });
 
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 50));
-      this.$store.commit("data/set_metric_data", {
-        name: "Twitch Frequency",
-        data: values,
-      });
-
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
+      values = Array.from({ length: 24 }, () => Math.random());
       this.$store.commit("data/set_metric_data", {
         name: "Twitch Width 80",
         data: values,
       });
 
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
+      values = Array.from({ length: 24 }, () => Math.random());
       this.$store.commit("data/set_metric_data", {
         name: "Contraction Velocity",
         data: values,
       });
 
-      values = Array.from({ length: 24 }, () => Math.floor(Math.random() * 100));
+      values = Array.from({ length: 24 }, () => Math.random());
       this.$store.commit("data/set_metric_data", {
         name: "Relaxation Velocity",
         data: values,

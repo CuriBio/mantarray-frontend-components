@@ -79,7 +79,7 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     const init_heatmap_values = {
-      "Twitch Force": {
+      "Twitch Frequency": {
         data: [
           new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
           new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
@@ -87,7 +87,7 @@ describe("HeatMap.vue", () => {
           new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
         ],
       },
-      "Twitch Frequency": {
+      "Twitch Force": {
         data: [
           new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
           new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
@@ -148,7 +148,7 @@ describe("HeatMap.vue", () => {
     });
 
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(15)] },
+      "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(15)] },
     });
 
     await wrapper.find("#input-widget-field-heatmap-max").setValue("15");
@@ -162,8 +162,8 @@ describe("HeatMap.vue", () => {
   test("When a few metric types are entered into the data store, Then the display drop down options match the metric names", async () => {
     // need to commit values to store before mounting
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [[]] },
       "Twitch Frequency": { data: [[]] },
+      "Twitch Force": { data: [[]] },
       "Twitch Period": { data: [[]] },
     });
     const wrapper = mount(HeatMap, {
@@ -185,11 +185,11 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": {
-        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)],
-      },
       "Twitch Frequency": {
         data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)],
+      },
+      "Twitch Force": {
+        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)],
       },
     });
 
@@ -215,10 +215,10 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": {
+      "Twitch Frequency": {
         data: [[]],
       },
-      "Twitch Frequency": {
+      "Twitch Force": {
         data: [[]],
       },
     });
@@ -241,8 +241,8 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
       "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
+      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
     });
 
     // for some reason need to select a metric first before colors are displayed so switching to freq
@@ -270,8 +270,8 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
       "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
+      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
     });
 
     // set metric display to freq
