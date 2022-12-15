@@ -11,7 +11,7 @@ const default_state = {
   // plate_waveforms: 24 element array. each element corresponds to a well in the plate  (all x/y data points for the whole recording)
   plate_waveforms: [],
   heatmap_values: {
-    "Twitch Frequency": { data: [[1]], range_min: 0, range_max: 1 },
+    "Twitch Frequency": { data: [[100]], range_min: 0, range_max: 1 },
     "Twitch Force": { data: [[0]], range_min: 0, range_max: 1 },
     // "Twitch Period": { data: [], range_min: 0, range_max: 100 },
     // "Twitch Width 80": { data: [], range_min: 0, range_max: 100 },
