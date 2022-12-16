@@ -185,11 +185,11 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Force": {
-        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)],
-      },
       "Twitch Frequency": {
         data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)],
+      },
+      "Twitch Force": {
+        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)],
       },
     });
 
