@@ -205,7 +205,7 @@ export default {
       checkbox_state: false,
       color_theme_idx: 0,
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
-      metric_selection_idx: 0,
+      metric_selection_idx: 1,
       max_min_placeholder: { min: 0, max: 1 },
     };
   },
@@ -221,7 +221,12 @@ export default {
     }),
     ...mapState("playback", ["playback_state"]),
     metric_names: function () {
-      return Object.keys(this.well_values);
+      // this is needed because the order of metrics in the desktop app is different from the FE tests.
+      const temp = Object.keys(this.well_values);
+      const default_metric_index = temp.indexOf("Twitch Frequency");
+      temp[default_metric_index] = temp[0];
+      temp[0] = "Twitch Frequency";
+      return temp;
     },
     ...mapState("gradient", ["gradients", "gradient_theme_idx", "gradient_range_min", "gradient_range_max"]),
     ...mapGetters("gradient", {
