@@ -222,8 +222,8 @@ export default {
     ...mapState("playback", ["playback_state"]),
     metric_names: function () {
       // Without this sorting the values will be unpredictable
-      // The list for accesing metric name is not passed with a consistent order.
-      // The order for the mataray app and fe tests is different.
+      // The list for accessing metric name is not passed with a consistent order.
+      // The order for the Mantarray app and fe tests is different.
       const temp = Object.keys(this.well_values);
       const default_metric_index = temp.indexOf("Twitch Frequency");
       temp[default_metric_index] = temp[0];
