@@ -46,12 +46,13 @@ export default {
     deltaT() {
       let values = Array.from({ length: 24 }, () => Math.random());
       this.$store.commit("data/set_metric_data", {
-        name: "Twitch Frequency",
+        name: "Twitch Force",
         data: values,
       });
+
       values = Array.from({ length: 24 }, () => Math.random());
       this.$store.commit("data/set_metric_data", {
-        name: "Twitch Force",
+        name: "Twitch Frequency",
         data: values,
       });
 

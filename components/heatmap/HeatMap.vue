@@ -205,7 +205,7 @@ export default {
       checkbox_state: false,
       color_theme_idx: 0,
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
-      metric_selection_idx: 1,
+      metric_selection_idx: 0,
       max_min_placeholder: { min: 0, max: 1 },
     };
   },
@@ -221,11 +221,14 @@ export default {
     }),
     ...mapState("playback", ["playback_state"]),
     metric_names: function () {
-      // this is needed because the order of metrics in the desktop app is different from the FE tests.
+      // Without this sorting the values will be unpredictable
+      // The list for accesing metric name is not passed with a consistent order.
+      // The order for the mataray app and fe tests is different.
       const temp = Object.keys(this.well_values);
       const default_metric_index = temp.indexOf("Twitch Frequency");
       temp[default_metric_index] = temp[0];
       temp[0] = "Twitch Frequency";
+      console.log(temp);
       return temp;
     },
     ...mapState("gradient", ["gradients", "gradient_theme_idx", "gradient_range_min", "gradient_range_max"]),
@@ -403,6 +406,7 @@ export default {
 
       // reset display dropdown
       this.metric_selection_changed(0);
+      console.log(this.metric_names[this.metric_selection_idx]);
       this.$store.commit("heatmap/set_display_option", this.metric_names[this.metric_selection_idx]);
       this.$store.commit("heatmap/set_display_option_idx", this.metric_selection_idx);
 
