@@ -228,7 +228,6 @@ export default {
       const default_metric_index = temp.indexOf("Twitch Frequency");
       temp[default_metric_index] = temp[0];
       temp[0] = "Twitch Frequency";
-      console.log(temp);
       return temp;
     },
     ...mapState("gradient", ["gradients", "gradient_theme_idx", "gradient_range_min", "gradient_range_max"]),
@@ -406,7 +405,6 @@ export default {
 
       // reset display dropdown
       this.metric_selection_changed(0);
-      console.log(this.metric_names[this.metric_selection_idx]);
       this.$store.commit("heatmap/set_display_option", this.metric_names[this.metric_selection_idx]);
       this.$store.commit("heatmap/set_display_option_idx", this.metric_selection_idx);
 
