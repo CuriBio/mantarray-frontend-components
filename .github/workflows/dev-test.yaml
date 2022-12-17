@@ -146,7 +146,7 @@ jobs:
       - name: Upload coverage to Codecov
         # only upload coverage from fastest job
         if: matrix.IS_FASTEST_JOB == true
-        uses: codecov/codecov-action@v2.1.0
+        uses: codecov/codecov-action@v3
         timeout-minutes: 1 # Tanner (8/11/20): once fundmental issue with codecov timeout is fixed, remove this line and the next
         continue-on-error: true
         with:
