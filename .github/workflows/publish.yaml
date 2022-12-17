@@ -29,7 +29,7 @@ jobs:
 
       - name: Get Version
         id: package-version
-        uses: notiz-dev/github-action-json-property@v0.1.0
+        uses: notiz-dev/github-action-json-property@v0.2.0
         with:
           path: "package.json"
           prop_path: "version"
@@ -257,14 +257,14 @@ jobs:
 
       - name: Get Version
         id: package-version
-        uses: notiz-dev/github-action-json-property@v0.1.0
+        uses: notiz-dev/github-action-json-property@v0.2.0
         with:
           path: "package.json"
           prop_path: "version"
 
       - name: Get Package Name
         id: package-name
-        uses: notiz-dev/github-action-json-property@v0.1.0
+        uses: notiz-dev/github-action-json-property@v0.2.0
         with:
           path: "package.json"
           prop_path: "name"
@@ -309,7 +309,7 @@ jobs:
 
       - name: Get Version
         id: package-version
-        uses: notiz-dev/github-action-json-property@v0.1.0
+        uses: notiz-dev/github-action-json-property@v0.2.0
         with:
           path: "package.json"
           prop_path: "version"
