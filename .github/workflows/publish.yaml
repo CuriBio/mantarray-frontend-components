@@ -29,7 +29,7 @@ jobs:
 
       - name: Get Version
         id: package-version
-        uses: notiz-dev/github-action-json-property@v0.1.0
+        uses: notiz-dev/github-action-json-property@v0.2.0
         with:
           path: "package.json"
           prop_path: "version"
@@ -99,7 +99,7 @@ jobs:
           chromedriver --version
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
-        uses: actions/cache@v3.0.6
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -109,7 +109,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
 
       - name: Cache Python modules # needed for pre-commit
-        uses: actions/cache@v3.0.6
+        uses: actions/cache@v3
         env:
           cache-name: cache-python-modules
         with:
@@ -119,7 +119,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-
 
       - name: Cache Pre-commit hooks
-        uses: actions/cache@v3.0.6
+        uses: actions/cache@v3
         env:
           cache-name: cache-pre-commit-hooks
         with:
@@ -154,7 +154,7 @@ jobs:
         run: pre-commit run git-dirty -a
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist--${{ matrix.os }}--${{ matrix.node-version }}
           path: dist/*
@@ -186,7 +186,7 @@ jobs:
           scope: "@curi-bio-ci"
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
-        uses: actions/cache@v3.0.6
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -208,7 +208,7 @@ jobs:
           npm --version
 
       - name: Download built dist folder from previous step
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: dist--${{ matrix.os }}--${{ matrix.node-version }}
           path: dist
@@ -257,14 +257,14 @@ jobs:
 
       - name: Get Version
         id: package-version
-        uses: notiz-dev/github-action-json-property@v0.1.0
+        uses: notiz-dev/github-action-json-property@v0.2.0
         with:
           path: "package.json"
           prop_path: "version"
 
       - name: Get Package Name
         id: package-name
-        uses: notiz-dev/github-action-json-property@v0.1.0
+        uses: notiz-dev/github-action-json-property@v0.2.0
         with:
           path: "package.json"
           prop_path: "name"
@@ -309,7 +309,7 @@ jobs:
 
       - name: Get Version
         id: package-version
-        uses: notiz-dev/github-action-json-property@v0.1.0
+        uses: notiz-dev/github-action-json-property@v0.2.0
         with:
           path: "package.json"
           prop_path: "version"
