@@ -154,7 +154,7 @@ jobs:
         run: pre-commit run git-dirty -a
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist--${{ matrix.os }}--${{ matrix.node-version }}
           path: dist/*
