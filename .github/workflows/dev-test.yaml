@@ -72,24 +72,20 @@ jobs:
           chromedriver --version
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
-        uses: actions/cache@v3.0.6
-        env:
-          cache-name: cache-node-modules
+        uses: actions/cache@v3
         with:
           path: ./.npm_cache
-          key: ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ matrix.os }}-${{ matrix.node-version }}-build-cache-node-modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
+            ${{ matrix.os }}-${{ matrix.node-version }}-build-cache-node-modules-
 
       - name: Cache Python modules # needed for pre-commit
-        uses: actions/cache@v3.0.6
-        env:
-          cache-name: cache-python-modules
+        uses: actions/cache@v3
         with:
           path: ./.cache/pip
-          key: ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements-dev.txt') }}
+          key: ${{ matrix.os }}-${{ matrix.python-version }}-build-cache-python-modules-${{ hashFiles('**/requirements-dev.txt') }}
           restore-keys: |
-            ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-
+            ${{ matrix.os }}-${{ matrix.python-version }}-build-cache-python-modules-
 
       - name: Cache Pre-commit hooks
         uses: actions/cache@v3.0.6
