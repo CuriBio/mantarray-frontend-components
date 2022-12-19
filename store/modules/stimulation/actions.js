@@ -310,6 +310,7 @@ export default {
       detailed_subprotocols,
       run_until_stopped,
     } = protocol.protocol;
+
     state.current_assignment = { letter, color };
 
     await commit("set_protocol_name", label);
