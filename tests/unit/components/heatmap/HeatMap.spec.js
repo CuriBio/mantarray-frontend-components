@@ -81,18 +81,18 @@ describe("HeatMap.vue", () => {
     const init_heatmap_values = {
       "Twitch Frequency": {
         data: [
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(1),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(2),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(4),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(5),
         ],
       },
       "Twitch Force": {
         data: [
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(10),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(1),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(2),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(4),
+          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(5),
         ],
       },
     };
@@ -105,7 +105,7 @@ describe("HeatMap.vue", () => {
 
     // test default metric selection (Twitch Force)
     expect(mean_text.text()).toBe("Mean of 4 Wells (Hz):");
-    expect(mean_value.text()).toBe("10.000");
+    expect(mean_value.text()).toBe("3.000");
     // switch to Twitch Frequency
     await wrapper.findAll("li").at(0).trigger("click");
 
@@ -114,7 +114,7 @@ describe("HeatMap.vue", () => {
 
     // test new values
     expect(mean_text.text()).toBe("Mean of 4 Wells (µN):");
-    expect(mean_value.text()).toBe("10.000");
+    expect(mean_value.text()).toBe("3.000");
   });
   test("When new max and min values are entered for scale bar and apply button is pressed, Then gradient bar labels update", async () => {
     const wrapper = mount(HeatMap, {
