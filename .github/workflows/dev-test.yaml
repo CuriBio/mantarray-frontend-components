@@ -72,27 +72,23 @@ jobs:
           chromedriver --version
 
       - name: Cache node modules # https://docs.github.com/en/free-pro-team@latest/actions/guides/caching-dependencies-to-speed-up-workflows
-        uses: actions/cache@v3.0.6
-        env:
-          cache-name: cache-node-modules
+        uses: actions/cache@v3
         with:
           path: ./.npm_cache
-          key: ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ matrix.os }}-${{ matrix.node-version }}-build-cache-node-modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ matrix.os }}-${{ matrix.node-version }}-build-${{ env.cache-name }}-
+            ${{ matrix.os }}-${{ matrix.node-version }}-build-cache-node-modules-
 
       - name: Cache Python modules # needed for pre-commit
-        uses: actions/cache@v3.0.6
-        env:
-          cache-name: cache-python-modules
+        uses: actions/cache@v3
         with:
           path: ./.cache/pip
-          key: ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements-dev.txt') }}
+          key: ${{ matrix.os }}-${{ matrix.python-version }}-build-cache-python-modules-${{ hashFiles('**/requirements-dev.txt') }}
           restore-keys: |
-            ${{ matrix.os }}-${{ matrix.python-version }}-build-${{ env.cache-name }}-
+            ${{ matrix.os }}-${{ matrix.python-version }}-build-cache-python-modules-
 
       - name: Cache Pre-commit hooks
-        uses: actions/cache@v3.0.6
+        uses: actions/cache@v3
         env:
           cache-name: cache-pre-commit-hooks
         if: matrix.IS_FASTEST_JOB == true
@@ -105,7 +101,7 @@ jobs:
       - name: Install Node Dependencies and list installed python dev dependencies
         # not sure why CodeBuild fails without the --unsafe-perm flag for npm ci, but it seems to help when running the "prepare" scripts after the install https://stackoverflow.com/questions/18136746/npm-install-failed-with-cannot-run-in-wd
         run: |
-          npm ci --unsafe-perm
+          npm ci --unsafe-perm --cache .npm_cache/
           pip freeze
 
       - name: Run pre-commit hooks
@@ -150,7 +146,7 @@ jobs:
       - name: Upload coverage to Codecov
         # only upload coverage from fastest job
         if: matrix.IS_FASTEST_JOB == true
-        uses: codecov/codecov-action@v2.1.0
+        uses: codecov/codecov-action@v3
         timeout-minutes: 1 # Tanner (8/11/20): once fundmental issue with codecov timeout is fixed, remove this line and the next
         continue-on-error: true
         with:
@@ -162,7 +158,7 @@ jobs:
 
       - name: Archive visual regression
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: visual-regression-screenshots--${{ matrix.os }}--${{ matrix.node-version }}
           path: "tests/e2e/screenshots/**/*"
