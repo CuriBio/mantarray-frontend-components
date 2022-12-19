@@ -113,14 +113,14 @@ export default {
     update_protocols() {
       this.protocol_list = this.$store.getters["stimulation/get_protocols"];
     },
-    selected_protocol_change(idx) {
+    async selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
       const selected_protocol = this.protocol_list[idx];
 
       if (idx === 0) {
         this.set_edit_mode_off();
         this.reset_protocol_editor();
-      } else this.edit_selected_protocol(selected_protocol);
+      } else await this.edit_selected_protocol(selected_protocol);
 
       this.$emit("handle_selection_change", selected_protocol);
     },
