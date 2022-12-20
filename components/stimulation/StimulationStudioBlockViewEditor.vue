@@ -203,10 +203,7 @@ export default {
         this.protocol_name = "";
         this.rest_duration = "";
         this.name_validity = "";
-      } else if (
-        mutation.type === "stimulation/set_imported_protocol" ||
-        mutation.type === "stimulation/set_new_protocol"
-      ) {
+      } else if (mutation.type === "stimulation/set_new_protocol") {
         this.update_protocols();
       } else if (mutation.type === "stimulation/set_edit_mode") {
         this.update_protocols();
