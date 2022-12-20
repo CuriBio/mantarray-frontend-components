@@ -42,7 +42,7 @@ export async function call_axios_get_from_vuex(url, action_context, params = {})
           `The installer can be downloaded here: https://downloads.curibio.com/software/MantarrayController-Setup-prod-${version}.exe`,
         { root: true }
       );
-    } else if (action_context.rootState.flask.status_uuid === STATUS.MESSAGE.SERVER_STILL_INITIALIZING) {
+    } else if (action_context.rootState.flask.status_uuid === STATUS.MESSAGE.SERVER_BOOTING_UP) {
       return error;
     }
     if (error.response === undefined || error.response.status !== 401) {

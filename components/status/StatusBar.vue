@@ -291,8 +291,9 @@ export default {
     },
     is_initializing: function () {
       return [
-        STATUS.MESSAGE.SERVER_READY,
+        STATUS.MESSAGE.SERVER_BOOTING_UP,
         STATUS.MESSAGE.SERVER_STILL_INITIALIZING,
+        STATUS.MESSAGE.SERVER_READY,
         STATUS.MESSAGE.INITIALIZING_INSTRUMENT,
         STATUS.MESSAGE.CALIBRATING, // this is added to be included in specific modal
       ].includes(this.status_uuid);
@@ -389,10 +390,13 @@ export default {
     },
     set_system_specific_status: function (status) {
       switch (status) {
-        case STATUS.MESSAGE.SERVER_READY:
-          this.alert_txt = "Connecting...";
+        case STATUS.MESSAGE.SERVER_BOOTING_UP:
+          this.alert_txt = "Booting Up...";
           break;
         case STATUS.MESSAGE.SERVER_STILL_INITIALIZING:
+          this.alert_txt = "Connecting...";
+          break;
+        case STATUS.MESSAGE.SERVER_READY:
           this.alert_txt = "Connecting...";
           break;
         case STATUS.MESSAGE.INITIALIZING_INSTRUMENT:

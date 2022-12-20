@@ -8,7 +8,7 @@ import { STATUS } from "./enums";
 const default_state = {
   port: 4567, // http://localhost:4567/
   status_ping_interval_id: null,
-  status_uuid: STATUS.MESSAGE.SERVER_STILL_INITIALIZING,
+  status_uuid: STATUS.MESSAGE.SERVER_BOOTING_UP,
   simulation_mode: false,
   barcode_manual_mode: false,
   ignore_next_system_status_if_matching_this_status: null,
