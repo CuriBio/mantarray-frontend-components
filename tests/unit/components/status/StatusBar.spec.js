@@ -61,6 +61,7 @@ describe("StatusWidget.vue", () => {
     });
     //add test to check that false = not visible
     test.each([
+      ["SERVER_BOOTING_UP", "System status: Booting Up..."],
       ["SERVER_STILL_INITIALIZING", "System status: Connecting..."],
       ["SERVER_READY", "System status: Connecting..."],
       ["INITIALIZING_INSTRUMENT", "System status: Initializing..."],
@@ -113,7 +114,7 @@ describe("StatusWidget.vue", () => {
           store,
           localVue,
         });
-        expect(wrapper.find(text_selector).text()).toBe("System status: Connecting..."); // initial status
+        expect(wrapper.find(text_selector).text()).toBe("System status: Booting Up..."); // initial status
         await store.commit("settings/set_shutdown_error_status", { error_type });
         expect(wrapper.find(text_selector).text()).toBe(`System status: Error Occurred`);
       }
@@ -127,7 +128,7 @@ describe("StatusWidget.vue", () => {
         localVue,
       });
 
-      expect(wrapper.find(text_selector).text()).toBe("System status: Connecting..."); // initial status
+      expect(wrapper.find(text_selector).text()).toBe("System status: Booting Up..."); // initial status
       await store.commit("settings/set_shutdown_error_status", { error_type: "UnknownError" });
       expect(wrapper.find(text_selector).text()).toBe("System status: Error Occurred");
     });
@@ -208,6 +209,7 @@ describe("StatusWidget.vue", () => {
       });
     });
     test.each([
+      "SERVER_BOOTING_UP",
       "SERVER_STILL_INITIALIZING",
       "SERVER_READY",
       "INITIALIZING_INSTRUMENT",
@@ -317,8 +319,9 @@ describe("StatusWidget.vue", () => {
     );
 
     test.each([
-      ["SERVER_READY", "initializing"],
+      ["SERVER_BOOTING_UP", "initializing"],
       ["SERVER_STILL_INITIALIZING", "initializing"],
+      ["SERVER_READY", "initializing"],
       ["INITIALIZING_INSTRUMENT", "initializing"],
       ["CALIBRATING", "initializing"],
       ["CHECKING_FOR_UPDATES", "initializing"],

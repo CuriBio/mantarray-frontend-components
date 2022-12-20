@@ -36,22 +36,22 @@ describe("axios_helper.call_axios_get_from_vuex", () => {
     sandbox.restore();
   });
   test.each([["flask/get_flask_action_context"], ["playback/get_playback_action_context"]])(
-    "Given that the context variable is obtained from %s and /system_status is mocked to return 404 and the SystemState is SERVER_STILL_INITIALIZING and a interval ID is committed to the store for status pinging, When the function is called with the URL /system_status, Then System State remains in SERVER_STILL_INITIALIZING (does not change to Error) and the status pinging interval does not get cleared",
+    "Given that the context variable is obtained from %s and /system_status is mocked to return 404 and the SystemState is SERVER_BOOTING_UP and a interval ID is committed to the store for status pinging, When the function is called with the URL /system_status, Then System State remains in SERVER_BOOTING_UP (does not change to Error) and the status pinging interval does not get cleared",
     async (context_str) => {
       context = await store.dispatch(context_str);
 
       mocked_axios.onGet(system_status_regexp).reply(404);
       const expected_interval_id = 5;
-      store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_STILL_INITIALIZING);
+      store.commit("flask/set_status_uuid", STATUS.MESSAGE.SERVER_BOOTING_UP);
       store.commit("flask/set_status_ping_interval_id", expected_interval_id);
 
       // confirm pre-conditions
-      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.SERVER_STILL_INITIALIZING);
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.SERVER_BOOTING_UP);
 
       await call_axios_get_from_vuex("http://localhost:4567/system_status", context);
 
       expect(store.state.flask.status_ping_interval_id).toStrictEqual(expected_interval_id);
-      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.SERVER_STILL_INITIALIZING);
+      expect(store.state.flask.status_uuid).toStrictEqual(STATUS.MESSAGE.SERVER_BOOTING_UP);
     }
   );
   describe("Given the SYSTEM STATE is set to SERVER_READY", () => {
