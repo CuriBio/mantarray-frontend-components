@@ -57,7 +57,7 @@
     "@fortawesome/fontawesome-svg-core": "~1.2.27",
     "@fortawesome/free-brands-svg-icons": "~5.15.1",
     "@fortawesome/free-regular-svg-icons": "~5.15.1",
-    "@fortawesome/free-solid-svg-icons": "~5.15.1",
+    "@fortawesome/free-solid-svg-icons": "~6.2.1",
     "@vue/cli-service": "^4.4.6",
     "@vue/test-utils": "^1.1.1",
     "axios-mock-adapter": "^1.18.1",
