@@ -7,6 +7,7 @@ Changelog for Mantarray Frontend Components
 Fixed:
 ^^^^^^
 - Fixed websocket handler to match the data_type returned from BE for local data analysis
+- Importing multiple stimulation protocols in one file will now populate dropdown correctly
 
 Changed:
 ^^^^^^^

@@ -193,17 +193,14 @@ export default {
     download_link.remove();
   },
 
-  async add_imported_protocol({ commit, dispatch, getters }, { protocols }) {
-    await commit("set_edit_mode_off");
-
+  async add_imported_protocol({ commit, getters }, { protocols }) {
     for (const { protocol } of protocols) {
-      const assignment = await getters["get_next_protocol"];
-      const { color, letter } = assignment;
+      // needs to be set to off every iteration because an action elsewhere triggers it on
+      await commit("set_edit_mode_off");
+      const { color, letter } = await getters["get_next_protocol"];
       const imported_protocol = { color, letter, label: protocol.name, protocol };
-
       await commit("set_imported_protocol", imported_protocol);
     }
-    await dispatch("edit_selected_protocol", protocols[protocols.length - 1]);
   },
   async add_saved_protocol({ commit, state, dispatch }) {
     const { protocol_editor, edit_mode, protocol_list } = state;
@@ -305,6 +302,7 @@ export default {
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {
     const { label, letter, color } = protocol;
+
     const {
       stimulation_type,
       time_unit,
@@ -312,6 +310,7 @@ export default {
       detailed_subprotocols,
       run_until_stopped,
     } = protocol.protocol;
+
     state.current_assignment = { letter, color };
 
     await commit("set_protocol_name", label);
