@@ -9,6 +9,10 @@ Fixed:
 - Fixed websocket handler to match the data_type returned from BE for local data analysis
 - Importing multiple stimulation protocols in one file will now populate dropdown correctly
 
+Changed:
+^^^^^^^
+- Changed Heatmap default to a range of 0-1 Hz and changed default metric to Twitch Frequency
+
 
 1.3.1 (2022-12-13)
 ------------------

@@ -188,7 +188,7 @@ export default {
     return {
       checkbox_options: [{ text: "", value: "autoscale" }],
       label: "",
-      keyplaceholder: "Twitch Force",
+      keyplaceholder: "Twitch Frequency",
       error_text: "An ID is required",
       entry_width: 201,
       disallow_entry: false,
@@ -199,14 +199,14 @@ export default {
       max_value_error_msg: "",
       min_value_error_msg: "",
       autoscale: false,
-      upper: 100,
+      upper: 1,
       lower: 0,
       checkbox_reset: false,
       checkbox_state: false,
       color_theme_idx: 0,
       playback_state_enums: playback_module.ENUMS.PLAYBACK_STATES,
       metric_selection_idx: 0,
-      max_min_placeholder: { min: 0, max: 100 },
+      max_min_placeholder: { min: 0, max: 1 },
     };
   },
   computed: {
@@ -406,10 +406,10 @@ export default {
       // reset gradient range, min/max input text boxes are subscribed to this mutation will update themselves
       this.$store.commit("gradient/reset_gradient_range", {
         min: 0,
-        max: 100,
+        max: 1,
       });
       // reset autoscale check box and disable setting for inputs
-      this.on_update_maximum(100);
+      this.on_update_maximum(1);
       this.on_update_minimum(0);
       this.checkbox_reset = true;
       this.autoscale = false;

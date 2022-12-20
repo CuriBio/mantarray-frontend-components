@@ -220,8 +220,8 @@ export default {
   created: async function () {
     // init store values needed in pages here since this side bar is only created once
     this.$store.commit("data/set_heatmap_values", {
-      "Twitch Force": { data: [...Array(24)].map((_) => Array(0)) },
       "Twitch Frequency": { data: [...Array(24)].map((_) => Array(0)) },
+      "Twitch Force": { data: [...Array(24)].map((_) => Array(0)) },
     });
 
     this.$store.commit("waveform/set_x_axis_zoom_idx", 2);

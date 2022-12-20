@@ -7,7 +7,7 @@ import { METRIC_UNITS } from "./enums";
 const default_state = {
   selected_wells: [],
   well_selection_statuses: new Array(24).fill(false),
-  display_option: "Twitch Force",
+  display_option: "Twitch Frequency",
   display_option_idx: 0,
   auto_scale: false,
 };
