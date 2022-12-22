@@ -429,10 +429,10 @@ export default {
   computed: {
     total_pulse_duration: function () {
       return this.pulse_type === "Monophasic"
-        ? Number(this.pulse_settings.phase_one_duration)
-        : Number(this.pulse_settings.phase_one_duration) +
-            Number(this.pulse_settings.phase_two_duration) +
-            Number(this.pulse_settings.interphase_interval);
+        ? +this.pulse_settings.phase_one_duration
+        : +this.pulse_settings.phase_one_duration +
+            +this.pulse_settings.phase_two_duration +
+            +this.pulse_settings.interphase_interval;
     },
     calculated_delay: function () {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
@@ -492,7 +492,7 @@ export default {
     close(idx) {
       const button_label = this.button_labels[idx];
       this.pulse_settings.postphase_interval = this.calculated_delay;
-      this.pulse_settings.num_cycles = Number(this.num_cycles);
+      this.pulse_settings.num_cycles = +this.num_cycles;
       this.pulse_settings.frequency = this.input_pulse_frequency;
       this.$emit("close", button_label, this.pulse_settings, this.selected_color);
     },
@@ -628,10 +628,8 @@ export default {
     check_active_duration() {
       const value_str = this.pulse_settings.total_active_duration.duration;
       const value = +value_str;
-
       const selected_unit = this.time_units[this.active_duration_idx];
       const value_in_millis = value * TIME_CONVERSION_TO_MILLIS[selected_unit];
-
       // if user continues with letter in one of the duration input fields, total_pulse_duration will be NaN, so change it to 0
       const min_dur_allowed = Math.max(MIN_SUBPROTOCOL_DURATION_MS, this.total_pulse_duration || 0);
 
@@ -665,7 +663,7 @@ export default {
       } else {
         this.err_msgs[label] = this.invalid_err_msg.valid;
         this.input_pulse_frequency = value;
-        this.max_pulse_duration_for_freq = Math.min(50, Math.trunc(1000 / this.input_pulse_frequency));
+        this.max_pulse_duration_for_freq = Math.min(50, Math.trunc(1000 / this.input_pulse_frequency) * 0.8);
         this.invalid_err_msg.max_pulse_duration = `Duration must be <= ${this.max_pulse_duration_for_freq}ms`;
         this.check_pulse_duration_validity(); // Need to recheck pulse dur after a new valid frequency is entered
       }

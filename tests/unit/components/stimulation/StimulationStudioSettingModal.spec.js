@@ -191,7 +191,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
 
     const target_input_field = wrapper.find("#input-widget-field-duration");
     await target_input_field.setValue("11");
-    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Duration must be <= 10ms");
+    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Duration must be <= 8ms");
   });
 
   test("When a user adds a value to the total active duration, Then the value must be a number greater than the min allowed subprotocol duration", async () => {
