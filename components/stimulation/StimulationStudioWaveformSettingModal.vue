@@ -388,6 +388,7 @@ export default {
         max_voltage: "Must be within +/- 1200",
         frequency: "Must be a non-zero value <= 100",
         num_cycles: "Must be a whole number > 0",
+        max_duty: "Max duty cycle limit is 80%",
       },
       err_msgs: {
         phase_one_duration: "",
@@ -429,10 +430,10 @@ export default {
   computed: {
     total_pulse_duration: function () {
       return this.pulse_type === "Monophasic"
-        ? Number(this.pulse_settings.phase_one_duration)
-        : Number(this.pulse_settings.phase_one_duration) +
-            Number(this.pulse_settings.phase_two_duration) +
-            Number(this.pulse_settings.interphase_interval);
+        ? +this.pulse_settings.phase_one_duration
+        : +this.pulse_settings.phase_one_duration +
+            +this.pulse_settings.phase_two_duration +
+            +this.pulse_settings.interphase_interval;
     },
     calculated_delay: function () {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
@@ -449,6 +450,19 @@ export default {
     },
     color_to_display: function () {
       return "background-color: " + this.selected_color;
+    },
+    active_duration_in_millis: function () {
+      const value_str =
+        this.pulse_settings && this.pulse_settings.total_active_duration
+          ? this.pulse_settings.total_active_duration.duration
+          : "";
+
+      const value = +value_str;
+      const selected_unit = this.time_units[this.active_duration_idx];
+      return value * TIME_CONVERSION_TO_MILLIS[selected_unit];
+    },
+    calculated_duty_cycle: function () {
+      return +this.total_pulse_duration / Math.trunc(1000 / +this.input_pulse_frequency);
     },
   },
   watch: {
@@ -492,7 +506,7 @@ export default {
     close(idx) {
       const button_label = this.button_labels[idx];
       this.pulse_settings.postphase_interval = this.calculated_delay;
-      this.pulse_settings.num_cycles = Number(this.num_cycles);
+      this.pulse_settings.num_cycles = +this.num_cycles;
       this.pulse_settings.frequency = this.input_pulse_frequency;
       this.$emit("close", button_label, this.pulse_settings, this.selected_color);
     },
@@ -593,6 +607,7 @@ export default {
           this.check_pulse_frequency();
         }
       }
+      this.check_duty_cycle();
       this.handle_all_valid();
     },
     check_pulse_duration_validity() {
@@ -600,6 +615,26 @@ export default {
       if (this.pulse_type === "Biphasic") {
         this.check_pulse_duration("phase_two_duration");
         this.check_pulse_duration("interphase_interval");
+      }
+    },
+    check_duty_cycle: function () {
+      const related_inputs = [
+        "phase_one_duration",
+        "phase_two_duration",
+        "interphase_interval",
+        "pulse_frequency",
+      ];
+
+      const previous_errors = related_inputs.filter(
+        (label) => this.err_msgs[label] != this.invalid_err_msg.valid
+      );
+
+      for (const label of related_inputs) {
+        if (this.calculated_duty_cycle > 0.8 && previous_errors.length === 0) {
+          this.err_msgs[label] = this.invalid_err_msg.max_duty;
+        } else if (this.err_msgs[label] == this.invalid_err_msg.max_duty) {
+          this.err_msgs[label] = this.invalid_err_msg.valid;
+        }
       }
     },
     handle_all_valid() {
@@ -628,9 +663,7 @@ export default {
     check_active_duration() {
       const value_str = this.pulse_settings.total_active_duration.duration;
       const value = +value_str;
-
-      const selected_unit = this.time_units[this.active_duration_idx];
-      const value_in_millis = value * TIME_CONVERSION_TO_MILLIS[selected_unit];
+      const value_in_millis = this.active_duration_in_millis;
 
       // if user continues with letter in one of the duration input fields, total_pulse_duration will be NaN, so change it to 0
       const min_dur_allowed = Math.max(MIN_SUBPROTOCOL_DURATION_MS, this.total_pulse_duration || 0);
