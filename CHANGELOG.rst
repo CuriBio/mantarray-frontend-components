@@ -7,6 +7,7 @@ Changelog for Mantarray Frontend Components
 Added:
 ^^^^^^
 - Booting up state which will now ignore /system_status errors instead of server initializing
+- Check to pulse setting modal in stimulation studio to limit max duty cycle to 80%
 
 Changed:
 ^^^^^^^^

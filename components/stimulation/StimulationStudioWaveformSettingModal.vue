@@ -624,15 +624,17 @@ export default {
         "interphase_interval",
         "pulse_frequency",
       ];
-
+      // only check this after all other errors have been cleared
       const previous_errors = related_inputs.filter(
         (label) => this.err_msgs[label] != this.invalid_err_msg.valid
       );
 
       for (const label of related_inputs) {
         if (this.calculated_duty_cycle > 0.8 && previous_errors.length === 0) {
+          // if no other errors and duty cycle is greater than .8
           this.err_msgs[label] = this.invalid_err_msg.max_duty;
         } else if (this.err_msgs[label] == this.invalid_err_msg.max_duty) {
+          // remove error messages if they were previously set with duty cycle limit and no longer needed
           this.err_msgs[label] = this.invalid_err_msg.valid;
         }
       }

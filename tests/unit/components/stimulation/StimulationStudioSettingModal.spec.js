@@ -385,4 +385,58 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     await wrapper.find("#input-widget-field-num-cycles").setValue("5");
     expect(wrapper.vm.calculated_active_dur).toBe(2.5);
   });
+
+  test("When a user changes a duration or frequency value, Then the duty cycle limit will be checked against pulse duration", async () => {
+    const wrapper = mount(StimulationStudioWaveformSettingModal, {
+      store,
+      localVue,
+      propsData: {
+        stimulation_type: "Current",
+        pulse_type: "Monophasic",
+        selected_pulse_settings: test_monophasic_pulse_settings,
+        current_color: "hsla(50, 100%, 50%, 1)",
+      },
+    });
+
+    await wrapper.find("#input-widget-field-duration").setValue("50");
+    await wrapper.find("#input-widget-field-charge").setValue("50");
+    await wrapper.find("#input-widget-field-pulse-frequency").setValue("20");
+    await wrapper.find("#input-widget-field-total-active-duration").setValue("1000");
+
+    await wrapper.find("#input-widget-field-pulse-frequency").setValue("1");
+    for (const label of ["phase_one_duration", "pulse_frequency"]) {
+      expect(wrapper.vm.err_msgs[label]).toBe("");
+    }
+
+    await wrapper.find("#input-widget-field-pulse-frequency").setValue("20");
+    for (const label of ["phase_one_duration", "pulse_frequency"]) {
+      expect(wrapper.vm.err_msgs[label]).toBe("Max duty cycle limit is 80%");
+    }
+
+    await wrapper.find("#input-widget-field-duration").setValue("5");
+    for (const label of ["phase_one_duration", "pulse_frequency"]) {
+      expect(wrapper.vm.err_msgs[label]).toBe("");
+    }
+  });
+
+  test("When a user changes a duration or frequency value, Then max duty cycle check will only be checked if error message isn't already present", async () => {
+    const wrapper = mount(StimulationStudioWaveformSettingModal, {
+      store,
+      localVue,
+      propsData: {
+        stimulation_type: "Current",
+        pulse_type: "Monophasic",
+        selected_pulse_settings: test_monophasic_pulse_settings,
+        current_color: "hsla(50, 100%, 50%, 1)",
+      },
+    });
+
+    await wrapper.find("#input-widget-field-duration").setValue("55");
+    await wrapper.find("#input-widget-field-charge").setValue("50");
+    await wrapper.find("#input-widget-field-pulse-frequency").setValue("200");
+    await wrapper.find("#input-widget-field-total-active-duration").setValue("1000");
+
+    expect(wrapper.vm.err_msgs["phase_one_duration"]).toBe("Duration must be <= 50ms");
+    expect(wrapper.vm.err_msgs["pulse_frequency"]).toBe("Must be a non-zero value <= 100");
+  });
 });
