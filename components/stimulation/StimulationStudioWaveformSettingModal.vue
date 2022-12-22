@@ -388,7 +388,6 @@ export default {
         max_voltage: "Must be within +/- 1200",
         frequency: "Must be a non-zero value <= 100",
         num_cycles: "Must be a whole number > 0",
-        max_duty: "Max duty cycle limit is 80%",
       },
       err_msgs: {
         phase_one_duration: "",
@@ -450,19 +449,6 @@ export default {
     },
     color_to_display: function () {
       return "background-color: " + this.selected_color;
-    },
-    active_duration_in_millis: function () {
-      const value_str =
-        this.pulse_settings && this.pulse_settings.total_active_duration
-          ? this.pulse_settings.total_active_duration.duration
-          : "";
-
-      const value = +value_str;
-      const selected_unit = this.time_units[this.active_duration_idx];
-      return value * TIME_CONVERSION_TO_MILLIS[selected_unit];
-    },
-    calculated_duty_cycle: function () {
-      return +this.total_pulse_duration / Math.trunc(1000 / +this.input_pulse_frequency);
     },
   },
   watch: {
@@ -607,7 +593,6 @@ export default {
           this.check_pulse_frequency();
         }
       }
-      this.check_duty_cycle();
       this.handle_all_valid();
     },
     check_pulse_duration_validity() {
@@ -615,28 +600,6 @@ export default {
       if (this.pulse_type === "Biphasic") {
         this.check_pulse_duration("phase_two_duration");
         this.check_pulse_duration("interphase_interval");
-      }
-    },
-    check_duty_cycle: function () {
-      const related_inputs = [
-        "phase_one_duration",
-        "phase_two_duration",
-        "interphase_interval",
-        "pulse_frequency",
-      ];
-      // only check this after all other errors have been cleared
-      const previous_errors = related_inputs.filter(
-        (label) => this.err_msgs[label] != this.invalid_err_msg.valid
-      );
-
-      for (const label of related_inputs) {
-        if (this.calculated_duty_cycle > 0.8 && previous_errors.length === 0) {
-          // if no other errors and duty cycle is greater than .8
-          this.err_msgs[label] = this.invalid_err_msg.max_duty;
-        } else if (this.err_msgs[label] == this.invalid_err_msg.max_duty) {
-          // remove error messages if they were previously set with duty cycle limit and no longer needed
-          this.err_msgs[label] = this.invalid_err_msg.valid;
-        }
       }
     },
     handle_all_valid() {
@@ -665,8 +628,8 @@ export default {
     check_active_duration() {
       const value_str = this.pulse_settings.total_active_duration.duration;
       const value = +value_str;
-      const value_in_millis = this.active_duration_in_millis;
-
+      const selected_unit = this.time_units[this.active_duration_idx];
+      const value_in_millis = value * TIME_CONVERSION_TO_MILLIS[selected_unit];
       // if user continues with letter in one of the duration input fields, total_pulse_duration will be NaN, so change it to 0
       const min_dur_allowed = Math.max(MIN_SUBPROTOCOL_DURATION_MS, this.total_pulse_duration || 0);
 
@@ -700,7 +663,7 @@ export default {
       } else {
         this.err_msgs[label] = this.invalid_err_msg.valid;
         this.input_pulse_frequency = value;
-        this.max_pulse_duration_for_freq = Math.min(50, Math.trunc(1000 / this.input_pulse_frequency));
+        this.max_pulse_duration_for_freq = Math.min(50, Math.trunc(1000 / this.input_pulse_frequency) * 0.8);
         this.invalid_err_msg.max_pulse_duration = `Duration must be <= ${this.max_pulse_duration_for_freq}ms`;
         this.check_pulse_duration_validity(); // Need to recheck pulse dur after a new valid frequency is entered
       }
