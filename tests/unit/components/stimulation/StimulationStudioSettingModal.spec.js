@@ -438,5 +438,13 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
 
     expect(wrapper.vm.err_msgs["phase_one_duration"]).toBe("Duration must be <= 50ms");
     expect(wrapper.vm.err_msgs["pulse_frequency"]).toBe("Must be a non-zero value <= 100");
+
+    await wrapper.find("#input-widget-field-pulse-frequency").setValue("100");
+    expect(wrapper.vm.err_msgs["phase_one_duration"]).toBe("Duration must be <= 10ms");
+    expect(wrapper.vm.err_msgs["pulse_frequency"]).toBe("");
+
+    await wrapper.find("#input-widget-field-duration").setValue("10");
+    expect(wrapper.vm.err_msgs["phase_one_duration"]).toBe("Max duty cycle limit is 80%");
+    expect(wrapper.vm.err_msgs["pulse_frequency"]).toBe("Max duty cycle limit is 80%");
   });
 });
