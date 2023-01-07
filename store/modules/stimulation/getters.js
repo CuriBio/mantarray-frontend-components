@@ -20,7 +20,8 @@ export default {
 
     if (!state.edit_mode.status) {
       const letter = get_protocol_editor_letter(protocol_list);
-      const offset = protocol_list.length > 24 ? 24 * Math.floor(protocol_list.length / 24) + 1 : 1;
+      // loop through again once protocol list becomes greater than 24
+      const offset = protocol_list.length > 26 ? 26 * Math.floor(protocol_list.length / 26) + 1 : 1;
       const color = color_palette[protocol_list.length - offset];
       state.current_assignment = { letter, color };
       return { color, letter };
@@ -51,6 +52,7 @@ const get_protocol_editor_letter = (list) => {
   if (current_alphabet_idx === 25) {
     letter_assignment = alphabet[0];
   }
+  // add double/triple/etc letters based on number of protocols so it doesn't assign same single letter to protocols
   const num_of_loops = Math.floor(list.length / 27);
   Array(num_of_loops)
     .fill()
@@ -85,4 +87,6 @@ const color_palette = [
   "#00bcd4",
   "#3b77aa",
   "#ae96c0",
+  "#ffeb3b",
+  "#581623",
 ];
