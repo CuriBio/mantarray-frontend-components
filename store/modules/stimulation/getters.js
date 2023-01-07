@@ -1,5 +1,3 @@
-import { generate_random_color } from "@/js_utils/waveform_data_formatter";
-
 // eslint-disable-next-line require-jsdoc
 export function get_default_protocol_editor_state() {
   return {
@@ -22,7 +20,8 @@ export default {
 
     if (!state.edit_mode.status) {
       const letter = get_protocol_editor_letter(protocol_list);
-      const color = get_protocol_editor_color(protocol_list);
+      const offset = protocol_list.length > 24 ? 24 * Math.floor(protocol_list.length / 24) + 1 : 1;
+      const color = color_palette[protocol_list.length - offset];
       state.current_assignment = { letter, color };
       return { color, letter };
     } else if (state.edit_mode.status) {
@@ -41,18 +40,49 @@ export default {
   },
 };
 
-const get_protocol_editor_color = (list) => {
-  const color = generate_random_color(false);
-  const duplicate_color = list.filter((protocol) => protocol.color === color).length > 0;
-
-  return duplicate_color ? get_protocol_editor_color(list) : color;
-};
-
 // TODO Luci, handle if there are more than 26 protocols
 const get_protocol_editor_letter = (list) => {
-  const current_protocol_assignment = list[list.length - 1].letter;
+  // grab just the first letter in case of AA BB CCC DDDD, unlikely but just in case.
+  const current_protocol_assignment = list[list.length - 1].letter[0];
+
   const current_alphabet_idx = alphabet.indexOf(current_protocol_assignment);
-  return alphabet[current_alphabet_idx + 1];
+  let letter_assignment = alphabet[current_alphabet_idx + 1];
+
+  if (current_alphabet_idx === 25) {
+    letter_assignment = alphabet[0];
+  }
+  const num_of_loops = Math.floor(list.length / 27);
+  Array(num_of_loops)
+    .fill()
+    .map(() => (letter_assignment += letter_assignment));
+
+  return letter_assignment;
 };
 
 const alphabet = Array.from(Array(26).keys()).map((i) => String.fromCharCode(65 + i));
+const color_palette = [
+  "#3b77aa",
+  "#45438d",
+  "#6eb394",
+  "#408444",
+  "#e5eb94",
+  "#f9d78c",
+  "#f0a061",
+  "#df6147",
+  "#bd3532",
+  "#801d38",
+  "#632467",
+  "#735d9e",
+  "#7986b5",
+  "#92afce",
+  "#26542e",
+  "#7db76d",
+  "#283578",
+  "#ed8943",
+  "#a92d6c",
+  "#e1abce",
+  "#fffce4",
+  "#00bcd4",
+  "#3b77aa",
+  "#ae96c0",
+];
