@@ -3,7 +3,7 @@ import { createLocalVue } from "@vue/test-utils";
 import * as axios_helpers from "@/js_utils/axios_helpers.js";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
-import { STIM_STATUS } from "../../../store/modules/stimulation/enums";
+import { COLOR_PALETTE, STIM_STATUS } from "../../../store/modules/stimulation/enums";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -180,24 +180,18 @@ describe("store/stimulation", () => {
       ).length;
       expect(protocols).toHaveLength(labeled_protocols);
     });
-
     test("When requesting the next available protocol assignment(color, letter), Then the protocol recieved should be unused and unique", async () => {
-      const { protocol_list } = store.state.stimulation;
-      protocol_list.push({ letter: "B", name: "mock_protocol" });
+      store.state.stimulation.protocol_list = [{ letter: "", color: "", label: "Create New" }];
 
-      const { letter, color } = store.getters["stimulation/get_next_protocol"];
+      Array(26)
+        .fill()
+        .map((_, i) => {
+          const { color, letter } = store.getters["stimulation/get_next_protocol"];
 
-      let check_color_duplicate = false;
-      let check_letter_duplicate = false;
+          store.state.stimulation.protocol_list.push({ color, letter });
 
-      protocol_list.map((protocol) => {
-        const { inner_letter, inner_color } = protocol;
-        if (inner_letter === letter) check_letter_duplicate = true;
-        if (inner_color === color) check_color_duplicate = true;
-      });
-
-      expect(check_color_duplicate).toBe(false);
-      expect(check_letter_duplicate).toBe(false);
+          expect(color).toBe(COLOR_PALETTE[i]);
+        });
     });
 
     test("When there are no saved protocols, Then the letter assigned to new protocol will be A", async () => {
