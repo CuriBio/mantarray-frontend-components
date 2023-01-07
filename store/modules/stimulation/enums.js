@@ -56,3 +56,5 @@ export const COLOR_PALETTE = [
   "#ffeb3b",
   "#581623",
 ];
+
+export const ALPHABET = Array.from(Array(26).keys()).map((i) => String.fromCharCode(65 + i));

@@ -3,7 +3,7 @@ import { createLocalVue } from "@vue/test-utils";
 import * as axios_helpers from "@/js_utils/axios_helpers.js";
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
-import { COLOR_PALETTE, STIM_STATUS } from "../../../store/modules/stimulation/enums";
+import { COLOR_PALETTE, STIM_STATUS, ALPHABET } from "../../../store/modules/stimulation/enums";
 
 describe("store/stimulation", () => {
   const localVue = createLocalVue();
@@ -187,10 +187,32 @@ describe("store/stimulation", () => {
         .fill()
         .map((_, i) => {
           const { color, letter } = store.getters["stimulation/get_next_protocol"];
+          store.state.stimulation.protocol_list.push({ color, letter });
+          expect(color).toBe(COLOR_PALETTE[i]);
+        });
+
+      // expect that double letters will be chosen after initial 26 are used as single characters
+      // reuse color palette every 26
+      Array(26)
+        .fill()
+        .map((_, i) => {
+          const { color, letter } = store.getters["stimulation/get_next_protocol"];
 
           store.state.stimulation.protocol_list.push({ color, letter });
 
           expect(color).toBe(COLOR_PALETTE[i]);
+          expect(letter).toBe(ALPHABET[i] + ALPHABET[i]);
+        });
+      // just ensure it continues to add a letter
+      Array(26)
+        .fill()
+        .map((_, i) => {
+          const { color, letter } = store.getters["stimulation/get_next_protocol"];
+
+          store.state.stimulation.protocol_list.push({ color, letter });
+
+          expect(color).toBe(COLOR_PALETTE[i]);
+          expect(letter).toBe(ALPHABET[i] + ALPHABET[i] + ALPHABET[i]);
         });
     });
 
