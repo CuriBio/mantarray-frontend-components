@@ -19,22 +19,21 @@ export default {
     HeatMap,
   },
   created: function () {
-    const data = [
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
+    const starterData = [
+      new Array(24).fill([0]),
+      new Array(24).fill([0]),
+      new Array(24).fill([0]),
+      new Array(24).fill([0]),
+      new Array(24).fill([0]),
+      new Array(24).fill([0]),
     ];
-
     const heatmap_values = {
-      "Twitch Frequency": { data: [[1]] },
-      "Twitch Force": { data: [[1]] },
-      "Twitch Period": { data: data[1] },
-      "Twitch Width 80": { data: data[1] },
-      "Contraction Velocity": { data: data[1] },
-      "Relaxation Velocity": { data: data[1] },
+      "Twitch Frequency": { data: starterData[0] },
+      "Twitch Force": { data: starterData[1] },
+      "Twitch Period": { data: starterData[2] },
+      "Twitch Width 80": { data: starterData[3] },
+      "Contraction Velocity": { data: starterData[4] },
+      "Relaxation Velocity": { data: starterData[5] },
     };
     this.$store.commit("data/set_heatmap_values", heatmap_values);
   },
