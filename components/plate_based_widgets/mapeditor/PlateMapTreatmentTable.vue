@@ -1,6 +1,16 @@
 <template>
   <div class="div__platemap-treatmenttable-backdrop">
-    <b-table class="b-table__background-container" striped hover :items="items" :fields="fields" />
+    <b-table class="b-table__background-container" :fields="fields" :items="items">
+      <template #head()="data">
+        <div :class="'b-table__th-class'">{{ data.field.label }}</div>
+      </template>
+      <template #cell(name)="data">
+        <div :class="'b-table__td-class'">{{ data.item.name }}</div>
+      </template>
+      <template #cell(age)="data">
+        <div :class="'b-table__td-class'">{{ data.item.age }}</div>
+      </template>
+    </b-table>
   </div>
 </template>
 <script>
@@ -16,12 +26,21 @@ export default {
   props: {},
   data() {
     return {
-      fields: ["first_name", "last_name", "age"],
+      fields: [
+        {
+          key: "name",
+          label: "Name",
+        },
+        {
+          key: "age",
+          label: "Age",
+        },
+      ],
       items: [
-        { isActive: true, age: 40, first_name: "Dickerson", last_name: "Macdonald" },
-        { isActive: false, age: 21, first_name: "Larsen", last_name: "Shaw" },
-        { isActive: false, age: 89, first_name: "Geneva", last_name: "Wilson" },
-        { isActive: true, age: 38, first_name: "Jami", last_name: "Carney" },
+        { age: 40, name: "Dickerson" },
+        { age: 21, name: "Larsen" },
+        { age: 89, name: "Geneva" },
+        { age: 38, name: "Jami" },
       ],
     };
   },
@@ -40,7 +59,6 @@ export default {
   height: 275px;
   visibility: visible;
   border: none;
-  border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
   pointer-events: all;
   display: flex;
@@ -50,10 +68,23 @@ export default {
 }
 .b-table__background-container {
   font-family: Muli;
-  color: #ffff;
   width: 100%;
   position: relative;
   text-align: center;
   height: 100%;
+}
+.b-table__th-class {
+  font-size: 19px;
+  background: black;
+  color: #ffff;
+  width: 100%;
+  position: relative;
+  border: none;
+  height: 30px;
+}
+.b-table__td-class {
+  font-size: 16px;
+  color: #b7b7b7;
+  /* border-bottom: 1px solid #ffff; */
 }
 </style>
