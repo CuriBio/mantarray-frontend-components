@@ -19,7 +19,7 @@ export default {
     HeatMap,
   },
   created: function () {
-    const starterData = [
+    const starter_data = [
       new Array(24).fill([0]),
       new Array(24).fill([0]),
       new Array(24).fill([0]),
@@ -28,12 +28,12 @@ export default {
       new Array(24).fill([0]),
     ];
     const heatmap_values = {
-      "Twitch Frequency": { data: starterData[0] },
-      "Twitch Force": { data: starterData[1] },
-      "Twitch Period": { data: starterData[2] },
-      "Twitch Width 80": { data: starterData[3] },
-      "Contraction Velocity": { data: starterData[4] },
-      "Relaxation Velocity": { data: starterData[5] },
+      "Twitch Frequency": { data: starter_data[0] },
+      "Twitch Force": { data: starter_data[1] },
+      "Twitch Period": { data: starter_data[2] },
+      "Twitch Width 80": { data: starter_data[3] },
+      "Contraction Velocity": { data: starter_data[4] },
+      "Relaxation Velocity": { data: starter_data[5] },
     };
     this.$store.commit("data/set_heatmap_values", heatmap_values);
   },

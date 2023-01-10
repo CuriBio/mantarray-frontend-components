@@ -235,7 +235,7 @@ export default {
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
         const total = well.slice(-MIN_NUM_DATAPOINTS_FOR_MEAN).reduce((a, b) => a + b, 0);
-        const mean = (total / MIN_NUM_DATAPOINTS_FOR_MEAN).toFixed(3);
+        const mean = (total / well.slice(-MIN_NUM_DATAPOINTS_FOR_MEAN).length).toFixed(3);
         const color = this.gradient_map(mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
@@ -249,10 +249,11 @@ export default {
         total += parseFloat(
           this.well_values[this.display_option].data[well_idx]
             .slice(-MIN_NUM_DATAPOINTS_FOR_MEAN)
-            .reduce((a, b) => a + b, 0)
+            .reduce((a, b) => a + b, 0) /
+            this.well_values[this.display_option].data[well_idx].slice(-MIN_NUM_DATAPOINTS_FOR_MEAN).length
         );
       });
-      return (total / (this.selected_wells.length * MIN_NUM_DATAPOINTS_FOR_MEAN)).toFixed(3);
+      return (total / this.selected_wells.length).toFixed(3);
     },
     unit: function () {
       return METRIC_UNITS[this.display_option];
