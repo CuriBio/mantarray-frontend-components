@@ -234,8 +234,9 @@ export default {
     },
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
-        const total = well.slice(-MIN_NUM_DATAPOINTS_FOR_MEAN).reduce((a, b) => a + b, 0);
-        const mean = (total / well.slice(-MIN_NUM_DATAPOINTS_FOR_MEAN).length).toFixed(3);
+        const wellData = well.slice(-MIN_NUM_DATAPOINTS_FOR_MEAN);
+        const total = wellData.reduce((a, b) => a + b, 0);
+        const mean = (total / wellData.length).toFixed(3);
         const color = this.gradient_map(mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
@@ -246,12 +247,10 @@ export default {
     mean_value: function () {
       let total = 0;
       this.selected_wells.map((well_idx) => {
-        total += parseFloat(
-          this.well_values[this.display_option].data[well_idx]
-            .slice(-MIN_NUM_DATAPOINTS_FOR_MEAN)
-            .reduce((a, b) => a + b, 0) /
-            this.well_values[this.display_option].data[well_idx].slice(-MIN_NUM_DATAPOINTS_FOR_MEAN).length
+        const wellData = this.well_values[this.display_option].data[well_idx].slice(
+          -MIN_NUM_DATAPOINTS_FOR_MEAN
         );
+        total += wellData.reduce((a, b) => a + b, 0) / wellData.length;
       });
       return (total / this.selected_wells.length).toFixed(3);
     },
