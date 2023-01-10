@@ -171,8 +171,7 @@ import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue"
 import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
 import playback_module from "@/store/modules/playback";
-import { METRIC_UNITS } from "@/store/modules/heatmap/enums";
-const MAX_NUM_DATAPOINTS_FOR_MEAN = 5;
+import { METRIC_UNITS, MAX_NUM_DATAPOINTS_FOR_MEAN } from "@/store/modules/heatmap/enums";
 
 export default {
   name: "HeatMap",

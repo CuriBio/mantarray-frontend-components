@@ -4,11 +4,11 @@ import { HeatMap as DistComponentToTest } from "@/dist/mantarray.common";
 import { createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 import playback_module from "@/store/modules/playback";
+import { MAX_NUM_DATAPOINTS_FOR_MEAN } from "../../../../store/modules/heatmap/enums";
 
 const max_warm_rgb = "rgb(74.118% 20.784% 19.608%)";
 const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
 const max_cool_rgb = "rgb(6.275% 39.216% 54.902%)";
-const MAX_NUM_DATAPOINTS_FOR_MEAN = 5;
 
 const localVue = createLocalVue();
 
@@ -89,10 +89,10 @@ describe("HeatMap.vue", () => {
       },
       "Twitch Force": {
         data: [
-          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(1),
-          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(2),
-          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(4),
-          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(5),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN - 3).fill(1),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN - 3).fill(2),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN - 3).fill(4),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN - 3).fill(5),
         ],
       },
     };
@@ -106,7 +106,7 @@ describe("HeatMap.vue", () => {
     // test default metric selection (Twitch Force)
     expect(mean_text.text()).toBe("Mean of 4 Wells (Hz):");
     expect(mean_value.text()).toBe("3.000");
-    // switch to Twitch Frequency
+    // switch to Twitch Force
     await wrapper.findAll("li").at(0).trigger("click");
 
     // apply changes
