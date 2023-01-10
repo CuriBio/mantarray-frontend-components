@@ -183,37 +183,30 @@ describe("store/stimulation", () => {
     test("When requesting the next available protocol assignment(color, letter), Then the protocol recieved should be unused and unique", async () => {
       store.state.stimulation.protocol_list = [{ letter: "", color: "", label: "Create New" }];
 
-      Array(26)
-        .fill()
-        .map((_, i) => {
-          const { color, letter } = store.getters["stimulation/get_next_protocol"];
-          store.state.stimulation.protocol_list.push({ color, letter });
-          expect(color).toBe(COLOR_PALETTE[i]);
-        });
+      [...Array(26)].map((_, i) => {
+        const { color, letter } = store.getters["stimulation/get_next_protocol"];
+
+        store.state.stimulation.protocol_list.push({ color, letter });
+        expect(color).toBe(COLOR_PALETTE[i % 26 === 25 ? 0 : (i % 26) + 1]);
+      });
 
       // expect that double letters will be chosen after initial 26 are used as single characters
       // reuse color palette every 26
-      Array(26)
-        .fill()
-        .map((_, i) => {
-          const { color, letter } = store.getters["stimulation/get_next_protocol"];
-
-          store.state.stimulation.protocol_list.push({ color, letter });
-
-          expect(color).toBe(COLOR_PALETTE[i]);
-          expect(letter).toBe(ALPHABET[i] + ALPHABET[i]);
-        });
+      [...Array(26)].map((_, i) => {
+        const { color, letter } = store.getters["stimulation/get_next_protocol"];
+        store.state.stimulation.protocol_list.push({ color, letter });
+        expect(color).toBe(COLOR_PALETTE[i % 26 === 25 ? 0 : (i % 26) + 1]);
+        expect(letter).toBe(ALPHABET[i] + ALPHABET[i]);
+      });
       // just ensure it continues to add a letter
-      Array(26)
-        .fill()
-        .map((_, i) => {
-          const { color, letter } = store.getters["stimulation/get_next_protocol"];
+      [...Array(26)].map((_, i) => {
+        const { color, letter } = store.getters["stimulation/get_next_protocol"];
 
-          store.state.stimulation.protocol_list.push({ color, letter });
+        store.state.stimulation.protocol_list.push({ color, letter });
 
-          expect(color).toBe(COLOR_PALETTE[i]);
-          expect(letter).toBe(ALPHABET[i] + ALPHABET[i] + ALPHABET[i]);
-        });
+        expect(color).toBe(COLOR_PALETTE[i % 26 === 25 ? 0 : (i % 26) + 1]);
+        expect(letter).toBe(ALPHABET[i] + ALPHABET[i] + ALPHABET[i]);
+      });
     });
 
     test("When there are no saved protocols, Then the letter assigned to new protocol will be A", async () => {

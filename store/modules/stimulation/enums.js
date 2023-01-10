@@ -29,8 +29,8 @@ export const TIME_CONVERSION_TO_MILLIS = {
 };
 
 export const COLOR_PALETTE = [
-  "#3b77aa",
   "#45438d",
+  "#3b77aa",
   "#6eb394",
   "#408444",
   "#e5eb94",
@@ -51,7 +51,7 @@ export const COLOR_PALETTE = [
   "#e1abce",
   "#fffce4",
   "#00bcd4",
-  "#3b77aa",
+  "#994a23",
   "#ae96c0",
   "#ffeb3b",
   "#581623",
