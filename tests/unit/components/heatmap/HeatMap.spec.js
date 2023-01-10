@@ -8,7 +8,7 @@ import playback_module from "@/store/modules/playback";
 const max_warm_rgb = "rgb(74.118% 20.784% 19.608%)";
 const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
 const max_cool_rgb = "rgb(6.275% 39.216% 54.902%)";
-const MIN_NUM_DATAPOINTS_FOR_MEAN = 5;
+const MAX_NUM_DATAPOINTS_FOR_MEAN = 5;
 
 const localVue = createLocalVue();
 
@@ -81,18 +81,18 @@ describe("HeatMap.vue", () => {
     const init_heatmap_values = {
       "Twitch Frequency": {
         data: [
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(1),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(2),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(4),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(5),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(1),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(2),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(4),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(5),
         ],
       },
       "Twitch Force": {
         data: [
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(1),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(2),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(4),
-          new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(5),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(1),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(2),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(4),
+          new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(5),
         ],
       },
     };
@@ -148,7 +148,7 @@ describe("HeatMap.vue", () => {
     });
 
     store.commit("data/set_heatmap_values", {
-      "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(15)] },
+      "Twitch Frequency": { data: [new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(15)] },
     });
 
     await wrapper.find("#input-widget-field-heatmap-max").setValue("15");
@@ -186,10 +186,10 @@ describe("HeatMap.vue", () => {
     });
     store.commit("data/set_heatmap_values", {
       "Twitch Frequency": {
-        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)],
+        data: [new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(0)],
       },
       "Twitch Force": {
-        data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)],
+        data: [new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(100)],
       },
     });
 
@@ -241,8 +241,8 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
-      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
+      "Twitch Frequency": { data: [new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
+      "Twitch Force": { data: [new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
     });
 
     // for some reason need to select a metric first before colors are displayed so switching to freq
@@ -270,8 +270,8 @@ describe("HeatMap.vue", () => {
       localVue,
     });
     store.commit("data/set_heatmap_values", {
-      "Twitch Frequency": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
-      "Twitch Force": { data: [new Array(MIN_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
+      "Twitch Frequency": { data: [new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(0)] },
+      "Twitch Force": { data: [new Array(MAX_NUM_DATAPOINTS_FOR_MEAN).fill(100)] },
     });
 
     // set metric display to freq

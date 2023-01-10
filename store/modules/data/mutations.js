@@ -1,5 +1,5 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-
+const MAX_NUM_DATAPOINTS_FOR_MEAN = 5;
 import { TWITCH } from "@/store/modules/data/enums";
 export default {
   set_plate_waveforms(state, new_value) {
@@ -28,7 +28,7 @@ export default {
               well_idx
             ]
               .concat(new_well_values[TWITCH.METRIC_IDS[metric_name]])
-              .slice(-5);
+              .slice(-MAX_NUM_DATAPOINTS_FOR_MEAN);
           }
         }
       }

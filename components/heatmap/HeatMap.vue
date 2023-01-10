@@ -172,7 +172,7 @@ import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
 import playback_module from "@/store/modules/playback";
 import { METRIC_UNITS } from "@/store/modules/heatmap/enums";
-const MIN_NUM_DATAPOINTS_FOR_MEAN = 5;
+const MAX_NUM_DATAPOINTS_FOR_MEAN = 5;
 
 export default {
   name: "HeatMap",
@@ -234,7 +234,7 @@ export default {
     },
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
-        const well_data = well.slice(-MIN_NUM_DATAPOINTS_FOR_MEAN);
+        const well_data = well.slice(-MAX_NUM_DATAPOINTS_FOR_MEAN);
         const total = well_data.reduce((a, b) => a + b, 0);
         const mean = (total / well_data.length).toFixed(3);
         const color = this.gradient_map(mean);
@@ -248,7 +248,7 @@ export default {
       let total = 0;
       this.selected_wells.map((well_idx) => {
         const well_data = this.well_values[this.display_option].data[well_idx].slice(
-          -MIN_NUM_DATAPOINTS_FOR_MEAN
+          -MAX_NUM_DATAPOINTS_FOR_MEAN
         );
         total += well_data.reduce((a, b) => a + b, 0) / well_data.length;
       });
