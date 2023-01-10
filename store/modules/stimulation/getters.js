@@ -1,5 +1,4 @@
-import { generate_random_color } from "@/js_utils/waveform_data_formatter";
-
+import { COLOR_PALETTE, ALPHABET } from "./enums";
 // eslint-disable-next-line require-jsdoc
 export function get_default_protocol_editor_state() {
   return {
@@ -12,7 +11,6 @@ export function get_default_protocol_editor_state() {
     detailed_subprotocols: [],
   };
 }
-
 export default {
   get_protocols({ protocol_list }) {
     return protocol_list;
@@ -22,7 +20,7 @@ export default {
 
     if (!state.edit_mode.status) {
       const letter = get_protocol_editor_letter(protocol_list);
-      const color = get_protocol_editor_color(protocol_list);
+      const color = COLOR_PALETTE[protocol_list.length % 26];
       state.current_assignment = { letter, color };
       return { color, letter };
     } else if (state.edit_mode.status) {
@@ -41,18 +39,10 @@ export default {
   },
 };
 
-const get_protocol_editor_color = (list) => {
-  const color = generate_random_color(false);
-  const duplicate_color = list.filter((protocol) => protocol.color === color).length > 0;
-
-  return duplicate_color ? get_protocol_editor_color(list) : color;
-};
-
-// TODO Luci, handle if there are more than 26 protocols
 const get_protocol_editor_letter = (list) => {
-  const current_protocol_assignment = list[list.length - 1].letter;
-  const current_alphabet_idx = alphabet.indexOf(current_protocol_assignment);
-  return alphabet[current_alphabet_idx + 1];
-};
+  const protocol_idx = list.length - 1;
+  const letter_assignment = ALPHABET[protocol_idx % 26];
+  const num_letters = Math.floor(protocol_idx / 26) + 1;
 
-const alphabet = Array.from(Array(26).keys()).map((i) => String.fromCharCode(65 + i));
+  return letter_assignment.repeat(num_letters);
+};
