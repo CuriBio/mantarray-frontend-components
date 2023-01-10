@@ -163,6 +163,8 @@ export default {
   font-family: Muli;
   color: rgb(255, 255, 255);
   cursor: pointer;
+  text-shadow: -1px -1px 0 #6f7173, 1px -1px 0 #6f7173, -1px 1px 0 #6f7173, 1px 1px 0 #6f7173;
+  /* creates a light outline for light protocol colors */
 }
 .div__popover-overlay {
   height: 50px;
