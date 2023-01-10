@@ -41,10 +41,8 @@ export default {
 
 const get_protocol_editor_letter = (list) => {
   const protocol_idx = list.length - 1;
-
   const letter_assignment = ALPHABET[protocol_idx % 26];
   const num_letters = Math.floor(protocol_idx / 26) + 1;
 
-  // I changed the snippet above to this here since I just found out this exists
   return letter_assignment.repeat(num_letters);
 };
