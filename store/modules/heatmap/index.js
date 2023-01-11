@@ -2,7 +2,7 @@
 
 import getters from "./getters";
 import mutations from "./mutations";
-import { METRIC_UNITS } from "./enums";
+import { METRIC_UNITS, MAX_NUM_DATAPOINTS_FOR_MEAN } from "./enums";
 
 const default_state = {
   selected_wells: [],
@@ -21,4 +21,5 @@ export default {
   mutations,
   getters,
   METRIC_UNITS,
+  MAX_NUM_DATAPOINTS_FOR_MEAN,
 };

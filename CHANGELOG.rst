@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.3.3 (unreleased)
+------------------
+
+Changed:
+^^^^^^^^
+- Heatmap uses last 5 most recent datapoints for heatmap instead of just one
+
+
 1.3.2 (2023-01-06)
 ------------------
 

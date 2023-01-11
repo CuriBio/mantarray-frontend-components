@@ -6,3 +6,4 @@ export const METRIC_UNITS = {
   "Contraction Velocity": "--",
   "Relaxation Velocity": "--",
 };
+export const MAX_NUM_DATAPOINTS_FOR_MEAN = 5;
