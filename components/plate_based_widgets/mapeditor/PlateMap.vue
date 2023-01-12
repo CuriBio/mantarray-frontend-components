@@ -66,7 +66,7 @@
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
         @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
-      ></PlateWell>
+      />
     </span>
   </div>
 </template>
@@ -75,8 +75,10 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import PlateWell from "@/components/basic_widgets/PlateWell.vue";
+
 library.add(faMinusCircle);
 library.add(faPlusCircle);
+
 const no_stroke_width = 0;
 const hover_stroke_width = 2;
 const selected_stroke_width = 4;
@@ -84,6 +86,7 @@ const hover_color = "#ececed";
 const selected_color = "#FFFFFF";
 const default_color = "#b7b7b7";
 const debug_mode = undefined;
+
 export default {
   name: "PlateMap",
   components: { FontAwesomeIcon, PlateWell },
@@ -112,11 +115,20 @@ export default {
       hover: new Array(24).fill(false),
       hover_color: new Array(24).fill(hover_color),
       stroke_width: new Array(24).fill(no_stroke_width),
-      temp_stroke_width: [],
       row_values: ["A", "B", "C", "D"],
       column_values: ["1", "2", "3", "4", "5", "6"],
       testerf: false,
     };
+  },
+  watch: {
+    selected: function () {
+      // reset stroke width when selected wells is reset
+
+      if (this.selected.filter((x) => x).length === 0) {
+        this.all_select = Array(24).fill(false);
+        this.stroke_width = Array(24).fill(no_stroke_width);
+      }
+    },
   },
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);
@@ -251,7 +263,6 @@ export default {
     },
     basic_select(value) {
       const new_list = new Array(24).fill(false);
-
       new_list[value] = true;
       this.test_event("Well clicked");
       this.stroke_width[value] = selected_stroke_width;

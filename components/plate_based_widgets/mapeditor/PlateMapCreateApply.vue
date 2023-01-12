@@ -1,13 +1,21 @@
 <template>
   <div class="div__platemap-createapply-backdrop">
     <div class="div__platemap-createapply-header">Well Settings</div>
-    <div class="div__platemap-createapply-subheader">Well Colors</div>
-    <div class="div__platemap-createapply-color-container" />
+
     <canvas class="canvas__common-horizontal-line" />
     <div class="div__platemap-createapply-subheader">Well Treatments</div>
+    <div class="div__platemap-select-dropdown-container">
+      <SelectDropDown
+        :options_text="well_treatment_names"
+        :input_width="300"
+        :input_height="45"
+        :options_idx="options_idx"
+        @selection-changed="handle_dropdown_selection"
+      />
+    </div>
     <div class="div__platemap-createapply-buttons-container">
       <div
-        v-for="(value, idx) in ['Select Treatment(s)', 'Create Treatment']"
+        v-for="(value, idx) in ['Apply Treatment', 'Create Treatment']"
         :id="idx"
         :key="value"
         class="div__platemap-createapply-button-background"
@@ -19,14 +27,37 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 export default {
   name: "PlateMapCreateApply",
-  components: {},
+  components: { SelectDropDown },
   props: {},
   data() {
-    return {};
+    return {
+      treatment_option: null,
+      options_idx: 0,
+    };
   },
-  methods: {},
+  computed: {
+    ...mapState("platemap", ["well_treatments", "selected_wells"]),
+    well_treatment_names: function () {
+      return this.well_treatments.map(({ name }) => name);
+    },
+  },
+  methods: {
+    handle_click: function ({ target }) {
+      if (target.id === "1") this.$emit("handle_modal_open");
+      else this.$store.commit("platemap/apply_well_treatment", this.treatment_option);
+    },
+    handle_modal_close: function () {
+      this.$emit("handle_modal_close");
+    },
+    handle_dropdown_selection: function (idx) {
+      this.treatment_option = this.well_treatment_names[idx];
+      this.options_idx = idx;
+    },
+  },
 };
 </script>
 <style scoped>
@@ -35,7 +66,7 @@ export default {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: rgb(28, 28, 28);
+  background: rgb(17, 17, 17);
   position: absolute;
   width: 450px;
   height: 280px;
@@ -55,7 +86,7 @@ export default {
   width: 450px;
   text-align: center;
   font-family: Muli;
-  height: 40px;
+  height: 55px;
   top: 10px;
   font-size: 20px;
   position: relative;
@@ -114,5 +145,11 @@ export default {
 .div__platemap-createapply-button-background:hover {
   background: #b7b7b7c9;
   cursor: pointer;
+}
+.div__platemap-select-dropdown-container {
+  position: relative;
+  height: 60px;
+  width: 300px;
+  z-index: 2;
 }
 </style>

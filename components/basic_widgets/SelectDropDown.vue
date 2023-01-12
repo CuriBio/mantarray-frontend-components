@@ -21,10 +21,12 @@
         class="span__select-dropdown-controls-content-input-txt-widget"
         :style="'width: ' + input_width + 'px;'"
       >
-        <span class="span__input-controls-content-dropdown-widget">
-          <span :style="'color:' + chosen_option.color">{{ chosen_option.letter }}</span>
-          {{ chosen_option.name }}</span
-        >
+        <div class="div__chosen-option-container">
+          <span class="span__input-controls-content-dropdown-widget">
+            <span :style="'color:' + chosen_option.color">{{ chosen_option.letter }}</span>
+            {{ chosen_option.name }}</span
+          >
+        </div>
       </div>
       <div class="arrow" :class="{ expanded: visible }"></div>
       <div :class="{ hidden: !visible, visible }">
@@ -72,6 +74,10 @@ export default {
     },
     options_idx: function () {
       this.get_preselected_option();
+    },
+    options_text: function () {
+      this.get_dropdown_options();
+      this.filter_options();
     },
   },
   created() {
@@ -173,7 +179,6 @@ body {
   transform: translateZ(0px);
   position: absolute;
   height: 45px;
-  line-height: 45px;
   top: 0px;
   left: 0px;
   user-select: none;
@@ -215,7 +220,7 @@ ul {
   width: 100%;
   list-style-type: none;
   padding: 0;
-  margin-top: 35px;
+  margin-top: 17px;
   left: 0;
   font-size: 16px;
   position: absolute;
@@ -226,6 +231,7 @@ li {
   padding: 12px;
   color: #b7b7b7;
   background-color: #292929;
+  overflow: hidden;
 }
 li:hover {
   background: #1c1c1c;
@@ -240,5 +246,11 @@ li:hover {
 }
 .visible {
   visibility: visible;
+}
+.div__chosen-option-container {
+  width: 255px;
+  height: 20px;
+  overflow: hidden;
+  position: relative;
 }
 </style>

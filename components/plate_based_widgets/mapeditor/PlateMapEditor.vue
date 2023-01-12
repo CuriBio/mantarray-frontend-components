@@ -2,14 +2,19 @@
   <div class="div__platemapeditor-layout-background">
     <div class="div__platemapeditor-header">Plate Map Editor</div>
     <canvas class="canvas__common-horizontal-line" />
-    <div class="div__platemapeditor-container">
-      <PlateMap :platecolor="passing_plate_colors" @test-event="display_event" />
-      <PlateMapCreateApply />
-    </div>
     <div class="div__platemap-treatmenttable-container">
-      <div class="div__platemapeditor-subheader">Selected Treatment(s)</div>
+      <div class="div__platemapeditor-subheader">Applied Treatment(s)</div>
       <PlateMapTreatmentTable />
     </div>
+    <div class="div__platemapeditor-container">
+      <PlateMap
+        :platecolor="passing_plate_colors"
+        :selected="well_selection"
+        @platewell-selected="platewell_selected"
+      />
+      <PlateMapCreateApply @handle_modal_open="handle_modal_open" />
+    </div>
+
     <div class="div__platemap-buttons-container">
       <div
         v-for="(value, idx) in ['Save Changes', 'Reset All Treatments', 'Discard Changes']"
@@ -21,13 +26,29 @@
         {{ value }}
       </div>
     </div>
+    <b-modal
+      id="new-treatment-modal"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <NewTreatmentWidget id="new-treatment-widget" @close_modal="handle_modal_close" />
+    </b-modal>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import PlateMap from "@/components/plate_based_widgets/mapeditor/PlateMap.vue";
 import PlateMapCreateApply from "@/components/plate_based_widgets/mapeditor/PlateMapCreateApply.vue";
 import PlateMapTreatmentTable from "@/components/plate_based_widgets/mapeditor/PlateMapTreatmentTable.vue";
+import NewTreatmentWidget from "@/components/plate_based_widgets/mapeditor/NewTreatmentWidget.vue";
+import { BModal } from "bootstrap-vue";
+import { mapState } from "vuex";
+Vue.component("BModal", BModal);
 
 export default {
   name: "PlateMapEditor",
@@ -35,44 +56,55 @@ export default {
     PlateMap,
     PlateMapCreateApply,
     PlateMapTreatmentTable,
+    NewTreatmentWidget,
+    BModal,
   },
   data() {
-    return {
-      userevent: "",
-    };
+    return {};
   },
-  created: function () {
-    const plate_colors = [
-      "#871d28",
-      "#bd3532",
-      "#df6147",
-      "#f0a061",
-      "#871d28",
-      "#bd3532",
-      "#df6147",
-      "#f0a061",
-      "#83c0b3",
-      "#83c0b3",
-      "#83c0b3",
-      "#f9d78c",
-      "#45847b",
-      "#45847b",
-      "#45847b",
-      "#f9d78c",
-      "#24524b",
-      "#24524b",
-      "#24524b",
-      "#24524b",
-      "#133836",
-      "#133836",
-      "#133836",
-      "#133836",
-    ];
-    this.passing_plate_colors = plate_colors;
+  computed: {
+    ...mapState("platemap", ["well_treatments", "selected_wells"]),
+    passing_plate_colors: function () {
+      const blank_plate = Array(24).fill("#b7b7b7");
+
+      const arr = blank_plate.map((gray, i) => {
+        let color_to_use = gray;
+        for (const { wells, color } of this.well_treatments) {
+          if (wells.includes(i)) color_to_use = color;
+        }
+        return color_to_use;
+      });
+      return arr;
+    },
+    well_selection: function () {
+      return Array(24)
+        .fill()
+        .map((_, i) => {
+          return this.selected_wells.includes(i);
+        });
+    },
   },
+
   methods: {
     display_event(value) {
       this.userevent = value;
+    },
+    handle_modal_open: function () {
+      this.$bvModal.show("new-treatment-modal");
+    },
+    handle_modal_close: function (idx) {
+      this.$bvModal.hide("new-treatment-modal");
+    },
+    platewell_selected: function (wells) {
+      // set indices of wells with true values marking selected
+      this.$store.commit(
+        "platemap/set_selected_wells",
+        wells
+          .map((b, i) => {
+            return b ? i : b;
+          })
+          .filter((well) => well || well === 0)
+      );
     },
   },
 };
@@ -165,5 +197,17 @@ export default {
   text-align: center;
   height: 30px;
   position: relative;
+  margin-bottom: 10px;
+}
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
+#new-treatment-modal {
+  position: fixed;
+  margin: 5% auto;
+  top: 25%;
+  left: 0;
+  right: 0;
 }
 </style>

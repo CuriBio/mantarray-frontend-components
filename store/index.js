@@ -10,6 +10,7 @@ import settings_module from "./modules/settings";
 import heatmap_module from "./modules/heatmap";
 import stimulation_module from "./modules/stimulation";
 import gradient_module from "./modules/gradient";
+import platemap_module from "./modules/platemap";
 import { default as create_web_socket_plugin, socket } from "./plugins/websocket";
 
 const ws_plugin = create_web_socket_plugin(socket);
@@ -27,6 +28,7 @@ const createStore = () => {
       heatmap: heatmap_module,
       stimulation: stimulation_module,
       gradient: gradient_module,
+      platemap: platemap_module,
     },
     plugins: [ws_plugin],
   });
