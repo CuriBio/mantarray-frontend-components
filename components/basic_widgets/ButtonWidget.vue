@@ -1,12 +1,6 @@
 <template>
   <div>
-    <div
-      :ref="'background'"
-      class="div__button-background"
-      :style="background_cssprops"
-      @mouseenter="hover_background_active()"
-      @mouseleave="hover_background_inactive()"
-    >
+    <div class="div__button-background" :style="background_cssprops">
       <span
         v-for="btn_index in num_of_btn"
         :key="btn_index"
@@ -56,8 +50,6 @@ export default {
     button_widget_height: { type: Number, default: 0 },
     button_widget_top: { type: Number, default: 0 },
     button_widget_left: { type: Number, default: 0 },
-    button_background_color: { type: String, default: "rgb(17, 17, 17)" },
-    hover_background_color: { type: String, default: "rgb(17, 17, 17)" },
   },
   computed: {
     num_of_btn: function () {
@@ -127,18 +119,6 @@ export default {
       if (this.is_enabled[value - 1]) {
         const local_ref = this.$refs[value.toString()];
         local_ref[0].style.color = this.enabled_color;
-      }
-    },
-    hover_background_active() {
-      if (this.is_enabled.length === 1 && this.is_enabled[0]) {
-        const local_ref = this.$refs["background"];
-        local_ref.style.background = this.hover_background_color;
-      }
-    },
-    hover_background_inactive() {
-      if (this.is_enabled.length === 1 && this.is_enabled[0]) {
-        const local_ref = this.$refs["background"];
-        local_ref.style.background = this.button_background_color;
       }
     },
   },
