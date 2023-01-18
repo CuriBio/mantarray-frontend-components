@@ -9,7 +9,7 @@
 
 <script>
 import { PlateMap as ComponentToTest } from "@/dist/mantarray.common";
-// import ComponentToTest from "@/components/plate_based_widgets/mapeditor/PlateMap.vue";
+// import ComponentToTest from "@/components/plate_based_widgets/mapeditor/PlateMapWidget.vue";
 export default {
   components: {
     ComponentToTest,

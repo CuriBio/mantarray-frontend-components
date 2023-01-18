@@ -73,7 +73,7 @@
 <script>
 import Vue from "vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
-import PlateMap from "@/components/plate_based_widgets/mapeditor/PlateMap.vue";
+import PlateMap from "@/components/plate_based_widgets/mapeditor/PlateMapWidget.vue";
 import PlateMapCreateApply from "@/components/plate_based_widgets/mapeditor/PlateMapCreateApply.vue";
 import PlateMapTreatmentTable from "@/components/plate_based_widgets/mapeditor/PlateMapTreatmentTable.vue";
 import NewTreatmentWidget from "@/components/plate_based_widgets/mapeditor/NewTreatmentWidget.vue";

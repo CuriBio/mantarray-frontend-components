@@ -17,7 +17,7 @@
         :options_text="well_treatment_names"
         :input_width="300"
         :input_height="45"
-        :options_idx="well_options_idx"
+        :options_idx="treatment_options_idx"
         @selection-changed="handle_well_dropdown_selection"
       />
     </div>
@@ -45,11 +45,10 @@ import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 export default {
   name: "PlateMapCreateApply",
   components: { SelectDropDown },
-  props: {},
   data() {
     return {
       treatment_option: null,
-      well_options_idx: 0,
+      treatment_options_idx: 0,
       map_options_idx: 0,
     };
   },
@@ -67,7 +66,7 @@ export default {
       return this.stored_platemaps.map(({ name }) => name);
     },
     is_apply_enabled: function () {
-      return this.selected_wells.length > 0 && this.well_options_idx !== 0;
+      return this.selected_wells.length > 0 && this.treatment_options_idx !== 0;
     },
   },
   watch: {
@@ -95,7 +94,7 @@ export default {
     },
     handle_well_dropdown_selection: function (idx) {
       this.treatment_option = this.well_treatment_names[idx];
-      this.well_options_idx = idx;
+      this.treatment_options_idx = idx;
     },
     handle_map_dropdown_selection: function (idx) {
       this.map_options_idx = idx;
