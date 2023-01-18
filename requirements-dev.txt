@@ -6,4 +6,4 @@
 
 pre-commit>=2.7.1 # run 'pre-commit install' initially to install the git hooks
 sphinx-js==3.1.2
-MarkupSafe==0.23
+MarkupSafe==2.1.2
