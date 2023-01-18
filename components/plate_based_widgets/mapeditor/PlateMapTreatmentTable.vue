@@ -5,9 +5,10 @@
         <table>
           <thead>
             <tr :class="'b-table__th-class'">
-              <th scope="col">Name</th>
+              <th scope="col">Treatment Name</th>
               <th scope="col">Wells</th>
               <th scope="col">Color</th>
+              <th scope="col" />
             </tr>
           </thead>
           <tbody>
@@ -20,6 +21,13 @@
                 <div class="div__color-block-container" :style="`background: ${assignment.color}`" />
                 <div class="div__change-color-text">Change</div>
               </td>
+              <td>
+                <FontAwesomeIcon
+                  class="fontawesome__trash-icon"
+                  :icon="['fa', 'trash-alt']"
+                  @click="() => handle_deletion(assignment.name)"
+                />
+              </td>
             </tr>
           </tbody>
         </table>
@@ -28,12 +36,19 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
+
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+library.add(faTrashAlt);
+
 export default {
   name: "PlateMapTreatmentTable",
+  components: { FontAwesomeIcon },
   props: {},
   data() {
     return {};
@@ -50,7 +65,12 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    ...mapActions("platemap", ["remove_selected_well_treatment"]),
+    handle_deletion: function (name) {
+      this.remove_selected_well_treatment(name);
+    },
+  },
 };
 </script>
 <style scoped>
@@ -122,9 +142,21 @@ table {
   width: 100%;
 }
 th {
-  width: 33%;
-  max-width: 33%;
+  width: 30%;
+  max-width: 30%;
 }
+.fontawesome__trash-icon {
+  color: #b7b7b7;
+  padding-top: 1px;
+  font-size: 20px;
+  position: relative;
+}
+
+.fontawesome__trash-icon:hover {
+  cursor: pointer;
+  color: #b7b7b7c9;
+}
+
 td {
   max-width: 280px;
   overflow: hidden;

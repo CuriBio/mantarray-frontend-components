@@ -17,7 +17,31 @@ export default {
         state.well_treatments[idx].wells = [...JSON.parse(JSON.stringify(state.selected_wells))];
       }
     }
+
     // reset selected wells
     state.selected_wells = [];
+  },
+  clear_well_treatments(state) {
+    for (const well of state.well_treatments) {
+      well.wells = [];
+    }
+  },
+  set_entire_platemap(state, map) {
+    state.well_treatments = [...map];
+  },
+  set_platemap_name(state, input) {
+    state.current_platemap_name = input;
+  },
+  save_new_platemap(state, platemap) {
+    state.stored_platemaps.push(platemap);
+    state.current_platemap_name = platemap.name;
+  },
+  save_platemap_changes(state, { platemap, previous_name }) {
+    const selected_idx = state.stored_platemaps.findIndex(
+      (map) => map.name === platemap.name || map.name === previous_name
+    );
+
+    state.stored_platemaps[selected_idx].map = platemap.map;
+    state.stored_platemaps[selected_idx].name = platemap.name;
   },
 };

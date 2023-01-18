@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="div__select-dropdown-background"
-    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
-  >
+  <div class="div__select-dropdown-background" :style="dynamic_background_style">
     <span
       v-if="title_label !== ''"
       class="span__select-dropdown-content-label"
@@ -12,9 +9,7 @@
     </span>
     <div
       class="div__select-dropdown-controls-content-widget"
-      :style="
-        'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;' + 'height:' + input_height + 'px;'
-      "
+      :style="dynamic_content_widget_style"
       @click="toggle()"
     >
       <div
@@ -67,6 +62,24 @@ export default {
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
     },
+    dynamic_background_style: function () {
+      return (
+        "width: " + this.input_width_background + "px;" + "height: " + this.input_height_background + "px;"
+      );
+    },
+    dynamic_content_widget_style: function () {
+      return (
+        "width: " +
+        this.input_width +
+        "px;" +
+        "top:" +
+        this.input_widget_top +
+        "px;" +
+        "height:" +
+        this.input_height +
+        "px;"
+      );
+    },
   },
   watch: {
     chosen_option: function () {
@@ -76,8 +89,10 @@ export default {
       this.get_preselected_option();
     },
     options_text: function () {
+      // get updated list and selected option when prop list changes
       this.get_dropdown_options();
       this.filter_options();
+      this.get_preselected_option();
     },
   },
   created() {
@@ -107,7 +122,9 @@ export default {
   },
   methods: {
     get_preselected_option() {
-      this.chosen_option = this.dropdown_options[this.options_idx];
+      this.chosen_option = this.dropdown_options[this.options_idx]
+        ? this.dropdown_options[this.options_idx]
+        : this.dropdown_options[0];
     },
     change_selection(idx) {
       this.chosen_option = this.dropdown_options[idx];
@@ -250,6 +267,7 @@ li:hover {
 .div__chosen-option-container {
   width: 255px;
   height: 20px;
+  line-height: 1.5;
   overflow: hidden;
   position: relative;
 }

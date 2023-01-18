@@ -28,6 +28,7 @@
 <script>
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "NewTreatmentWidget",
@@ -41,11 +42,25 @@ export default {
       initial_value: "",
     };
   },
-  created() {},
+  computed: {
+    ...mapState("platemap", ["well_treatments"]),
+    treatment_names: function () {
+      return this.well_treatments.map(({ name }) => name);
+    },
+  },
   methods: {
     on_update_name: function (new_value) {
-      this.invalid_text = new_value.length === 0 ? "Required" : "";
-      this.is_enabled = new_value.length === 0 ? [true, false] : [true, true];
+      if (new_value.length === 0) {
+        this.invalid_text = "Required";
+        this.is_enabled = [true, false];
+      } else if (this.treatment_names.includes(new_value)) {
+        this.invalid_text = "This name is already taken";
+        this.is_enabled = [true, false];
+      } else {
+        this.invalid_text = "";
+        this.is_enabled = [true, true];
+      }
+
       this.input_treatment_name = new_value;
       this.initial_value = new_value;
     },

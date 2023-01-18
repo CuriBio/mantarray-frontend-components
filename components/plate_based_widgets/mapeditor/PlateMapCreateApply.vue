@@ -1,7 +1,15 @@
 <template>
   <div class="div__platemap-createapply-backdrop">
-    <div class="div__platemap-createapply-header">Well Settings</div>
-
+    <div class="div__platemap-createapply-header">Map Settings</div>
+    <div class="div__platemap-select-dropdown-container" :style="'z-index: 8;'">
+      <SelectDropDown
+        :options_text="platemap_names"
+        :input_width="300"
+        :input_height="45"
+        :options_idx="map_options_idx"
+        @selection-changed="handle_map_dropdown_selection"
+      />
+    </div>
     <canvas class="canvas__common-horizontal-line" />
     <div class="div__platemap-createapply-subheader">Well Treatments</div>
     <div class="div__platemap-select-dropdown-container">
@@ -9,8 +17,8 @@
         :options_text="well_treatment_names"
         :input_width="300"
         :input_height="45"
-        :options_idx="options_idx"
-        @selection-changed="handle_dropdown_selection"
+        :options_idx="well_options_idx"
+        @selection-changed="handle_well_dropdown_selection"
       />
     </div>
     <div class="div__platemap-createapply-buttons-container">
@@ -18,7 +26,12 @@
         v-for="(value, idx) in ['Apply Treatment', 'Create Treatment']"
         :id="idx"
         :key="value"
-        class="div__platemap-createapply-button-background"
+        :class="
+          // apply button is only button that could be disabled
+          idx === 0 && !is_apply_enabled
+            ? 'div__platemap-createapply-button-background-disabled'
+            : 'div__platemap-createapply-button-background-enabled'
+        "
         @click.exact="handle_click"
       >
         {{ value }}
@@ -27,7 +40,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 export default {
   name: "PlateMapCreateApply",
@@ -36,26 +49,58 @@ export default {
   data() {
     return {
       treatment_option: null,
-      options_idx: 0,
+      well_options_idx: 0,
+      map_options_idx: 0,
     };
   },
   computed: {
-    ...mapState("platemap", ["well_treatments", "selected_wells"]),
+    ...mapState("platemap", [
+      "well_treatments",
+      "selected_wells",
+      "stored_platemaps",
+      "current_platemap_name",
+    ]),
     well_treatment_names: function () {
       return this.well_treatments.map(({ name }) => name);
     },
+    platemap_names: function () {
+      return this.stored_platemaps.map(({ name }) => name);
+    },
+    is_apply_enabled: function () {
+      return this.selected_wells.length > 0 && this.well_options_idx !== 0;
+    },
+  },
+  watch: {
+    current_platemap_name: function () {
+      if (this.current_platemap_name !== this.platemap_names[this.map_options_idx]) {
+        const platemap_idx = this.platemap_names.indexOf(this.current_platemap_name);
+        this.map_options_idx = this.current_platemap_name.length > 0 && platemap_idx > -1 ? platemap_idx : 0;
+      }
+    },
+    well_treatment_names: function (new_names, old_names) {
+      // select new treatment once saved to be selected in dropdown
+      if (new_names.length > old_names.length) {
+        this.handle_well_dropdown_selection(new_names.length - 1);
+      }
+    },
   },
   methods: {
+    ...mapMutations("platemap", ["apply_well_treatment", "set_entire_platemap", "set_platemap_name"]),
     handle_click: function ({ target }) {
       if (target.id === "1") this.$emit("handle_modal_open");
-      else this.$store.commit("platemap/apply_well_treatment", this.treatment_option);
+      else {
+        // prevent button from being clicked when it's disabled
+        if (this.is_apply_enabled) this.apply_well_treatment(this.treatment_option);
+      }
     },
-    handle_modal_close: function () {
-      this.$emit("handle_modal_close");
-    },
-    handle_dropdown_selection: function (idx) {
+    handle_well_dropdown_selection: function (idx) {
       this.treatment_option = this.well_treatment_names[idx];
-      this.options_idx = idx;
+      this.well_options_idx = idx;
+    },
+    handle_map_dropdown_selection: function (idx) {
+      this.map_options_idx = idx;
+      this.set_entire_platemap(this.stored_platemaps[idx].map);
+      this.set_platemap_name(idx !== 0 ? this.stored_platemaps[idx].name : "");
     },
   },
 };
@@ -130,7 +175,7 @@ export default {
   margin: 7px;
 }
 
-.div__platemap-createapply-button-background {
+.div__platemap-createapply-button-background-enabled {
   background: #b7b7b7;
   height: 45px;
   line-height: 2.5;
@@ -140,9 +185,21 @@ export default {
   text-align: center;
   font-size: 16px;
   font-family: Muli;
+  color: #111;
 }
-
-.div__platemap-createapply-button-background:hover {
+.div__platemap-createapply-button-background-disabled {
+  background: #b7b7b7c9;
+  height: 45px;
+  line-height: 2.5;
+  position: relative;
+  color: #636262;
+  width: 220px;
+  margin: 10px;
+  text-align: center;
+  font-size: 16px;
+  font-family: Muli;
+}
+.div__platemap-createapply-button-background-enabled:hover {
   background: #b7b7b7c9;
   cursor: pointer;
 }
@@ -150,6 +207,6 @@ export default {
   position: relative;
   height: 60px;
   width: 300px;
-  z-index: 2;
+  z-index: 5;
 }
 </style>
