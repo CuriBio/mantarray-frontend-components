@@ -323,12 +323,4 @@ export default {
   height: 33px;
   overflow: hidden;
 }
-
-#new-treatment-modal {
-  position: fixed;
-  margin: 5% auto;
-  top: 25%;
-  left: 0;
-  right: 0;
-}
 </style>

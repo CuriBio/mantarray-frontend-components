@@ -74,6 +74,7 @@ export { default as ToggleWidget } from "./components/basic_widgets/ToggleWidget
 // Plate Based
 export { default as PlateNavigator } from "./components/plate_based_widgets/navigator/PlateNavigator.vue";
 export { default as PlateMapEditor } from "./components/plate_based_widgets/mapeditor/PlateMapEditor.vue";
+export { default as PlateMap } from "./components/plate_based_widgets/mapeditor/PlateMap.vue";
 export { default as PlateMapEditorButton } from "./components/plate_based_widgets/mapeditor/PlateMapEditorButton.vue";
 export { default as StimulationStudioWidget } from "./components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 

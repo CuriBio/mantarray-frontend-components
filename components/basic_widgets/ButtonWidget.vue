@@ -50,6 +50,7 @@ export default {
     button_widget_height: { type: Number, default: 0 },
     button_widget_top: { type: Number, default: 0 },
     button_widget_left: { type: Number, default: 0 },
+    button_background_color: { type: String, default: "rgb(17, 17, 17)" },
   },
   computed: {
     num_of_btn: function () {

@@ -22,9 +22,9 @@ const well_2 = Selector(".well_2");
 const well_22 = Selector(".well_22");
 
 // the fixture declares what we are testing
-fixture`plate_based_widgets/plate-mapeditor/basic`
+fixture`plate_based_widgets/plate-mapeditor/basic-plate`
   .page // declare the fixture
-`http://localhost:8080/plate_based_widgets/plate-mapeditor/basic`; // specify the start page
+`http://localhost:8080/plate_based_widgets/plate-mapeditor/basic-plate`; // specify the start page
 
 test("testing the Plate-MapEditor page should display as designed in the mockflow", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "basic-init");
