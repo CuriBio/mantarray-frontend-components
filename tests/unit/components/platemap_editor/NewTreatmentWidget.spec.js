@@ -19,7 +19,7 @@ describe("NewTreatmentWidget.vue", () => {
     store = await NuxtStore.createStore();
   });
 
-  test("When mounting NewTreatmentWidget, Then the apply button should be disabled", async () => {
+  test("When mounting NewTreatmentWidget, Then the header will be present", async () => {
     const wrapper = mount(NewTreatmentWidget, {
       store,
       localVue,
