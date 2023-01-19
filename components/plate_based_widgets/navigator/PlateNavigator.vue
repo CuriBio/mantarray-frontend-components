@@ -2,7 +2,7 @@
   <div class="div__plate-navigator">
     <div class="div__plate-navigator-tab-container">
       <div
-        v-for="(tab, i) in ['Stim. Plate View', 'Plate Map View']"
+        v-for="(tab, i) in ['Plate Map View', 'Stim. Plate View']"
         :id="i"
         :key="tab"
         :class="i === active_tab ? 'div__plate-navigator-active-tab' : 'div__plate-navigator-inactive-tab'"
@@ -158,7 +158,7 @@ export default {
     },
     getWellColor(well_index) {
       // if stim tab is selected
-      if (this.active_tab === 0) {
+      if (this.active_tab === 1) {
         if (this.protocol_assignments[well_index] !== undefined)
           return this.protocol_assignments[well_index].color;
         else return "#B7B7B7";
