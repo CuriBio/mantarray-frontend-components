@@ -34,6 +34,7 @@ export {
 export { ENUMS as PLAYBACK_ENUMS } from "./store/modules/playback/enums";
 export { STATUS as FLASK_STATUS_ENUMS } from "./store/modules/flask/enums";
 export { METRIC_UNITS as HEATMAP_METRIC_UNITS } from "./store/modules/heatmap/enums";
+export { MAX_NUM_DATAPOINTS_FOR_MEAN as HEATMAP_MAX_NUM_DATAPOINTS_FOR_MEAN } from "./store/modules/heatmap/enums";
 export { default as create_web_socket_plugin } from "./store/plugins/websocket";
 export { socket } from "./store/plugins/websocket";
 

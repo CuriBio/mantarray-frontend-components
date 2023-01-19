@@ -1,5 +1,5 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
-
+import { MAX_NUM_DATAPOINTS_FOR_MEAN } from "@/store/modules/heatmap/enums";
 import { TWITCH } from "@/store/modules/data/enums";
 export default {
   set_plate_waveforms(state, new_value) {
@@ -24,8 +24,11 @@ export default {
         const new_well_values = new_values[well_idx];
         for (const metric_name in state.heatmap_values) {
           if (new_well_values[TWITCH.METRIC_IDS[metric_name]] !== undefined) {
-            state.heatmap_values[metric_name].data[well_idx] =
-              new_well_values[TWITCH.METRIC_IDS[metric_name]];
+            state.heatmap_values[metric_name].data[well_idx] = state.heatmap_values[metric_name].data[
+              well_idx
+            ]
+              .concat(new_well_values[TWITCH.METRIC_IDS[metric_name]])
+              .slice(-MAX_NUM_DATAPOINTS_FOR_MEAN);
           }
         }
       }
