@@ -12,7 +12,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="assignment in well_assignments" :key="assignment.name" :class="'b-table__td-class'">
+            <tr
+              v-for="assignment in well_label_assignments"
+              :key="assignment.name"
+              :class="'b-table__td-class'"
+            >
               <td scope="row">{{ assignment.name }}</td>
               <td>
                 {{ assignment.wells.map((well) => well_names[well]).join(", ") }}
@@ -55,7 +59,7 @@ export default {
   },
   computed: {
     ...mapState("platemap", ["well_assignments"]),
-    well_assignments: function () {
+    well_label_assignments: function () {
       return this.well_assignments.filter(({ wells }) => wells.length > 0);
     },
     well_names: function () {

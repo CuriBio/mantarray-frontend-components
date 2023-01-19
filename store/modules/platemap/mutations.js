@@ -9,9 +9,9 @@ export default {
   set_selected_wells(state, wells) {
     state.selected_wells = [...wells];
   },
-  apply_well_assignment(state, treatment_option) {
+  apply_well_assignment(state, assignment_option) {
     for (const well of state.well_assignments) {
-      if (well.name === treatment_option) {
+      if (well.name === assignment_option) {
         const idx = state.well_assignments.indexOf(well);
         // json parse to copy and be independent of state selected wells
         state.well_assignments[idx].wells = [...JSON.parse(JSON.stringify(state.selected_wells))];

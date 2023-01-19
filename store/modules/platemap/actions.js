@@ -71,7 +71,7 @@ export default {
     if (previous_state) {
       // add any new well_assignments to remain in dropdown
       for (const { name, color } of state.well_assignments) {
-        const current_platemap_idx = previous_state.map.findIndex((treatment) => treatment.name === name);
+        const current_platemap_idx = previous_state.map.findIndex((assignment) => assignment.name === name);
         if (current_platemap_idx === -1) {
           previous_state.map.push({ name, color, wells: [] });
         }
@@ -84,14 +84,14 @@ export default {
       commit("set_platemap_name", "");
     }
   },
-  remove_selected_well_assignment({ state, commit }, treatment_name) {
-    const treatments_copy = JSON.parse(JSON.stringify(state.well_assignments));
-    for (const treatment of treatments_copy) {
-      if (treatment.name === treatment_name) {
-        treatment.wells = [];
+  remove_selected_well_assignment({ state, commit }, assignment_name) {
+    const assignments_copy = JSON.parse(JSON.stringify(state.well_assignments));
+    for (const assignment of assignments_copy) {
+      if (assignment.name === assignment_name) {
+        assignment.wells = [];
       }
     }
 
-    commit("set_entire_platemap", treatments_copy);
+    commit("set_entire_platemap", assignments_copy);
   },
 };
