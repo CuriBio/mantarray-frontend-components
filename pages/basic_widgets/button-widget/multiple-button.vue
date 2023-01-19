@@ -128,7 +128,7 @@ export default {
     this.hidecolor_trash_treatment = "#3F3F3F";
     this.hovercolors_trash_treatment = ["#BD4932", "#19ac8a"];
 
-    this.btnnames_plate_map_treatment = ["Cancel", "Select Treatment(s)"];
+    this.btnnames_plate_map_treatment = ["Cancel", "Select Label(s)"];
     this.enablelist_plate_map_treatment = [true, true];
     this.visiblecolor_plate_map_treatment = "#FFFFFF";
     this.hidecolor_plate_map_treatment = "#3F3F3F";

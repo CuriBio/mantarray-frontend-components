@@ -2,7 +2,7 @@
   <div class="div__platemapeditor-layout-background">
     <div class="div__platemapeditor-header">Plate Map Editor</div>
     <canvas class="canvas__common-horizontal-line" />
-    <div class="div__platemap-treatmenttable-container">
+    <div class="div__platemap-assignmenttable-container">
       <div class="div__platemapeditor-subheader">
         <div class="div__platemap-name-container">
           Platemap Name:
@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-      <PlateMapTreatmentTable />
+      <PlateMapAssignmentTable />
     </div>
     <div class="div__platemapeditor-container">
       <PlateMapWidget
@@ -57,7 +57,7 @@
       </div>
     </div>
     <b-modal
-      id="new-treatment-modal"
+      id="new-assignment-modal"
       size="sm"
       hide-footer
       hide-header
@@ -65,7 +65,7 @@
       :static="true"
       :no-close-on-backdrop="true"
     >
-      <NewTreatmentWidget id="new-treatment-widget" @close_modal="handle_modal_close" />
+      <PlateMapNewAssignmentWidget id="new-assigment-widget" @close_modal="handle_modal_close" />
     </b-modal>
   </div>
 </template>
@@ -75,8 +75,8 @@ import Vue from "vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import PlateMapWidget from "@/components/plate_based_widgets/mapeditor/PlateMapWidget.vue";
 import PlateMapCreateApply from "@/components/plate_based_widgets/mapeditor/PlateMapCreateApply.vue";
-import PlateMapTreatmentTable from "@/components/plate_based_widgets/mapeditor/PlateMapTreatmentTable.vue";
-import NewTreatmentWidget from "@/components/plate_based_widgets/mapeditor/NewTreatmentWidget.vue";
+import PlateMapAssignmentTable from "@/components/plate_based_widgets/mapeditor/PlateMapAssignmentTable.vue";
+import PlateMapNewAssignmentWidget from "@/components/plate_based_widgets/mapeditor/PlateMapNewAssignmentWidget.vue";
 import { BModal } from "bootstrap-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 Vue.component("BModal", BModal);
@@ -86,8 +86,8 @@ export default {
   components: {
     PlateMapWidget,
     PlateMapCreateApply,
-    PlateMapTreatmentTable,
-    NewTreatmentWidget,
+    PlateMapAssignmentTable,
+    PlateMapNewAssignmentWidget,
     InputWidget,
     BModal,
   },
@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     ...mapState("platemap", [
-      "well_treatments",
+      "well_assignments",
       "selected_wells",
       "current_platemap_name",
       "stored_platemaps",
@@ -109,7 +109,7 @@ export default {
 
       const arr = blank_plate.map((gray, i) => {
         let color_to_use = gray;
-        for (const { wells, color } of this.well_treatments) {
+        for (const { wells, color } of this.well_assignments) {
           if (wells.includes(i)) color_to_use = color;
         }
         return color_to_use;
@@ -124,8 +124,8 @@ export default {
         });
     },
     are_wells_assigned: function () {
-      // if no wells are assigned, the wells array for each treatment will be empty
-      return this.well_treatments.filter(({ wells }) => wells.length > 0).length > 0;
+      // if no wells are assigned, the wells array for each assignmetn will be empty
+      return this.well_assignments.filter(({ wells }) => wells.length > 0).length > 0;
     },
     is_export_import_enabled: function () {
       // only allow export if wells have been assigned
@@ -147,12 +147,12 @@ export default {
       "save_platemap",
       "discard_current_platemap_changes",
     ]),
-    ...mapMutations("platemap", ["set_selected_wells", "clear_well_treatments", "set_platemap_name"]),
+    ...mapMutations("platemap", ["set_selected_wells", "clear_well_assignments", "set_platemap_name"]),
     handle_modal_open: function () {
-      this.$bvModal.show("new-treatment-modal");
+      this.$bvModal.show("new-assignment-modal");
     },
     handle_modal_close: function () {
-      this.$bvModal.hide("new-treatment-modal");
+      this.$bvModal.hide("new-assignment-modal");
     },
     platewell_selected: function (wells) {
       // set indices of wells with true values marking selected
@@ -170,7 +170,7 @@ export default {
         // saving name on save instead of here as it's input to trigger dropdown change in other component
         this.save_platemap(this.input_platemap_name);
       } else if (button_idx === 1) {
-        this.clear_well_treatments();
+        this.clear_well_assignments();
         this.input_platemap_name = "";
       } else if (button_idx === 2) {
         this.discard_current_platemap_changes();
@@ -287,7 +287,7 @@ export default {
   background: #b7b7b7c9;
   cursor: pointer;
 }
-.div__platemap-treatmenttable-container {
+.div__platemap-assignmenttable-container {
   position: absolute;
   height: 300px;
   top: 415px;

@@ -11,19 +11,19 @@
       />
     </div>
     <canvas class="canvas__common-horizontal-line" />
-    <div class="div__platemap-createapply-subheader">Well Treatments</div>
+    <div class="div__platemap-createapply-subheader">Well Labels</div>
     <div class="div__platemap-select-dropdown-container">
       <SelectDropDown
-        :options_text="well_treatment_names"
+        :options_text="well_assignment_names"
         :input_width="300"
         :input_height="45"
-        :options_idx="treatment_options_idx"
+        :options_idx="assignment_options_idx"
         @selection-changed="handle_well_dropdown_selection"
       />
     </div>
     <div class="div__platemap-createapply-buttons-container">
       <div
-        v-for="(value, idx) in ['Apply Treatment', 'Create Treatment']"
+        v-for="(value, idx) in ['Apply Label', 'Create Label']"
         :id="idx"
         :key="value"
         :class="
@@ -47,26 +47,26 @@ export default {
   components: { SelectDropDown },
   data() {
     return {
-      treatment_option: null,
-      treatment_options_idx: 0,
+      assignment_option: null,
+      assignment_options_idx: 0,
       map_options_idx: 0,
     };
   },
   computed: {
     ...mapState("platemap", [
-      "well_treatments",
+      "well_assignments",
       "selected_wells",
       "stored_platemaps",
       "current_platemap_name",
     ]),
-    well_treatment_names: function () {
-      return this.well_treatments.map(({ name }) => name);
+    well_assignment_names: function () {
+      return this.well_assignments.map(({ name }) => name);
     },
     platemap_names: function () {
       return this.stored_platemaps.map(({ name }) => name);
     },
     is_apply_enabled: function () {
-      return this.selected_wells.length > 0 && this.treatment_options_idx !== 0;
+      return this.selected_wells.length > 0 && this.assignment_options_idx !== 0;
     },
   },
   watch: {
@@ -76,25 +76,25 @@ export default {
         this.map_options_idx = this.current_platemap_name.length > 0 && platemap_idx > -1 ? platemap_idx : 0;
       }
     },
-    well_treatment_names: function (new_names, old_names) {
-      // select new treatment once saved to be selected in dropdown
+    well_assignment_names: function (new_names, old_names) {
+      // select new assignment once saved to be selected in dropdown
       if (new_names.length > old_names.length) {
         this.handle_well_dropdown_selection(new_names.length - 1);
       }
     },
   },
   methods: {
-    ...mapMutations("platemap", ["apply_well_treatment", "set_entire_platemap", "set_platemap_name"]),
+    ...mapMutations("platemap", ["apply_well_assignment", "set_entire_platemap", "set_platemap_name"]),
     handle_click: function ({ target }) {
       if (target.id === "1") this.$emit("handle_modal_open");
       else {
         // prevent button from being clicked when it's disabled
-        if (this.is_apply_enabled) this.apply_well_treatment(this.treatment_option);
+        if (this.is_apply_enabled) this.apply_well_assignment(this.assignment_option);
       }
     },
     handle_well_dropdown_selection: function (idx) {
-      this.treatment_option = this.well_treatment_names[idx];
-      this.treatment_options_idx = idx;
+      this.assignment_option = this.well_assignment_names[idx];
+      this.assignment_options_idx = idx;
     },
     handle_map_dropdown_selection: function (idx) {
       this.map_options_idx = idx;

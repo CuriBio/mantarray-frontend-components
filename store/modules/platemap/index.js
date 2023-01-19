@@ -3,11 +3,11 @@
 import actions from "./actions";
 import mutations from "./mutations";
 
-const blank_map = () => JSON.parse(JSON.stringify([{ name: "Select Treatment", wells: [], color: "none" }]));
+const blank_map = () => JSON.parse(JSON.stringify([{ name: "Select Label", wells: [], color: "none" }]));
 
 const default_state = {
   selected_wells: [],
-  well_treatments: blank_map(),
+  well_assignments: blank_map(),
   stored_platemaps: [{ name: "Create New Map", map: blank_map() }],
   current_platemap_name: null,
 };

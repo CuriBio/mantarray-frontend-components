@@ -445,7 +445,7 @@ describe("store/playback", () => {
           stim_barcode: test_stim_barcode,
           is_hardware_test_recording: false,
           recording_name: test_recording_name,
-          platemap: [{ color: "none", name: "Select Treatment", wells: [] }],
+          platemap: [{ color: "none", name: "Select Label", wells: [] }],
         });
 
         expect(store.state.playback.playback_state).toStrictEqual(

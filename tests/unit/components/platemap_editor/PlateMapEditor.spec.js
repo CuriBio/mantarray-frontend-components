@@ -39,10 +39,10 @@ describe("PlateMapEditor.vue", () => {
       localVue,
     });
     await wrapper.find("#input-widget-field-platemap-name").setValue("test_platemap_name");
-    // mock applying and assigning wells to a treatment
-    await store.commit("platemap/set_new_well_treatment", "well_treatment_one");
+    // mock applying and assigning wells to a assignment
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
     await store.commit("platemap/set_selected_wells", [1, 4, 7]);
-    await store.commit("platemap/apply_well_treatment", "well_treatment_one");
+    await store.commit("platemap/apply_well_assignment", "well_assignment_one");
 
     await wrapper.findAll(".div__platemap-button-background-enabled").at(1).trigger("click");
 
@@ -102,8 +102,8 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
     await wrapper.find("#row_1").trigger("click");
-    await store.commit("platemap/set_new_well_treatment", "well_treatment_one");
-    await store.commit("platemap/apply_well_treatment", "well_treatment_one");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/apply_well_assignment", "well_assignment_one");
     await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
 
     expect(store.state.platemap.stored_platemaps[1].name).toBe("new_platemap");
@@ -117,14 +117,14 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
     await wrapper.find("#row_1").trigger("click");
-    await store.commit("platemap/set_new_well_treatment", "well_treatment_one");
-    await store.commit("platemap/apply_well_treatment", "well_treatment_one");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/apply_well_assignment", "well_assignment_one");
 
-    expect(store.state.platemap.well_treatments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
 
     await wrapper.findAll(".div__platemap-button-background-enabled").at(3).trigger("click");
 
-    expect(store.state.platemap.well_treatments[1].wells).toStrictEqual([]);
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([]);
   });
 
   test("When user selects 'Discard Changes' button, Then the platemap will reset to most recent saved state", async () => {
@@ -135,27 +135,27 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
     await wrapper.find("#row_1").trigger("click");
-    await store.commit("platemap/set_new_well_treatment", "well_treatment_one");
-    await store.commit("platemap/apply_well_treatment", "well_treatment_one");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/apply_well_assignment", "well_assignment_one");
     // save changes
     await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
 
     // declare previously saved state
-    expect(store.state.platemap.well_treatments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
     expect(store.state.platemap.current_platemap_name).toBe("new_platemap");
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("different_platemap_name");
     await wrapper.find("#row_2").trigger("click");
-    await store.commit("platemap/set_new_well_treatment", "well_treatment_two");
-    await store.commit("platemap/apply_well_treatment", "well_treatment_two");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_two");
+    await store.commit("platemap/apply_well_assignment", "well_assignment_two");
 
-    expect(store.state.platemap.well_treatments[2].wells).toStrictEqual([1, 5, 9, 13, 17, 21]);
+    expect(store.state.platemap.well_assignments[2].wells).toStrictEqual([1, 5, 9, 13, 17, 21]);
 
     // click discard
     await wrapper.findAll(".div__platemap-button-background-enabled").at(4).trigger("click");
 
-    expect(store.state.platemap.well_treatments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
     expect(store.state.platemap.current_platemap_name).toBe("new_platemap");
-    expect(store.state.platemap.well_treatments[2].wells).toStrictEqual([]);
+    expect(store.state.platemap.well_assignments[2].wells).toStrictEqual([]);
   });
 });

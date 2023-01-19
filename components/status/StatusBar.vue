@@ -575,7 +575,7 @@ export default {
 #short-circuit-err,
 #success-qc-check,
 #h5_warning,
-#new-treatment-modal {
+#new-assignment-modal {
   position: fixed;
   margin: 5% auto;
   top: 15%;

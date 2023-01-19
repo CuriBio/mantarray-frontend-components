@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faTrashAlt);
 
 export default {
-  name: "PlateMapTreatmentTable",
+  name: "PlateMapAssignmentTable",
   components: { FontAwesomeIcon },
 };
 </script>

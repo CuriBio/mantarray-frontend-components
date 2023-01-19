@@ -78,13 +78,13 @@ export default {
       selected_quadrant_well_indices: "is_quadrant",
     }),
     ...mapState("stimulation", ["protocol_assignments"]),
-    ...mapState("platemap", ["well_treatments"]),
+    ...mapState("platemap", ["well_assignments"]),
     platemap_colors: function () {
       const blank_plate = Array(24).fill("#b7b7b7");
 
       const arr = blank_plate.map((gray, i) => {
         let color_to_use = gray;
-        for (const { wells, color } of this.well_treatments) {
+        for (const { wells, color } of this.well_assignments) {
           if (wells.includes(i)) color_to_use = color;
         }
         return color_to_use;

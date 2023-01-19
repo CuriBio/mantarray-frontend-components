@@ -1,18 +1,18 @@
 <template>
-  <div class="div__platemap-treatmenttable-outer-backdrop">
-    <div class="div__platemap-treatmenttable-backdrop">
+  <div class="div__platemap-assignmenttable-outer-backdrop">
+    <div class="div__platemap-assignmenttable-backdrop">
       <div class="b-table__background-container">
         <table>
           <thead>
             <tr :class="'b-table__th-class'">
-              <th scope="col">Treatment Name</th>
+              <th scope="col">Label</th>
               <th scope="col">Wells</th>
               <th scope="col">Color</th>
               <th scope="col" />
             </tr>
           </thead>
           <tbody>
-            <tr v-for="assignment in assigned_treatments" :key="assignment.name" :class="'b-table__td-class'">
+            <tr v-for="assignment in well_assignments" :key="assignment.name" :class="'b-table__td-class'">
               <td scope="row">{{ assignment.name }}</td>
               <td>
                 {{ assignment.wells.map((well) => well_names[well]).join(", ") }}
@@ -47,16 +47,16 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faTrashAlt);
 
 export default {
-  name: "PlateMapTreatmentTable",
+  name: "PlateMapAssignmentTable",
   components: { FontAwesomeIcon },
   props: {},
   data() {
     return {};
   },
   computed: {
-    ...mapState("platemap", ["well_treatments"]),
-    assigned_treatments: function () {
-      return this.well_treatments.filter(({ wells }) => wells.length > 0);
+    ...mapState("platemap", ["well_assignments"]),
+    well_assignments: function () {
+      return this.well_assignments.filter(({ wells }) => wells.length > 0);
     },
     well_names: function () {
       return [...Array(24).keys()].map((i) =>
@@ -65,21 +65,21 @@ export default {
     },
   },
   methods: {
-    ...mapActions("platemap", ["remove_selected_well_treatment"]),
+    ...mapActions("platemap", ["remove_selected_well_assignment"]),
     handle_deletion: function (name) {
-      this.remove_selected_well_treatment(name);
+      this.remove_selected_well_assignment(name);
     },
   },
 };
 </script>
 <style scoped>
-.div__platemap-treatmenttable-outer-backdrop {
+.div__platemap-assignmenttable-outer-backdrop {
   width: 870px;
   height: 252px;
   background: rgb(17, 17, 17);
   display: flex;
 }
-.div__platemap-treatmenttable-backdrop {
+.div__platemap-assignmenttable-backdrop {
   transform: rotate(0deg);
   box-sizing: border-box;
   position: relative;

@@ -28,7 +28,7 @@ describe("PlateMapCreateApply.vue", () => {
     expect(disabled_button.isVisible()).toBe(true);
   });
 
-  test("When selecting 'Create New Treatment' button, Then open modal event is emitted to parent component", async () => {
+  test("When selecting 'Create New Label' button, Then open modal event is emitted to parent component", async () => {
     const wrapper = mount(PlateMapCreateApply, {
       store,
       localVue,
@@ -38,18 +38,18 @@ describe("PlateMapCreateApply.vue", () => {
     expect(wrapper.emitted("handle_modal_open")).toHaveLength(1);
   });
 
-  test("When a new treatment gets added, Then the dropdown will auto select the newly added treatment", async () => {
+  test("When a new assignment gets added, Then the dropdown will auto select the newly added assignment", async () => {
     const wrapper = mount(PlateMapCreateApply, {
       store,
       localVue,
     });
-    expect(wrapper.vm.well_treatment_names).toStrictEqual(["Select Treatment"]);
-    expect(wrapper.vm.treatment_options_idx).toBe(0);
+    expect(wrapper.vm.well_assignment_names).toStrictEqual(["Select Label"]);
+    expect(wrapper.vm.assignment_options_idx).toBe(0);
 
-    await store.commit("platemap/set_new_well_treatment", "test_treatment");
+    await store.commit("platemap/set_new_well_assignment", "test_label");
 
-    expect(wrapper.vm.well_treatment_names).toStrictEqual(["Select Treatment", "test_treatment"]);
-    expect(wrapper.vm.treatment_options_idx).toBe(1);
+    expect(wrapper.vm.well_assignment_names).toStrictEqual(["Select Label", "test_label"]);
+    expect(wrapper.vm.assignment_options_idx).toBe(1);
   });
   test("When a new platemap gets added, Then the dropdown will auto select the newly added platemap", async () => {
     const wrapper = mount(PlateMapCreateApply, {
@@ -61,7 +61,7 @@ describe("PlateMapCreateApply.vue", () => {
 
     await store.commit("platemap/save_new_platemap", {
       name: "test_platemap",
-      map: { name: "Select Treatment", wells: [], color: "none" },
+      map: { name: "Select Label", wells: [], color: "none" },
     });
 
     expect(wrapper.vm.platemap_names).toStrictEqual(["Create New Map", "test_platemap"]);
@@ -79,15 +79,15 @@ describe("PlateMapCreateApply.vue", () => {
     store.state.platemap.stored_platemaps = [
       {
         name: "Create New Map",
-        map: { name: "Select Treatment", wells: [], color: "none" },
+        map: { name: "Select Label", wells: [], color: "none" },
       },
       {
         name: "test_platemap_one",
-        map: { name: "Select Treatment", wells: [], color: "none" },
+        map: { name: "Select Label", wells: [], color: "none" },
       },
       {
         name: "test_platemap_two",
-        map: { name: "Select Treatment", wells: [], color: "none" },
+        map: { name: "Select Label", wells: [], color: "none" },
       },
     ];
 
@@ -101,49 +101,49 @@ describe("PlateMapCreateApply.vue", () => {
     expect(commit_spy).toHaveBeenCalledWith(
       "platemap/set_entire_platemap",
       {
-        name: "Select Treatment",
+        name: "Select Label",
         wells: [],
         color: "none",
       },
       undefined
     );
   });
-  test("When a user selects a treatment from the dropdown, Then the changes will be saved to local state", async () => {
+  test("When a user selects a assignment from the dropdown, Then the changes will be saved to local state", async () => {
     const wrapper = mount(PlateMapCreateApply, {
       store,
       localVue,
     });
 
-    expect(wrapper.vm.treatment_options_idx).toBe(0);
+    expect(wrapper.vm.assignment_options_idx).toBe(0);
 
-    await store.commit("platemap/set_new_well_treatment", "well_treatment_one");
-    await store.commit("platemap/set_new_well_treatment", "well_treatment_two");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_two");
 
     await wrapper.find(".div__select-dropdown-controls-content-widget").trigger("click");
     const list_opts = wrapper.findAll("li");
     await list_opts.at(1).trigger("click");
 
-    expect(wrapper.vm.treatment_options_idx).toBe(1);
-    expect(wrapper.vm.treatment_option).toBe("well_treatment_one");
+    expect(wrapper.vm.assignment_options_idx).toBe(1);
+    expect(wrapper.vm.assignment_option).toBe("well_assignment_one");
   });
 
-  test("When a user applies treatment to selected wells, Then the wells get added to treatment in vuex state", async () => {
+  test("When a user applies assignment to selected wells, Then the wells get added to assignment in vuex state", async () => {
     const wrapper = mount(PlateMapCreateApply, {
       store,
       localVue,
     });
 
-    expect(wrapper.vm.treatment_options_idx).toBe(0);
+    expect(wrapper.vm.assignment_options_idx).toBe(0);
 
-    await store.commit("platemap/set_new_well_treatment", "well_treatment_one");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
     await store.commit("platemap/set_selected_wells", [1, 4, 7, 13]);
-    expect(store.state.platemap.well_treatments[1].wells).toStrictEqual([]);
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([]);
 
     expect(wrapper.vm.is_apply_enabled).toBe(true);
 
     await wrapper.findAll(".div__platemap-createapply-button-background-enabled").at(0).trigger("click");
 
-    expect(wrapper.vm.treatment_options_idx).toBe(1);
-    expect(store.state.platemap.well_treatments[1].wells).toStrictEqual([1, 4, 7, 13]);
+    expect(wrapper.vm.assignment_options_idx).toBe(1);
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([1, 4, 7, 13]);
   });
 });

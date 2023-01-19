@@ -1,18 +1,18 @@
 <template>
-  <div class="div__platemap-newtreatment-backdrop">
-    <div class="div__platemap-newtreatment-header">Create New Treatment</div>
-    <div class="div__platemap-newtreatment-input-container">
+  <div class="div__platemap-newlabel-backdrop">
+    <div class="div__platemap-newlabel-header">Create New Label</div>
+    <div class="div__platemap-newlabel-input-container">
       <InputWidget
-        :title_label="'Treatment Name'"
+        :title_label="'Label'"
         :placeholder="'Define Name'"
         :input_width="300"
         :invalid_text="invalid_text"
-        :dom_id_suffix="'treatment-name'"
+        :dom_id_suffix="'assignment-name'"
         :initial_value="initial_value"
         @update:value="on_update_name($event)"
       />
     </div>
-    <div class="div__platemap-newtreatment-buttons-container">
+    <div class="div__platemap-newlabel-buttons-container">
       <ButtonWidget
         :button_widget_width="500"
         :button_widget_height="50"
@@ -31,21 +31,21 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import { mapState } from "vuex";
 
 export default {
-  name: "NewTreatmentWidget",
+  name: "PlateMapNewAssignmentWidget",
   components: { ButtonWidget, InputWidget },
   props: {},
   data() {
     return {
       invalid_text: "Required",
       is_enabled: [true, false],
-      input_treatment_name: "",
+      input_label_name: "",
       initial_value: "",
     };
   },
   computed: {
-    ...mapState("platemap", ["well_treatments"]),
-    treatment_names: function () {
-      return this.well_treatments.map(({ name }) => name);
+    ...mapState("platemap", ["well_assignments"]),
+    assignment_names: function () {
+      return this.well_assignments.map(({ name }) => name);
     },
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
       if (new_value.length === 0) {
         this.invalid_text = "Required";
         this.is_enabled = [true, false];
-      } else if (this.treatment_names.includes(new_value)) {
+      } else if (this.assignment_names.includes(new_value)) {
         this.invalid_text = "This name is already taken";
         this.is_enabled = [true, false];
       } else {
@@ -61,13 +61,13 @@ export default {
         this.is_enabled = [true, true];
       }
 
-      this.input_treatment_name = new_value;
+      this.input_label_name = new_value;
       this.initial_value = new_value;
     },
     handle_btn_click: function (idx) {
       // if saved, set to data state
       if (idx === 1) {
-        this.$store.commit("platemap/set_new_well_treatment", this.input_treatment_name);
+        this.$store.commit("platemap/set_new_well_assignment", this.input_label_name);
       }
       // reset
       this.initial_value = "";
@@ -78,7 +78,7 @@ export default {
 };
 </script>
 <style>
-.div__platemap-newtreatment-backdrop {
+.div__platemap-newlabel-backdrop {
   transform: rotate(0deg);
   box-sizing: border-box;
   background: rgb(17, 17, 17);
@@ -93,20 +93,20 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.div__platemap-newtreatment-header {
+.div__platemap-newlabel-header {
   font-family: Muli;
   color: #ffff;
   font-size: 20px;
   margin: 20px;
 }
-.div__platemap-newtreatment-input-container {
+.div__platemap-newlabel-input-container {
   position: relative;
   width: 300px;
   height: 100px;
   display: flex;
   justify-content: center;
 }
-.div__platemap-newtreatment-buttons-container {
+.div__platemap-newlabel-buttons-container {
   position: absolute;
   bottom: 0;
   left: 0;

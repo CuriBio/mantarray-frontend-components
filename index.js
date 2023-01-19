@@ -94,7 +94,7 @@ export { default as RecordingSnapshotWidget } from "./components/status/Recordin
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
-export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+export { default as PlateHeatMap } from "./components/plate_based_widgets/heatmap/PlateHeatMap.vue";
 
 // Stimulation Studio
 export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";

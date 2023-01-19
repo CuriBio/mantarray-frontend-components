@@ -1,9 +1,9 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
 export default {
   async handle_export_platemap({ state }, platemap_name) {
-    const { well_treatments } = state;
+    const { well_assignments } = state;
 
-    const text_to_write = JSON.stringify({ name: platemap_name, map: well_treatments });
+    const text_to_write = JSON.stringify({ name: platemap_name, map: well_assignments });
     const text_file_blob = new Blob([text_to_write], { type: "application/json" });
     // get new file name of datetime
     const current_date = new Date();
@@ -54,7 +54,7 @@ export default {
     commit("set_platemap_name", name);
     const new_platemap = {
       name,
-      map: JSON.parse(JSON.stringify(state.well_treatments)),
+      map: JSON.parse(JSON.stringify(state.well_assignments)),
     };
 
     if (state.stored_platemaps.some(({ name }) => name === new_platemap.name || name === previous_name)) {
@@ -69,8 +69,8 @@ export default {
     );
 
     if (previous_state) {
-      // add any new well_treatments to remain in dropdown
-      for (const { name, color } of state.well_treatments) {
+      // add any new well_assignments to remain in dropdown
+      for (const { name, color } of state.well_assignments) {
         const current_platemap_idx = previous_state.map.findIndex((treatment) => treatment.name === name);
         if (current_platemap_idx === -1) {
           previous_state.map.push({ name, color, wells: [] });
@@ -80,12 +80,12 @@ export default {
       commit("set_entire_platemap", previous_state.map);
       commit("set_platemap_name", previous_state.name);
     } else {
-      commit("clear_well_treatments");
+      commit("clear_well_assignments");
       commit("set_platemap_name", "");
     }
   },
-  remove_selected_well_treatment({ state, commit }, treatment_name) {
-    const treatments_copy = JSON.parse(JSON.stringify(state.well_treatments));
+  remove_selected_well_assignment({ state, commit }, treatment_name) {
+    const treatments_copy = JSON.parse(JSON.stringify(state.well_assignments));
     for (const treatment of treatments_copy) {
       if (treatment.name === treatment_name) {
         treatment.wells = [];
