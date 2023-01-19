@@ -108,4 +108,42 @@ describe("PlateMapCreateApply.vue", () => {
       undefined
     );
   });
+  test("When a user selects a treatment from the dropdown, Then the changes will be saved to local state", async () => {
+    const wrapper = mount(PlateMapCreateApply, {
+      store,
+      localVue,
+    });
+
+    expect(wrapper.vm.treatment_options_idx).toBe(0);
+
+    await store.commit("platemap/set_new_well_treatment", "well_treatment_one");
+    await store.commit("platemap/set_new_well_treatment", "well_treatment_two");
+
+    await wrapper.find(".div__select-dropdown-controls-content-widget").trigger("click");
+    const list_opts = wrapper.findAll("li");
+    await list_opts.at(1).trigger("click");
+
+    expect(wrapper.vm.treatment_options_idx).toBe(1);
+    expect(wrapper.vm.treatment_option).toBe("well_treatment_one");
+  });
+
+  test("When a user applies treatment to selected wells, Then the wells get added to treatment in vuex state", async () => {
+    const wrapper = mount(PlateMapCreateApply, {
+      store,
+      localVue,
+    });
+
+    expect(wrapper.vm.treatment_options_idx).toBe(0);
+
+    await store.commit("platemap/set_new_well_treatment", "well_treatment_one");
+    await store.commit("platemap/set_selected_wells", [1, 4, 7, 13]);
+    expect(store.state.platemap.well_treatments[1].wells).toStrictEqual([]);
+
+    expect(wrapper.vm.is_apply_enabled).toBe(true);
+
+    await wrapper.findAll(".div__platemap-createapply-button-background-enabled").at(0).trigger("click");
+
+    expect(wrapper.vm.treatment_options_idx).toBe(1);
+    expect(store.state.platemap.well_treatments[1].wells).toStrictEqual([1, 4, 7, 13]);
+  });
 });
