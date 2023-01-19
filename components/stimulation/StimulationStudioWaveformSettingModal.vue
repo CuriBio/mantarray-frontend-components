@@ -663,7 +663,11 @@ export default {
       } else {
         this.err_msgs[label] = this.invalid_err_msg.valid;
         this.input_pulse_frequency = value;
-        this.max_pulse_duration_for_freq = Math.min(50, Math.trunc(1000 / this.input_pulse_frequency) * 0.8);
+        this.max_pulse_duration_for_freq = Math.min(
+          50,
+          Math.trunc((1000 / this.input_pulse_frequency) * 0.8)
+        );
+
         this.invalid_err_msg.max_pulse_duration = `Duration must be <= ${this.max_pulse_duration_for_freq}ms`;
         this.check_pulse_duration_validity(); // Need to recheck pulse dur after a new valid frequency is entered
       }
