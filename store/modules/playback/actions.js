@@ -56,6 +56,7 @@ export default {
       plate_barcode,
       stim_barcode,
       is_hardware_test_recording: false,
+      platemap: this.state.platemap.well_treatments,
     };
     context.commit("set_recording_start_time", time_index);
     await call_axios_get_from_vuex(url, context, params);

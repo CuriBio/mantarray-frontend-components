@@ -98,8 +98,8 @@ export default {
     },
     handle_map_dropdown_selection: function (idx) {
       this.map_options_idx = idx;
-      this.set_entire_platemap(this.stored_platemaps[idx].map);
       this.set_platemap_name(idx !== 0 ? this.stored_platemaps[idx].name : "");
+      this.set_entire_platemap(this.stored_platemaps[idx].map);
     },
   },
 };
