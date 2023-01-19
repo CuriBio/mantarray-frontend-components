@@ -54,7 +54,7 @@ export default {
     commit("set_platemap_name", name);
     const new_platemap = {
       name,
-      map: state.well_treatments,
+      map: JSON.parse(JSON.stringify(state.well_treatments)),
     };
 
     if (state.stored_platemaps.some(({ name }) => name === new_platemap.name || name === previous_name)) {
@@ -64,8 +64,19 @@ export default {
     }
   },
   discard_current_platemap_changes({ state, commit }) {
-    const previous_state = state.stored_platemaps.find(({ name }) => name === state.current_platemap_name);
+    const previous_state = JSON.parse(JSON.stringify(state.stored_platemaps)).find(
+      ({ name }) => name === state.current_platemap_name
+    );
+
     if (previous_state) {
+      // add any new well_treatments to remain in dropdown
+      for (const { name, color } of state.well_treatments) {
+        const current_platemap_idx = previous_state.map.findIndex((treatment) => treatment.name === name);
+        if (current_platemap_idx === -1) {
+          previous_state.map.push({ name, color, wells: [] });
+        }
+      }
+
       commit("set_entire_platemap", previous_state.map);
       commit("set_platemap_name", previous_state.name);
     } else {

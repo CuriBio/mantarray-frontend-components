@@ -64,7 +64,6 @@ export default {
       );
     },
   },
-
   methods: {
     ...mapActions("platemap", ["remove_selected_well_treatment"]),
     handle_deletion: function (name) {

@@ -22,7 +22,7 @@
       <PlateMapTreatmentTable />
     </div>
     <div class="div__platemapeditor-container">
-      <PlateMap
+      <PlateMapWidget
         :platecolor="passing_plate_colors"
         :selected="well_selection"
         @platewell-selected="platewell_selected"
@@ -73,7 +73,7 @@
 <script>
 import Vue from "vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
-import PlateMap from "@/components/plate_based_widgets/mapeditor/PlateMapWidget.vue";
+import PlateMapWidget from "@/components/plate_based_widgets/mapeditor/PlateMapWidget.vue";
 import PlateMapCreateApply from "@/components/plate_based_widgets/mapeditor/PlateMapCreateApply.vue";
 import PlateMapTreatmentTable from "@/components/plate_based_widgets/mapeditor/PlateMapTreatmentTable.vue";
 import NewTreatmentWidget from "@/components/plate_based_widgets/mapeditor/NewTreatmentWidget.vue";
@@ -84,7 +84,7 @@ Vue.component("BModal", BModal);
 export default {
   name: "PlateMapEditor",
   components: {
-    PlateMap,
+    PlateMapWidget,
     PlateMapCreateApply,
     PlateMapTreatmentTable,
     NewTreatmentWidget,
@@ -98,7 +98,12 @@ export default {
     };
   },
   computed: {
-    ...mapState("platemap", ["well_treatments", "selected_wells", "current_platemap_name"]),
+    ...mapState("platemap", [
+      "well_treatments",
+      "selected_wells",
+      "current_platemap_name",
+      "stored_platemaps",
+    ]),
     passing_plate_colors: function () {
       const blank_plate = Array(24).fill("#b7b7b7");
 
@@ -131,6 +136,9 @@ export default {
     current_platemap_name: function () {
       this.input_platemap_name = this.current_platemap_name;
     },
+    stored_platemaps: function () {
+      console.log(this.stored_platemaps);
+    },
   },
   methods: {
     ...mapActions("platemap", [
@@ -140,9 +148,6 @@ export default {
       "discard_current_platemap_changes",
     ]),
     ...mapMutations("platemap", ["set_selected_wells", "clear_well_treatments", "set_platemap_name"]),
-    display_event(value) {
-      this.userevent = value;
-    },
     handle_modal_open: function () {
       this.$bvModal.show("new-treatment-modal");
     },
@@ -166,6 +171,7 @@ export default {
         this.save_platemap(this.input_platemap_name);
       } else if (button_idx === 1) {
         this.clear_well_treatments();
+        this.input_platemap_name = "";
       } else if (button_idx === 2) {
         this.discard_current_platemap_changes();
         this.input_platemap_name = this.current_platemap_name;
