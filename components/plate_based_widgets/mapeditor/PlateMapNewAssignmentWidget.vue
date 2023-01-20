@@ -1,9 +1,9 @@
 <template>
   <div class="div__platemap-newlabel-backdrop">
-    <div class="div__platemap-newlabel-header">Create New Label</div>
+    <div class="div__platemap-newlabel-header">{{ dynamic_modal_header }}</div>
     <div class="div__platemap-newlabel-input-container">
       <InputWidget
-        :title_label="'Label'"
+        :title_label="'Label Name'"
         :placeholder="'Define Name'"
         :input_width="300"
         :invalid_text="invalid_text"
@@ -28,18 +28,20 @@
 <script>
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "PlateMapNewAssignmentWidget",
   components: { ButtonWidget, InputWidget },
-  props: {},
+  props: {
+    editable_name: { type: String, default: null },
+  },
   data() {
     return {
       invalid_text: "Required",
       is_enabled: [true, false],
       input_label_name: "",
-      initial_value: "",
+      initial_value: this.editable_name,
     };
   },
   computed: {
@@ -47,13 +49,22 @@ export default {
     assignment_names: function () {
       return this.well_assignments.map(({ name }) => name);
     },
+    dynamic_modal_header: function () {
+      return this.editable_name ? "Edit Existing Label" : "Create New Label";
+    },
+  },
+  watch: {
+    editable_name: function () {
+      this.on_update_name(this.editable_name);
+    },
   },
   methods: {
+    ...mapMutations("platemap", ["change_existing_name", "set_new_well_assignment"]),
     on_update_name: function (new_value) {
       if (new_value.length === 0) {
         this.invalid_text = "Required";
         this.is_enabled = [true, false];
-      } else if (this.assignment_names.includes(new_value)) {
+      } else if (this.assignment_names.includes(new_value) && !this.editable_name) {
         this.invalid_text = "This name is already taken";
         this.is_enabled = [true, false];
       } else {
@@ -67,7 +78,11 @@ export default {
     handle_btn_click: function (idx) {
       // if saved, set to data state
       if (idx === 1) {
-        this.$store.commit("platemap/set_new_well_assignment", this.input_label_name);
+        if (this.editable_name) {
+          this.change_existing_name({ new_name: this.input_label_name, old_name: this.editable_name });
+        } else {
+          this.set_new_well_assignment(this.input_label_name);
+        }
       }
       // reset
       this.initial_value = "";

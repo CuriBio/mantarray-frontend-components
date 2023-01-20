@@ -1,9 +1,9 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
 export default {
-  async handle_export_platemap({ state }, platemap_name) {
+  async handle_export_platemap({ state }, map_name) {
     const { well_assignments } = state;
 
-    const text_to_write = JSON.stringify({ name: platemap_name, map: well_assignments });
+    const text_to_write = JSON.stringify({ map_name, labels: well_assignments });
     const text_file_blob = new Blob([text_to_write], { type: "application/json" });
     // get new file name of datetime
     const current_date = new Date();
@@ -18,7 +18,7 @@ export default {
       current_date.getMinutes() +
       current_date.getSeconds();
 
-    const file_name_to_save = platemap_name + "__" + datetime;
+    const file_name_to_save = map_name + "__" + datetime;
     const download_link = document.createElement("a");
     download_link.download = file_name_to_save;
     download_link.innerHTML = "Download File";
@@ -40,7 +40,7 @@ export default {
     reader.onload = async function () {
       const response = JSON.parse(reader.result);
       await commit("save_new_platemap", response);
-      await commit("set_entire_platemap", response.map);
+      await commit("set_entire_platemap", response.labels);
     };
 
     reader.onerror = function () {
@@ -49,15 +49,19 @@ export default {
 
     reader.readAsText(file);
   },
-  save_platemap({ state, commit }, name) {
+  save_platemap({ state, commit }, map_name) {
     const previous_name = state.current_platemap_name;
-    commit("set_platemap_name", name);
+    commit("set_platemap_name", map_name);
     const new_platemap = {
-      name,
-      map: JSON.parse(JSON.stringify(state.well_assignments)),
+      map_name,
+      labels: JSON.parse(JSON.stringify(state.well_assignments)),
     };
 
-    if (state.stored_platemaps.some(({ name }) => name === new_platemap.name || name === previous_name)) {
+    if (
+      state.stored_platemaps.some(
+        ({ map_name }) => map_name === new_platemap.map_name || map_name === previous_name
+      )
+    ) {
       commit("save_platemap_changes", { platemap: new_platemap, previous_name });
     } else {
       commit("save_new_platemap", new_platemap);
@@ -65,22 +69,24 @@ export default {
   },
   discard_current_platemap_changes({ state, commit }) {
     const previous_state = JSON.parse(JSON.stringify(state.stored_platemaps)).find(
-      ({ name }) => name === state.current_platemap_name
+      ({ map_name }) => map_name === state.current_platemap_name
     );
 
     if (previous_state) {
       // add any new well_assignments to remain in dropdown
       for (const { name, color } of state.well_assignments) {
-        const current_platemap_idx = previous_state.map.findIndex((assignment) => assignment.name === name);
+        const current_platemap_idx = previous_state.labels.findIndex(
+          (assignment) => assignment.name === name
+        );
         if (current_platemap_idx === -1) {
-          previous_state.map.push({ name, color, wells: [] });
+          previous_state.labels.push({ name, color, wells: [] });
         }
       }
 
-      commit("set_entire_platemap", previous_state.map);
-      commit("set_platemap_name", previous_state.name);
+      commit("set_entire_platemap", previous_state.labels);
+      commit("set_platemap_name", previous_state.map_name);
     } else {
-      commit("clear_well_assignments");
+      commit("clear_all_well_assignments");
       commit("set_platemap_name", "");
     }
   },

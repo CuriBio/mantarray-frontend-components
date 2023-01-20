@@ -65,7 +65,11 @@
       :static="true"
       :no-close-on-backdrop="true"
     >
-      <PlateMapNewAssignmentWidget id="new-assigment-widget" @close_modal="handle_modal_close" />
+      <PlateMapNewAssignmentWidget
+        id="new-assigment-widget"
+        :editable_name="editable_name"
+        @close_modal="handle_modal_close"
+      />
     </b-modal>
   </div>
 </template>
@@ -95,15 +99,11 @@ export default {
     return {
       invalid_text: "Required",
       input_platemap_name: "",
+      editable_name: null,
     };
   },
   computed: {
-    ...mapState("platemap", [
-      "well_assignments",
-      "selected_wells",
-      "current_platemap_name",
-      "stored_platemaps",
-    ]),
+    ...mapState("platemap", ["well_assignments", "selected_wells", "current_platemap_name"]),
     passing_plate_colors: function () {
       const blank_plate = Array(24).fill("#b7b7b7");
 
@@ -136,9 +136,9 @@ export default {
     current_platemap_name: function () {
       this.input_platemap_name = this.current_platemap_name;
     },
-    stored_platemaps: function () {
-      console.log(this.stored_platemaps);
-    },
+  },
+  mounted() {
+    this.input_platemap_name = this.current_platemap_name;
   },
   methods: {
     ...mapActions("platemap", [
@@ -147,12 +147,15 @@ export default {
       "save_platemap",
       "discard_current_platemap_changes",
     ]),
-    ...mapMutations("platemap", ["set_selected_wells", "clear_well_assignments", "set_platemap_name"]),
-    handle_modal_open: function () {
+    ...mapMutations("platemap", ["set_selected_wells", "clear_all_well_assignments", "set_platemap_name"]),
+    handle_modal_open: function (editable_name) {
+      this.editable_name = editable_name;
       this.$bvModal.show("new-assignment-modal");
     },
     handle_modal_close: function () {
       this.$bvModal.hide("new-assignment-modal");
+      // always set back to false just in case
+      this.opened_for_edit = null;
     },
     platewell_selected: function (wells) {
       // set indices of wells with true values marking selected
@@ -170,7 +173,7 @@ export default {
         // saving name on save instead of here as it's input to trigger dropdown change in other component
         this.save_platemap(this.input_platemap_name);
       } else if (button_idx === 1) {
-        this.clear_well_assignments();
+        this.clear_all_well_assignments();
         this.input_platemap_name = "";
       } else if (button_idx === 2) {
         this.discard_current_platemap_changes();
@@ -314,9 +317,9 @@ export default {
   flex-direction: row;
   display: flex;
   position: relative;
-  width: 50%;
+  width: 48%;
   height: 100%;
-  padding-left: 30px;
+  padding-left: 23px;
 }
 .modal-backdrop {
   background-color: rgb(0, 0, 0, 0.5);

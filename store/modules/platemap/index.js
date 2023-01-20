@@ -8,7 +8,7 @@ const blank_map = () => JSON.parse(JSON.stringify([{ name: "Select Label", wells
 const default_state = {
   selected_wells: [],
   well_assignments: blank_map(),
-  stored_platemaps: [{ name: "Create New Map", map: blank_map() }],
+  stored_platemaps: [{ map_name: "Create New Map", labels: blank_map() }],
   current_platemap_name: null,
 };
 

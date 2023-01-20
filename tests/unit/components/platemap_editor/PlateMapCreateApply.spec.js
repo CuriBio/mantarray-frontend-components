@@ -60,8 +60,8 @@ describe("PlateMapCreateApply.vue", () => {
     expect(wrapper.vm.map_options_idx).toBe(0);
 
     await store.commit("platemap/save_new_platemap", {
-      name: "test_platemap",
-      map: { name: "Select Label", wells: [], color: "none" },
+      map_name: "test_platemap",
+      labels: { name: "Select Label", wells: [], color: "none" },
     });
 
     expect(wrapper.vm.platemap_names).toStrictEqual(["Create New Map", "test_platemap"]);
@@ -78,16 +78,16 @@ describe("PlateMapCreateApply.vue", () => {
     expect(wrapper.vm.map_options_idx).toBe(0);
     store.state.platemap.stored_platemaps = [
       {
-        name: "Create New Map",
-        map: { name: "Select Label", wells: [], color: "none" },
+        map_name: "Create New Map",
+        labels: { name: "Select Label", wells: [], color: "none" },
       },
       {
-        name: "test_platemap_one",
-        map: { name: "Select Label", wells: [], color: "none" },
+        map_name: "test_platemap_one",
+        labels: { name: "Select Label", wells: [], color: "none" },
       },
       {
-        name: "test_platemap_two",
-        map: { name: "Select Label", wells: [], color: "none" },
+        map_name: "test_platemap_two",
+        labels: { name: "Select Label", wells: [], color: "none" },
       },
     ];
 

@@ -14,34 +14,50 @@ export default {
       if (well.name === assignment_option) {
         const idx = state.well_assignments.indexOf(well);
         // json parse to copy and be independent of state selected wells
-        state.well_assignments[idx].wells = [...JSON.parse(JSON.stringify(state.selected_wells))];
+        for (const well of state.selected_wells) {
+          if (!state.well_assignments[idx].wells.includes(well)) state.well_assignments[idx].wells.push(well);
+        }
       }
     }
 
     // reset selected wells
     state.selected_wells = [];
   },
-  clear_well_assignments(state) {
+  clear_selected_wells(state, assignment_option) {
+    const selected_assigment_idx = JSON.parse(JSON.stringify(state.well_assignments)).findIndex(
+      ({ name }) => name === assignment_option
+    );
+    state.well_assignments[selected_assigment_idx].wells = state.well_assignments[
+      selected_assigment_idx
+    ].wells.filter((well_idx) => !state.selected_wells.includes(well_idx));
+    // reset selected wells
+    state.selected_wells = [];
+  },
+  clear_all_well_assignments(state) {
     for (const well of state.well_assignments) {
       well.wells = [];
     }
   },
-  set_entire_platemap(state, map) {
-    state.well_assignments = [...map];
+  set_entire_platemap(state, labels) {
+    state.well_assignments = [...labels];
   },
   set_platemap_name(state, input) {
     state.current_platemap_name = input;
   },
+  change_existing_name(state, { old_name, new_name }) {
+    const index_to_change = state.well_assignments.findIndex(({ name }) => name === old_name);
+    state.well_assignments[index_to_change].name = new_name;
+  },
   save_new_platemap(state, platemap) {
     state.stored_platemaps.push(platemap);
-    state.current_platemap_name = platemap.name;
+    state.current_platemap_name = platemap.map_name;
   },
   save_platemap_changes(state, { platemap, previous_name }) {
     const selected_idx = state.stored_platemaps.findIndex(
-      (map) => map.name === platemap.name || map.name === previous_name
+      (map) => map.map_name === platemap.map_name || map.map_name === previous_name
     );
 
-    state.stored_platemaps[selected_idx].map = platemap.map;
-    state.stored_platemaps[selected_idx].name = platemap.name;
+    state.stored_platemaps[selected_idx].labels = platemap.labels;
+    state.stored_platemaps[selected_idx].map_name = platemap.map_name;
   },
 };

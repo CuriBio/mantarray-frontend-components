@@ -23,16 +23,31 @@
     </div>
     <div class="div__platemap-createapply-buttons-container">
       <div
-        v-for="(value, idx) in ['Apply Label', 'Create Label']"
+        v-for="(value, idx) in ['Apply Label', 'Create New Label']"
         :id="idx"
         :key="value"
         :class="
           // apply button is only button that could be disabled
-          idx === 0 && !is_apply_enabled
-            ? 'div__platemap-createapply-button-background-disabled'
-            : 'div__platemap-createapply-button-background-enabled'
+          is_apply_create_enabled[idx]
+            ? 'div__platemap-createapply-button-background-enabled'
+            : 'div__platemap-createapply-button-background-disabled'
         "
-        @click.exact="handle_click"
+        @click.exact="handle_create_apply_click"
+      >
+        {{ value }}
+      </div>
+    </div>
+    <div class="div__platemap-createapply-buttons-container">
+      <div
+        v-for="(value, idx) in ['Clear Wells', 'Edit Label']"
+        :id="idx"
+        :key="value"
+        :class="
+          is_clear_edit_enabled[idx]
+            ? 'div__platemap-createapply-button-background-enabled'
+            : 'div__platemap-createapply-button-background-disabled'
+        "
+        @click.exact="handle_clear_edit_click"
       >
         {{ value }}
       </div>
@@ -63,33 +78,65 @@ export default {
       return this.well_assignments.map(({ name }) => name);
     },
     platemap_names: function () {
-      return this.stored_platemaps.map(({ name }) => name);
+      return this.stored_platemaps.map(({ map_name }) => map_name);
     },
     is_apply_enabled: function () {
       return this.selected_wells.length > 0 && this.assignment_options_idx !== 0;
     },
+    is_apply_create_enabled: function () {
+      return [this.is_apply_enabled, true];
+    },
+    is_clear_edit_enabled: function () {
+      return [this.selected_wells.length > 0, this.assignment_options_idx > 0];
+    },
   },
   watch: {
     current_platemap_name: function () {
-      if (this.current_platemap_name !== this.platemap_names[this.map_options_idx]) {
-        const platemap_idx = this.platemap_names.indexOf(this.current_platemap_name);
-        this.map_options_idx = this.current_platemap_name.length > 0 && platemap_idx > -1 ? platemap_idx : 0;
-      }
+      this.check_platemap_dropdown_matches_state();
+    },
+    map_options_idx: function () {
+      this.check_platemap_dropdown_matches_state();
     },
     well_assignment_names: function (new_names, old_names) {
       // select new assignment once saved to be selected in dropdown
       if (new_names.length > old_names.length) {
         this.handle_well_dropdown_selection(new_names.length - 1);
       }
+      // need to reassign here in case a user edits a label name and tries to immediately apply or clear well assignments, the name will be old name before editing
+      this.assignment_option = this.well_assignment_names[this.assignment_options_idx];
     },
   },
   methods: {
-    ...mapMutations("platemap", ["apply_well_assignment", "set_entire_platemap", "set_platemap_name"]),
-    handle_click: function ({ target }) {
-      if (target.id === "1") this.$emit("handle_modal_open");
-      else {
-        // prevent button from being clicked when it's disabled
-        if (this.is_apply_enabled) this.apply_well_assignment(this.assignment_option);
+    ...mapMutations("platemap", [
+      "apply_well_assignment",
+      "set_entire_platemap",
+      "set_platemap_name",
+      "clear_selected_wells",
+    ]),
+    check_platemap_dropdown_matches_state() {
+      if (this.current_platemap_name !== this.platemap_names[this.map_options_idx]) {
+        const platemap_idx = this.platemap_names.indexOf(this.current_platemap_name);
+        this.map_options_idx = this.current_platemap_name.length > 0 && platemap_idx > -1 ? platemap_idx : 0;
+      }
+    },
+    handle_create_apply_click: function ({ target }) {
+      const idx = Number(target.id);
+      if (this.is_apply_create_enabled[idx]) {
+        if (idx === 1) this.$emit("handle_modal_open");
+        else {
+          // prevent button from being clicked when it's disabled
+          if (this.is_apply_enabled) this.apply_well_assignment(this.assignment_option);
+        }
+      }
+    },
+    handle_clear_edit_click: function ({ target }) {
+      const idx = Number(target.id);
+      if (this.is_clear_edit_enabled[idx]) {
+        if (idx === 1) this.$emit("handle_modal_open", this.assignment_option);
+        else {
+          // prevent button from being clicked when it's disabled
+          this.clear_selected_wells(this.assignment_option);
+        }
       }
     },
     handle_well_dropdown_selection: function (idx) {
@@ -98,8 +145,8 @@ export default {
     },
     handle_map_dropdown_selection: function (idx) {
       this.map_options_idx = idx;
-      this.set_platemap_name(idx !== 0 ? this.stored_platemaps[idx].name : "");
-      this.set_entire_platemap(this.stored_platemaps[idx].map);
+      this.set_platemap_name(idx !== 0 ? this.stored_platemaps[idx].map_name : "");
+      this.set_entire_platemap(this.stored_platemaps[idx].labels);
     },
   },
 };
@@ -113,7 +160,7 @@ export default {
   background: rgb(17, 17, 17);
   position: absolute;
   width: 450px;
-  height: 280px;
+  height: 335px;
   top: 0px;
   left: 450px;
   visibility: visible;

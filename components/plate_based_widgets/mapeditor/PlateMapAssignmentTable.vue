@@ -23,7 +23,6 @@
               </td>
               <td class="div__color-table-cell">
                 <div class="div__color-block-container" :style="`background: ${assignment.color}`" />
-                <div class="div__change-color-text">Change</div>
               </td>
               <td>
                 <FontAwesomeIcon
@@ -173,18 +172,8 @@ td {
   margin-right: 10px;
 }
 .div__color-table-cell {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-.div__change-color-text {
-  font-size: 14px;
-}
-.div__change-color-text:hover {
-  text-decoration: underline;
-  font-style: italic;
-  cursor: pointer;
+  height: 100%;
+  position: relative;
+  padding-left: 12%;
 }
 </style>

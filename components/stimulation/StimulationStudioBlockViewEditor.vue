@@ -21,18 +21,18 @@
         }}</span>
         <input
           v-model="protocol_name"
-          class="protocol_name_nput"
+          class="protocol_name_input"
           placeholder="Protocol Name"
           :disabled="disabled_name"
           :style="name_validity"
           @change="check_name_validity($event.target.value)"
         />
         <span class="error-message">{{ error_message }}</span>
-        <FontAwesomeIcon
+        <!-- <FontAwesomeIcon
           class="pencil-icon"
           :icon="['fa', 'pencil-alt']"
           @click="disabled_name = !disabled_name"
-        />
+        /> -->
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
@@ -390,7 +390,7 @@ export default {
   visibility: visible;
 }
 
-.protocol_name_nput {
+.protocol_name_input {
   background: rgb(0, 0, 0);
   height: 25px;
   width: 300px;
@@ -401,6 +401,9 @@ export default {
   color: rgb(255, 255, 255);
 }
 
+.protocol_name_input:focus {
+  border: 1px solid #b7b7b7;
+}
 .span__Inactive-Tab-labels {
   background: rgb(8, 8, 8);
   border: 2px solid rgb(17, 17, 17);

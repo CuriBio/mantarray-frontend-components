@@ -106,7 +106,7 @@ describe("PlateMapEditor.vue", () => {
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
     await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
 
-    expect(store.state.platemap.stored_platemaps[1].name).toBe("new_platemap");
+    expect(store.state.platemap.stored_platemaps[1].map_name).toBe("new_platemap");
   });
 
   test("When user selects 'Clear/Reset All' button, Then the current platemap configuration reset assigned wells only", async () => {
