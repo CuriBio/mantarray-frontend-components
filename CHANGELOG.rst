@@ -6,6 +6,8 @@ Changelog for Mantarray Frontend Components
 
 Changed:
 ^^^^^^^^
+- If the max pulse duration allowed for a Stim pulse is a decimal value, it will be rounded down to the nearest int
+- Stim protocol colors are no longer random, will now be selected from a predetermined list of colors
 - Heatmap uses last 5 most recent datapoints for heatmap instead of just one
 
 
