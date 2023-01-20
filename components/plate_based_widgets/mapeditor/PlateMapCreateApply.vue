@@ -94,9 +94,7 @@ export default {
     current_platemap_name: function () {
       this.check_platemap_dropdown_matches_state();
     },
-    map_options_idx: function () {
-      this.check_platemap_dropdown_matches_state();
-    },
+
     well_assignment_names: function (new_names, old_names) {
       // select new assignment once saved to be selected in dropdown
       if (new_names.length > old_names.length) {
@@ -105,6 +103,9 @@ export default {
       // need to reassign here in case a user edits a label name and tries to immediately apply or clear well assignments, the name will be old name before editing
       this.assignment_option = this.well_assignment_names[this.assignment_options_idx];
     },
+  },
+  mounted() {
+    this.check_platemap_dropdown_matches_state();
   },
   methods: {
     ...mapMutations("platemap", [
@@ -116,7 +117,10 @@ export default {
     check_platemap_dropdown_matches_state() {
       if (this.current_platemap_name !== this.platemap_names[this.map_options_idx]) {
         const platemap_idx = this.platemap_names.indexOf(this.current_platemap_name);
-        this.map_options_idx = this.current_platemap_name.length > 0 && platemap_idx > -1 ? platemap_idx : 0;
+        this.map_options_idx =
+          this.current_platemap_name && this.current_platemap_name.length > 0 && platemap_idx > -1
+            ? platemap_idx
+            : 0;
       }
     },
     handle_create_apply_click: function ({ target }) {

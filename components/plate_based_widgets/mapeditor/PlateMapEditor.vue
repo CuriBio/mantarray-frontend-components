@@ -14,7 +14,7 @@
               :invalid_text="invalid_text"
               :initial_value="input_platemap_name"
               :dom_id_suffix="'platemap-name'"
-              @update:value="update_platemap_input"
+              @update:value="update_platemap_input($event)"
             />
           </div>
         </div>
@@ -138,7 +138,7 @@ export default {
     },
   },
   mounted() {
-    this.input_platemap_name = this.current_platemap_name;
+    this.input_platemap_name = this.current_platemap_name ? this.current_platemap_name : "";
   },
   methods: {
     ...mapActions("platemap", [
@@ -198,7 +198,7 @@ export default {
     update_platemap_input: function (value) {
       this.input_platemap_name = value;
       // even though this isn't shown, it signifies whether a red or green border is used around the input box
-      this.invalid_text = value.length === 0 ? "Required" : "";
+      this.invalid_text = value && value.length === 0 ? "Required" : "";
     },
   },
 };
