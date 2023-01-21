@@ -461,7 +461,10 @@ describe("store/playback", () => {
 
       test("When user attempts to start a new recording with a platemap stored, Then the platemap config will be sent in /start_recording request instead of defaulting to null", async () => {
         const api = "start_recording";
-        await store.commit("platemap/save_new_platemap", { map_name: "test_platemap", labels: [] });
+        await store.commit("platemap/save_new_platemap", {
+          map_name: "test_platemap",
+          labels: [{ name: "test_label", wells: [], color: "#111" }],
+        });
 
         const test_plate_barcode = "ML2022001000";
         const test_stim_barcode = "MS2022001000";
@@ -478,7 +481,7 @@ describe("store/playback", () => {
           stim_barcode: test_stim_barcode,
           is_hardware_test_recording: false,
           recording_name: test_recording_name,
-          platemap: { map_name: "test_platemap", labels: [] },
+          platemap: { map_name: "test_platemap", labels: [{ name: "test_label", wells: [] }] },
         });
       });
 

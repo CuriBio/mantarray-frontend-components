@@ -54,9 +54,10 @@ export default {
     const current_platemap = stored_platemaps.find(({ map_name }) => map_name === current_platemap_name);
     // remove unecessary keys from labels to send
     if (current_platemap)
-      current_platemap.labels = current_platemap.labels.map(({ name, wells }) => {
-        name, wells;
-      });
+      current_platemap.labels = current_platemap.labels.map(({ name, wells }) => ({
+        name,
+        wells,
+      }));
 
     const url = "http://localhost:4567/start_recording";
     const params = {
