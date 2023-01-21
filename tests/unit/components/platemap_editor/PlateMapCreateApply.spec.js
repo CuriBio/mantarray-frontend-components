@@ -146,4 +146,25 @@ describe("PlateMapCreateApply.vue", () => {
     expect(wrapper.vm.assignment_options_idx).toBe(1);
     expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([1, 4, 7, 13]);
   });
+
+  test("When a user applies assignment to selected wells and then selects the same wells to clear them, Then the wells get removed in vuex state", async () => {
+    const wrapper = mount(PlateMapCreateApply, {
+      store,
+      localVue,
+    });
+
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_selected_wells", [1, 4, 7, 13]);
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([]);
+
+    await wrapper.findAll(".div__platemap-createapply-button-background-enabled").at(0).trigger("click");
+
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([1, 4, 7, 13]);
+
+    await store.commit("platemap/set_selected_wells", [7, 13]);
+
+    await wrapper.findAll(".div__platemap-createapply-button-background-enabled").at(2).trigger("click");
+
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([1, 4]);
+  });
 });

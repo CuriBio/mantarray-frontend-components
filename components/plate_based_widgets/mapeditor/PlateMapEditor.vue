@@ -155,7 +155,7 @@ export default {
     handle_modal_close: function () {
       this.$bvModal.hide("new-assignment-modal");
       // always set back to false just in case
-      this.opened_for_edit = null;
+      this.editable_name = null;
     },
     platewell_selected: function (wells) {
       // set indices of wells with true values marking selected

@@ -50,9 +50,10 @@ describe("PlateMapEditor.vue", () => {
   });
 
   test("When user clicks on import protocol button, Then action will be dispatched to store", async () => {
-    const import_spy = jest
+    const filereader_spy = jest
       .spyOn(FileReader.prototype, "readAsText")
       .mockImplementation(() => "test successful");
+
     const action_spy = jest.spyOn(store, "dispatch");
 
     const wrapper = mount(PlateMapEditor, {
@@ -64,8 +65,9 @@ describe("PlateMapEditor.vue", () => {
 
     const test_file = new File([new ArrayBuffer(1)], "file.jpg");
     await wrapper.vm.handle_import([test_file]);
+
     expect(action_spy).toHaveBeenCalledWith("platemap/handle_import_platemap", test_file);
-    expect(import_spy).toHaveBeenCalledTimes(1);
+    expect(filereader_spy).toHaveBeenCalledTimes(1);
   });
 
   test("When user clicks plate column, Then the well indices selected will be added to state", async () => {
@@ -109,6 +111,34 @@ describe("PlateMapEditor.vue", () => {
     expect(store.state.platemap.stored_platemaps[1].map_name).toBe("new_platemap");
   });
 
+  test("When user selects 'Save Changes' to a previously saved platemap, Then the changes to will added to original platemap and not add a new one", async () => {
+    const wrapper = mount(PlateMapEditor, {
+      store,
+      localVue,
+    });
+
+    await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
+    await wrapper.find("#column_1").trigger("click");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/apply_well_assignment", "well_assignment_one");
+    await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
+
+    const { stored_platemaps } = store.state.platemap;
+    expect(stored_platemaps[1].map_name).toBe("new_platemap");
+    expect(stored_platemaps[1].labels[1].wells).toStrictEqual([0, 1, 2, 3]);
+    expect(stored_platemaps).toHaveLength(2);
+
+    await wrapper.find("#input-widget-field-platemap-name").setValue("updated_platemap_name");
+    await wrapper.find("#column_2").trigger("click");
+    await store.commit("platemap/apply_well_assignment", "well_assignment_one");
+
+    await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
+
+    expect(stored_platemaps[1].map_name).toBe("updated_platemap_name");
+    expect(stored_platemaps[1].labels[1].wells).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7]);
+    expect(stored_platemaps).toHaveLength(2);
+  });
+
   test("When user selects 'Clear/Reset All' button, Then the current platemap configuration reset assigned wells only", async () => {
     const wrapper = mount(PlateMapEditor, {
       store,
@@ -125,6 +155,22 @@ describe("PlateMapEditor.vue", () => {
     await wrapper.findAll(".div__platemap-button-background-enabled").at(3).trigger("click");
 
     expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([]);
+  });
+
+  test("When user selects 'Edit Label' button, Then assigment modal will open with name passed as props", async () => {
+    const wrapper = mount(PlateMapEditor, {
+      store,
+      localVue,
+    });
+
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+
+    await wrapper.findAll(".div__platemap-createapply-button-background-enabled").at(1).trigger("click");
+
+    expect(wrapper.vm.editable_name).toBe("well_assignment_one");
+
+    await wrapper.vm.handle_modal_close();
+    expect(wrapper.vm.editable_name).toBeNull();
   });
 
   test("When user selects 'Discard Changes' button, Then the platemap will reset to most recent saved state", async () => {
@@ -157,5 +203,27 @@ describe("PlateMapEditor.vue", () => {
     expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
     expect(store.state.platemap.current_platemap_name).toBe("new_platemap");
     expect(store.state.platemap.well_assignments[2].wells).toStrictEqual([]);
+  });
+  test("When user selects 'Discard Changes' button when no changes have ever been saved, Then the platemap will reset to most recent to empty state", async () => {
+    const wrapper = mount(PlateMapEditor, {
+      store,
+      localVue,
+    });
+
+    await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
+    await wrapper.find("#row_1").trigger("click");
+    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/apply_well_assignment", "well_assignment_one");
+
+    // declare previously saved state
+    expect(store.state.platemap.well_assignments).toHaveLength(2);
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
+
+    // click discard
+    await wrapper.findAll(".div__platemap-button-background-enabled").at(4).trigger("click");
+
+    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([]);
+    expect(store.state.platemap.current_platemap_name).toBe("");
+    expect(wrapper.find("#input-widget-field-platemap-name").text()).toBe("");
   });
 });

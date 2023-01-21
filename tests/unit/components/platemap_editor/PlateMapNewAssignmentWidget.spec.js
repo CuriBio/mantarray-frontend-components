@@ -65,6 +65,40 @@ describe("PlateMapNewAssignmentWidget.vue", () => {
     expect(store_spy).toHaveBeenCalledWith("platemap/set_new_well_assignment", "new_name", undefined);
   });
 
+  test("When original name gets passed as props for editing, Then the name will auto populate the input", async () => {
+    const wrapper = mount(PlateMapNewAssignmentWidget, {
+      store,
+      localVue,
+    });
+    await wrapper.setProps({ editable_name: "name_to_edit" });
+
+    expect(wrapper.vm.initial_value).toBe("name_to_edit");
+    expect(wrapper.vm.invalid_text).toBe("");
+    expect(wrapper.vm.is_enabled).toStrictEqual([true, true]);
+  });
+
+  test("When edited name gets saved, Then the new and old name will be passed in commit to change state", async () => {
+    const store_spy = jest.spyOn(store, "commit");
+
+    const wrapper = mount(PlateMapNewAssignmentWidget, {
+      store,
+      localVue,
+      propsData: {
+        editable_name: "name_to_edit",
+      },
+    });
+
+    await wrapper.find("#input-widget-field-assignment-name").setValue("new_name");
+
+    await wrapper.findAll(".span__button_label").at(1).trigger("click");
+
+    expect(store_spy).toHaveBeenCalledWith(
+      "platemap/change_existing_name",
+      { new_name: "new_name", old_name: "name_to_edit" },
+      undefined
+    );
+  });
+
   test.each([0, 1])(
     "When valid input has been added, Then selecting either button will close the modal and reset input value",
     async (button_idx) => {
