@@ -22,7 +22,7 @@
       class="span__platemap-editor-row-index"
     >
       <label
-        :id="'row_' + v"
+        :id="'row_' + i"
         @click.exact="on_select(v, row_values)"
         @click.shift.exact="on_shift_click(v, row_values)"
         @mouseenter="on_enter_hover(v, row_values)"

@@ -108,10 +108,10 @@ describe("PlateMapWidget.vue", () => {
     await wrapper.vm.basic_select(4);
     expect(wrapper.find("#plus").isVisible()).toBe(true);
     await wrapper.find(".span__platemap-toggle-plus-minus-icon").trigger("click");
-    await wrapper.vm.on_column_select(2);
+    await wrapper.find("#column_2").trigger("click");
     expect(wrapper.find("#plus").isVisible()).toBe(true);
     await wrapper.find(".span__platemap-toggle-plus-minus-icon").trigger("click");
-    await wrapper.vm.on_row_select(3);
+    await wrapper.find("#row_2").trigger("click");
     expect(wrapper.find("#plus").isVisible()).toBe(true);
   });
 
@@ -168,10 +168,10 @@ describe("PlateMapWidget.vue", () => {
     ["#column_4", [12, 13, 14, 15]],
     ["#column_5", [16, 17, 18, 19]],
     ["#column_6", [20, 21, 22, 23]],
-    ["#row_1", [0, 4, 8, 12, 16, 20]],
-    ["#row_2", [1, 5, 9, 13, 17, 21]],
-    ["#row_3", [2, 6, 10, 14, 18, 22]],
-    ["#row_4", [3, 7, 11, 15, 19, 23]],
+    ["#row_0", [0, 4, 8, 12, 16, 20]],
+    ["#row_1", [1, 5, 9, 13, 17, 21]],
+    ["#row_2", [2, 6, 10, 14, 18, 22]],
+    ["#row_3", [3, 7, 11, 15, 19, 23]],
   ])(
     "Given no wells are selected, When the user selects a row/column label, Then the corresponding unselected wells will have a stroke_width of 4",
     async (id, wells) => {
@@ -196,10 +196,10 @@ describe("PlateMapWidget.vue", () => {
     ["#column_4", [12, 13, 14, 15]],
     ["#column_5", [16, 17, 18, 19]],
     ["#column_6", [20, 21, 22, 23]],
-    ["#row_1", [0, 4, 8, 12, 16, 20]],
-    ["#row_2", [1, 5, 9, 13, 17, 21]],
-    ["#row_3", [2, 6, 10, 14, 18, 22]],
-    ["#row_4", [3, 7, 11, 15, 19, 23]],
+    ["#row_0", [0, 4, 8, 12, 16, 20]],
+    ["#row_1", [1, 5, 9, 13, 17, 21]],
+    ["#row_2", [2, 6, 10, 14, 18, 22]],
+    ["#row_3", [3, 7, 11, 15, 19, 23]],
   ])(
     "Given no wells are selected, When the user enters and leaves a row/column label, Then corresponding unselected wells will toggle stroke-width of 2px and 0px",
     async (id, wells) => {
@@ -254,10 +254,10 @@ describe("PlateMapWidget.vue", () => {
       localVue,
     });
     const test = [
-      ["#row_1", [0, 4, 8, 12, 16, 20]],
-      ["#row_2", [1, 5, 9, 13, 17, 21]],
-      ["#row_3", [2, 6, 10, 14, 18, 22]],
-      ["#row_4", [3, 7, 11, 15, 19, 23]],
+      ["#row_0", [0, 4, 8, 12, 16, 20]],
+      ["#row_1", [1, 5, 9, 13, 17, 21]],
+      ["#row_2", [2, 6, 10, 14, 18, 22]],
+      ["#row_3", [3, 7, 11, 15, 19, 23]],
     ];
     test.map(async (row) => {
       await wrapper.find(row[0]).trigger("click", { shiftKey: true });

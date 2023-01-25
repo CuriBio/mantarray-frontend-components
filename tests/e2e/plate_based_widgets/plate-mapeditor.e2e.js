@@ -10,9 +10,9 @@ const backdrop_div = Selector(".div__platemap-editor-backdrop");
 const column_one_btn = Selector("#column_1");
 const column_five_btn = Selector("#column_5");
 
-const row_A_btn = Selector("#row_1");
-const row_B_btn = Selector("#row_2");
-const row_D_btn = Selector("#row_4");
+const row_A_btn = Selector("#row_0");
+const row_B_btn = Selector("#row_1");
+const row_D_btn = Selector("#row_3");
 
 const plus_btn = Selector("#plus");
 const minus_btn = Selector("#minus");
