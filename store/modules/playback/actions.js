@@ -49,6 +49,16 @@ export default {
     const time_index = this.state.playback.x_time_index;
     const plate_barcode = this.state.playback.barcodes.plate_barcode.value;
     const stim_barcode = this.state.playback.barcodes.stim_barcode.value;
+    // get currently selected platemap
+    const { stored_platemaps, current_platemap_name } = this.state.platemap;
+    const current_platemap = stored_platemaps.find(({ map_name }) => map_name === current_platemap_name);
+    // remove unecessary keys from labels to send
+    if (current_platemap)
+      current_platemap.labels = current_platemap.labels.map(({ name, wells }) => ({
+        name,
+        wells,
+      }));
+
     const url = "http://localhost:4567/start_recording";
     const params = {
       time_index,
@@ -56,6 +66,7 @@ export default {
       plate_barcode,
       stim_barcode,
       is_hardware_test_recording: false,
+      platemap: current_platemap ? current_platemap : null,
     };
     context.commit("set_recording_start_time", time_index);
     await call_axios_get_from_vuex(url, context, params);

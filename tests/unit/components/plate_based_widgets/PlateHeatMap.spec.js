@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+import PlateHeatMap from "@/components/plate_based_widgets/heatmap/PlateHeatMap.vue";
 import { PlateHeatMap as DistComponentToTest } from "@/dist/mantarray.common";
 import { createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";

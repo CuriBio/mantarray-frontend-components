@@ -445,6 +445,7 @@ describe("store/playback", () => {
           stim_barcode: test_stim_barcode,
           is_hardware_test_recording: false,
           recording_name: test_recording_name,
+          platemap: null,
         });
 
         expect(store.state.playback.playback_state).toStrictEqual(
@@ -457,6 +458,33 @@ describe("store/playback", () => {
           STATUS.MESSAGE.LIVE_VIEW_ACTIVE
         );
       });
+
+      test("When user attempts to start a new recording with a platemap stored, Then the platemap config will be sent in /start_recording request instead of defaulting to null", async () => {
+        const api = "start_recording";
+        await store.commit("platemap/save_new_platemap", {
+          map_name: "test_platemap",
+          labels: [{ name: "test_label", wells: [], color: "#111" }],
+        });
+
+        const test_plate_barcode = "ML2022001000";
+        const test_stim_barcode = "MS2022001000";
+        store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: test_plate_barcode });
+        store.dispatch("playback/validate_barcode", { type: "stim_barcode", new_value: test_stim_barcode });
+
+        const test_recording_name = "Test Name";
+        await store.dispatch("playback/start_recording", test_recording_name);
+
+        expect(mocked_axios.history.get[0].url).toStrictEqual(`${base_url}/${api}`);
+        expect(mocked_axios.history.get[0].params).toStrictEqual({
+          time_index: 0,
+          plate_barcode: test_plate_barcode,
+          stim_barcode: test_stim_barcode,
+          is_hardware_test_recording: false,
+          recording_name: test_recording_name,
+          platemap: { map_name: "test_platemap", labels: [{ name: "test_label", wells: [] }] },
+        });
+      });
+
       test("Given an x_time_index is set in Vuex and a valid barcode is set in Vuex, When stop_recording is invoked, Then the playback and status states mutate to live_view_active and the /stop_recording route is called with the x_time_index parameter and the recording start time is reset to 0 in Vuex and the ignore_next_system_status_if_matching_this_status state in Vuex is set to RECORDING", async () => {
         const api = "stop_recording";
 

@@ -169,7 +169,7 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
 import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue";
 import GradientBar from "@/components/status/GradientBar.vue";
-import PlateHeatMap from "@/components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+import PlateHeatMap from "@/components/plate_based_widgets/heatmap/PlateHeatMap.vue";
 import playback_module from "@/store/modules/playback";
 import { METRIC_UNITS, MAX_NUM_DATAPOINTS_FOR_MEAN } from "@/store/modules/heatmap/enums";
 

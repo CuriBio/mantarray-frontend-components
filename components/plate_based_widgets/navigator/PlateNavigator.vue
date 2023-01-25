@@ -1,5 +1,19 @@
 <template>
   <div class="div__plate-navigator">
+    <div class="div__plate-navigator-tab-container">
+      <div
+        v-for="(tab, i) in ['Plate Map View', 'Stim. Plate View']"
+        :id="i"
+        :key="tab"
+        :class="i === active_tab ? 'div__plate-navigator-active-tab' : 'div__plate-navigator-inactive-tab'"
+        @click="set_active_tab"
+      >
+        {{ tab }}
+      </div>
+
+      <!-- <div :class="div__plate - navigator - active - tab">Stim. Plate View</div>
+      <div :class="div__plate - navigator - inactive - tab">Plate Map View</div> -->
+    </div>
     <div class="div__plate-navigator-plate-body">
       <!-- original MockFlow ID: cmpD6ca2d9ba3a0cec7efa1b41c0ae833e9c -->
       <span
@@ -24,7 +38,7 @@
             r="15"
             stroke="#FFFFFF"
             stroke-width="0"
-            :fill="getProtocolColor(well_index)"
+            :fill="getWellColor(well_index)"
             :class="{
               'circle__plate-navigator-well--selected': selected_quadrant_well_indices.includes(well_index),
               'circle__plate-navigator-well--unselected-hover':
@@ -56,6 +70,7 @@ export default {
   data: function () {
     return {
       hovered_quadrant_wells: [],
+      active_tab: 0,
     };
   },
   computed: {
@@ -63,6 +78,19 @@ export default {
       selected_quadrant_well_indices: "is_quadrant",
     }),
     ...mapState("stimulation", ["protocol_assignments"]),
+    ...mapState("platemap", ["well_assignments"]),
+    platemap_colors: function () {
+      const blank_plate = Array(24).fill("#b7b7b7");
+
+      const arr = blank_plate.map((gray, i) => {
+        let color_to_use = gray;
+        for (const { wells, color } of this.well_assignments) {
+          if (wells.includes(i)) color_to_use = color;
+        }
+        return color_to_use;
+      });
+      return arr;
+    },
   },
   created() {
     this.quadrant_options = {
@@ -128,10 +156,19 @@ export default {
       const quadrant_containing_this_well = this.get_quadrant_from_well_index(well_index);
       this.$store.commit(this.quadrant_options_api_set.QUADRANT, quadrant_containing_this_well);
     },
-    getProtocolColor(well_index) {
-      if (this.protocol_assignments[well_index] !== undefined)
-        return this.protocol_assignments[well_index].color;
-      else return "#B7B7B7";
+    getWellColor(well_index) {
+      // if stim tab is selected
+      if (this.active_tab === 1) {
+        if (this.protocol_assignments[well_index] !== undefined)
+          return this.protocol_assignments[well_index].color;
+        else return "#B7B7B7";
+      } else {
+        // else show platemap colors
+        return this.platemap_colors[well_index];
+      }
+    },
+    set_active_tab({ target }) {
+      this.active_tab = Number(target.id);
     },
   },
 };
@@ -140,19 +177,50 @@ export default {
 body {
   user-select: none;
 }
+
 .div__plate-navigator {
   position: relative;
   top: 0px;
   left: 0px;
   width: 287px;
-  height: 177px;
+  height: 212px;
   background: #1c1c1c;
   margin-bottom: 8px;
+}
+.div__plate-navigator-tab-container {
+  position: relative;
+  width: 99%;
+  height: 35px;
+  display: flex;
+  flex-direction: row;
+}
+.div__plate-navigator-active-tab {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  color: #b7b7b7;
+  cursor: pointer;
+  font-family: Muli;
+  text-align: center;
+  line-height: 3;
+  font-size: 13px;
+}
+.div__plate-navigator-inactive-tab {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background: rgb(0, 0, 0);
+  color: #b7b7b7c9;
+  cursor: pointer;
+  font-family: Muli;
+  text-align: center;
+  line-height: 3;
+  font-size: 13px;
 }
 
 .div__plate-navigator-plate-body {
   position: absolute;
-  top: 5px;
+  bottom: 5px;
   left: 17px;
   width: 254px;
   height: 167px;

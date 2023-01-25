@@ -21,18 +21,12 @@
         }}</span>
         <input
           v-model="protocol_name"
-          class="protocol_name_nput"
+          class="protocol_name_input"
           placeholder="Protocol Name"
-          :disabled="disabled_name"
           :style="name_validity"
           @change="check_name_validity($event.target.value)"
         />
         <span class="error-message">{{ error_message }}</span>
-        <FontAwesomeIcon
-          class="pencil-icon"
-          :icon="['fa', 'pencil-alt']"
-          @click="disabled_name = !disabled_name"
-        />
         <div class="div__right-settings-panel">
           <SmallDropDown
             :input_height="25"
@@ -98,7 +92,7 @@ import Vue from "vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import StatusWarningWidget from "@/components/status/StatusWarningWidget.vue";
 import BootstrapVue from "bootstrap-vue";
@@ -107,7 +101,7 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import { MAX_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
 Vue.use(BootstrapVue);
 Vue.component("BModal", BModal);
-library.add(faPencilAlt, faTrashAlt);
+library.add(faTrashAlt);
 
 /**
  * @vue-data {String} active_tab - Shows current selected tab
@@ -144,7 +138,6 @@ export default {
   data() {
     return {
       active_tab: "Basic",
-      disabled_name: true,
       disabled_time: false,
       current_letter: "",
       current_color: "",
@@ -338,12 +331,6 @@ export default {
   font-size: 25px;
 }
 
-.pencil-icon {
-  left: 4%;
-  color: #b7b7b7;
-  position: relative;
-}
-
 .trash-icon {
   margin-left: 11%;
   margin-right: 4px;
@@ -352,7 +339,6 @@ export default {
   font-size: 20px;
 }
 
-.pencil-icon:hover,
 .trash-icon:hover {
   cursor: pointer;
   opacity: 0.6;
@@ -390,7 +376,7 @@ export default {
   visibility: visible;
 }
 
-.protocol_name_nput {
+.protocol_name_input {
   background: rgb(0, 0, 0);
   height: 25px;
   width: 300px;
@@ -399,6 +385,10 @@ export default {
   border: none;
   padding: 0 10px 0 10px;
   color: rgb(255, 255, 255);
+}
+
+.protocol_name_input:focus {
+  border: 1px solid #b7b7b7;
 }
 
 .span__Inactive-Tab-labels {

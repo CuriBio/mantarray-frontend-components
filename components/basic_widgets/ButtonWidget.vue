@@ -106,18 +106,18 @@ export default {
       return "left: " + left_shift + "px;";
     },
     selected(value) {
-      if (this.is_enabled[value - 1] == true) {
+      if (this.is_enabled[value - 1]) {
         this.$emit("btn-click", value - 1);
       }
     },
     hover_active(value) {
-      if (this.is_enabled[value - 1] == true) {
+      if (this.is_enabled[value - 1]) {
         const local_ref = this.$refs[value.toString()];
         local_ref[0].style.color = this.hover_color[value - 1];
       }
     },
     hover_inactive(value) {
-      if (this.is_enabled[value - 1] == true) {
+      if (this.is_enabled[value - 1]) {
         const local_ref = this.$refs[value.toString()];
         local_ref[0].style.color = this.enabled_color;
       }
@@ -144,6 +144,7 @@ body {
   box-shadow: none;
   z-index: 3;
   pointer-events: all;
+  overflow: hidden;
 }
 
 .span__button_label {
