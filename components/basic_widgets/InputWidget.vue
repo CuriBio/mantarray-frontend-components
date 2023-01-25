@@ -91,7 +91,7 @@ export default {
       return this.invalid_text === "";
     },
     input_height_background: function () {
-      return this.title_label !== "" ? 100 : 60;
+      return this.title_label !== "" ? 100 : this.input_height + 10;
     },
     input_widget_top: function () {
       const base = this.title_label !== "" ? 40 : 0;

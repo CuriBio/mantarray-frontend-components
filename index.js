@@ -18,6 +18,7 @@ export { default as data_store_module } from "./store/modules/data";
 export { default as playback_store_module } from "./store/modules/playback";
 export { default as settings_store_module } from "./store/modules/settings";
 export { default as waveform_store_module } from "./store/modules/waveform";
+export { default as platemap_store_module } from "./store/modules/platemap";
 export { default as twentyfourcontrols_store_module } from "./store/modules/twentyfourcontrols";
 export { default as flask_store_module } from "./store/modules/flask";
 export { system_status_regexp, all_mantarray_commands_regexp } from "./store/modules/flask/url_regex";
@@ -74,6 +75,8 @@ export { default as ToggleWidget } from "./components/basic_widgets/ToggleWidget
 // Plate Based
 export { default as PlateNavigator } from "./components/plate_based_widgets/navigator/PlateNavigator.vue";
 export { default as PlateMapEditor } from "./components/plate_based_widgets/mapeditor/PlateMapEditor.vue";
+export { default as PlateMapWidget } from "./components/plate_based_widgets/mapeditor/PlateMapWidget.vue";
+export { default as PlateMapEditorButton } from "./components/plate_based_widgets/mapeditor/PlateMapEditorButton.vue";
 export { default as StimulationStudioWidget } from "./components/plate_based_widgets/stimulationstudio/StimulationStudioWidget.vue";
 
 // Status Related
@@ -91,7 +94,7 @@ export { default as RecordingSnapshotWidget } from "./components/status/Recordin
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
-export { default as PlateHeatMap } from "./components/plate_based_widgets/mapeditor/PlateHeatMap.vue";
+export { default as PlateHeatMap } from "./components/plate_based_widgets/heatmap/PlateHeatMap.vue";
 
 // Stimulation Studio
 export { default as StimulationStudioCreateAndEdit } from "./components/stimulation/StimulationStudioCreateAndEdit.vue";

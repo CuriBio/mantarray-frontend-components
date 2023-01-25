@@ -1,725 +1,335 @@
 <template>
-  <div>
-    <div class="div__platemap-editor-backdrop"></div>
-    <span
-      v-for="column_index in 6"
-      :key="'column_' + column_index"
-      class="span__platemap-editor-column-index"
-      :style="'left:' + column_left_offset(column_values[column_index - 1]) + 'px;'"
-    >
-      <label
-        :id="'column_' + column_index"
-        @click.exact="on_column_select(column_values[column_index - 1])"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
-        @mouseenter="on_column_enter_hover(column_values[column_index - 1])"
-        @mouseleave="on_column_leave_hover(column_values[column_index - 1])"
-        >0{{ column_values[column_index - 1] }}</label
+  <div class="div__platemapeditor-layout-background">
+    <div class="div__platemapeditor-header">Plate Map Editor</div>
+    <canvas class="canvas__common-horizontal-line" />
+    <div class="div__platemap-assignmenttable-container">
+      <div class="div__platemapeditor-subheader">
+        <div class="div__platemap-name-container">
+          Platemap Name:
+          <div class="div__platemap-input-container">
+            <InputWidget
+              :placeholder="'Platemap A'"
+              :input_width="200"
+              :input_height="28"
+              :invalid_text="invalid_text"
+              :initial_value="input_platemap_name"
+              :dom_id_suffix="'platemap-name'"
+              @update:value="update_platemap_input($event)"
+            />
+          </div>
+        </div>
+      </div>
+      <PlateMapAssignmentTable />
+    </div>
+    <div class="div__platemapeditor-container">
+      <PlateMapWidget
+        :platecolor="passing_plate_colors"
+        :selected="well_selection"
+        @platewell-selected="platewell_selected"
+      />
+      <PlateMapCreateApply @handle_modal_open="handle_modal_open" />
+    </div>
+    <div class="div__platemap-upper-buttons-container">
+      <div
+        v-for="(value, idx) in ['Import Map', 'Export Map']"
+        :id="idx"
+        :key="value"
+        :class="
+          is_export_import_enabled[idx]
+            ? 'div__platemap-button-background-enabled'
+            : 'div__platemap-button-background-disabled'
+        "
+        @click.exact="handle_import_export"
       >
-    </span>
-
-    <span
-      v-for="row_index in 4"
-      :key="'row_' + row_index"
-      class="span__platemap-editor-row-index"
-      :style="'top:' + row_top_offset(row_values[row_index - 1]) + 'px;'"
-    >
-      <label
-        :id="'row_' + row_index"
-        @click.exact="on_row_select(row_values[row_index - 1])"
-        @click.shift.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
-        @mouseenter="on_row_enter_hover(row_values[row_index - 1])"
-        @mouseleave="on_row_leave_hover(row_values[row_index - 1])"
+        {{ value }}
+      </div>
+      <input ref="file" type="file" style="display: none" @change="handle_import($event.target.files)" />
+    </div>
+    <div class="div__platemap-lower-buttons-container">
+      <div
+        v-for="(value, idx) in ['Save Changes', 'Clear/Reset All', 'Discard All Changes']"
+        :id="idx"
+        :key="value"
+        class="div__platemap-button-background-enabled"
+        @click.exact="handle_btn_click"
       >
-        {{ row_values[row_index - 1] }}</label
-      >
-    </span>
-
-    <span
-      class="span__platemap-toggle-plus-minus-icon"
-      @click.exact="on_select_cancel_all(all_select_or_cancel)"
-      @mouseenter="on_plus_minus_enter_hover(all_select_or_cancel)"
-      @mouseleave="on_plus_minus_leave_hover(all_select_or_cancel)"
+        {{ value }}
+      </div>
+    </div>
+    <b-modal
+      id="new-assignment-modal"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
     >
-      <FontAwesomeIcon v-show="all_select_or_cancel" id="plus" :icon="['fa', 'plus-circle']" />
-      <FontAwesomeIcon v-show="!all_select_or_cancel" id="minus" :icon="['fa', 'minus-circle']" />
-    </span>
-    <span
-      v-for="well_index in Array(24).keys()"
-      :key="well_index"
-      :class="'well_' + well_index"
-      :style="well_top_left_offset(well_index)"
-      width="66"
-      height="66"
-    >
-      <PlateWell
-        :classname="'plate_' + well_index"
-        :svg_height="66"
-        :svg_width="66"
-        :circle_x="33"
-        :circle_y="33"
-        :radius="25"
-        :strk="hover_color[well_index]"
-        :plate_fill="platecolor[well_index]"
-        :stroke_wdth="stroke_width[well_index]"
-        :index="well_index"
-        @enter-well="on_wellenter(well_index)"
-        @leave-well="on_wellleave(well_index)"
-        @click-exact="basic_select(well_index)"
-        @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
-      ></PlateWell>
-    </span>
+      <PlateMapNewAssignmentWidget
+        id="new-assigment-widget"
+        :editable_name="editable_name"
+        @close_modal="handle_modal_close"
+      />
+    </b-modal>
   </div>
 </template>
+
 <script>
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faMinusCircle, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import PlateWell from "@/components/basic_widgets/PlateWell.vue";
-library.add(faMinusCircle);
-library.add(faPlusCircle);
-const no_stroke_width = 0;
-const hover_stroke_width = 2;
-const selected_stroke_width = 4;
-const hover_color = "#ececed";
-const selected_color = "#FFFFFF";
-const default_color = "#b7b7b7";
-const debug_mode = undefined;
+import Vue from "vue";
+import InputWidget from "@/components/basic_widgets/InputWidget.vue";
+import PlateMapWidget from "@/components/plate_based_widgets/mapeditor/PlateMapWidget.vue";
+import PlateMapCreateApply from "@/components/plate_based_widgets/mapeditor/PlateMapCreateApply.vue";
+import PlateMapAssignmentTable from "@/components/plate_based_widgets/mapeditor/PlateMapAssignmentTable.vue";
+import PlateMapNewAssignmentWidget from "@/components/plate_based_widgets/mapeditor/PlateMapNewAssignmentWidget.vue";
+import { BModal } from "bootstrap-vue";
+import { mapState, mapActions, mapMutations } from "vuex";
+Vue.component("BModal", BModal);
+
 export default {
   name: "PlateMapEditor",
-  components: { FontAwesomeIcon, PlateWell },
-  props: {
-    selected: {
-      type: Array,
-      default: function () {
-        return new Array(24).fill(false);
-      },
-    },
-    platecolor: {
-      type: Array,
-      default: function () {
-        return new Array(24).fill(default_color);
-      },
-    },
+  components: {
+    PlateMapWidget,
+    PlateMapCreateApply,
+    PlateMapAssignmentTable,
+    PlateMapNewAssignmentWidget,
+    InputWidget,
+    BModal,
   },
   data() {
     return {
-      all_select_or_cancel: true,
-      x_origin: 0,
-      y_origin: 0,
-      rect_width: 0,
-      rect_height: 0,
-      all_select: this.selected,
-      hover: new Array(24).fill(false),
-      hover_color: new Array(24).fill(hover_color),
-      stroke_width: new Array(24).fill(no_stroke_width),
-      temp_stroke_width: [],
-      row_values: ["A", "B", "C", "D"],
-      column_values: ["1", "2", "3", "4", "5", "6"],
-      testerf: false,
+      invalid_text: "Required",
+      input_platemap_name: "",
+      editable_name: null,
     };
   },
-  created() {
-    this.stroke_width.splice(0, this.stroke_width.length);
-    for (let j = 0; j < this.all_select.length; j++) {
-      this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-    }
-    const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-    this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+  computed: {
+    ...mapState("platemap", ["well_assignments", "selected_wells", "current_platemap_name"]),
+    passing_plate_colors: function () {
+      const blank_plate = Array(24).fill("#b7b7b7");
+
+      const arr = blank_plate.map((gray, i) => {
+        let color_to_use = gray;
+        for (const { wells, color } of this.well_assignments) {
+          if (wells.includes(i)) color_to_use = color;
+        }
+        return color_to_use;
+      });
+      return arr;
+    },
+    well_selection: function () {
+      return Array(24)
+        .fill()
+        .map((_, i) => {
+          return this.selected_wells.includes(i);
+        });
+    },
+    are_wells_assigned: function () {
+      // if no wells are assigned, the wells array for each assignmetn will be empty
+      return this.well_assignments.filter(({ wells }) => wells.length > 0).length > 0;
+    },
+    is_export_import_enabled: function () {
+      // only allow export if wells have been assigned
+      return [true, this.are_wells_assigned];
+    },
+  },
+  watch: {
+    current_platemap_name: function () {
+      this.input_platemap_name = this.current_platemap_name;
+    },
+  },
+  mounted() {
+    this.input_platemap_name = this.current_platemap_name ? this.current_platemap_name : "";
   },
   methods: {
-    column_left_offset(column) {
-      switch (column) {
-        case "1":
-          return "35.9792";
-        case "2":
-          return "97.5836";
-        case "3":
-          return "159.188";
-        case "4":
-          return "220.792";
-        case "5":
-          return "282.397";
-        case "6":
-          return "344.001";
+    ...mapActions("platemap", [
+      "handle_import_platemap",
+      "handle_export_platemap",
+      "save_platemap",
+      "discard_current_platemap_changes",
+    ]),
+    ...mapMutations("platemap", ["set_selected_wells", "clear_all_well_assignments", "set_platemap_name"]),
+    handle_modal_open: function (editable_name) {
+      this.editable_name = editable_name;
+      this.$bvModal.show("new-assignment-modal");
+    },
+    handle_modal_close: function () {
+      this.$bvModal.hide("new-assignment-modal");
+      // always set back to false just in case
+      this.editable_name = null;
+    },
+    platewell_selected: function (wells) {
+      // set indices of wells with true values marking selected
+      this.set_selected_wells(
+        wells
+          .map((b, i) => {
+            return b ? i : b;
+          })
+          .filter((well) => well || well === 0)
+      );
+    },
+    handle_btn_click: function ({ target }) {
+      const button_idx = Number(target.id);
+      if (button_idx === 0 && this.invalid_text === "") {
+        // saving name on save instead of here as it's input to trigger dropdown change in other component
+        this.save_platemap(this.input_platemap_name);
+      } else if (button_idx === 1) {
+        this.clear_all_well_assignments();
+        this.input_platemap_name = "";
+      } else if (button_idx === 2) {
+        this.discard_current_platemap_changes();
+        this.input_platemap_name = this.current_platemap_name;
       }
     },
-    row_top_offset(row) {
-      switch (row) {
-        case "A":
-          return "41.928";
-        case "B":
-          return "103.621";
-        case "C":
-          return "165.779";
-        case "D":
-          return "224.1";
-      }
-    },
-    well_top_left_offset(index) {
-      switch (index) {
-        case 0:
-          return "top: 25px; left: 29.9792px;";
-        case 1:
-          return "top: 85.3524px; left: 29.9792px;";
-        case 2:
-          return "top: 145.278px; left: 29.9792px;";
-        case 3:
-          return "top: 205.157px; left: 29.9792px;";
-        case 4:
-          return "top: 25.427px; left: 91.5836px;";
-        case 5:
-          return "top: 85.3524px; left: 91.5836px;";
-        case 6:
-          return "top: 145.278px; left: 91.5836px;";
-        case 7:
-          return "top: 205.203px; left: 91.5836px;";
-        case 8:
-          return "top: 25.427px; left: 153.188px;";
-        case 9:
-          return "top: 85.3524px; left: 153.188px;";
-        case 10:
-          return "top: 145.278px; left: 153.188px;";
-        case 11:
-          return "top: 205.203px; left: 153.188px;";
-        case 12:
-          return "top: 25.427px; left: 214.792px;";
-        case 13:
-          return "top: 85.3524px; left: 214.792px;";
-        case 14:
-          return "top: 145.278px; left: 214.792px;";
-        case 15:
-          return "top: 205.203px; left: 214.792px;";
-        case 16:
-          return "top: 25.427px; left: 276.397px;";
-        case 17:
-          return "top: 85.3524px; left: 276.397px;";
-        case 18:
-          return "top: 145.278px; left: 276.397px;";
-        case 19:
-          return "top: 205.203px; left: 276.397px;";
-        case 20:
-          return "top: 25.427px; left: 338.001px;";
-        case 21:
-          return "top: 85.3524px; left: 338.001px;";
-        case 22:
-          return "top: 145.278px; left: 338.001px;";
-        case 23:
-          return "top: 205.203px; left: 338.001px;";
-      }
-    },
-    on_select_cancel_all(state) {
-      if (this.all_select_or_cancel == true) {
-        this.test_event("+ icon clicked");
-      } else {
-        this.test_event("- icon clicked");
-      }
-      this.all_select_or_cancel = !state;
-      for (let count = 0; count < 24; count++) {
-        this.all_select[count] = state;
-      }
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[j] = !this.all_select[j] ? hover_color : selected_color;
-      }
-      this.on_plate_well_selected();
-    },
-    on_plus_minus_enter_hover(state) {
-      if (state == true) {
-        this.test_event("+ icon enter => Hover");
-      } else {
-        this.test_event("- icon enter => Hover");
-      }
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? hover_stroke_width : selected_stroke_width;
-      }
-    },
-    on_plus_minus_leave_hover(state) {
-      if (state == true) {
-        this.test_event("+ icon leave => Hover");
-      } else {
-        this.test_event("- icon leave => Hover");
-      }
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-        if (state == false) {
-          this.hover_color[j] = selected_color;
-        }
-      }
-    },
-    basic_select(value) {
-      const new_list = new Array(24).fill(false);
+    handle_import_export: function ({ target }) {
+      const button_idx = Number(target.id);
 
-      new_list[value] = true;
-      this.test_event("Well clicked");
-      this.stroke_width[value] = selected_stroke_width;
-      this.all_select = new_list;
-      if (this.all_select_or_cancel == false) {
-        this.all_select_or_cancel = true;
-      }
-      this.on_wellenter(value);
-      this.on_plate_well_selected();
-    },
-    basic_shift_or_ctrl_select(value) {
-      this.test_event("Well Shift or Ctrl clicked");
-      this.testerf = !this.testerf;
-      const allEqual = (arr) => arr.every((v) => v === true);
-      this.all_select[value] = !this.all_select[value];
-      this.stroke_width[value] = selected_stroke_width;
-      if (allEqual(this.all_select)) {
-        this.all_select_or_cancel = false;
-      } else {
-        this.all_select_or_cancel = true;
-      }
-      this.on_wellenter(value);
-      this.on_plate_well_selected();
-    },
-    on_wellenter(value) {
-      this.hover[value] = true;
-      this.hover_color[value] = hover_color;
-      this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event("well enter =>" + value + " Hover");
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-      }
-      if (this.all_select[value] == true) {
-        this.stroke_width[value] = selected_stroke_width;
-      } else {
-        this.stroke_width[value] = hover_stroke_width;
+      if (this.is_export_import_enabled[button_idx]) {
+        if (button_idx === 0) {
+          // manually click file ref to open local directory for file selection
+          this.$refs.file.click();
+        } else this.handle_export_platemap(this.input_platemap_name);
       }
     },
-    on_wellleave(value) {
-      this.hover[value] = false;
-      this.hover_color[value] = selected_color;
-      this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event("well leave =>" + value + " Hover");
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
+    handle_import: async function (files) {
+      for (const file of files) {
+        await this.handle_import_platemap(file);
       }
     },
-    on_row_select(row) {
-      const new_list = new Array(24).fill(false);
-      this.test_event(row + " clicked");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (row) {
-        case "A":
-          new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
-          break;
-        case "B":
-          new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
-          break;
-        case "C":
-          new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
-          break;
-        case "D":
-          new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
-          break;
-      }
-      if (this.all_select_or_cancel == false) {
-        this.all_select_or_cancel = true;
-      }
-      this.all_select = new_list;
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-      this.on_plate_well_selected();
-    },
-    on_column_select(column) {
-      const new_list = new Array(24).fill(false);
-      this.test_event(column + " clicked");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (column) {
-        case "1":
-          new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
-          break;
-        case "2":
-          new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
-          break;
-        case "3":
-          new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
-          break;
-        case "4":
-          new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
-          break;
-        case "5":
-          new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
-          break;
-        case "6":
-          new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
-          break;
-      }
-      if (this.all_select_or_cancel == false) {
-        this.all_select_or_cancel = true;
-      }
-      this.all_select = new_list;
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-      this.on_plate_well_selected();
-    },
-    on_row_ctrl_click_or_shift_click(row) {
-      const new_list = [];
-      let result = false;
-      this.test_event(row + " ctrl or shift clicked");
-      for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (row) {
-        case "A":
-          result = new_list[0] && new_list[4] && new_list[8] && new_list[12] && new_list[16] && new_list[20];
-          if (result == true) {
-            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = false;
-          } else {
-            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
-          }
-          break;
-        case "B":
-          result = new_list[1] && new_list[5] && new_list[9] && new_list[13] && new_list[17] && new_list[21];
-          if (result == true) {
-            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = false;
-          } else {
-            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
-          }
-          break;
-        case "C":
-          result = new_list[2] && new_list[6] && new_list[10] && new_list[14] && new_list[18] && new_list[22];
-          if (result == true) {
-            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = false;
-          } else {
-            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
-          }
-          break;
-        case "D":
-          result = new_list[3] && new_list[7] && new_list[11] && new_list[15] && new_list[19] && new_list[23];
-          if (result == true) {
-            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = false;
-          } else {
-            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
-          }
-          break;
-      }
-
-      this.all_select = new_list;
-      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-      this.on_plate_well_selected();
-    },
-    on_column_ctrl_click_or_shift_click(column) {
-      this.test_event(column + " ctrl or shift clicked");
-      const new_list = [];
-      let result = false;
-      for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (column) {
-        case "1":
-          result = new_list[0] && new_list[1] && new_list[2] && new_list[3];
-          if (result == true) {
-            new_list[0] = new_list[1] = new_list[2] = new_list[3] = false;
-          } else {
-            new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
-          }
-          break;
-        case "2":
-          result = new_list[4] && new_list[5] && new_list[6] && new_list[7];
-          if (result == true) {
-            new_list[4] = new_list[5] = new_list[6] = new_list[7] = false;
-          } else {
-            new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
-          }
-          break;
-        case "3":
-          result = new_list[8] && new_list[9] && new_list[10] && new_list[11];
-          if (result == true) {
-            new_list[8] = new_list[9] = new_list[10] = new_list[11] = false;
-          } else {
-            new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
-          }
-          break;
-        case "4":
-          result = new_list[12] && new_list[13] && new_list[14] && new_list[15];
-          if (result == true) {
-            new_list[12] = new_list[13] = new_list[14] = new_list[15] = false;
-          } else {
-            new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
-          }
-          break;
-        case "5":
-          result = new_list[16] && new_list[17] && new_list[18] && new_list[19];
-          if (result == true) {
-            new_list[16] = new_list[17] = new_list[18] = new_list[19] = false;
-          } else {
-            new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
-          }
-          break;
-        case "6":
-          result = new_list[20] && new_list[21] && new_list[22] && new_list[23];
-          if (result == true) {
-            new_list[20] = new_list[21] = new_list[22] = new_list[23] = false;
-          } else {
-            new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
-          }
-          break;
-      }
-
-      this.all_select = new_list;
-      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-      this.on_plate_well_selected();
-    },
-    on_column_enter_hover(value) {
-      this.test_event(value + " hover enter");
-      const new_list = [];
-      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (value) {
-        case "1":
-          new_list[0] = new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
-          new_list[1] = new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
-          new_list[2] = new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
-          new_list[3] = new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
-          break;
-        case "2":
-          new_list[4] = new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
-          new_list[5] = new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
-          new_list[6] = new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
-          new_list[7] = new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
-          break;
-        case "3":
-          new_list[8] = new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
-          new_list[9] = new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
-          new_list[10] = new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
-          new_list[11] = new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
-          break;
-        case "4":
-          new_list[12] = new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
-          new_list[13] = new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
-          new_list[14] = new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
-          new_list[15] = new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
-          break;
-        case "5":
-          new_list[16] = new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
-          new_list[17] = new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
-          new_list[18] = new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
-          new_list[19] = new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
-          break;
-        case "6":
-          new_list[20] = new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
-          new_list[21] = new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
-          new_list[22] = new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
-          new_list[23] = new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
-          break;
-      }
-      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
-    },
-    on_column_leave_hover(value) {
-      this.test_event(value + " hover leave");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-    },
-    on_row_enter_hover(value) {
-      this.test_event(value + " hover enter");
-      const new_list = [];
-      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (value) {
-        case "A":
-          new_list[0] = new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
-          new_list[4] = new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
-          new_list[8] = new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
-          new_list[12] = new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
-          new_list[16] = new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
-          new_list[20] = new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
-          break;
-        case "B":
-          new_list[1] = new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
-          new_list[5] = new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
-          new_list[9] = new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
-          new_list[13] = new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
-          new_list[17] = new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
-          new_list[21] = new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
-          break;
-        case "C":
-          new_list[2] = new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
-          new_list[6] = new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
-          new_list[10] = new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
-          new_list[14] = new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
-          new_list[18] = new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
-          new_list[22] = new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
-          break;
-        case "D":
-          new_list[3] = new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
-          new_list[7] = new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
-          new_list[11] = new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
-          new_list[15] = new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
-          new_list[19] = new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
-          new_list[23] = new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
-          break;
-      }
-      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
-    },
-    on_row_leave_hover(value) {
-      this.test_event(value + " hover leave");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-    },
-    on_plate_well_selected() {
-      this.$emit("platewell-selected", this.all_select);
-    },
-    test_event(evnt) {
-      if (debug_mode != undefined) {
-        this.$emit("test-event", evnt);
-      }
+    update_platemap_input: function (value) {
+      this.input_platemap_name = value;
+      // even though this isn't shown, it signifies whether a red or green border is used around the input box
+      this.invalid_text = value && value.length === 0 ? "Required" : "";
     },
   },
 };
 </script>
-<style>
-.div__platemap-editor-backdrop {
-  transform: rotate(0deg);
+<style scoped>
+.div__platemapeditor-layout-background {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: rgb(28, 28, 28);
+  background: rgb(0, 0, 0);
   position: absolute;
-  width: 415px;
-  height: 280px;
-  top: 0px;
-  left: 0px;
-  visibility: visible;
-  border: 0px none rgb(0, 0, 0);
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 10px 0px;
-  pointer-events: all;
+  width: 1629px;
+  height: 885px;
 }
-
-.div__platemap-drag-drop-selector {
-  transform: rotate(0deg);
-  box-sizing: border-box;
-  padding: 26px;
-  margin: 0px;
-  position: absolute;
-  width: 400px;
-  height: 265px;
-  top: 0px;
-  left: 0px;
-  visibility: visible;
-  pointer-events: all;
-}
-
-.span__platemap-editor-column-index {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 53px;
-  height: 27px;
-  top: 2px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: center;
-}
-
-.span__platemap-editor-column-index label:hover,
-.span__platemap-editor-row-index label:hover {
-  color: #ececed;
-}
-
-.span__platemap-toggle-plus-minus-icon:hover {
+.div__platemapeditor-header {
   color: #ffffff;
+  font-size: 25px;
+  font-family: Muli;
+  width: 1629px;
+  text-align: center;
+  height: 45px;
+  top: 20px;
+  position: absolute;
+}
+.div__platemapeditor-container {
+  position: absolute;
+  top: 115px;
+  left: 367px;
+}
+.canvas__common-horizontal-line {
+  transform: rotate(0deg);
+  pointer-events: all;
+  position: absolute;
+  height: 2px;
+  top: 80px;
+  left: 400px;
+  width: 850px;
+  visibility: visible;
+  z-index: 3;
+  background-color: #3f3f3f;
+  opacity: 0.5;
 }
 
-.span__platemap-editor-row-index {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
+.div__platemap-lower-buttons-container {
   position: absolute;
-  width: 22px;
-  height: 25px;
-  left: 7px;
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: left;
+  bottom: 30px;
+  width: 1629px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
-.span__platemap-toggle-plus-minus-icon {
-  overflow: hidden;
-  white-space: nowrap;
+.div__platemap-upper-buttons-container {
+  position: absolute;
+  bottom: 95px;
+  width: 1629px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.div__platemap-button-background-enabled {
+  background: #b7b7b7;
+  height: 50px;
+  line-height: 2.5;
+  position: relative;
+  width: 200px;
+  margin: 15px;
   text-align: center;
-  font-weight: normal;
-  transform: translateZ(0px);
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  top: 5px;
-  left: 5px;
-  font-size: 20px;
-  color: rgb(183, 183, 183);
+  font-size: 18px;
+  font-family: Muli;
 }
-.well_0,
-.well_1,
-.well_2,
-.well_3,
-.well_4,
-.well_5,
-.well_6,
-.well_7,
-.well_8,
-.well_9,
-.well_10,
-.well_11,
-.well_12,
-.well_13,
-.well_14,
-.well_15,
-.well_16,
-.well_17,
-.well_18,
-.well_19,
-.well_20,
-.well_21,
-.well_22,
-.well_23 {
-  pointer-events: all;
-  border-radius: 50%;
-  transform: rotate(0deg);
+.div__platemap-button-background-disabled {
+  background: #b7b7b7c9;
+  height: 50px;
+  line-height: 2.5;
+  position: relative;
+  width: 200px;
+  margin: 15px;
+  text-align: center;
+  font-size: 18px;
+  font-family: Muli;
+  color: #636262;
+}
+.div__platemap-button-background-enabled:hover {
+  background: #b7b7b7c9;
+  cursor: pointer;
+}
+.div__platemap-assignmenttable-container {
   position: absolute;
-  width: 66px;
-  height: 66px;
-  visibility: visible;
+  height: 300px;
+  top: 415px;
+  width: 1629px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.div__platemapeditor-subheader {
+  color: #b7b7b7;
+  font-size: 19px;
+  font-family: Muli;
+  width: 1629px;
+  text-align: left;
+  height: 43px;
+  position: relative;
+  line-height: 2;
+  margin-bottom: 2px;
+  width: 53%;
+}
+.div__platemap-name-container {
+  background: rgb(17, 17, 17);
+  flex-direction: row;
+  display: flex;
+  position: relative;
+  width: 48%;
+  height: 100%;
+  padding-left: 23px;
+}
+.modal-backdrop {
+  background-color: rgb(0, 0, 0, 0.5);
+}
+.div__platemap-input-container {
+  position: relative;
+  margin-left: 10px;
+  margin-top: 5px;
+  width: 204px;
+  height: 33px;
+  overflow: hidden;
 }
 </style>

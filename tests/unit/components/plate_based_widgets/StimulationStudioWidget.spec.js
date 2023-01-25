@@ -108,10 +108,10 @@ describe("StimulationStudioWidget.vue", () => {
     await wrapper.vm.basic_select(4);
     expect(wrapper.find("#plus").isVisible()).toBe(true);
     await wrapper.find(".span__stimulationstudio-toggle-plus-minus-icon").trigger("click");
-    await wrapper.vm.on_select(3, "column");
+    await wrapper.find("#column_3").trigger("click");
     expect(wrapper.find("#plus").isVisible()).toBe(true);
     await wrapper.find(".span__stimulationstudio-toggle-plus-minus-icon").trigger("click");
-    await wrapper.vm.on_select("D", "row");
+    await wrapper.find("#row_3").trigger("click");
     expect(wrapper.find("#plus").isVisible()).toBe(true);
   });
 
@@ -130,8 +130,8 @@ describe("StimulationStudioWidget.vue", () => {
       await wrapper.find("#column_" + column).trigger("mouseenter");
       wrapper.vm.column_values[column].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(2));
     });
-    Object.keys(wrapper.vm.row_values).map(async (row) => {
-      await wrapper.find("#row_" + row).trigger("mouseenter");
+    ["A", "B", "C", "D"].map(async (row, i) => {
+      await wrapper.find("#row_" + i).trigger("mouseenter");
       wrapper.vm.row_values[row].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(2));
     });
   });
@@ -149,8 +149,8 @@ describe("StimulationStudioWidget.vue", () => {
       await wrapper.find("#column_" + column).trigger("mouseleave");
       wrapper.vm.column_values[column].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(0));
     });
-    Object.keys(wrapper.vm.row_values).map(async (row) => {
-      await wrapper.find("#row_" + row).trigger("mouseleave");
+    ["A", "B", "C", "D"].map(async (row, i) => {
+      await wrapper.find("#row_" + i).trigger("mouseleave");
       wrapper.vm.row_values[row].map((well) => expect(wrapper.vm.stroke_width[well]).toBe(0));
     });
   });
@@ -161,10 +161,10 @@ describe("StimulationStudioWidget.vue", () => {
       localVue,
     });
     const test = [
-      ["#row_A", [0, 4, 8, 12, 16, 20]],
-      ["#row_B", [1, 5, 9, 13, 17, 21]],
-      ["#row_C", [2, 6, 10, 14, 18, 22]],
-      ["#row_D", [3, 7, 11, 15, 19, 23]],
+      ["#row_0", [0, 4, 8, 12, 16, 20]],
+      ["#row_1", [1, 5, 9, 13, 17, 21]],
+      ["#row_2", [2, 6, 10, 14, 18, 22]],
+      ["#row_3", [3, 7, 11, 15, 19, 23]],
     ];
     test.map(async (row) => {
       await wrapper.find(row[0]).trigger("click", { shiftKey: true });

@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { PlateMapEditor as ComponentToTest } from "@/dist/mantarray.common";
-// import ComponentToTest from "@/components/playback/controls/PlateMapEditor.vue";
+import { PlateMapWidget as ComponentToTest } from "@/dist/mantarray.common";
+// import ComponentToTest from "@/components/playback/controls/PlateMapWidget.vue";
 
 export default {
   components: {

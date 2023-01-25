@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="div__select-dropdown-background"
-    :style="'width: ' + input_width_background + 'px;' + 'height: ' + input_height_background + 'px;'"
-  >
+  <div class="div__select-dropdown-background" :style="dynamic_background_style">
     <span
       v-if="title_label !== ''"
       class="span__select-dropdown-content-label"
@@ -12,19 +9,19 @@
     </span>
     <div
       class="div__select-dropdown-controls-content-widget"
-      :style="
-        'width: ' + input_width + 'px;' + 'top:' + input_widget_top + 'px;' + 'height:' + input_height + 'px;'
-      "
+      :style="dynamic_content_widget_style"
       @click="toggle()"
     >
       <div
         class="span__select-dropdown-controls-content-input-txt-widget"
         :style="'width: ' + input_width + 'px;'"
       >
-        <span class="span__input-controls-content-dropdown-widget">
-          <span :style="'color:' + chosen_option.color">{{ chosen_option.letter }}</span>
-          {{ chosen_option.name }}</span
-        >
+        <div class="div__chosen-option-container">
+          <span class="span__input-controls-content-dropdown-widget">
+            <span :style="'color:' + chosen_option.color">{{ chosen_option.letter }}</span>
+            {{ chosen_option.name }}</span
+          >
+        </div>
       </div>
       <div class="arrow" :class="{ expanded: visible }"></div>
       <div :class="{ hidden: !visible, visible }">
@@ -65,12 +62,36 @@ export default {
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
     },
+    dynamic_background_style: function () {
+      return (
+        "width: " + this.input_width_background + "px;" + "height: " + this.input_height_background + "px;"
+      );
+    },
+    dynamic_content_widget_style: function () {
+      return (
+        "width: " +
+        this.input_width +
+        "px;" +
+        "top:" +
+        this.input_widget_top +
+        "px;" +
+        "height:" +
+        this.input_height +
+        "px;"
+      );
+    },
   },
   watch: {
     chosen_option: function () {
       this.filter_options();
     },
     options_idx: function () {
+      this.get_preselected_option();
+    },
+    options_text: function () {
+      // get updated list and selected option when prop list changes
+      this.get_dropdown_options();
+      this.filter_options();
       this.get_preselected_option();
     },
   },
@@ -101,7 +122,9 @@ export default {
   },
   methods: {
     get_preselected_option() {
-      this.chosen_option = this.dropdown_options[this.options_idx];
+      this.chosen_option = this.dropdown_options[this.options_idx]
+        ? this.dropdown_options[this.options_idx]
+        : this.dropdown_options[0];
     },
     change_selection(idx) {
       this.chosen_option = this.dropdown_options[idx];
@@ -173,7 +196,6 @@ body {
   transform: translateZ(0px);
   position: absolute;
   height: 45px;
-  line-height: 45px;
   top: 0px;
   left: 0px;
   user-select: none;
@@ -215,7 +237,7 @@ ul {
   width: 100%;
   list-style-type: none;
   padding: 0;
-  margin-top: 35px;
+  margin-top: 17px;
   left: 0;
   font-size: 16px;
   position: absolute;
@@ -226,6 +248,7 @@ li {
   padding: 12px;
   color: #b7b7b7;
   background-color: #292929;
+  overflow: hidden;
 }
 li:hover {
   background: #1c1c1c;
@@ -240,5 +263,12 @@ li:hover {
 }
 .visible {
   visibility: visible;
+}
+.div__chosen-option-container {
+  width: 255px;
+  height: 20px;
+  line-height: 1.5;
+  overflow: hidden;
+  position: relative;
 }
 </style>

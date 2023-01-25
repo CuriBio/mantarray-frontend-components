@@ -1,7 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.3.3 (unreleased)
+1.4.0 (unreleased)
+------------------
+
+Added:
+^^^^^^
+- Initial Platemap Editor components and page
+- Platemap vuex store module
+
+
+1.3.3 (2023-01-19)
 ------------------
 
 Changed:

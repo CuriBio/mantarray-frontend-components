@@ -10,9 +10,9 @@ const backdrop_div = Selector(".div__platemap-editor-backdrop");
 const column_one_btn = Selector("#column_1");
 const column_five_btn = Selector("#column_5");
 
-const row_A_btn = Selector("#row_1");
-const row_B_btn = Selector("#row_2");
-const row_D_btn = Selector("#row_4");
+const row_A_btn = Selector("#row_0");
+const row_B_btn = Selector("#row_1");
+const row_D_btn = Selector("#row_3");
 
 const plus_btn = Selector("#plus");
 const minus_btn = Selector("#minus");
@@ -22,9 +22,9 @@ const well_2 = Selector(".well_2");
 const well_22 = Selector(".well_22");
 
 // the fixture declares what we are testing
-fixture`plate_based_widgets/plate-mapeditor/basic`
+fixture`plate_based_widgets/plate-mapeditor/basic-plate`
   .page // declare the fixture
-`http://localhost:8080/plate_based_widgets/plate-mapeditor/basic`; // specify the start page
+`http://localhost:8080/plate_based_widgets/plate-mapeditor/basic-plate`; // specify the start page
 
 test("testing the Plate-MapEditor page should display as designed in the mockflow", async (t) => {
   let screenshot_path = path.join(base_screenshot_path, "basic-init");

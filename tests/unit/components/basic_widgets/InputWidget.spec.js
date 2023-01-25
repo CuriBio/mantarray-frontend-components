@@ -186,7 +186,7 @@ describe("InputWidget.vue", () => {
       localVue,
     });
     const background = wrapper.find(".div__input-background");
-    expect(background.attributes("style")).toStrictEqual("width: 394px; height: 60px;");
+    expect(background.attributes("style")).toStrictEqual("width: 394px; height: 55px;");
     const input_title_label = wrapper.find(".span__input-content-label");
     expect(input_title_label.exists()).toBe(false);
 
