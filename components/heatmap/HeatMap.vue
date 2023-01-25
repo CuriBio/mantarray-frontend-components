@@ -233,9 +233,8 @@ export default {
     },
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
-        const well_data = well.slice(-MAX_NUM_DATAPOINTS_FOR_MEAN);
-        const total = well_data.reduce((a, b) => a + b, 0);
-        const mean = (total / well_data.length).toFixed(3);
+        const total = well.reduce((a, b) => a + b, 0);
+        const mean = (total / well.length).toFixed(3);
         const color = this.gradient_map(mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
@@ -289,9 +288,13 @@ export default {
         }; // the input box width cuts off decimal places so rounding vals
       }
     },
-    playback_state: function (_, old_value) {
+    playback_state: function (new_state, old_state) {
       // cleans up settings when live view becomes inactive
-      if (old_value == this.playback_state_enums.LIVE_VIEW_ACTIVE) this.reset_heatmap_settings();
+      if (
+        old_state == this.playback_state_enums.LIVE_VIEW_ACTIVE &&
+        new_state == this.playback_state_enums.CALIBRATED
+      )
+        this.reset_heatmap_settings();
     },
   },
   mounted() {
@@ -377,7 +380,6 @@ export default {
         }
       }
     },
-
     apply_heatmap_settings: function () {
       if (this.is_apply_set) {
         this.$store.commit("heatmap/set_auto_scale", this.autoscale);
