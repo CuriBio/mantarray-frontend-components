@@ -43,6 +43,7 @@
     <div
       v-for="well_index in Array(number_of_wells).keys()"
       :key="well_index"
+      :class="'well_' + well_index"
       :style="well_computed_style[well_index]"
     >
       <PlateWell
