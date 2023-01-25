@@ -139,7 +139,7 @@ export default {
         if (idx === 1) this.$emit("handle_modal_open", this.assignment_option);
         else {
           // prevent button from being clicked when it's disabled
-          this.clear_selected_wells(this.assignment_option);
+          this.clear_selected_wells();
         }
       }
     },

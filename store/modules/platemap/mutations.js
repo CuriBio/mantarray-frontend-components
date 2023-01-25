@@ -23,13 +23,13 @@ export default {
     // reset selected wells
     state.selected_wells = [];
   },
-  clear_selected_wells(state, assignment_option) {
-    const selected_assigment_idx = JSON.parse(JSON.stringify(state.well_assignments)).findIndex(
-      ({ name }) => name === assignment_option
-    );
-    state.well_assignments[selected_assigment_idx].wells = state.well_assignments[
-      selected_assigment_idx
-    ].wells.filter((well_idx) => !state.selected_wells.includes(well_idx));
+  clear_selected_wells(state) {
+    state.well_assignments.map((label) => {
+      if (label && label.wells) {
+        label.wells = label.wells.filter((well_idx) => !state.selected_wells.includes(well_idx));
+      }
+    });
+
     // reset selected wells
     state.selected_wells = [];
   },
