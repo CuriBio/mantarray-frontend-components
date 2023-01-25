@@ -238,8 +238,7 @@ export default {
       });
 
       this.all_select = new_list;
-      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+      this.all_select_or_cancel = !this.all_equal;
       this.check_stroke_width();
     },
     check_stroke_width() {
