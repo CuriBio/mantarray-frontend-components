@@ -3,32 +3,32 @@
     <span
       v-for="column_index in 6"
       :key="'column_' + column_index"
-      :style="'left:' + column_left_offset(column_index) + 'px;'"
+      :style="column_computed_offsets[column_index - 1]"
       class="span__stimulationstudio-column-index"
     >
       <label
         :id="'column_' + column_index"
-        @click.exact="on_select(column_index, 'column')"
-        @click.shift.exact="on_shift_click(column_index, 'column')"
-        @mouseenter="on_enter_hover(column_index, 'column')"
-        @mouseleave="on_leave_hover(column_index, 'column')"
+        @click.exact="on_select(column_index, column_values)"
+        @click.shift.exact="on_shift_click(column_index, column_values)"
+        @mouseenter="on_enter_hover(column_index, column_values)"
+        @mouseleave="on_leave_hover(column_index, column_values)"
         >0{{ column_index }}</label
       >
     </span>
     <span
-      v-for="(value, key) in row_values"
-      :key="'row_' + key"
-      :style="'top:' + row_top_offset(key) + 'px;'"
+      v-for="(v, i) in Object.keys(row_values)"
+      :key="'row_' + v"
+      :style="row_computed_offsets[i]"
       class="span__stimulationstudio-row-index"
     >
       <label
-        :id="'row_' + key"
-        @click.exact="on_select(key, 'row')"
-        @click.shift.exact="on_shift_click(key, 'row')"
-        @mouseenter="on_enter_hover(key, 'row')"
-        @mouseleave="on_leave_hover(key, 'row')"
+        :id="'row_' + v"
+        @click.exact="on_select(v, row_values)"
+        @click.shift.exact="on_shift_click(v, row_values)"
+        @mouseenter="on_enter_hover(v, row_values)"
+        @mouseleave="on_leave_hover(v, row_values)"
       >
-        {{ key }}</label
+        {{ v }}</label
       >
     </span>
     <span
@@ -89,7 +89,6 @@ const hover_stroke_width = 2;
 const selected_stroke_width = 4;
 const hover_color = "#ececed";
 const selected_color = "#FFFFFF";
-const debug_mode = undefined;
 
 export default {
   name: "StimulationStudioWidget",
@@ -133,6 +132,12 @@ export default {
         Object.keys(this.protocol_assignments).includes(well.toString())
       );
     },
+    row_computed_offsets: function () {
+      return ["41", "103", "165", "224"].map((v) => "top:" + v + "px;");
+    },
+    column_computed_offsets: function () {
+      return ["39", "101", "164", "225", "287", "349"].map((v) => "left:" + v + "px;");
+    },
   },
   watch: {
     all_select: function () {
@@ -163,42 +168,34 @@ export default {
   },
   methods: {
     on_select_cancel_all(state) {
-      this.all_select_or_cancel ? this.test_event("+ icon clicked") : this.test_event("- icon clicked");
       this.all_select_or_cancel = !state;
-      for (let count = 0; count < 24; count++) this.all_select[count] = state;
-      state ? this.all_select.map((_) => true) : this.all_select.map((_) => false);
+      this.all_select = new Array(this.number_of_wells).fill(state);
       this.$store.dispatch("stimulation/handle_selected_wells", this.all_select);
       this.stroke_width.splice(0, this.stroke_width.length);
       this.check_stroke_width();
     },
 
-    on_plus_minus_enter_hover(state) {
-      state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
+    on_plus_minus_enter_hover() {
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
         this.stroke_width[j] = !this.all_select[j] ? hover_stroke_width : selected_stroke_width;
       }
     },
 
-    on_plus_minus_leave_hover(state) {
-      state ? this.test_event("+ icon leave => Hover") : this.test_event("- icon leave => Hover");
+    on_plus_minus_leave_hover() {
       this.stroke_width.splice(0, this.stroke_width.length);
       this.check_stroke_width();
     },
 
     basic_select(value) {
-      this.test_event("Well clicked");
-      const new_list = new Array(24).fill(false);
-      new_list[value] = true;
-      this.all_select = new_list;
+      this.all_select = new Array(this.number_of_wells).fill(false);
+      this.all_select[value] = true;
       this.stroke_width[value] = selected_stroke_width;
       if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
       this.on_wellenter(value);
     },
 
     basic_shift_select(value) {
-      this.test_event("Well Shift clicked");
-      this.testerf = !this.testerf;
       const allEqual = (arr) => arr.every((v) => v === true);
       this.all_select[value] = !this.all_select[value];
       this.stroke_width[value] = selected_stroke_width;
@@ -212,126 +209,64 @@ export default {
       this.hover[value] = true;
       this.hover_color[value] = "#ececed";
       this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event("well enter =>" + value + " Hover");
       this.check_stroke_width();
-      this.all_select[value]
-        ? (this.stroke_width[value] = selected_stroke_width)
-        : (this.stroke_width[value] = hover_stroke_width);
+      this.stroke_width[value] = this.all_select[value] ? selected_stroke_width : hover_stroke_width;
     },
 
     on_wellleave(value) {
       this.hover[value] = false;
       this.hover_color[value] = selected_color;
       this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event("well leave =>" + value + " Hover");
       this.check_stroke_width();
     },
 
-    on_select(val, type) {
-      let toChange = null;
-      const new_list = new Array(24).fill(false);
+    on_select(val, values_to_change) {
+      this.all_select = new Array(this.number_of_wells).fill(false);
       this.stroke_width.splice(0, this.stroke_width.length);
-      type == "column" ? (toChange = this.column_values) : (toChange = this.row_values);
-      toChange[val].map((well) => (new_list[well] = true));
+      values_to_change[val].map((well) => (this.all_select[well] = true));
       if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
-      this.all_select = new_list;
       this.check_stroke_width();
-      this.test_event(val + " clicked");
     },
 
-    on_enter_hover(val, type) {
-      const new_list = [];
-      this.test_event(val + " hover enter");
-      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
+    on_enter_hover(val, values_to_change) {
+      const new_list = JSON.parse(JSON.stringify(this.stroke_width));
       this.stroke_width.splice(0, this.stroke_width.length);
-      const to_change = type == "column" ? this.column_values : this.row_values;
-      to_change[val].map(
+
+      values_to_change[val].map(
         (well) => (new_list[well] = new_list[well] == no_stroke_width ? hover_stroke_width : new_list[well])
       );
-      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
+      this.stroke_width = new_list;
     },
 
-    on_leave_hover(val) {
-      this.test_event(val + " hover leave");
+    on_leave_hover() {
       this.stroke_width.splice(0, this.stroke_width.length);
       this.check_stroke_width();
     },
 
-    on_shift_click(val, type) {
-      const new_list = [];
-      let toChange = null;
-      let result = false;
-      this.test_event(val + " ctrl or shift clicked");
-      for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
+    on_shift_click(val, values_to_change) {
+      const new_list = JSON.parse(JSON.stringify(this.all_select));
       this.stroke_width.splice(0, this.stroke_width.length);
-      if (type === "column") {
-        toChange = this.column_values;
-        result =
-          new_list[toChange[val][0]] &&
-          new_list[toChange[val][1]] &&
-          new_list[toChange[val][2]] &&
-          new_list[toChange[val][3]];
-        toChange[val].map((well) => {
-          new_list[well] = !result;
-        });
-      } else {
-        toChange = this.row_values;
-        result =
-          new_list[toChange[val][0]] &&
-          new_list[toChange[val][1]] &&
-          new_list[toChange[val][2]] &&
-          new_list[toChange[val][3]];
-        toChange[val].map((well) => {
-          new_list[well] = !result;
-        });
-      }
+      const result =
+        new_list[values_to_change[val][0]] &&
+        new_list[values_to_change[val][1]] &&
+        new_list[values_to_change[val][2]] &&
+        new_list[values_to_change[val][3]];
+
+      values_to_change[val].map((well) => {
+        new_list[well] = !result;
+      });
+
       this.all_select = new_list;
       const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
       this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
       this.check_stroke_width();
     },
-
-    test_event(evnt) {
-      if (debug_mode) this.$emit("test-event", evnt);
-    },
-
     check_stroke_width() {
       for (let i = 0; i < this.all_select.length; i++) {
         this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
         this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
       }
     },
-
-    column_left_offset(column) {
-      switch (column) {
-        case 1:
-          return "40";
-        case 2:
-          return "103";
-        case 3:
-          return "164";
-        case 4:
-          return "225";
-        case 5:
-          return "285";
-        case 6:
-          return "348";
-      }
-    },
-
-    row_top_offset(row) {
-      switch (row) {
-        case "A":
-          return "41.928";
-        case "B":
-          return "103.621";
-        case "C":
-          return "165.779";
-        case "D":
-          return "224.1";
-      }
-    },
-
     get_protocol_color(index) {
       return this.protocol_assignments[index] ? this.protocol_assignments[index].color : "#B7B7B7";
     },

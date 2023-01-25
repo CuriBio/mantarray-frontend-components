@@ -1,40 +1,36 @@
-r
 <template>
-  <div>
-    <div class="div__platemap-editor-backdrop"></div>
+  <div class="div__platemap-editor-backdrop">
     <span
       v-for="column_index in 6"
       :key="'column_' + column_index"
+      :style="column_computed_offsets[column_index - 1]"
       class="span__platemap-editor-column-index"
-      :style="'left:' + column_left_offset(column_values[column_index - 1]) + 'px;'"
     >
       <label
         :id="'column_' + column_index"
-        @click.exact="on_column_select(column_values[column_index - 1])"
-        @click.shift.exact="on_column_ctrl_click_or_shift_click(column_values[column_index - 1])"
-        @mouseenter="on_column_enter_hover(column_values[column_index - 1])"
-        @mouseleave="on_column_leave_hover(column_values[column_index - 1])"
-        >0{{ column_values[column_index - 1] }}</label
+        @click.exact="on_select(column_index, column_values)"
+        @click.shift.exact="on_shift_click(column_index, column_values)"
+        @mouseenter="on_enter_hover(column_index, column_values)"
+        @mouseleave="on_leave_hover(column_index, column_values)"
+        >0{{ column_index }}</label
       >
     </span>
-
     <span
-      v-for="row_index in 4"
-      :key="'row_' + row_index"
+      v-for="(v, i) in Object.keys(row_values)"
+      :key="'row_' + v"
+      :style="row_computed_offsets[i]"
       class="span__platemap-editor-row-index"
-      :style="'top:' + row_top_offset(row_values[row_index - 1]) + 'px;'"
     >
       <label
-        :id="'row_' + row_index"
-        @click.exact="on_row_select(row_values[row_index - 1])"
-        @click.shift.exact="on_row_ctrl_click_or_shift_click(row_values[row_index - 1])"
-        @mouseenter="on_row_enter_hover(row_values[row_index - 1])"
-        @mouseleave="on_row_leave_hover(row_values[row_index - 1])"
+        :id="'row_' + v"
+        @click.exact="on_select(v, row_values)"
+        @click.shift.exact="on_shift_click(v, row_values)"
+        @mouseenter="on_enter_hover(v, row_values)"
+        @mouseleave="on_leave_hover(v, row_values)"
       >
-        {{ row_values[row_index - 1] }}</label
+        {{ v }}</label
       >
     </span>
-
     <span
       class="span__platemap-toggle-plus-minus-icon"
       @click.exact="on_select_cancel_all(all_select_or_cancel)"
@@ -44,13 +40,10 @@ r
       <FontAwesomeIcon v-show="all_select_or_cancel" id="plus" :icon="['fa', 'plus-circle']" />
       <FontAwesomeIcon v-show="!all_select_or_cancel" id="minus" :icon="['fa', 'minus-circle']" />
     </span>
-    <span
-      v-for="well_index in Array(24).keys()"
+    <div
+      v-for="well_index in Array(number_of_wells).keys()"
       :key="well_index"
-      :class="'well_' + well_index"
-      :style="well_top_left_offset(well_index)"
-      width="66"
-      height="66"
+      :style="well_computed_style[well_index]"
     >
       <PlateWell
         :classname="'plate_' + well_index"
@@ -66,9 +59,9 @@ r
         @enter-well="on_wellenter(well_index)"
         @leave-well="on_wellleave(well_index)"
         @click-exact="basic_select(well_index)"
-        @click-shift-exact="basic_shift_or_ctrl_select(well_index)"
+        @click-shift-exact="basic_shift_select(well_index)"
       />
-    </span>
+    </div>
   </div>
 </template>
 <script>
@@ -86,7 +79,6 @@ const selected_stroke_width = 4;
 const hover_color = "#ececed";
 const selected_color = "#FFFFFF";
 const default_color = "#b7b7b7";
-const debug_mode = undefined;
 
 export default {
   name: "PlateMap",
@@ -104,501 +96,156 @@ export default {
         return new Array(24).fill(default_color);
       },
     },
+    number_of_wells: { type: Number, default: 24 },
   },
   data() {
     return {
-      all_select_or_cancel: true,
-      x_origin: 0,
-      y_origin: 0,
-      rect_width: 0,
-      rect_height: 0,
-      all_select: this.selected,
-      hover: new Array(24).fill(false),
-      hover_color: new Array(24).fill(hover_color),
-      stroke_width: new Array(24).fill(no_stroke_width),
-      row_values: ["A", "B", "C", "D"],
-      column_values: ["1", "2", "3", "4", "5", "6"],
-      testerf: false,
+      row_values: {
+        A: [0, 4, 8, 12, 16, 20],
+        B: [1, 5, 9, 13, 17, 21],
+        C: [2, 6, 10, 14, 18, 22],
+        D: [3, 7, 11, 15, 19, 23],
+      },
+      column_values: {
+        1: [0, 1, 2, 3],
+        2: [4, 5, 6, 7],
+        3: [8, 9, 10, 11],
+        4: [12, 13, 14, 15],
+        5: [16, 17, 18, 19],
+        6: [20, 21, 22, 23],
+      },
+      all_select_or_cancel: false,
+      hover: new Array(this.number_of_wells).fill(false),
+      all_select: new Array(this.number_of_wells).fill(false),
+      hover_color: new Array(this.number_of_wells).fill(hover_color),
+      stroke_width: new Array(this.number_of_wells).fill(no_stroke_width),
     };
+  },
+  computed: {
+    well_computed_style: function () {
+      return [...Array(24).keys()].map((i) => {
+        const computed_top = 26 + (i % 4) * 60;
+        const computed_left = 33 + Math.floor(i / 4) * 62;
+        return "position: absolute; top:" + computed_top + "px;" + "left:" + computed_left + "px;";
+      });
+    },
+    all_equal: function () {
+      return this.all_select.every((v) => v);
+    },
+    row_computed_offsets: function () {
+      return ["41", "103", "165", "224"].map((v) => "top:" + v + "px;");
+    },
+    column_computed_offsets: function () {
+      return ["39", "101", "164", "225", "287", "349"].map((v) => "left:" + v + "px;");
+    },
   },
   watch: {
     selected: function () {
       // reset stroke width when selected wells is reset
-
       if (this.selected.filter((x) => x).length === 0) {
-        this.all_select = Array(24).fill(false);
-        this.stroke_width = Array(24).fill(no_stroke_width);
+        this.all_select = Array(this.number_of_wells).fill(false);
+        this.stroke_width = Array(this.number_of_wells).fill(no_stroke_width);
       }
     },
   },
   created() {
     this.stroke_width.splice(0, this.stroke_width.length);
-    for (let j = 0; j < this.all_select.length; j++) {
-      this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-    }
-    const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-    this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+    this.check_stroke_width();
+    this.all_select_or_cancel = !this.all_equal; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
   },
   methods: {
-    column_left_offset(column) {
-      switch (column) {
-        case "1":
-          return "35.9792";
-        case "2":
-          return "97.5836";
-        case "3":
-          return "159.188";
-        case "4":
-          return "220.792";
-        case "5":
-          return "282.397";
-        case "6":
-          return "344.001";
-      }
-    },
-    row_top_offset(row) {
-      switch (row) {
-        case "A":
-          return "41.928";
-        case "B":
-          return "103.621";
-        case "C":
-          return "165.779";
-        case "D":
-          return "224.1";
-      }
-    },
-    well_top_left_offset(index) {
-      switch (index) {
-        case 0:
-          return "top: 25px; left: 29.9792px;";
-        case 1:
-          return "top: 85.3524px; left: 29.9792px;";
-        case 2:
-          return "top: 145.278px; left: 29.9792px;";
-        case 3:
-          return "top: 205.157px; left: 29.9792px;";
-        case 4:
-          return "top: 25.427px; left: 91.5836px;";
-        case 5:
-          return "top: 85.3524px; left: 91.5836px;";
-        case 6:
-          return "top: 145.278px; left: 91.5836px;";
-        case 7:
-          return "top: 205.203px; left: 91.5836px;";
-        case 8:
-          return "top: 25.427px; left: 153.188px;";
-        case 9:
-          return "top: 85.3524px; left: 153.188px;";
-        case 10:
-          return "top: 145.278px; left: 153.188px;";
-        case 11:
-          return "top: 205.203px; left: 153.188px;";
-        case 12:
-          return "top: 25.427px; left: 214.792px;";
-        case 13:
-          return "top: 85.3524px; left: 214.792px;";
-        case 14:
-          return "top: 145.278px; left: 214.792px;";
-        case 15:
-          return "top: 205.203px; left: 214.792px;";
-        case 16:
-          return "top: 25.427px; left: 276.397px;";
-        case 17:
-          return "top: 85.3524px; left: 276.397px;";
-        case 18:
-          return "top: 145.278px; left: 276.397px;";
-        case 19:
-          return "top: 205.203px; left: 276.397px;";
-        case 20:
-          return "top: 25.427px; left: 338.001px;";
-        case 21:
-          return "top: 85.3524px; left: 338.001px;";
-        case 22:
-          return "top: 145.278px; left: 338.001px;";
-        case 23:
-          return "top: 205.203px; left: 338.001px;";
-      }
+    basic_select(value) {
+      this.all_select = new Array(this.number_of_wells).fill(false);
+      this.all_select[value] = true;
+      this.stroke_width[value] = selected_stroke_width;
+      if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
+      this.on_wellenter(value);
     },
     on_select_cancel_all(state) {
-      if (this.all_select_or_cancel == true) {
-        this.test_event("+ icon clicked");
-      } else {
-        this.test_event("- icon clicked");
-      }
       this.all_select_or_cancel = !state;
-      for (let count = 0; count < 24; count++) {
-        this.all_select[count] = state;
-      }
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[j] = !this.all_select[j] ? hover_color : selected_color;
-      }
+      this.all_select = new Array(this.number_of_wells).fill(state);
       this.on_plate_well_selected();
+      this.stroke_width.splice(0, this.stroke_width.length);
+      this.check_stroke_width();
     },
-    on_plus_minus_enter_hover(state) {
-      if (state == true) {
-        this.test_event("+ icon enter => Hover");
-      } else {
-        this.test_event("- icon enter => Hover");
-      }
+    on_plus_minus_enter_hover() {
       this.stroke_width.splice(0, this.stroke_width.length);
       for (let j = 0; j < this.all_select.length; j++) {
         this.stroke_width[j] = !this.all_select[j] ? hover_stroke_width : selected_stroke_width;
       }
     },
-    on_plus_minus_leave_hover(state) {
-      if (state == true) {
-        this.test_event("+ icon leave => Hover");
-      } else {
-        this.test_event("- icon leave => Hover");
-      }
+    on_plus_minus_leave_hover() {
       this.stroke_width.splice(0, this.stroke_width.length);
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-        if (state == false) {
-          this.hover_color[j] = selected_color;
-        }
-      }
-    },
-    basic_select(value) {
-      const new_list = new Array(24).fill(false);
-      new_list[value] = true;
-      this.test_event("Well clicked");
-      this.stroke_width[value] = selected_stroke_width;
-      this.all_select = new_list;
-      if (this.all_select_or_cancel == false) {
-        this.all_select_or_cancel = true;
-      }
-      this.on_wellenter(value);
-      this.on_plate_well_selected();
-    },
-    basic_shift_or_ctrl_select(value) {
-      this.test_event("Well Shift or Ctrl clicked");
-      this.testerf = !this.testerf;
-      const allEqual = (arr) => arr.every((v) => v === true);
-      this.all_select[value] = !this.all_select[value];
-      this.stroke_width[value] = selected_stroke_width;
-      if (allEqual(this.all_select)) {
-        this.all_select_or_cancel = false;
-      } else {
-        this.all_select_or_cancel = true;
-      }
-      this.on_wellenter(value);
-      this.on_plate_well_selected();
+      this.check_stroke_width();
     },
     on_wellenter(value) {
       this.hover[value] = true;
-      this.hover_color[value] = hover_color;
+      this.hover_color[value] = "#ececed";
       this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event("well enter =>" + value + " Hover");
-      for (let j = 0; j < this.all_select.length; j++) {
-        this.stroke_width[j] = !this.all_select[j] ? no_stroke_width : selected_stroke_width;
-      }
-      if (this.all_select[value] == true) {
-        this.stroke_width[value] = selected_stroke_width;
-      } else {
-        this.stroke_width[value] = hover_stroke_width;
-      }
+      this.check_stroke_width();
+      this.stroke_width[value] = this.all_select[value] ? selected_stroke_width : hover_stroke_width;
     },
+
     on_wellleave(value) {
       this.hover[value] = false;
       this.hover_color[value] = selected_color;
       this.stroke_width.splice(0, this.stroke_width.length);
-      this.test_event("well leave =>" + value + " Hover");
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-      }
+      this.check_stroke_width();
     },
-    on_row_select(row) {
-      const new_list = new Array(24).fill(false);
-      this.test_event(row + " clicked");
+    on_select(val, values_to_change) {
+      this.all_select = new Array(this.number_of_wells).fill(false);
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (row) {
-        case "A":
-          new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
-          break;
-        case "B":
-          new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
-          break;
-        case "C":
-          new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
-          break;
-        case "D":
-          new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
-          break;
-      }
-      if (this.all_select_or_cancel == false) {
-        this.all_select_or_cancel = true;
-      }
-      this.all_select = new_list;
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
+      values_to_change[val].map((well) => (this.all_select[well] = true));
+      if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
+
+      this.check_stroke_width();
       this.on_plate_well_selected();
     },
-    on_column_select(column) {
-      const new_list = new Array(24).fill(false);
-      this.test_event(column + " clicked");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (column) {
-        case "1":
-          new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
-          break;
-        case "2":
-          new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
-          break;
-        case "3":
-          new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
-          break;
-        case "4":
-          new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
-          break;
-        case "5":
-          new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
-          break;
-        case "6":
-          new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
-          break;
-      }
-      if (this.all_select_or_cancel == false) {
-        this.all_select_or_cancel = true;
-      }
-      this.all_select = new_list;
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
+    basic_shift_select(value) {
+      this.all_select[value] = !this.all_select[value];
+      this.stroke_width[value] = selected_stroke_width;
+      this.all_select_or_cancel = !this.all_select.every((v) => v);
       this.on_plate_well_selected();
+      this.on_wellenter(value);
     },
-    on_row_ctrl_click_or_shift_click(row) {
-      const new_list = [];
-      let result = false;
-      this.test_event(row + " ctrl or shift clicked");
-      for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (row) {
-        case "A":
-          result = new_list[0] && new_list[4] && new_list[8] && new_list[12] && new_list[16] && new_list[20];
-          if (result == true) {
-            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = false;
-          } else {
-            new_list[0] = new_list[4] = new_list[8] = new_list[12] = new_list[16] = new_list[20] = true;
-          }
-          break;
-        case "B":
-          result = new_list[1] && new_list[5] && new_list[9] && new_list[13] && new_list[17] && new_list[21];
-          if (result == true) {
-            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = false;
-          } else {
-            new_list[1] = new_list[5] = new_list[9] = new_list[13] = new_list[17] = new_list[21] = true;
-          }
-          break;
-        case "C":
-          result = new_list[2] && new_list[6] && new_list[10] && new_list[14] && new_list[18] && new_list[22];
-          if (result == true) {
-            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = false;
-          } else {
-            new_list[2] = new_list[6] = new_list[10] = new_list[14] = new_list[18] = new_list[22] = true;
-          }
-          break;
-        case "D":
-          result = new_list[3] && new_list[7] && new_list[11] && new_list[15] && new_list[19] && new_list[23];
-          if (result == true) {
-            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = false;
-          } else {
-            new_list[3] = new_list[7] = new_list[11] = new_list[15] = new_list[19] = new_list[23] = true;
-          }
-          break;
-      }
 
-      this.all_select = new_list;
-      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-      this.on_plate_well_selected();
-    },
-    on_column_ctrl_click_or_shift_click(column) {
-      this.test_event(column + " ctrl or shift clicked");
-      const new_list = [];
-      let result = false;
-      for (let j = 0; j < this.all_select.length; j++) new_list[j] = this.all_select[j];
+    on_enter_hover(val, values_to_change) {
+      const new_list = JSON.parse(JSON.stringify(this.stroke_width));
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (column) {
-        case "1":
-          result = new_list[0] && new_list[1] && new_list[2] && new_list[3];
-          if (result == true) {
-            new_list[0] = new_list[1] = new_list[2] = new_list[3] = false;
-          } else {
-            new_list[0] = new_list[1] = new_list[2] = new_list[3] = true;
-          }
-          break;
-        case "2":
-          result = new_list[4] && new_list[5] && new_list[6] && new_list[7];
-          if (result == true) {
-            new_list[4] = new_list[5] = new_list[6] = new_list[7] = false;
-          } else {
-            new_list[4] = new_list[5] = new_list[6] = new_list[7] = true;
-          }
-          break;
-        case "3":
-          result = new_list[8] && new_list[9] && new_list[10] && new_list[11];
-          if (result == true) {
-            new_list[8] = new_list[9] = new_list[10] = new_list[11] = false;
-          } else {
-            new_list[8] = new_list[9] = new_list[10] = new_list[11] = true;
-          }
-          break;
-        case "4":
-          result = new_list[12] && new_list[13] && new_list[14] && new_list[15];
-          if (result == true) {
-            new_list[12] = new_list[13] = new_list[14] = new_list[15] = false;
-          } else {
-            new_list[12] = new_list[13] = new_list[14] = new_list[15] = true;
-          }
-          break;
-        case "5":
-          result = new_list[16] && new_list[17] && new_list[18] && new_list[19];
-          if (result == true) {
-            new_list[16] = new_list[17] = new_list[18] = new_list[19] = false;
-          } else {
-            new_list[16] = new_list[17] = new_list[18] = new_list[19] = true;
-          }
-          break;
-        case "6":
-          result = new_list[20] && new_list[21] && new_list[22] && new_list[23];
-          if (result == true) {
-            new_list[20] = new_list[21] = new_list[22] = new_list[23] = false;
-          } else {
-            new_list[20] = new_list[21] = new_list[22] = new_list[23] = true;
-          }
-          break;
-      }
-
-      this.all_select = new_list;
-      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
-      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
-
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-      this.on_plate_well_selected();
+      values_to_change[val].map(
+        (well) => (new_list[well] = new_list[well] == no_stroke_width ? hover_stroke_width : new_list[well])
+      );
+      this.stroke_width = new_list;
     },
-    on_column_enter_hover(value) {
-      this.test_event(value + " hover enter");
-      const new_list = [];
-      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
+    on_leave_hover() {
       this.stroke_width.splice(0, this.stroke_width.length);
-      switch (value) {
-        case "1":
-          new_list[0] = new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
-          new_list[1] = new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
-          new_list[2] = new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
-          new_list[3] = new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
-          break;
-        case "2":
-          new_list[4] = new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
-          new_list[5] = new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
-          new_list[6] = new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
-          new_list[7] = new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
-          break;
-        case "3":
-          new_list[8] = new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
-          new_list[9] = new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
-          new_list[10] = new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
-          new_list[11] = new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
-          break;
-        case "4":
-          new_list[12] = new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
-          new_list[13] = new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
-          new_list[14] = new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
-          new_list[15] = new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
-          break;
-        case "5":
-          new_list[16] = new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
-          new_list[17] = new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
-          new_list[18] = new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
-          new_list[19] = new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
-          break;
-        case "6":
-          new_list[20] = new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
-          new_list[21] = new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
-          new_list[22] = new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
-          new_list[23] = new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
-          break;
-      }
-      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
-    },
-    on_column_leave_hover(value) {
-      this.test_event(value + " hover leave");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
-    },
-    on_row_enter_hover(value) {
-      this.test_event(value + " hover enter");
-      const new_list = [];
-      for (let i = 0; i < this.stroke_width.length; i++) new_list[i] = this.stroke_width[i];
-      this.stroke_width.splice(0, this.stroke_width.length);
-      switch (value) {
-        case "A":
-          new_list[0] = new_list[0] == no_stroke_width ? hover_stroke_width : new_list[0];
-          new_list[4] = new_list[4] == no_stroke_width ? hover_stroke_width : new_list[4];
-          new_list[8] = new_list[8] == no_stroke_width ? hover_stroke_width : new_list[8];
-          new_list[12] = new_list[12] == no_stroke_width ? hover_stroke_width : new_list[12];
-          new_list[16] = new_list[16] == no_stroke_width ? hover_stroke_width : new_list[16];
-          new_list[20] = new_list[20] == no_stroke_width ? hover_stroke_width : new_list[20];
-          break;
-        case "B":
-          new_list[1] = new_list[1] == no_stroke_width ? hover_stroke_width : new_list[1];
-          new_list[5] = new_list[5] == no_stroke_width ? hover_stroke_width : new_list[5];
-          new_list[9] = new_list[9] == no_stroke_width ? hover_stroke_width : new_list[9];
-          new_list[13] = new_list[13] == no_stroke_width ? hover_stroke_width : new_list[13];
-          new_list[17] = new_list[17] == no_stroke_width ? hover_stroke_width : new_list[17];
-          new_list[21] = new_list[21] == no_stroke_width ? hover_stroke_width : new_list[21];
-          break;
-        case "C":
-          new_list[2] = new_list[2] == no_stroke_width ? hover_stroke_width : new_list[2];
-          new_list[6] = new_list[6] == no_stroke_width ? hover_stroke_width : new_list[6];
-          new_list[10] = new_list[10] == no_stroke_width ? hover_stroke_width : new_list[10];
-          new_list[14] = new_list[14] == no_stroke_width ? hover_stroke_width : new_list[14];
-          new_list[18] = new_list[18] == no_stroke_width ? hover_stroke_width : new_list[18];
-          new_list[22] = new_list[22] == no_stroke_width ? hover_stroke_width : new_list[22];
-          break;
-        case "D":
-          new_list[3] = new_list[3] == no_stroke_width ? hover_stroke_width : new_list[3];
-          new_list[7] = new_list[7] == no_stroke_width ? hover_stroke_width : new_list[7];
-          new_list[11] = new_list[11] == no_stroke_width ? hover_stroke_width : new_list[11];
-          new_list[15] = new_list[15] == no_stroke_width ? hover_stroke_width : new_list[15];
-          new_list[19] = new_list[19] == no_stroke_width ? hover_stroke_width : new_list[19];
-          new_list[23] = new_list[23] == no_stroke_width ? hover_stroke_width : new_list[23];
-          break;
-      }
-      for (let j = 0; j < new_list.length; j++) this.stroke_width[j] = new_list[j];
-    },
-    on_row_leave_hover(value) {
-      this.test_event(value + " hover leave");
-      this.stroke_width.splice(0, this.stroke_width.length);
-      for (let i = 0; i < this.all_select.length; i++) {
-        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
-        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
-      }
+      this.check_stroke_width();
     },
     on_plate_well_selected() {
       this.$emit("platewell-selected", this.all_select);
     },
-    test_event(evnt) {
-      if (debug_mode != undefined) {
-        this.$emit("test-event", evnt);
+    on_shift_click(val, values_to_change) {
+      const new_list = JSON.parse(JSON.stringify(this.all_select));
+      this.stroke_width.splice(0, this.stroke_width.length);
+      const result =
+        new_list[values_to_change[val][0]] &&
+        new_list[values_to_change[val][1]] &&
+        new_list[values_to_change[val][2]] &&
+        new_list[values_to_change[val][3]];
+
+      values_to_change[val].map((well) => {
+        new_list[well] = !result;
+      });
+
+      this.all_select = new_list;
+      const allEqual = (arr) => arr.every((v) => v === true); // verify in the pre-select all via a const allEqual function.
+      this.all_select_or_cancel = allEqual(this.all_select) ? false : true; // if pre-select has all wells is true, then toggle from (+) to (-) icon.
+      this.check_stroke_width();
+    },
+    check_stroke_width() {
+      for (let i = 0; i < this.all_select.length; i++) {
+        this.stroke_width[i] = !this.all_select[i] ? no_stroke_width : selected_stroke_width;
+        this.hover_color[i] = !this.all_select[i] ? hover_color : selected_color;
       }
     },
   },
