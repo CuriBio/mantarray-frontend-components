@@ -87,13 +87,13 @@ describe("PlateMapEditor.vue", () => {
       localVue,
     });
 
-    expect(wrapper.vm.input_platemap_name).toBe("");
+    expect(wrapper.vm.input_platemap_name).toBeNull();
     expect(wrapper.vm.invalid_text).toBe("Required");
 
     await store.commit("platemap/set_platemap_name", "new_name");
 
     expect(wrapper.vm.input_platemap_name).toBe("new_name");
-    expect(wrapper.vm.invalid_text).toBeNull();
+    expect(wrapper.vm.invalid_text).toBe("");
   });
 
   test("When user selects 'Save Changes' button, Then the current platemap configuration will be saved to state", async () => {
