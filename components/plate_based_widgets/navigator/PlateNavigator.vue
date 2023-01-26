@@ -87,16 +87,17 @@ export default {
     ...mapState("platemap", ["well_assignments", "current_platemap_name", "stored_platemaps"]),
     platemap_colors: function () {
       // want to use most recently saved state for selected platemap to only reflect changes after 'Save Changes' is selected and not as labels are applied before saving
-      const saved_platemap_labels = this.stored_platemaps.find(
+      const saved_platemap = this.stored_platemaps.find(
         ({ map_name }) => map_name === this.current_platemap_name
       );
+      console.log(saved_platemap);
       return Array(24)
         .fill("#b7b7b7")
         .map((gray, i) => {
           let color_to_use = gray;
           // don't change the platemap navigator colors until a user has saved a platemap so that it's obvious when the labels have been assigned
           if (this.is_platemap_selected) {
-            for (const { wells, color } of saved_platemap_labels.labels) {
+            for (const { wells, color } of saved_platemap.labels) {
               if (wells.includes(i)) color_to_use = color;
             }
           }

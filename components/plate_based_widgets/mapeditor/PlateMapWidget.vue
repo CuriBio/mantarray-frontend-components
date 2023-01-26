@@ -160,6 +160,7 @@ export default {
       this.all_select[value] = true;
       this.stroke_width[value] = selected_stroke_width;
       if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
+      this.on_plate_well_selected();
       this.on_wellenter(value);
     },
     on_select_cancel_all(state) {
