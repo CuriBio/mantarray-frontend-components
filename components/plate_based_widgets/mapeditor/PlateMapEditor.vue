@@ -84,6 +84,8 @@ import PlateMapNewAssignmentWidget from "@/components/plate_based_widgets/mapedi
 import { BModal } from "bootstrap-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 Vue.component("BModal", BModal);
+import { TextValidation } from "@/js_utils/text_validation.js";
+const TextValidation_Name = new TextValidation("platemap_editor_input");
 
 export default {
   name: "PlateMapEditor",
@@ -105,16 +107,15 @@ export default {
   computed: {
     ...mapState("platemap", ["well_assignments", "selected_wells", "current_platemap_name"]),
     passing_plate_colors: function () {
-      const blank_plate = Array(24).fill("#b7b7b7");
-
-      const arr = blank_plate.map((gray, i) => {
-        let color_to_use = gray;
-        for (const { wells, color } of this.well_assignments) {
-          if (wells.includes(i)) color_to_use = color;
-        }
-        return color_to_use;
-      });
-      return arr;
+      return Array(24)
+        .fill("#b7b7b7")
+        .map((gray, i) => {
+          let color_to_use = gray;
+          for (const { wells, color } of this.well_assignments) {
+            if (wells.includes(i)) color_to_use = color;
+          }
+          return color_to_use;
+        });
     },
     well_selection: function () {
       return Array(24)
@@ -136,9 +137,13 @@ export default {
     current_platemap_name: function () {
       this.input_platemap_name = this.current_platemap_name;
     },
+    input_platemap_name: function () {
+      this.invalid_text = TextValidation_Name.validate(this.input_platemap_name);
+    },
   },
+
   mounted() {
-    this.input_platemap_name = this.current_platemap_name ? this.current_platemap_name : "";
+    this.input_platemap_name = this.current_platemap_name;
   },
   methods: {
     ...mapActions("platemap", [
@@ -197,8 +202,6 @@ export default {
     },
     update_platemap_input: function (value) {
       this.input_platemap_name = value;
-      // even though this isn't shown, it signifies whether a red or green border is used around the input box
-      this.invalid_text = value && value.length === 0 ? "Required" : "";
     },
   },
 };

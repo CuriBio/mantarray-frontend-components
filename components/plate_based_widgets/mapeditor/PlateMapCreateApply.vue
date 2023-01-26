@@ -115,6 +115,8 @@ export default {
       "clear_selected_wells",
     ]),
     check_platemap_dropdown_matches_state() {
+      this.assignment_options_idx = 0; // this resets and so this needs to mirror that change so the edit label button is disabled
+
       if (this.current_platemap_name !== this.platemap_names[this.map_options_idx]) {
         const platemap_idx = this.platemap_names.indexOf(this.current_platemap_name);
         this.map_options_idx =

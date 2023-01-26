@@ -38,7 +38,7 @@
             r="15"
             stroke="#FFFFFF"
             stroke-width="0"
-            :fill="getWellColor(well_index)"
+            :fill="get_well_colors[well_index]"
             :class="{
               'circle__plate-navigator-well--selected': selected_quadrant_well_indices.includes(well_index),
               'circle__plate-navigator-well--unselected-hover':
@@ -71,6 +71,12 @@ export default {
     return {
       hovered_quadrant_wells: [],
       active_tab: 0,
+      quadrant_options: {
+        QUADRANT_ONE: [0, 1, 4, 5, 8, 9],
+        QUADRANT_TWO: [12, 13, 16, 17, 20, 21],
+        QUADRANT_THREE: [2, 3, 6, 7, 10, 11],
+        QUADRANT_FOUR: [14, 15, 18, 19, 22, 23],
+      },
     };
   },
   computed: {
@@ -78,94 +84,51 @@ export default {
       selected_quadrant_well_indices: "is_quadrant",
     }),
     ...mapState("stimulation", ["protocol_assignments"]),
-    ...mapState("platemap", ["well_assignments"]),
+    ...mapState("platemap", ["well_assignments", "current_platemap_name"]),
     platemap_colors: function () {
-      const blank_plate = Array(24).fill("#b7b7b7");
-
-      const arr = blank_plate.map((gray, i) => {
-        let color_to_use = gray;
-        for (const { wells, color } of this.well_assignments) {
-          if (wells.includes(i)) color_to_use = color;
-        }
-        return color_to_use;
-      });
-      return arr;
+      console.log(this.platemap_has_been_saved);
+      return Array(24)
+        .fill("#b7b7b7")
+        .map((gray, i) => {
+          let color_to_use = gray;
+          // don't change the platemap navigator colors until a user has saved a platemap so that it's obvious when the labels have been assigned
+          if (this.platemap_has_been_saved) {
+            for (const { wells, color } of this.well_assignments) {
+              if (wells.includes(i)) color_to_use = color;
+            }
+          }
+          return color_to_use;
+        });
     },
-  },
-  created() {
-    this.quadrant_options = {
-      QUADRANT_ONE: [0, 1, 4, 5, 8, 9],
-      QUADRANT_TWO: [12, 13, 16, 17, 20, 21],
-      QUADRANT_THREE: [2, 3, 6, 7, 10, 11],
-      QUADRANT_FOUR: [14, 15, 18, 19, 22, 23],
-    };
-
-    this.quadrant_options_api_set = {
-      QUADRANT: "twentyfourcontrols/set_is_quadrant",
-    };
-    this.quadrant_options_api_get = {
-      QUADRANT: "twentyfourcontrols/is_quadrant",
-    };
+    stim_plate_colors: function () {
+      return Array(24)
+        .fill("#b7b7b7")
+        .map((gray, i) =>
+          this.protocol_assignments[i] !== undefined ? this.protocol_assignments[i].color : gray
+        );
+    },
+    get_well_colors: function () {
+      return this.active_tab === 0 ? this.platemap_colors : this.stim_plate_colors;
+    },
+    platemap_has_been_saved: function () {
+      return this.current_platemap_name && this.current_platemap_name.length > 0;
+    },
   },
   methods: {
     get_quadrant_from_well_index: function (well_index) {
-      switch (well_index) {
-        case 0:
-        case 1:
-        case 4:
-        case 5:
-        case 8:
-        case 9: {
-          return this.quadrant_options.QUADRANT_ONE;
-        }
-        case 12:
-        case 13:
-        case 16:
-        case 17:
-        case 20:
-        case 21: {
-          return this.quadrant_options.QUADRANT_TWO;
-        }
-
-        case 2:
-        case 3:
-        case 6:
-        case 7:
-        case 10:
-        case 11: {
-          return this.quadrant_options.QUADRANT_THREE;
-        }
-        case 14:
-        case 15:
-        case 18:
-        case 19:
-        case 22:
-        case 23: {
-          return this.quadrant_options.QUADRANT_FOUR;
-        }
+      for (const wells of Object.values(this.quadrant_options)) {
+        if (wells && wells.includes(well_index)) return wells;
       }
     },
-
     on_enter_well: function (well_index) {
       this.hovered_quadrant_wells = this.get_quadrant_from_well_index(well_index);
     },
-    on_leave_well: function (well_index) {
+    on_leave_well: function () {
       this.hovered_quadrant_wells = [];
     },
     on_click_well: function (well_index) {
       const quadrant_containing_this_well = this.get_quadrant_from_well_index(well_index);
-      this.$store.commit(this.quadrant_options_api_set.QUADRANT, quadrant_containing_this_well);
-    },
-    getWellColor(well_index) {
-      // if stim tab is selected
-      if (this.active_tab === 1) {
-        if (this.protocol_assignments[well_index] !== undefined)
-          return this.protocol_assignments[well_index].color;
-        else return "#B7B7B7";
-      } else {
-        // else show platemap colors
-        return this.platemap_colors[well_index];
-      }
+      this.$store.commit("twentyfourcontrols/set_is_quadrant", quadrant_containing_this_well);
     },
     set_active_tab({ target }) {
       this.active_tab = Number(target.id);
