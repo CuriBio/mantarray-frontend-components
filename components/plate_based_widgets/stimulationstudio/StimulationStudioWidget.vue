@@ -246,12 +246,7 @@ export default {
     on_shift_click(val, values_to_change) {
       const new_list = JSON.parse(JSON.stringify(this.all_select));
       this.stroke_width.splice(0, this.stroke_width.length);
-      const result =
-        new_list[values_to_change[val][0]] &&
-        new_list[values_to_change[val][1]] &&
-        new_list[values_to_change[val][2]] &&
-        new_list[values_to_change[val][3]];
-
+      const result = values_to_change[val].map((i) => new_list[i]).every((x) => x);
       values_to_change[val].map((well) => {
         new_list[well] = !result;
       });

@@ -160,6 +160,7 @@ export default {
       this.all_select[value] = true;
       this.stroke_width[value] = selected_stroke_width;
       if (!this.all_select_or_cancel) this.all_select_or_cancel = true;
+      this.on_plate_well_selected();
       this.on_wellenter(value);
     },
     on_select_cancel_all(state) {
@@ -228,19 +229,16 @@ export default {
     on_shift_click(val, values_to_change) {
       const new_list = JSON.parse(JSON.stringify(this.all_select));
       this.stroke_width.splice(0, this.stroke_width.length);
-      const result =
-        new_list[values_to_change[val][0]] &&
-        new_list[values_to_change[val][1]] &&
-        new_list[values_to_change[val][2]] &&
-        new_list[values_to_change[val][3]];
+      const selected_item = values_to_change[val];
+      const result = selected_item.map((i) => new_list[i]).every((x) => x);
 
-      values_to_change[val].map((well) => {
+      selected_item.map((well) => {
         new_list[well] = !result;
       });
-
       this.all_select = new_list;
       this.all_select_or_cancel = !this.all_equal;
       this.check_stroke_width();
+      this.on_plate_well_selected();
     },
     check_stroke_width() {
       for (let i = 0; i < this.all_select.length; i++) {

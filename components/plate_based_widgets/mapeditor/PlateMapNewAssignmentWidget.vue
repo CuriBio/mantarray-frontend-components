@@ -29,6 +29,8 @@
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import { mapState, mapMutations } from "vuex";
+import { TextValidation } from "@/js_utils/text_validation.js";
+const TextValidation_Label = new TextValidation("platemap_editor_input");
 
 export default {
   name: "PlateMapNewAssignmentWidget",
@@ -61,16 +63,12 @@ export default {
   methods: {
     ...mapMutations("platemap", ["change_existing_name", "set_new_well_assignment"]),
     on_update_name: function (new_value) {
-      if (new_value.length === 0) {
-        this.invalid_text = "Required";
-        this.is_enabled = [true, false];
-      } else if (this.assignment_names.includes(new_value) && !this.editable_name) {
+      this.invalid_text = TextValidation_Label.validate(new_value);
+      if (this.assignment_names.includes(new_value) && !this.editable_name) {
         this.invalid_text = "This name is already taken";
-        this.is_enabled = [true, false];
-      } else {
-        this.invalid_text = "";
-        this.is_enabled = [true, true];
       }
+
+      this.is_enabled = this.invalid_text === "" ? [true, true] : [true, false];
 
       this.input_label_name = new_value;
       this.initial_value = new_value;

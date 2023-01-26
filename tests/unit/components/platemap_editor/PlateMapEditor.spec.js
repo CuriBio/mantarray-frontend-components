@@ -87,7 +87,7 @@ describe("PlateMapEditor.vue", () => {
       localVue,
     });
 
-    expect(wrapper.vm.input_platemap_name).toBe("");
+    expect(wrapper.vm.input_platemap_name).toBeNull();
     expect(wrapper.vm.invalid_text).toBe("Required");
 
     await store.commit("platemap/set_platemap_name", "new_name");

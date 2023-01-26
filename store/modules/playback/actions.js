@@ -50,7 +50,7 @@ export default {
     const plate_barcode = this.state.playback.barcodes.plate_barcode.value;
     const stim_barcode = this.state.playback.barcodes.stim_barcode.value;
     // get currently selected platemap
-    const { stored_platemaps, current_platemap_name } = this.state.platemap;
+    const { stored_platemaps, current_platemap_name } = JSON.parse(JSON.stringify(this.state.platemap));
     const current_platemap = stored_platemaps.find(({ map_name }) => map_name === current_platemap_name);
     // remove unecessary keys from labels to send
     if (current_platemap)

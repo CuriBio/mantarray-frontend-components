@@ -39,6 +39,9 @@ export class TextValidation {
         case "plate_barcode":
           feedback = this.validate_barcode(text, type, beta_2_mode);
           break;
+        case "platemap_editor_input":
+          feedback = this.validate_platemap_editor_input(text);
+          break;
         case "uuidBase57encode":
           feedback = this.validate_uuidBase_fiftyseven_encode(text);
           break;
@@ -80,6 +83,25 @@ export class TextValidation {
     }
     return feedback;
   }
+
+  /**
+   * Returns the feedback text with either value of "" or text with reason for failure
+   *
+   * @param  {text}  text The text on which the validation rules are verified
+
+   * @return {string} The string is either empty on valid and <space> or <invalid meessage>
+   */
+  validate_platemap_editor_input(text) {
+    let feedback = "";
+    const valid_regex = new RegExp("^[0-9A-Za-z _-]+$");
+    if (!text || text.length === 0) feedback = "Required";
+    else if (!valid_regex.test(text))
+      feedback =
+        "Invalid character present. Valid characters are alphanumeric, spaces, hyphens, and underscores";
+
+    return feedback;
+  }
+
   /**
    * Returns the feedback text with either value of "" or text with reason for failure
    *
