@@ -13,6 +13,10 @@ const default_state = {
   heatmap_values: {
     "Twitch Frequency": { data: [] },
     "Twitch Force": { data: [] },
+    // "Twitch Period": { data: [] },
+    // "Twitch Width 80": { data: [] },
+    // "Contraction Velocity": { data: [] },
+    // "Relaxation Velocity": { data: [] },
   },
 
   // Tanner (10/29/21): the data stored here aren't actually waveforms yet, but will be in the future
