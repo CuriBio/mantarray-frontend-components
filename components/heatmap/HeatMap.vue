@@ -171,7 +171,7 @@ import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue"
 import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/heatmap/PlateHeatMap.vue";
 import playback_module from "@/store/modules/playback";
-import { METRIC_UNITS, MAX_NUM_DATAPOINTS_FOR_MEAN } from "@/store/modules/heatmap/enums";
+import { METRIC_UNITS } from "@/store/modules/heatmap/enums";
 
 export default {
   name: "HeatMap",
@@ -233,9 +233,8 @@ export default {
     },
     passing_plate_colors: function () {
       return this.well_values[this.display_option].data.map((well) => {
-        const well_data = well.slice(-MAX_NUM_DATAPOINTS_FOR_MEAN);
-        const total = well_data.reduce((a, b) => a + b, 0);
-        const mean = (total / well_data.length).toFixed(3);
+        const total = well.reduce((a, b) => a + b, 0);
+        const mean = (total / well.length).toFixed(3);
         const color = this.gradient_map(mean);
         return well.length > 0 && color !== "rgb(0% 0% 0%)" ? color : "#b7b7b7";
       });
@@ -246,9 +245,7 @@ export default {
     mean_value: function () {
       let total = 0;
       this.selected_wells.map((well_idx) => {
-        const well_data = this.well_values[this.display_option].data[well_idx].slice(
-          -MAX_NUM_DATAPOINTS_FOR_MEAN
-        );
+        const well_data = this.well_values[this.display_option].data[well_idx];
         total += well_data.reduce((a, b) => a + b, 0) / well_data.length;
       });
       return (total / this.selected_wells.length).toFixed(3);
@@ -281,17 +278,22 @@ export default {
   },
   watch: {
     auto_max_min: function (new_value) {
-      if (this.autoscale) {
+      if (this.stored_auto_scale) {
         this.$store.commit("gradient/set_gradient_range", new_value);
         this.max_min_placeholder = {
           min: Math.floor(new_value.min),
           max: Math.ceil(new_value.max),
-        }; // the input box width cuts off decimal places so rounding vals
+        };
+        // the input box width cuts off decimal places so rounding vals
       }
     },
-    playback_state: function (_, old_value) {
+    playback_state: function (new_state, old_state) {
       // cleans up settings when live view becomes inactive
-      if (old_value == this.playback_state_enums.LIVE_VIEW_ACTIVE) this.reset_heatmap_settings();
+      if (
+        old_state == this.playback_state_enums.LIVE_VIEW_ACTIVE &&
+        new_state == this.playback_state_enums.CALIBRATED
+      )
+        this.reset_heatmap_settings();
     },
   },
   mounted() {
@@ -377,7 +379,6 @@ export default {
         }
       }
     },
-
     apply_heatmap_settings: function () {
       if (this.is_apply_set) {
         this.$store.commit("heatmap/set_auto_scale", this.autoscale);
