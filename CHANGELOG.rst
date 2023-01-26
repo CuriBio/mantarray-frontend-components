@@ -9,6 +9,10 @@ Added:
 - Initial Platemap Editor components and page
 - Platemap vuex store module
 
+Fixed:
+^^^^^^
+- Heatmap to respond automatically to incoming data and apply autoscale setting on 'Apply'
+
 
 1.3.3 (2023-01-19)
 ------------------
