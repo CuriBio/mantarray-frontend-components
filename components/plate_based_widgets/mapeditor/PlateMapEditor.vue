@@ -50,7 +50,11 @@
         v-for="(value, idx) in ['Save Changes', 'Clear/Reset All', 'Discard All Changes']"
         :id="idx"
         :key="value"
-        class="div__platemap-button-background-enabled"
+        :class="
+          is_save_clear_discard_enabled[idx]
+            ? 'div__platemap-button-background-enabled'
+            : 'div__platemap-button-background-disabled'
+        "
         @click.exact="handle_btn_click"
       >
         {{ value }}
@@ -130,7 +134,10 @@ export default {
     },
     is_export_import_enabled: function () {
       // only allow export if wells have been assigned
-      return [true, this.are_wells_assigned];
+      return [true, this.are_wells_assigned && this.invalid_text === ""];
+    },
+    is_save_clear_discard_enabled: function () {
+      return [this.invalid_text === "", true, true];
     },
   },
   watch: {

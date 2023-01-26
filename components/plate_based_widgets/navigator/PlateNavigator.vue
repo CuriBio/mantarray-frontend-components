@@ -84,16 +84,19 @@ export default {
       selected_quadrant_well_indices: "is_quadrant",
     }),
     ...mapState("stimulation", ["protocol_assignments"]),
-    ...mapState("platemap", ["well_assignments", "current_platemap_name"]),
+    ...mapState("platemap", ["well_assignments", "current_platemap_name", "stored_platemaps"]),
     platemap_colors: function () {
-      console.log(this.platemap_has_been_saved);
+      // want to use most recently saved state for selected platemap to only reflect changes after 'Save Changes' is selected and not as labels are applied before saving
+      const saved_platemap_labels = this.stored_platemaps.find(
+        ({ map_name }) => map_name === this.current_platemap_name
+      );
       return Array(24)
         .fill("#b7b7b7")
         .map((gray, i) => {
           let color_to_use = gray;
           // don't change the platemap navigator colors until a user has saved a platemap so that it's obvious when the labels have been assigned
-          if (this.platemap_has_been_saved) {
-            for (const { wells, color } of this.well_assignments) {
+          if (this.is_platemap_selected) {
+            for (const { wells, color } of saved_platemap_labels.labels) {
               if (wells.includes(i)) color_to_use = color;
             }
           }
@@ -110,7 +113,7 @@ export default {
     get_well_colors: function () {
       return this.active_tab === 0 ? this.platemap_colors : this.stim_plate_colors;
     },
-    platemap_has_been_saved: function () {
+    is_platemap_selected: function () {
       return this.current_platemap_name && this.current_platemap_name.length > 0;
     },
   },

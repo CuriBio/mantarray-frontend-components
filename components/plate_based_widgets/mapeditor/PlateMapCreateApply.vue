@@ -78,7 +78,7 @@ export default {
       return this.well_assignments.map(({ name }) => name);
     },
     platemap_names: function () {
-      return this.stored_platemaps.map(({ map_name }) => map_name);
+      return JSON.parse(JSON.stringify(this.stored_platemaps)).map(({ map_name }) => map_name);
     },
     is_apply_enabled: function () {
       return this.selected_wells.length > 0 && this.assignment_options_idx !== 0;
@@ -151,8 +151,9 @@ export default {
     },
     handle_map_dropdown_selection: function (idx) {
       this.map_options_idx = idx;
-      this.set_platemap_name(idx !== 0 ? this.stored_platemaps[idx].map_name : "");
-      this.set_entire_platemap(this.stored_platemaps[idx].labels);
+      const { map_name, labels } = JSON.parse(JSON.stringify(this.stored_platemaps[idx]));
+      this.set_platemap_name(idx !== 0 ? map_name : "");
+      this.set_entire_platemap(labels);
     },
   },
 };
