@@ -58,7 +58,7 @@ export default {
         name,
         wells,
       }));
-
+    // TODO make start_recording a POST route
     const url = "http://localhost:4567/start_recording";
     const params = {
       time_index,

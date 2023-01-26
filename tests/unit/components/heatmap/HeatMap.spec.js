@@ -5,6 +5,7 @@ import { createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 import playback_module from "@/store/modules/playback";
 import { MAX_NUM_DATAPOINTS_FOR_MEAN } from "../../../../store/modules/heatmap/enums";
+import { color } from "d3";
 
 const max_warm_rgb = "rgb(74.118% 20.784% 19.608%)";
 const min_warm_rgb = "rgb(97.647% 84.314% 54.902%)";
@@ -264,6 +265,39 @@ describe("HeatMap.vue", () => {
     expect(test_well.attributes("fill")).toStrictEqual(max_cool_rgb);
   });
 
+  test("When new heatmap values get added to state, Then the wells will automatically change color accordingly", async () => {
+    const wrapper = mount(HeatMap, {
+      store,
+      localVue,
+    });
+    await store.commit("data/set_heatmap_values", {
+      "Twitch Frequency": { data: [[], [], [], []] },
+    });
+    expect(wrapper.vm.passing_plate_colors).toStrictEqual(Array(4).fill("#b7b7b7"));
+    await store.commit("data/set_heatmap_values", {
+      "Twitch Frequency": { data: [[5, 15], [15], [0, 10]] },
+    });
+    const color_map = store.getters["gradient/gradient_color_mapping"];
+    expect(wrapper.vm.passing_plate_colors).toStrictEqual([color_map(10), color_map(15), color_map(10)]);
+
+    await store.commit("data/set_heatmap_values", {
+      "Twitch Frequency": {
+        data: [
+          [10, 20, 25, 10], // show only last five points are used
+          [25, 0],
+          [20, 10],
+          [1, 3],
+        ],
+      },
+    });
+    expect(wrapper.vm.passing_plate_colors).toStrictEqual([
+      color_map(40),
+      color_map(20),
+      color_map(20),
+      color_map(2),
+    ]);
+  });
+
   test("Given all settings are changed from default and a well selection is set, When the reset button is pressed, Then all settings reset except for well selection", async () => {
     const wrapper = mount(HeatMap, {
       store,
@@ -422,6 +456,6 @@ describe("HeatMap.vue", () => {
       "Twitch Frequency": { data: [[10, 15, 20]] },
     });
 
-    expect(store_spy.mock.calls).toHaveLength(8);
+    expect(store_spy.mock.calls).toHaveLength(9);
   });
 });

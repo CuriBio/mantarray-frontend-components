@@ -19,20 +19,21 @@ export default {
     });
   },
   append_metric_data(state, new_values) {
+    const heatmap_copy = JSON.parse(JSON.stringify(state.heatmap_values));
     for (const well_idx in new_values) {
       if (new_values[well_idx] !== undefined) {
         const new_well_values = new_values[well_idx];
-        for (const metric_name in state.heatmap_values) {
+        for (const metric_name in heatmap_copy) {
           if (new_well_values[TWITCH.METRIC_IDS[metric_name]] !== undefined) {
-            state.heatmap_values[metric_name].data[well_idx] = state.heatmap_values[metric_name].data[
-              well_idx
-            ]
+            heatmap_copy[metric_name].data[well_idx] = heatmap_copy[metric_name].data[well_idx]
               .concat(new_well_values[TWITCH.METRIC_IDS[metric_name]])
               .slice(-MAX_NUM_DATAPOINTS_FOR_MEAN);
           }
         }
       }
     }
+
+    state.heatmap_values = { ...heatmap_copy };
   },
   clear_heatmap_values(state) {
     for (const metric_name in state.heatmap_values) {
