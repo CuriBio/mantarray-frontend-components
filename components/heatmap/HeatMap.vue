@@ -171,7 +171,7 @@ import RadioButtonWidget from "@/components/basic_widgets/RadioButtonWidget.vue"
 import GradientBar from "@/components/status/GradientBar.vue";
 import PlateHeatMap from "@/components/plate_based_widgets/heatmap/PlateHeatMap.vue";
 import playback_module from "@/store/modules/playback";
-import { METRIC_UNITS, MAX_NUM_DATAPOINTS_FOR_MEAN } from "@/store/modules/heatmap/enums";
+import { METRIC_UNITS } from "@/store/modules/heatmap/enums";
 
 export default {
   name: "HeatMap",
@@ -245,9 +245,7 @@ export default {
     mean_value: function () {
       let total = 0;
       this.selected_wells.map((well_idx) => {
-        const well_data = this.well_values[this.display_option].data[well_idx].slice(
-          -MAX_NUM_DATAPOINTS_FOR_MEAN
-        );
+        const well_data = this.well_values[this.display_option].data[well_idx];
         total += well_data.reduce((a, b) => a + b, 0) / well_data.length;
       });
       return (total / this.selected_wells.length).toFixed(3);

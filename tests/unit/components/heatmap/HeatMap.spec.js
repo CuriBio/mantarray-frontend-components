@@ -422,6 +422,6 @@ describe("HeatMap.vue", () => {
       "Twitch Frequency": { data: [[10, 15, 20]] },
     });
 
-    expect(store_spy.mock.calls).toHaveLength(8);
+    expect(store_spy.mock.calls).toHaveLength(9);
   });
 });

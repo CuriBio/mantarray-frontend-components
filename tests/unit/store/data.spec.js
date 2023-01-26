@@ -375,8 +375,6 @@ describe("store/data", () => {
         };
         store.commit("data/set_heatmap_values", init_heatmap_values);
 
-        const stored_metrics = store.getters["data/heatmap_values"];
-
         const new_heatmap_values = {
           0: {
             "89cf1105-a015-434f-b527-4169b9400e26": [1, 2], // Twitch Force
@@ -394,8 +392,9 @@ describe("store/data", () => {
           });
         });
 
-        let data_validator = (well, idx) => {
-          let expected_length = idx != 1 ? 3 : 0;
+        const stored_metrics = store.getters["data/heatmap_values"];
+        const data_validator = (well, idx) => {
+          const expected_length = idx != 1 ? 3 : 0;
           expect(well).toHaveLength(expected_length);
         };
         stored_metrics["Twitch Force"].data.map(data_validator);
