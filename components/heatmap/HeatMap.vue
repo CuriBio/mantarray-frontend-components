@@ -67,9 +67,9 @@
         :invalid_text="max_value_error_msg"
         :input_width="105"
         :dom_id_suffix="'heatmap-max'"
-        :disabled="checkbox_state"
+        :disabled="autoscale"
         :initial_value="upper.toString()"
-        @update:value="!checkbox_state ? on_update_maximum($event) : null"
+        @update:value="!autoscale ? on_update_maximum($event) : null"
       />
     </div>
 
@@ -83,9 +83,9 @@
         :invalid_text="min_value_error_msg"
         :input_width="105"
         :dom_id_suffix="'heatmap-min'"
-        :disabled="checkbox_state"
+        :disabled="autoscale"
         :initial_value="lower.toString()"
-        @update:value="!checkbox_state ? on_update_minimum($event) : null"
+        @update:value="!autoscale ? on_update_minimum($event) : null"
       />
     </div>
 
@@ -280,8 +280,12 @@ export default {
   },
   watch: {
     auto_max_min: function (new_value) {
-      if (this.autoscale) {
+      if (this.stored_auto_scale) {
         this.$store.commit("gradient/set_gradient_range", new_value);
+        this.max_min_placeholder = {
+          min: Math.floor(new_value.min),
+          max: Math.ceil(new_value.max),
+        };
         // the input box width cuts off decimal places so rounding vals
       }
     },
@@ -312,12 +316,8 @@ export default {
       if (new_value == "autoscale") {
         this.max_value_error_msg = "";
         this.min_value_error_msg = "";
-        // this.autoscale = true;
+        this.autoscale = true;
         this.checkbox_reset = false;
-        this.max_min_placeholder = {
-          min: Math.floor(new_value.min),
-          max: Math.ceil(new_value.max),
-        };
       } else {
         this.on_update_maximum(this.upper);
         this.on_update_minimum(this.lower);
