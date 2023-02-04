@@ -1,7 +1,17 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.4.0 (2022-01-26)
+1.4.1 (2023-01-05)
+------------------
+
+Changed:
+^^^^^^
+- Check to prevent duplicate PlateMap names
+- PlateMap name validation on import to remove special characters
+- Clear/Reset All in PlateMap Editor will remove current PlateMap
+
+
+1.4.0 (2023-01-26)
 ------------------
 
 Added:

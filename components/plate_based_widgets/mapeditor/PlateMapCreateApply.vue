@@ -94,7 +94,6 @@ export default {
     current_platemap_name: function () {
       this.check_platemap_dropdown_matches_state();
     },
-
     well_assignment_names: function (new_names, old_names) {
       // select new assignment once saved to be selected in dropdown
       if (new_names.length > old_names.length) {

@@ -11,11 +11,19 @@ export default {
   },
   apply_well_assignment(state, assignment_option) {
     for (const well of state.well_assignments) {
+      const idx = state.well_assignments.indexOf(well);
+      const assignments = state.well_assignments[idx];
+      // if it's the selected label, then add well to assignment array
       if (well.name === assignment_option) {
-        const idx = state.well_assignments.indexOf(well);
         // json parse to copy and be independent of state selected wells
         for (const well of state.selected_wells) {
-          if (!state.well_assignments[idx].wells.includes(well)) state.well_assignments[idx].wells.push(well);
+          if (!assignments.wells.includes(well)) assignments.wells.push(well);
+        }
+      } else {
+        // else if this well was previously assigned a different label, then remove well from assignment array
+        for (const well of state.selected_wells) {
+          const duplicate_assignment_idx = assignments.wells.indexOf(well);
+          if (duplicate_assignment_idx !== -1) assignments.wells.splice(duplicate_assignment_idx, 1);
         }
       }
     }
@@ -33,10 +41,20 @@ export default {
     // reset selected wells
     state.selected_wells = [];
   },
-  clear_all_well_assignments(state) {
-    for (const well of state.well_assignments) {
-      well.wells = [];
-    }
+  clear_platemap(state) {
+    const platemaps_copy = JSON.parse(JSON.stringify(state.stored_platemaps));
+    state.well_assignments = JSON.parse(JSON.stringify([{ name: "Select Label", wells: [], color: "none" }]));
+    // get the index of the current platemap to remove
+    const platemap_idx_to_clear = platemaps_copy
+      .map(({ map_name }) => map_name)
+      .indexOf(state.current_platemap_name);
+
+    platemaps_copy.splice(platemap_idx_to_clear, 1);
+    state.stored_platemaps = platemaps_copy;
+    state.current_platemap_name = null;
+
+    // reset selected wells
+    state.selected_wells = [];
   },
   set_entire_platemap(state, labels) {
     state.well_assignments = [...labels];
@@ -49,8 +67,8 @@ export default {
     state.well_assignments[index_to_change].name = new_name;
   },
   save_new_platemap(state, platemap) {
-    state.stored_platemaps.push(platemap);
     state.current_platemap_name = platemap.map_name;
+    state.stored_platemaps.push(platemap);
   },
   save_platemap_changes(state, { platemap, previous_name }) {
     const selected_idx = state.stored_platemaps.findIndex(

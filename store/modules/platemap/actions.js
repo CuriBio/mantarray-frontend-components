@@ -39,6 +39,9 @@ export default {
 
     reader.onload = async function () {
       const response = JSON.parse(reader.result);
+      // remove all special characters
+      response.map_name = response.map_name.replace(/[^\w-_ \s]/gi, "");
+
       await commit("save_new_platemap", response);
       await commit("set_entire_platemap", response.labels);
     };
