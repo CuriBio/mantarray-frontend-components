@@ -52,7 +52,6 @@ export default {
     platemaps_copy.splice(platemap_idx_to_clear, 1);
     state.stored_platemaps = platemaps_copy;
     state.current_platemap_name = null;
-
     // reset selected wells
     state.selected_wells = [];
   },
@@ -77,5 +76,10 @@ export default {
 
     state.stored_platemaps[selected_idx].labels = platemap.labels;
     state.stored_platemaps[selected_idx].map_name = platemap.map_name;
+  },
+  clear_all_well_assignments(state) {
+    for (const well of state.well_assignments) {
+      well.wells = [];
+    }
   },
 };

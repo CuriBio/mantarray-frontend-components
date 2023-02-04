@@ -139,7 +139,7 @@ describe("PlateMapEditor.vue", () => {
     expect(stored_platemaps).toHaveLength(2);
   });
 
-  test("When user selects 'Clear/Reset All' button, Then the current platemap configuration reset assigned wells only", async () => {
+  test("When user selects 'Clear/Reset All' button, Then the current platemap configuration reset entire platemap", async () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
@@ -150,11 +150,16 @@ describe("PlateMapEditor.vue", () => {
     await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
 
+    await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
+
     expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([0, 4, 8, 12, 16, 20]);
+    expect(store.state.platemap.well_assignments).toHaveLength(2);
+    expect(store.state.platemap.stored_platemaps).toHaveLength(2);
 
     await wrapper.findAll(".div__platemap-button-background-enabled").at(3).trigger("click");
 
-    expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([]);
+    expect(store.state.platemap.well_assignments).toHaveLength(1);
+    expect(store.state.platemap.stored_platemaps).toHaveLength(1);
   });
 
   test("When user selects 'Edit Label' button, Then assigment modal will open with name passed as props", async () => {
