@@ -229,7 +229,7 @@ jobs:
 
       - name: Sleep for 180 seconds to allow NPM Index to update before proceeding to the next step
         if: github.event.inputs.publish_package == '1'
-        uses: juliangruber/sleep-action@v1.0.1
+        uses: juliangruber/sleep-action@v2.0.0
         with:
           time: 180s
 
