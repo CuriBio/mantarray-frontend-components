@@ -5,10 +5,13 @@ Changelog for Mantarray Frontend Components
 ------------------
 
 Changed:
-^^^^^^
-- Check to prevent duplicate PlateMap names
-- PlateMap name validation on import to remove special characters
+^^^^^^^^
+- PlateMap name validation runs on import and removes disallowed characters
 - Clear/Reset All in PlateMap Editor will remove current PlateMap
+
+Fixed:
+^^^^^^
+- Duplicate PlateMap names no longer allowed
 
 
 1.4.0 (2023-01-26)
