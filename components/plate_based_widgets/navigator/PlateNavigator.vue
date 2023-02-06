@@ -90,7 +90,6 @@ export default {
       const saved_platemap = this.stored_platemaps.find(
         ({ map_name }) => map_name === this.current_platemap_name
       );
-      console.log(saved_platemap);
       return Array(24)
         .fill("#b7b7b7")
         .map((gray, i) => {

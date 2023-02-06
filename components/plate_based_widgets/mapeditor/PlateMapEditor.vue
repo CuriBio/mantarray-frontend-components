@@ -109,7 +109,12 @@ export default {
     };
   },
   computed: {
-    ...mapState("platemap", ["well_assignments", "selected_wells", "current_platemap_name"]),
+    ...mapState("platemap", [
+      "well_assignments",
+      "selected_wells",
+      "current_platemap_name",
+      "stored_platemaps",
+    ]),
     passing_plate_colors: function () {
       return Array(24)
         .fill("#b7b7b7")
@@ -139,16 +144,23 @@ export default {
     is_save_clear_discard_enabled: function () {
       return [this.invalid_text === "", true, true];
     },
+    stored_platemap_names: function () {
+      return this.stored_platemaps.map(({ map_name }) => map_name);
+    },
   },
   watch: {
     current_platemap_name: function () {
       this.input_platemap_name = this.current_platemap_name;
     },
     input_platemap_name: function () {
-      this.invalid_text = TextValidation_Name.validate(this.input_platemap_name);
+      this.invalid_text = TextValidation_Name.validate(this.input_platemap_name).split(".")[0];
+      if (
+        this.stored_platemap_names.includes(this.input_platemap_name) &&
+        this.input_platemap_name !== this.current_platemap_name
+      )
+        this.invalid_text = "Duplicate name";
     },
   },
-
   mounted() {
     this.input_platemap_name = this.current_platemap_name;
   },
@@ -159,7 +171,7 @@ export default {
       "save_platemap",
       "discard_current_platemap_changes",
     ]),
-    ...mapMutations("platemap", ["set_selected_wells", "clear_all_well_assignments", "set_platemap_name"]),
+    ...mapMutations("platemap", ["set_selected_wells", "clear_platemap", "set_platemap_name"]),
     handle_modal_open: function (editable_name) {
       this.editable_name = editable_name;
       this.$bvModal.show("new-assignment-modal");
@@ -185,7 +197,7 @@ export default {
         // saving name on save instead of here as it's input to trigger dropdown change in other component
         this.save_platemap(this.input_platemap_name);
       } else if (button_idx === 1) {
-        this.clear_all_well_assignments();
+        this.clear_platemap();
         this.input_platemap_name = "";
       } else if (button_idx === 2) {
         this.discard_current_platemap_changes();
@@ -339,7 +351,7 @@ export default {
   margin-left: 10px;
   margin-top: 5px;
   width: 204px;
-  height: 33px;
+  height: 48px;
   overflow: hidden;
 }
 </style>
