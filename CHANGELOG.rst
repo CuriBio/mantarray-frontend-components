@@ -1,6 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.4.2 (unreleased)
+------------------
+
+Changed:
+^^^^^^^^
+- Minimum phase one and phase two charge requirement for subprotocols is now 1mA
+- Minimum phase one and phase two duration requirement for subprotocols is now 0.02ms
+- Minimum interphase duration requirement for subprotocols is now 0.02ms or 0ms
+
+
 1.4.1 (2023-01-06)
 ------------------
 
