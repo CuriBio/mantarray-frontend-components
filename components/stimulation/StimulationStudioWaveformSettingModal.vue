@@ -187,7 +187,7 @@
           :invalid_text="err_msgs.pulse_frequency"
           :input_width="142"
           :initial_value="input_pulse_frequency.toString()"
-          @update:value="update_freq($event)"
+          @update:value="update_frequency($event)"
         />
       </span>
     </div>
@@ -311,8 +311,14 @@ import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { VBPopover } from "bootstrap-vue";
-import { MIN_SUBPROTOCOL_DURATION_MS, TIME_CONVERSION_TO_MILLIS } from "@/store/modules/stimulation/enums";
-import { MAX_SUBPROTOCOL_DURATION_MS } from "../../store/modules/stimulation/enums";
+import {
+  MIN_SUBPROTOCOL_DURATION_MS,
+  TIME_CONVERSION_TO_MILLIS,
+  MAX_SUBPROTOCOL_DURATION_MS,
+  MIN_CHARGE_MA,
+  MAX_CHARGE_MA,
+  MIN_PHASE_DURATION_US,
+} from "@/store/modules/stimulation/enums";
 import BootstrapVue from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 Vue.directive("b-popover", VBPopover);
@@ -379,12 +385,13 @@ export default {
       pulse_settings: {},
       invalid_err_msg: {
         num_err: "Must be a number",
-        min_num_err: "Must be a positive number",
         required: "Required",
         max_pulse_duration: "Duration must be <= 50ms",
+        min_pulse_duration: `Duration must be >= ${MIN_PHASE_DURATION_US}μs`,
+        min_interphase_duration: `Duration must be 0ms or >= ${MIN_PHASE_DURATION_US}μs`,
         min_active_duration: "Duration must be >= 100ms",
         valid: "",
-        max_current: "Must be within +/- 100",
+        max_min_current: `Must be within [-${MIN_CHARGE_MA}, -${MAX_CHARGE_MA}] or [${MIN_CHARGE_MA}, ${MAX_CHARGE_MA}]`,
         max_voltage: "Must be within +/- 1200",
         frequency: "Must be a non-zero value <= 100",
         num_cycles: "Must be a whole number > 0",
@@ -494,9 +501,10 @@ export default {
       this.pulse_settings.postphase_interval = this.calculated_delay;
       this.pulse_settings.num_cycles = +this.num_cycles;
       this.pulse_settings.frequency = this.input_pulse_frequency;
+
       this.$emit("close", button_label, this.pulse_settings, this.selected_color);
     },
-    update_freq(new_value) {
+    update_frequency(new_value) {
       this.check_validity(new_value, "pulse_frequency");
       this.update_current_calculated_value();
     },
@@ -614,10 +622,17 @@ export default {
     check_pulse_duration(label) {
       const value_str = this.pulse_settings[label];
       const value = +value_str;
+      const is_interphase_dur = label === "interphase_interval";
+      const is_value_less_than_min = value < MIN_PHASE_DURATION_US / 1000;
+
       if (value_str === "") {
         this.err_msgs[label] = this.invalid_err_msg.required;
-      } else if (isNaN(value) || value < 0) {
-        this.err_msgs[label] = this.invalid_err_msg.min_num_err;
+      } else if (isNaN(value)) {
+        this.err_msgs[label] = this.invalid_err_msg.num_err;
+      } else if (is_value_less_than_min && !is_interphase_dur) {
+        this.err_msgs[label] = this.invalid_err_msg.min_pulse_duration;
+      } else if (is_value_less_than_min && value !== 0 && is_interphase_dur) {
+        this.err_msgs[label] = this.invalid_err_msg.min_interphase_duration;
       } else if (this.total_pulse_duration > this.max_pulse_duration_for_freq) {
         this.err_msgs[label] = this.invalid_err_msg.max_pulse_duration;
       } else {
@@ -678,8 +693,11 @@ export default {
         this.err_msgs[label] = this.invalid_err_msg.required;
       } else if (isNaN(value)) {
         this.err_msgs[label] = this.invalid_err_msg.num_err;
-      } else if (this.stimulation_type.includes("C") && Math.abs(value) > 100) {
-        this.err_msgs[label] = this.invalid_err_msg.max_current;
+      } else if (
+        this.stimulation_type.includes("C") &&
+        (Math.abs(value) > MAX_CHARGE_MA || Math.abs(value) < MIN_CHARGE_MA)
+      ) {
+        this.err_msgs[label] = this.invalid_err_msg.max_min_current;
       } else if (this.stimulation_type.includes("V") && Math.abs(value) > 1200) {
         this.err_msgs[label] = this.invalid_err_msg.max_voltage;
       } else {

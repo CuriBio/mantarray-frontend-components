@@ -152,28 +152,41 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
     expect(wrapper.vm.all_valid).toBe(false);
   });
 
-  test("When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
-    const wrapper = mount(StimulationStudioWaveformSettingModal, {
-      store,
-      localVue,
-      propsData: {
-        stimulation_type: "Voltage",
-        pulse_type: "Monophasic",
-        selected_pulse_settings: test_monophasic_pulse_settings,
-        current_color: "hsla(100, 100%, 50%, 1)",
-      },
-    });
-    const target_input_field = wrapper.find("#input-widget-field-duration");
-
-    await target_input_field.setValue("test");
-    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Must be a positive number");
-
-    await target_input_field.setValue("1500");
-    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Duration must be <= 50ms");
-
-    await target_input_field.setValue("");
-    expect(wrapper.vm.err_msgs.phase_one_duration).toBe("Required");
-  });
+  test.each([
+    ["phase_one_duration", "duration", "test", "Must be a number"],
+    ["phase_one_duration", "duration", "1500", "Duration must be <= 50ms"],
+    ["phase_one_duration", "duration", "", "Required"],
+    ["phase_one_duration", "duration", "0.01", "Duration must be >= 20μs"],
+    ["phase_one_duration", "duration", "50", ""],
+    ["interphase_interval", "interphase", "0.01", "Duration must be 0ms or >= 20μs"],
+    ["interphase_interval", "interphase", "test", "Must be a number"],
+    ["interphase_interval", "interphase", "0.02", ""],
+    ["interphase_interval", "interphase", "0", ""],
+    ["interphase_interval", "interphase", "", "Required"],
+    ["interphase_interval", "interphase", "100", "Duration must be <= 50ms"],
+    ["phase_one_charge", "charge", "test", "Must be a number"],
+    ["phase_one_charge", "charge", "", "Required"],
+    ["phase_one_charge", "charge", "0", "Must be within [-1, -100] or [1, 100]"],
+    ["phase_one_charge", "charge", "101", "Must be within [-1, -100] or [1, 100]"],
+    ["phase_one_charge", "charge", "50", ""],
+  ])(
+    "When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input",
+    async (input_type, suffix, value, error_msg) => {
+      const wrapper = mount(StimulationStudioWaveformSettingModal, {
+        store,
+        localVue,
+        propsData: {
+          stimulation_type: "Current",
+          pulse_type: "Biphasic",
+          selected_pulse_settings: test_biphasic_pulse_settings,
+          current_color: "hsla(100, 100%, 50%, 1)",
+        },
+      });
+      const target_input_field = wrapper.find(`#input-widget-field-${suffix}`);
+      await target_input_field.setValue(value);
+      expect(wrapper.vm.err_msgs[input_type]).toBe(error_msg);
+    }
+  );
 
   test("Given that a high frequency is selected, When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
     const wrapper = mount(StimulationStudioWaveformSettingModal, {

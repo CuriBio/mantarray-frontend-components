@@ -19,6 +19,9 @@ export const STIM_STATUS = {
 };
 
 export const MIN_SUBPROTOCOL_DURATION_MS = 100;
+export const MIN_PHASE_DURATION_US = 20; // Making this us because 0.02 is difficult to read in the error text below text box when user goes below. 20 is more visible.
+export const MIN_CHARGE_MA = 1;
+export const MAX_CHARGE_MA = 100;
 export const MAX_SUBPROTOCOL_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export const TIME_CONVERSION_TO_MILLIS = {
