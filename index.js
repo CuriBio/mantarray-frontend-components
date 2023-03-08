@@ -30,6 +30,9 @@ export {
   STIM_STATUS,
   MAX_SUBPROTOCOL_DURATION_MS,
   MIN_SUBPROTOCOL_DURATION_MS,
+  MIN_CHARGE_MA,
+  MIN_PHASE_DURATION_US,
+  MAX_CHARGE_MA,
 } from "./store/modules/stimulation/enums";
 export { ENUMS as PLAYBACK_ENUMS } from "./store/modules/playback/enums";
 export { STATUS as FLASK_STATUS_ENUMS } from "./store/modules/flask/enums";
