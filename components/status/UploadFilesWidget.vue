@@ -113,7 +113,7 @@ export default {
           msg_two: "Will automatically retry next start up.",
           button_names: ["Close"],
         };
-      } else {
+      } else if (this.upload_error === "usage") {
         this.status = false;
         this.modal_labels = {
           header: "Important!",
@@ -121,12 +121,11 @@ export default {
           msg_two: `However, because the analysis limit has been reached for this customer account, the analysis will not run.`,
           button_names: ["Close"],
         };
+        this.$store.commit("settings/set_job_limit_reached", true);
       }
       // reset
       this.$store.commit("settings/set_upload_error", false);
       this.$bvModal.show("upload-status");
-      // this is added here so that this modal is layered on top of usage upload error modal
-      this.$store.commit("settings/set_job_limit_reached", true);
     },
   },
   methods: {

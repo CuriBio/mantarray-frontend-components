@@ -675,7 +675,7 @@ describe("store/data", () => {
       expect(file_count).toBe(1);
     });
 
-    test("When backend emits status update message with an upload error, Then ws client does not update file count and sets upload_error status to true", async () => {
+    test("When backend emits status update message with an upload error, Then ws client does not update file count and sets upload_error status to 'generic'", async () => {
       const new_status_update = {
         file_name: "test_filename",
         error: "upload_error",
@@ -693,6 +693,26 @@ describe("store/data", () => {
       expect(upload_error).toBe("generic");
       expect(file_count).toBe(0);
     });
+
+    test("When backend emits status update message with an usage upload error, Then ws client does update file count and sets upload_error status to 'usage'", async () => {
+      const new_status_update = {
+        file_name: "test_filename",
+        error: "CloudAnalysisJobFailedError('UsageError')",
+      };
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("upload_status", JSON.stringify(new_status_update), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      const { total_uploaded_files, upload_error, file_count } = store.state.settings;
+
+      expect(total_uploaded_files[0]).toBe(new_status_update.file_name);
+      expect(upload_error).toBe("usage");
+      expect(file_count).toBe(1);
+    });
+
     test("When backend emits sw_update message with allow_software_update value, Then ws client commits value to store", async () => {
       const message = {
         allow_software_update: true,
