@@ -200,23 +200,4 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     await store.commit("stimulation/reset_state");
     expect(wrapper.vm.selected_protocol_idx).toBe(0);
   });
-
-  // test("When a user imports a new protocol, Then the dropdown will default to that new protocol", async () => {
-  //   const imported_option_idx = 2;
-  //   const mock_protocol = {
-  //     label: "test",
-  //     protocol: {
-  //       stimulation_type: "C",
-  //       detailed_subprotocols: [],
-  //       subprotocols: [],
-  //     },
-  //   };
-  //   const wrapper = mount(StimulationStudioCreateAndEdit, {
-  //     store,
-  //     localVue,
-  //   });
-
-  //   await store.commit("stimulation/set_imported_protocol", mock_protocol);
-  //   expect(wrapper.vm.selected_protocol_idx).toBe(imported_option_idx);
-  // });
 });

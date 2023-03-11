@@ -170,8 +170,33 @@ describe("SettingsForm.vue", () => {
       await save_changes.trigger("click");
       const close_event = wrapper.emitted("close_modal");
       expect(close_event[0]).toStrictEqual([true]);
+    });
 
-      // expect(emit_close).toBeTruthy();
+    test("When a user wants to save customer credentials and the usage_quota returned notifies of the job limit reached, Then Vuex job_limit_reached state will be mutated to true and auto_upload will be mutated to false if true", async () => {
+      await store.commit("settings/set_active_user_index", 1);
+
+      wrapper = mount(ComponentToTest, {
+        store,
+        localVue,
+      });
+
+      jest.spyOn(store, "dispatch").mockImplementation(() => {
+        return {
+          status: 200,
+          data: {
+            usage_quota: {
+              jobs_reached: true,
+            },
+          },
+        };
+      });
+
+      await store.commit("settings/set_auto_upload", true);
+      const save_changes = wrapper.find(".span__settings-tool-tip-save-btn-txt-enable");
+      await save_changes.trigger("click");
+
+      expect(store.state.settings.job_limit_reached).toBe(true);
+      expect(store.state.settings.auto_upload).toBe(false);
     });
 
     test("Given a customer and user account selected in Vuex and the textbox for Customer Account is changed to an account different than the one in Vuex and a user account is selected in thet textbox, When the Save Changes button is clicked, Then the selected indices in Vuex for Customer and User accounts are updated to reflect the chosen options in the textboxes", async () => {
