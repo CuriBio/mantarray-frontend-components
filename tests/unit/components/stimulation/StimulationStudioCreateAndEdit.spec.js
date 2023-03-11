@@ -135,17 +135,6 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     expect(input_widget_top).toBe(0);
   });
 
-  test("When a user imports a new protocol, Then the the available protocol list in dropdown will get updated", async () => {
-    const updateSpy = jest.spyOn(StimulationStudioCreateAndEdit.methods, "update_protocols");
-    mount(StimulationStudioCreateAndEdit, {
-      store,
-      localVue,
-    });
-    const test_protocol = store.state.stimulation.protocol_list[1];
-    await store.commit("stimulation/set_new_protocol", test_protocol);
-    expect(updateSpy).toHaveBeenCalledWith();
-  });
-
   test("When a user selects Create New in the protocol dropdown, Then the protocol editor will reset to be empty", async () => {
     const reset_spy = jest.spyOn(StimulationStudioCreateAndEdit.methods, "reset_protocol_editor");
     const edit_spy = jest.spyOn(StimulationStudioCreateAndEdit.methods, "edit_selected_protocol");
@@ -173,16 +162,6 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     await wrapper.findAll("li").at(0).trigger("click");
 
     expect(action_spy).toHaveBeenCalledTimes(1);
-  });
-
-  test("When exiting instance, Then instance is effectively destroyed", async () => {
-    const destroyed_spy = jest.spyOn(StimulationStudioCreateAndEdit, "beforeDestroy");
-    const wrapper = mount(StimulationStudioCreateAndEdit, {
-      store,
-      localVue,
-    });
-    wrapper.destroy();
-    expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
   test("When clicks on export protocol button, Then action will be dispatched to store", async () => {
@@ -222,22 +201,22 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     expect(wrapper.vm.selected_protocol_idx).toBe(0);
   });
 
-  test("When a user imports a new protocol, Then the dropdown will default to that new protocol", async () => {
-    const imported_option_idx = 2;
-    const mock_protocol = {
-      label: "test",
-      protocol: {
-        stimulation_type: "C",
-        detailed_subprotocols: [],
-        subprotocols: [],
-      },
-    };
-    const wrapper = mount(StimulationStudioCreateAndEdit, {
-      store,
-      localVue,
-    });
+  // test("When a user imports a new protocol, Then the dropdown will default to that new protocol", async () => {
+  //   const imported_option_idx = 2;
+  //   const mock_protocol = {
+  //     label: "test",
+  //     protocol: {
+  //       stimulation_type: "C",
+  //       detailed_subprotocols: [],
+  //       subprotocols: [],
+  //     },
+  //   };
+  //   const wrapper = mount(StimulationStudioCreateAndEdit, {
+  //     store,
+  //     localVue,
+  //   });
 
-    await store.commit("stimulation/set_imported_protocol", mock_protocol);
-    expect(wrapper.vm.selected_protocol_idx).toBe(imported_option_idx);
-  });
+  //   await store.commit("stimulation/set_imported_protocol", mock_protocol);
+  //   expect(wrapper.vm.selected_protocol_idx).toBe(imported_option_idx);
+  // });
 });

@@ -17,7 +17,7 @@ const state = () => ({
   stim_play_state: false,
   x_axis_unit_name: "milliseconds",
   x_axis_time_idx: 0,
-  edit_mode: { status: false, protocol: "", label: "", color: "" },
+  edit_mode: { status: false, label: "", color: "" },
   stim_status: STIM_STATUS.CALIBRATION_NEEDED,
   hovered_pulse: {
     idx: null,

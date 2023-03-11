@@ -690,7 +690,7 @@ describe("store/data", () => {
       const { total_uploaded_files, upload_error, file_count } = store.state.settings;
 
       expect(total_uploaded_files[0]).toBe(new_status_update.file_name);
-      expect(upload_error).toBe(true);
+      expect(upload_error).toBe("generic");
       expect(file_count).toBe(0);
     });
     test("When backend emits sw_update message with allow_software_update value, Then ws client commits value to store", async () => {

@@ -103,9 +103,6 @@ export default {
   set_new_protocol({ protocol_list }, protocol) {
     protocol_list.push(protocol);
   },
-  set_imported_protocol({ protocol_list }, protocol) {
-    protocol_list.push(protocol);
-  },
   set_stim_play_state(state, bool) {
     state.stim_play_state = bool;
 
@@ -125,13 +122,13 @@ export default {
       state.stim_status = STIM_STATUS.NO_PROTOCOLS_ASSIGNED;
     else state.stim_status = status;
   },
-  set_edit_mode({ edit_mode }, { label, letter }) {
-    edit_mode.status = true;
-    edit_mode.label = label;
-    edit_mode.letter = letter;
+  set_edit_mode(state, { label, letter }) {
+    state.edit_mode.status = true;
+    state.edit_mode.letter = letter;
+    state.edit_mode.label = label;
   },
-  set_edit_mode_off({ edit_mode }) {
-    edit_mode.status = false;
+  set_edit_mode_off(state) {
+    state.edit_mode = { status: false, label: "", color: "" };
   },
   set_stop_setting({ protocol_editor }, setting) {
     protocol_editor.run_until_stopped = setting;

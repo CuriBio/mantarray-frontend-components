@@ -34,6 +34,7 @@ const default_state = {
   confirmation_request: false,
   pulse3d_versions: ["Error"],
   pulse3d_version_selection_index: 0,
+  job_limit_reached: false,
 };
 
 const state = () => JSON.parse(JSON.stringify(default_state));

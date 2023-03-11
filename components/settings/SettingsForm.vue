@@ -70,7 +70,7 @@
         id="auto_upload_switch"
         :checked_state="auto_upload"
         :label="'auto_upload'"
-        :disabled="disable_toggle"
+        :disabled="job_limit_reached"
         @handle_toggle_state="handle_toggle_state"
       />
     </div>
@@ -95,7 +95,7 @@
         id="auto_delete_switch"
         :checked_state="auto_delete"
         :label="'auto_delete'"
-        :disabled="!disable_toggle"
+        :disabled="disable_delete_toggle"
         @handle_toggle_state="handle_toggle_state"
       />
     </div>
@@ -207,7 +207,7 @@ export default {
       auto_upload: false,
       pulse3d_focus_idx: 0,
       auto_delete: false,
-      disable_toggle: false,
+      disable_delete_toggle: true,
       recording_snapshot_state: true,
     };
   },
@@ -219,6 +219,7 @@ export default {
       "stored_customer_id",
       "pulse3d_versions",
       "pulse3d_version_selection_index",
+      "job_limit_reached",
     ]),
     get_user_names: function () {
       return this.user_accounts.map((user_account) => user_account.user_name);
@@ -235,6 +236,11 @@ export default {
         this.user_focus_idx = user_focus_idx;
       }
       this.modify_btn_states();
+    },
+    job_limit_reached: function () {
+      if (this.job_limit_reached) {
+        this.auto_upload = false;
+      }
     },
   },
   created: function () {
@@ -255,10 +261,11 @@ export default {
         this.$store.commit("settings/set_recording_snapshot_state", this.recording_snapshot_state);
         this.$store.commit("settings/set_pulse3d_version_selection_index", this.pulse3d_focus_idx);
 
-        const { status } = await this.$store.dispatch("settings/update_settings");
+        const { status, data } = await this.$store.dispatch("settings/update_settings");
 
         // Currently, error-handling by resetting inputs to force user to try again if axios request fails
         if (status === 200) {
+          this.$store.commit("settings/set_job_limit_reached", data.usage_quota.jobs_reached);
           this.$emit("close_modal", true);
         } else if (status == 401) {
           this.open_for_invalid_creds = true;

@@ -479,7 +479,7 @@ describe("store/stimulation", () => {
     });
 
     test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the updated protocol will be commited to state in the available protocol list", async () => {
-      const { protocol_list, protocol_editor, edit_mode } = store.state.stimulation;
+      const { protocol_list } = store.state.stimulation;
 
       const selected_protocol = protocol_list[1];
       const { protocol } = protocol_list[1];
@@ -488,6 +488,8 @@ describe("store/stimulation", () => {
 
       expect(protocol.name).toBe(old_name);
       await store.dispatch("stimulation/edit_selected_protocol", selected_protocol);
+
+      const { edit_mode, protocol_editor } = store.state.stimulation;
       expect(protocol_editor.name).toBe(old_name);
       expect(edit_mode.status).toBe(true);
       await store.commit("stimulation/set_protocol_name", new_name);
@@ -496,7 +498,7 @@ describe("store/stimulation", () => {
       const test = protocol_list[1].protocol.name;
       expect(test).toBe(new_name);
 
-      expect(edit_mode.status).toBe(false);
+      expect(store.state.stimulation.edit_mode.status).toBe(false);
     });
 
     test("When a user wants to save changes to an existing protocol by clicking on Save Changes button, Then the edited protocol will be updated in protocol assignments if assigned", async () => {

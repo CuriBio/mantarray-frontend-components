@@ -7,7 +7,7 @@
       :disabled="disabled"
       @click="toggle_checkbox"
     />
-    <div class="slider round" />
+    <div class="slider round" :style="slider__slider_dynamic_style" />
   </label>
 </template>
 <script>
@@ -22,6 +22,11 @@ export default {
     return {
       checked: false,
     };
+  },
+  computed: {
+    slider__slider_dynamic_style: function () {
+      return this.disabled ? "cursor: default" : "cursor: pointer";
+    },
   },
   watch: {
     checked_state: function () {
@@ -53,7 +58,6 @@ export default {
 
 .slider {
   position: absolute;
-  cursor: pointer;
   top: 0;
   left: 0;
   right: 0;

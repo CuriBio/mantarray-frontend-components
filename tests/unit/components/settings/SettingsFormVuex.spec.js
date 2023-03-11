@@ -158,6 +158,11 @@ describe("SettingsForm.vue", () => {
       jest.spyOn(store, "dispatch").mockImplementation(() => {
         return {
           status: 200,
+          data: {
+            usage_quota: {
+              jobs_reached: false,
+            },
+          },
         };
       });
 
