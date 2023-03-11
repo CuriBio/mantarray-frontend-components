@@ -116,6 +116,34 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     expect(store.state.stimulation.protocol_assignments[1]).toBeFalsy();
   });
 
+  test("When new protocols get added to the list in state, Then the selected_protocol_idx will always reset to 0", async () => {
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+    wrapper.vm.selected_protocol_idx = 1;
+    await store.commit("stimulation/set_new_protocol", {
+      letter: "Z",
+      label: "test_protocol",
+      protocol: [],
+    });
+
+    expect(wrapper.vm.selected_protocol_idx).toBe(0);
+  });
+
+  test("When edit_mode gets turned off, Then the selected_protocol_idx will always reset to 0", async () => {
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+    await store.commit("stimulation/set_edit_mode", { letter: "A", label: "Tester" });
+
+    wrapper.vm.selected_protocol_idx = 1;
+    await store.commit("stimulation/set_edit_mode_off");
+
+    expect(wrapper.vm.selected_protocol_idx).toBe(0);
+  });
+
   test("When the dropdown is rendered to the page in the StimulationStudioCreateAndEdit component, Then there should be no title", () => {
     mount(SelectDropDown, {
       localVue,

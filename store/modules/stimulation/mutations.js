@@ -100,8 +100,8 @@ export default {
     if (!isNaN(converted_delay_duration) && converted_delay_duration !== 0)
       subprotocols.push(delay_pulse_model);
   },
-  set_new_protocol({ protocol_list }, protocol) {
-    protocol_list.push(protocol);
+  set_new_protocol(state, protocol) {
+    state.protocol_list = [...state.protocol_list, protocol];
   },
   set_stim_play_state(state, bool) {
     state.stim_play_state = bool;
@@ -128,7 +128,9 @@ export default {
     state.edit_mode.label = label;
   },
   set_edit_mode_off(state) {
-    state.edit_mode = { status: false, label: "", color: "" };
+    state.edit_mode.status = false;
+    state.edit_mode.letter = "";
+    state.edit_mode.label = "";
   },
   set_stop_setting({ protocol_editor }, setting) {
     protocol_editor.run_until_stopped = setting;

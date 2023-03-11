@@ -4,11 +4,19 @@ Changelog for Mantarray Frontend Components
 1.4.2 (unreleased)
 ------------------
 
+Added:
+^^^^^^
+- Notifications to let users know when their customer account has reached their analysis limit, if applicable
+
 Changed:
 ^^^^^^^^
 - Minimum phase one and phase two charge requirement for subprotocols is now 1mA
 - Minimum phase one and phase two duration requirement for subprotocols is now 0.02ms
 - Minimum interphase duration requirement for subprotocols is now 0.02ms or 0ms
+
+Fixed:
+^^^^^^
+- Importing multiple stimulation protocols in one file will now populate dropdown correctly
 
 
 1.4.1 (2023-01-06)
