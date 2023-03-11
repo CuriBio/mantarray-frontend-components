@@ -31,7 +31,7 @@
         id="upload-modal"
         :include_filepath="status"
         :modal_labels="modal_labels"
-        @handle_confirmation="handle_confirmation"
+        @handle_confirmation="$bvModal.hide('upload-status')"
       />
     </b-modal>
   </div>
@@ -126,11 +126,6 @@ export default {
       // reset
       this.$store.commit("settings/set_upload_error", false);
       this.$bvModal.show("upload-status");
-    },
-  },
-  methods: {
-    handle_confirmation: function () {
-      this.$bvModal.hide("upload-status");
     },
   },
 };

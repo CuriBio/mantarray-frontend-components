@@ -241,15 +241,18 @@ describe("SettingsForm.vue", () => {
     expect(wrapper.find("#input-dropdown-widget-user-account-").element.value).toStrictEqual("");
   });
 
-  test("When the jobs limit for a customer account has been reached, Then the auto_upload checkbox state will auto switch to false", async () => {
-    wrapper = mount(ComponentToTest, {
-      store,
-      localVue,
-    });
+  test.each([false, true])(
+    "When the job_limit_reached gets updated to %s, Then the auto_upload checkbox state will auto switch to the opposite",
+    async (job_limit_reached_state) => {
+      wrapper = mount(ComponentToTest, {
+        store,
+        localVue,
+      });
 
-    wrapper.vm.auto_upload = true;
-    await store.commit("settings/set_job_limit_reached", true);
+      wrapper.vm.auto_upload = true;
+      await store.commit("settings/set_job_limit_reached", job_limit_reached_state);
 
-    expect(wrapper.vm.auto_upload).toBe(false);
-  });
+      expect(wrapper.vm.auto_upload).toBe(!job_limit_reached_state);
+    }
+  );
 });
