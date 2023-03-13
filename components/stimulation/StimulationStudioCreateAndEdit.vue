@@ -89,9 +89,11 @@ export default {
   },
   watch: {
     protocol_list: function (new_list, old_list) {
+      console.log("reached", new_list.length, old_list.length);
       if (new_list.length !== old_list.length) this.selected_protocol_idx = 0;
     },
     edit_mode_status: function () {
+      console.log("here");
       if (!this.edit_mode_status) this.selected_protocol_idx = 0;
       else {
         const { letter } = this.edit_mode;

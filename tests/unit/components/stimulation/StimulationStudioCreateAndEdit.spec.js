@@ -131,6 +131,21 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     expect(wrapper.vm.selected_protocol_idx).toBe(0);
   });
 
+  test("When order of protocol_list changes, Then the dropdown will not reset", async () => {
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+    wrapper.vm.selected_protocol_idx = 1;
+    await store.commit("stimulation/set_new_protocol", {
+      letter: "Z",
+      label: "test_protocol",
+      protocol: [],
+    });
+
+    expect(wrapper.vm.selected_protocol_idx).toBe(0);
+  });
+
   test("When edit_mode gets turned off, Then the selected_protocol_idx will always reset to 0", async () => {
     const wrapper = mount(StimulationStudioCreateAndEdit, {
       store,
