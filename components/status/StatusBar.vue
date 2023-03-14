@@ -43,6 +43,7 @@
         :no-close-on-backdrop="true"
       >
         <StatusWarningWidget
+          id="usage-reached-modal"
           :modal_labels="jobs_limit_reached"
           @handle_confirmation="close_modals_by_id(['usage-reached'])"
         />
