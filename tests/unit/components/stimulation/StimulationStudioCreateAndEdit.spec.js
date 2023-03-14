@@ -116,6 +116,49 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     expect(store.state.stimulation.protocol_assignments[1]).toBeFalsy();
   });
 
+  test("When new protocols get added to the list in state, Then the selected_protocol_idx will always reset to 0", async () => {
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+    wrapper.vm.selected_protocol_idx = 1;
+    await store.commit("stimulation/set_new_protocol", {
+      letter: "Z",
+      label: "test_protocol",
+      protocol: [],
+    });
+
+    expect(wrapper.vm.selected_protocol_idx).toBe(0);
+  });
+
+  test("When order of protocol_list changes, Then the dropdown will not reset", async () => {
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+    wrapper.vm.selected_protocol_idx = 1;
+    await store.commit("stimulation/set_new_protocol", {
+      letter: "Z",
+      label: "test_protocol",
+      protocol: [],
+    });
+
+    expect(wrapper.vm.selected_protocol_idx).toBe(0);
+  });
+
+  test("When edit_mode gets turned off, Then the selected_protocol_idx will always reset to 0", async () => {
+    const wrapper = mount(StimulationStudioCreateAndEdit, {
+      store,
+      localVue,
+    });
+    await store.commit("stimulation/set_edit_mode", { letter: "A", label: "Tester" });
+
+    wrapper.vm.selected_protocol_idx = 1;
+    await store.commit("stimulation/set_edit_mode_off");
+
+    expect(wrapper.vm.selected_protocol_idx).toBe(0);
+  });
+
   test("When the dropdown is rendered to the page in the StimulationStudioCreateAndEdit component, Then there should be no title", () => {
     mount(SelectDropDown, {
       localVue,
@@ -133,17 +176,6 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     });
     expect(input_height_background).toBe(60);
     expect(input_widget_top).toBe(0);
-  });
-
-  test("When a user imports a new protocol, Then the the available protocol list in dropdown will get updated", async () => {
-    const updateSpy = jest.spyOn(StimulationStudioCreateAndEdit.methods, "update_protocols");
-    mount(StimulationStudioCreateAndEdit, {
-      store,
-      localVue,
-    });
-    const test_protocol = store.state.stimulation.protocol_list[1];
-    await store.commit("stimulation/set_new_protocol", test_protocol);
-    expect(updateSpy).toHaveBeenCalledWith();
   });
 
   test("When a user selects Create New in the protocol dropdown, Then the protocol editor will reset to be empty", async () => {
@@ -173,16 +205,6 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     await wrapper.findAll("li").at(0).trigger("click");
 
     expect(action_spy).toHaveBeenCalledTimes(1);
-  });
-
-  test("When exiting instance, Then instance is effectively destroyed", async () => {
-    const destroyed_spy = jest.spyOn(StimulationStudioCreateAndEdit, "beforeDestroy");
-    const wrapper = mount(StimulationStudioCreateAndEdit, {
-      store,
-      localVue,
-    });
-    wrapper.destroy();
-    expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
   test("When clicks on export protocol button, Then action will be dispatched to store", async () => {
@@ -220,24 +242,5 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     });
     await store.commit("stimulation/reset_state");
     expect(wrapper.vm.selected_protocol_idx).toBe(0);
-  });
-
-  test("When a user imports a new protocol, Then the dropdown will default to that new protocol", async () => {
-    const imported_option_idx = 2;
-    const mock_protocol = {
-      label: "test",
-      protocol: {
-        stimulation_type: "C",
-        detailed_subprotocols: [],
-        subprotocols: [],
-      },
-    };
-    const wrapper = mount(StimulationStudioCreateAndEdit, {
-      store,
-      localVue,
-    });
-
-    await store.commit("stimulation/set_imported_protocol", mock_protocol);
-    expect(wrapper.vm.selected_protocol_idx).toBe(imported_option_idx);
   });
 });

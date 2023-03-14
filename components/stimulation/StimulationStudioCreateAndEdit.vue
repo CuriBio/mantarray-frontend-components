@@ -39,7 +39,7 @@
 
 <script>
 import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
-import { mapActions, mapMutations } from "vuex";
+import { mapActions, mapState, mapMutations } from "vuex";
 
 /**
  * @vue-data {Object} btn_labels - Label and style of buttons
@@ -79,23 +79,25 @@ export default {
       selected_protocol_idx: 0,
       input_height: 45,
       input_width: 600,
-      protocol_list: [],
     };
   },
-  created() {
-    this.update_protocols();
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (
-        mutation.type === "stimulation/set_new_protocol" ||
-        mutation.type === "stimulation/set_edit_mode_off"
-      ) {
-        this.update_protocols();
-        this.selected_protocol_idx = 0;
-      }
-    });
+  computed: {
+    ...mapState("stimulation", ["protocol_list", "edit_mode"]),
+    edit_mode_status: function () {
+      return this.edit_mode.status;
+    },
   },
-  beforeDestroy() {
-    this.unsubscribe();
+  watch: {
+    protocol_list: function (new_list, old_list) {
+      this.selected_protocol_idx = 0;
+    },
+    edit_mode_status: function () {
+      if (!this.edit_mode_status) this.selected_protocol_idx = 0;
+      else {
+        const { letter } = this.edit_mode;
+        this.selected_protocol_idx = this.protocol_list.findIndex((protocol) => protocol.letter === letter);
+      }
+    },
   },
   methods: {
     ...mapActions("stimulation", [
@@ -110,9 +112,6 @@ export default {
       "apply_selected_protocol",
       "set_selected_protocol_for_edit",
     ]),
-    update_protocols() {
-      this.protocol_list = this.$store.getters["stimulation/get_protocols"];
-    },
     async selected_protocol_change(idx) {
       this.selected_protocol_idx = idx;
       const selected_protocol = this.protocol_list[idx];

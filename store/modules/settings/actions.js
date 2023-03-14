@@ -24,8 +24,7 @@ export default {
       pulse3d_version: selected_pulse3d_version,
     };
 
-    const response = await call_axios_get_from_vuex(url, context, params);
-    return response;
+    return await call_axios_get_from_vuex(url, context, params);
   },
   async send_firmware_update_confirmation(_, update_accepted) {
     const status = update_accepted ? "accepted" : "declined";

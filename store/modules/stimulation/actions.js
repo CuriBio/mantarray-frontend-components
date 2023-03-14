@@ -1,7 +1,8 @@
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 import { call_axios_post_from_vuex } from "../../../js_utils/axios_helpers";
-import { STIM_STATUS, TIME_CONVERSION_TO_MILLIS } from "./enums";
+import { STIM_STATUS, TIME_CONVERSION_TO_MILLIS, COLOR_PALETTE } from "./enums";
+import { get_protocol_editor_letter } from "./getters";
 
 export default {
   handle_selected_wells({ commit }, wells) {
@@ -193,13 +194,14 @@ export default {
     download_link.remove();
   },
 
-  async add_imported_protocol({ commit, getters }, { protocols }) {
+  async add_imported_protocol({ commit, state }, { protocols }) {
     for (const { protocol } of protocols) {
-      // needs to be set to off every iteration because an action elsewhere triggers it on
       await commit("set_edit_mode_off");
-      const { color, letter } = await getters["get_next_protocol"];
+      // needs to be set to off every iteration because an action elsewhere triggers it on
+      const letter = get_protocol_editor_letter(state.protocol_list);
+      const color = COLOR_PALETTE[state.protocol_list.length % 26];
       const imported_protocol = { color, letter, label: protocol.name, protocol };
-      await commit("set_imported_protocol", imported_protocol);
+      await commit("set_new_protocol", imported_protocol);
     }
   },
   async add_saved_protocol({ commit, state, dispatch }) {

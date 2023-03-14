@@ -24,14 +24,14 @@
     <!--  original mockflow ID: cmpD2eba17f4bc0b8222a44b2a8fffec29f8 -->
     <span class="span__upload-file-label-txt"> Successfully&nbsp;<wbr />Uploaded: </span>
     <!-- original mockflow ID: cmpD58c69d7de8aa0934dca9ef4e8beabbdc -->
-    <span class="span__upload-file-count-container"> {{ value }}/{{ total }} </span>
-    <b-progress id="upload-progress-bar" :value="value" :max="total" variant="success" />
+    <span class="span__upload-file-count-container"> {{ file_count }}/{{ total_file_count }} </span>
+    <b-progress id="upload-progress-bar" :value="file_count" :max="total_file_count" variant="success" />
     <b-modal id="upload-status" size="sm" hide-footer hide-header hide-header-close :static="true">
       <StatusWarningWidget
         id="upload-modal"
         :include_filepath="status"
         :modal_labels="modal_labels"
-        @handle_confirmation="handle_confirmation"
+        @handle_confirmation="$bvModal.hide('upload-status')"
       />
     </b-modal>
   </div>
@@ -65,21 +65,22 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", {
-      value: "file_count",
-      total: "total_file_count",
-      upload_error: "upload_error",
-      total_uploaded_files: "total_uploaded_files",
-      root_downloads_path: "root_downloads_path",
-    }),
+    ...mapState("settings", [
+      "file_count",
+      "total_file_count",
+      "upload_error",
+      "total_uploaded_files",
+      "root_downloads_path",
+      "job_limit_reached",
+    ]),
     last_file_name() {
       return this.total_uploaded_files[this.total_uploaded_files.length - 1];
     },
   },
   watch: {
-    value: function () {
-      if (this.value != 0) {
-        if (this.total == this.value) {
+    file_count: function () {
+      if (this.file_count != 0) {
+        if (this.total_file_count == this.file_count) {
           this.tick = true;
           setTimeout(
             function () {
@@ -91,18 +92,8 @@ export default {
           this.tick = false;
         }
       }
-    },
-    total_uploaded_files: function () {
-      if (this.upload_error) {
-        this.$store.commit("settings/set_upload_error", false);
-        this.status = false;
-        this.modal_labels = {
-          header: "Error!",
-          msg_one: `There was an error uploading recording: ${this.last_file_name}.`,
-          msg_two: "Will automatically retry next start up.",
-          button_names: ["Close"],
-        };
-      } else {
+
+      if (!this.upload_error) {
         this.status = true;
         this.modal_labels = {
           header: "Successful Upload!",
@@ -110,13 +101,31 @@ export default {
           msg_two: `${this.root_downloads_path}\\${this.last_file_name}.xlsx`,
           button_names: ["Close"],
         };
+        this.$bvModal.show("upload-status");
       }
-      this.$bvModal.show("upload-status");
     },
-  },
-  methods: {
-    handle_confirmation: function () {
-      this.$bvModal.hide("upload-status");
+    upload_error: function () {
+      if (this.upload_error === "generic") {
+        this.status = false;
+        this.modal_labels = {
+          header: "Error!",
+          msg_one: `There was an error uploading recording: ${this.last_file_name}.`,
+          msg_two: "Will automatically retry next start up.",
+          button_names: ["Close"],
+        };
+      } else if (this.upload_error === "usage") {
+        this.status = false;
+        this.modal_labels = {
+          header: "Important!",
+          msg_one: `The following recording was successfully uploaded: ${this.last_file_name}. `,
+          msg_two: `However, because the analysis limit has been reached for this customer account, the analysis will not run.`,
+          button_names: ["Close"],
+        };
+        this.$store.commit("settings/set_job_limit_reached", true);
+      }
+      // reset
+      this.$store.commit("settings/set_upload_error", false);
+      this.$bvModal.show("upload-status");
     },
   },
 };

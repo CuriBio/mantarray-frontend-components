@@ -49,8 +49,8 @@ export default {
     state.active_user_index = null;
     state.auto_delete = false;
   },
-  set_upload_error(state, new_value) {
-    state.upload_error = new_value;
+  set_upload_error(state, type) {
+    state.upload_error = type;
   },
   set_file_name(state, file_name) {
     state.total_uploaded_files = [...state.total_uploaded_files, file_name];
@@ -97,5 +97,11 @@ export default {
   },
   set_recording_snapshot_state(state, bool) {
     state.run_recording_snapshot_default = bool;
+  },
+  set_job_limit_reached(state, bool) {
+    state.job_limit_reached = bool;
+    if (bool) {
+      state.auto_upload = false;
+    }
   },
 };

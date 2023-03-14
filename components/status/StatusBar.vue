@@ -20,7 +20,7 @@
         />
       </b-modal>
       <b-modal
-        id="h5_warning"
+        id="h5-warning"
         size="sm"
         hide-footer
         hide-header
@@ -30,7 +30,22 @@
       >
         <StatusWarningWidget
           :modal_labels="h5_warning_label"
-          @handle_confirmation="close_modals_by_id(['h5_warning'])"
+          @handle_confirmation="close_modals_by_id(['h5-warning'])"
+        />
+      </b-modal>
+      <b-modal
+        id="usage-reached"
+        size="sm"
+        hide-footer
+        hide-header
+        hide-header-close
+        :static="true"
+        :no-close-on-backdrop="true"
+      >
+        <StatusWarningWidget
+          id="usage-reached-modal"
+          :modal_labels="jobs_limit_reached"
+          @handle_confirmation="close_modals_by_id(['usage-reached'])"
         />
       </b-modal>
       <b-modal
@@ -240,6 +255,12 @@ export default {
         msg_two: "It will become available shortly.",
         button_names: ["Close"],
       },
+      jobs_limit_reached: {
+        header: "Important!",
+        msg_one: "The analysis limit has been reached for this customer account.",
+        msg_two: "Auto upload will be disabled.",
+        button_names: ["Close"],
+      },
       h5_warning_label: {
         header: "Error!",
         msg_one: "Corrupt h5 files found",
@@ -265,6 +286,7 @@ export default {
       "allow_sw_update_install",
       "firmware_update_dur_mins",
       "confirmation_request",
+      "job_limit_reached",
     ]),
     fw_update_in_progress_labels: function () {
       let duration = `${this.firmware_update_dur_mins} minute`;
@@ -284,6 +306,7 @@ export default {
         Object.keys(this.protocol_assignments).includes(well.toString())
       );
     },
+
     is_playback_active: function () {
       return [STATUS.MESSAGE.LIVE_VIEW_ACTIVE, STATUS.MESSAGE.RECORDING, STATUS.MESSAGE.BUFFERING].includes(
         this.status_uuid
@@ -316,6 +339,9 @@ export default {
     },
     stim_status: function (new_status) {
       if (this.stim_specific) this.set_stim_specific_status(new_status);
+    },
+    job_limit_reached: function () {
+      if (this.job_limit_reached) this.$bvModal.show("usage-reached");
     },
     confirmation_request: function () {
       const sensitive_ops_in_progress =
@@ -365,7 +391,7 @@ export default {
       }
     },
     h5_warning: function (new_val, _) {
-      this.$bvModal.show("h5_warning");
+      this.$bvModal.show("h5-warning");
     },
     is_recording_snapshot_running: function (new_bool) {
       if (!new_bool) {
@@ -574,7 +600,8 @@ export default {
 #initializing-warning,
 #short-circuit-err,
 #success-qc-check,
-#h5_warning,
+#h5-warning,
+#usage-reached,
 #new-assignment-modal {
   position: fixed;
   margin: 5% auto;

@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       customer: {
-        customer_id: 0,
+        customer_id: "0",
         uuid: "5FY8KwTsQaUJ2KzHJGetfE",
         user_password: "06ad547f-fe02-477b-9473-f7977e4d5e17",
         user_name: "Experiment anemia -1",

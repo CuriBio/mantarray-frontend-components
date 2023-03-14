@@ -9,7 +9,6 @@ import { createLocalVue } from "@vue/test-utils";
 import { STATUS } from "@/store/modules/flask/enums";
 import { ENUMS } from "@/store/modules/playback/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
-import { ERRORS } from "@/store/modules/settings/enums";
 
 let wrapper = null;
 
@@ -49,17 +48,50 @@ describe("StatusWidget.vue", () => {
       });
       const text_selector_h5 = "#h5_warning";
       await store.commit("data/set_h5_warning");
-      //select the correct button
+      // select the correct button
       Vue.nextTick(() => {
         expect(wrapper.find(text_selector_h5).isVisible()).toBe(true);
         const h5_exit_button = wrapper.findAll(".span__button_label").at(0);
-        //check we have the correct button
+        // check we have the correct button
         expect(h5_exit_button.text()).toBe([]);
         h5_exit_button.trigger("click");
         expect(wrapper.find(text_selector_h5).isVisible()).toBe(false);
       });
     });
-    //add test to check that false = not visible
+
+    test.each([[true, false]])(
+      "When job limit being reached is %s, Then the limit modal will appear accordingly",
+      async (job_limit_reached) => {
+        const propsData = {};
+        wrapper = mount(StatusWidget, {
+          propsData,
+          store,
+          localVue,
+        });
+
+        await store.commit("settings/set_job_limit_reached", !job_limit_reached);
+        await store.commit("settings/set_job_limit_reached", job_limit_reached);
+        // select the correct button
+        Vue.nextTick(() => {
+          expect(wrapper.find("#usage-reached-modal").isVisible()).toBe(job_limit_reached);
+        });
+      }
+    );
+    test("When is_recording_snapshot_running is changed to true/false, Then the warning modal will appear accordingly", async () => {
+      const propsData = {};
+      wrapper = mount(StatusWidget, {
+        propsData,
+        store,
+        localVue,
+      });
+      const method_spy = jest.spyOn(wrapper.vm, "close_modals_by_id");
+      await store.commit("playback/set_is_recording_snapshot_running", true);
+      await store.commit("playback/set_is_recording_snapshot_running", false);
+
+      expect(method_spy).toHaveBeenCalledTimes(1);
+    });
+
+    // add test to check that false = not visible
     test.each([
       ["SERVER_BOOTING_UP", "System status: Booting Up..."],
       ["SERVER_STILL_INITIALIZING", "System status: Connecting..."],
@@ -145,6 +177,7 @@ describe("StatusWidget.vue", () => {
       await wrapper.vm.$nextTick(); // wait for update
       expect(wrapper.find(text_selector).text()).toBe("System status: 3dbb8814-09f1-44db-b7d5-7a9f702beac4");
     });
+
     test("Given that the http response is 404 for api request /shutdown, When Vuex is mutated to an ERROR UUID, Then the status text should update as 'Error Occurred' and the the dialog of ErrorCatchWidget is visible", async () => {
       const shutdown_url = "http://localhost:4567/shutdown";
       mocked_axios.onGet(shutdown_url).reply(404);
@@ -166,6 +199,7 @@ describe("StatusWidget.vue", () => {
         expect(modal.isVisible()).toBe(true);
       });
     });
+
     test("When Vuex is mutated to an ERROR UUID and shutdown status was set to known error, Then the status text should not update to 'Error Occurred'", async () => {
       const propsData = {};
       wrapper = mount(StatusWidget, {

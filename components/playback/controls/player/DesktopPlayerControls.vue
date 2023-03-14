@@ -605,6 +605,7 @@ export default {
     },
     close_settings_modal: function (save) {
       this.$bvModal.hide("settings-form");
+
       if (save) {
         // this event is used in electron
         this.$emit("save_account_info");
