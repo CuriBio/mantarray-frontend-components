@@ -242,7 +242,7 @@ describe("SettingsForm.vue", () => {
   });
 
   test.each([false, true])(
-    "When the job_limit_reached gets updated to %s, Then the auto_upload checkbox state will auto switch to the opposite",
+    "When the job_limit_reached gets updated to %s, Then the auto_upload checkbox state will auto switch to the opposite state",
     async (job_limit_reached_state) => {
       wrapper = mount(ComponentToTest, {
         store,
@@ -255,4 +255,18 @@ describe("SettingsForm.vue", () => {
       expect(wrapper.vm.auto_upload).toBe(!job_limit_reached_state);
     }
   );
+
+  test("When user selects pulse3d version from the dropdown, Then the pulse3d_focus_idx will get updated to selected version index", async () => {
+    wrapper = mount(ComponentToTest, {
+      store,
+      localVue,
+    });
+    expect(wrapper.vm.pulse3d_focus_idx).toBe(0);
+
+    store.commit("settings/set_pulse3d_versions", ["12.34.56", "0.24.6", "1.0.0"]);
+    await wrapper.find(".div__small-dropdown-controls-content-widget").trigger("click");
+    await wrapper.find("#pulse3d_version_1").trigger("click");
+
+    expect(wrapper.vm.pulse3d_focus_idx).toBe(1);
+  });
 });

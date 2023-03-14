@@ -54,7 +54,7 @@
           Add&nbsp;<wbr />New&nbsp;<wbr />User</b-button
         >
         <b-modal id="add-user" size="sm" hide-footer hide-header hide-header-close>
-          <AddUser @cancel-id="cancel_adding_user" @save-id="save_new_user" />
+          <AddUser @cancel-id="$bvModal.hide('add-user')" @save-id="save_new_user" />
         </b-modal>
       </span>
     </div>
@@ -285,9 +285,6 @@ export default {
     },
     cancel_changes() {
       this.$emit("close_modal", false);
-    },
-    cancel_adding_user() {
-      this.$bvModal.hide("add-user");
     },
     save_new_user(new_user) {
       this.$bvModal.hide("add-user");
