@@ -9,7 +9,6 @@ import { createLocalVue } from "@vue/test-utils";
 import { STATUS } from "@/store/modules/flask/enums";
 import { ENUMS } from "@/store/modules/playback/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
-import { ERRORS } from "@/store/modules/settings/enums";
 
 let wrapper = null;
 
@@ -69,6 +68,8 @@ describe("StatusWidget.vue", () => {
           store,
           localVue,
         });
+
+        await store.commit("settings/set_job_limit_reached", !job_limit_reached);
         await store.commit("settings/set_job_limit_reached", job_limit_reached);
         // select the correct button
         Vue.nextTick(() => {
@@ -76,6 +77,19 @@ describe("StatusWidget.vue", () => {
         });
       }
     );
+    test("When is_recording_snapshot_running is changed to true/false, Then the warning modal will appear accordingly", async () => {
+      const propsData = {};
+      wrapper = mount(StatusWidget, {
+        propsData,
+        store,
+        localVue,
+      });
+      const method_spy = jest.spyOn(wrapper.vm, "close_modals_by_id");
+      await store.commit("playback/set_is_recording_snapshot_running", true);
+      await store.commit("playback/set_is_recording_snapshot_running", false);
+
+      expect(method_spy).toHaveBeenCalledTimes(1);
+    });
 
     // add test to check that false = not visible
     test.each([
