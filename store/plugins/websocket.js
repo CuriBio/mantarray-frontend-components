@@ -149,29 +149,29 @@ export default function create_web_socket_plugin(socket) {
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
 
-    add_handler_with_error_handling(socket, "local_analysis", async (message_json, cb) => {
+    add_handler_with_error_handling(socket, "local_analysis", (message_json, cb) => {
       const message = JSON.parse(message_json);
-      await store.commit("settings/set_data_analysis_directory", message.output_dir);
+      store.commit("settings/set_data_analysis_directory", message.output_dir);
 
       if (message.failed_recordings) {
-        await store.commit("settings/set_failed_recordings", message.failed_recordings);
+        store.commit("settings/set_failed_recordings", message.failed_recordings);
       }
 
-      await store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
+      store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE.COMPLETE);
 
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
 
-    add_handler_with_error_handling(socket, "corrupt_files_alert", async (_, cb) => {
-      await store.commit("data/set_h5_warning");
+    add_handler_with_error_handling(socket, "corrupt_files_alert", (_, cb) => {
+      store.commit("data/set_h5_warning");
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
 
-    add_handler_with_error_handling(socket, "error", async (message_json, cb) => {
+    add_handler_with_error_handling(socket, "error", (message_json, cb) => {
       const message = JSON.parse(message_json);
-      await store.commit("settings/set_shutdown_error_status", message);
+      store.commit("settings/set_shutdown_error_status", message);
       /* istanbul ignore else */
       if (cb) cb("commit done"); // this callback is only used for testing. The backend will not send a callback
     });
