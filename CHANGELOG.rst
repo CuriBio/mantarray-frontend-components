@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.4.3 (2023-03-22)
+------------------
+
+Added:
+^^^^^^
+- Error logging in WS handlers
+
+
 1.4.2 (2023-03-20)
 ------------------
 
