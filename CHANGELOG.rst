@@ -1,7 +1,7 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.4.4 (unreleaed)
+1.4.4 (2023-03-30)
 ------------------
 
 Added:
