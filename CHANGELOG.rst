@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.4.4 (unreleaed)
+------------------
+
+Added:
+^^^^^^
+- Send barcodes in /start_stim_checks
+
+
 1.4.3 (2023-03-22)
 ------------------
 

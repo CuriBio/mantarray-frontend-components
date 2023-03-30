@@ -683,9 +683,16 @@ describe("store/stimulation", () => {
           .mockImplementation(() => response);
 
         store.state.stimulation.protocol_assignments = { 1: {} };
+        store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "MA209990004" });
+        store.dispatch("playback/validate_barcode", { type: "stim_barcode", new_value: "MS209990005" });
+
         await store.dispatch("stimulation/start_stim_configuration");
 
-        expect(axios_status_spy).toHaveBeenCalledWith("/start_stim_checks", { well_indices: ["1"] });
+        expect(axios_status_spy).toHaveBeenCalledWith("/start_stim_checks", {
+          well_indices: ["1"],
+          plate_barcode: "MA209990004",
+          stim_barcode: "MS209990005",
+        });
         expect(store.state.stimulation.stim_status).toBe(STIM_STATUS[status]);
       }
     );

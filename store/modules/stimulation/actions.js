@@ -357,7 +357,11 @@ export default {
   async start_stim_configuration({ commit, state }) {
     const url = `/start_stim_checks`;
     const well_indices = Object.keys(state.protocol_assignments);
-    const res = await call_axios_post_from_vuex(url, { well_indices });
+    const { barcodes } = this.state.playback;
+    const plate_barcode = barcodes.plate_barcode.value;
+    const stim_barcode = barcodes.stim_barcode.value;
+
+    const res = await call_axios_post_from_vuex(url, { well_indices, plate_barcode, stim_barcode });
 
     if (res && res.status !== 200) {
       commit("set_stim_status", STIM_STATUS.ERROR);
