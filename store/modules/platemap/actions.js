@@ -34,16 +34,34 @@ export default {
     download_link.click();
     download_link.remove();
   },
-  async handle_import_platemap({ commit }, file) {
+  async handle_import_platemap({ commit, state }, file) {
     const reader = new FileReader();
 
     reader.onload = async function () {
-      const response = JSON.parse(reader.result);
+      let { map_name, labels } = JSON.parse(reader.result);
       // remove all special characters
-      response.map_name = response.map_name.replace(/[^\w-_ \s]/gi, "");
+      map_name = map_name.replace(/[^\w-_ \s]/gi, "");
 
-      await commit("save_new_platemap", response);
-      await commit("set_entire_platemap", response.labels);
+      // this accounts for if there are already existing labels and these labels need to be pushed to the end of an existing arrays with updated colors instead of replacing
+      for (const label of labels) {
+        // check if name already exists
+        if (
+          !(label.name in state.well_assignments.map(({ name }) => name)) &&
+          label.name !== "Select Label"
+        ) {
+          // commit the new label to both well assignments and all stored platemaps
+          // this needs to go before updating the wells in each assignment so the assignment gets added to the end of the array
+          commit("set_new_label", label.name);
+          // then update the assigned wells in the current platemap to match those imported
+          state.well_assignments[state.well_assignments.length - 1].wells = label.wells;
+        }
+      }
+
+      // store with updated well assignments
+      await commit("save_new_platemap", {
+        map_name,
+        labels: state.well_assignments,
+      });
     };
 
     reader.onerror = function () {

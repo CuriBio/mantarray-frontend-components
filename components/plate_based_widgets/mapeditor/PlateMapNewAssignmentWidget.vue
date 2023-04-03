@@ -61,7 +61,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations("platemap", ["change_existing_name", "set_new_well_assignment"]),
+    ...mapMutations("platemap", ["change_existing_name", "set_new_label"]),
     on_update_name: function (new_value) {
       this.invalid_text = TextValidation_Label.validate(new_value);
       if (this.assignment_names.includes(new_value) && !this.editable_name) {
@@ -79,13 +79,12 @@ export default {
         if (this.editable_name) {
           this.change_existing_name({ new_name: this.input_label_name, old_name: this.editable_name });
         } else {
-          this.set_new_well_assignment(this.input_label_name);
+          this.set_new_label(this.input_label_name);
         }
       }
-      // reset
-      this.initial_value = "";
       // always emit to close modal regardless of button selected
       this.$emit("close_modal", idx);
+      this.initial_value = "";
     },
   },
 };

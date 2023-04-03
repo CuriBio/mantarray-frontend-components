@@ -46,7 +46,7 @@ describe("PlateMapCreateApply.vue", () => {
     expect(wrapper.vm.well_assignment_names).toStrictEqual(["Select Label"]);
     expect(wrapper.vm.assignment_options_idx).toBe(0);
 
-    await store.commit("platemap/set_new_well_assignment", "test_label");
+    await store.commit("platemap/set_new_label", "test_label");
 
     expect(wrapper.vm.well_assignment_names).toStrictEqual(["Select Label", "test_label"]);
     expect(wrapper.vm.assignment_options_idx).toBe(1);
@@ -116,8 +116,8 @@ describe("PlateMapCreateApply.vue", () => {
 
     expect(wrapper.vm.assignment_options_idx).toBe(0);
 
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_two");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_two");
 
     await wrapper.find(".div__select-dropdown-controls-content-widget").trigger("click");
     const list_opts = wrapper.findAll("li");
@@ -135,7 +135,7 @@ describe("PlateMapCreateApply.vue", () => {
 
     expect(wrapper.vm.assignment_options_idx).toBe(0);
 
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/set_selected_wells", [1, 4, 7, 13]);
     expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([]);
 
@@ -153,7 +153,7 @@ describe("PlateMapCreateApply.vue", () => {
       localVue,
     });
 
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/set_selected_wells", [1, 4, 7, 13]);
     expect(store.state.platemap.well_assignments[1].wells).toStrictEqual([]);
 

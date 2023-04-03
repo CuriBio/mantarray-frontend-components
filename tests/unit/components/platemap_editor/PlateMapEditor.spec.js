@@ -40,7 +40,7 @@ describe("PlateMapEditor.vue", () => {
     });
     await wrapper.find("#input-widget-field-platemap-name").setValue("test_platemap_name");
     // mock applying and assigning wells to a assignment
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/set_selected_wells", [1, 4, 7]);
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
 
@@ -104,7 +104,7 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
     await wrapper.find("#row_0").trigger("click");
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
     await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
 
@@ -119,7 +119,7 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
     await wrapper.find("#column_1").trigger("click");
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
     await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
 
@@ -147,7 +147,7 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
     await wrapper.find("#row_0").trigger("click");
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
 
     await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
@@ -168,7 +168,7 @@ describe("PlateMapEditor.vue", () => {
       localVue,
     });
 
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
 
     await wrapper.findAll(".div__platemap-createapply-button-background-enabled").at(1).trigger("click");
 
@@ -186,7 +186,7 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
     await wrapper.find("#row_0").trigger("click");
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
     // save changes
     await wrapper.findAll(".div__platemap-button-background-enabled").at(2).trigger("click");
@@ -197,7 +197,7 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("different_platemap_name");
     await wrapper.find("#row_1").trigger("click");
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_two");
+    await store.commit("platemap/set_new_label", "well_assignment_two");
     await store.commit("platemap/apply_well_assignment", "well_assignment_two");
 
     expect(store.state.platemap.well_assignments[2].wells).toStrictEqual([1, 5, 9, 13, 17, 21]);
@@ -217,7 +217,7 @@ describe("PlateMapEditor.vue", () => {
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
     await wrapper.find("#row_0").trigger("click");
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
 
     // declare previously saved state
