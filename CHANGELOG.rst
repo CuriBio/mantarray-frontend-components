@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.4.5 (unreleased)
+------------------
+
+Changed:
+^^^^^^^^
+- Labels in Platemap Editor will be universal to all platemaps intead of unique to one platemap
+
+
 1.4.4 (2023-03-30)
 ------------------
 
