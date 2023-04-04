@@ -34,33 +34,11 @@ export default {
     download_link.click();
     download_link.remove();
   },
-  async handle_import_platemap({ commit, state }, file) {
+  async handle_file_import({ dispatch }, file) {
     const reader = new FileReader();
 
     reader.onload = async function () {
-      let { map_name, labels } = JSON.parse(reader.result);
-      // remove all special characters
-      map_name = map_name.replace(/[^\w-_ \s]/gi, "");
-      // this accounts for if there are already existing labels and these labels need to be pushed to the end of an existing arrays with updated colors instead of replacing
-      for (const label of labels) {
-        // check if name already exists
-        if (
-          !(label.name in state.well_assignments.map(({ name }) => name)) &&
-          label.name !== "Select Label"
-        ) {
-          // commit the new label to both well assignments and all stored platemaps
-          // this needs to go before updating the wells in each assignment so the assignment gets added to the end of the array
-          commit("set_new_label", label.name);
-          // then update the assigned wells in the current platemap to match those imported
-          state.well_assignments[state.well_assignments.length - 1].wells = label.wells;
-        }
-      }
-
-      // store with updated well assignments
-      await commit("save_new_platemap", {
-        map_name,
-        labels: state.well_assignments,
-      });
+      await dispatch("handle_platemap_from_import", JSON.parse(reader.result));
     };
 
     reader.onerror = function () {
@@ -68,6 +46,27 @@ export default {
     };
 
     reader.readAsText(file);
+  },
+  async handle_platemap_from_import({ state, commit }, result) {
+    let { map_name, labels } = result;
+    // remove all special characters
+    map_name = map_name.replace(/[^\w-_ \s]/gi, "");
+    // this accounts for if there are already existing labels and these labels need to be pushed to the end of an existing arrays with updated colors instead of replacing
+    for (const label of labels) {
+      // check if name already exists
+      if (!(label.name in state.well_assignments.map(({ name }) => name)) && label.name !== "Select Label") {
+        // commit the new label to both well assignments and all stored platemaps
+        // this needs to go before updating the wells in each assignment so the assignment gets added to the end of the array
+        commit("set_new_label", label.name);
+        // then update the assigned wells in the current platemap to match those imported
+        state.well_assignments[state.well_assignments.length - 1].wells = label.wells;
+      }
+    }
+    // store with updated well assignments
+    await commit("save_new_platemap", {
+      map_name,
+      labels: state.well_assignments,
+    });
   },
   save_platemap({ state, commit }, map_name) {
     const previous_name = state.current_platemap_name;

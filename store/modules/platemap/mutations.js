@@ -3,7 +3,7 @@ import { COLOR_PALETTE } from "@/store/modules/stimulation/enums";
 
 export default {
   set_new_label(state, name) {
-    const color_idx = state.well_assignments.length === 1 ? 0 : state.well_assignments.length;
+    const color_idx = state.well_assignments.length - 1;
     // has to be a copy to maintain independent state
     const new_label = { name, wells: [], color: COLOR_PALETTE.reverse()[color_idx] };
     // add label to all other platemaps

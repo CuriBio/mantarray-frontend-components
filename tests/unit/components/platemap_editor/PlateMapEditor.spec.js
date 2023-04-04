@@ -66,7 +66,7 @@ describe("PlateMapEditor.vue", () => {
     const test_file = new File([new ArrayBuffer(1)], "file.jpg");
     await wrapper.vm.handle_import([test_file]);
 
-    expect(action_spy).toHaveBeenCalledWith("platemap/handle_import_platemap", test_file);
+    expect(action_spy).toHaveBeenCalledWith("platemap/handle_file_import", test_file);
     expect(filereader_spy).toHaveBeenCalledTimes(1);
   });
 

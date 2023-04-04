@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     ...mapActions("platemap", [
-      "handle_import_platemap",
+      "handle_file_import",
       "handle_export_platemap",
       "save_platemap",
       "discard_current_platemap_changes",
@@ -216,7 +216,7 @@ export default {
     },
     handle_import: async function (files) {
       for (const file of files) {
-        await this.handle_import_platemap(file);
+        await this.handle_file_import(file);
       }
     },
     update_platemap_input: function (value) {
