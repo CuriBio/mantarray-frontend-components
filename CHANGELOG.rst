@@ -1,6 +1,13 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.4.5 (unreleased)
+
+Added:
+^^^^^^
+- Status alert in top right of screen for if stimulation is running.
+
+
 1.4.4 (2023-03-30)
 ------------------
 
