@@ -138,6 +138,7 @@
       </span>
     </div>
     <div class="div__top-bar-above-waveforms">
+      <StimulationRunningWidget />
       <div class="div__recording-top-bar-container">
         <UploadFilesWidget />
         <RecordingTime />
@@ -158,6 +159,7 @@ import PlateNavigator from "@/components/plate_based_widgets/navigator/PlateNavi
 import StatusBar from "@/components/status/StatusBar.vue";
 import SimulationMode from "@/components/status/SimulationMode.vue";
 import RecordingTime from "@/components/status/RecordingTime.vue";
+import StimulationRunningWidget from "../../../../components/status/StimulationRunningWidget.vue";
 
 import { mapState } from "vuex";
 
@@ -180,6 +182,7 @@ export default {
     StimulationControls,
     UploadFilesWidget,
     DataAnalysisControl,
+    StimulationRunningWidget,
     BCollapse,
   },
   data: function () {
@@ -328,6 +331,9 @@ body {
   background-color: #111111;
   height: 45px;
   width: 1629px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 .div__recording-top-bar-container {
   float: right;
