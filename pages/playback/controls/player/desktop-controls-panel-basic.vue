@@ -159,7 +159,7 @@ import PlateNavigator from "@/components/plate_based_widgets/navigator/PlateNavi
 import StatusBar from "@/components/status/StatusBar.vue";
 import SimulationMode from "@/components/status/SimulationMode.vue";
 import RecordingTime from "@/components/status/RecordingTime.vue";
-import StimulationRunningWidget from "../../../../components/status/StimulationRunningWidget.vue";
+import StimulationRunningWidget from "@/components/status/StimulationRunningWidget.vue";
 
 import { mapState } from "vuex";
 

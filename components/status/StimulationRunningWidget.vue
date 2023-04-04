@@ -1,10 +1,10 @@
 <template>
   <div>
     <div
-      :style="{ border: borderStyle, backgroundColor: backgroundValue, color: textColor }"
+      :style="{ border: border_style, backgroundColor: background_value, color: text_color }"
       class="div__stimulation_status"
     >
-      {{ textValue }}
+      {{ text_value }}
     </div>
   </div>
 </template>
@@ -16,33 +16,33 @@ export default {
   name: "StimulationRunningWidget",
   data() {
     return {
-      borderStyle: "2px solid red",
+      border_style: "2px solid red",
+      background_value: "red",
     };
   },
   computed: {
     ...mapState("stimulation", ["stim_play_state"]),
-    textValue() {
+    text_value() {
       return this.stim_play_state ? "Stimulation is Running" : "Stimulation is Stopped";
     },
-    backgroundValue() {
-      return this.stim_play_state ? "red" : "white";
-    },
-    textColor() {
+    text_color() {
       return this.stim_play_state ? "white" : "black";
     },
   },
   created() {
-    this.flashInterval = setInterval(() => {
+    this.flash_interval = setInterval(() => {
       if (this.stim_play_state) {
-        this.borderStyle = "2px solid red";
+        this.border_style = "2px solid red";
+        this.background_value = "red";
         setTimeout(() => {
-          this.borderStyle = "2px solid black";
+          this.border_style = "2px solid black";
+          this.background_value = "white";
         }, 1000);
       }
     }, 600);
   },
   beforeDestroy() {
-    clearInterval(this.flashInterval);
+    clearInterval(this.flash_interval);
   },
 };
 </script>
