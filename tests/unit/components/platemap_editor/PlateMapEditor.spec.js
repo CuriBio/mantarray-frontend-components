@@ -49,7 +49,7 @@ describe("PlateMapEditor.vue", () => {
     expect(action_spy).toHaveBeenCalledWith("platemap/handle_export_platemap", "test_platemap_name");
   });
 
-  test("When user clicks on import protocol button, Then action will be dispatched to store", async () => {
+  test("When user clicks on import button, Then action will be dispatched to store", async () => {
     const filereader_spy = jest
       .spyOn(FileReader.prototype, "readAsText")
       .mockImplementation(() => "test successful");

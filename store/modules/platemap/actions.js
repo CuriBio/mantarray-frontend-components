@@ -41,7 +41,6 @@ export default {
       let { map_name, labels } = JSON.parse(reader.result);
       // remove all special characters
       map_name = map_name.replace(/[^\w-_ \s]/gi, "");
-
       // this accounts for if there are already existing labels and these labels need to be pushed to the end of an existing arrays with updated colors instead of replacing
       for (const label of labels) {
         // check if name already exists

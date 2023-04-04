@@ -69,6 +69,7 @@ export default {
     const index_to_change = state.well_assignments.findIndex(({ name }) => name === old_name);
     state.well_assignments[index_to_change].name = new_name;
     // also change in existing platemaps
+
     state.stored_platemaps.map(({ labels }) => {
       labels[index_to_change].name = new_name;
     });
