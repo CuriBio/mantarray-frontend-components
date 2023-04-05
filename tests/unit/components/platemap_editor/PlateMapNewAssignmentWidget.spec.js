@@ -34,7 +34,7 @@ describe("PlateMapNewAssignmentWidget.vue", () => {
       localVue,
     });
 
-    await store.commit("platemap/set_new_well_assignment", "duplicate_name");
+    await store.commit("platemap/set_new_label", "duplicate_name");
     const error_msg = wrapper.find("#input-widget-feedback-assignment-name");
     expect(error_msg.text()).toBe("Required");
 
@@ -62,7 +62,7 @@ describe("PlateMapNewAssignmentWidget.vue", () => {
     await wrapper.find("#input-widget-field-assignment-name").setValue("new_name");
     await wrapper.findAll(".span__button_label").at(1).trigger("click");
 
-    expect(store_spy).toHaveBeenCalledWith("platemap/set_new_well_assignment", "new_name", undefined);
+    expect(store_spy).toHaveBeenCalledWith("platemap/set_new_label", "new_name", undefined);
   });
 
   test("When original name gets passed as props for editing, Then the name will auto populate the input", async () => {

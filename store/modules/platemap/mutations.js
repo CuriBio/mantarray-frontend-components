@@ -2,19 +2,23 @@
 import { COLOR_PALETTE } from "@/store/modules/stimulation/enums";
 
 export default {
-  set_new_well_assignment(state, name) {
-    const color_idx = state.well_assignments.length === 1 ? 0 : state.well_assignments.length;
-    state.well_assignments.push({ name, wells: [], color: COLOR_PALETTE.reverse()[color_idx] });
+  set_new_label(state, name) {
+    const color_idx = state.well_assignments.length - 1;
+    // has to be a copy to maintain independent state
+    const new_label = { name, wells: [], color: COLOR_PALETTE.reverse()[color_idx] };
+    // add label to all other platemaps
+    state.stored_platemaps.map(({ labels }) => labels.push(JSON.parse(JSON.stringify(new_label))));
+    state.well_assignments.push(JSON.parse(JSON.stringify(new_label)));
   },
   set_selected_wells(state, wells) {
     state.selected_wells = [...wells];
   },
   apply_well_assignment(state, assignment_option) {
-    for (const well of state.well_assignments) {
-      const idx = state.well_assignments.indexOf(well);
+    for (const group of state.well_assignments) {
+      const idx = state.well_assignments.indexOf(group);
       const assignments = state.well_assignments[idx];
       // if it's the selected label, then add well to assignment array
-      if (well.name === assignment_option) {
+      if (group.name === assignment_option) {
         // json parse to copy and be independent of state selected wells
         for (const well of state.selected_wells) {
           if (!assignments.wells.includes(well)) assignments.wells.push(well);
@@ -64,6 +68,11 @@ export default {
   change_existing_name(state, { old_name, new_name }) {
     const index_to_change = state.well_assignments.findIndex(({ name }) => name === old_name);
     state.well_assignments[index_to_change].name = new_name;
+    // also change in existing platemaps
+
+    state.stored_platemaps.map(({ labels }) => {
+      labels[index_to_change].name = new_name;
+    });
   },
   save_new_platemap(state, platemap) {
     state.current_platemap_name = platemap.map_name;

@@ -34,16 +34,11 @@ export default {
     download_link.click();
     download_link.remove();
   },
-  async handle_import_platemap({ commit }, file) {
+  async handle_file_import({ dispatch }, file) {
     const reader = new FileReader();
 
     reader.onload = async function () {
-      const response = JSON.parse(reader.result);
-      // remove all special characters
-      response.map_name = response.map_name.replace(/[^\w-_ \s]/gi, "");
-
-      await commit("save_new_platemap", response);
-      await commit("set_entire_platemap", response.labels);
+      await dispatch("handle_platemap_from_import", JSON.parse(reader.result));
     };
 
     reader.onerror = function () {
@@ -51,6 +46,37 @@ export default {
     };
 
     reader.readAsText(file);
+  },
+  async handle_platemap_from_import({ state, commit }, result) {
+    let { map_name, labels } = result;
+    // remove all special characters
+    map_name = map_name.replace(/[^\w-_ \s]/gi, "");
+    // clear any existing well assignments but keep all labels
+    state.well_assignments.map((assignment) => {
+      assignment.wells = [];
+    });
+
+    const existing_labels = JSON.parse(JSON.stringify(state.well_assignments)).map(({ name }) => name);
+    let index_to_update;
+    // this accounts for if there are already existing labels and these labels need to be pushed to the end of an existing arrays with updated colors instead of replacing
+    for (const label of labels) {
+      // check if name already exists
+      if (!existing_labels.includes(label.name)) {
+        // commit the new label to both well assignments and all stored platemaps
+        // this needs to go before updating the wells in each assignment so the assignment gets added to the end of the array
+        commit("set_new_label", label.name);
+        index_to_update = state.well_assignments.length - 1;
+      } else {
+        index_to_update = existing_labels.findIndex((name) => name === label.name);
+      }
+      // then update the assigned wells in the current platemap to match those imported
+      state.well_assignments[index_to_update].wells = label.wells;
+    }
+    // store with updated well assignments
+    commit("save_new_platemap", {
+      map_name,
+      labels: JSON.parse(JSON.stringify(state.well_assignments)),
+    });
   },
   save_platemap({ state, commit }, map_name) {
     const previous_name = state.current_platemap_name;
