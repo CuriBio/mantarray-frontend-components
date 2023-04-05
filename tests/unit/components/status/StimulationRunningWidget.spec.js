@@ -10,7 +10,7 @@ localVue.use(Vuex);
 let nuxt_store;
 let store;
 
-describe("StimulationRunningWidget.vue", () => {
+describe("StimulationRunningWidget", () => {
   beforeAll(async () => {
     const store_path = `${process.env.buildDir}/store.js`;
     nuxt_store = await import(store_path);
