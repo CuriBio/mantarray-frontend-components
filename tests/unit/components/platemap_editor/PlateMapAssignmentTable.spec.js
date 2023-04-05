@@ -37,7 +37,7 @@ describe("PlateMapAssignmentTable.vue", () => {
     });
 
     // mock applying and assigning wells to an assigment
-    await store.commit("platemap/set_new_well_assignment", "well_assignment_one");
+    await store.commit("platemap/set_new_label", "well_assignment_one");
     await store.commit("platemap/set_selected_wells", [1, 4, 7]);
     await store.commit("platemap/apply_well_assignment", "well_assignment_one");
 

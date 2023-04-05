@@ -5,9 +5,9 @@ import { createLocalVue } from "@vue/test-utils";
 
 import { STATUS } from "@/store/modules/flask/enums";
 import playback_module from "@/store/modules/playback";
-import { ping_system_status } from "../../../store/modules/flask/actions";
+import { ping_system_status } from "@/store/modules/flask/actions";
 import { system_status_regexp } from "@/store/modules/flask/url_regex";
-import { STIM_STATUS } from "../../../store/modules/stimulation/enums";
+import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 
 describe("store/flask", () => {
   const localVue = createLocalVue();
