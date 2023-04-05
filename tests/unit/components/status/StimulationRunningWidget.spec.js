@@ -25,7 +25,7 @@ describe("StimulationRunningWidget", () => {
     jest.restoreAllMocks();
   });
 
-  test("When the stim_play_state is true, Then the 'Stimulation is Running' text is visible and flashing", async () => {
+  test("When the stim_play_state is true, Then the 'Stimulation is Running' is visible and flashing", async () => {
     store.commit("stimulation/set_stim_play_state", true);
     const wrapper = mount(StimulationRunningWidget, { store, localVue });
     await Vue.nextTick();
@@ -35,7 +35,7 @@ describe("StimulationRunningWidget", () => {
     expect(running_text.text()).toBe("Stimulation is Running");
   });
 
-  test("When the stim_play_state is false, Then the 'Stimulation is Running' text is not visible", async () => {
+  test("When the stim_play_state is false, Then the 'Stimulation is Running'  is not visible", async () => {
     store.commit("stimulation/set_stim_play_state", false);
     const wrapper = mount(StimulationRunningWidget, { store, localVue });
     await Vue.nextTick();
