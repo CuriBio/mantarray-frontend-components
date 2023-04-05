@@ -4,6 +4,10 @@ Changelog for Mantarray Frontend Components
 1.4.5 (unreleased)
 ------------------
 
+Added:
+^^^^^^
+- Status alert in top right of screen for if stimulation is running.
+
 Changed:
 ^^^^^^^^
 - Labels in Platemap Editor will be universal to all platemaps intead of unique to one platemap

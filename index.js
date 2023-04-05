@@ -94,6 +94,7 @@ export { default as StatusWarningWidget } from "./components/status/StatusWarnin
 export { default as StatusSpinnerWidget } from "./components/status/StatusSpinnerWidget.vue";
 export { default as StimQCSummary } from "./components/status/StimQCSummary.vue";
 export { default as RecordingSnapshotWidget } from "./components/status/RecordingSnapshotWidget.vue";
+export { default as StimulationRunningWidget } from "./components/status/StimulationRunningWidget.vue";
 
 // HeatMap Layout
 export { default as HeatMap } from "./components/heatmap/HeatMap.vue";
