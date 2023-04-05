@@ -81,4 +81,17 @@ describe("StimulationRunningWidget", () => {
     await Vue.nextTick();
     expect(status_warning.exists()).toBe(false);
   });
+
+  test("displays warning modal when stimulation is stopped", async () => {
+    store.commit("stimulation/set_stim_play_state", true);
+    const wrapper = mount(StimulationRunningWidget, { store, localVue });
+    await Vue.nextTick();
+
+    expect(wrapper.find("#warning-modal").exists()).toBe(false);
+
+    store.commit("stimulation/set_stim_play_state", false);
+    await Vue.nextTick();
+
+    expect(wrapper.find("#warning-modal").exists()).toBe(true);
+  });
 });
