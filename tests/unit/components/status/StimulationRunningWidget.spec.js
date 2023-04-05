@@ -1,46 +1,84 @@
 import { mount } from "@vue/test-utils";
-import StimulationRunningWidget from "@/components/status/StimulationRunningWidget.vue";
+import StimulationRunningWidget from "@/components/status/StimulationRunningWidget";
+import Vuex from "vuex";
+import Vue from "vue";
+import { createLocalVue } from "@vue/test-utils";
+
+const localVue = createLocalVue();
+localVue.use(Vuex);
+
+let nuxt_store;
+let store;
 
 describe("StimulationRunningWidget.vue", () => {
-  test("renders correct text when stim_play_state is true", async () => {
-    const wrapper = mount(StimulationRunningWidget, {
-      computed: {
-        stim_play_state: () => true,
-      },
-    });
-
-    const text_div = wrapper.find(".div__stimulation_status");
-    expect(text_div.text()).toBe("Stimulation is Running");
-
-    await wrapper.vm.$nextTick();
-
-    const border_style = text_div.element.style.border;
-    const background_color = text_div.element.style.backgroundColor;
-
-    expect(border_style).toBe("2px solid red");
-    expect(background_color).toBe("red");
-
-    wrapper.destroy();
+  beforeAll(async () => {
+    const store_path = `${process.env.buildDir}/store.js`;
+    nuxt_store = await import(store_path);
   });
 
-  test("renders correct text when stim_play_state is false", async () => {
-    const wrapper = mount(StimulationRunningWidget, {
-      computed: {
-        stim_play_state: () => false,
-      },
-    });
+  beforeEach(async () => {
+    store = await nuxt_store.createStore();
+    jest.clearAllMocks();
+  });
 
-    const text_div = wrapper.find(".div__stimulation_status");
-    expect(text_div.text()).toBe("Stimulation is Stopped");
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
-    await wrapper.vm.$nextTick();
+  test("When the stim_play_state is true, Then the 'Stimulation is Running' text is visible and flashing", async () => {
+    store.commit("stimulation/set_stim_play_state", true);
+    const wrapper = mount(StimulationRunningWidget, { store, localVue });
+    await Vue.nextTick();
 
-    const border_style = text_div.element.style.border;
-    const background_color = text_div.element.style.backgroundColor;
+    const running_text = wrapper.find(".flash");
+    expect(running_text.isVisible()).toBe(true);
+    expect(running_text.text()).toBe("Stimulation is Running");
+  });
 
-    expect(border_style).toBe("2px solid red");
-    expect(background_color).toBe("red");
+  test("When the stim_play_state is false, Then the 'Stimulation is Running' text is not visible", async () => {
+    store.commit("stimulation/set_stim_play_state", false);
+    const wrapper = mount(StimulationRunningWidget, { store, localVue });
+    await Vue.nextTick();
 
-    wrapper.destroy();
+    const running_text = wrapper.find(".flash");
+    expect(running_text.exists()).toBe(false);
+  });
+
+  test("When the stim_play_state is false, Then the StatusWarningWidget is not visible", async () => {
+    store.commit("stimulation/set_stim_play_state", false);
+    const wrapper = mount(StimulationRunningWidget, { store, localVue });
+    await Vue.nextTick();
+
+    const status_warning = wrapper.find("#warning-modal");
+    expect(status_warning.exists()).toBe(false);
+  });
+
+  test("When the stim_play_state transitions from true to false, Then the StatusWarningWidget is visible", async () => {
+    store.commit("stimulation/set_stim_play_state", true);
+    const wrapper = mount(StimulationRunningWidget, { store, localVue });
+    await Vue.nextTick();
+
+    store.commit("stimulation/set_stim_play_state", false);
+    await Vue.nextTick();
+
+    const status_warning = wrapper.find("#warning-modal");
+    expect(status_warning.exists()).toBe(true);
+  });
+
+  test("When the stim_play_state transitions from true to false and the 'Close' button in the warning modal is clicked, Then the StatusWarningWidget is no longer visible", async () => {
+    store.commit("stimulation/set_stim_play_state", true);
+    const wrapper = mount(StimulationRunningWidget, { store, localVue });
+    await Vue.nextTick();
+
+    store.commit("stimulation/set_stim_play_state", false);
+    await Vue.nextTick();
+
+    const status_warning = wrapper.find("#warning-modal");
+    expect(status_warning.exists()).toBe(true);
+
+    wrapper.vm.close_warning_modal();
+
+    await Vue.nextTick();
+    expect(status_warning.exists()).toBe(false);
   });
 });

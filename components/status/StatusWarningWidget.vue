@@ -40,6 +40,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 

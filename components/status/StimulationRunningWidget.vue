@@ -1,57 +1,83 @@
 <template>
   <div>
-    <div
-      :style="{ border: border_style, backgroundColor: background_value, color: text_color }"
-      class="div__stimulation_status"
-    >
-      {{ text_value }}
+    <div id="stimulation-end-warning">
+      <StatusWarningWidget
+        v-if="show_warning"
+        id="warning-modal"
+        :modal_labels="analysis_end_modal_labels"
+        @handle_confirmation="close_warning_modal"
+      />
     </div>
+    <div v-if="is_visible" :class="{ flash: is_flashing }">Stimulation is Running</div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import StatusWarningWidget from "@/components/status/StatusWarningWidget";
 
 export default {
   name: "StimulationRunningWidget",
-  data() {
+  components: {
+    StatusWarningWidget,
+  },
+  data: function () {
     return {
-      border_style: "2px solid red",
-      background_value: "red",
+      show_warning: false,
+      analysis_end_modal_labels: {
+        header: "Attention!",
+        msg_one: `Stimulation was stopped.`,
+        msg_two: "Please confirm to continue.",
+        button_names: ["Close"],
+      },
     };
   },
   computed: {
     ...mapState("stimulation", ["stim_play_state"]),
-    text_value() {
-      return this.stim_play_state ? "Stimulation is Running" : "Stimulation is Stopped";
+    is_flashing() {
+      return this.stim_play_state;
     },
-    text_color() {
-      return this.stim_play_state ? "white" : "black";
+    is_visible() {
+      return this.stim_play_state;
     },
   },
-  created() {
-    this.flash_interval = setInterval(() => {
-      if (this.stim_play_state) {
-        this.border_style = "2px solid red";
-        this.background_value = "red";
-        setTimeout(() => {
-          this.border_style = "2px solid black";
-          this.background_value = "white";
-        }, 1000);
+  watch: {
+    stim_play_state(newVal, oldVal) {
+      if (oldVal && !newVal) {
+        this.show_warning = true;
       }
-    }, 600);
+    },
   },
-  beforeDestroy() {
-    clearInterval(this.flash_interval);
+  methods: {
+    close_warning_modal() {
+      this.show_warning = false;
+    },
   },
 };
 </script>
+
 <style>
-.div__stimulation_status {
-  width: 175px;
-  margin: 0;
-  text-align: center;
-  font-family: Muli;
-  background-color: red;
+#stimulation-end-warning {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+.flash {
+  animation: flash 1s infinite;
+  color: white;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
