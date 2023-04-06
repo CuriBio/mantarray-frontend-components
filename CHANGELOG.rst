@@ -1,8 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.4.5 (unreleased)
+1.4.6 (unreleased)
 ------------------
+
+Changed:
+^^^^^^^^
+- Styling of stimulation warning widget. Background is now red.
+
+
+1.4.5 (2023-04-6)
+-----------------
 
 Added:
 ^^^^^^
