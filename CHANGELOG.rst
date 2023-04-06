@@ -1,12 +1,20 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.4.5 (unreleased)
+1.4.6 (unreleased)
 ------------------
+
+Changed:
+^^^^^^^^
+- Styling of stimulation running widget. Background is now red.
+
+
+1.4.5 (2023-04-6)
+-----------------
 
 Added:
 ^^^^^^
-- Status alert in top right of screen for if stimulation is running.
+- Stimulation running widget to notify user that stimulation is actively running.
 
 Changed:
 ^^^^^^^^
