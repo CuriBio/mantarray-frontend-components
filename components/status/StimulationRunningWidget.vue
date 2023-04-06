@@ -67,6 +67,8 @@ export default {
 .flash {
   animation: flash 1s infinite;
   color: white;
+  background-color: red;
+  padding: 3px;
 }
 
 @keyframes flash {
