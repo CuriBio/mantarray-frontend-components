@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.4.8 (2023-04-18)
+------------------
+
+Added:
+^^^^^^
+- Custom error message for when a stingray connection is made
+
+
 1.4.7 (2023-04-17)
 ------------------
 
