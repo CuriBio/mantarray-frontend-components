@@ -6,7 +6,11 @@ Changelog for Mantarray Frontend Components
 
 Changed:
 ^^^^^^^^
-- Styling of stimulation running widget. Background is now red.
+- Background of stimulation running widget is now red
+
+Fixed:
+^^^^^^
+- fw-updates-in-progress-message modal shown in INSTALLING_UPDATES state in case DOWNLOADING_UPDATES case is skipped
 
 
 1.4.5 (2023-04-6)
@@ -14,7 +18,7 @@ Changed:
 
 Added:
 ^^^^^^
-- Stimulation running widget to notify user that stimulation is actively running.
+- Stimulation running widget to notify user that stimulation is actively running
 
 Changed:
 ^^^^^^^^

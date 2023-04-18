@@ -457,6 +457,7 @@ export default {
           this.$bvModal.show("fw-updates-in-progress-message");
           break;
         case STATUS.MESSAGE.INSTALLING_UPDATES:
+          this.$bvModal.show("fw-updates-in-progress-message");
           this.alert_txt = `Installing Firmware Updates...`;
           break;
         case STATUS.MESSAGE.UPDATES_COMPLETE:
