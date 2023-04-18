@@ -1,16 +1,21 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.4.6 (unreleased)
+1.4.7 (2023-04-17)
 ------------------
 
-Changed:
+Removed:
 ^^^^^^^^
-- Background of stimulation running widget is now red
+- Popup modal from stimulation running alert
+
+
+1.4.6 (2023-04-13)
+------------------
 
 Fixed:
 ^^^^^^
 - fw-updates-in-progress-message modal shown in INSTALLING_UPDATES state in case DOWNLOADING_UPDATES case is skipped
+- Background of stimulation running alert is now red
 
 
 1.4.5 (2023-04-6)
