@@ -1,12 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.4.6 (2023-04-17)
+1.4.7 (2023-04-17)
 ------------------
 
 Changed:
 ^^^^^^^^
-- Background of stimulation running widget is now red
+- Background of stimulation running alert is now red
+
+
+1.4.6 (2023-04-13)
+------------------
 
 Fixed:
 ^^^^^^
