@@ -119,7 +119,7 @@ export default {
         color: "#578844",
         protocol: {
           name: "mock_protocol_2",
-          stimulation_type: "V",
+          stimulation_type: "C",
           run_until_stopped: true,
           rest_duration: 1,
           time_unit: "seconds",

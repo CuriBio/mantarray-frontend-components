@@ -61,7 +61,6 @@
     </div>
     <div v-if="modal_type !== null" class="modal-container">
       <StimulationStudioWaveformSettingModal
-        :stimulation_type="stimulation_type"
         :pulse_type="modal_type"
         :modal_open_for_edit="modal_open_for_edit"
         :selected_pulse_settings="selected_pulse_settings"
@@ -89,7 +88,6 @@ import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 
 /**
- * @vue-props {String} stimulation_type - Current selected stimulation type user selects from drowdown
  * @vue-data {Array} icon_type - The source for the draggable pulse tiles
  * @vue-data {Array} is_dragging - Boolean to determine if user is currently dragging a tile in the scrollable window
  * @vue-data {Array} time_units_array - Available units of time for drop down in settings panel
@@ -121,7 +119,6 @@ export default {
     SmallDropDown,
   },
   props: {
-    stimulation_type: { type: String, default: "Voltage" },
     disable_edits: { type: Boolean, default: false },
   },
   data() {

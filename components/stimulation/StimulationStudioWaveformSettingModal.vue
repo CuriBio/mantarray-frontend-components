@@ -54,7 +54,7 @@
       id="cmpDf2d0dbfd2edb4ffa3b8615863fa1b9a7"
       class="span__stimulationstudio-current-settings-label-left"
       :style="'top: 179.5px;'"
-      >{{ stimulation_type }}</span
+      >Current</span
     >
     <div
       id="cmpDf6ba8560cb2fbd91276a29c46743e99a"
@@ -76,7 +76,7 @@
       id="cmpD7695902a49c6eaeb81d267812f0a90cd"
       class="span__stimulationstudio-current-settings-label-right"
       :style="'top: 179.5px;'"
-      >{{ stim_unit }}</span
+      >mA</span
     >
     <div v-if="pulse_type === 'Biphasic'">
       <canvas id="cmpDefb479b0caa166978ebed24ab8c44baf" :style="'top: 246px;'" />
@@ -145,7 +145,7 @@
         id="cmpDdd1b9fc6423c3af17206292a54489078"
         class="span__stimulationstudio-current-settings-label-left"
         :style="'top: 466.5px;'"
-        >{{ stimulation_type }}</span
+        >Current</span
       >
       <div
         id="cmpD8ecdf9c4a418509adff741b988ad0676"
@@ -167,7 +167,7 @@
         id="cmpDbc629158eb67226e3134f41509394ec9"
         class="span__stimulationstudio-current-settings-label-right"
         :style="'top: 466.5px;'"
-        >{{ stim_unit }}</span
+        >mA</span
       >
     </div>
     <canvas :style="pulse_type === 'Monophasic' ? 'top: 240px;' : 'top: 533px;'" />
@@ -273,7 +273,7 @@
     <div class="div__waveform-preview-title">Waveform Preview</div>
     <div class="div__pulse-diagram-container">
       <img
-        :src="require(`@/assets/img/${pulse_type}-diagram-${stimulation_type}.png`)"
+        :src="require(`@/assets/img/${pulse_type}-diagram-Current.png`)"
         :class="pulse_type === 'Monophasic' ? 'img__mononphasic-diagram' : 'None'"
       />
     </div>
@@ -311,14 +311,15 @@ import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBalanceScale, faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { VBPopover } from "bootstrap-vue";
+import { TIME_CONVERSION_TO_MILLIS } from "@/store/modules/stimulation/enums";
 import {
-  MIN_SUBPROTOCOL_DURATION_MS,
-  TIME_CONVERSION_TO_MILLIS,
-  MAX_SUBPROTOCOL_DURATION_MS,
-  MIN_CHARGE_MA,
-  MAX_CHARGE_MA,
-  MIN_PHASE_DURATION_US,
-} from "@/store/modules/stimulation/enums";
+  check_num_cycles_validity,
+  check_pulse_charge_validity,
+  check_pulse_duration_validity,
+  check_active_duration_validity,
+  check_pulse_frequency_validity,
+  get_max_pulse_duration_for_freq,
+} from "@/js_utils/protocol_validation";
 import BootstrapVue from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 Vue.directive("b-popover", VBPopover);
@@ -328,7 +329,6 @@ Vue.directive("popover", VBPopover);
 library.add(faBalanceScale, faQuestionCircle);
 
 /**
- * @vue-props {String} stimulation_type - Current type of stimulation
  * @vue-props {String} pulse_type - Type of pulse for modal
  * @vue-props {Object} selected_pulse_settings - Settings passed to modal if it's selected to edit
  * @vue-props {Object} selected_pulse_settings - Stim block settings passed to modal if it's selected to edit
@@ -337,7 +337,6 @@ library.add(faBalanceScale, faQuestionCircle);
  * @vue-data {Object} pulse_settings - Model for new inputs to be assigned
  * @vue-data {Object} pulse_settings - Model for new inputs to be assigned
  * @vue-data {Array} is_enabled_array - Array of which buttons should be disabled at base of modal
- * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
  * @vue-data {Object} err_msgs - Object containing all initial error messages for inputs
  * @vue-data {Boolean} all_valid - True if all inputs pass the validation check and allows Save button to become enabled
  * @vue-data {Object} time_units - Contains option for dropdown components
@@ -367,7 +366,6 @@ export default {
     StimulationStudioColorModal,
   },
   props: {
-    stimulation_type: { type: String, default: "Current" },
     pulse_type: { type: String, default: "Biphasic" },
     modal_open_for_edit: { type: Boolean, default: false },
     selected_pulse_settings: {
@@ -383,19 +381,6 @@ export default {
     return {
       popover_message: "Not Editable: This data is displayed for informational purposes only.",
       pulse_settings: {},
-      invalid_err_msg: {
-        num_err: "Must be a number",
-        required: "Required",
-        max_pulse_duration: "Duration must be <= 50ms",
-        min_pulse_duration: `Duration must be >= ${MIN_PHASE_DURATION_US}μs`,
-        min_interphase_duration: `Duration must be 0ms or >= ${MIN_PHASE_DURATION_US}μs`,
-        min_active_duration: "Duration must be >= 100ms",
-        valid: "",
-        max_min_current: `Must be within [-${MIN_CHARGE_MA}, -${MAX_CHARGE_MA}] or [${MIN_CHARGE_MA}, ${MAX_CHARGE_MA}]`,
-        max_voltage: "Must be within +/- 1200",
-        frequency: "Must be a non-zero value <= 100",
-        num_cycles: "Must be a whole number > 0",
-      },
       err_msgs: {
         phase_one_duration: "",
         phase_one_charge: "",
@@ -413,13 +398,13 @@ export default {
       input_pulse_frequency: "",
       max_pulse_duration_for_freq: 50,
       diagram_keys: {
-        Monophasic: ["A. Phase Duration", `B. Phase ${this.stimulation_type}`, "C. Total Active Duration"],
+        Monophasic: ["A. Phase Duration", `B. Phase Current`, "C. Total Active Duration"],
         Biphasic: [
           "A. Phase 1 Duration",
-          `B. Phase 1 ${this.stimulation_type}`,
+          "B. Phase 1 Current",
           "C. Interphase Interval",
           "D. Phase 2 Duration",
-          `E. Phase 2 ${this.stimulation_type}`,
+          "E. Phase 2 Current",
           "F. Total Active Duration",
         ],
       },
@@ -445,9 +430,7 @@ export default {
       const total_delay = 1000 - this.input_pulse_frequency * this.total_pulse_duration;
       return total_delay / this.input_pulse_frequency;
     },
-    stim_unit: function () {
-      return this.stimulation_type.includes("C") ? "mA" : "V";
-    },
+
     button_hover_colors: function () {
       return this.modal_open_for_edit ? ["#19ac8a", "#19ac8a", "#bd4932", "#bd4932"] : ["#19ac8a", "#bd4932"];
     },
@@ -592,7 +575,7 @@ export default {
         }
 
         if (label.includes("duration") || label.includes("interval")) {
-          this.check_pulse_duration_validity();
+          this.handle_pulse_duration_validity();
           this.check_active_duration();
         } else if (label.includes("charge")) {
           this.check_charge_validity(value, label);
@@ -603,7 +586,7 @@ export default {
       }
       this.handle_all_valid();
     },
-    check_pulse_duration_validity() {
+    handle_pulse_duration_validity() {
       this.check_pulse_duration("phase_one_duration");
       if (this.pulse_type === "Biphasic") {
         this.check_pulse_duration("phase_two_duration");
@@ -621,100 +604,57 @@ export default {
     },
     check_pulse_duration(label) {
       const value_str = this.pulse_settings[label];
-      const value = +value_str;
       const is_interphase_dur = label === "interphase_interval";
-      const is_value_less_than_min = value < MIN_PHASE_DURATION_US / 1000;
+      this.err_msgs[label] = check_pulse_duration_validity(
+        value_str,
+        is_interphase_dur,
+        this.max_pulse_duration_for_freq,
+        this.total_pulse_duration
+      );
 
-      if (value_str === "") {
-        this.err_msgs[label] = this.invalid_err_msg.required;
-      } else if (isNaN(value)) {
-        this.err_msgs[label] = this.invalid_err_msg.num_err;
-      } else if (is_value_less_than_min && !is_interphase_dur) {
-        this.err_msgs[label] = this.invalid_err_msg.min_pulse_duration;
-      } else if (is_value_less_than_min && value !== 0 && is_interphase_dur) {
-        this.err_msgs[label] = this.invalid_err_msg.min_interphase_duration;
-      } else if (this.total_pulse_duration > this.max_pulse_duration_for_freq) {
-        this.err_msgs[label] = this.invalid_err_msg.max_pulse_duration;
-      } else {
-        this.err_msgs[label] = this.invalid_err_msg.valid;
-        this.pulse_settings[label] = value;
-      }
+      const is_valid = this.err_msgs[label] === "";
+      if (is_valid) this.pulse_settings[label] = +value_str;
     },
     check_active_duration() {
       const value_str = this.pulse_settings.total_active_duration.duration;
-      const value = +value_str;
       const selected_unit = this.time_units[this.active_duration_idx];
-      const value_in_millis = value * TIME_CONVERSION_TO_MILLIS[selected_unit];
-      // if user continues with letter in one of the duration input fields, total_pulse_duration will be NaN, so change it to 0
-      const min_dur_allowed = Math.max(MIN_SUBPROTOCOL_DURATION_MS, this.total_pulse_duration || 0);
 
-      const label = "total_active_duration";
-
-      if (value_str === "") {
-        this.err_msgs[label] = this.invalid_err_msg.required;
-      } else if (isNaN(value)) {
-        this.err_msgs[label] = "Invalid number";
-      } else if (value_in_millis < min_dur_allowed) {
-        this.err_msgs[label] = `Must be >= ${min_dur_allowed}ms`;
-      } else if (value_in_millis > MAX_SUBPROTOCOL_DURATION_MS) {
-        const max_in_hrs = MAX_SUBPROTOCOL_DURATION_MS / TIME_CONVERSION_TO_MILLIS.hours;
-        this.err_msgs[label] = `Must be <= ${max_in_hrs}hrs`;
-      } else {
-        this.err_msgs[label] = this.invalid_err_msg.valid;
-        this.pulse_settings[label].duration = value;
-        this.pulse_settings[label].unit = this.time_units[this.active_duration_idx];
+      this.err_msgs.total_active_duration = check_active_duration_validity(
+        value_str,
+        selected_unit,
+        this.total_pulse_duration
+      );
+      const is_valid = this.err_msgs.total_active_duration === "";
+      if (is_valid) {
+        this.pulse_settings.total_active_duration.duration = +value_str;
+        this.pulse_settings.total_active_duration.unit = this.time_units[this.active_duration_idx];
       }
     },
     check_pulse_frequency() {
-      const label = "pulse_frequency";
-
       const value_str = this.input_pulse_frequency;
-      const value = +value_str;
+      const max_pulse_dur_for_freq = get_max_pulse_duration_for_freq(this.input_pulse_frequency);
 
-      if (value_str === "") {
-        this.err_msgs[label] = this.invalid_err_msg.required;
-      } else if (isNaN(value) || value <= 0 || value > 100) {
-        this.err_msgs[label] = this.invalid_err_msg.frequency;
-      } else {
-        this.err_msgs[label] = this.invalid_err_msg.valid;
-        this.input_pulse_frequency = value;
-        this.max_pulse_duration_for_freq = Math.min(
-          50,
-          Math.trunc((1000 / this.input_pulse_frequency) * 0.8)
-        );
+      this.err_msgs.pulse_frequency = check_pulse_frequency_validity(value_str, max_pulse_dur_for_freq);
+      const is_valid = this.err_msgs.pulse_frequency === "";
 
-        this.invalid_err_msg.max_pulse_duration = `Duration must be <= ${this.max_pulse_duration_for_freq}ms`;
-        this.check_pulse_duration_validity(); // Need to recheck pulse dur after a new valid frequency is entered
+      if (is_valid) {
+        this.input_pulse_frequency = +value_str;
+        this.max_pulse_duration_for_freq = max_pulse_dur_for_freq;
+
+        this.handle_pulse_duration_validity(); // Need to recheck pulse dur after a new valid frequency is entered
       }
     },
     check_charge_validity(value_str, label) {
-      const value = +value_str;
-      if (value_str === "") {
-        this.err_msgs[label] = this.invalid_err_msg.required;
-      } else if (isNaN(value)) {
-        this.err_msgs[label] = this.invalid_err_msg.num_err;
-      } else if (
-        this.stimulation_type.includes("C") &&
-        (Math.abs(value) > MAX_CHARGE_MA || Math.abs(value) < MIN_CHARGE_MA)
-      ) {
-        this.err_msgs[label] = this.invalid_err_msg.max_min_current;
-      } else if (this.stimulation_type.includes("V") && Math.abs(value) > 1200) {
-        this.err_msgs[label] = this.invalid_err_msg.max_voltage;
-      } else {
-        this.err_msgs[label] = this.invalid_err_msg.valid;
-        this.pulse_settings[label] = value;
-      }
+      this.err_msgs[label] = check_pulse_charge_validity(value_str);
+      const is_valid = this.err_msgs[label] === "";
+      if (is_valid) this.pulse_settings[label] = +value_str;
     },
     check_num_cycles() {
       const num_cycles_as_num = +this.num_cycles;
-      let error_msg_label;
-      if (this.num_cycles === "" || !Number.isInteger(num_cycles_as_num) || num_cycles_as_num <= 0) {
-        error_msg_label = "num_cycles";
-      } else {
-        error_msg_label = "valid";
-        this.num_cycles = num_cycles_as_num;
-      }
-      this.err_msgs["num_cycles"] = this.invalid_err_msg[error_msg_label];
+      this.err_msgs.num_cycles = check_num_cycles_validity(this.num_cycles);
+      const is_valid = this.err_msgs.num_cycles === "";
+
+      if (is_valid) this.num_cycles = num_cycles_as_num;
     },
     handle_total_duration_unit_change(idx) {
       this.active_duration_idx = idx;

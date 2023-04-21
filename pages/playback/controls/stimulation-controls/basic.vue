@@ -41,7 +41,7 @@ export default {
           label: "Tester",
           protocol: {
             name: "Tester",
-            stimulation_type: "V",
+            stimulation_type: "C",
             rest_duration: 1,
             time_unit: "milliseconds",
             run_until_stopped: true,

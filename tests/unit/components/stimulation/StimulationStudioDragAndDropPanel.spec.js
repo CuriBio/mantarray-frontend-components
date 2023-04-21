@@ -1,150 +1,17 @@
 import { mount, createLocalVue, shallowMount } from "@vue/test-utils";
 import StimulationStudioDragAndDropPanel from "@/components/stimulation/StimulationStudioDragAndDropPanel.vue";
 import Vuex from "vuex";
-import Vue from "vue";
+import {
+  MONOPHASIC_DROP_ELEMENT,
+  BIPHASIC_DROP_ELEMENT,
+  TEST_PROTOCOL_LIST_2,
+  TEST_PROTOCOL_ORDER_3,
+} from "@/tests/sample_stim_protocols/stim_protocols";
+
 const localVue = createLocalVue();
 localVue.use(Vuex);
 let NuxtStore;
 let store;
-const test_protocol_order = [
-  {
-    type: "Biphasic",
-    src: "placeholder",
-    run_until_stopped: false,
-    color: "hsla(15, 100%, 50%, 1)",
-    pulse_settings: {
-      phase_one_duration: 20,
-      phase_one_charge: 2,
-      interphase_interval: 10,
-      phase_two_duration: 20,
-      phase_two_charge: -5,
-      postphase_interval: 0,
-      total_active_duration: {
-        duration: 1000,
-        unit: "milliseconds",
-      },
-      num_cycles: 1,
-      frequency: 3,
-    },
-  },
-  {
-    type: "Monophasic",
-    src: "placeholder",
-    run_until_stopped: false,
-    color: "hsla(205, 100%, 50%, 1)",
-    pulse_settings: {
-      phase_one_duration: 20,
-      phase_one_charge: 3,
-      postphase_interval: 0,
-      total_active_duration: {
-        duration: 2000,
-        unit: "milliseconds",
-      },
-      num_cycles: 2,
-      frequency: 1,
-    },
-  },
-  {
-    type: "Delay",
-    src: "placeholder",
-    run_until_stopped: false,
-    color: "hsla(5, 100%, 50%, 1)",
-    pulse_settings: {
-      duration: 300,
-      unit: "seconds",
-    },
-  },
-  {
-    type: "Monophasic",
-    src: "placeholder",
-    run_until_stopped: false,
-    color: "hsla(190, 100%, 50%, 1)",
-    pulse_settings: {
-      phase_one_duration: 10,
-      phase_one_charge: 2,
-      postphase_interval: 0,
-      total_active_duration: {
-        duration: 4000,
-        unit: "milliseconds",
-      },
-      num_cycles: 4,
-      frequency: 5,
-    },
-  },
-];
-
-const test_protocol_list = [
-  { letter: "", color: "", label: "Create New" },
-  {
-    letter: "A",
-    color: "#118075",
-    label: "Tester",
-    protocol: {
-      name: "Tester",
-      stimulation_type: "V",
-      run_until_stopped: false,
-      rest_duration: 20,
-      time_unit: "milliseconds",
-      subprotocols: [
-        {
-          type: "Delay",
-          duration: 15000,
-          unit: "milliseconds",
-        },
-        {
-          type: "Delay",
-          duration: 20,
-          unit: "seconds",
-        },
-      ],
-      detailed_subprotocols: [
-        {
-          type: "Delay",
-          src: "/delay-tile.png",
-          run_until_stopped: false,
-          color: "hsla(65, 100%, 50%, 1)",
-          pulse_settings: {
-            pduration: 15000,
-            unit: "milliseconds",
-          },
-        },
-      ],
-    },
-  },
-];
-const new_mono_test_element = {
-  type: "Monophasic",
-  color: "",
-  pulse_settings: {
-    phase_one_duration: "",
-    phase_one_charge: "",
-    postphase_interval: "",
-    total_active_duration: {
-      duration: "",
-      unit: "milliseconds",
-    },
-    num_cycles: 0,
-    frequency: "",
-  },
-};
-const new_bi_test_element = {
-  type: "Biphasic",
-  color: "",
-  pulse_settings: {
-    phase_one_duration: "",
-    phase_one_charge: "",
-    interphase_interval: "",
-    phase_two_duration: "",
-    phase_two_charge: "",
-    postphase_interval: "",
-    total_active_duration: {
-      duration: "",
-      unit: "milliseconds",
-    },
-    num_cycles: 0,
-    frequency: "",
-  },
-};
 
 let wrapper = null;
 describe("StimulationStudioDragAndDropPanel.vue", () => {
@@ -155,7 +22,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
-    store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
+    store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(TEST_PROTOCOL_LIST_2));
   });
 
   afterEach(() => {
@@ -190,7 +57,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.clone({ type: "Monophasic", src: "test" });
     await wrapper.vm.check_type({
       added: {
-        element: new_mono_test_element,
+        element: MONOPHASIC_DROP_ELEMENT,
         newIndex: 4,
       },
     });
@@ -230,7 +97,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(test_protocol_order)) });
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)) });
     await wrapper.vm.open_modal_for_edit("Biphasic", 0);
     expect(wrapper.vm.modal_type).toBe("Biphasic");
     expect(wrapper.vm.shift_click_img_idx).toBe(0);
@@ -273,14 +140,14 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(test_protocol_order)) });
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)) });
     expect(wrapper.vm.protocol_order).toHaveLength(4);
 
     await wrapper.vm.clone({ type: "Biphasic", src: "test" });
     expect(wrapper.vm.cloned).toBe(true);
     await wrapper.vm.check_type({
       added: {
-        element: new_bi_test_element,
+        element: BIPHASIC_DROP_ELEMENT,
         newIndex: 4,
       },
     });
@@ -297,7 +164,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
-    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(test_protocol_order)) });
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)) });
     expect(wrapper.vm.protocol_order).toHaveLength(4);
 
     await wrapper.vm.check_type({
@@ -361,8 +228,8 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       color: null,
     });
 
-    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(test_protocol_order)) });
-    await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)) });
+    await store.dispatch("stimulation/handle_protocol_order", TEST_PROTOCOL_ORDER_3);
     await wrapper.vm.on_pulse_enter(1);
 
     expect(store.state.stimulation.hovered_pulse).toStrictEqual({
@@ -385,10 +252,10 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(store.state.stimulation.hovered_pulse).toStrictEqual(default_state);
 
     await wrapper.setData({
-      protocol_order: JSON.parse(JSON.stringify(test_protocol_order)),
+      protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)),
       is_dragging: true,
     });
-    await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
+    await store.dispatch("stimulation/handle_protocol_order", TEST_PROTOCOL_ORDER_3);
     await wrapper.vm.on_pulse_enter(1);
 
     expect(store.state.stimulation.hovered_pulse).toStrictEqual(default_state);
@@ -400,7 +267,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    await store.dispatch("stimulation/handle_protocol_order", test_protocol_order);
+    await store.dispatch("stimulation/handle_protocol_order", TEST_PROTOCOL_ORDER_3);
     await wrapper.vm.on_pulse_enter(1);
     expect(store.state.stimulation.hovered_pulse).toStrictEqual({
       idx: 1,
@@ -422,7 +289,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(test_protocol_order)) });
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)) });
     expect(wrapper.vm.protocol_order).toHaveLength(4);
     await wrapper.vm.open_modal_for_edit("Monophasic", 3);
 
@@ -461,7 +328,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       unit: "seconds",
     };
 
-    await wrapper.setData({ protocol_order: test_protocol_order });
+    await wrapper.setData({ protocol_order: TEST_PROTOCOL_ORDER_3 });
     await wrapper.vm.open_modal_for_edit("Delay", idx);
     expect(wrapper.vm.open_delay_modal).toBe(true);
 

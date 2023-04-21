@@ -25,13 +25,12 @@
     </div>
     <div
       v-for="(key, value, idx) in import_export_btn_labels"
-      :id="value"
+      id="import_export_button"
       :key="value"
       @click.exact="handle_import_export(idx)"
     >
       <div :class="'div__stimulationstudio-btn-container'" :style="key">
         <span type="button" :class="'span__stimulationstudio-btn-label'">{{ value }}</span>
-        <input ref="file" type="file" style="display: none" @change="handle_import($event.target.files)" />
       </div>
     </div>
   </div>
@@ -88,7 +87,7 @@ export default {
     },
   },
   watch: {
-    protocol_list: function (new_list, old_list) {
+    protocol_list: function () {
       this.selected_protocol_idx = 0;
     },
     edit_mode_status: function () {
@@ -150,7 +149,15 @@ export default {
     },
     handle_import_export(idx) {
       if (idx === 0) {
-        this.$refs.file[idx].click();
+        // this adds and removes the input element to be able to allow importing the same file twice in a row.
+        // Otherwise the @change event won't get triggered if the same file is selected twice.
+        const input_el = document.createElement("input");
+        document.body.appendChild(input_el);
+        input_el.setAttribute("ref", "file");
+        input_el.setAttribute("type", "file");
+        input_el.addEventListener("change", (e) => this.handle_import(e.target.files));
+        input_el.click();
+        input_el.remove();
       } else if (idx === 1) {
         this.handle_export();
       }
