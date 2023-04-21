@@ -104,6 +104,154 @@ describe("store/stimulation", () => {
     },
   });
 
+  const invalid_stim_json = JSON.stringify({
+    protocols: [
+      {
+        color: "hsla(51, 90%, 40%, 1)",
+        letter: "A",
+        label: "",
+        protocol: {
+          name: "test_proto_1",
+          run_until_stopped: true,
+          stimulation_type: "C",
+          rest_duration: 0,
+          time_unit: "milliseconds",
+          subprotocols: [
+            {
+              type: "Delay",
+              duration: 0,
+              unit: "milliseconds",
+            },
+          ],
+          detailed_subprotocols: [
+            {
+              type: "Delay",
+              color: "hsla(69, 92%, 45%, 1)",
+              pulse_settings: {
+                duration: 0,
+                unit: "milliseconds",
+              },
+            },
+          ],
+        },
+      },
+      {
+        color: "hsla(334, 95%, 53%, 1)",
+        letter: "B",
+        label: "",
+        protocol: {
+          name: "test_proto_2",
+          run_until_stopped: true,
+          stimulation_type: "C",
+          rest_duration: 0,
+          time_unit: "milliseconds",
+          subprotocols: [
+            {
+              type: "Biphasic",
+              phase_one_duration: 0,
+              phase_one_charge: 200,
+              interphase_interval: 10,
+              phase_two_duration: 3,
+              phase_two_charge: 200,
+              postphase_interval: 5,
+              total_active_duration: {
+                duration: 1000,
+                unit: "milliseconds",
+              },
+              num_cycles: 1,
+            },
+          ],
+          detailed_subprotocols: [
+            {
+              type: "Biphasic",
+              color: "hsla(69, 92%, 45%, 1)",
+              pulse_settings: {
+                phase_one_duration: 100,
+                phase_one_charge: 200,
+                interphase_interval: 10,
+                phase_two_duration: 3,
+                phase_two_charge: 200,
+                postphase_interval: 5,
+                total_active_duration: {
+                  duration: 1000,
+                  unit: "milliseconds",
+                },
+                num_cycles: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        color: "hsla(310, 95%, 53%, 1)",
+        letter: "C",
+        label: "",
+        protocol: {
+          name: "test_proto_3",
+          run_until_stopped: true,
+          stimulation_type: "C",
+          rest_duration: 0,
+          time_unit: "milliseconds",
+          subprotocols: [
+            {
+              type: "Monophasic",
+              phase_one_duration: 10,
+              phase_one_charge: 0,
+              postphase_interval: 5,
+              total_active_duration: {
+                duration: 1,
+                unit: "seconds",
+              },
+              num_cycles: 1,
+            },
+          ],
+          detailed_subprotocols: [
+            {
+              type: "Monophasic",
+              color: "hsla(69, 92%, 45%, 1)",
+              pulse_settings: {
+                phase_one_duration: 10,
+                phase_one_charge: 0,
+                postphase_interval: 5,
+                total_active_duration: {
+                  duration: 1,
+                  unit: "seconds",
+                },
+                num_cycles: 1,
+              },
+            },
+          ],
+        },
+      },
+    ],
+    protocol_assignments: {
+      A1: null,
+      B1: null,
+      C1: null,
+      D1: null,
+      A2: null,
+      B2: null,
+      C2: null,
+      D2: null,
+      A3: null,
+      B3: null,
+      C3: null,
+      D3: null,
+      A4: "B",
+      B4: "B",
+      C4: "B",
+      D4: "B",
+      A5: "A",
+      B5: "A",
+      C5: "A",
+      D5: "A",
+      A6: "C",
+      B6: "C",
+      C6: null,
+      D6: null,
+    },
+  });
+
   const test_protocol_order = [
     {
       type: "Biphasic",
@@ -376,6 +524,17 @@ describe("store/stimulation", () => {
       const expected_letter = store.state.stimulation.protocol_list[2].letter;
       expect(expected_name).toBe(parsed_stim_data.protocols[0].protocol.name);
       expect(expected_letter).toBe("B"); // imported letter assignments won't be used, will always be next in line
+    });
+
+    test("When protocol file has been read and contains now invalid values, Then the protocol names will be added to state to show to user", async () => {
+      const parsed_stim_data = JSON.parse(invalid_stim_json);
+      await store.dispatch("stimulation/add_imported_protocol", parsed_stim_data);
+
+      expect(store.state.stimulation.invalid_imported_protocols).toStrictEqual([
+        "test_proto_1",
+        "test_proto_2",
+        "test_proto_3",
+      ]);
     });
 
     test("When a user selects wells with a protocol applied, Then the selected wells should be cleared of any protocol assignments with specified protocol", async () => {
