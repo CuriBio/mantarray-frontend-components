@@ -134,7 +134,7 @@ describe("store/stimulation", () => {
       label: "Tester",
       protocol: {
         name: "Tester",
-        stimulation_type: "V",
+        stimulation_type: "C",
         rest_duration: 20,
         time_unit: "milliseconds",
         subprotocols: [
@@ -232,7 +232,7 @@ describe("store/stimulation", () => {
       const default_type = store.getters["stimulation/get_stimulation_type"];
       expect(default_type).toBe(current);
 
-      store.state.stimulation.protocol_editor.stimulation_type = "V";
+      store.state.stimulation.protocol_editor.stimulation_type = "C";
       const voltage_selection = store.getters["stimulation/get_stimulation_type"];
       expect(voltage_selection).toBe(voltage);
 
@@ -425,7 +425,7 @@ describe("store/stimulation", () => {
     test("When a user selects a new stimulation type to Current Stimulation Type, Then it should mutate state Current", async () => {
       expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
       await store.commit("stimulation/set_stimulation_type", "Voltage Controlled Stimulation");
-      expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("V");
+      expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
       await store.commit("stimulation/set_stimulation_type", "Current Controlled Stimulation");
       expect(store.state.stimulation.protocol_editor.stimulation_type).toBe("C");
     });
@@ -578,7 +578,7 @@ describe("store/stimulation", () => {
         color: "#000001",
         label: "test_2",
         protocol: {
-          stimulation_type: "V",
+          stimulation_type: "C",
           run_until_stopped: false,
           subprotocols: [
             {
@@ -623,7 +623,7 @@ describe("store/stimulation", () => {
           },
           {
             protocol_id: "D",
-            stimulation_type: "V",
+            stimulation_type: "C",
             run_until_stopped: false,
             subprotocols: [
               {

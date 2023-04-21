@@ -154,6 +154,20 @@
     >
       <StatusWarningWidget :modal_labels="timer_warning_labels" @handle_confirmation="close_timer_modal" />
     </b-modal>
+    <b-modal
+      id="invalid-imported-protocols"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        :modal_labels="invalid_imported_protocols_labels"
+        @handle_confirmation="close_invalid_protocol_modal"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -233,12 +247,18 @@ export default {
           "We strongly recommend stopping the stimulation and running another configuration check to ensure the integrity of the stimulation.",
         button_names: ["Continue Anyway", "Stop Stimulation"],
       },
+
       stim_24hr_timer: null,
       open_start_dropdown: false,
     };
   },
   computed: {
-    ...mapState("stimulation", ["protocol_assignments", "stim_play_state", "stim_status"]),
+    ...mapState("stimulation", [
+      "protocol_assignments",
+      "stim_play_state",
+      "stim_status",
+      "invalid_imported_protocols",
+    ]),
     ...mapState("playback", ["playback_state", "enable_stim_controls", "barcodes"]),
     ...mapState("data", ["stimulator_circuit_statuses"]),
     is_start_stop_button_enabled: function () {
@@ -351,6 +371,15 @@ export default {
       // disable this option if state is already recording
       return this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.RECORDING;
     },
+    invalid_imported_protocols_labels: function () {
+      return {
+        header: "Warning!",
+        msg_one:
+          "The following protocols were not imported because some values no longer pass current validity checks:",
+        msg_two: this.invalid_imported_protocols.join(", "),
+        button_names: ["Close"],
+      };
+    },
   },
   watch: {
     stim_play_state: function () {
@@ -360,6 +389,9 @@ export default {
     assigned_open_circuits: function (new_val, old_val) {
       if (this.stim_status !== STIM_STATUS.CONFIG_CHECK_COMPLETE && new_val.length > old_val.length)
         this.$bvModal.show("open-circuit-warning");
+    },
+    invalid_imported_protocols: function () {
+      if (this.invalid_imported_protocols.length > 0) this.$bvModal.show("invalid-imported-protocols");
     },
   },
   mounted() {
@@ -407,6 +439,10 @@ export default {
       // always start stimulation
       await this.$store.dispatch(`stimulation/create_protocol_message`);
       this.start_24hr_timer();
+    },
+    close_invalid_protocol_modal: function () {
+      this.$bvModal.hide("invalid-imported-protocols");
+      this.$store.commit("set_invalid_imported_protocols", []);
     },
   },
 };
@@ -607,7 +643,8 @@ body {
 }
 
 #open-circuit-warning,
-#stim-24hr-warning {
+#stim-24hr-warning,
+#invalid-imported-protocols {
   position: fixed;
   margin: 5% auto;
   top: 15%;

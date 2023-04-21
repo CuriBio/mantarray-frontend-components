@@ -28,10 +28,6 @@ export default {
       return state.current_assignment;
     }
   },
-  get_stimulation_type({ protocol_editor }) {
-    return protocol_editor.stimulation_type === "C" ? "Current" : "Voltage";
-  },
-
   get_protocol_name({ protocol_editor }) {
     return protocol_editor.name;
   },

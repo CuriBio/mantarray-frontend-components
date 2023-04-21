@@ -57,11 +57,7 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import StimulationStudioColorModal from "@/components/stimulation/StimulationStudioColorModal.vue";
-import {
-  MAX_SUBPROTOCOL_DURATION_MS,
-  MIN_SUBPROTOCOL_DURATION_MS,
-  TIME_CONVERSION_TO_MILLIS,
-} from "@/store/modules/stimulation/enums";
+import { check_delay_pulse_validity } from "@/js_utils/protocol_valiation";
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 
@@ -82,7 +78,6 @@ Vue.use(BootstrapVue);
  * @vue-computed {Array} button_hover_colors - Array of what color the text in the button will be when hovered over
  * @vue-data {Array} time_units - Array of possible options in the unit dropdown menu
  * @vue-data {Int} time_unit_idx - Index of currently selected time unit from dropdown
- * @vue-data {Object} invalid_err_msg - Object containing all error messages for validation checks of inputs
  * @vue-watch {Boolean} is_valid - True if input passes the validation check and allows Save button to become enabled
  * @vue-data {String} modal_title - Title
  * @vue-data {String} input_description - Subtitle
@@ -123,14 +118,6 @@ export default {
       current_value: this.current_delay_input,
       input_value: null,
       invalid_text: "Required",
-      invalid_err_msg: {
-        num_err: "Must be a (+) number",
-        required: "Required",
-        valid: "",
-        min_duration: `Duration must be >=${MIN_SUBPROTOCOL_DURATION_MS}ms`,
-        max_duration: "Duration must be <= 24hrs",
-        non_integer: "Must be a whole number of ms",
-      },
       time_units: ["milliseconds", "seconds", "minutes", "hours"],
       time_unit_idx: 0,
       is_enabled_array: [false, true],
@@ -181,31 +168,14 @@ export default {
     },
     check_validity(value_str) {
       this.current_value = value_str;
-
-      const value = +value_str;
-
       const selected_unit = this.time_units[this.time_unit_idx];
-      const value_in_millis = value * TIME_CONVERSION_TO_MILLIS[selected_unit];
 
-      if (value_str === "") {
-        this.invalid_text = this.invalid_err_msg.required;
-      } else if (isNaN(value)) {
-        this.invalid_text = this.invalid_err_msg.num_err;
-      } else if (value_in_millis < MIN_SUBPROTOCOL_DURATION_MS) {
-        this.invalid_text = this.invalid_err_msg.min_duration;
-      } else if (value_in_millis > MAX_SUBPROTOCOL_DURATION_MS) {
-        this.invalid_text = this.invalid_err_msg.max_duration;
-      } else if (!Number.isInteger(value_in_millis)) {
-        this.invalid_text = this.invalid_err_msg.non_integer;
-      } else {
-        this.invalid_text = this.invalid_err_msg.valid;
-        // Only want to update input_value here so it is only ever set to a valid value.
-        // This means that if a user enters an invalid value and then presses cancel, the most recent
-        // valid value will be committed to the store instead of the invalid value
-        this.input_value = value;
-      }
-
-      this.is_valid = this.invalid_text === this.invalid_err_msg.valid;
+      this.invalid_text = check_delay_pulse_validity(value_str, selected_unit);
+      this.is_valid = this.invalid_text === "";
+      // Only want to update input_value here so it is only ever set to a valid value.
+      // This means that if a user enters an invalid value and then presses cancel, the most recent
+      // valid value will be committed to the store instead of the invalid value
+      if (this.is_valid) this.input_value = +value_str;
     },
     handle_unit_change(idx) {
       this.time_unit_idx = idx;

@@ -9,17 +9,13 @@
     />
     <StimulationStudioDragAndDropPanel
       class="stimulationstudio_draganddroppanel-container"
-      :stimulation_type="stimulation_type"
       :disable_edits="disable_edits"
     />
     <StimulationStudioBlockViewEditor
       class="stimulationstudio_blockvieweditor-container"
       @new-rest-dur="new_rest_dur"
     />
-    <StimulationStudioProtocolViewer
-      class="stimulationstudio_protocolviewer-container"
-      :stimulation_type="stimulation_type"
-    />
+    <StimulationStudioProtocolViewer class="stimulationstudio_protocolviewer-container" />
     <div class="button-background">
       <div v-for="(value, idx) in btn_labels" :id="value" :key="value" @click.exact="handle_click(idx)">
         <div v-b-popover.hover.top="btn_hover" :class="get_btn_class(idx)">
@@ -42,7 +38,6 @@ import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 
 /**
  * @vue-data {Array} btn_labels - button labels for base of stim studio component
- * @vue-data {String} stimulation_type - Current selected stimulation type in BlockViewEditor component
  * @vue-data {Object} selected_protocol - Current selected protocol from drop down in CreateAndEdit component
  * @vue-event {Event} handle_click - Handles what gets executed when any of the base buttons are selected
  * @vue-event {Event} handle_selection_changed - Gets emitted when a user selected a protocol for edit so it can be used if new changes need to be discarded
@@ -60,7 +55,6 @@ export default {
   data() {
     return {
       btn_labels: ["Save Changes", "Clear/Reset All", "Discard Changes"],
-      stimulation_type: "Current",
       selected_protocol: { label: "Create New", color: "", letter: "" },
       rest_dur_is_valid: true,
     };
@@ -80,22 +74,6 @@ export default {
         disabled: !this.disable_edits,
       };
     },
-  },
-  created: async function () {
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (mutation.type === "stimulation/set_stimulation_type") {
-        this.stimulation_type = this.$store.getters["stimulation/get_stimulation_type"];
-      }
-      if (
-        mutation.type === "stimulation/reset_state" ||
-        mutation.type === "stimulation/reset_protocol_editor"
-      ) {
-        this.stimulation_type = "Current";
-      }
-    });
-  },
-  beforeDestroy() {
-    this.unsubscribe();
   },
   methods: {
     async handle_click(idx) {

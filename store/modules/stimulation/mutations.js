@@ -30,7 +30,6 @@ export default {
   },
   set_stimulation_type({ protocol_editor }, type) {
     if (type[0] === "C") protocol_editor.stimulation_type = "C";
-    if (type[0] === "V") protocol_editor.stimulation_type = "V";
   },
   set_time_unit({ protocol_editor }, unit) {
     protocol_editor.time_unit = unit;
@@ -144,5 +143,8 @@ export default {
       indices: [],
       color: null,
     };
+  },
+  set_invalid_imported_protocols(state, protocols) {
+    state.invalid_imported_protocols = [...protocols];
   },
 };

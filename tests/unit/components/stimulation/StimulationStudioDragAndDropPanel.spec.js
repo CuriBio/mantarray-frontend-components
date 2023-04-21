@@ -81,7 +81,7 @@ const test_protocol_list = [
     label: "Tester",
     protocol: {
       name: "Tester",
-      stimulation_type: "V",
+      stimulation_type: "C",
       run_until_stopped: false,
       rest_duration: 20,
       time_unit: "milliseconds",

@@ -7,7 +7,7 @@
       :plot_area_pixel_height="160"
       :plot_area_pixel_width="dynamic_plot_width"
       :data_points="datapoints"
-      :y_axis_label="stimulation_type"
+      :y_axis_label="'Current'"
       :x_axis_label="x_axis_label"
       :repeat_colors="repeat_colors"
       :delay_blocks="delay_blocks"
@@ -19,7 +19,6 @@ import StimulationStudioWaveform from "@/components/stimulation/StimulationStudi
 import { convert_x_y_arrays_to_d3_array } from "@/js_utils/waveform_data_formatter.js";
 
 /**
- * @vue-props {Sting} stimulation_type - Current selected stimulation_type assigned to y axis label/scale
  * @vue-data {Int} y_min_max - The y axis min and max values
  * @vue-data {Array} datapoints - The d3 formatted x and y axis points
  * @vue-data {Array} repeat_colors - Corresponding color assignments from repeat blocks in pulse order to be assigned to color of line in graph
@@ -34,9 +33,6 @@ export default {
   name: "StimulationStudioProtocolViewer",
   components: {
     StimulationStudioWaveform,
-  },
-  props: {
-    stimulation_type: { type: String, default: "Voltage" },
   },
   data() {
     return {

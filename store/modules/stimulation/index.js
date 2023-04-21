@@ -24,6 +24,7 @@ const state = () => ({
     indices: [],
     color: null,
   },
+  invalid_imported_protocols: [],
 });
 
 export default {

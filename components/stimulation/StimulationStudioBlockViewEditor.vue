@@ -33,9 +33,8 @@
             :input_width="200"
             :disable_selection="true"
             :options_text="stimulation_types_array"
-            :options_idx="stimulation_type_idx"
+            :options_idx="0"
             :dom_id_suffix="'stimulation_type'"
-            @selection-changed="handle_stimulation_type"
           />
           <SmallDropDown
             :style="'margin-left: 5%;'"
@@ -116,12 +115,10 @@ library.add(faTrashAlt);
  * @vue-data {String} name_validity - Corresponding border style after name validity check
  * @vue-data {String} error_message - Error message that appears under name input field after validity check
  * @vue-data {Array} protocol_list - All available protocols from Vuex
- * @vue-data {Int} stimulation_type_idx - Used to change preselected index in the dropdown when user wants to edit existing protocols
  * @vue-event {Event} update_protocols - Gets called when a change to the available protocol list occurs to update next available color/letter assignment and dropdown options
  * @vue-event {Event} handle_trash_modal - Toggle view of delete popover on trash icon
  * @vue-event {Event} toggle_tab - Toggles which tab is active
  * @vue-event {Event} handle_delete - Confirms and commits the deletion of protocol to state
- * @vue-event {Event} handle_stimulation_type - Commits the new selected stimulation type to state
  * @vue-event {Event} handle_stop_setting - Currently just assigns the new stop setting to local state
  * @vue-event {Event} handle_rest_duration - Commits the new delay input to state
  * @vue-event {Event} check_name_validity - Checks if the inputted name has already been used
@@ -145,7 +142,6 @@ export default {
       stop_options_array: ["Stimulate Until Stopped", "Stimulate Until Complete"],
       protocol_name: "",
       stop_option_idx: 0,
-      stimulation_type_idx: 0,
       rest_duration: "",
       name_validity: "null",
       error_message: "",
@@ -161,7 +157,6 @@ export default {
   },
   computed: {
     ...mapState("stimulation", {
-      stimulation_type: (state) => state.protocol_editor.stimulation_type,
       run_until_stopped: (state) => state.protocol_editor.run_until_stopped,
       rest_time_unit: (state) => state.protocol_editor.time_unit,
     }),
@@ -202,7 +197,6 @@ export default {
         this.update_protocols();
         this.protocol_name = this.get_protocol_name;
         this.rest_duration = JSON.stringify(this.get_rest_duration);
-        this.stimulation_type_idx = +(this.stimulation_type === "V");
 
         this.stop_option_idx = +!this.run_until_stopped;
         this.disabled_time = !this.run_until_stopped;
@@ -218,7 +212,7 @@ export default {
   },
   methods: {
     ...mapActions("stimulation", ["handle_protocol_editor_reset", "handle_new_rest_duration"]),
-    ...mapMutations("stimulation", ["set_stimulation_type", "set_protocol_name", "set_stop_setting"]),
+    ...mapMutations("stimulation", ["set_protocol_name", "set_stop_setting"]),
     update_protocols() {
       this.protocol_list = this.get_protocols;
       const { letter, color } = this.get_next_protocol;
@@ -234,11 +228,6 @@ export default {
     close_del_protocol_modal(idx) {
       this.$bvModal.hide("del-protocol-modal");
       if (idx === 0) this.handle_protocol_editor_reset();
-    },
-    handle_stimulation_type(idx) {
-      const type = this.stimulation_types_array[idx];
-      this.stimulation_type_idx = idx;
-      this.set_stimulation_type(type);
     },
     handle_stop_setting(idx) {
       const setting = this.stop_options_array[idx];

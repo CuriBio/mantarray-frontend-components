@@ -1,6 +1,7 @@
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
-import { call_axios_post_from_vuex } from "../../../js_utils/axios_helpers";
+import { call_axios_post_from_vuex } from "@/js_utils/axios_helpers";
+import { is_valid_delay_pulse, is_valid_single_pulse } from "@/js_utils/protocol_validation";
 import { STIM_STATUS, TIME_CONVERSION_TO_MILLIS, COLOR_PALETTE } from "./enums";
 import { get_protocol_editor_letter } from "./getters";
 
@@ -195,13 +196,26 @@ export default {
   },
 
   async add_imported_protocol({ commit, state }, { protocols }) {
+    const invalid_imported_protocols = [];
     for (const { protocol } of protocols) {
-      await commit("set_edit_mode_off");
-      // needs to be set to off every iteration because an action elsewhere triggers it on
-      const letter = get_protocol_editor_letter(state.protocol_list);
-      const color = COLOR_PALETTE[state.protocol_list.length % 26];
-      const imported_protocol = { color, letter, label: protocol.name, protocol };
-      await commit("set_new_protocol", imported_protocol);
+      const invalid_pulses = protocol.subprotocols.filter(
+        (pulse) => !(pulse.type === "Delay" ? is_valid_delay_pulse(pulse) : is_valid_single_pulse(pulse))
+      );
+
+      if (invalid_pulses.length > 0) {
+        await commit("set_edit_mode_off");
+        // needs to be set to off every iteration because an action elsewhere triggers it on
+        const letter = get_protocol_editor_letter(state.protocol_list);
+        const color = COLOR_PALETTE[state.protocol_list.length % 26];
+        const imported_protocol = { color, letter, label: protocol.name, protocol };
+        await commit("set_new_protocol", imported_protocol);
+      } else {
+        invalid_imported_protocols.push(protocol.name);
+      }
+    }
+
+    if (invalid_imported_protocols.length > 0) {
+      await commit("set_invalid_imported_protocols", invalid_imported_protocols);
     }
   },
   async add_saved_protocol({ commit, state, dispatch }) {
@@ -271,7 +285,7 @@ export default {
         if (!unique_protocol_ids.has(letter)) {
           unique_protocol_ids.add(letter);
           // this needs to be converted before sent because stim type changes independently of pulse settings
-          const converted_subprotocols = await _get_converted_settings(subprotocols, stimulation_type);
+          const converted_subprotocols = await _get_converted_settings(subprotocols);
           const protocol_model = {
             protocol_id: letter,
             stimulation_type,
@@ -380,10 +394,9 @@ export default {
   },
 };
 
-const _get_converted_settings = async (subprotocols, stim_type) => {
+const _get_converted_settings = async (subprotocols) => {
   const milli_to_micro = 1e3;
-  const charge_conversion = { C: 1000, V: 1 };
-  const conversion = charge_conversion[stim_type];
+  const current_conversion = milli_to_micro;
 
   return subprotocols.map((pulse) => {
     let type_specific_settings = {};
@@ -395,14 +408,14 @@ const _get_converted_settings = async (subprotocols, stim_type) => {
         num_cycles: pulse.num_cycles,
         postphase_interval: Math.round(pulse.postphase_interval * milli_to_micro), // sent in µs, also needs to be an integer value
         phase_one_duration: pulse.phase_one_duration * milli_to_micro, // sent in µs
-        phase_one_charge: pulse.phase_one_charge * conversion, // sent in mV
+        phase_one_charge: pulse.phase_one_charge * current_conversion, // sent in mV
       };
 
     if (pulse.type === "Biphasic")
       type_specific_settings = {
         ...type_specific_settings,
         interphase_interval: pulse.interphase_interval * milli_to_micro, // sent in µs
-        phase_two_charge: pulse.phase_two_charge * conversion, // sent in mV or µA
+        phase_two_charge: pulse.phase_two_charge * current_conversion, // sent in mV or µA
         phase_two_duration: pulse.phase_two_duration * milli_to_micro, // sent in µs
       };
 
