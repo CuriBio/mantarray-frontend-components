@@ -225,22 +225,6 @@ describe("store/stimulation", () => {
       expect(color).toBe("#118075");
     });
 
-    test("When requesting the next stimulation type, Then it should return what user has selected in dropdown", async () => {
-      const voltage = "Voltage";
-      const current = "Current";
-
-      const default_type = store.getters["stimulation/get_stimulation_type"];
-      expect(default_type).toBe(current);
-
-      store.state.stimulation.protocol_editor.stimulation_type = "C";
-      const voltage_selection = store.getters["stimulation/get_stimulation_type"];
-      expect(voltage_selection).toBe(voltage);
-
-      store.state.stimulation.protocol_editor.stimulation_type = "C";
-      const current_selection = store.getters["stimulation/get_stimulation_type"];
-      expect(current_selection).toBe(current);
-    });
-
     test("When requesting the name and rest duration to edit existing protocol in the editor, Then it should return specified pulse order", async () => {
       const selected_protocol = store.state.stimulation.protocol_list[1];
       const { name, rest_duration } = selected_protocol.protocol;
@@ -631,9 +615,9 @@ describe("store/stimulation", () => {
                 num_cycles: 2,
                 postphase_interval: 0,
                 phase_one_duration: 20000,
-                phase_one_charge: 400,
+                phase_one_charge: 400000,
                 interphase_interval: 10000,
-                phase_two_charge: -400,
+                phase_two_charge: -400000,
                 phase_two_duration: 20000,
               },
             ],

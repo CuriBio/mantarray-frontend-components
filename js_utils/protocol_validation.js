@@ -21,6 +21,7 @@ const invalid_err_msg = {
   num_cycles: "Must be a whole number > 0",
   min_delay_duration: `Duration must be >=${MIN_SUBPROTOCOL_DURATION_MS}ms`,
   max_delay_duration: "Duration must be <= 24hrs",
+  delay_num_err: "Must be a (+) number",
   non_integer: "Must be a whole number of ms",
 };
 
@@ -131,7 +132,7 @@ export const check_delay_pulse_validity = (value_str, selected_unit) => {
   if (value_str === "") {
     error_message = invalid_err_msg.required;
   } else if (isNaN(+value_str)) {
-    error_message = invalid_err_msg.num_err;
+    error_message = invalid_err_msg.delay_num_err;
   } else if (value_in_millis < MIN_SUBPROTOCOL_DURATION_MS) {
     error_message = invalid_err_msg.min_delay_duration;
   } else if (value_in_millis > MAX_SUBPROTOCOL_DURATION_MS) {
