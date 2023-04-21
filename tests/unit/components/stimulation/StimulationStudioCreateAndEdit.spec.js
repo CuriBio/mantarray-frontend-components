@@ -1,66 +1,13 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import StimulationStudioCreateAndEdit from "@/components/stimulation/StimulationStudioCreateAndEdit.vue";
 import SelectDropDown from "@/components/basic_widgets/SelectDropDown.vue";
-
+import { TEST_PROTOCOL_LIST_2 } from "@/tests/sample_stim_protocols/stim_protocols";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 let NuxtStore;
 let store;
-
-const test_protocol_list = [
-  { letter: "", color: "", label: "Create New" },
-  {
-    letter: "A",
-    color: "#118075",
-    label: "Tester",
-    protocol: {
-      name: "Tester",
-      stimulation_type: "C",
-      rest_duration: 20,
-      time_unit: "milliseconds",
-      subprotocols: [
-        {
-          phase_one_duration: 15,
-          phase_one_charge: 0,
-          interphase_interval: 0,
-          phase_two_duration: 0,
-          phase_two_charge: 0,
-        },
-        {
-          phase_one_duration: 20,
-          phase_one_charge: 0,
-          interphase_interval: 0,
-          phase_two_duration: 0,
-          phase_two_charge: 0,
-        },
-      ],
-      detailed_subprotocols: [
-        {
-          type: "Delay",
-          src: "/delay-tile.png",
-          nested_protocols: [],
-          repeat: { color: "d822f9", number_of_repeats: 1 },
-          settings: {
-            phase_one_duration: 15000,
-            phase_one_charge: 0,
-            interphase_interval: 0,
-            phase_two_duration: 0,
-            phase_two_charge: 0,
-          },
-          stim_settings: {
-            postphase_interval: 0,
-            total_active_duration: {
-              unit: "milliseconds",
-              duration: 15000,
-            },
-          },
-        },
-      ],
-    },
-  },
-];
 
 describe("StimulationStudioCreateAndEdit.vue", () => {
   beforeAll(async () => {
@@ -70,7 +17,7 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
-    store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(test_protocol_list));
+    store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(TEST_PROTOCOL_LIST_2));
   });
 
   afterEach(() => {

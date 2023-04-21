@@ -3,6 +3,10 @@ import StimulationStudioWaveformSettingModal from "@/components/stimulation/Stim
 import { StimulationStudioWaveformSettingModal as dist_StimulationStudioWaveformSettingModal } from "@/dist/mantarray.common";
 import { MIN_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
 import Vuex from "vuex";
+import {
+  TEST_MONOPHASIC_PULSE_SETTINGS,
+  TEST_BIPHASIC_PULSE_SETTINGS,
+} from "@/tests/sample_stim_protocols/stim_protocols";
 
 let wrapper = null;
 
@@ -10,33 +14,6 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 let NuxtStore;
 let store;
-
-const test_biphasic_pulse_settings = {
-  phase_one_duration: "",
-  phase_one_charge: "",
-  interphase_interval: "",
-  phase_two_duration: "",
-  phase_two_charge: "",
-  postphase_interval: "",
-  total_active_duration: {
-    duration: "",
-    unit: "milliseconds",
-  },
-  num_cycles: 0,
-  frequency: "",
-};
-
-const test_monophasic_pulse_settings = {
-  phase_one_duration: "",
-  phase_one_charge: "",
-  postphase_interval: "",
-  total_active_duration: {
-    duration: "",
-    unit: "milliseconds",
-  },
-  num_cycles: 0,
-  frequency: "",
-};
 
 describe("StimulationStudioWaveformSettingModal.vue", () => {
   beforeAll(async () => {
@@ -68,7 +45,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        selected_pulse_settings: test_biphasic_pulse_settings,
+        selected_pulse_settings: TEST_BIPHASIC_PULSE_SETTINGS,
         frequency: 0,
         current_color: "hsla(100, 100%, 50%, 1)",
       },
@@ -84,7 +61,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        selected_pulse_settings: test_biphasic_pulse_settings,
+        selected_pulse_settings: TEST_BIPHASIC_PULSE_SETTINGS,
         frequency: 0,
         current_color: "hsla(100, 100%, 50%, 1)",
       },
@@ -97,7 +74,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       store,
       localVue,
       propsData: {
-        selected_pulse_settings: test_biphasic_pulse_settings,
+        selected_pulse_settings: TEST_BIPHASIC_PULSE_SETTINGS,
         frequency: 0,
         current_color: "hsla(100, 100%, 50%, 1)",
       },
@@ -131,7 +108,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
         localVue,
         propsData: {
           pulse_type: "Biphasic",
-          selected_pulse_settings: test_biphasic_pulse_settings,
+          selected_pulse_settings: TEST_BIPHASIC_PULSE_SETTINGS,
           current_color: "hsla(100, 100%, 50%, 1)",
         },
       });
@@ -146,7 +123,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       localVue,
       propsData: {
         pulse_type: "Monophasic",
-        selected_pulse_settings: test_monophasic_pulse_settings,
+        selected_pulse_settings: TEST_MONOPHASIC_PULSE_SETTINGS,
         current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
@@ -178,7 +155,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       localVue,
       propsData: {
         pulse_type: "Monophasic",
-        selected_pulse_settings: test_monophasic_pulse_settings,
+        selected_pulse_settings: TEST_MONOPHASIC_PULSE_SETTINGS,
         current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
@@ -269,7 +246,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       localVue,
       propsData: {
         pulse_type: "Monophasic",
-        selected_pulse_settings: test_monophasic_pulse_settings,
+        selected_pulse_settings: TEST_MONOPHASIC_PULSE_SETTINGS,
         current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
@@ -330,7 +307,7 @@ describe("StimulationStudioWaveformSettingModal.vue", () => {
       localVue,
       propsData: {
         pulse_type: "Monophasic",
-        selected_pulse_settings: test_monophasic_pulse_settings,
+        selected_pulse_settings: TEST_MONOPHASIC_PULSE_SETTINGS,
         current_color: "hsla(100, 100%, 50%, 1)",
       },
     });
