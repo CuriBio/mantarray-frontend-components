@@ -25,7 +25,7 @@
     </div>
     <div
       v-for="(key, value, idx) in import_export_btn_labels"
-      :id="value"
+      id="import_export_button"
       :key="value"
       @click.exact="handle_import_export(idx)"
     >

@@ -172,13 +172,17 @@ describe("StimulationStudioCreateAndEdit.vue", () => {
     const import_spy = jest
       .spyOn(FileReader.prototype, "readAsText")
       .mockImplementation(() => "test successful");
+
     const wrapper = mount(StimulationStudioCreateAndEdit, {
       store,
       localVue,
+      attachToDocument: true,
     });
 
-    await wrapper.findAll("input").at(0).trigger("change");
+    await wrapper.findAll("#import_export_button").at(0).trigger("click");
 
+    // calling directly here because input element gets removed before it can be manually clicked here on the wrapper
+    wrapper.vm.handle_import([new File([new Blob()], "test_filename")]);
     expect(import_spy).toHaveBeenCalledTimes(1);
   });
 
