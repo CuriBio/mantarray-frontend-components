@@ -391,6 +391,7 @@ export default {
         this.$bvModal.show("open-circuit-warning");
     },
     invalid_imported_protocols: function () {
+      console.log("invalid protocols: ", this.invalid_imported_protocols);
       if (this.invalid_imported_protocols.length > 0) this.$bvModal.show("invalid-imported-protocols");
     },
   },

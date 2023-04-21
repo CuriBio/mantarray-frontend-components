@@ -197,7 +197,7 @@ export default {
 
   async add_imported_protocol({ commit, state }, { protocols }) {
     const invalid_imported_protocols = [];
-    for (const { protocol } of protocols) {
+    for (const [idx, { protocol }] of Object.entries(protocols)) {
       const invalid_pulses = protocol.subprotocols.filter(
         (pulse) => !(pulse.type === "Delay" ? is_valid_delay_pulse(pulse) : is_valid_single_pulse(pulse))
       );
@@ -210,7 +210,9 @@ export default {
         const imported_protocol = { color, letter, label: protocol.name, protocol };
         await commit("set_new_protocol", imported_protocol);
       } else {
-        invalid_imported_protocols.push(protocol.name);
+        // if protocol is unnamed, assign generic name with place in list, +1 to index
+        const name_to_use = protocol.name && protocol.name.length > 0 ? protocol.name : `protocol_${idx + 1}`;
+        invalid_imported_protocols.push(name_to_use);
       }
     }
 
