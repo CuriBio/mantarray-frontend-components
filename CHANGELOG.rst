@@ -1,6 +1,18 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.4.9 (2023-04-21)
+------------------
+
+Added:
+^^^^^^
+- Protocol validitation checks on import in stimulation studio
+
+Changed:
+^^^^^^^^
+- Removed voltage controlled stimulatio handling
+
+
 1.4.8 (2023-04-18)
 ------------------
 
