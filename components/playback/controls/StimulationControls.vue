@@ -442,7 +442,7 @@ export default {
     },
     close_invalid_protocol_modal: function () {
       this.$bvModal.hide("invalid-imported-protocols");
-      this.$store.commit("set_invalid_imported_protocols", []);
+      this.$store.commit("stimulation/set_invalid_imported_protocols", []);
     },
   },
 };

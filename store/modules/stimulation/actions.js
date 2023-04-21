@@ -202,7 +202,7 @@ export default {
         (pulse) => !(pulse.type === "Delay" ? is_valid_delay_pulse(pulse) : is_valid_single_pulse(pulse))
       );
 
-      if (invalid_pulses.length > 0) {
+      if (invalid_pulses.length === 0) {
         await commit("set_edit_mode_off");
         // needs to be set to off every iteration because an action elsewhere triggers it on
         const letter = get_protocol_editor_letter(state.protocol_list);

@@ -161,43 +161,33 @@ export const is_valid_single_pulse = (protocol) => {
   const charges_to_check = is_monophasic ? ["phase_one_charge"] : ["phase_one_charge", "phase_two_charge"];
   const durations_to_check = is_monophasic
     ? ["phase_one_duration"]
-    : ["phase_one_duration", "phase_two_duration", "interphase_duration"];
+    : ["phase_one_duration", "phase_two_duration", "interphase_interval"];
 
   const max_pulse_duration_for_freq = get_max_pulse_duration_for_freq(protocol.frequency);
   const total_active_duration = get_total_active_duration(protocol.type, protocol);
-  // set initial state
-  let is_valid = true;
 
   // first check all durations are within max and min bounds
-  for (const duration of durations_to_check) {
-    is_valid =
-      check_pulse_duration_validity(
-        protocol[duration],
-        duration === "interphase_duration",
-        max_pulse_duration_for_freq,
-        total_active_duration
-      ) === "";
-    // if error is present, it means some validation check was not passed, break statement and return not valid
-    if (!is_valid) break;
-  }
+  const durations_are_valid =
+    durations_to_check.filter(
+      (duration) =>
+        check_pulse_duration_validity(
+          protocol[duration],
+          duration === "interphase_interval",
+          max_pulse_duration_for_freq,
+          total_active_duration
+        ) !== ""
+    ).length === 0;
 
-  // unnecessary to continue validation checks if validation has already failed
-  if (is_valid) {
-    for (const charge of charges_to_check) {
-      is_valid = check_pulse_charge_validity(charge) === "";
-      // if error is present, it means some validation check was not passed, break statement and return not valid
-      if (!is_valid) break;
-    }
-  }
-  // unnecessary to continue validation checks if validation has already failed
-  if (is_valid) {
-    is_valid =
-      check_pulse_frequency_validity(protocol.frequency, max_pulse_duration_for_freq) === "" &&
-      check_active_duration_validity(duration, unit, total_active_duration) === "" &&
-      check_num_cycles_validity(protocol.num_cycles) === "";
-  }
+  // check if charges are within max and min bounds
+  const charges_are_valid =
+    charges_to_check.filter((charge) => check_pulse_charge_validity(protocol[charge]) !== "").length === 0;
 
-  return is_valid;
+  const complete_pulse_validity =
+    check_pulse_frequency_validity(protocol.frequency, max_pulse_duration_for_freq) === "" &&
+    check_active_duration_validity(duration, unit, total_active_duration) === "" &&
+    check_num_cycles_validity(protocol.num_cycles) === "";
+
+  return durations_are_valid && charges_are_valid && complete_pulse_validity;
 };
 
 export const is_valid_delay_pulse = (protocol) => {

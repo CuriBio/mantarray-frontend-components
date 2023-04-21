@@ -57,7 +57,7 @@ import InputWidget from "@/components/basic_widgets/InputWidget.vue";
 import ButtonWidget from "@/components/basic_widgets/ButtonWidget.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import StimulationStudioColorModal from "@/components/stimulation/StimulationStudioColorModal.vue";
-import { check_delay_pulse_validity } from "@/js_utils/protocol_valiation";
+import { check_delay_pulse_validity } from "@/js_utils/protocol_validation";
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 
