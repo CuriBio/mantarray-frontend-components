@@ -1,5 +1,9 @@
 <template>
   <div class="div__platemapeditor-layout-background">
+    <NuxtLink to="/" class="div__platemapeditor-exit">
+      <img :src="require(`@/assets/img/exit-x.png`)" alt="exit button" height="30px" />
+    </NuxtLink>
+
     <div class="div__platemapeditor-header">Plate Map Editor</div>
     <canvas class="canvas__common-horizontal-line" />
     <div class="div__platemap-assignmenttable-container">
@@ -244,6 +248,13 @@ export default {
   height: 45px;
   top: 20px;
   position: absolute;
+}
+.div__platemapeditor-exit {
+  text-align: right;
+  top: 20px;
+  right: 20px;
+  position: absolute;
+  z-index: 3;
 }
 .div__platemapeditor-container {
   position: absolute;
