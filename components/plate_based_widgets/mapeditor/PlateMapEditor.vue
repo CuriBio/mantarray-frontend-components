@@ -1,7 +1,7 @@
 <template>
   <div class="div__platemapeditor-layout-background">
     <NuxtLink to="/" class="div__platemapeditor-exit">
-      <img :src="require(`@/assets/img/exit-x.png`)" alt="exit button" height="30px" />
+      <FontAwesomeIcon id="plus" class="exit-icon fa-2x" :icon="['fa', 'plus-circle']" />
     </NuxtLink>
 
     <div class="div__platemapeditor-header">Plate Map Editor</div>
@@ -91,6 +91,7 @@ import PlateMapAssignmentTable from "@/components/plate_based_widgets/mapeditor/
 import PlateMapNewAssignmentWidget from "@/components/plate_based_widgets/mapeditor/PlateMapNewAssignmentWidget.vue";
 import { BModal } from "bootstrap-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 Vue.component("BModal", BModal);
 import { TextValidation } from "@/js_utils/text_validation.js";
 const TextValidation_Name = new TextValidation("platemap_editor_input");
@@ -103,6 +104,7 @@ export default {
     PlateMapAssignmentTable,
     PlateMapNewAssignmentWidget,
     InputWidget,
+    FontAwesomeIcon,
     BModal,
   },
   data() {
@@ -252,7 +254,7 @@ export default {
 .div__platemapeditor-exit {
   text-align: right;
   top: 20px;
-  right: 20px;
+  right: 100px;
   position: absolute;
   z-index: 3;
 }
@@ -364,5 +366,14 @@ export default {
   width: 204px;
   height: 48px;
   overflow: hidden;
+}
+.exit-icon {
+  color: lightgray;
+  transform: rotate(45deg);
+  transition: color 0.15s;
+}
+.exit-icon:hover {
+  color: red;
+  transition: color 0.15s;
 }
 </style>
