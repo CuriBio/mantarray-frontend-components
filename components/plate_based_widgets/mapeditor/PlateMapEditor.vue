@@ -373,7 +373,7 @@ export default {
   transition: color 0.15s;
 }
 .exit-icon:hover {
-  color: red;
+  color: lightgray;
   transition: color 0.15s;
 }
 </style>
