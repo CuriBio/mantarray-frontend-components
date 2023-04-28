@@ -25,6 +25,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
     const header_label = wrapper.find(".div__platemapeditor-header");
     expect(header_label.text()).toBe("Plate Map Editor");
@@ -37,6 +40,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
     await wrapper.find("#input-widget-field-platemap-name").setValue("test_platemap_name");
     // mock applying and assigning wells to a assignment
@@ -59,6 +65,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     await wrapper.findAll(".div__platemap-button-background-enabled").at(0).trigger("click");
@@ -74,6 +83,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     await wrapper.find("#row_1").trigger("click");
@@ -85,6 +97,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     expect(wrapper.vm.input_platemap_name).toBeNull();
@@ -100,6 +115,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
@@ -115,6 +133,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
@@ -143,6 +164,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
@@ -166,6 +190,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     await store.commit("platemap/set_new_label", "well_assignment_one");
@@ -182,6 +209,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");
@@ -213,6 +243,9 @@ describe("PlateMapEditor.vue", () => {
     const wrapper = mount(PlateMapEditor, {
       store,
       localVue,
+      stubs: {
+        NuxtLink: true, // Add this line to stub NuxtLink
+      },
     });
 
     await wrapper.find("#input-widget-field-platemap-name").setValue("new_platemap");

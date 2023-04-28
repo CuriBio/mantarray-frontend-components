@@ -1,5 +1,9 @@
 <template>
   <div class="div__platemapeditor-layout-background">
+    <NuxtLink v-b-popover.hover.top="'Return to Live View'" to="/" class="div__platemapeditor-exit">
+      <FontAwesomeIcon id="plus" class="exit-icon fa-2x" :icon="['fa', 'plus-circle']" />
+    </NuxtLink>
+
     <div class="div__platemapeditor-header">Plate Map Editor</div>
     <canvas class="canvas__common-horizontal-line" />
     <div class="div__platemap-assignmenttable-container">
@@ -87,6 +91,7 @@ import PlateMapAssignmentTable from "@/components/plate_based_widgets/mapeditor/
 import PlateMapNewAssignmentWidget from "@/components/plate_based_widgets/mapeditor/PlateMapNewAssignmentWidget.vue";
 import { BModal } from "bootstrap-vue";
 import { mapState, mapActions, mapMutations } from "vuex";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 Vue.component("BModal", BModal);
 import { TextValidation } from "@/js_utils/text_validation.js";
 const TextValidation_Name = new TextValidation("platemap_editor_input");
@@ -99,6 +104,7 @@ export default {
     PlateMapAssignmentTable,
     PlateMapNewAssignmentWidget,
     InputWidget,
+    FontAwesomeIcon,
     BModal,
   },
   data() {
@@ -245,6 +251,13 @@ export default {
   top: 20px;
   position: absolute;
 }
+.div__platemapeditor-exit {
+  text-align: right;
+  top: 65px;
+  right: 275px;
+  position: absolute;
+  z-index: 3;
+}
 .div__platemapeditor-container {
   position: absolute;
   top: 115px;
@@ -353,5 +366,14 @@ export default {
   width: 204px;
   height: 48px;
   overflow: hidden;
+}
+.exit-icon {
+  color: rgb(183, 183, 183);
+  transform: rotate(45deg);
+  transition: color 0.15s;
+}
+.exit-icon:hover {
+  color: #ffffff;
+  transition: color 0.15s;
 }
 </style>
