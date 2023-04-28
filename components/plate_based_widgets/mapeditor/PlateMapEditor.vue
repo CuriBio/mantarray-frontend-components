@@ -1,6 +1,6 @@
 <template>
   <div class="div__platemapeditor-layout-background">
-    <NuxtLink to="/" class="div__platemapeditor-exit">
+    <NuxtLink v-b-popover.hover.top="'Return to Live View'" to="/" class="div__platemapeditor-exit">
       <FontAwesomeIcon id="plus" class="exit-icon fa-2x" :icon="['fa', 'plus-circle']" />
     </NuxtLink>
 
@@ -253,8 +253,8 @@ export default {
 }
 .div__platemapeditor-exit {
   text-align: right;
-  top: 20px;
-  right: 100px;
+  top: 65px;
+  right: 275px;
   position: absolute;
   z-index: 3;
 }
@@ -368,12 +368,12 @@ export default {
   overflow: hidden;
 }
 .exit-icon {
-  color: lightgray;
+  color: rgb(183, 183, 183);
   transform: rotate(45deg);
   transition: color 0.15s;
 }
 .exit-icon:hover {
-  color: lightgray;
+  color: #ffffff;
   transition: color 0.15s;
 }
 </style>
