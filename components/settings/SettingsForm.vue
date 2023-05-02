@@ -1,88 +1,102 @@
 <template>
   <div>
     <div class="div__settingsform-controls">
-      <span class="span__settingsform-title">Settings</span>
-      <span class="span__settingsform-user-sub-title">Select&nbsp;<wbr />User</span>
-
+      <span class="span__settingsform-title">User Settings</span>
+      <canvas class="canvas__settings-title-separator" />
       <div class="div__settingsform-editor-input">
         <InputDropDown
-          :title_label="label_user"
-          :placeholder="key_placeholder_user"
-          :invalid_text="error_text_user"
-          :value.sync="entrykey_user"
-          :input_width="entry_width_user"
+          :title_label="'Select Customer ID'"
+          :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
+          :invalid_text="error_text.customer_id"
+          :input_width="400"
+          :value:sync="user_details.customer_id"
           :disabled="disallow_entry_user"
-          :options_text="get_user_names"
-          :message_if_invalid="!user_found"
-          :options_id="'user-account-'"
+          :options_text="[stored_customer_id]"
+          :options_id="'customer-id-'"
+          @update:value="on_update_input($event, 'customer_id')"
         />
       </div>
-      <div class="div__settingsform-user-edit-btn" width="88" height="45">
-        <span v-show="!disable_edit_user" class="span__settingsform-user-edit-btn-txt">
-          <b-button
-            id="edit-a-user"
-            v-b-modal.edit-user
-            squared
-            class="w-100 h-100 edit-id"
-            style="background-color: #3f3f3f; border: 0px; color: #ececed"
-            >Edit&nbsp;<wbr />User
-          </b-button>
-          <b-modal id="edit-user" size="sm" hide-footer hide-header hide-header-close>
-            <EditUser
-              :dialogdata="user_accounts[user_focus_idx]"
-              :open_for_invalid_creds="open_for_invalid_creds"
-              @cancel-id="cancel_user_update"
-              @save-id="apply_user_update"
-              @delete-id="delete_user"
-            />
-          </b-modal>
-        </span>
-        <span v-show="disable_edit_user" class="span__settingsform-user-edit-btn-txt-disable"
-          >Edit&nbsp;<wbr />User</span
+      <div class="div__settingsform-editor-input">
+        <InputDropDown
+          :title_label="'Select User'"
+          :placeholder="'user account 1'"
+          :invalid_text="error_text.user"
+          :input_width="400"
+          :value:sync="user_details.user"
+          :disabled="disallow_entry_user"
+          :options_text="stored_usernames"
+          :options_id="'user-account-'"
+          @update:value="on_update_input($event, 'user')"
+        />
+      </div>
+      <div class="div__settingsform-editor-input">
+        <InputWidget
+          :title_label="'Enter Password'"
+          :placeholder="'****'"
+          :invalid_text="error_text.password"
+          :type="'password'"
+          :spellcheck="false"
+          :initial_value="''"
+          :container_background_color="'rgba(0, 0, 0)'"
+          :input_background_color="'#1c1c1c'"
+          :input_width="400"
+          :dom_id_suffix="'passkey-id'"
+          @update:value="on_update_input($event, 'password')"
+        />
+      </div>
+      <div
+        class="div__settings-login-btn"
+        :class="[
+          is_login_enabled
+            ? 'div__settings-tool-tip-login-btn-enable'
+            : 'div__settings-tool-tip-login-btn-disable',
+        ]"
+      >
+        <span
+          class="span__settings-tool-tip-login-btn-txt"
+          :class="[
+            is_login_enabled
+              ? 'span__settings-tool-tip-login-btn-txt-enable'
+              : 'span__settings-tool-tip-login-btn-txt-disable',
+          ]"
+          @click="login_user()"
+          >Login</span
         >
       </div>
     </div>
-    <div class="div__settingsform-user-add-btn" width="285" height="45">
-      <span class="span__settingsform-user-add-btn_txt">
-        <b-button
-          id="add-a-user"
-          v-b-modal.add-user
-          squared
-          class="w-100 h-100 edit-id"
-          style="background-color: #3f3f3f; border: 0px; color: #ececed"
-        >
-          Add&nbsp;<wbr />New&nbsp;<wbr />User</b-button
-        >
-        <b-modal id="add-user" size="sm" hide-footer hide-header hide-header-close>
-          <AddUser @cancel-id="$bvModal.hide('add-user')" @save-id="save_new_user" />
-        </b-modal>
-      </span>
-    </div>
-    <canvas class="canvas__settings-title-separator" width="510" height="20"> </canvas>
     <span class="span__settingsform-record-file-settings">
       Recorded&nbsp;<wbr />File&nbsp;<wbr />Settings</span
     >
     <span class="span__settingsform_auto-upload-settings"
       >Auto&nbsp;<wbr />Upload&nbsp;<wbr />Files&nbsp;<wbr />to&nbsp;<wbr />Cloud</span
     >
-    <div class="div__settingsform-toggle-icon" width="62" height="34">
+    <div class="div__settingsform-toggle-icon">
       <ToggleWidget
         id="auto_upload_switch"
-        :checked_state="auto_upload"
+        :checked_state="user_settings.auto_upload"
         :label="'auto_upload'"
-        :disabled="job_limit_reached"
+        :disabled="!is_user_logged_in || jobs_reached"
         @handle_toggle_state="handle_toggle_state"
       />
+      <div
+        v-if="!is_user_logged_in"
+        v-b-popover.hover.top="'Must be logged in'"
+        class="div__tooltip-container"
+      />
     </div>
-    <div v-show="!auto_upload" class="div__pulse3d-input-blocker"></div>
+    <div
+      v-show="!user_settings.auto_upload || !is_user_logged_in"
+      v-b-popover.hover.top="!is_user_logged_in ? 'Must be logged in' : 'Auto-upload must be enabled'"
+      class="div__pulse3d-input-blocker"
+    />
     <span class="span__settingsform_pulse3d-version-settings">Pulse3D&nbsp;<wbr />Version</span>
     <div class="div__settingsform-dropdown">
       <SmallDropDown
         :input_height="25"
         :input_width="80"
-        :disable_selection="false"
+        :disable_selection="!is_user_logged_in"
         :options_text="sorted_pulse3d_versions"
-        :options_idx="pulse3d_focus_idx"
+        :options_idx="user_settings.pulse3d_focus_idx"
         :dom_id_suffix="'pulse3d_version'"
         @selection-changed="handle_pulse3d_selection_change"
       />
@@ -90,44 +104,50 @@
     <span class="span__settingsform-delete-local-files-after-upload_txt"
       >Delete&nbsp;<wbr />Local&nbsp;<wbr />Files&nbsp;<wbr />After&nbsp;<wbr />Uploaded&nbsp;<wbr />to&nbsp;<wbr />Cloud</span
     >
-    <div class="div__settingsform-toggle-icon-2" width="62" height="34">
+    <div class="div__settingsform-toggle-icon-2">
       <ToggleWidget
         id="auto_delete_switch"
-        :checked_state="auto_delete"
+        :checked_state="user_settings.auto_delete"
         :label="'auto_delete'"
-        :disabled="disable_delete_toggle"
+        :disabled="disable_settings"
         @handle_toggle_state="handle_toggle_state"
       />
+      <div v-b-popover.hover.top="'(Unavailable)'" class="div__tooltip-container" />
     </div>
 
     <span v-if="beta_2_mode" class="span__settingsform-show-recording-snapshot-text"
       >Show&nbsp;<wbr />Snapshot&nbsp;<wbr />After&nbsp;<wbr />Recording</span
     >
-    <div v-if="beta_2_mode" class="div__settingsform-toggle-icon-3" width="62" height="34">
+    <div v-if="beta_2_mode" class="div__settingsform-toggle-icon-3">
       <ToggleWidget
         id="recording_snapshot_switch"
-        :checked_state="recording_snapshot_state"
+        :checked_state="user_settings.recording_snapshot"
         :label="'recording_snapshot_state'"
         @handle_toggle_state="handle_toggle_state"
       />
+      <div
+        v-if="!is_user_logged_in"
+        v-b-popover.hover.top="'Must be logged in'"
+        class="div__tooltip-container"
+      />
     </div>
 
-    <canvas class="canvas__settings-file-upload-separator" width="512" height="22"> </canvas>
-    <div class="div__settings-tool-tip-cancel-btn" width="180" height="55" @click="cancel_changes">
+    <canvas class="canvas__settings-file-upload-separator" />
+    <div class="div__settings-tool-tip-cancel-btn" @click="cancel_changes">
       <span class="span__settings-tool-tip-cancel-btn-txt">Cancel</span>
     </div>
     <div
       class="div__settings-tool-tip-reset-btn"
       :class="[
-        user_found ? 'div__settings-tool-tip-reset-btn-enable' : 'div__settings-tool-tip-reset-btn-disable',
+        is_user_logged_in
+          ? 'div__settings-tool-tip-reset-btn-enable'
+          : 'div__settings-tool-tip-reset-btn-disable',
       ]"
-      width="180"
-      height="55"
     >
       <span
         class="span__settings-tool-tip-reset-btn-txt"
         :class="[
-          user_found
+          is_user_logged_in
             ? 'span__settings-tool-tip-reset-btn-txt-enable'
             : 'span__settings-tool-tip-reset-btn-txt-disable',
         ]"
@@ -138,16 +158,16 @@
     <div
       class="div__settings-tool-tip-save-btn"
       :class="[
-        user_found ? 'div__settings-tool-tip-save-btn-enable' : 'div__settings-tool-tip-save-btn-disable',
+        is_user_logged_in
+          ? 'div__settings-tool-tip-save-btn-enable'
+          : 'div__settings-tool-tip-save-btn-disable',
       ]"
-      width="180"
-      height="55"
     >
-      <canvas class="canvas__settings-tool-tip-save-btn" width="180" height="55"> </canvas>
+      <canvas class="canvas__settings-tool-tip-save-btn" />
       <span
         class="span__settings-tool-tip-save-btn-txt"
         :class="[
-          user_found
+          is_user_logged_in
             ? 'span__settings-tool-tip-save-btn-txt-enable'
             : 'span__settings-tool-tip-save-btn-txt-disable',
         ]"
@@ -170,153 +190,128 @@ import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
-import AddUser from "@/components/settings/AddUser.vue";
-import EditUser from "@/components/settings/EditUser.vue";
 import InputDropDown from "@/components/basic_widgets/InputDropDown.vue";
 import ToggleWidget from "@/components/basic_widgets/ToggleWidget.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
-
+import InputWidget from "@/components/basic_widgets/InputWidget.vue";
+import { VBPopover } from "bootstrap-vue";
 import semver_sort from "semver-sort";
 
 Vue.use(BootstrapVue);
 Vue.component("BButton", BButton);
 Vue.component("BModal", BModal);
 Vue.component("BFormInput", BFormInput);
+Vue.directive("b-popover", VBPopover);
 
 export default {
   name: "SettingsForm",
   components: {
-    AddUser,
-    EditUser,
     InputDropDown,
     ToggleWidget,
     SmallDropDown,
+    InputWidget,
   },
   data() {
     return {
       user_focus_idx: 0,
-      disable_edit_user: true,
-      label_user: "User Selection",
-      entrykey_user: "",
-      key_placeholder_user: "Select User",
-      error_text_user: "An ID is required",
-      entry_width_user: 283,
+      disable_settings: true,
       disallow_entry_user: false,
-      user_found: false,
-      open_for_invalid_creds: false,
-      auto_upload: false,
-      pulse3d_focus_idx: 0,
-      auto_delete: false,
-      disable_delete_toggle: true,
-      recording_snapshot_state: true,
+      invalid_creds_found: false,
+      user_settings: {
+        auto_upload: false,
+        pulse3d_focus_idx: 0,
+        auto_delete: false,
+        recording_snapshot: true,
+      },
+      user_details: {
+        customer_id: "",
+        password: "",
+        user: "",
+      },
     };
   },
   computed: {
     ...mapState("settings", [
       "beta_2_mode",
-      "user_accounts",
-      "active_user_index",
+      "user_account",
       "stored_customer_id",
       "pulse3d_versions",
       "pulse3d_version_selection_index",
       "job_limit_reached",
+      "stored_usernames",
     ]),
-    get_user_names: function () {
-      return this.user_accounts.map((user_account) => user_account.user_name);
-    },
     sorted_pulse3d_versions: function () {
       return semver_sort.desc(this.pulse3d_versions);
     },
+    is_login_enabled: function () {
+      return !Object.values(this.error_text).some((val) => val !== "");
+    },
+    error_text: function () {
+      return this.invalid_creds_found
+        ? {
+            customer_id: "Invalid Customer ID, Username, or Password",
+            user: "Invalid Customer ID, Username, or Password",
+            password: "Invalid Customer ID, Username, or Password",
+          }
+        : {
+            customer_id:
+              this.user_details.customer_id && this.user_details.customer_id !== "" ? "" : "Required",
+            user: this.user_details.user && this.user_details.user !== "" ? "" : "Required",
+            password: this.user_details.password && this.user_details.password !== "" ? "" : "Required",
+          };
+    },
+    is_user_logged_in: function () {
+      return this.user_account.customer_id && this.user_account.customer_id !== "";
+    },
   },
   watch: {
-    entrykey_user: function () {
-      const user_focus_idx = this.get_user_names.indexOf(this.entrykey_user);
-      this.user_found = this.entrykey_user !== "" && user_focus_idx !== -1;
-      if (this.user_found) {
-        this.user_focus_idx = user_focus_idx;
-      }
-      this.modify_btn_states();
-    },
     job_limit_reached: function () {
       if (this.job_limit_reached) {
-        this.auto_upload = false;
+        this.user_settings.auto_upload = false;
       }
     },
   },
   created: function () {
-    if (this.active_user_index != null) {
-      this.entrykey_user = this.user_accounts[this.active_user_index].user_name;
-      this.user_focus_idx = this.active_user_index;
-      this.disable_edit_user = false;
-      this.user_found = true;
-    }
-    this.pulse3d_focus_idx = this.pulse3d_version_selection_index;
+    this.user_settings.pulse3d_focus_idx = this.pulse3d_version_selection_index;
+    this.user_details = { ...this.user_account };
   },
   methods: {
     async save_changes() {
-      if (this.user_found) {
-        this.$store.commit("settings/set_active_user_index", this.user_focus_idx);
-        this.$store.commit("settings/set_auto_upload", this.auto_upload);
-        this.$store.commit("settings/set_auto_delete", this.auto_delete);
-        this.$store.commit("settings/set_recording_snapshot_state", this.recording_snapshot_state);
-        this.$store.commit("settings/set_pulse3d_version_selection_index", this.pulse3d_focus_idx);
-
-        const { status, data } = await this.$store.dispatch("settings/update_settings");
-
-        // Currently, error-handling by resetting inputs to force user to try again if axios request fails
-        if (status === 200) {
-          this.$store.commit("settings/set_job_limit_reached", data.usage_quota.jobs_reached);
-          this.$emit("close_modal", true);
-        } else if (status == 401) {
-          this.open_for_invalid_creds = true;
-          this.$bvModal.show("edit-user");
-        } else {
-          this.reset_changes();
-        }
+      await this.$store.dispatch("settings/update_settings", this.user_settings);
+      // storing separate and is always able to be saved
+      this.$store.commit("settings/set_recording_snapshot_state", this.user_settings.recording_snapshot);
+      // close modal always on save changes
+      this.$emit("close_modal", false);
+    },
+    async login_user() {
+      const { status, data } = await this.$store.dispatch("settings/login_user", this.user_details);
+      // Currently, error-handling by resetting inputs to force user to try again if axios request fails
+      if (status === 200) {
+        this.$store.commit("settings/set_job_limit_reached", data.usage_quota.jobs_reached);
+        this.$emit("close_modal", true);
+      } else if (status == 401) {
+        this.invalid_creds_found = true;
+      } else {
+        this.reset_changes();
       }
     },
+    on_update_input: function (new_value, field) {
+      this.invalid_creds_found = false;
+      this.user_details = { ...this.user_details, [field]: new_value };
+    },
     reset_changes() {
-      this.entrykey_user = "";
-      this.auto_delete = false;
-      this.auto_upload = false;
-      this.recording_snapshot_state = true;
-
-      this.$store.commit("settings/reset_to_default");
+      this.user_settings.auto_delete = false;
+      this.user_settings.auto_upload = false;
+      this.user_settings.recording_snapshot = true;
     },
     cancel_changes() {
       this.$emit("close_modal", false);
     },
-    save_new_user(new_user) {
-      this.$bvModal.hide("add-user");
-      this.user_accounts.push(new_user);
-      this.entrykey_user = new_user.user_name;
-    },
-    cancel_user_update() {
-      this.$bvModal.hide("edit-user");
-    },
-    apply_user_update(edited_user) {
-      this.$bvModal.hide("edit-user");
-      this.open_for_invalid_creds = false;
-      // need to use splice so that Vue will recognize that the array was updated
-      this.user_accounts.splice(this.user_focus_idx, 1, edited_user);
-      this.entrykey_user = edited_user.user_name;
-    },
-    delete_user() {
-      this.$bvModal.hide("edit-user");
-      this.open_for_invalid_creds = false;
-      // need to use splice so that Vue will recognize that the array was updated
-      this.user_accounts.splice(this.user_focus_idx, 1);
-      this.user_focus_idx = 0;
-      this.entrykey_user = "";
-    },
-    modify_btn_states() {
-      this.disable_edit_user = !this.user_found;
-    },
     handle_toggle_state: function (state, label) {
-      this[label] = state;
+      this.user_settings[label] = state;
     },
     handle_pulse3d_selection_change: function (idx) {
-      this.pulse3d_focus_idx = idx;
+      this.user_settings.pulse3d_focus_idx = idx;
     },
   },
 };
@@ -327,11 +322,14 @@ export default {
   left: 0px;
   background-color: rgba(0, 0, 0);
   width: 700px;
-  height: 545px;
+  height: 760px;
   position: absolute;
   overflow: hidden;
   pointer-events: none;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .span__settingsform-title {
@@ -339,10 +337,10 @@ export default {
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
-  position: absolute;
+  position: relative;
   width: 700px;
   height: 34px;
-  top: 13px;
+  margin-top: 13px;
   left: 0px;
   padding: 5px;
   visibility: visible;
@@ -358,153 +356,30 @@ export default {
   background-color: rgba(0, 0, 0);
 }
 
-.span__settingsform-user-sub-title {
-  pointer-events: all;
-  line-height: 100%;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 225px;
-  height: 30px;
-  top: 123.142px;
-  left: calc(734.511px - 734.511px);
-  padding: 5px;
-  visibility: visible;
-  user-select: none;
-  font-family: Muli;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 17px;
-  color: rgb(183, 183, 183);
-  text-align: right;
-  z-index: 21;
-}
-
 .div__settingsform-editor-input {
   pointer-events: all;
   white-space: nowrap;
   line-height: 100%;
   transform: rotate(0deg);
-  position: absolute;
-  width: 285px;
-  height: 45px;
-  top: 70.422px;
-  left: calc(962.145px - 734.511px);
+  position: relative;
+  width: 400px;
+  height: 100px;
   padding: 0px;
   visibility: visible;
   z-index: 55;
 }
 
-.div__settingsform-user-edit-btn {
-  pointer-events: all;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 88px;
-  height: 45px;
-  top: 112.422px;
-  left: calc(1258px - 734.511px);
-  visibility: visible;
-  z-index: 25;
-}
-
-.span__settingsform-user-edit-btn-txt {
-  padding-left: 0px;
-  padding-right: 0px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: center;
-  font-weight: normal;
-  transform: translateZ(0px);
-  position: absolute;
-  width: 88px;
-  height: 45px;
-  line-height: 47px;
-  top: 0px;
-  left: 0px;
-  user-select: none;
-  font-family: Muli;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 16px;
-  color: rgb(236, 236, 237);
-  background-color: #3f3f3f;
-  z-index: 55;
-}
-
-.span__settingsform-user-edit-btn-txt-disable {
-  padding-left: 0px;
-  padding-right: 0px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: center;
-  font-weight: normal;
-  transform: translateZ(0px);
-  position: absolute;
-  width: 88px;
-  height: 45px;
-  line-height: 47px;
-  top: 0px;
-  left: 0px;
-  user-select: none;
-  font-family: Muli;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 16px;
-  color: #6e6f72;
-  background-color: #3f3f3f;
-  z-index: 55;
-}
-
-.div__settingsform-user-add-btn {
-  pointer-events: all;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 285px;
-  height: 45px;
-  top: 172px;
-  left: calc(962.145px - 734.511px);
-  visibility: visible;
-  z-index: 25;
-}
-
-.span__settingsform-user-add-btn_txt {
-  padding-left: 0px;
-  padding-right: 0px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: center;
-  font-weight: normal;
-  transform: translateZ(0px);
-  position: absolute;
-  width: 285px;
-  height: 45px;
-  line-height: 47px;
-  top: 0px;
-  left: 0px;
-  user-select: none;
-  font-family: Muli;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 16px;
-  color: rgb(236, 236, 237);
-  background-color: #3f3f3f;
-}
-
 .canvas__settings-title-separator {
   transform: rotate(0deg);
   pointer-events: all;
-  position: absolute;
+  position: relative;
   width: 510px;
   height: 1px;
-  top: 56px;
-  left: 95px;
   visibility: visible;
   z-index: 11;
   background-color: #878d99;
   opacity: 0.5;
+  margin: 10px 0;
 }
 
 .span__settingsform-record-file-settings {
@@ -515,7 +390,7 @@ export default {
   position: absolute;
   width: 360px;
   height: 30px;
-  top: 253px;
+  top: 453px;
   left: calc(925px - 750.511px);
   padding: 5px;
   visibility: visible;
@@ -537,7 +412,7 @@ export default {
   position: absolute;
   width: 232px;
   height: 30px;
-  top: 291px;
+  top: 491px;
   left: calc(1026px - 775.511px);
   padding: 5px;
   visibility: visible;
@@ -555,11 +430,11 @@ export default {
   pointer-events: all;
   transform: rotate(0deg);
   overflow: hidden;
-  position: absolute;
+  position: relative;
   width: 62px;
   height: 34px;
-  top: 293px;
-  left: calc(961px - 775.511px);
+  top: 477px;
+  left: 171px;
   visibility: visible;
   z-index: 57;
   color: white;
@@ -569,14 +444,19 @@ export default {
   position: absolute;
   width: 285px;
   height: 30px;
-  top: 327px;
+  top: 527px;
   left: calc(1026px - 775.511px);
   visibility: visible;
   opacity: 0.5;
   background-color: black;
   z-index: 100;
 }
-
+.div__tooltip-container {
+  height: 30px;
+  top: -40px;
+  position: relative;
+  width: 50px;
+}
 .span__settingsform_pulse3d-version-settings {
   pointer-events: all;
   line-height: 100%;
@@ -585,7 +465,7 @@ export default {
   position: absolute;
   width: 285px;
   height: 30px;
-  top: 327px;
+  top: 527px;
   left: calc(1026px - 775.511px);
   padding: 5px;
   visibility: visible;
@@ -606,7 +486,7 @@ export default {
   position: absolute;
   width: 80px;
   height: 34px;
-  top: 327px;
+  top: 527px;
   left: calc(961px - 566px);
   visibility: visible;
   z-index: 57;
@@ -621,7 +501,7 @@ export default {
   position: absolute;
   width: 360px;
   height: 30px;
-  top: 363px;
+  top: 563px;
   left: calc(1026px - 775.511px);
   padding: 5px;
   visibility: visible;
@@ -642,7 +522,7 @@ export default {
   position: absolute;
   width: 360px;
   height: 30px;
-  top: 399px;
+  top: 599px;
   left: calc(1026px - 775.511px);
   padding: 5px;
   visibility: visible;
@@ -663,7 +543,7 @@ export default {
   position: absolute;
   width: 62px;
   height: 34px;
-  top: 364px;
+  top: 564px;
   left: calc(961px - 775.511px);
   visibility: visible;
   z-index: 45;
@@ -676,7 +556,7 @@ export default {
   position: absolute;
   width: 62px;
   height: 34px;
-  top: 399px;
+  top: 599px;
   left: calc(961px - 775.511px);
   visibility: visible;
   z-index: 45;
@@ -689,10 +569,21 @@ export default {
   position: absolute;
   width: 180px;
   height: 55px;
-  top: 475px;
+  top: 675px;
   left: 450px;
   visibility: visible;
   z-index: 55;
+  background-color: rgb(183, 183, 183);
+}
+
+.div__settings-login-btn {
+  pointer-events: all;
+  transform: rotate(0deg);
+  overflow: hidden;
+  position: relative;
+  width: 180px;
+  height: 55px;
+  margin: 12px 0;
   background-color: rgb(183, 183, 183);
 }
 .span__settings-tool-tip-cancel-btn-txt {
@@ -724,7 +615,7 @@ export default {
   position: absolute;
   width: 180px;
   height: 55px;
-  top: 475px;
+  top: 675px;
   left: 260px;
   visibility: visible;
   z-index: 55;
@@ -757,32 +648,49 @@ export default {
   position: absolute;
   width: 180px;
   height: 55px;
-  top: 475px;
+  top: 675px;
   left: 70px;
   visibility: visible;
   z-index: 55;
 }
 .div__settings-tool-tip-save-btn-enable,
+.div__settings-tool-tip-login-btn-enable,
 .div__settings-tool-tip-reset-btn-enable {
   background-color: rgb(183, 183, 183);
+  cursor: pointer;
 }
 
 .div__settings-tool-tip-save-btn-disable,
+.div__settings-tool-tip-login-btn-disable,
 .div__settings-tool-tip-reset-btn-disable {
   background-color: #b7b7b7c9;
 }
 
 .div__settings-tool-tip-save-btn-enable:hover {
   background-color: #19ac8a;
-  cursor: pointer;
 }
 
 .div__settings-tool-tip-reset-btn-enable:hover,
+.div__settings-tool-tip-login-btn-enable:hover,
 .div__settings-tool-tip-cancel-btn:hover {
   background-color: #b7b7b7c9;
   cursor: pointer;
 }
 
+.span__settings-tool-tip-btn-txt-disable {
+  color: #6e6f72;
+}
+
+.span__settings-tool-tip-save-btn-txt-disable,
+.span__settings-tool-tip-login-btn-txt-disable,
+.span__settings-tool-tip-reset-btn-txt-disable {
+  color: #6e6f72;
+}
+
+.span__settings-tool-tip-btn-txt-enable,
+.span__settings-tool-tip-btn-txt-enable {
+  color: rgb(0, 0, 0);
+}
 .canvas__settings-tool-tip-save-btn {
   -webkit-transform: translateZ(0);
   position: absolute;
@@ -791,6 +699,7 @@ export default {
   top: 0px;
   left: 0px;
 }
+.span__settings-tool-tip-login-btn-txt,
 .span__settings-tool-tip-save-btn-txt {
   padding-left: 5px;
   padding-right: 5px;
@@ -812,45 +721,18 @@ export default {
   font-size: 16px;
 }
 
-.span__settings-tool-tip-save-btn-txt-disable,
-.span__settings-tool-tip-reset-btn-txt-disable {
-  color: #6e6f72;
-}
-
-.span__settings-tool-tip-reset-btn-txt-enable,
-.span__settings-tool-tip-save-btn-txt-enable {
-  color: rgb(0, 0, 0);
-}
-
 .canvas__settings-file-upload-separator {
   transform: rotate(0deg);
   pointer-events: all;
   position: absolute;
   width: 512px;
   height: 1px;
-  top: 454px;
+  top: 645px;
   left: 95px;
   visibility: visible;
   background-color: #878d99;
   opacity: 0.5;
   z-index: 33;
-}
-
-.modal-backdrop {
-  background-color: rgb(0, 0, 0, 0.5);
-}
-
-.modal {
-  position: fixed;
-  top: 15%;
-  left: -25%;
-}
-
-.btn {
-  padding-bottom: 0;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 0;
 }
 
 .form-control {
@@ -872,15 +754,5 @@ datalist {
   background: #2f2f2f;
   font: 17px Muli;
   color: #ececed;
-}
-#add-user,
-#edit-user,
-#add-user,
-#edit-user {
-  position: fixed;
-  margin: 5% auto;
-  top: 15%;
-  left: 0;
-  right: 0;
 }
 </style>

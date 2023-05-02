@@ -22,15 +22,12 @@ export default {
     state.shutdown_error_status = error;
     state.shutdown_error_message = error;
   },
-  set_user_accounts(state, new_value) {
-    state.user_accounts = new_value;
+  set_user_account(state, new_value) {
+    state.user_account = { ...new_value };
   },
   set_stored_accounts(state, { customer_id, usernames }) {
     state.stored_customer_id = customer_id;
     state.stored_usernames = usernames;
-  },
-  set_active_user_index(state, new_value) {
-    state.active_user_index = new_value;
   },
   set_file_count(state) {
     state.file_count += 1;

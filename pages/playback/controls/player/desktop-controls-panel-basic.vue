@@ -203,7 +203,7 @@ export default {
   },
   computed: {
     ...mapState("settings", [
-      "user_accounts",
+      "user_account",
       "active_user_index",
       "allow_sw_update_install",
       "recordings_list",
