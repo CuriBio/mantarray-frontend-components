@@ -13,7 +13,7 @@ export default {
     };
 
     const { status } = await call_axios_get_from_vuex(url, context, params);
-    if (status === 200) {
+    if (status === 204) {
       this.commit("settings/set_auto_upload", auto_upload);
       this.commit("settings/set_auto_delete", auto_delete);
       this.commit("settings/set_pulse3d_version_selection_index", pulse3d_focus_idx);

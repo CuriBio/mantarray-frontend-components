@@ -122,7 +122,7 @@
       <ToggleWidget
         id="recording_snapshot_switch"
         :checked_state="user_settings.recording_snapshot"
-        :label="'recording_snapshot_state'"
+        :label="'recording_snapshot'"
         @handle_toggle_state="handle_toggle_state"
       />
       <div
@@ -151,7 +151,7 @@
             ? 'span__settings-tool-tip-reset-btn-txt-enable'
             : 'span__settings-tool-tip-reset-btn-txt-disable',
         ]"
-        @click="reset_changes()"
+        @click="reset_to_default()"
         >Reset&nbsp;<wbr />to&nbsp;<wbr />Defaults</span
       >
     </div>
@@ -239,6 +239,9 @@ export default {
       "pulse3d_version_selection_index",
       "job_limit_reached",
       "stored_usernames",
+      "auto_upload",
+      "auto_delete",
+      "run_recording_snapshot_default",
     ]),
     sorted_pulse3d_versions: function () {
       return semver_sort.desc(this.pulse3d_versions);
@@ -271,10 +274,6 @@ export default {
       }
     },
   },
-  created: function () {
-    this.user_settings.pulse3d_focus_idx = this.pulse3d_version_selection_index;
-    this.user_details = { ...this.user_account };
-  },
   methods: {
     async save_changes() {
       await this.$store.dispatch("settings/update_settings", this.user_settings);
@@ -292,20 +291,31 @@ export default {
       } else if (status == 401) {
         this.invalid_creds_found = true;
       } else {
-        this.reset_changes();
+        this.reset_to_default();
       }
+
+      // this protects if a user toggles the rec settings, but clicks login instead of save
+      this.reset_to_stored_state();
     },
     on_update_input: function (new_value, field) {
       this.invalid_creds_found = false;
       this.user_details = { ...this.user_details, [field]: new_value };
     },
-    reset_changes() {
+    reset_to_default() {
       this.user_settings.auto_delete = false;
       this.user_settings.auto_upload = false;
       this.user_settings.recording_snapshot = true;
     },
     cancel_changes() {
+      this.reset_to_stored_state();
       this.$emit("close_modal", false);
+    },
+    reset_to_stored_state() {
+      // reset to existing stored state, that can still be different than initial default state, so don't call reset_to_default
+      this.user_settings.auto_delete = this.auto_delete;
+      this.user_settings.auto_upload = this.auto_upload;
+      this.user_settings.recording_snapshot = this.run_recording_snapshot_default;
+      this.user_settings.pulse3d_focus_idx = this.pulse3d_version_selection_index;
     },
     handle_toggle_state: function (state, label) {
       this.user_settings[label] = state;
