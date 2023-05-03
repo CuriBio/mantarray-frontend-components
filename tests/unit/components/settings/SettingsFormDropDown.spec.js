@@ -4,8 +4,6 @@ import ComponentToTest from "@/components/settings/SettingsForm.vue";
 import Vuex from "vuex";
 import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { array_of_user_accounts } from "./SettingsFormUserData.js";
 
 let wrapper = null;
 
@@ -33,11 +31,6 @@ describe("SettingsForm.vue", () => {
 
   afterEach(() => wrapper.destroy());
   describe("Given Vuex has valid customer and user accounts but no customer index or user index selected", () => {
-    beforeEach(() => {
-      // commit a deep copy of the template object to the Vuex store using JSON stringify/parse, as it may be modified during tests. https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
-      store.commit("settings/set_user_accounts", JSON.parse(JSON.stringify(array_of_user_accounts)));
-    });
-
     test("When the SettingsForm is mounted, Then the dropDown of customer contains the user_namess from Vuex", () => {
       wrapper = mount(ComponentToTest, {
         store,
