@@ -1,11 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.4.10 (unreleased)
+1.4.10 (2023-05-02)
 -------------------
 
 Added:
+^^^^^^
 - Exit button in plate map editor that returns you to live view
+
+Fixed:
+^^^^^^
+- Stim button is now disabled if no plate barcode is present
 
 
 1.4.9 (2023-04-21)
