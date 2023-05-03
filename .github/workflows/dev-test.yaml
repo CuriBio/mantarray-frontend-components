@@ -20,25 +20,12 @@ jobs:
           - "windows-2022"
         node-version:
           - 16
-        e2e-tests: # TODO (Eli 10/5/20): figure out a more robust way to ensure all subfolders are covered (maybe using the fixture.meta flag and a pre-commit hook to ensure all tests have one...or with the file glob pattern...)
-          - "tests/e2e/playback"
-          - "tests/e2e/status"
-          - "tests/e2e/waveforms"
-          - "tests/e2e/settings"
-          - "tests/e2e/basic_widgets"
-          - "tests/e2e/plate_based_widgets"
-          # - "tests/e2e/heatmap"
-          # - "tests/e2e/stimulation"
-
         include:
           # only enable coverage on the fastest job
           - os: "ubuntu-22.04"
             node-version: "16"
-            e2e-tests: "tests/e2e/status"
             IS_FASTEST_JOB: true
-          - e2e-tests: "tests/e2e/status"
-            IS_FASTEST_E2E_SUITE: true
-    name: Node.js ${{ matrix.node-version }} on ${{ matrix.os }} for E2E test suite ${{ matrix.e2e-tests }}
+    name: Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -120,17 +107,6 @@ jobs:
         env:
           TEST_ENV: CI
         run: npm run test:unit-no-prebuild -- --ci --verbose
-
-      # - name: Run E2E Tests (Windows)
-      #   if: matrix.IS_WINDOWS == true
-      #   run: npx testcafe chrome:headless:emulation:width=1920;height=930;cdpPort=9223; ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app "npm run dev" --app-init-delay 35000
-
-      - name: Run E2E Tests (Linux)
-        if: runner.os == 'Linux'
-        uses: CuriBio/testcafe-action@v0.0.6
-        with:
-          skip-install: true
-          args: '"chrome:headless:emulation:width=1920;height=930;cdpPort=9223;" ${{ matrix.e2e-tests }} --screenshots path=./tests/e2e/screenshots --app ''node ./node_modules/@curi-bio/frontend-test-utils/check-engines.js && cross-env-shell NODE_ENV=development nuxt dev --spa'' --app-init-delay 45000'
 
       - name: Confirm Sphinx Docs build correctly
         # only check Sphinx docs build on the fastest job
