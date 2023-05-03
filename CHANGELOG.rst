@@ -1,11 +1,20 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.4.10 (unreleased)
+1.5.0 (unreleased)
 -------------------
 
 Added:
+^^^^^^
 - Exit button in plate map editor that returns you to live view
+
+Changed:
+^^^^^^^^
+- New login flow
+
+Removed:
+^^^^^^^^
+- `AddUser` and `EditUser` modals
 
 
 1.4.9 (2023-04-21)

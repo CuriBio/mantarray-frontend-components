@@ -30,7 +30,7 @@
           :disabled="disabled"
           class="w-100 h-100 edit-id"
           :style="`border-radius: 0; background-color: ${input_background_color}; border: 0px; color: #ffffff`"
-        ></b-form-input>
+        />
         <datalist v-if="dropdown_options.length" :id="'option_list' + options_id">
           <option v-for="item in dropdown_options" :id="item.id" :key="item.id">
             {{ item.name }}
@@ -131,6 +131,7 @@ body {
   margin: 0px;
   position: absolute;
   top: 0px;
+  display: flex;
   left: 0px;
   visibility: visible;
   border-radius: 0px;

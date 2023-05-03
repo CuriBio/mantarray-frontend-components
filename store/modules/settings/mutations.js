@@ -41,11 +41,6 @@ export default {
   set_auto_delete(state, new_value) {
     state.auto_delete = new_value;
   },
-  reset_to_default(state) {
-    state.auto_upload = false;
-    state.active_user_index = null;
-    state.auto_delete = false;
-  },
   set_upload_error(state, type) {
     state.upload_error = type;
   },

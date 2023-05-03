@@ -12,7 +12,7 @@
           :dom_id_suffix="'recording-name'"
           :initial_value="default_recording_name"
           @update:value="check_recording_name($event)"
-        ></InputWidget>
+        />
       </div>
       <div v-if="beta_2_mode" class="div__toggle-container">
         <ToggleWidget

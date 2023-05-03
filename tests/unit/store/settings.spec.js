@@ -4,7 +4,11 @@ import { settings_store_module } from "@/dist/mantarray.common";
 import * as axios_helpers from "../../../js_utils/axios_helpers.js";
 import axios from "axios";
 const MockAxiosAdapter = require("axios-mock-adapter");
-
+const test_user_account = {
+  customer_id: "4vqyd62oARXqj9nRUNhtLQ",
+  password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
+  user: "User account -1",
+};
 describe("store/settings", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -28,58 +32,17 @@ describe("store/settings", () => {
     jest.clearAllMocks();
   });
 
-  test("When initialized, Then the user_accounts is an empty with no value assigned", () => {
-    const array_of_user_accounts = store.state.settings.user_accounts;
-    expect(array_of_user_accounts).toHaveLength(0);
+  test("When initialized, Then the user_account is an empty object with no value assigned", () => {
+    expect(store.state.settings.user_account).toStrictEqual({});
   });
-  test("When initialized, Then the user_accounts when accessed via settings_store_module is an empty with no value assigned", () => {
-    const array_of_user_accounts = settings_store_module.state().user_accounts;
-    expect(array_of_user_accounts).toHaveLength(0);
-  });
+
   test("When initialized, Then the file_count and total_file_count is zero 0 as with no value assigned", () => {
     const value = store.state.settings.file_count;
     const max = store.state.settings.total_file_count;
     expect(value).toStrictEqual(0);
     expect(max).toStrictEqual(0);
   });
-  test("When initialized the array of user_accounts is empty and size 0, Then commit a single valid user_account as the first record in user_accounts, active_user_index/active_user_index and assert the same", () => {
-    const array_of_user_accounts = [
-      {
-        customer_id: "4vqyd62oARXqj9nRUNhtLQ",
-        user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        user_name: "User account -1",
-      },
-    ];
-    expect(store.state.settings.user_accounts).toHaveLength(0);
-    store.commit("settings/set_user_accounts", array_of_user_accounts);
-    store.commit("settings/set_active_user_index", 0);
-    expect(
-      store.state.settings.user_accounts[store.state.settings.active_user_index].customer_id
-    ).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
-    expect(
-      store.state.settings.user_accounts[store.state.settings.active_user_index].user_password
-    ).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
-    expect(
-      store.state.settings.user_accounts[store.state.settings.active_user_index].user_name
-    ).toStrictEqual("User account -1");
-  });
-  test("When initialized the array of user_accounts is empty and size 0, Then commit an array of customer details in user_accounts and assert the number of customer records", () => {
-    const array_of_user_accounts = [
-      {
-        customer_id: "4vqyd62oARXqj9nRUNhtLQ",
-        user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        user_name: "User account -1",
-      },
-      {
-        customer_id: "6cBaidlJ84Ggc5JA7IYCgv",
-        user_password: "941532a0-6be1-443a-cdee-d57bdf180a52",
-        user_name: "User account -1",
-      },
-    ];
-    expect(store.state.settings.user_accounts).toHaveLength(0);
-    store.commit("settings/set_user_accounts", array_of_user_accounts);
-    expect(store.state.settings.user_accounts).toHaveLength(2);
-  });
+
   test("Given the store has multiple customer details, When the mutation deletes one Customer details, Then validate the number of the customer decrements by one", () => {
     /* ========================== */
     /* |  Settings.vue          | */
@@ -89,62 +52,13 @@ describe("store/settings", () => {
     /* |  (SaveChanges)         |                ======================== */
     /* ========================== */
 
-    const array_of_user_accounts = [
-      {
-        customer_id: "4vqyd62oARXqj9nRUNhtLQ",
-        user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        user_name: "User account -1",
-      },
-      {
-        customer_id: "6cBaidlJ84Ggc5JA7IYCgv",
-        user_password: "941532a0-6be1-443a-cdee-d57bdf180a52",
-        user_name: "User account -2",
-      },
-    ];
-    expect(store.state.settings.user_accounts).toHaveLength(0);
-    store.commit("settings/set_user_accounts", array_of_user_accounts);
+    store.commit("settings/set_user_account", test_user_account);
 
     /* User now does Edit Customer Click on the "User account - 1*/
-    store.commit("settings/set_active_user_index", 0);
-    const current_focus_customerid = store.state.settings.user_accounts[0];
-    expect(current_focus_customerid.user_name).toStrictEqual("User account -1");
+    const current_focus_customerid = store.state.settings.user_account;
+    expect(current_focus_customerid.user).toStrictEqual("User account -1");
     expect(current_focus_customerid.customer_id).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
-    expect(current_focus_customerid.user_password).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
-    /*  (Delete ID) selected */
-    const current_customerids = store.state.settings.user_accounts;
-    const focus_active_user_index = store.state.settings.active_user_index;
-    /* Javascript array provides an internal api array.splice(idx,1)  so we delete object in array and store in Vuex*/
-    current_customerids.splice(focus_active_user_index, 1);
-    /*  (SaveChanges) selected */
-    store.commit("settings/set_user_accounts", current_customerids);
-    const updated_focus_customerid = store.state.settings.user_accounts[0];
-    expect(updated_focus_customerid.customer_id).toStrictEqual("6cBaidlJ84Ggc5JA7IYCgv");
-    expect(updated_focus_customerid.user_password).toStrictEqual("941532a0-6be1-443a-cdee-d57bdf180a52");
-    expect(updated_focus_customerid.user_name).toStrictEqual("User account -2");
-    expect(store.state.settings.user_accounts).toHaveLength(1);
-  });
-  test("When a user resets the settings form, Then the mutation will only reset current selection and toggle switches and will not reset existing IDs", async () => {
-    const array_of_user_accounts = [
-      {
-        customer_id: "4vqyd62oARXqj9nRUNhtLQ",
-        user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-        user_name: "User account -1",
-      },
-    ];
-
-    store.commit("settings/set_user_accounts", array_of_user_accounts);
-    expect(store.state.settings.user_accounts).toHaveLength(1);
-    store.commit("settings/set_active_user_index", 0);
-
-    store.commit("settings/set_auto_upload", true);
-    store.commit("settings/set_auto_delete", true);
-
-    await store.commit("settings/reset_to_default");
-
-    expect(store.state.settings.user_accounts).toHaveLength(1);
-    expect(store.state.settings.auto_delete).toBe(false);
-    expect(store.state.settings.auto_upload).toBe(false);
-    expect(store.state.settings.active_user_index).toBeNull();
+    expect(current_focus_customerid.password).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
   });
 
   test("When the app is created and the user's log path is committed, Then the base downloads path also gets updated with user_name", async () => {
@@ -185,18 +99,7 @@ describe("store/settings", () => {
         };
       });
 
-      const array_of_user_accounts = [
-        {
-          customer_id: "4vqyd62oARXqj9nRUNhtLQ",
-          user_password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-          user_name: "User account -1",
-        },
-      ];
-
-      store.commit("settings/set_user_accounts", array_of_user_accounts);
-      store.commit("settings/set_active_user_index", 0);
-
-      const { status } = await store.dispatch("settings/update_settings");
+      const { status } = await store.dispatch("settings/login_user", test_user_account);
       expect(status).toBe(200);
     });
     test.each([true, false])(

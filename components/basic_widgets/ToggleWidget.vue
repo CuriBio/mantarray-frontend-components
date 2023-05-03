@@ -1,7 +1,7 @@
 <template>
   <label class="switch">
     <input
-      id="toggle_input"
+      :id="`toggle_input_${label}`"
       type="checkbox"
       :checked="checked"
       :disabled="disabled"
@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     slider__slider_dynamic_style: function () {
-      return this.disabled ? "cursor: default" : "cursor: pointer";
+      return this.disabled ? "cursor: default;" : "cursor: pointer";
     },
   },
   watch: {
@@ -44,7 +44,7 @@ export default {
   },
 };
 </script>
-<style type="text/css">
+<style scoped>
 .switch {
   position: relative;
   display: inline-block;
@@ -62,7 +62,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #4c4c4c;
+  background-color: hsla(0, 0%, 30%, 0.652);
   -webkit-transition: 0.6s;
   transition: 0.6s;
 }
@@ -100,5 +100,13 @@ input:checked + .slider:before {
 
 .round:before {
   border-radius: 50%;
+}
+
+input:disabled + .slider {
+  background-color: #302f2f;
+}
+
+input:disabled + .slider:before {
+  background-color: #424242;
 }
 </style>

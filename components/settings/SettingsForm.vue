@@ -59,10 +59,13 @@
               ? 'span__settings-tool-tip-login-btn-txt-enable'
               : 'span__settings-tool-tip-login-btn-txt-disable',
           ]"
-          @click="login_user()"
+          @click="login_user"
           >Login</span
         >
       </div>
+    </div>
+    <div v-if="is_user_logged_in" class="div__logged_in_text">
+      <FontAwesomeIcon :icon="['fa', 'check']" style="margin-right: 7px" />Success
     </div>
     <span class="span__settingsform-record-file-settings">
       Recorded&nbsp;<wbr />File&nbsp;<wbr />Settings</span
@@ -75,12 +78,12 @@
         id="auto_upload_switch"
         :checked_state="user_settings.auto_upload"
         :label="'auto_upload'"
-        :disabled="!is_user_logged_in || jobs_reached"
+        :disabled="!is_user_logged_in || job_limit_reached"
         @handle_toggle_state="handle_toggle_state"
       />
       <div
         v-if="!is_user_logged_in"
-        v-b-popover.hover.top="'Must be logged in'"
+        v-b-popover.hover.left="'Must be logged in'"
         class="div__tooltip-container"
       />
     </div>
@@ -101,20 +104,20 @@
         @selection-changed="handle_pulse3d_selection_change"
       />
     </div>
-    <span class="span__settingsform-delete-local-files-after-upload_txt"
-      >Delete&nbsp;<wbr />Local&nbsp;<wbr />Files&nbsp;<wbr />After&nbsp;<wbr />Uploaded&nbsp;<wbr />to&nbsp;<wbr />Cloud</span
-    >
-    <div class="div__settingsform-toggle-icon-2">
-      <ToggleWidget
-        id="auto_delete_switch"
-        :checked_state="user_settings.auto_delete"
-        :label="'auto_delete'"
-        :disabled="disable_settings"
-        @handle_toggle_state="handle_toggle_state"
-      />
-      <div v-b-popover.hover.top="'(Unavailable)'" class="div__tooltip-container" />
+    <div v-if="show_auto_delete">
+      <span class="span__settingsform-delete-local-files-after-upload_txt"
+        >Delete&nbsp;<wbr />Local&nbsp;<wbr />Files&nbsp;<wbr />After&nbsp;<wbr />Uploaded&nbsp;<wbr />to&nbsp;<wbr />Cloud</span
+      >
+      <div class="div__settingsform-toggle-icon-2">
+        <ToggleWidget
+          id="auto_delete_switch"
+          :checked_state="user_settings.auto_delete"
+          :label="'auto_delete'"
+          :disabled="disable_settings"
+          @handle_toggle_state="handle_toggle_state"
+        />
+      </div>
     </div>
-
     <span v-if="beta_2_mode" class="span__settingsform-show-recording-snapshot-text"
       >Show&nbsp;<wbr />Snapshot&nbsp;<wbr />After&nbsp;<wbr />Recording</span
     >
@@ -123,37 +126,19 @@
         id="recording_snapshot_switch"
         :checked_state="user_settings.recording_snapshot"
         :label="'recording_snapshot'"
+        :disabled="!is_user_logged_in"
         @handle_toggle_state="handle_toggle_state"
       />
       <div
         v-if="!is_user_logged_in"
-        v-b-popover.hover.top="'Must be logged in'"
+        v-b-popover.hover.left="'Must be logged in'"
         class="div__tooltip-container"
       />
     </div>
 
     <canvas class="canvas__settings-file-upload-separator" />
     <div class="div__settings-tool-tip-cancel-btn" @click="cancel_changes">
-      <span class="span__settings-tool-tip-cancel-btn-txt">Cancel</span>
-    </div>
-    <div
-      class="div__settings-tool-tip-reset-btn"
-      :class="[
-        is_user_logged_in
-          ? 'div__settings-tool-tip-reset-btn-enable'
-          : 'div__settings-tool-tip-reset-btn-disable',
-      ]"
-    >
-      <span
-        class="span__settings-tool-tip-reset-btn-txt"
-        :class="[
-          is_user_logged_in
-            ? 'span__settings-tool-tip-reset-btn-txt-enable'
-            : 'span__settings-tool-tip-reset-btn-txt-disable',
-        ]"
-        @click="reset_to_default()"
-        >Reset&nbsp;<wbr />to&nbsp;<wbr />Defaults</span
-      >
+      <span class="span__settings-tool-tip-cancel-btn-txt">Close</span>
     </div>
     <div
       class="div__settings-tool-tip-save-btn"
@@ -181,11 +166,8 @@
 import Vue from "vue";
 import { mapState } from "vuex";
 import { library } from "@fortawesome/fontawesome-svg-core";
-
-import { faKey as fa_key } from "@fortawesome/free-solid-svg-icons";
-
-library.add(fa_key);
-
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faCheck as fa_check } from "@fortawesome/free-solid-svg-icons";
 import BootstrapVue from "bootstrap-vue";
 import { BButton } from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
@@ -202,6 +184,7 @@ Vue.component("BButton", BButton);
 Vue.component("BModal", BModal);
 Vue.component("BFormInput", BFormInput);
 Vue.directive("b-popover", VBPopover);
+library.add(fa_check);
 
 export default {
   name: "SettingsForm",
@@ -210,6 +193,7 @@ export default {
     ToggleWidget,
     SmallDropDown,
     InputWidget,
+    FontAwesomeIcon,
   },
   data() {
     return {
@@ -217,6 +201,7 @@ export default {
       disable_settings: true,
       disallow_entry_user: false,
       invalid_creds_found: false,
+      show_auto_delete: false,
       user_settings: {
         auto_upload: false,
         pulse3d_focus_idx: 0,
@@ -276,22 +261,19 @@ export default {
   },
   methods: {
     async save_changes() {
-      await this.$store.dispatch("settings/update_settings", this.user_settings);
+      this.$store.dispatch("settings/update_settings", this.user_settings);
       // storing separate and is always able to be saved
       this.$store.commit("settings/set_recording_snapshot_state", this.user_settings.recording_snapshot);
       // close modal always on save changes
-      this.$emit("close_modal", false);
+      this.$emit("close_modal", true);
     },
     async login_user() {
       const { status, data } = await this.$store.dispatch("settings/login_user", this.user_details);
       // Currently, error-handling by resetting inputs to force user to try again if axios request fails
       if (status === 200) {
         this.$store.commit("settings/set_job_limit_reached", data.usage_quota.jobs_reached);
-        this.$emit("close_modal", true);
-      } else if (status == 401) {
+      } else if (status === 401) {
         this.invalid_creds_found = true;
-      } else {
-        this.reset_to_default();
       }
 
       // this protects if a user toggles the rec settings, but clicks login instead of save
@@ -301,14 +283,10 @@ export default {
       this.invalid_creds_found = false;
       this.user_details = { ...this.user_details, [field]: new_value };
     },
-    reset_to_default() {
-      this.user_settings.auto_delete = false;
-      this.user_settings.auto_upload = false;
-      this.user_settings.recording_snapshot = true;
-    },
     cancel_changes() {
       this.reset_to_stored_state();
-      this.$emit("close_modal", false);
+      // if user is logged in and just wants to close the modal, then set to true and still save to YAML
+      this.$emit("close_modal", this.is_user_logged_in);
     },
     reset_to_stored_state() {
       // reset to existing stored state, that can still be different than initial default state, so don't call reset_to_default
@@ -332,7 +310,7 @@ export default {
   left: 0px;
   background-color: rgba(0, 0, 0);
   width: 700px;
-  height: 760px;
+  height: 723px;
   position: absolute;
   overflow: hidden;
   pointer-events: none;
@@ -392,6 +370,17 @@ export default {
   margin: 10px 0;
 }
 
+.div__logged_in_text {
+  color: rgb(25, 172, 138);
+  position: absolute;
+  font-size: 16px;
+  width: 105px;
+  z-index: 2;
+  left: 458px;
+  top: 395px;
+  font-style: italic;
+}
+
 .span__settingsform-record-file-settings {
   pointer-events: all;
   line-height: 100%;
@@ -440,14 +429,13 @@ export default {
   pointer-events: all;
   transform: rotate(0deg);
   overflow: hidden;
-  position: relative;
+  position: absolute;
   width: 62px;
   height: 34px;
-  top: 477px;
-  left: 171px;
+  top: 491px;
+  left: calc(961px - 775.511px);
   visibility: visible;
-  z-index: 57;
-  color: white;
+  z-index: 45;
 }
 
 .div__pulse3d-input-blocker {
@@ -532,7 +520,7 @@ export default {
   position: absolute;
   width: 360px;
   height: 30px;
-  top: 599px;
+  top: 564px;
   left: calc(1026px - 775.511px);
   padding: 5px;
   visibility: visible;
@@ -566,7 +554,7 @@ export default {
   position: absolute;
   width: 62px;
   height: 34px;
-  top: 599px;
+  top: 564px;
   left: calc(961px - 775.511px);
   visibility: visible;
   z-index: 45;
@@ -579,8 +567,8 @@ export default {
   position: absolute;
   width: 180px;
   height: 55px;
-  top: 675px;
-  left: 450px;
+  top: 639px;
+  left: 362px;
   visibility: visible;
   z-index: 55;
   background-color: rgb(183, 183, 183);
@@ -618,39 +606,6 @@ export default {
   color: rgb(0, 0, 0);
   z-index: 55;
 }
-.div__settings-tool-tip-reset-btn {
-  pointer-events: all;
-  transform: rotate(0deg);
-  overflow: hidden;
-  position: absolute;
-  width: 180px;
-  height: 55px;
-  top: 675px;
-  left: 260px;
-  visibility: visible;
-  z-index: 55;
-  background-color: #b7b7b7c9;
-}
-.span__settings-tool-tip-reset-btn-txt {
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: center;
-  font-weight: normal;
-  transform: translateZ(0px);
-  position: absolute;
-  width: 170px;
-  height: 45px;
-  line-height: 47px;
-  top: 5px;
-  left: 5px;
-  user-select: none;
-  font-family: Muli;
-  font-style: normal;
-  text-decoration: none;
-  font-size: 16px;
-}
 .div__settings-tool-tip-save-btn {
   pointer-events: all;
   transform: rotate(0deg);
@@ -658,21 +613,19 @@ export default {
   position: absolute;
   width: 180px;
   height: 55px;
-  top: 675px;
-  left: 70px;
+  top: 639px;
+  left: 160px;
   visibility: visible;
   z-index: 55;
 }
 .div__settings-tool-tip-save-btn-enable,
-.div__settings-tool-tip-login-btn-enable,
-.div__settings-tool-tip-reset-btn-enable {
+.div__settings-tool-tip-login-btn-enable {
   background-color: rgb(183, 183, 183);
   cursor: pointer;
 }
 
 .div__settings-tool-tip-save-btn-disable,
-.div__settings-tool-tip-login-btn-disable,
-.div__settings-tool-tip-reset-btn-disable {
+.div__settings-tool-tip-login-btn-disable {
   background-color: #b7b7b7c9;
 }
 
@@ -680,7 +633,6 @@ export default {
   background-color: #19ac8a;
 }
 
-.div__settings-tool-tip-reset-btn-enable:hover,
 .div__settings-tool-tip-login-btn-enable:hover,
 .div__settings-tool-tip-cancel-btn:hover {
   background-color: #b7b7b7c9;
@@ -692,8 +644,7 @@ export default {
 }
 
 .span__settings-tool-tip-save-btn-txt-disable,
-.span__settings-tool-tip-login-btn-txt-disable,
-.span__settings-tool-tip-reset-btn-txt-disable {
+.span__settings-tool-tip-login-btn-txt-disable {
   color: #6e6f72;
 }
 
@@ -737,7 +688,7 @@ export default {
   position: absolute;
   width: 512px;
   height: 1px;
-  top: 645px;
+  top: 612px;
   left: 95px;
   visibility: visible;
   background-color: #878d99;

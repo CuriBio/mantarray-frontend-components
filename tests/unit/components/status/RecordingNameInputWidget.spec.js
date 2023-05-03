@@ -172,7 +172,7 @@ describe("RecordingNameInputWidget.vue", () => {
     await store.commit("settings/set_recording_snapshot_state", false);
     expect(wrapper.vm.run_recording_snapshot_current).toBe(false);
 
-    const toggle_input = wrapper.find("#toggle_input");
+    const toggle_input = wrapper.find("#toggle_input_run_recording_snapshot_current");
     const button_widget = wrapper.findAll(".span__button_label");
 
     await toggle_input.trigger("click");
