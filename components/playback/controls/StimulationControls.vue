@@ -269,6 +269,8 @@ export default {
         return (
           this.playback_state !== playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING &&
           this.assigned_open_circuits.length === 0 &&
+          this.barcodes.plate_barcode.valid &&
+          this.barcodes.stim_barcode.valid &&
           ![
             STIM_STATUS.ERROR,
             STIM_STATUS.NO_PROTOCOLS_ASSIGNED,
@@ -296,8 +298,11 @@ export default {
         this.stim_status === STIM_STATUS.CONFIG_CHECK_IN_PROGRESS
       ) {
         return "Configuration check needed";
-      } else if (!this.barcodes.stim_barcode.valid) return "Must have a valid Stimulation Lid Barcode";
-      else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED) {
+      } else if (!this.barcodes.stim_barcode.valid) {
+        return "Must have a valid Stimulation Lid Barcode";
+      } else if (!this.barcodes.plate_barcode.valid) {
+        return "Must have a valid Plate Barcode";
+      } else if (this.stim_status === STIM_STATUS.NO_PROTOCOLS_ASSIGNED) {
         return "No protocols have been assigned";
       } else if (this.playback_state === playback_module.ENUMS.PLAYBACK_STATES.CALIBRATING) {
         return "Cannot start stimulation while calibrating instrument";
