@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     slider__slider_dynamic_style: function () {
-      return this.disabled ? "cursor: default;" : "cursor: pointer";
+      return this.disabled ? "cursor: default" : "cursor: pointer";
     },
   },
   watch: {
