@@ -20,12 +20,12 @@ export default {
     }
   },
   async login_user(context, user_details) {
-    const { customer_id, user, password } = user_details;
+    const { customer_id, username, password } = user_details;
 
     const url = "http://localhost:4567/login";
     const params = {
       customer_id,
-      user_name: user,
+      user_name: username,
       user_password: password,
     };
 

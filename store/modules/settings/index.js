@@ -7,7 +7,7 @@ const default_state = {
   auto_upload: false,
   auto_delete: false,
   run_recording_snapshot_default: true,
-  user_account: {},
+  user_account: { customer_id: "", username: "", password: "" },
   stored_customer_id: null,
   stored_usernames: [],
   log_path: "C:\\Users\\username\\AppData\\Roaming\\MantarrayController\\logs_flask",

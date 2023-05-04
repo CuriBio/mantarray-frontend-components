@@ -9,8 +9,7 @@
           :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
           :invalid_text="error_text.customer_id"
           :input_width="400"
-          :value:sync="user_details.customer_id"
-          :disabled="disallow_entry_user"
+          :value="user_details.customer_id"
           :options_text="[stored_customer_id]"
           :options_id="'customer-id-'"
           @update:value="on_update_input($event, 'customer_id')"
@@ -20,13 +19,12 @@
         <InputDropDown
           :title_label="'Select User'"
           :placeholder="'user account 1'"
-          :invalid_text="error_text.user"
+          :invalid_text="error_text.username"
           :input_width="400"
-          :value:sync="user_details.user"
-          :disabled="disallow_entry_user"
+          :value="user_details.username"
           :options_text="stored_usernames"
           :options_id="'user-account-'"
-          @update:value="on_update_input($event, 'user')"
+          @update:value="on_update_input($event, 'username')"
         />
       </div>
       <div class="div__settingsform-editor-input">
@@ -36,7 +34,7 @@
           :invalid_text="error_text.password"
           :type="'password'"
           :spellcheck="false"
-          :initial_value="''"
+          :initial_value="user_details.password"
           :container_background_color="'rgba(0, 0, 0)'"
           :input_background_color="'#1c1c1c'"
           :input_width="400"
@@ -197,9 +195,7 @@ export default {
   },
   data() {
     return {
-      user_focus_idx: 0,
       disable_settings: true,
-      disallow_entry_user: false,
       invalid_creds_found: false,
       show_auto_delete: false,
       user_settings: {
@@ -211,7 +207,7 @@ export default {
       user_details: {
         customer_id: "",
         password: "",
-        user: "",
+        username: "",
       },
     };
   },
@@ -238,13 +234,13 @@ export default {
       return this.invalid_creds_found
         ? {
             customer_id: "Invalid Customer ID, Username, or Password",
-            user: "Invalid Customer ID, Username, or Password",
+            username: "Invalid Customer ID, Username, or Password",
             password: "Invalid Customer ID, Username, or Password",
           }
         : {
             customer_id:
               this.user_details.customer_id && this.user_details.customer_id !== "" ? "" : "Required",
-            user: this.user_details.user && this.user_details.user !== "" ? "" : "Required",
+            username: this.user_details.username && this.user_details.username !== "" ? "" : "Required",
             password: this.user_details.password && this.user_details.password !== "" ? "" : "Required",
           };
     },
@@ -285,6 +281,7 @@ export default {
     },
     cancel_changes() {
       this.reset_to_stored_state();
+      this.user_details = { ...this.user_account };
       // if user is logged in and just wants to close the modal, then set to true and still save to YAML
       this.$emit("close_modal", this.is_user_logged_in);
     },
