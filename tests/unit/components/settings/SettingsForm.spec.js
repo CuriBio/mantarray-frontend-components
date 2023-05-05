@@ -171,31 +171,4 @@ describe("SettingsForm.vue", () => {
       expect(wrapper.vm.user_settings.recording_snapshot).toBe(false);
     });
   });
-
-  // describe("Given a user has not logged in yet", () => {
-  //   test("When a user wants to save credentials and the usage_quota returned notifies of the job limit reached, Then Vuex job_limit_reached state will be mutated to true", async () => {
-  //     wrapper = mount(SettingsForm, {
-  //       store,
-  //       localVue
-  //     });
-
-  //     jest.spyOn(axios_helpers, "call_axios_get_from_vuex").mockImplementation(() => {
-  //       return {
-  //         status: 401,
-  //         data: {}
-  //       };
-  //     });
-
-  //     await wrapper.find("#input-widget-field-passkey-id").setValue("test_password");
-  //     await wrapper
-  //       .find("#input-dropdown-widget-customer-id-")
-  //       .setValue("941532a0-6be1-443a-a9d5-d57bdf180a52");
-  //     await wrapper.find("#input-dropdown-widget-user-account-").setValue("User account -1");
-
-  //     const login_button = wrapper.find(".span__settings-tool-tip-login-btn-txt-enable");
-  //     await login_button.trigger("click");
-
-  //     expect(wrapper.vm.invalid_creds_found).toBe(true);
-  //   });
-  // });
 });
