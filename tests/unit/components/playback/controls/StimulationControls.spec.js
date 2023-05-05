@@ -5,7 +5,7 @@ import { ENUMS } from "@/store/modules/playback/enums";
 import { STIM_STATUS } from "@/store/modules/stimulation/enums";
 import waitForExpect from "wait-for-expect";
 
-describe("store/stimulation", () => {
+describe("StimulationControls", () => {
   const localVue = createLocalVue();
   localVue.use(Vuex);
   let NuxtStore;
@@ -18,6 +18,11 @@ describe("store/stimulation", () => {
 
   beforeEach(async () => {
     store = await NuxtStore.createStore();
+    await store.commit("playback/set_barcode", {
+      type: "plate_barcode",
+      new_value: "MA209990004",
+      is_valid: true,
+    });
   });
 
   afterEach(() => {
@@ -103,7 +108,11 @@ describe("store/stimulation", () => {
       dispatch_spy.mockImplementation(
         async () => await store.commit("stimulation/set_stim_play_state", true)
       );
-
+      await store.commit("playback/set_barcode", {
+        type: "stim_barcode",
+        new_value: "MS2022001000",
+        is_valid: true,
+      });
       store.state.stimulation.protocol_assignments = {
         test: "assignment",
       };
@@ -139,6 +148,11 @@ describe("store/stimulation", () => {
       );
 
       store.state.stimulation.protocol_assignments = { test: "assignment" };
+      await store.commit("playback/set_barcode", {
+        type: "stim_barcode",
+        new_value: "MS2022001000",
+        is_valid: true,
+      });
       await store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
       const wrapper = mount(StimulationControls, {
         store,
@@ -237,6 +251,7 @@ describe("store/stimulation", () => {
           store,
           localVue,
         });
+
         await store.commit("stimulation/set_stim_play_state", false);
         await store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
         await store.commit("playback/set_barcode", {
