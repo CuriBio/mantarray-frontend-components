@@ -7,7 +7,7 @@ const MockAxiosAdapter = require("axios-mock-adapter");
 const test_user_account = {
   customer_id: "4vqyd62oARXqj9nRUNhtLQ",
   password: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-  user: "User account -1",
+  username: "User account -1",
 };
 describe("store/settings", () => {
   const localVue = createLocalVue();
@@ -33,7 +33,7 @@ describe("store/settings", () => {
   });
 
   test("When initialized, Then the user_account is an empty object with no value assigned", () => {
-    expect(store.state.settings.user_account).toStrictEqual({});
+    expect(store.state.settings.user_account).toStrictEqual({ customer_id: "", username: "", password: "" });
   });
 
   test("When initialized, Then the file_count and total_file_count is zero 0 as with no value assigned", () => {
@@ -56,7 +56,7 @@ describe("store/settings", () => {
 
     /* User now does Edit Customer Click on the "User account - 1*/
     const current_focus_customerid = store.state.settings.user_account;
-    expect(current_focus_customerid.user).toStrictEqual("User account -1");
+    expect(current_focus_customerid.username).toStrictEqual("User account -1");
     expect(current_focus_customerid.customer_id).toStrictEqual("4vqyd62oARXqj9nRUNhtLQ");
     expect(current_focus_customerid.password).toStrictEqual("941532a0-6be1-443a-a9d5-d57bdf180a52");
   });
