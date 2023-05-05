@@ -103,7 +103,7 @@ jobs:
         run: npm run build
 
       - name: Run Unit Tests
-        if: matrix.IS_FASTEST_E2E_SUITE == true
+        if: matrix.IS_FASTEST_JOB == true
         env:
           TEST_ENV: CI
         run: npm run test:unit-no-prebuild -- --ci --verbose
