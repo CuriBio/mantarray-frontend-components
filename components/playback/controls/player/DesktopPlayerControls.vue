@@ -816,4 +816,11 @@ export default {
   left: 0;
   right: 0;
 }
+#settings-form {
+  position: fixed;
+  margin: 0%;
+  top: 5%;
+  left: 0;
+  right: 0;
+}
 </style>

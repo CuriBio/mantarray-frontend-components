@@ -61,8 +61,6 @@ export { default as DataAnalysisCompleteWidget } from "./components/playback/con
 
 // Settings Components
 export { default as SettingsForm } from "./components/settings/SettingsForm.vue";
-export { default as AddUser } from "./components/settings/AddUser.vue";
-export { default as EditUser } from "./components/settings/EditUser.vue";
 
 // Basic Widgets
 export { default as PlateWell } from "./components/basic_widgets/PlateWell.vue";

@@ -1,6 +1,18 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.5.0 (unreleased)
+-------------------
+
+Changed:
+^^^^^^^^
+- New login flow
+
+Removed:
+^^^^^^^^
+- `AddUser` and `EditUser` modals
+
+
 1.4.10 (2023-05-02)
 -------------------
 

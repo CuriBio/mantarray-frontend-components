@@ -12,7 +12,7 @@
     <div
       class="div__input-dropdown-controls-content-widget"
       :class="[
-        message_if_invalid
+        invalid_text !== ''
           ? 'div__input-dropdown-controls-content-widget--invalid'
           : 'div__input-dropdown-controls-content-widget--valid',
       ]"
@@ -30,7 +30,7 @@
           :disabled="disabled"
           class="w-100 h-100 edit-id"
           :style="`border-radius: 0; background-color: ${input_background_color}; border: 0px; color: #ffffff`"
-        ></b-form-input>
+        />
         <datalist v-if="dropdown_options.length" :id="'option_list' + options_id">
           <option v-for="item in dropdown_options" :id="item.id" :key="item.id">
             {{ item.name }}
@@ -39,7 +39,7 @@
       </span>
     </div>
     <div
-      v-show="message_if_invalid"
+      v-show="invalid_text !== ''"
       :id="'input-dropdown-widget-feedback-' + options_id"
       class="div__input-dropdown-controls-content-feedback"
       :style="'width: ' + input_width + 'px;' + 'top:' + input_feedback_top + 'px;'"
@@ -54,7 +54,7 @@ import BootstrapVue from "bootstrap-vue";
 import { BFormInput } from "bootstrap-vue";
 Vue.use(BootstrapVue);
 Vue.component("BFormInput", BFormInput);
-import "bootstrap/dist/css/bootstrap.min.css";
+
 export default {
   name: "InputDropDown",
   props: {
@@ -66,7 +66,6 @@ export default {
     disabled: { type: Boolean, default: false }, // disabled (optional bool=False) (not able to type into input)
     options_text: { type: Array, required: true },
     options_id: { type: String, default: "" }, // This prop is utilized by the parent component
-    message_if_invalid: { type: Boolean, default: false }, // when set to true, will display a simple feedback
     input_background_color: { type: String, default: "#1c1c1c" },
     container_background_color: { type: String, default: "rgb(0, 0, 0)" },
   },
@@ -78,18 +77,12 @@ export default {
   },
   computed: {
     dropdown_options: function () {
-      const list = []; // list is empty to start
-
-      for (let i = 0; i < this.options_text.length; i++) {
-        // the options_text is required true so a minimum of one element is needed
-        // if suppose options_text.length is zero(0) then return doesn't change its []
-        const name = {
+      return this.options_text.map((val, i) => {
+        return {
           id: this.options_id + i,
-          name: this.options_text[i],
+          name: val,
         };
-        list.push(name);
-      }
-      return list;
+      });
     },
     input_height_background: function () {
       return this.title_label !== "" ? 100 : 60;
@@ -97,6 +90,7 @@ export default {
     input_widget_top: function () {
       return this.title_label !== "" ? 40 : 0;
     },
+
     input_feedback_top: function () {
       return this.title_label !== "" ? 88 : 48;
     },
@@ -137,6 +131,7 @@ body {
   margin: 0px;
   position: absolute;
   top: 0px;
+  display: flex;
   left: 0px;
   visibility: visible;
   border-radius: 0px;
@@ -150,10 +145,8 @@ body {
   line-height: 100%;
   transform: rotate(0deg);
   overflow: hidden;
-  position: absolute;
   height: 30px;
   top: 0px;
-  left: -15px;
   padding: 5px;
   visibility: visible;
   user-select: none;
@@ -161,9 +154,10 @@ body {
   font-weight: normal;
   font-style: normal;
   text-decoration: none;
-  font-size: 19px;
-  color: rgb(255, 255, 255);
+  font-size: 17px;
+  color: #b7b7b7;
   z-index: 25;
+  text-align: center;
 }
 
 .span__input-controls-content-input-txt-widget {

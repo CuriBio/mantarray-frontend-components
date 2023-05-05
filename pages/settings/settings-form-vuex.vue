@@ -5,8 +5,8 @@
 </template>
 
 <script>
-// import { SettingsForm } from "@/dist/mantarray.common";
-import SettingsForm from "@/components/settings/SettingsForm.vue";
+import { SettingsForm } from "@/dist/mantarray.common";
+// import SettingsForm from "@/components/settings/SettingsForm.vue";
 
 export default {
   components: {
@@ -32,3 +32,4 @@ export default {
   },
 };
 </script>
+s

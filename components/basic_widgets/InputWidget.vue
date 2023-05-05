@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div
-      class="div__input-background"
-      :style="`width: ${input_width_background}px; height: ${input_height_background}px;`"
-    >
+    <div class="div__input-background" :style="dynamic__container_background_style">
       <span v-if="title_label !== ''" class="span__input-content-label" :style="`width: ${input_width}px;`">
         {{ title_label }}
       </span>
@@ -15,7 +12,7 @@
             ? 'div__input-controls-content-widget--invalid'
             : 'div__input-controls-content-widget--valid',
         ]"
-        :style="`width: ${input_width}px; height: ${input_height}px; top: ${input_widget_top}px;`"
+        :style="dynamic__input_widget_style"
       >
         <span
           class="span__input-controls-content-input-txt-widget"
@@ -32,9 +29,9 @@
             :onpaste="disable_paste"
             :type="type"
             class="w-100 h-100 edit-id"
-            style="border-radius: 0; color: rgb(255, 255, 255); background-color: #3f3f3f; border: 0px"
+            :style="dynamic__background_color"
             @input="on_b_form_input"
-          ></b-form-input>
+          />
         </span>
       </div>
       <div
@@ -79,11 +76,12 @@ export default {
     display_text_message: { type: Boolean, default: true }, // display_text_message (boolean) if set to false would not render invalid_text
     disable_paste: { type: Boolean, default: false }, // disable_paste (boolean) if set to true would prevent cut and paste of text into input
     type: { type: String, default: "text" },
+    container_background_color: { type: String, default: "rgb(17, 17, 17)" },
+    input_background_color: { type: String, default: "#3f3f3f" },
   },
   data() {
     return {
       input_value: this.initial_value,
-      input_width_background: this.input_width + 4, // required for the red/green boxes around the input widget
     };
   },
   computed: {
@@ -99,6 +97,19 @@ export default {
     },
     input_feedback_top: function () {
       return this.input_height + this.top_adjust + 4 + (this.title_label !== "" ? 40 : 0);
+    },
+    dynamic__container_background_style: function () {
+      const input_width_background = this.input_width + 4;
+      return (
+        `width: ${input_width_background}px; height: ${this.input_height_background}px;` +
+        `background: ${this.container_background_color}; border: 2px solid ${this.container_background_color};`
+      );
+    },
+    dynamic__input_widget_style: function () {
+      return `width: ${this.input_width}px; height: ${this.input_height}px; top: ${this.input_widget_top}px;`;
+    },
+    dynamic__background_color: function () {
+      return `border-radius: 0; border: 0px; color: rgb(255, 255, 255); background: ${this.input_background_color};`;
     },
   },
   watch: {
@@ -131,12 +142,10 @@ body {
   box-sizing: border-box;
   padding: 0px;
   margin: 0px;
-  background: rgb(17, 17, 17);
   position: absolute;
   top: 0px;
   left: 0px;
   visibility: visible;
-  border: 2px solid rgb(17, 17, 17);
   border-radius: 0px;
   box-shadow: none;
   z-index: 3;
@@ -183,7 +192,6 @@ body {
   text-decoration: none;
   font-size: 17px;
   color: rgb(255, 255, 255);
-  background-color: #2f2f2f;
 }
 
 .div__input-controls-content-widget {
@@ -194,7 +202,6 @@ body {
   left: 0px;
   visibility: visible;
   z-index: 7;
-  background-color: #1c1c1c;
 }
 
 .div__input-controls-content-widget--invalid {

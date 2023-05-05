@@ -32,6 +32,8 @@ describe("store/stimulation", () => {
     beforeEach(async () => {
       store = await NuxtStore.createStore();
       store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(TEST_PROTOCOL_LIST));
+      store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "MA209990004" });
+      store.dispatch("playback/validate_barcode", { type: "stim_barcode", new_value: "MS209990005" });
     });
 
     test("When the protocol dropdown displays available protocols, Then only only protocols with defined label should return", async () => {
@@ -116,6 +118,8 @@ describe("store/stimulation", () => {
     beforeEach(async () => {
       store = await NuxtStore.createStore();
       store.state.stimulation.protocol_list = JSON.parse(JSON.stringify(TEST_PROTOCOL_LIST));
+      store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "MA209990004" });
+      store.dispatch("playback/validate_barcode", { type: "stim_barcode", new_value: "MS209990005" });
     });
     afterEach(() => {
       jest.resetAllMocks();
@@ -490,8 +494,6 @@ describe("store/stimulation", () => {
           .mockImplementation(() => response);
 
         store.state.stimulation.protocol_assignments = { 1: {} };
-        store.dispatch("playback/validate_barcode", { type: "plate_barcode", new_value: "MA209990004" });
-        store.dispatch("playback/validate_barcode", { type: "stim_barcode", new_value: "MS209990005" });
 
         await store.dispatch("stimulation/start_stim_configuration");
 
