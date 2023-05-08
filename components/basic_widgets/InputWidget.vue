@@ -109,7 +109,9 @@ export default {
       return `width: ${this.input_width}px; height: ${this.input_height}px; top: ${this.input_widget_top}px;`;
     },
     dynamic__background_color: function () {
-      return `border-radius: 0; border: 0px; color: rgb(255, 255, 255); background: ${this.input_background_color};`;
+      return this.disabled
+        ? `border-radius: 0; border: 0px; background: rgb(31, 29, 29);`
+        : `border-radius: 0; border: 0px; color: rgb(255, 255, 255); background: ${this.input_background_color};`;
     },
   },
   watch: {
