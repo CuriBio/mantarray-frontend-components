@@ -7,6 +7,7 @@ Changelog for Mantarray Frontend Components
 Changed:
 ^^^^^^^^
 - New login flow
+- Default stimulation to `Stimulate Until Complete`
 
 Removed:
 ^^^^^^^^
