@@ -154,6 +154,9 @@ export default {
       // reset so old position/idx isn't highlighted once moved
       this.on_pulse_mouseleave();
     },
+    disable_dropdown: function () {
+      if (this.disable_dropdown) this.time_units_idx = 0;
+    },
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {

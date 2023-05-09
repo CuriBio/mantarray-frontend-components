@@ -232,7 +232,6 @@ export default {
     handle_stop_setting(idx) {
       const setting = this.stop_options_array[idx];
       this.stop_option_idx = idx;
-
       this.disabled_time = idx === 0;
 
       if (this.disabled_time) this.handle_rest_duration("0");
