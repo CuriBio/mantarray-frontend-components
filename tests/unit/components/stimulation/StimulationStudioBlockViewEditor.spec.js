@@ -56,13 +56,13 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await store.dispatch("stimulation/edit_selected_protocol", test_param_1);
     expect(wrapper.vm.current_letter).toBe(test_param_1.letter);
     expect(wrapper.vm.rest_duration).toBe("20");
-    expect(wrapper.vm.stop_option_idx).toBe(1);
+    expect(wrapper.vm.stop_option_idx).toBe(0);
     expect(wrapper.vm.disabled_time).toBe(true);
 
     await store.dispatch("stimulation/edit_selected_protocol", test_param_2);
     expect(wrapper.vm.current_letter).toBe(test_param_2.letter);
     expect(wrapper.vm.rest_duration).toBe("40");
-    expect(wrapper.vm.stop_option_idx).toBe(0);
+    expect(wrapper.vm.stop_option_idx).toBe(1);
     expect(wrapper.vm.disabled_time).toBe(false);
   });
 
@@ -71,6 +71,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
+    await wrapper.find("#stop_options_1").trigger("click");
 
     await wrapper.find("#input-widget-field-protocol-rest").setValue("5");
     expect(wrapper.vm.rest_duration).toBe("5");
@@ -81,6 +82,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       store,
       localVue,
     });
+
     await wrapper.vm.check_name_validity("test");
     expect(wrapper.vm.name_validity).toBe("border: 1px solid #19ac8a");
     expect(wrapper.vm.error_message).toBe("");
@@ -139,7 +141,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await store.commit("stimulation/reset_state");
 
     expect(wrapper.vm.protocol_name).toBe("");
-    expect(wrapper.vm.rest_duration).toBe("");
+    expect(wrapper.vm.rest_duration).toBe("0");
     expect(wrapper.vm.name_validity).toBe("");
   });
 
@@ -149,13 +151,12 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
     const toggle_stop_options = wrapper.find("#small_dropdown_stop_options");
-    const visible_option = wrapper.find("#stop_options_1");
-
+    await toggle_stop_options.trigger("click");
+    await wrapper.find("#stop_options_1").trigger("click");
     expect(wrapper.vm.disabled_time).toBe(false);
 
     await toggle_stop_options.trigger("click");
-    await visible_option.trigger("click");
-
+    await wrapper.find("#stop_options_0").trigger("click");
     expect(wrapper.vm.disabled_time).toBe(true);
   });
 

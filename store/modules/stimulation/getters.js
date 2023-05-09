@@ -3,7 +3,7 @@ import { COLOR_PALETTE, ALPHABET } from "./enums";
 export function get_default_protocol_editor_state() {
   return {
     name: "",
-    run_until_stopped: true,
+    run_until_stopped: false,
     stimulation_type: "C",
     rest_duration: 0,
     time_unit: "milliseconds",

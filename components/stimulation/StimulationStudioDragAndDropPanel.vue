@@ -26,7 +26,7 @@
         <SmallDropDown
           class="dropdown-container"
           :input_height="25"
-          :disable="disable_dropdown"
+          :disable_toggle="disable_dropdown"
           :input_width="100"
           :options_text="time_units_array"
           :options_idx="time_units_idx"
@@ -137,7 +137,7 @@ export default {
       new_cloned_idx: null,
       modal_open_for_edit: false, // TODO Luci, clean up state management and constant names
       time_units_idx: 0,
-      disable_dropdown: false,
+      disable_dropdown: true,
       is_dragging: false,
       selected_color: null,
     };

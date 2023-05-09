@@ -135,11 +135,11 @@ export default {
   data() {
     return {
       active_tab: "Basic",
-      disabled_time: false,
+      disabled_time: true,
       current_letter: "",
       current_color: "",
       stimulation_types_array: ["Current Controlled Stimulation", "(Not Yet Available)"],
-      stop_options_array: ["Stimulate Until Stopped", "Stimulate Until Complete"],
+      stop_options_array: ["Stimulate Until Complete", "Stimulate Until Stopped"],
       protocol_name: "",
       stop_option_idx: 0,
       rest_duration: "",
@@ -198,7 +198,7 @@ export default {
         this.protocol_name = this.get_protocol_name;
         this.rest_duration = JSON.stringify(this.get_rest_duration);
 
-        this.stop_option_idx = +!this.run_until_stopped;
+        this.stop_option_idx = +this.run_until_stopped;
         this.disabled_time = !this.run_until_stopped;
       }
     });
@@ -233,7 +233,7 @@ export default {
       const setting = this.stop_options_array[idx];
       this.stop_option_idx = idx;
 
-      this.disabled_time = idx === 1;
+      this.disabled_time = idx === 0;
 
       if (this.disabled_time) this.handle_rest_duration("0");
 
