@@ -27,6 +27,7 @@ const default_state = {
   stimulator_circuit_statuses: [],
   recording_snapshot_data: [],
   h5_warning: false,
+  recording_snapshot_error: false,
 };
 
 for (let i = 0; i < maximum_number_of_wells_in_any_plate; i++) {
