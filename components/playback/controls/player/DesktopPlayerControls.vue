@@ -376,7 +376,7 @@ export default {
       recording_snapshot_error_labels: {
         header: "Error!",
         msg_one: "An error occurred while running data analysis for the recording snapshot.",
-        msg_two: "Unable to converge due to bad quality of data.",
+        msg_two: "Unable to process recording due to low quality calibration and/or noise.",
         button_names: ["Close"],
       },
     };
@@ -557,9 +557,7 @@ export default {
         this.$bvModal.show("analysis-in-progress-modal");
       } else {
         this.$bvModal.hide("analysis-in-progress-modal");
-        this.recording_snapshot_error
-          ? this.$bvModal.show("recording-snapshot-error")
-          : this.$bvModal.show("recording-check");
+        this.$bvModal.show(this.recording_snapshot_error ? "recording-snapshot-error" : "recording-check");
       }
     },
   },
