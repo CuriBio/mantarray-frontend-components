@@ -99,6 +99,20 @@ describe("DesktopPlayerControls.vue", () => {
     expect(wrapper.emitted("save_account_info")).toHaveLength(1);
   });
 
+  test("When a user closes the recording snapshot error modal, Then the recording_snapshot_error state will return to false", async () => {
+    wrapper = mount(component_to_test, {
+      store,
+      localVue,
+    });
+
+    store.commit("data/set_recording_snapshot_error", true);
+    expect(store.state.data.recording_snapshot_error).toBe(true);
+
+    wrapper.vm.close_rec_snapshot_err_modal();
+
+    expect(store.state.data.recording_snapshot_error).toBe(false);
+  });
+
   test("When a user selects the settings control button, Then the modal will appear and will not emit a save event when closed with cancel", async () => {
     const close_spy = jest.spyOn(component_to_test.methods, "close_settings_modal");
     wrapper = mount(component_to_test, {
