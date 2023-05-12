@@ -4,6 +4,10 @@ Changelog for Mantarray Frontend Components
 1.5.0 (unreleased)
 -------------------
 
+Added:
+^^^^^^
+- Recording snapshot error modal when unable to converge during data analysis
+
 Changed:
 ^^^^^^^^
 - New login flow
