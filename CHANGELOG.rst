@@ -1,12 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.5.0 (unreleased)
+1.5.1 (unreleased)
 -------------------
 
 Added:
 ^^^^^^
 - Recording snapshot error modal when unable to converge during data analysis
+
+
+1.5.0 (2023-05-12)
+------------------
 
 Changed:
 ^^^^^^^^

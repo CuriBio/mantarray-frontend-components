@@ -376,7 +376,8 @@ export default {
       recording_snapshot_error_labels: {
         header: "Error!",
         msg_one: "An error occurred while running data analysis for the recording snapshot.",
-        msg_two: "Unable to process recording due to low quality calibration and/or noise.",
+        msg_two:
+          "Unable to process recording due to low quality calibration and/or noise. Please recalibrate and try again.",
         button_names: ["Close"],
       },
     };
