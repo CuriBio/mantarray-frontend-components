@@ -130,8 +130,6 @@ export default {
       });
 
       commit("set_recording_snapshot_data", formatted_data);
-    }
-
-    commit("set_recording_snapshot_error", "error" in msg);
+    } else if ("error" in msg) commit("set_recording_snapshot_error", msg["error"]);
   },
 };

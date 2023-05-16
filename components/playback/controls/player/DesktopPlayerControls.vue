@@ -373,13 +373,6 @@ export default {
         msg_one: "Data analysis is in progress for the recording snapshot. This won't take long.",
         msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
       },
-      recording_snapshot_error_labels: {
-        header: "Error!",
-        msg_one: "An error occurred while running data analysis for the recording snapshot.",
-        msg_two:
-          "Unable to process recording due to low quality calibration and/or noise. Please recalibrate and try again.",
-        button_names: ["Close"],
-      },
     };
   },
   computed: {
@@ -519,6 +512,14 @@ export default {
             this.playback_state === this.playback_state_enums.CALIBRATED) &&
           this.stim_status !== STIM_STATUS.STIM_ACTIVE &&
           this.stim_status !== STIM_STATUS.CONFIG_CHECK_IN_PROGRESS,
+      };
+    },
+    recording_snapshot_error_labels: function () {
+      return {
+        header: "Error!",
+        msg_one: "An error occurred while running data analysis for the recording snapshot.",
+        msg_two: `${this.recording_snapshot_error}. Please recalibrate and try again.`,
+        button_names: ["Close"],
       };
     },
   },

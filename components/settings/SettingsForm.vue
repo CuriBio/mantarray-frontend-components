@@ -4,14 +4,15 @@
       <span class="span__settingsform-title">User Settings</span>
       <canvas class="canvas__settings-title-separator" />
       <div class="div__settingsform-editor-input">
-        <InputDropDown
+        <InputWidget
           :title_label="'Select Customer ID'"
           :placeholder="'ba86b8f0-6fdf-4944-87a0-8a491a19490e'"
           :invalid_text="error_text.customer_id"
           :input_width="400"
-          :value="user_details.customer_id"
-          :options_text="[stored_customer_id]"
-          :options_id="'customer-id-'"
+          :initial_value="user_details.customer_id"
+          :dom_id_suffix="'customer-id'"
+          :container_background_color="'rgba(0, 0, 0)'"
+          :input_background_color="'#1c1c1c'"
           @update:value="on_update_input($event, 'customer_id')"
         />
       </div>
@@ -245,7 +246,7 @@ export default {
           };
     },
     is_user_logged_in: function () {
-      return this.user_account.customer_id && this.user_account.customer_id !== "";
+      return this.user_account.username && this.user_account.username !== "";
     },
   },
   watch: {
@@ -253,6 +254,9 @@ export default {
       if (this.job_limit_reached) {
         this.user_settings.auto_upload = false;
       }
+    },
+    stored_customer_id: function () {
+      this.user_details.customer_id = this.stored_customer_id;
     },
   },
   methods: {

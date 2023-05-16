@@ -562,7 +562,7 @@ describe("store/data", () => {
         });
       });
 
-      expect(store.state.data.recording_snapshot_error).toBe(true);
+      expect(store.state.data.recording_snapshot_error).toBe(example_message.error);
       expect(store.state.playback.is_recording_snapshot_running).toBe(false);
     });
 

@@ -68,7 +68,7 @@ export default {
   set_recording_snapshot_data(state, data) {
     state.recording_snapshot_data = [...data];
   },
-  set_recording_snapshot_error(state, bool) {
-    state.recording_snapshot_error = bool;
+  set_recording_snapshot_error(state, msg) {
+    state.recording_snapshot_error = msg;
   },
 };

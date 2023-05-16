@@ -27,6 +27,8 @@ export default {
   },
   set_stored_accounts(state, { customer_id, usernames }) {
     state.stored_customer_id = customer_id;
+    state.user_account.customer_id = customer_id;
+
     state.stored_usernames = usernames;
   },
   set_file_count(state) {

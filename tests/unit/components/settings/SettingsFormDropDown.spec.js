@@ -39,13 +39,5 @@ describe("SettingsForm.vue", () => {
       expect(wrapper.find("#user-account-0").text()).toStrictEqual("User account -1");
       expect(wrapper.find("#user-account-1").text()).toStrictEqual("User account -2");
     });
-
-    test("When the Component is mounted, Then the dropdown menu for the Customer Account matches the values in Vuex", async () => {
-      wrapper = mount(ComponentToTest, {
-        store,
-        localVue,
-      });
-      expect(wrapper.find("#customer-id-0").text()).toStrictEqual("test-uuid");
-    });
   });
 });
