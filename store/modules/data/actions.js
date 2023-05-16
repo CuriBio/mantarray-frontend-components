@@ -123,11 +123,15 @@ export default {
       this.commit("stimulation/set_stim_status", STIM_STATUS.CONFIG_CHECK_COMPLETE);
     }
   },
-  format_recording_snapshot_data({ commit }, { time, force }) {
-    const formatted_data = force.map((y_values) => {
-      return convert_x_y_arrays_to_d3_array(time, y_values);
-    });
+  format_recording_snapshot_data({ commit }, msg) {
+    if ("time" in msg) {
+      const formatted_data = msg.force.map((y_values) => {
+        return convert_x_y_arrays_to_d3_array(msg.time, y_values);
+      });
 
-    commit("set_recording_snapshot_data", formatted_data);
+      commit("set_recording_snapshot_data", formatted_data);
+    }
+
+    commit("set_recording_snapshot_error", "error" in msg);
   },
 };

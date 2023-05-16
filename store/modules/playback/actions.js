@@ -170,10 +170,13 @@ export default {
     }
   },
   async start_live_view(context) {
+    // set to buffering before request to disable live view button until status response is received
+    context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.BUFFERING);
+
     const plate_barcode = this.state.playback.barcodes.plate_barcode.value;
     const url = "http://localhost:4567/start_managed_acquisition";
     await call_axios_get_from_vuex(url, context, { plate_barcode });
-    context.dispatch("transition_playback_state", ENUMS.PLAYBACK_STATES.BUFFERING);
+
     context.commit("flask/ignore_next_system_status_if_matching_status", STATUS.MESSAGE.CALIBRATED, {
       root: true,
     });

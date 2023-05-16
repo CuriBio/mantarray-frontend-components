@@ -548,6 +548,24 @@ describe("store/data", () => {
       expect(store.state.playback.is_recording_snapshot_running).toBe(false);
     });
 
+    test("When recording snapshot data returns an error, Then the handler will dispatch a data action with parsed data", async () => {
+      const example_message = {
+        error: "test_error",
+      };
+
+      store.state.playback.is_recording_snapshot_running = true;
+      expect(store.state.data.recording_snapshot_error).toBe(false);
+
+      await new Promise((resolve) => {
+        socket_server_side.emit("recording_snapshot_data", JSON.stringify(example_message), (ack) => {
+          resolve(ack);
+        });
+      });
+
+      expect(store.state.data.recording_snapshot_error).toBe(true);
+      expect(store.state.playback.is_recording_snapshot_running).toBe(false);
+    });
+
     test("When backend emits stimulation message, Then ws client updates stim_waveforms", async () => {
       store.commit("data/set_stim_waveforms", [
         { x_data_points: [1], y_data_points: [2] },

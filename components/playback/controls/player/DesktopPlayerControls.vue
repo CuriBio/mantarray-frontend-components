@@ -246,6 +246,20 @@
         @close_modal="$bvModal.hide('recording-check')"
       />
     </b-modal>
+    <b-modal
+      id="recording-snapshot-error"
+      size="sm"
+      hide-footer
+      hide-header
+      hide-header-close
+      :static="true"
+      :no-close-on-backdrop="true"
+    >
+      <StatusWarningWidget
+        :modal_labels="recording_snapshot_error_labels"
+        @handle_confirmation="close_rec_snapshot_err_modal"
+      />
+    </b-modal>
   </div>
 </template>
 <script>
@@ -359,6 +373,13 @@ export default {
         msg_one: "Data analysis is in progress for the recording snapshot. This won't take long.",
         msg_two: "Do not close the Mantarray software or power off the Mantarray instrument.",
       },
+      recording_snapshot_error_labels: {
+        header: "Error!",
+        msg_one: "An error occurred while running data analysis for the recording snapshot.",
+        msg_two:
+          "Unable to process recording due to low quality calibration and/or noise. Please recalibrate and try again.",
+        button_names: ["Close"],
+      },
     };
   },
   computed: {
@@ -369,6 +390,7 @@ export default {
       "start_recording_from_stim",
       "is_recording_snapshot_running",
     ]),
+    ...mapState("data", ["recording_snapshot_error"]),
     ...mapState("settings", [
       "auto_upload",
       "beta_2_mode",
@@ -536,7 +558,7 @@ export default {
         this.$bvModal.show("analysis-in-progress-modal");
       } else {
         this.$bvModal.hide("analysis-in-progress-modal");
-        this.$bvModal.show("recording-check");
+        this.$bvModal.show(this.recording_snapshot_error ? "recording-snapshot-error" : "recording-check");
       }
     },
   },
@@ -614,6 +636,10 @@ export default {
     close_calibration_modal(idx) {
       this.$bvModal.hide("calibration-warning");
       if (idx === 1) this.$store.dispatch("playback/start_calibration");
+    },
+    close_rec_snapshot_err_modal() {
+      this.$bvModal.hide("recording-snapshot-error");
+      this.$store.commit("data/set_recording_snapshot_error", false);
     },
     close_fw_update_available_modal(idx) {
       this.$bvModal.hide("fw-update-available-message");
@@ -802,7 +828,8 @@ export default {
 #one-min-warning,
 #recording-name-input-prompt-message,
 #analysis-in-progress-modal,
-#existing-recording-warning {
+#existing-recording-warning,
+#recording-snapshot-error {
   position: fixed;
   margin: 5% auto;
   top: 15%;
