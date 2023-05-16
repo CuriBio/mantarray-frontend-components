@@ -6,7 +6,6 @@ import { createLocalVue } from "@vue/test-utils";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import * as axios_helpers from "@/js_utils/axios_helpers.js";
 
 const MockAxiosAdapter = require("axios-mock-adapter");
 let mocked_axios;
@@ -42,7 +41,7 @@ describe("SettingsForm.vue", () => {
   const test_user_account = {
     password: "4vqyd62oARXqj9nRUNhtLQ",
     customer_id: "941532a0-6be1-443a-a9d5-d57bdf180a52",
-    user: "User account -1",
+    username: "User account -1",
   };
 
   test("When mounting SettingsForm from the build dist file, Then verify that it loads successfully", () => {
@@ -64,8 +63,7 @@ describe("SettingsForm.vue", () => {
 
   describe("Given a user is logged in", () => {
     beforeEach(() => {
-      // commit a deep copy of the template object to the Vuex store using JSON stringify/parse, as it may be modified during tests. https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
-      store.commit("settings/set_user_account", JSON.parse(JSON.stringify(test_user_account)));
+      store.commit("settings/set_user_account", { ...test_user_account });
       mocked_axios.onGet("http://localhost:4567/update_settings").reply(204, {});
     });
 
