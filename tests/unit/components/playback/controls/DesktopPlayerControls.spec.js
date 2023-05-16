@@ -104,9 +104,9 @@ describe("DesktopPlayerControls.vue", () => {
       store,
       localVue,
     });
-
-    store.commit("data/set_recording_snapshot_error", true);
-    expect(store.state.data.recording_snapshot_error).toBe(true);
+    const generic_msg = "Generic recording snapshot error";
+    store.commit("data/set_recording_snapshot_error", generic_msg);
+    expect(store.state.data.recording_snapshot_error).toBe(generic_msg);
 
     wrapper.vm.close_rec_snapshot_err_modal();
 
