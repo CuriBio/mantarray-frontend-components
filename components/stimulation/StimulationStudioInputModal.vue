@@ -2,8 +2,10 @@
   <div class="div__stimulationstudio-current-settings-background">
     <span class="span__stimulationstudio-current-settings-title"
       >{{ modal_title }}
-      <div class="div__color-block" :style="color_to_display" />
-      <div class="div__color-label" @click="$bvModal.show('change-color-modal-two')">Change color</div></span
+      <div v-if="include_units" class="div__color-block" :style="color_to_display" />
+      <div v-if="include_units" class="div__color-label" @click="$bvModal.show('change-color-modal-two')">
+        Change color
+      </div></span
     >
     <span>
       <b-modal id="change-color-modal-two" size="sm" hide-footer hide-header hide-header-close :static="true">
@@ -15,18 +17,18 @@
     </span>
     <canvas class="canvas__stimulationstudio-horizontal-line-separator"> </canvas>
     <div class="div__stimulationstudio-body-container">
-      <span>{{ input_description }}</span>
+      <span>{{ input_label }}</span>
       <span class="input_container">
         <InputWidget
           :placeholder="'0'"
-          :dom_id_suffix="'delay'"
+          :dom_id_suffix="'stim-input'"
           :invalid_text="invalid_text"
           :input_width="100"
           :initial_value="current_value !== null ? current_value : ''"
           @update:value="check_validity($event)"
         />
       </span>
-      <span>
+      <span v-if="include_units">
         <SmallDropDown
           :options_text="time_units"
           :options_idx="time_unit_idx"
@@ -68,7 +70,7 @@ Vue.component("BModal", BModal);
 Vue.use(BootstrapVue);
 /**
  * @vue-props {String} current_value - Current input if modal is open for editing
- * @vue-props {String} current_delay_unit - The current unit selected when a delay block is opened to edit
+ * @vue-props {String} current_unit - The current unit selected when a delay block is opened to edit
  * @vue-props {String} modal_type - Determines if delay or repeat styling is assigned to modal
  * @vue-props {Boolean} modal_open_for_edit - States if delay modal is open for editing
  * @vue-data {String} input_value - Value input into modal
@@ -88,7 +90,7 @@ Vue.use(BootstrapVue);
  */
 
 export default {
-  name: "StimulationStudioDelayModal",
+  name: "StimulationStudioInputModal",
   components: {
     InputWidget,
     ButtonWidget,
@@ -96,11 +98,11 @@ export default {
     StimulationStudioColorModal,
   },
   props: {
-    current_delay_input: {
+    current_input: {
       type: String,
       default: null,
     },
-    current_delay_unit: {
+    current_unit: {
       type: String,
       default: "milliseconds",
     },
@@ -110,20 +112,30 @@ export default {
     },
     current_color: {
       type: String,
-      default: null,
+      default: "#b7b7b7",
+    },
+    modal_title: {
+      type: String,
+      default: "Delay",
+    },
+    input_label: {
+      type: String,
+      default: "Duration:",
+    },
+    include_units: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
     return {
-      current_value: this.current_delay_input,
+      current_value: this.current_input,
       input_value: null,
       invalid_text: "Required",
       time_units: ["milliseconds", "seconds", "minutes", "hours"],
       time_unit_idx: 0,
       is_enabled_array: [false, true],
       is_valid: false,
-      modal_title: "Delay",
-      input_description: "Duration:",
       selected_color: this.current_color,
     };
   },
@@ -156,23 +168,26 @@ export default {
   methods: {
     close(idx) {
       const button_label = this.button_labels[idx];
-
-      const selected_unit = this.time_units[this.time_unit_idx];
-      const converted_input = Number(this.input_value);
-      const delay_settings = {
-        duration: converted_input,
-        unit: selected_unit,
-      };
-
-      this.$emit("delay_close", button_label, delay_settings, this.selected_color);
+      const value = +this.input_value;
+      if (this.modal_title === "Delay") {
+        const unit = this.time_units[this.time_unit_idx];
+        const delay_settings = { duration: value, unit };
+        this.$emit("input-close", button_label, delay_settings, this.selected_color);
+      } else {
+        this.$emit("input-close", button_label, value);
+      }
     },
     check_validity(value_str) {
       this.current_value = value_str;
-      const selected_unit = this.time_units[this.time_unit_idx];
-
-      this.invalid_text = check_delay_pulse_validity(value_str, selected_unit);
-      this.is_valid = this.invalid_text === "";
-      // Only want to update input_value here so it is only ever set to a valid value.
+      if (this.modal_title === "Delay") {
+        const selected_unit = this.time_units[this.time_unit_idx];
+        this.invalid_text = check_delay_pulse_validity(value_str, selected_unit);
+      } else {
+        const is_int = Number.isInteger(+value_str);
+        this.invalid_text = !is_int ? "Must be a whole (+) number" : "";
+      }
+      this.isValid = this.invalidText === "";
+      // Only want to update inputValue here so it is only ever set to a valid value.
       // This means that if a user enters an invalid value and then presses cancel, the most recent
       // valid value will be committed to the store instead of the invalid value
       if (this.is_valid) this.input_value = +value_str;

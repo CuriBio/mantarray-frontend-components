@@ -69,7 +69,7 @@
       />
     </div>
     <div v-if="open_delay_modal" class="modal-container delay-container">
-      <StimulationStudioDelayModal
+      <StimulationStudioInputModal
         :modal_open_for_edit="modal_open_for_edit"
         :current_delay_unit="current_delay_unit"
         :current_delay_input="current_delay_input"
@@ -83,7 +83,7 @@
 import draggable from "vuedraggable";
 import { mapState, mapActions, mapMutations } from "vuex";
 import StimulationStudioWaveformSettingModal from "@/components/stimulation/StimulationStudioWaveformSettingModal.vue";
-import StimulationStudioDelayModal from "@/components/stimulation/StimulationStudioDelayModal.vue";
+import StimulationStudioInputModal from "@/components/stimulation/StimulationStudioInputModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import { generate_random_color } from "@/js_utils/waveform_data_formatter";
 
@@ -115,7 +115,7 @@ export default {
   components: {
     draggable,
     StimulationStudioWaveformSettingModal,
-    StimulationStudioDelayModal,
+    StimulationStudioInputModal,
     SmallDropDown,
   },
   props: {
