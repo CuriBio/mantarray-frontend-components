@@ -572,4 +572,29 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     expect(action_spy).toHaveBeenCalledTimes(1);
   });
+
+  test("When a user moves a pulse out of a loop, Then changes will be dispatched to state", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    const action_spy = jest.spyOn(store, "dispatch");
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    expect(action_spy).toHaveBeenCalledTimes(0);
+
+    wrapper.vm.protocol_order[4].subprotocols.splice(0, 1);
+    wrapper.vm.handle_protocol_loop(
+      {
+        removed: {
+          element: {
+            type: "Monophasic",
+          },
+        },
+      },
+      4
+    );
+
+    expect(action_spy).toHaveBeenCalledTimes(1);
+    expect(wrapper.vm.protocol_order[4].type).toBe("Delay");
+  });
 });
