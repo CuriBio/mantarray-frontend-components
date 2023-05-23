@@ -122,9 +122,9 @@
       <StimulationStudioInputModal
         :modal_open_for_edit="modal_open_for_edit"
         :current_input="current_input"
-        :input_label="'Number of Loops:'"
+        :input_label="'Number of Iterations:'"
         :include_units="false"
-        :modal_title="'Repeat Setup'"
+        :modal_title="'Setup Subprotocol Loop'"
         @input-close="close_repeat_modal"
       />
     </div>
