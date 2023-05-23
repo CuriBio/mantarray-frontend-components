@@ -477,4 +477,99 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     expect(wrapper.vm.protocol_order[4].subprotocols).toHaveLength(0);
     expect(wrapper.vm.protocol_order[4].type).toBe("Monophasic");
   });
+
+  test("When initiates a loop with first nested pulse, Then the repeat modal will open", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    wrapper.vm.handle_protocol_loop(
+      {
+        added: {
+          element: {
+            type: "Monophasic",
+            src: "placeholder",
+            color: "rgb(350, 85, 90)",
+            pulse_settings: {
+              frequency: 10,
+              num_cycles: 100,
+              phase_one_charge: 10,
+              phase_one_duration: 5,
+              postphase_interval: 95,
+              total_active_duration: {
+                duration: 10,
+                unit: "seconds",
+              },
+            },
+            subprotocols: [],
+          },
+        },
+      },
+      1
+    );
+
+    expect(wrapper.vm.open_repeat_modal).toBe(true);
+    expect(wrapper.vm.dbl_click_pulse_idx).toBe(1);
+  });
+
+  test("When adds a new pulse to an existing loop, Then the repeat modal will not open", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    wrapper.vm.handle_protocol_loop(
+      {
+        added: {
+          element: {
+            type: "Monophasic",
+            src: "placeholder",
+            color: "rgb(350, 85, 90)",
+            pulse_settings: {
+              frequency: 10,
+              num_cycles: 100,
+              phase_one_charge: 10,
+              phase_one_duration: 5,
+              postphase_interval: 95,
+              total_active_duration: {
+                duration: 10,
+                unit: "seconds",
+              },
+            },
+            subprotocols: [],
+          },
+        },
+      },
+      4
+    );
+
+    expect(wrapper.vm.open_repeat_modal).toBe(false);
+    expect(wrapper.vm.dbl_click_pulse_idx).toBe(null);
+  });
+
+  test("When a user moves a pulse within a loop, Then changes will be dispatched to state", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    const action_spy = jest.spyOn(store, "dispatch");
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    expect(action_spy).toHaveBeenCalledTimes(0);
+
+    wrapper.vm.handle_protocol_loop(
+      {
+        moved: {
+          element: {
+            type: "Monophasic",
+          },
+        },
+      },
+      4
+    );
+
+    expect(action_spy).toHaveBeenCalledTimes(1);
+  });
 });
