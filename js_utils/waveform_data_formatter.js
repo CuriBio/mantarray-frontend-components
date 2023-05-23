@@ -207,7 +207,7 @@ function generate_random_color(non_green, previous_hue, next_hue) {
     const hue_idx = non_green_ranges.indexOf(int_hue);
 
     // 80 will prevent too similar of purple/blue and red/pink next to each other
-    let opposite_idx = hue_idx + 80;
+    let opposite_idx = hue_idx + 80 + Math.floor(110 * Math.random());
 
     if (!non_green_ranges[opposite_idx]) {
       // using 210 instead of 260 (the total length of non-green hues) to prevent only alternating 4 colors

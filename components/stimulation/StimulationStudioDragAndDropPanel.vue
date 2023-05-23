@@ -316,16 +316,10 @@ export default {
     },
     async handle_nested_settings(button, pulse_settings, selected_color) {
       const edited_pulse = this.protocol_order[this.dbl_click_pulse_idx];
-      const { subprotocols } = edited_pulse;
       // needs to not edit original pulse, edited_pulse does
-      const edited_nested_pulse = subprotocols[this.dbl_click_pulse_nested_idx];
-
+      const edited_nested_pulse = edited_pulse.subprotocols[this.dbl_click_pulse_nested_idx];
       const edited_nested_pulse_copy = JSON.parse(JSON.stringify(edited_nested_pulse));
-      const num_subprotocols = subprotocols.length;
-      const previous_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx);
-
-      // intentionally set to undefined if neither of the following conditionals are met
-      let next_hue;
+      const num_subprotocols = edited_pulse.subprotocols.length;
 
       switch (button) {
         case "Save":
@@ -333,23 +327,20 @@ export default {
           edited_nested_pulse.color = selected_color;
           break;
         case "Duplicate":
-          // next conditional checks if pulse is not last in loop
-          if (num_subprotocols - 1 > this.dbl_click_pulse_nested_idx)
-            next_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx);
-          // else take next pulse outside of loop to prevent duplciate colors in a row
-          else if (
-            num_subprotocols - 1 == this.dbl_click_pulse_nested_idx &&
-            this.dbl_click_pulse_idx < this.protocol_order.length - 1
-          )
-            next_hue = this.get_pulse_hue(this.dbl_click_pulse_idx + 1);
+          // generate color considering previous and next pulses colors
+          edited_nested_pulse_copy.color = generate_random_color(
+            true,
+            this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx),
+            this.dbl_click_pulse_nested_idx + 1 < num_subprotocols - 1
+              ? this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx + 1)
+              : undefined
+          );
 
-          // else no need to consider next in order
-          edited_nested_pulse_copy.color = generate_random_color(true, previous_hue, next_hue);
           edited_pulse.subprotocols.splice(this.dbl_click_pulse_nested_idx + 1, 0, edited_nested_pulse_copy);
           break;
         case "Delete":
           if (num_subprotocols - 1 === 1) {
-            this.protocol_order.splice(this.dbl_click_pulse_idx, 1, subprotocols[0]);
+            this.protocol_order.splice(this.dbl_click_pulse_idx, 1, edited_pulse.subprotocols[0]);
           } else {
             edited_pulse.subprotocols.splice(this.dbl_click_pulse_nested_idx, 1);
           }
