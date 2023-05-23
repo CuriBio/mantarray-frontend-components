@@ -27,10 +27,10 @@ describe("StimulationStudioInputModal.vue", () => {
       },
     });
 
-    await wrapper.find("#input-widget-field-delay").setValue(MIN_SUBPROTOCOL_DURATION_MS.toString());
-    await wrapper.findAll(".span__button_label").at(1).trigger("click");
+    await wrapper.find("#input-widget-field-stim-input").setValue(MIN_SUBPROTOCOL_DURATION_MS.toString());
+    await wrapper.findAll(".span__button-label").at(1).trigger("click");
 
-    expect(wrapper.emitted("delay_close")).toBeTruthy();
+    expect(wrapper.emitted("input-close")).toBeTruthy();
   });
 
   test.each([
@@ -67,7 +67,7 @@ describe("StimulationStudioInputModal.vue", () => {
         current_color: "hsla(50, 100%, 50%, 1)",
       },
     });
-    const target_input_field = wrapper.find("#input-widget-field-delay");
+    const target_input_field = wrapper.find("#input-widget-field-stim-input");
 
     // invalid
     await target_input_field.setValue("");
@@ -102,10 +102,10 @@ describe("StimulationStudioInputModal.vue", () => {
         current_color: "hsla(50, 100%, 50%, 1)",
       },
     });
-    await wrapper.find("#input-widget-field-delay").setValue("5000");
+    await wrapper.find("#input-widget-field-stim-input").setValue("5000");
     expect(wrapper.vm.is_valid).toBe(true);
 
-    await wrapper.find("#input-widget-field-delay").setValue("test");
+    await wrapper.find("#input-widget-field-stim-input").setValue("test");
     expect(wrapper.vm.is_valid).toBe(false);
   });
   test("When a user selects a different time unit from the dropdown, Then the index will be saved to state", async () => {

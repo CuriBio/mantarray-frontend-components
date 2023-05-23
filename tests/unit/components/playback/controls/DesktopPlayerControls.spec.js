@@ -158,7 +158,7 @@ describe("DesktopPlayerControls.vue", () => {
       expect(wrapper.find("#settings-form").isVisible()).toBe(false);
     });
 
-    await wrapper.findAll(".span__button_label").at(0).trigger("click");
+    await wrapper.findAll(".span__button-label").at(0).trigger("click");
 
     Vue.nextTick(() => {
       expect(wrapper.find("#user-input-prompt-message").isVisible()).toBe(false);
@@ -207,7 +207,7 @@ describe("DesktopPlayerControls.vue", () => {
         expect(wrapper.find("#calibration-warning").isVisible()).toBe(false);
       });
 
-      await wrapper.findAll(".span__button_label").at(close_idx).trigger("click");
+      await wrapper.findAll(".span__button-label").at(close_idx).trigger("click");
 
       Vue.nextTick(() => {
         expect(wrapper.find("#fw-update-available-message").isVisible()).toBe(false);
@@ -357,7 +357,7 @@ describe("DesktopPlayerControls.vue", () => {
         // stop recording
         const stop_button = wrapper.find(".svg__playback-desktop-player-controls-record-button--active");
         await stop_button.trigger("click");
-        await wrapper.findAll(".span__button_label").at(8).trigger("click");
+        await wrapper.findAll(".span__button-label").at(8).trigger("click");
         expect(store.state.playback.playback_state).toBe(
           playback_module.ENUMS.PLAYBACK_STATES["LIVE_VIEW_ACTIVE"]
         );
@@ -604,7 +604,7 @@ describe("DesktopPlayerControls.vue", () => {
         expect(wrapper.find("#calibration-modal").isVisible()).toBe(true);
       });
 
-      await wrapper.findAll(".span__button_label").at(1).trigger("click");
+      await wrapper.findAll(".span__button-label").at(1).trigger("click");
 
       expect(action_spy).toHaveBeenCalledWith("playback/start_calibration");
     });

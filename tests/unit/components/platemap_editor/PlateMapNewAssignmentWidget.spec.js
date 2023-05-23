@@ -60,7 +60,7 @@ describe("PlateMapNewAssignmentWidget.vue", () => {
     });
 
     await wrapper.find("#input-widget-field-assignment-name").setValue("new_name");
-    await wrapper.findAll(".span__button_label").at(1).trigger("click");
+    await wrapper.findAll(".span__button-label").at(1).trigger("click");
 
     expect(store_spy).toHaveBeenCalledWith("platemap/set_new_label", "new_name", undefined);
   });
@@ -90,7 +90,7 @@ describe("PlateMapNewAssignmentWidget.vue", () => {
 
     await wrapper.find("#input-widget-field-assignment-name").setValue("new_name");
 
-    await wrapper.findAll(".span__button_label").at(1).trigger("click");
+    await wrapper.findAll(".span__button-label").at(1).trigger("click");
 
     expect(store_spy).toHaveBeenCalledWith(
       "platemap/change_existing_name",
@@ -108,7 +108,7 @@ describe("PlateMapNewAssignmentWidget.vue", () => {
       });
 
       await wrapper.find("#input-widget-field-assignment-name").setValue("new_name");
-      await wrapper.findAll(".span__button_label").at(button_idx).trigger("click");
+      await wrapper.findAll(".span__button-label").at(button_idx).trigger("click");
 
       expect(wrapper.emitted("close_modal")).toHaveLength(1);
       expect(wrapper.vm.initial_value).toBe("");

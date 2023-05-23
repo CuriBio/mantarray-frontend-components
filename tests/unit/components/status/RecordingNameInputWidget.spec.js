@@ -74,7 +74,7 @@ describe("RecordingNameInputWidget.vue", () => {
       const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
       const error_msg = wrapper.find("#input-widget-feedback-recording-name");
       const input_widget = wrapper.find("#input-widget-field-recording-name");
-      const button_widget = wrapper.findAll(".span__button_label").at(0);
+      const button_widget = wrapper.findAll(".span__button-label").at(0);
 
       input_widget.element.value = "";
       await input_widget.trigger("input");
@@ -104,7 +104,7 @@ describe("RecordingNameInputWidget.vue", () => {
 
     jest.spyOn(store, "dispatch").mockImplementation(() => 403);
     const input_widget = wrapper.find("#input-widget-field-recording-name");
-    const button_widget = wrapper.findAll(".span__button_label").at(0);
+    const button_widget = wrapper.findAll(".span__button-label").at(0);
 
     input_widget.element.value = "new_name";
     await input_widget.trigger("input");
@@ -129,7 +129,7 @@ describe("RecordingNameInputWidget.vue", () => {
 
       jest.spyOn(store, "dispatch").mockImplementation(() => 200);
       const input_widget = wrapper.find("#input-widget-field-recording-name");
-      const button_widget = wrapper.findAll(".span__button_label").at(0);
+      const button_widget = wrapper.findAll(".span__button-label").at(0);
 
       input_widget.element.value = "new_name";
       await input_widget.trigger("input");
@@ -173,7 +173,7 @@ describe("RecordingNameInputWidget.vue", () => {
     expect(wrapper.vm.run_recording_snapshot_current).toBe(false);
 
     const toggle_input = wrapper.find("#toggle_input_run_recording_snapshot_current");
-    const button_widget = wrapper.findAll(".span__button_label");
+    const button_widget = wrapper.findAll(".span__button-label");
 
     await toggle_input.trigger("click");
     await button_widget.at(2).trigger("click");
@@ -190,7 +190,7 @@ describe("RecordingNameInputWidget.vue", () => {
 
     jest.spyOn(store, "dispatch").mockImplementation(() => 403);
     const input_widget = wrapper.find("#input-widget-field-recording-name");
-    const button_widget = wrapper.findAll(".span__button_label");
+    const button_widget = wrapper.findAll(".span__button-label");
     const error_msg = wrapper.find("#input-widget-feedback-recording-name");
 
     input_widget.element.value = "new_name";
@@ -220,7 +220,7 @@ describe("RecordingNameInputWidget.vue", () => {
 
       jest.spyOn(store, "dispatch").mockImplementation(() => 403);
       const input_widget = wrapper.find("#input-widget-field-recording-name");
-      const button_widget = wrapper.findAll(".span__button_label");
+      const button_widget = wrapper.findAll(".span__button-label");
 
       input_widget.element.value = "new_name";
       await input_widget.trigger("input");

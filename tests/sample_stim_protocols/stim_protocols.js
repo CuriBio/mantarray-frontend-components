@@ -313,6 +313,7 @@ export const TEST_PROTOCOL_ORDER_2 = [
         unit: "milliseconds",
       },
       num_cycles: 2,
+      subprotocols: [],
     },
   },
   {
@@ -329,6 +330,7 @@ export const TEST_PROTOCOL_ORDER_2 = [
       },
       num_cycles: 1,
     },
+    subprotocols: [],
   },
   {
     type: "Delay",
@@ -338,6 +340,7 @@ export const TEST_PROTOCOL_ORDER_2 = [
       duration: 1300,
       unit: "seconds",
     },
+    subprotocols: [],
   },
   {
     type: "Monophasic",
@@ -353,6 +356,7 @@ export const TEST_PROTOCOL_ORDER_2 = [
       },
       num_cycles: 2,
     },
+    subprotocols: [],
   },
 ];
 
@@ -386,6 +390,7 @@ export const TEST_PROTOCOL_LIST = [
           nested_protocols: [],
           color: "hsla(99, 60%, 40%, 1)",
           pulse_settings: { duration: 15, unit: "seconds" },
+          subprotocols: [],
         },
       ],
     },
@@ -411,6 +416,7 @@ export const TEST_PROTOCOL_B = {
     detailed_subprotocols: [
       {
         color: "hsla(45, 90%, 40%, 1)",
+        subprotocols: [],
       },
     ],
   },
@@ -437,6 +443,7 @@ export const TEST_PROTOCOL_D = {
     detailed_subprotocols: [
       {
         color: "hsla(309, 50%, 60%, 1)",
+        subprotocols: [],
       },
     ],
   },
@@ -462,6 +469,7 @@ export const TEST_PROTOCOL_ORDER_3 = [
       num_cycles: 1,
       frequency: 3,
     },
+    subprotocols: [],
   },
   {
     type: "Monophasic",
@@ -479,6 +487,7 @@ export const TEST_PROTOCOL_ORDER_3 = [
       num_cycles: 2,
       frequency: 1,
     },
+    subprotocols: [],
   },
   {
     type: "Delay",
@@ -489,6 +498,7 @@ export const TEST_PROTOCOL_ORDER_3 = [
       duration: 300,
       unit: "seconds",
     },
+    subprotocols: [],
   },
   {
     type: "Monophasic",
@@ -506,6 +516,7 @@ export const TEST_PROTOCOL_ORDER_3 = [
       num_cycles: 4,
       frequency: 5,
     },
+    subprotocols: [],
   },
 ];
 
@@ -543,6 +554,7 @@ export const TEST_PROTOCOL_LIST_2 = [
             pduration: 15000,
             unit: "milliseconds",
           },
+          subprotocols: [],
         },
       ],
     },

@@ -156,7 +156,14 @@ export const get_total_active_duration = (type, protocol) => {
     : +protocol.phase_one_duration + +protocol.phase_two_duration + +protocol.interphase_interval;
 };
 
-export const is_valid_single_pulse = (protocol) => {
+export const are_valid_pulses = (input) => {
+  return input.some((proto) => {
+    if (proto.type === "loop") return are_valid_pulses(proto.subprotocols);
+    else return proto.type === "Delay" ? _is_valid_delay_pulse(proto) : _is_valid_single_pulse(proto);
+  });
+};
+
+export const _is_valid_single_pulse = (protocol) => {
   const { duration, unit } = protocol.total_active_duration;
   const is_monophasic = protocol.type === "Monophasic";
   const charges_to_check = is_monophasic ? ["phase_one_charge"] : ["phase_one_charge", "phase_two_charge"];
@@ -191,7 +198,7 @@ export const is_valid_single_pulse = (protocol) => {
   return durations_are_valid && charges_are_valid && complete_pulse_validity;
 };
 
-export const is_valid_delay_pulse = (protocol) => {
+export const _is_valid_delay_pulse = (protocol) => {
   const { duration, unit } = protocol;
   return check_delay_pulse_validity(duration, unit) === "";
 };
@@ -234,3 +241,11 @@ export const is_valid_delay_pulse = (protocol) => {
   type
   unit
 */
+
+/*
+    LOOP
+    ^^^^^
+    num_iterations: int
+    type
+    subprotocols: []
+  */

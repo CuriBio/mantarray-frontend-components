@@ -7,7 +7,7 @@ import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 const customer_id_input_field = Selector("#input-widget-field-customer-id");
 const username_input_field = Selector("#input-dropdown-widget-username");
 const user_password_input_field = Selector("#input-widget-field-passkey-id");
-const span__button_label = Selector(".span__button_label");
+const span__button_label = Selector(".span__button-label");
 
 const add_user_cancel_btn = span__button_label.nth(0);
 const user_save_btn = span__button_label.nth(1);

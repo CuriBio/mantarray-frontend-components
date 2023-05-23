@@ -66,7 +66,7 @@ describe("RecordingSnapshotWidget.vue", () => {
     store.commit("data/set_recording_snapshot_data", Array(24).fill([]));
     wrapper = mount(RecordingSnapshotWidget, { store, localVue });
 
-    await wrapper.find(".span__button_label").trigger("click");
+    await wrapper.find(".span__button-label").trigger("click");
 
     expect(wrapper.emitted("close_modal")).toHaveLength(1);
     expect(store.state.data.recording_snapshot_data).toStrictEqual([]);

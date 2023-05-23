@@ -1,7 +1,7 @@
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 import { call_axios_post_from_vuex } from "@/js_utils/axios_helpers";
-import { is_valid_delay_pulse, is_valid_single_pulse } from "@/js_utils/protocol_validation";
+import { are_valid_pulses } from "@/js_utils/protocol_validation";
 import { STIM_STATUS, TIME_CONVERSION_TO_MILLIS, COLOR_PALETTE } from "./enums";
 import { get_protocol_editor_letter } from "./getters";
 
@@ -62,28 +62,65 @@ export default {
     };
 
     await new_subprotocol_order.map(async (pulse) => {
-      const { color } = pulse;
-      let settings = pulse.pulse_settings;
+      if (pulse.type !== "loop") {
+        const { color } = pulse;
+        let settings = pulse.pulse_settings;
+        const starting_repeat_idx = x_values.length - 1;
 
-      const starting_repeat_idx = x_values.length - 1;
+        settings = {
+          type: pulse.type,
+          ...settings,
+        };
 
-      settings = {
-        type: pulse.type,
-        ...settings,
-      };
+        subprotocols.push(settings);
 
-      subprotocols.push(settings);
+        // num_cycles defaults to 0 and delay will never update unless run through once
+        let remaining_pulse_cycles = pulse.type === "Delay" ? 1 : settings.num_cycles;
 
-      // num_cycles defaults to 0 and delay will never update unless run through once
-      let remaining_pulse_cycles = pulse.type === "Delay" ? 1 : settings.num_cycles;
+        while (remaining_pulse_cycles > 0) {
+          helper(settings, pulse.type);
+          remaining_pulse_cycles--;
+        }
 
-      while (remaining_pulse_cycles > 0) {
-        helper(settings, pulse.type);
-        remaining_pulse_cycles--;
+        const ending_repeat_idx = x_values.length;
+        color_assignments.push([color, [starting_repeat_idx, ending_repeat_idx]]);
+      } else {
+        const pulse_copy = JSON.parse(JSON.stringify(pulse));
+
+        // eslint-disable-next-line  no-unused-vars
+        for (const _ of Array(pulse.num_iterations).fill()) {
+          pulse_copy.subprotocols.map((inner_pulse) => {
+            const { color } = inner_pulse;
+            let settings = inner_pulse.pulse_settings;
+            const starting_repeat_idx = x_values.length - 1;
+
+            settings = {
+              type: inner_pulse.type,
+              ...settings,
+            };
+
+            let remaining_pulse_cycles = inner_pulse.type === "Delay" ? 1 : settings.num_cycles;
+
+            while (remaining_pulse_cycles > 0) {
+              helper(settings, inner_pulse.type);
+              remaining_pulse_cycles--;
+            }
+
+            const ending_repeat_idx = x_values.length;
+            color_assignments.push([color, [starting_repeat_idx, ending_repeat_idx]]);
+          });
+        }
+
+        pulse_copy.subprotocols = pulse_copy.subprotocols.map((looped_pulse) => {
+          const settings = looped_pulse.pulse_settings;
+          return {
+            type: looped_pulse.type,
+            ...settings,
+          };
+        });
+
+        subprotocols.push(pulse_copy);
       }
-
-      const ending_repeat_idx = x_values.length;
-      color_assignments.push([color, [starting_repeat_idx, ending_repeat_idx]]);
     });
 
     // convert x_values to correct unit
@@ -198,11 +235,9 @@ export default {
   async add_imported_protocol({ commit, state }, { protocols }) {
     const invalid_imported_protocols = [];
     for (const [idx, { protocol }] of Object.entries(protocols)) {
-      const invalid_pulses = protocol.subprotocols.filter(
-        (pulse) => !(pulse.type === "Delay" ? is_valid_delay_pulse(pulse) : is_valid_single_pulse(pulse))
-      );
+      const invalid_pulses = are_valid_pulses(protocol.subprotocols);
 
-      if (invalid_pulses.length === 0) {
+      if (invalid_pulses) {
         await commit("set_edit_mode_off");
         // needs to be set to off every iteration because an action elsewhere triggers it on
         const letter = get_protocol_editor_letter(state.protocol_list);
@@ -385,24 +420,66 @@ export default {
       commit("set_stim_status", STIM_STATUS.CONFIG_CHECK_IN_PROGRESS);
     }
   },
-  async on_pulse_mouseenter({ state }, idx) {
-    const hovered_pulse = state.repeat_colors[idx];
+  async on_pulse_mouseenter({ state }, { idx, nested_idx }) {
+    const original_pulse = state.protocol_editor.detailed_subprotocols[idx];
+    let hovered_pulses = [];
 
-    state.hovered_pulse = {
-      idx,
-      indices: hovered_pulse[1],
-      color: hovered_pulse[0],
-    };
+    if (nested_idx >= 0 && original_pulse.type == "loop") {
+      // find the starting index by expanding any loops to find corresponding index in repeat_colors
+      const starting_idx = state.protocol_editor.detailed_subprotocols
+        // filter any unnecessary indices after hovered over index
+        .filter((_, i) => i < idx)
+        // reduce to get index
+        .reduce((acc, pulse) => {
+          const val = pulse.type === "loop" ? pulse.subprotocols.length * pulse.num_iterations : 1;
+          return acc + val;
+        }, 0);
+
+      // loop through subprotocols x amount of times to highlight every instance in a loop
+      hovered_pulses = [...Array(original_pulse.num_iterations).keys()].map((i) => {
+        const num_subprotocols = original_pulse.subprotocols.length;
+        const idx_to_use = starting_idx + nested_idx + i * num_subprotocols;
+        return {
+          idx: idx_to_use,
+          indices: state.repeat_colors[idx_to_use][1],
+          color: state.repeat_colors[idx_to_use][0],
+        };
+      });
+    } else {
+      //  find the index by expanding any loops to find corresponding index in repeat_colors
+      const idx_to_use = state.protocol_editor.detailed_subprotocols
+        .filter((_, i) => i <= idx)
+        .reduce((acc, pulse, i) => {
+          let val = pulse.type === "loop" ? pulse.subprotocols.length * pulse.num_iterations : 1;
+          if (i === 0) val = val-- < 0 ? 0 : val--;
+          return acc + val;
+        }, 0);
+
+      hovered_pulses = [
+        {
+          idx,
+          indices: state.repeat_colors[idx_to_use][1],
+          color: state.repeat_colors[idx_to_use][0],
+        },
+      ];
+    }
+    // needs to be array [{}, ... ]
+    state.hovered_pulses = hovered_pulses;
   },
 };
 
-const _get_converted_settings = async (subprotocols) => {
+const _get_converted_settings = (subprotocols) => {
   const milli_to_micro = 1e3;
-  const current_conversion = milli_to_micro;
+  const charge_conversion = milli_to_micro;
 
   return subprotocols.map((pulse) => {
     let type_specific_settings = {};
-    if (pulse.type === "Delay")
+    if (pulse.type === "loop") {
+      type_specific_settings = {
+        num_iterations: pulse.num_iterations,
+        subprotocols: _get_converted_settings(pulse.subprotocols),
+      };
+    } else if (pulse.type === "Delay")
       type_specific_settings.duration =
         pulse.duration * TIME_CONVERSION_TO_MILLIS[pulse.unit] * milli_to_micro;
     else
@@ -410,14 +487,14 @@ const _get_converted_settings = async (subprotocols) => {
         num_cycles: pulse.num_cycles,
         postphase_interval: Math.round(pulse.postphase_interval * milli_to_micro), // sent in µs, also needs to be an integer value
         phase_one_duration: pulse.phase_one_duration * milli_to_micro, // sent in µs
-        phase_one_charge: pulse.phase_one_charge * current_conversion, // sent in mV
+        phase_one_charge: pulse.phase_one_charge * charge_conversion, // sent in mV
       };
 
     if (pulse.type === "Biphasic")
       type_specific_settings = {
         ...type_specific_settings,
         interphase_interval: pulse.interphase_interval * milli_to_micro, // sent in µs
-        phase_two_charge: pulse.phase_two_charge * current_conversion, // sent in mV or µA
+        phase_two_charge: pulse.phase_two_charge * charge_conversion, // sent in mV or µA
         phase_two_duration: pulse.phase_two_duration * milli_to_micro, // sent in µs
       };
 

@@ -176,7 +176,7 @@ describe("YAxisControlsSettings.vue", () => {
     target_max_input.setValue("1.2");
     target_min_input.setValue("1.1");
     await Vue.nextTick();
-    const target_button_label_btn = wrapper.findAll(".span__button_label");
+    const target_button_label_btn = wrapper.findAll(".span__button-label");
     const apply_btn = target_button_label_btn.at(0);
     await apply_btn.trigger("click");
     await Vue.nextTick();
@@ -195,7 +195,7 @@ describe("YAxisControlsSettings.vue", () => {
       localVue,
     });
 
-    const target_button_label_btn = wrapper.findAll(".span__button_label");
+    const target_button_label_btn = wrapper.findAll(".span__button-label");
     const cancel_btn = target_button_label_btn.at(1);
     await cancel_btn.trigger("click");
     await Vue.nextTick();

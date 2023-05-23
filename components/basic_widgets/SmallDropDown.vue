@@ -91,6 +91,7 @@ export default {
   },
   created() {
     this.get_preselected_option();
+
     this.options_list = this.dropdown_options;
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
       if (

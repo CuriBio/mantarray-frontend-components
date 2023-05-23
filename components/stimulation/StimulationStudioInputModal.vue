@@ -161,7 +161,7 @@ export default {
   created() {
     this.input_value = this.current_value;
 
-    this.time_unit_idx = this.time_units.indexOf(this.current_delay_unit);
+    this.time_unit_idx = this.time_units.indexOf(this.current_unit);
     this.is_enabled_array = this.modal_open_for_edit ? [true, true, true, true] : [false, true];
     if (this.current_value !== null) this.check_validity(this.input_value);
   },
@@ -186,7 +186,8 @@ export default {
         const is_int = Number.isInteger(+value_str);
         this.invalid_text = !is_int ? "Must be a whole (+) number" : "";
       }
-      this.isValid = this.invalidText === "";
+
+      this.is_valid = this.invalid_text === "";
       // Only want to update inputValue here so it is only ever set to a valid value.
       // This means that if a user enters an invalid value and then presses cancel, the most recent
       // valid value will be committed to the store instead of the invalid value

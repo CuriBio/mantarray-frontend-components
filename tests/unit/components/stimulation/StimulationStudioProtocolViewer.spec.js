@@ -204,7 +204,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       const d_points = await convert_x_y_arrays_to_d3_array(x_axis_values, y_axis_values);
       await wrapper.setProps({ data_points: d_points });
 
-      await store.dispatch("stimulation/on_pulse_mouseenter", 1);
+      await store.dispatch("stimulation/on_pulse_mouseenter", { idx: 1 });
 
       const highlight_line_node = wrapper.find("#highlight_line_node");
       const highlight_line_path = highlight_line_node.findAll("path");

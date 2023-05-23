@@ -4,7 +4,7 @@ const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-const span__button_label = Selector(".span__button_label");
+const span__button_label = Selector(".span__button-label");
 
 const customer_id_input_field = Selector("#input-widget-field-customer-id");
 const username_input_field = Selector("#input-widget-field-username");

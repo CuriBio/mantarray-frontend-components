@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div :class="modal_type !== null || open_delay_modal ? 'modal_overlay' : null">
+    <div :class="modal_type !== null || open_delay_modal || open_repeat_modal ? 'div__modal-overlay' : null">
       <div>
-        <div class="div__DragAndDdrop-panel">
+        <div class="div__drag-and-drop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
           <canvas class="canvas__stimulationstudio-header-separator" />
           <div
@@ -13,10 +13,12 @@
           <draggable
             v-model="icon_types"
             tag="div"
-            class="draggable_tile_container"
+            class="draggable__tile-container"
             :disabled="disable_edits"
             :group="{ name: 'order', pull: 'clone', put: false }"
             :clone="clone"
+            @start="is_dragging = true"
+            @end="is_dragging = false"
           >
             <div v-for="(type, idx) in icon_types" :id="type" :key="idx">
               <img :src="require(`@/assets/img/${type}.png`)" />
@@ -43,17 +45,55 @@
             :group="{ name: 'order' }"
             :ghost-class="'ghost'"
             @change="check_type($event)"
-            @start="is_dragging = true"
+            @start="start_dragging"
             @end="is_dragging = false"
           >
-            <div v-for="(types, idx) in protocol_order" :key="idx" class="div__tile-container">
+            <div
+              v-for="(pulse, idx) in protocol_order"
+              :key="idx"
+              :class="'div__repeat-container'"
+              :style="get_border_style(pulse)"
+            >
+              <!-- Only display circular icon when nested loop, icon displays number of loops -->
+              <div v-if="pulse.num_iterations" :class="'div__repeat-label-container'">
+                <div class="div__circle" @dblclick="open_repeat_modal_for_edit(pulse.num_iterations, idx)">
+                  <span :class="'span__repeat-label'">
+                    {{ pulse.num_iterations }}
+                  </span>
+                </div>
+              </div>
               <img
+                v-if="pulse.type !== 'loop'"
                 id="img__waveform-tile"
-                :src="require(`@/assets/img/${types.type}.png`)"
-                @dblclick="open_modal_for_edit(types.type, idx)"
+                :src="require(`@/assets/img/${pulse.type}.png`)"
+                @dblclick="open_modal_for_edit(pulse.type, idx)"
                 @mouseenter="on_pulse_enter(idx)"
                 @mouseleave="on_pulse_leave"
               />
+              <!-- Below is nested dropzone, can be disabled if needed -->
+              <draggable
+                v-model="pulse.subprotocols"
+                class="dropzone"
+                :group="{ name: 'order' }"
+                :ghost-class="'ghost'"
+                :style="pulse.type === 'loop' && 'margin-right: -31px'"
+                :emptyInsertThreshold="40"
+                :disabled="is_nesting_disabled"
+                @change="handle_protocol_loop($event, idx)"
+                @start="is_dragging = true"
+                @end="is_dragging = false"
+              >
+                <div
+                  v-for="(nested_pulse, nested_idx) in pulse.subprotocols"
+                  :key="nested_idx"
+                  :style="'position: relative;'"
+                  @dblclick="open_modal_for_edit(nested_pulse.type, idx, nested_idx)"
+                  @mouseenter="on_pulse_enter(idx, nested_idx)"
+                  @mouseleave="on_pulse_leave"
+                >
+                  <img :src="require(`@/assets/img/${nested_pulse.type}.png`)" :style="'margin-top: 4px;'" />
+                </div>
+              </draggable>
             </div>
           </draggable>
         </div>
@@ -71,10 +111,20 @@
     <div v-if="open_delay_modal" class="modal-container delay-container">
       <StimulationStudioInputModal
         :modal_open_for_edit="modal_open_for_edit"
-        :current_delay_unit="current_delay_unit"
-        :current_delay_input="current_delay_input"
+        :current_unit="current_delay_unit"
+        :current_input="current_input"
         :current_color="selected_color"
-        @delay_close="on_modal_close"
+        @input-close="on_modal_close"
+      />
+    </div>
+    <div v-if="open_repeat_modal" class="modal-container repeat-container">
+      <StimulationStudioInputModal
+        :modal_open_for_edit="modal_open_for_edit"
+        :current_input="current_input"
+        :input_label="'Number of Loops:'"
+        :include_units="false"
+        :modal_title="'Repeat Setup'"
+        @input-close="close_repeat_modal"
       />
     </div>
   </div>
@@ -95,7 +145,7 @@ import { generate_random_color } from "@/js_utils/waveform_data_formatter";
  * @vue-data {Array} protocol_order -  This is the complete order of pulses/delays/repeats in the entire new protocol
  * @vue-data {String} modal_type - Tracks which modal should open based on pulse type
  * @vue-data {String} setting_type - This is the stimulation type that user selects from drop down in settings panel
- * @vue-data {Int} shift_click_img_idx - Index of selected pulse to edit in order to save new settings to correct pulse
+ * @vue-data {Int} dbl_click_pulse_idx - Index of selected pulse to edit in order to save new settings to correct pulse
  * @vue-data {String} open_delay_modal - Tracks which modal should open based on if it is a repeat or delay
  * @vue-data {String} current_delay_input - Saved input for a delay block that changes depending on which delay block is opened for edit
  * @vue-data {Boolean} cloned - Determines if a placed tile in protocol order is new and needs a modal to open appear to set settings or just an order rearrangement of existing tiles
@@ -129,9 +179,9 @@ export default {
       protocol_order: [],
       modal_type: null,
       setting_type: "Current",
-      shift_click_img_idx: null,
+      dbl_click_pulse_idx: null,
       open_delay_modal: false,
-      current_delay_input: null,
+      current_input: null,
       current_delay_unit: "milliseconds",
       cloned: false,
       new_cloned_idx: null,
@@ -140,6 +190,8 @@ export default {
       disable_dropdown: false,
       is_dragging: false,
       selected_color: null,
+      open_repeat_modal: false,
+      dbl_click_pulse_nested_idx: null,
     };
   },
   computed: {
@@ -148,30 +200,38 @@ export default {
       run_until_stopped: (state) => state.protocol_editor.run_until_stopped,
       detailed_subprotocols: (state) => state.protocol_editor.detailed_subprotocols,
     }),
+    is_nesting_disabled: function () {
+      // disable nesting if the dragged pulse is a nested loop already to prevent deep nesting
+      // OR a new pulse is being placed
+      const selected_pulse = this.protocol_order[this.is_dragging];
+      return (
+        (Number.isInteger(this.is_dragging) && selected_pulse && selected_pulse.type === "loop") ||
+        this.cloned
+      );
+    },
   },
   watch: {
     is_dragging: function () {
       // reset so old position/idx isn't highlighted once moved
       this.on_pulse_mouseleave();
     },
-  },
-  created() {
-    this.unsubscribe = this.$store.subscribe(async (mutation) => {
-      if (
-        mutation.type === "stimulation/reset_state" ||
-        mutation.type === "stimulation/reset_protocol_editor"
-      ) {
-        this.protocol_order = [];
-      } else if (mutation.type === "stimulation/set_edit_mode") {
-        this.protocol_order = JSON.parse(JSON.stringify(this.detailed_subprotocols));
-        this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
-      } else if (mutation.type === "stimulation/set_stop_setting") {
-        this.disable_dropdown = !this.run_until_stopped;
-      }
-    });
-  },
-  beforeDestroy() {
-    this.unsubscribe();
+    detailed_subprotocols: function () {
+      console.log(JSON.stringify(this.detailed_subprotocols));
+      this.protocol_order = JSON.parse(JSON.stringify(this.detailed_subprotocols)).map((protocol) =>
+        protocol.type !== "loop"
+          ? {
+              ...protocol,
+              subprotocols: [],
+            }
+          : protocol
+      );
+    },
+    time_unit: function () {
+      this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
+    },
+    run_until_stopped: function () {
+      this.disable_dropdown = !this.run_until_stopped;
+    },
   },
   methods: {
     ...mapActions("stimulation", ["handle_protocol_order", "on_pulse_mouseenter"]),
@@ -182,10 +242,12 @@ export default {
         const { element, newIndex } = e.added;
         this.new_cloned_idx = newIndex;
         this.selected_pulse_settings = element.pulse_settings;
+        this.selected_color = element.color;
 
-        if (element.type === "Monophasic") this.modal_type = "Monophasic";
-        else if (element.type === "Biphasic") this.modal_type = "Biphasic";
+        if (["Monophasic", "Biphasic"].includes(element.type)) this.modal_type = element.type;
         else if (element.type === "Delay") this.open_delay_modal = true;
+      } else if (e.removed) {
+        this.selected_pulse_settings = e.removed.element;
       }
 
       if ((e.added && !this.cloned) || e.moved || e.removed) this.handle_protocol_order(this.protocol_order);
@@ -194,80 +256,157 @@ export default {
     },
     on_modal_close(button, pulse_settings, selected_color) {
       this.modal_type = null;
-      this.open_delay_modal = false;
-      this.modal_open_for_edit = false;
-      this.current_delay_input = null;
+      this.current_input = null;
       this.current_delay_unit = "milliseconds";
       this.selected_color = null;
 
+      if (this.new_cloned_idx !== null) {
+        this.handle_new_settings(button, pulse_settings, selected_color);
+      } else if (isNaN(this.dbl_click_pulse_nested_idx)) {
+        this.handle_edited_settings(button, pulse_settings, selected_color);
+      } else {
+        this.handle_nested_settings(button, pulse_settings, selected_color);
+      }
+      // dispatch vuex state changes
+      this.handle_protocol_order(this.protocol_order);
+    },
+    start_dragging({ oldIndex }) {
+      this.is_dragging = oldIndex;
+    },
+    handle_new_settings(button, pulse_settings, selected_color) {
+      const new_pulse = this.protocol_order[this.new_cloned_idx];
       switch (button) {
         case "Save":
-          if (this.new_cloned_idx !== null) {
-            const new_pulse = this.protocol_order[this.new_cloned_idx];
-            new_pulse.pulse_settings = pulse_settings;
-            new_pulse.color = selected_color;
-            Object.assign(this.protocol_order[this.new_cloned_idx], new_pulse);
-          }
-          if (this.shift_click_img_idx !== null) {
-            const edited_pulse = this.protocol_order[this.shift_click_img_idx];
+          new_pulse.color = selected_color;
+          Object.assign(new_pulse.pulse_settings, pulse_settings);
+          break;
+        case "Cancel":
+          this.protocol_order.splice(this.new_cloned_idx, 1);
+      }
+      this.new_cloned_idx = null;
+      this.open_delay_modal = false;
+    },
+    handle_edited_settings(button, pulse_settings, selected_color) {
+      const edited_pulse = this.protocol_order[this.dbl_click_pulse_idx];
+      const duplicate_pulse = JSON.parse(JSON.stringify(edited_pulse));
+      // change color and insert after original pulse
+      const previous_hue = this.get_pulse_hue(this.dbl_click_pulse_idx);
+      const next_hue =
+        this.dbl_click_pulse_idx < this.protocol_order.length - 1
+          ? this.get_pulse_hue(this.dbl_click_pulse_idx + 1)
+          : undefined;
 
-            Object.assign(edited_pulse.pulse_settings, pulse_settings);
-            Object.assign(this.protocol_order[this.shift_click_img_idx], edited_pulse);
-            edited_pulse.color = selected_color;
+      switch (button) {
+        case "Save":
+          Object.assign(edited_pulse.pulse_settings, pulse_settings);
+          edited_pulse.color = selected_color;
+          break;
+        case "Duplicate":
+          duplicate_pulse.color = generate_random_color(true, previous_hue, next_hue);
+          this.protocol_order.splice(this.dbl_click_pulse_idx + 1, 0, duplicate_pulse);
+          break;
+        case "Delete":
+          this.protocol_order.splice(this.dbl_click_pulse_idx, 1);
+          break;
+      }
+      this.dbl_click_pulse_idx = null;
+      this.open_delay_modal = false;
+      this.modal_open_for_edit = false;
+    },
+    handle_nested_settings(button, pulse_settings, selected_color) {
+      const edited_pulse = this.protocol_order[this.dbl_click_pulse_idx];
+      const { subprotocols } = edited_pulse;
+      // needs to not edit original pulse, edited_pulse does
+      const edited_nested_pulse = subprotocols[this.dbl_click_pulse_nested_idx];
+      const edited_nested_pulse_copy = JSON.parse(JSON.stringify(edited_nested_pulse));
+      const num_subprotocols = subprotocols.length;
+      const previous_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx);
+      // intentionally set to undefined if neither of the following conditionals are met
+      let next_hue;
+      switch (button) {
+        case "Save":
+          Object.assign(edited_nested_pulse.pulse_settings, pulse_settings);
+          edited_nested_pulse.color = selected_color;
+          break;
+        case "Duplicate":
+          // next conditional checks if pulse is not last in loop
+          if (num_subprotocols - 1 > this.dbl_click_pulse_nested_idx)
+            next_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx + 1);
+          // else take next pulse outside of loop to prevent duplciate colors in a row
+          else if (
+            num_subprotocols - 1 == this.dbl_click_pulse_nested_idx &&
+            this.dbl_click_pulse_idx < this.protocol_order.length - 1
+          )
+            next_hue = this.get_pulse_hue(this.dbl_click_pulse_idx + 1);
+          // else no need to consider next in order
+          edited_nested_pulse_copy.color = generate_random_color(true, previous_hue, next_hue);
+          edited_pulse.subprotocols.splice(this.dbl_click_pulse_nested_idx + 1, 0, edited_nested_pulse_copy);
+          break;
+        case "Delete":
+          edited_pulse.subprotocols.splice(this.dbl_click_pulse_nested_idx, 1);
+          break;
+      }
+      this.dbl_click_pulse_nested_idx = null;
+      this.open_delay_modal = false;
+      this.modal_open_for_edit = false;
+    },
+    close_repeat_modal(button, value) {
+      this.open_repeat_modal = false;
+      this.current_input = null;
+      // create loop object to replace at index in protocol order
+      const loop_pulse = {
+        type: "loop",
+        num_iterations: value,
+        subprotocols: [this.protocol_order[this.dbl_click_pulse_idx], this.selected_pulse_settings],
+      };
+      switch (button) {
+        case "Save":
+          if (this.modal_open_for_edit) {
+            this.protocol_order[this.dbl_click_pulse_idx].num_iterations = value;
+          } else {
+            this.protocol_order.splice(this.dbl_click_pulse_idx, 1, loop_pulse);
           }
           break;
         case "Duplicate":
-          // eslint-disable-next-line no-case-declarations
-          const duplicate_pulse = // needs to not edit original pulse, edited_pulse does
-            this.shift_click_img_idx !== null
-              ? JSON.parse(JSON.stringify(this.protocol_order[this.shift_click_img_idx]))
-              : null;
-
-          // change color and insert after original pulse
-          // eslint-disable-next-line no-case-declarations
-          const previous_hue = this.get_pulse_hue(this.shift_click_img_idx);
-          // eslint-disable-next-line no-case-declarations
-          const next_hue =
-            this.shift_click_img_idx < this.protocol_order.length - 1
-              ? this.get_pulse_hue(this.shift_click_img_idx + 1)
-              : undefined;
-
-          duplicate_pulse.color = generate_random_color(true, previous_hue, next_hue);
-          this.protocol_order.splice(this.shift_click_img_idx + 1, 0, duplicate_pulse);
+          this.protocol_order.splice(
+            this.dbl_click_pulse_idx,
+            0,
+            this.protocol_order[this.dbl_click_pulse_idx]
+          );
           break;
         case "Delete":
-          this.protocol_order.splice(this.shift_click_img_idx, 1);
+          this.protocol_order.splice(this.dbl_click_pulse_idx, 1);
           break;
         case "Cancel":
-          if (this.new_cloned_idx !== null) {
-            this.protocol_order.splice(this.new_cloned_idx, 1);
+          if (!this.modal_open_for_edit) {
+            this.protocol_order.splice(this.dbl_click_pulse_idx + 1, 0, this.selected_pulse_settings);
           }
       }
-      this.new_cloned_idx = null;
-      this.shift_click_img_idx = null;
       this.handle_protocol_order(this.protocol_order);
+      this.modal_open_for_edit = false;
+      this.dbl_click_pulse_idx = null;
     },
-    open_modal_for_edit(type, idx) {
-      const pulse = this.protocol_order[idx];
-      this.shift_click_img_idx = idx;
+    open_modal_for_edit(type, idx, nested_idx) {
+      const pulse =
+        nested_idx >= 0 ? this.protocol_order[idx].subprotocols[nested_idx] : this.protocol_order[idx];
+      this.dbl_click_pulse_idx = idx;
+      this.dbl_click_pulse_nested_idx = nested_idx;
       this.modal_open_for_edit = true;
       this.selected_pulse_settings = pulse.pulse_settings;
       this.selected_color = pulse.color;
-
-      if (type === "Monophasic") {
-        this.modal_type = "Monophasic";
-      } else if (type === "Biphasic") {
-        this.modal_type = "Biphasic";
+      if (["Monophasic", "Biphasic"].includes(type)) {
+        this.modal_type = type;
       } else if (type === "Delay") {
         const { duration, unit } = this.selected_pulse_settings;
-        this.current_delay_input = duration.toString();
+        this.current_input = duration.toString();
         this.current_delay_unit = unit.toString();
         this.open_delay_modal = true;
       }
     },
-    on_pulse_enter(idx) {
+    on_pulse_enter(idx, nested_idx) {
       // if tile is being dragged, the pulse underneath the dragged tile will highlight even though the user is dragging a different tile
-      if (!this.is_dragging) this.on_pulse_mouseenter(idx);
+      // 0 index is considered falsy
+      if (!this.is_dragging && this.is_dragging !== 0) this.on_pulse_mouseenter({ idx, nested_idx });
     },
     on_pulse_leave() {
       this.on_pulse_mouseleave();
@@ -278,12 +417,24 @@ export default {
       this.set_time_unit(unit);
       this.handle_protocol_order(this.protocol_order);
     },
-    get_pulse_hue(idx) {
+    get_pulse_hue(idx, nested_idx) {
       // duplicated pulses are not always in last index
       const pulse_idx = idx ? idx : this.protocol_order.length - 1;
 
-      const last_pulse_hsla = this.protocol_order[pulse_idx].color;
+      const selected_pulse = this.protocol_order[pulse_idx];
+      const { subprotocols } = selected_pulse;
+      const last_pulse_hsla =
+        selected_pulse.type !== "loop"
+          ? selected_pulse.color
+          : subprotocols[nested_idx >= 0 ? nested_idx : subprotocols.length - 1].color;
+
       return last_pulse_hsla.split("(")[1].split(",")[0];
+    },
+    get_border_style(type) {
+      if (type.type === "loop") {
+        const consistent_color_to_use = type.subprotocols[0].color;
+        return "border: 2px solid " + consistent_color_to_use;
+      }
     },
     clone(type) {
       this.cloned = true;
@@ -295,21 +446,21 @@ export default {
 
       this.selected_color = random_color;
 
-      let type_specific_settings = {};
-      if (type === "Delay") type_specific_settings = { duration: "", unit: "milliseconds" };
-      // for both monophasic and biphasic
-      else
-        type_specific_settings = {
-          frequency: "",
-          total_active_duration: {
-            duration: "",
-            unit: "milliseconds",
-          },
-          num_cycles: 0,
-          postphase_interval: "",
-          phase_one_duration: "",
-          phase_one_charge: "",
-        };
+      let type_specific_settings =
+        type === "Delay"
+          ? { duration: "", unit: "milliseconds" }
+          : // for both monophasic and biphasic
+            {
+              frequency: "",
+              total_active_duration: {
+                duration: "",
+                unit: "milliseconds",
+              },
+              num_cycles: 0,
+              postphase_interval: "",
+              phase_one_duration: "",
+              phase_one_charge: "",
+            };
 
       if (type === "Biphasic")
         type_specific_settings = {
@@ -321,9 +472,37 @@ export default {
 
       return {
         type,
-        color: `${random_color}`,
+        color: random_color,
         pulse_settings: type_specific_settings,
+        subprotocols: [],
       };
+    },
+    open_repeat_modal_for_edit(number, idx) {
+      this.dbl_click_pulse_idx = idx;
+      this.current_input = number.toString();
+      this.modal_open_for_edit = true;
+      this.open_repeat_modal = true;
+    },
+    handle_protocol_loop(e, idx) {
+      if (e.added) {
+        if (this.protocol_order[idx].type !== "loop") {
+          this.dbl_click_pulse_idx = idx;
+          this.open_repeat_modal = true;
+        } else {
+          this.handle_protocol_order(this.protocol_order);
+        }
+      } else if (e.moved) {
+        this.handle_protocol_order(this.protocol_order);
+      } else if (e.removed) {
+        const { subprotocols } = this.protocol_order[idx];
+        const subprotocols_left = subprotocols.length;
+        // if last nested subprotocol is removed from loop so there is only one left,
+        // then replace loop object with last subprotocol object
+        if (subprotocols_left === 1) {
+          this.protocol_order.splice(idx, 1, subprotocols[0]);
+        }
+        this.handle_protocol_order(this.protocol_order);
+      }
     },
   },
 };
@@ -341,7 +520,7 @@ export default {
   left: 0px;
 }
 
-.div__DragAndDdrop-panel {
+.div__drag-and-drop-panel {
   background: rgb(17, 17, 17);
   position: absolute;
   width: 300px;
@@ -353,9 +532,24 @@ export default {
   justify-self: flex-end;
 }
 
-.div__tile-container {
+.div__repeat-container {
   display: flex;
   align-items: center;
+  padding-left: 1px;
+}
+.span__repeat-label {
+  font-size: 12px;
+  font-weight: bold;
+  position: relative;
+  font-family: Muli;
+  color: rgb(17, 17, 17);
+}
+.div__repeat-label-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  margin-right: 31px;
 }
 
 .img__icon-container {
@@ -371,7 +565,7 @@ img {
 }
 
 .ghost {
-  padding: 0 7px 7px 7px;
+  padding: 0 7px;
 }
 
 .modal-container {
@@ -387,12 +581,12 @@ img {
 }
 
 .dragArea {
-  height: 100px;
+  height: 98px;
   display: flex;
   padding-top: 4px;
 }
 
-.circle {
+.div__circle {
   width: 30px;
   height: 30px;
   border: 1px solid #222;
@@ -404,7 +598,7 @@ img {
   cursor: pointer;
 }
 
-.draggable_tile_container {
+.draggable__tile-container {
   display: grid;
   width: 80%;
   grid-template-columns: 50% 50%;
@@ -414,7 +608,7 @@ img {
   margin-top: 80px;
 }
 
-.modal_overlay {
+.div__modal-overlay {
   width: 1629px;
   height: 885px;
   position: absolute;
@@ -481,9 +675,14 @@ img {
 
 .dropzone {
   visibility: visible;
+  height: 102px;
+  display: flex;
+  right: 31px;
+  position: relative;
 }
 
-.delay-container {
+.delay-container,
+.repeat-container {
   top: 15%;
 }
 </style>

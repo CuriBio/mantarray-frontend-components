@@ -70,7 +70,7 @@ describe("DataAnalysisWidget.vue", () => {
       expect(wrapper.vm.selected_recordings).toStrictEqual(["rec_1", "rec_4"]);
 
       // click cancel
-      await wrapper.findAll(".span__button_label").at(button_idx).trigger("click");
+      await wrapper.findAll(".span__button-label").at(button_idx).trigger("click");
 
       expect(wrapper.vm.selected_recordings).toStrictEqual([]);
     }
@@ -99,7 +99,7 @@ describe("DataAnalysisWidget.vue", () => {
     await wrapper.findAll(".div__recording-list-item").at(4).trigger("click");
 
     // click cancel
-    await wrapper.findAll(".span__button_label").at(2).trigger("click");
+    await wrapper.findAll(".span__button-label").at(2).trigger("click");
 
     expect(wrapper.emitted("send_confirmation")).toStrictEqual([
       [{ idx: 2, selected_recordings: ["rec_2", "rec_5"] }],

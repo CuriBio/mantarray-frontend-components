@@ -52,7 +52,7 @@ const inactive_record_button = Selector(".svg__playback-desktop-player-controls-
 const active_record_button = Selector(".svg__playback-desktop-player-controls-record-button--active");
 const title_text = Selector(".span__playback-desktop-player-controls-text");
 const update_customer_idx_button = Selector(".update-idx-button");
-const confirm_recording_name_button = Selector(".span__button_label").withExactText("Confirm");
+const confirm_recording_name_button = Selector(".span__button-label").withExactText("Confirm");
 
 fixture`playback/controls/player/desktop-player/basic`.page(
   // declare the fixture

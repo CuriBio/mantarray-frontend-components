@@ -47,7 +47,7 @@ import { mapState } from "vuex";
  * @vue-data {Object} y_axis_scale        - An Object which is used to process the Y Axis scale
  * @vue-data {Object} waveform_line_node  - An Object which is used to plot the line graph
  * @vue-data {Object} highlight_line_node - An Object which is used to plot the line graph to fill when hovered over
- * @vue-computed {Object} hovered_pulse       - State Object used to fill background of hovered over pulse in stim studio
+ * @vue-computed {Object} hovered_pulses       - State Object used to fill background of hovered over pulse in stim studio
  * @vue-computed {Object} div__waveform_graph__dynamic_style - An CSS property to hold the dynamic value
  * @vue-event {Event} x_axis_min           - A Function  is invoked when x_axis_min prop is modified
  * @vue-event {Event} x_axis_sample_length - A Function  is invoked when x_axis_sample_length prop is modified
@@ -116,7 +116,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("stimulation", ["hovered_pulse"]),
+    ...mapState("stimulation", ["hovered_pulses"]),
     div__waveform_graph__dynamic_style: function () {
       return { width: this.plot_area_pixel_width + this.margin.left + this.margin.right + "px" };
     },
@@ -145,35 +145,40 @@ export default {
 
       this.render_plot();
     },
-    hovered_pulse: function (new_pulse) {
+    hovered_pulses: function (new_pulses) {
       this.highlight_line_node.selectAll("*").remove();
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
-
-      if (new_pulse.idx != null) {
-        const starting_x = this.data_points[new_pulse.indices[0]][0];
-        const ending_x = this.data_points[new_pulse.indices[1] - 1][0];
-
-        const starting_coord = [starting_x, this.y_max];
-        const ending_coord = [ending_x, this.y_max];
-        // in order to fill entire height of graph, need minimum y to max y
-        const data_to_fill = [[starting_x, this.y_min], starting_coord, ending_coord, [ending_x, this.y_min]];
-        this.highlight_line_node
-          .append("path")
-          .datum(data_to_fill)
-          .attr("fill", new_pulse.color)
-          .attr("stroke", new_pulse.color)
-          .attr("opacity", ".15")
-          .attr(
-            "d",
-            d3_line()
-              .x(function (d) {
-                return x_axis_scale(d[0]);
-              })
-              .y(function (d) {
-                return y_axis_scale(d[1]);
-              })
-          );
+      if (new_pulses.length > 0) {
+        for (const pulse of new_pulses) {
+          const starting_x = this.data_points[pulse.indices[0]][0];
+          const ending_x = this.data_points[pulse.indices[1] - 1][0];
+          const starting_coord = [starting_x, this.y_max];
+          const ending_coord = [ending_x, this.y_max];
+          // in order to fill entire height of graph, need minimum y to max y
+          const data_to_fill = [
+            [starting_x, this.y_min],
+            starting_coord,
+            ending_coord,
+            [ending_x, this.y_min],
+          ];
+          this.highlight_line_node
+            .append("path")
+            .datum(data_to_fill)
+            .attr("fill", pulse.color)
+            .attr("stroke", pulse.color)
+            .attr("opacity", ".15")
+            .attr(
+              "d",
+              d3_line()
+                .x(function (d) {
+                  return x_axis_scale(d[0]);
+                })
+                .y(function (d) {
+                  return y_axis_scale(d[1]);
+                })
+            );
+        }
       }
     },
   },
