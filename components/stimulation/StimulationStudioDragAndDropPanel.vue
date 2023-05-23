@@ -333,7 +333,6 @@ export default {
           edited_nested_pulse.color = selected_color;
           break;
         case "Duplicate":
-          console.log(subprotocols.map((pulse) => pulse.color));
           // next conditional checks if pulse is not last in loop
           if (num_subprotocols - 1 > this.dbl_click_pulse_nested_idx)
             next_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx);
