@@ -159,8 +159,9 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     await store.dispatch("stimulation/handle_new_rest_duration", test_value);
 
     expect(wrapper.vm.delay_blocks).toBe(store.state.stimulation.delay_blocks);
-    expect(wrapper.vm.delay_blocks).toStrictEqual([[1300240, 1300245]]);
+    expect(wrapper.vm.delay_blocks).toStrictEqual([[1750240, 1750245]]);
   });
+
   describe("StimulationStudioWaveform.vue", () => {
     test("When a user the protocol, Then all datapoints should be deleted", async () => {
       const wrapper = mount(StimulationStudioWaveform, {

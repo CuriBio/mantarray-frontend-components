@@ -85,6 +85,7 @@
               >
                 <div
                   v-for="(nested_pulse, nested_idx) in pulse.subprotocols"
+                  :id="`nested-pulse-${nested_idx}`"
                   :key="nested_idx"
                   :style="'position: relative;'"
                   @dblclick="open_modal_for_edit(nested_pulse.type, idx, nested_idx)"
@@ -216,7 +217,6 @@ export default {
       this.on_pulse_mouseleave();
     },
     detailed_subprotocols: function () {
-      console.log(JSON.stringify(this.detailed_subprotocols));
       this.protocol_order = JSON.parse(JSON.stringify(this.detailed_subprotocols)).map((protocol) =>
         protocol.type !== "loop"
           ? {
@@ -267,8 +267,6 @@ export default {
       } else {
         this.handle_nested_settings(button, pulse_settings, selected_color);
       }
-      // dispatch vuex state changes
-      this.handle_protocol_order(this.protocol_order);
     },
     start_dragging({ oldIndex }) {
       this.is_dragging = oldIndex;
@@ -285,6 +283,7 @@ export default {
       }
       this.new_cloned_idx = null;
       this.open_delay_modal = false;
+      this.handle_protocol_order(this.protocol_order);
     },
     handle_edited_settings(button, pulse_settings, selected_color) {
       const edited_pulse = this.protocol_order[this.dbl_click_pulse_idx];
@@ -309,20 +308,29 @@ export default {
           this.protocol_order.splice(this.dbl_click_pulse_idx, 1);
           break;
       }
+
       this.dbl_click_pulse_idx = null;
       this.open_delay_modal = false;
       this.modal_open_for_edit = false;
+      this.handle_protocol_order(this.protocol_order);
     },
-    handle_nested_settings(button, pulse_settings, selected_color) {
+    async handle_nested_settings(button, pulse_settings, selected_color) {
       const edited_pulse = this.protocol_order[this.dbl_click_pulse_idx];
       const { subprotocols } = edited_pulse;
       // needs to not edit original pulse, edited_pulse does
       const edited_nested_pulse = subprotocols[this.dbl_click_pulse_nested_idx];
+
       const edited_nested_pulse_copy = JSON.parse(JSON.stringify(edited_nested_pulse));
       const num_subprotocols = subprotocols.length;
-      const previous_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx);
+
+      const previous_hue = await this.get_pulse_hue(
+        this.dbl_click_pulse_idx,
+        this.dbl_click_pulse_nested_idx
+      );
+
       // intentionally set to undefined if neither of the following conditionals are met
       let next_hue;
+
       switch (button) {
         case "Save":
           Object.assign(edited_nested_pulse.pulse_settings, pulse_settings);
@@ -343,12 +351,18 @@ export default {
           edited_pulse.subprotocols.splice(this.dbl_click_pulse_nested_idx + 1, 0, edited_nested_pulse_copy);
           break;
         case "Delete":
-          edited_pulse.subprotocols.splice(this.dbl_click_pulse_nested_idx, 1);
+          if (num_subprotocols - 1 === 1) {
+            this.protocol_order.splice(this.dbl_click_pulse_idx, 1, subprotocols[0]);
+          } else {
+            edited_pulse.subprotocols.splice(this.dbl_click_pulse_nested_idx, 1);
+          }
           break;
       }
+
       this.dbl_click_pulse_nested_idx = null;
       this.open_delay_modal = false;
       this.modal_open_for_edit = false;
+      this.handle_protocol_order(this.protocol_order);
     },
     close_repeat_modal(button, value) {
       this.open_repeat_modal = false;
@@ -359,6 +373,7 @@ export default {
         num_iterations: value,
         subprotocols: [this.protocol_order[this.dbl_click_pulse_idx], this.selected_pulse_settings],
       };
+
       switch (button) {
         case "Save":
           if (this.modal_open_for_edit) {
@@ -389,11 +404,13 @@ export default {
     open_modal_for_edit(type, idx, nested_idx) {
       const pulse =
         nested_idx >= 0 ? this.protocol_order[idx].subprotocols[nested_idx] : this.protocol_order[idx];
+
       this.dbl_click_pulse_idx = idx;
       this.dbl_click_pulse_nested_idx = nested_idx;
       this.modal_open_for_edit = true;
       this.selected_pulse_settings = pulse.pulse_settings;
       this.selected_color = pulse.color;
+
       if (["Monophasic", "Biphasic"].includes(type)) {
         this.modal_type = type;
       } else if (type === "Delay") {
@@ -417,7 +434,7 @@ export default {
       this.set_time_unit(unit);
       this.handle_protocol_order(this.protocol_order);
     },
-    get_pulse_hue(idx, nested_idx) {
+    async get_pulse_hue(idx, nested_idx) {
       // duplicated pulses are not always in last index
       const pulse_idx = idx ? idx : this.protocol_order.length - 1;
 

@@ -6,6 +6,7 @@ import {
   BIPHASIC_DROP_ELEMENT,
   TEST_PROTOCOL_LIST_2,
   TEST_PROTOCOL_ORDER_3,
+  TEST_PROTOCOL_ORDER_2,
 } from "@/tests/sample_stim_protocols/stim_protocols";
 
 const localVue = createLocalVue();
@@ -28,6 +29,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
+
   test("When mounting StimulationStudioDragAndDropPanel from the component file, Then there should be no waveforms in the new protocol container", () => {
     wrapper = mount(StimulationStudioDragAndDropPanel, {
       store,
@@ -318,5 +320,161 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     await wrapper.vm.on_modal_close("Save", delay_settings);
     expect(wrapper.vm.protocol_order[idx].pulse_settings.duration).toBe(delay_settings.duration);
+  });
+
+  test("When a user double clicks the repeat circular icon for a nested loop, Then the input modal will appear auto filled with existing value", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    expect(wrapper.find(".span__repeat-label").text()).toBe("30");
+
+    await wrapper.find(".div__circle").trigger("dblclick");
+    await wrapper.find("#input-widget-field-stim-input").setValue("10");
+
+    await wrapper.findAll(".span__button-label").at(1).trigger("click");
+
+    expect(wrapper.find(".span__repeat-label").text()).toBe("10");
+  });
+
+  test("When a user double clicks the repeat circular icon to duplicate a nested loop, Then the exact subprotocol will be inserted after the original subprotocol", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    expect(wrapper.vm.protocol_order).toHaveLength(5);
+    expect(wrapper.vm.protocol_order[4].type).toBe("loop");
+
+    await wrapper.find(".div__circle").trigger("dblclick");
+
+    await wrapper.findAll(".span__button-label").at(2).trigger("click");
+
+    expect(wrapper.vm.protocol_order).toHaveLength(6);
+    expect(wrapper.vm.protocol_order[4]).toStrictEqual(wrapper.vm.protocol_order[5]);
+  });
+
+  test("When a user double clicks the repeat circular icon to delete a nested loop, Then the exact subprotocol will be inserted after the original subprotocol", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    expect(wrapper.vm.protocol_order).toHaveLength(5);
+
+    await wrapper.find(".div__circle").trigger("dblclick");
+
+    await wrapper.findAll(".span__button-label").at(3).trigger("click");
+
+    expect(wrapper.vm.protocol_order).toHaveLength(4);
+  });
+
+  test("When a user double clicks on a nested pulse, Then the changes to values in settings will update correctly when saved", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    await wrapper.find("#nested-pulse-1").trigger("dblclick");
+
+    await wrapper.find("#input-widget-field-stim-input").setValue("10000");
+
+    await wrapper.findAll(".span__button-label").at(1).trigger("click");
+
+    expect(wrapper.vm.protocol_order).toContainEqual({
+      type: "loop",
+      num_iterations: 30,
+      subprotocols: [
+        {
+          type: "Monophasic",
+          src: "placeholder",
+          color: "rgb(350, 85, 90)",
+          pulse_settings: {
+            frequency: 10,
+            num_cycles: 100,
+            phase_one_charge: 10,
+            phase_one_duration: 5,
+            postphase_interval: 95,
+            total_active_duration: {
+              duration: 10,
+              unit: "seconds",
+            },
+          },
+          subprotocols: [],
+        },
+        {
+          type: "Delay",
+          src: "placeholder",
+          color: "rgb(64, 80, 95)",
+          pulse_settings: {
+            duration: 10000,
+            unit: "milliseconds",
+          },
+          subprotocols: [],
+        },
+      ],
+    });
+  });
+
+  test("When a user double clicks on a nested pulse, Then the exact pulse will be inserted after the selected when duplicated", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+
+    expect(wrapper.vm.protocol_order[4].subprotocols).toHaveLength(2);
+    await wrapper.find("#nested-pulse-1").trigger("dblclick");
+
+    await wrapper.findAll(".span__button-label").at(2).trigger("click");
+
+    expect(wrapper.vm.protocol_order[4].subprotocols).toHaveLength(3);
+  });
+
+  test("When a user double clicks on a nested pulse, Then the pulse will be removed from state when deleted", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+
+    expect(wrapper.vm.protocol_order[4].subprotocols).toHaveLength(2);
+
+    // duplicating first to add an extra pulse
+    await wrapper.find("#nested-pulse-1").trigger("dblclick");
+    await wrapper.findAll(".span__button-label").at(2).trigger("click");
+
+    expect(wrapper.vm.protocol_order[4].subprotocols).toHaveLength(3);
+
+    await wrapper.find("#nested-pulse-1").trigger("dblclick");
+    await wrapper.findAll(".span__button-label").at(3).trigger("click");
+
+    expect(wrapper.vm.protocol_order[4].subprotocols).toHaveLength(2);
+  });
+
+  test("When a user deletes the second to last nested pulse in a loop, Then the pulse will be replaced with the last pulse and no longer be a loop", async () => {
+    const wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+
+    expect(wrapper.vm.protocol_order[4].subprotocols).toHaveLength(2);
+    expect(wrapper.vm.protocol_order[4].type).toBe("loop");
+
+    await wrapper.find("#nested-pulse-1").trigger("dblclick");
+
+    await wrapper.findAll(".span__button-label").at(3).trigger("click");
+
+    expect(wrapper.vm.protocol_order[4].subprotocols).toHaveLength(0);
+    expect(wrapper.vm.protocol_order[4].type).toBe("Monophasic");
   });
 });
