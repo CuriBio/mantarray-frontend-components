@@ -159,7 +159,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     await store.dispatch("stimulation/handle_new_rest_duration", test_value);
 
     expect(wrapper.vm.delay_blocks).toBe(store.state.stimulation.delay_blocks);
-    expect(wrapper.vm.delay_blocks).toStrictEqual([[1750240, 1750245]]);
+    expect(wrapper.vm.delay_blocks).toStrictEqual([[1345240, 1345245]]);
   });
 
   describe("StimulationStudioWaveform.vue", () => {

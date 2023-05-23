@@ -422,7 +422,6 @@ export default {
   },
   async on_pulse_mouseenter({ state }, { idx, nested_idx }) {
     const original_pulse = state.protocol_editor.detailed_subprotocols[idx];
-    let hovered_pulses = [];
 
     if (nested_idx >= 0 && original_pulse.type == "loop") {
       // find the starting index by expanding any loops to find corresponding index in repeat_colors
@@ -436,15 +435,17 @@ export default {
         }, 0);
 
       // loop through subprotocols x amount of times to highlight every instance in a loop
-      hovered_pulses = [...Array(original_pulse.num_iterations).keys()].map((i) => {
+      const indices_to_use = [...Array(original_pulse.num_iterations).keys()].map((i) => {
         const num_subprotocols = original_pulse.subprotocols.length;
         const idx_to_use = starting_idx + nested_idx + i * num_subprotocols;
-        return {
-          idx: idx_to_use,
-          indices: state.repeat_colors[idx_to_use][1],
-          color: state.repeat_colors[idx_to_use][0],
-        };
+        return state.repeat_colors[idx_to_use][1];
       });
+
+      state.hovered_pulse = {
+        idx,
+        indices: indices_to_use,
+        color: state.repeat_colors[starting_idx + nested_idx][0],
+      };
     } else {
       //  find the index by expanding any loops to find corresponding index in repeat_colors
       const idx_to_use = state.protocol_editor.detailed_subprotocols
@@ -455,16 +456,12 @@ export default {
           return acc + val;
         }, 0);
 
-      hovered_pulses = [
-        {
-          idx,
-          indices: state.repeat_colors[idx_to_use][1],
-          color: state.repeat_colors[idx_to_use][0],
-        },
-      ];
+      state.hovered_pulse = {
+        idx,
+        indices: [state.repeat_colors[idx_to_use][1]],
+        color: state.repeat_colors[idx_to_use][0],
+      };
     }
-    // needs to be array [{}, ... ]
-    state.hovered_pulses = hovered_pulses;
   },
 };
 

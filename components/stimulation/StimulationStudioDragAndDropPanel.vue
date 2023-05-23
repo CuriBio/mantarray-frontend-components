@@ -322,11 +322,7 @@ export default {
 
       const edited_nested_pulse_copy = JSON.parse(JSON.stringify(edited_nested_pulse));
       const num_subprotocols = subprotocols.length;
-
-      const previous_hue = await this.get_pulse_hue(
-        this.dbl_click_pulse_idx,
-        this.dbl_click_pulse_nested_idx
-      );
+      const previous_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx);
 
       // intentionally set to undefined if neither of the following conditionals are met
       let next_hue;
@@ -337,15 +333,17 @@ export default {
           edited_nested_pulse.color = selected_color;
           break;
         case "Duplicate":
+          console.log(subprotocols.map((pulse) => pulse.color));
           // next conditional checks if pulse is not last in loop
           if (num_subprotocols - 1 > this.dbl_click_pulse_nested_idx)
-            next_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx + 1);
+            next_hue = this.get_pulse_hue(this.dbl_click_pulse_idx, this.dbl_click_pulse_nested_idx);
           // else take next pulse outside of loop to prevent duplciate colors in a row
           else if (
             num_subprotocols - 1 == this.dbl_click_pulse_nested_idx &&
             this.dbl_click_pulse_idx < this.protocol_order.length - 1
           )
             next_hue = this.get_pulse_hue(this.dbl_click_pulse_idx + 1);
+
           // else no need to consider next in order
           edited_nested_pulse_copy.color = generate_random_color(true, previous_hue, next_hue);
           edited_pulse.subprotocols.splice(this.dbl_click_pulse_nested_idx + 1, 0, edited_nested_pulse_copy);
@@ -434,12 +432,13 @@ export default {
       this.set_time_unit(unit);
       this.handle_protocol_order(this.protocol_order);
     },
-    async get_pulse_hue(idx, nested_idx) {
+    get_pulse_hue(idx, nested_idx) {
       // duplicated pulses are not always in last index
       const pulse_idx = idx ? idx : this.protocol_order.length - 1;
 
       const selected_pulse = this.protocol_order[pulse_idx];
       const { subprotocols } = selected_pulse;
+
       const last_pulse_hsla =
         selected_pulse.type !== "loop"
           ? selected_pulse.color

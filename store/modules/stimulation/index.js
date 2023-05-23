@@ -19,7 +19,11 @@ const state = () => ({
   x_axis_time_idx: 0,
   edit_mode: { status: false, label: "", color: "" },
   stim_status: STIM_STATUS.CALIBRATION_NEEDED,
-  hovered_pulses: [],
+  hovered_pulse: {
+    idx: null,
+    indices: [],
+    color: null,
+  },
   invalid_imported_protocols: [],
 });
 

@@ -216,19 +216,40 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    expect(store.state.stimulation.hovered_pulses).toStrictEqual([]);
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({ color: null, idx: null, indices: [] });
 
     await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)) });
     await store.dispatch("stimulation/handle_protocol_order", TEST_PROTOCOL_ORDER_3);
     await wrapper.vm.on_pulse_enter(1);
 
-    expect(store.state.stimulation.hovered_pulses).toStrictEqual([
-      {
-        idx: 1,
-        indices: [9, 20],
-        color: "hsla(205, 100%, 50%, 1)",
-      },
-    ]);
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({
+      idx: 1,
+      indices: [[9, 20]],
+      color: "hsla(205, 100%, 50%, 1)",
+    });
+  });
+
+  test("When a user hovers over a waveform tile in a loop, Then the pulse settings for each iteration will be added to state", async () => {
+    wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({ color: null, idx: null, indices: [] });
+
+    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    await store.dispatch("stimulation/handle_protocol_order", TEST_PROTOCOL_ORDER_2);
+    await wrapper.vm.on_pulse_enter(4, 1);
+
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({
+      idx: 4,
+      indices: [
+        [536, 540],
+        [1039, 1043],
+        [1542, 1546],
+      ],
+      color: "rgb(64, 80, 95)",
+    });
   });
 
   test("When a user hovers over a waveform tile, but it's because the user is dragging a tile above, Then the pulse settings not be added", async () => {
@@ -237,7 +258,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    expect(store.state.stimulation.hovered_pulses).toStrictEqual([]);
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({ color: null, idx: null, indices: [] });
 
     await wrapper.setData({
       protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)),
@@ -246,7 +267,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await store.dispatch("stimulation/handle_protocol_order", TEST_PROTOCOL_ORDER_3);
     await wrapper.vm.on_pulse_enter(1);
 
-    expect(store.state.stimulation.hovered_pulses).toStrictEqual([]);
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({ color: null, idx: null, indices: [] });
   });
 
   test("When a user leaves hover over a waveform tile, Then the pulse settings will be reset", async () => {
@@ -257,16 +278,14 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     await store.dispatch("stimulation/handle_protocol_order", TEST_PROTOCOL_ORDER_3);
     await wrapper.vm.on_pulse_enter(1);
-    expect(store.state.stimulation.hovered_pulses).toStrictEqual([
-      {
-        idx: 1,
-        indices: [9, 20],
-        color: "hsla(205, 100%, 50%, 1)",
-      },
-    ]);
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({
+      idx: 1,
+      indices: [[9, 20]],
+      color: "hsla(205, 100%, 50%, 1)",
+    });
 
     await wrapper.vm.on_pulse_leave();
-    expect(store.state.stimulation.hovered_pulses).toStrictEqual([]);
+    expect(store.state.stimulation.hovered_pulse).toStrictEqual({ color: null, idx: null, indices: [] });
   });
 
   test("When a user selects 'Duplicate' in  waveform modal, Then the current pulse settings will be added into the pulse order right after selected pulse", async () => {
@@ -329,7 +348,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
 
     await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
-    expect(wrapper.find(".span__repeat-label").text()).toBe("30");
+    expect(wrapper.find(".span__repeat-label").text()).toBe("3");
 
     await wrapper.find(".div__circle").trigger("dblclick");
     await wrapper.find("#input-widget-field-stim-input").setValue("10");
@@ -388,7 +407,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
 
     expect(wrapper.vm.protocol_order).toContainEqual({
       type: "loop",
-      num_iterations: 30,
+      num_iterations: 3,
       subprotocols: [
         {
           type: "Monophasic",

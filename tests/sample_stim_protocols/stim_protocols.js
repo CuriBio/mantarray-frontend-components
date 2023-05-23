@@ -360,7 +360,7 @@ export const TEST_PROTOCOL_ORDER_2 = [
   },
   {
     type: "loop",
-    num_iterations: 30,
+    num_iterations: 3,
     subprotocols: [
       {
         type: "Monophasic",

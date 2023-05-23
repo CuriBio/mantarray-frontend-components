@@ -198,7 +198,6 @@ function append_well_data(arr, new_arr) {
  */
 function generate_random_color(non_green, previous_hue, next_hue) {
   let selected_hue;
-
   // remove green hues from color range 70-170
   const non_green_ranges = [...Array(71).keys(), ...[...Array(360).keys()].splice(170)];
 
@@ -227,7 +226,6 @@ function generate_random_color(non_green, previous_hue, next_hue) {
     // this is used in the protocol letter and well assignment color, not any pulse colors
     selected_hue = 1 + Math.floor(359 * Math.random());
   }
-
   // Random non-green with high saturation, 50% lightness, and 100% opacity
   return `hsla(${selected_hue}, 100%, 50%, 1)`;
 }
