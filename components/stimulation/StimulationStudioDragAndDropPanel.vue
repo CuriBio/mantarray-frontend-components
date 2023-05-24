@@ -216,6 +216,20 @@ export default {
       // reset so old position/idx isn't highlighted once moved
       this.on_pulse_mouseleave();
     },
+    detailed_subprotocols: function () {
+      this.protocol_order = JSON.parse(
+        JSON.stringify(
+          this.detailed_subprotocols.map((protocol) =>
+            protocol.type !== "loop"
+              ? {
+                  ...protocol,
+                  subprotocols: [],
+                }
+              : protocol
+          )
+        )
+      );
+    },
   },
   created() {
     this.unsubscribe = this.$store.subscribe(async (mutation) => {
@@ -225,7 +239,6 @@ export default {
       ) {
         this.protocol_order = [];
       } else if (mutation.type === "stimulation/set_edit_mode") {
-        this.protocol_order = JSON.parse(JSON.stringify(this.detailed_subprotocols));
         this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
       } else if (mutation.type === "stimulation/set_stop_setting") {
         this.disable_dropdown = !this.run_until_stopped;
