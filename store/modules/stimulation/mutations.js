@@ -144,6 +144,9 @@ export default {
       color: null,
     };
   },
+  set_protocol_list(state, list) {
+    state.protocol_list = [...list];
+  },
   set_invalid_imported_protocols(state, protocols) {
     state.invalid_imported_protocols = [...protocols];
   },

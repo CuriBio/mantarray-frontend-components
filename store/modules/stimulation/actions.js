@@ -259,19 +259,21 @@ export default {
     const { protocol_editor, edit_mode, protocol_list } = state;
     const { letter, color } = state.current_assignment;
     const updated_protocol = { color, letter, label: protocol_editor.name, protocol: protocol_editor };
+    const protocol_list_copy = JSON.parse(JSON.stringify(protocol_list));
 
     if (!edit_mode.status) {
       commit("set_new_protocol", updated_protocol);
     } else if (edit_mode.status) {
-      protocol_list.map((protocol, idx) => {
+      protocol_list_copy.map((protocol, idx) => {
         if (protocol.letter === edit_mode.letter)
-          protocol_list[idx] = {
+          protocol_list_copy[idx] = {
             ...protocol,
             label: protocol_editor.name,
             protocol: protocol_editor,
           };
       });
 
+      await commit("set_protocol_list", protocol_list_copy);
       await commit("set_edit_mode_off");
       await dispatch("update_protocol_assignments", updated_protocol);
     }
@@ -387,6 +389,7 @@ export default {
       for (const well in protocol_assignments) {
         if (protocol_assignments[well].label === label) delete protocol_assignments[well];
       }
+
       await commit("set_edit_mode_off");
     }
     commit("reset_protocol_editor");

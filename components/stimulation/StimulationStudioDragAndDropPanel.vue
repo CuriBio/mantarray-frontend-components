@@ -216,22 +216,24 @@ export default {
       // reset so old position/idx isn't highlighted once moved
       this.on_pulse_mouseleave();
     },
-    detailed_subprotocols: function () {
-      this.protocol_order = JSON.parse(JSON.stringify(this.detailed_subprotocols)).map((protocol) =>
-        protocol.type !== "loop"
-          ? {
-              ...protocol,
-              subprotocols: [],
-            }
-          : protocol
-      );
-    },
-    time_unit: function () {
-      this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
-    },
-    run_until_stopped: function () {
-      this.disable_dropdown = !this.run_until_stopped;
-    },
+  },
+  created() {
+    this.unsubscribe = this.$store.subscribe(async (mutation) => {
+      if (
+        mutation.type === "stimulation/reset_state" ||
+        mutation.type === "stimulation/reset_protocol_editor"
+      ) {
+        this.protocol_order = [];
+      } else if (mutation.type === "stimulation/set_edit_mode") {
+        this.protocol_order = JSON.parse(JSON.stringify(this.detailed_subprotocols));
+        this.time_units_idx = this.time_units_array.indexOf(this.time_unit);
+      } else if (mutation.type === "stimulation/set_stop_setting") {
+        this.disable_dropdown = !this.run_until_stopped;
+      }
+    });
+  },
+  beforeDestroy() {
+    this.unsubscribe();
   },
   methods: {
     ...mapActions("stimulation", ["handle_protocol_order", "on_pulse_mouseenter"]),
