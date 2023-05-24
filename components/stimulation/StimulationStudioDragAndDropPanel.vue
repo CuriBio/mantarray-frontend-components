@@ -557,6 +557,7 @@ export default {
   display: flex;
   align-items: center;
   padding-left: 1px;
+  overflow: hidden;
 }
 .span__repeat-label {
   font-size: 12px;
