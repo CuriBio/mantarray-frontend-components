@@ -168,7 +168,7 @@ export default {
             .datum(data_to_fill)
             .attr("fill", new_pulse.color)
             .attr("stroke", new_pulse.color)
-            .attr("opacity", ".15")
+            .attr("opacity", ".25")
             .attr(
               "d",
               d3_line()

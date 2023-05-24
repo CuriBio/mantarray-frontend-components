@@ -313,7 +313,11 @@ export default {
         const { letter } = protocol_assignments[well];
 
         const fill_color_payload = {
-          stim_fill_colors: detailed_subprotocols.map((pulse) => pulse.color),
+          stim_fill_colors: detailed_subprotocols
+            .map((pulse) =>
+              pulse.type === "loop" ? pulse.subprotocols.map((nestedPulse) => nestedPulse.color) : pulse.color
+            )
+            .flat(),
           well,
         };
 
