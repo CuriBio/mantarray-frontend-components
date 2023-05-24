@@ -211,7 +211,7 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       const highlight_line_path = highlight_line_node.findAll("path");
 
       expect(highlight_line_path).toHaveLength(1);
-      expect(highlight_line_path.at(0).attributes().opacity).toBe(".15");
+      expect(highlight_line_path.at(0).attributes().opacity).toBe(".25");
       expect(highlight_line_path.at(0).attributes().fill).toBe("#ffff2");
     });
 
