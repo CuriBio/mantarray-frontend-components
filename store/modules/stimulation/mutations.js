@@ -138,14 +138,7 @@ export default {
     state.x_axis_time_idx = idx;
   },
   on_pulse_mouseleave(state) {
-    state.hovered_pulse = {
-      idx: null,
-      indices: [],
-      color: null,
-    };
-  },
-  set_protocol_list(state, list) {
-    state.protocol_list = [...list];
+    state.hovered_pulse = { color: null, idx: null, indices: [] };
   },
   set_invalid_imported_protocols(state, protocols) {
     state.invalid_imported_protocols = [...protocols];
