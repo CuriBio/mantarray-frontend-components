@@ -27,6 +27,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
   });
 
   afterEach(() => {
+    wrapper.destroy();
     jest.clearAllMocks();
   });
 
@@ -37,6 +38,16 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     });
     const protocol_list = wrapper.vm.protocol_order;
     expect(protocol_list).toStrictEqual([]);
+  });
+
+  test("When exiting instance, Then instance is effectively destroyed", async () => {
+    const destroyed_spy = jest.spyOn(StimulationStudioDragAndDropPanel, "beforeDestroy");
+    wrapper = mount(StimulationStudioDragAndDropPanel, {
+      store,
+      localVue,
+    });
+    wrapper.destroy();
+    expect(destroyed_spy).toHaveBeenCalledWith();
   });
 
   test("When a user clicks on trash icons to delete protocol, Then the protocol order in StimulationStudioDragAndDropPanel should empty from the mutation in state", async () => {
