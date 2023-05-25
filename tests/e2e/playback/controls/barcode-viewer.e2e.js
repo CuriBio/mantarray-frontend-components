@@ -42,7 +42,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
   let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-plate-barcode");
 
   await t.click(barcode_pencil_click);
-  const span__button_label = Selector(".span__button_label");
+  const span__button_label = Selector(".span__button-label");
   const yes_btn = span__button_label.nth(1);
   await t.click(yes_btn);
 
@@ -53,7 +53,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
   let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-valid-plate-barcode");
 
   await t.click(barcode_pencil_click);
-  const span__button_label = Selector(".span__button_label");
+  const span__button_label = Selector(".span__button-label");
   const yes_btn = span__button_label.nth(1);
   await t.click(yes_btn);
   await t.typeText(barcode_input_field, "ML2022053000");
@@ -65,7 +65,7 @@ test("Plate Barcode with no input field and click on the Pencil to Show Manual E
   let screenshot_path = path.join(base_screenshot_path, "basic-on-manual-invalid-plate-barcode");
 
   await t.click(barcode_pencil_click);
-  const span__button_label = Selector(".span__button_label");
+  const span__button_label = Selector(".span__button-label");
   const yes_btn = span__button_label.nth(1);
   await t.click(yes_btn);
   await t.typeText(barcode_input_field, "MC190440991");

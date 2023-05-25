@@ -94,9 +94,6 @@ export default {
       }
       if (this.last_x_value === 0) this.x_axis_sample_length = 100;
       else this.x_axis_sample_length = this.last_x_value + 50;
-
-      if (this.x_axis_sample_length > 10000 && this.dynamic_plot_width === 1200)
-        this.dynamic_plot_width *= 25;
     },
   },
 };

@@ -76,7 +76,7 @@ describe("DataAnalysisCompleteWidget.vue", () => {
       localVue,
     });
 
-    const button_span = wrapper.find(".span__button_label");
+    const button_span = wrapper.find(".span__button-label");
     expect(button_span.text()).toBe("Close");
 
     await button_span.trigger("click");

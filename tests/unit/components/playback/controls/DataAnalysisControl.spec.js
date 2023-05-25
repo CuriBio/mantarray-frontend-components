@@ -78,7 +78,7 @@ describe("DataAnalysisControl.vue", () => {
       await store.commit("playback/set_data_analysis_state", ENUMS.DATA_ANALYSIS_STATE[status]);
 
       wait_for_expect(() => {
-        wrapper.findAll("span__button_label").at(0).trigger("cick");
+        wrapper.findAll("span__button-label").at(0).trigger("cick");
 
         expect(store_spy).toHaveBeenCalledWith(
           "playback/set_data_analysis_state",
@@ -160,7 +160,7 @@ describe("DataAnalysisControl.vue", () => {
 
       Vue.nextTick(() => {
         expect(wrapper.find("#analysis-closure-warning").isVisible()).toBe(bool);
-        wrapper.find(".span__button_label").trigger("click");
+        wrapper.find(".span__button-label").trigger("click");
       });
 
       wrapper.vm.handle_confirmation(0);

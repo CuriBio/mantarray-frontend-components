@@ -44,7 +44,7 @@ describe("StimulationStudioColorModal.vue", () => {
       },
     });
 
-    const cancel_button = wrapper.findAll(".span__button_label").at(0);
+    const cancel_button = wrapper.findAll(".span__button-label").at(0);
     await cancel_button.trigger("click");
 
     const emitedt_events = wrapper.emitted("change_pulse_color");

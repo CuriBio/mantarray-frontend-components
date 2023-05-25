@@ -256,6 +256,7 @@ export default {
     plot_stim_data() {
       const x_axis_scale = this.x_axis_scale;
       const stim_data = this.stim_fill_assignments;
+
       const area = d3_area()
         .x(function (d) {
           return x_axis_scale(d[0] / 1e6);

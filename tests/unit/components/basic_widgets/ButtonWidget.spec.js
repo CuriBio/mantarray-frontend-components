@@ -87,7 +87,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.find(".span__button_label");
+    const target_button_label_btn = wrapper.find(".span__button-label");
     expect(target_button_label_btn.text()).toStrictEqual("Save ID");
     expect(target_button_label_btn.attributes().style).toBe(
       "color: rgb(255, 255, 255); width: 500px; left: 0px; cursor: pointer;"
@@ -110,7 +110,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.find(".span__button_label");
+    const target_button_label_btn = wrapper.find(".span__button-label");
     expect(target_button_label_btn.text()).toStrictEqual("Save ID");
     expect(target_button_label_btn.attributes().style).toBe(
       "color: rgb(63, 63, 63); width: 500px; left: 0px;"
@@ -133,7 +133,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.find(".span__button_label");
+    const target_button_label_btn = wrapper.find(".span__button-label");
     expect(target_button_label_btn.text()).toStrictEqual("Save ID");
     expect(target_button_label_btn.attributes().style).toBe(
       "color: rgb(63, 63, 63); width: 500px; left: 0px;"
@@ -165,7 +165,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.find(".span__button_label");
+    const target_button_label_btn = wrapper.find(".span__button-label");
     await target_button_label_btn.trigger("mouseenter");
     expect(target_button_label_btn.attributes().style).toBe(
       "color: rgb(189, 73, 50); width: 500px; left: 0px; cursor: pointer;"
@@ -191,7 +191,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.find(".span__button_label");
+    const target_button_label_btn = wrapper.find(".span__button-label");
     expect(target_button_label_btn.attributes().style).toBe(
       "color: rgb(255, 255, 255); width: 500px; left: 0px; cursor: pointer;"
     );
@@ -212,7 +212,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.find(".span__button_label");
+    const target_button_label_btn = wrapper.find(".span__button-label");
     expect(target_button_label_btn.attributes().style).toBe(
       "color: rgb(63, 63, 63); width: 500px; left: 0px;"
     );
@@ -234,7 +234,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.findAll(".span__button_label");
+    const target_button_label_btn = wrapper.findAll(".span__button-label");
     const cancel_btn = target_button_label_btn.at(0);
     expect(cancel_btn.attributes().style).toBe(
       "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 0px; cursor: pointer;"
@@ -264,7 +264,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.findAll(".span__button_label");
+    const target_button_label_btn = wrapper.findAll(".span__button-label");
     const cancel_btn = target_button_label_btn.at(0);
     expect(cancel_btn.attributes().style).toBe(
       "color: rgb(255, 255, 255); width: 166.66666666666666px; left: 0px; cursor: pointer;"
@@ -359,7 +359,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.findAll(".span__button_label");
+    const target_button_label_btn = wrapper.findAll(".span__button-label");
     const cancel_btn = target_button_label_btn.at(0);
     await cancel_btn.trigger("click");
     const parent_id_events = wrapper.emitted("btn-click");
@@ -383,7 +383,7 @@ describe("ButtonWidget.vue", () => {
       store,
       localVue,
     });
-    const target_button_label_btn = wrapper.findAll(".span__button_label");
+    const target_button_label_btn = wrapper.findAll(".span__button-label");
     const save_btn = target_button_label_btn.at(1);
     await save_btn.trigger("click");
     const parent_id_events = wrapper.emitted("btn-click");

@@ -8,7 +8,7 @@ const path = require("path");
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
 const error_active_btn = Selector("#test");
-const okay_btn_label = Selector(".span__button_label");
+const okay_btn_label = Selector(".span__button-label");
 
 const shutdown_request_url = "http://localhost:4567/shutdown";
 

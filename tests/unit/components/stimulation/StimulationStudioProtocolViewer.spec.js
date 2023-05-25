@@ -159,8 +159,9 @@ describe("StimulationStudioProtocolViewer.vue", () => {
     await store.dispatch("stimulation/handle_new_rest_duration", test_value);
 
     expect(wrapper.vm.delay_blocks).toBe(store.state.stimulation.delay_blocks);
-    expect(wrapper.vm.delay_blocks).toStrictEqual([[1300240, 1300245]]);
+    expect(wrapper.vm.delay_blocks).toStrictEqual([[1345240, 1345245]]);
   });
+
   describe("StimulationStudioWaveform.vue", () => {
     test("When a user the protocol, Then all datapoints should be deleted", async () => {
       const wrapper = mount(StimulationStudioWaveform, {
@@ -204,13 +205,13 @@ describe("StimulationStudioProtocolViewer.vue", () => {
       const d_points = await convert_x_y_arrays_to_d3_array(x_axis_values, y_axis_values);
       await wrapper.setProps({ data_points: d_points });
 
-      await store.dispatch("stimulation/on_pulse_mouseenter", 1);
+      await store.dispatch("stimulation/on_pulse_mouseenter", { idx: 1 });
 
       const highlight_line_node = wrapper.find("#highlight_line_node");
       const highlight_line_path = highlight_line_node.findAll("path");
 
       expect(highlight_line_path).toHaveLength(1);
-      expect(highlight_line_path.at(0).attributes().opacity).toBe(".15");
+      expect(highlight_line_path.at(0).attributes().opacity).toBe(".25");
       expect(highlight_line_path.at(0).attributes().fill).toBe("#ffff2");
     });
 

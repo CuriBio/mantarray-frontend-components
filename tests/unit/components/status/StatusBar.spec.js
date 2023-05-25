@@ -51,7 +51,7 @@ describe("StatusWidget.vue", () => {
       // select the correct button
       Vue.nextTick(() => {
         expect(wrapper.find(text_selector_h5).isVisible()).toBe(true);
-        const h5_exit_button = wrapper.findAll(".span__button_label").at(0);
+        const h5_exit_button = wrapper.findAll(".span__button-label").at(0);
         // check we have the correct button
         expect(h5_exit_button.text()).toBe([]);
         h5_exit_button.trigger("click");

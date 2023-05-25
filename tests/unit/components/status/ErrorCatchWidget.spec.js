@@ -118,7 +118,7 @@ describe("ErrorCatchWidget.vue", () => {
       localVue,
     });
 
-    const okay_btn = wrapper.find(".span__button_label");
+    const okay_btn = wrapper.find(".span__button-label");
     await okay_btn.trigger("click");
     await wrapper.vm.$nextTick();
     const okay_btn_events = wrapper.emitted("ok-clicked");

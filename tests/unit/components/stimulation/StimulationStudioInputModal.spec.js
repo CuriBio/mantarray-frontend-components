@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from "@vue/test-utils";
-import StimulationStudioDelayModal from "@/components/stimulation/StimulationStudioDelayModal.vue";
+import StimulationStudioInputModal from "@/components/stimulation/StimulationStudioInputModal.vue";
 import { MIN_SUBPROTOCOL_DURATION_MS, MAX_SUBPROTOCOL_DURATION_MS } from "@/store/modules/stimulation/enums";
 import Vuex from "vuex";
 
@@ -8,7 +8,7 @@ localVue.use(Vuex);
 let NuxtStore;
 let store;
 
-describe("StimulationStudioDelayModal.vue", () => {
+describe("StimulationStudioInputModal.vue", () => {
   beforeAll(async () => {
     const storePath = `${process.env.buildDir}/store.js`;
     NuxtStore = await import(storePath);
@@ -19,7 +19,7 @@ describe("StimulationStudioDelayModal.vue", () => {
   });
 
   test("When a user closes delay modal, Then button label and new delay value should be emitted to parent component", async () => {
-    const wrapper = mount(StimulationStudioDelayModal, {
+    const wrapper = mount(StimulationStudioInputModal, {
       store,
       localVue,
       propsData: {
@@ -27,10 +27,10 @@ describe("StimulationStudioDelayModal.vue", () => {
       },
     });
 
-    await wrapper.find("#input-widget-field-delay").setValue(MIN_SUBPROTOCOL_DURATION_MS.toString());
-    await wrapper.findAll(".span__button_label").at(1).trigger("click");
+    await wrapper.find("#input-widget-field-stim-input").setValue(MIN_SUBPROTOCOL_DURATION_MS.toString());
+    await wrapper.findAll(".span__button-label").at(1).trigger("click");
 
-    expect(wrapper.emitted("delay_close")).toBeTruthy();
+    expect(wrapper.emitted("input-close")).toBeTruthy();
   });
 
   test.each([
@@ -39,7 +39,7 @@ describe("StimulationStudioDelayModal.vue", () => {
   ])(
     "When a user opens the delay modal and editing is %s, Then button labels should be %s",
     async (modal_open_for_edit, expected_button_labels) => {
-      const button_labels = StimulationStudioDelayModal.computed.button_labels.call({
+      const button_labels = StimulationStudioInputModal.computed.button_labels.call({
         modal_open_for_edit,
       });
       expect(button_labels).toStrictEqual(expected_button_labels);
@@ -52,7 +52,7 @@ describe("StimulationStudioDelayModal.vue", () => {
   ])(
     "When a user opens the delay modal and editing is %s, Then button hover colors should be %s",
     async (modal_open_for_edit, expected_button_colors) => {
-      const button_labels = StimulationStudioDelayModal.computed.button_hover_colors.call({
+      const button_labels = StimulationStudioInputModal.computed.button_hover_colors.call({
         modal_open_for_edit,
       });
       expect(button_labels).toStrictEqual(expected_button_colors);
@@ -60,14 +60,14 @@ describe("StimulationStudioDelayModal.vue", () => {
   );
 
   test("When a user adds a value to an input field, Then the correct error message will be presented upon validity checks to input", async () => {
-    const wrapper = mount(StimulationStudioDelayModal, {
+    const wrapper = mount(StimulationStudioInputModal, {
       store,
       localVue,
       propsData: {
         current_color: "hsla(50, 100%, 50%, 1)",
       },
     });
-    const target_input_field = wrapper.find("#input-widget-field-delay");
+    const target_input_field = wrapper.find("#input-widget-field-stim-input");
 
     // invalid
     await target_input_field.setValue("");
@@ -94,7 +94,7 @@ describe("StimulationStudioDelayModal.vue", () => {
   });
 
   test("When a user wants to save the delay/repeat value, Then it will only be possible once a all validation checks pass for input", async () => {
-    const wrapper = mount(StimulationStudioDelayModal, {
+    const wrapper = mount(StimulationStudioInputModal, {
       store,
       localVue,
       propsData: {
@@ -102,14 +102,14 @@ describe("StimulationStudioDelayModal.vue", () => {
         current_color: "hsla(50, 100%, 50%, 1)",
       },
     });
-    await wrapper.find("#input-widget-field-delay").setValue("5000");
+    await wrapper.find("#input-widget-field-stim-input").setValue("5000");
     expect(wrapper.vm.is_valid).toBe(true);
 
-    await wrapper.find("#input-widget-field-delay").setValue("test");
+    await wrapper.find("#input-widget-field-stim-input").setValue("test");
     expect(wrapper.vm.is_valid).toBe(false);
   });
   test("When a user selects a different time unit from the dropdown, Then the index will be saved to state", async () => {
-    const wrapper = mount(StimulationStudioDelayModal, {
+    const wrapper = mount(StimulationStudioInputModal, {
       store,
       localVue,
       propsData: {
@@ -124,7 +124,7 @@ describe("StimulationStudioDelayModal.vue", () => {
   });
 
   test("When a user clicks on a new color for delay block, Then the color will be set to state to be emitted to parent component", async () => {
-    const wrapper = mount(StimulationStudioDelayModal, {
+    const wrapper = mount(StimulationStudioInputModal, {
       store,
       localVue,
       propsData: {

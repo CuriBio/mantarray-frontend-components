@@ -14,7 +14,7 @@ const question_icon = Selector(".disabled_popover_container");
 const protocol_name_input = Selector(".protocol_input");
 const pencil_icon = Selector(".img__pencil-icon");
 const update_button = Selector(".update-button");
-// const save_btn = Selector(".span__button_label").withText("Save");
+// const save_btn = Selector(".span__button-label").withText("Save");
 const protocol_dropdown = Selector(".div__select-dropdown-controls-content-widget");
 
 test("testing the StimulationStudio layout on initialization", async (t) => {

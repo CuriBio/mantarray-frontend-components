@@ -4,7 +4,7 @@ const path = require("path");
 
 import { testcafe_page_visual_regression } from "@curi-bio/frontend-test-utils";
 
-const okay_btn_label = Selector(".span__button_label");
+const okay_btn_label = Selector(".span__button-label");
 const error_catch_contact = Selector("#error_contact");
 
 fixture`status/error-catch/error-catch-basic`

@@ -313,6 +313,7 @@ export const TEST_PROTOCOL_ORDER_2 = [
         unit: "milliseconds",
       },
       num_cycles: 2,
+      subprotocols: [],
     },
   },
   {
@@ -329,6 +330,7 @@ export const TEST_PROTOCOL_ORDER_2 = [
       },
       num_cycles: 1,
     },
+    subprotocols: [],
   },
   {
     type: "Delay",
@@ -338,6 +340,7 @@ export const TEST_PROTOCOL_ORDER_2 = [
       duration: 1300,
       unit: "seconds",
     },
+    subprotocols: [],
   },
   {
     type: "Monophasic",
@@ -353,6 +356,40 @@ export const TEST_PROTOCOL_ORDER_2 = [
       },
       num_cycles: 2,
     },
+    subprotocols: [],
+  },
+  {
+    type: "loop",
+    num_iterations: 3,
+    subprotocols: [
+      {
+        type: "Monophasic",
+        src: "placeholder",
+        color: "rgb(350, 85, 90)",
+        pulse_settings: {
+          frequency: 10,
+          num_cycles: 100,
+          phase_one_charge: 10,
+          phase_one_duration: 5,
+          postphase_interval: 95,
+          total_active_duration: {
+            duration: 10,
+            unit: "seconds",
+          },
+        },
+        subprotocols: [],
+      },
+      {
+        type: "Delay",
+        src: "placeholder",
+        color: "rgb(64, 80, 95)",
+        pulse_settings: {
+          duration: 5000,
+          unit: "milliseconds",
+        },
+        subprotocols: [],
+      },
+    ],
   },
 ];
 
@@ -382,10 +419,9 @@ export const TEST_PROTOCOL_LIST = [
       detailed_subprotocols: [
         {
           type: "Delay",
-          src: "/delay-tile.png",
-          nested_protocols: [],
           color: "hsla(99, 60%, 40%, 1)",
           pulse_settings: { duration: 15, unit: "seconds" },
+          subprotocols: [],
         },
       ],
     },
@@ -411,6 +447,7 @@ export const TEST_PROTOCOL_B = {
     detailed_subprotocols: [
       {
         color: "hsla(45, 90%, 40%, 1)",
+        subprotocols: [],
       },
     ],
   },
@@ -437,6 +474,7 @@ export const TEST_PROTOCOL_D = {
     detailed_subprotocols: [
       {
         color: "hsla(309, 50%, 60%, 1)",
+        subprotocols: [],
       },
     ],
   },
@@ -462,6 +500,7 @@ export const TEST_PROTOCOL_ORDER_3 = [
       num_cycles: 1,
       frequency: 3,
     },
+    subprotocols: [],
   },
   {
     type: "Monophasic",
@@ -479,6 +518,7 @@ export const TEST_PROTOCOL_ORDER_3 = [
       num_cycles: 2,
       frequency: 1,
     },
+    subprotocols: [],
   },
   {
     type: "Delay",
@@ -489,6 +529,7 @@ export const TEST_PROTOCOL_ORDER_3 = [
       duration: 300,
       unit: "seconds",
     },
+    subprotocols: [],
   },
   {
     type: "Monophasic",
@@ -506,6 +547,7 @@ export const TEST_PROTOCOL_ORDER_3 = [
       num_cycles: 4,
       frequency: 5,
     },
+    subprotocols: [],
   },
 ];
 
@@ -543,6 +585,7 @@ export const TEST_PROTOCOL_LIST_2 = [
             pduration: 15000,
             unit: "milliseconds",
           },
+          subprotocols: [],
         },
       ],
     },

@@ -150,30 +150,36 @@ export default {
       const x_axis_scale = this.x_axis_scale;
       const y_axis_scale = this.y_axis_scale;
 
-      if (new_pulse.idx != null) {
-        const starting_x = this.data_points[new_pulse.indices[0]][0];
-        const ending_x = this.data_points[new_pulse.indices[1] - 1][0];
-
-        const starting_coord = [starting_x, this.y_max];
-        const ending_coord = [ending_x, this.y_max];
-        // in order to fill entire height of graph, need minimum y to max y
-        const data_to_fill = [[starting_x, this.y_min], starting_coord, ending_coord, [ending_x, this.y_min]];
-        this.highlight_line_node
-          .append("path")
-          .datum(data_to_fill)
-          .attr("fill", new_pulse.color)
-          .attr("stroke", new_pulse.color)
-          .attr("opacity", ".15")
-          .attr(
-            "d",
-            d3_line()
-              .x(function (d) {
-                return x_axis_scale(d[0]);
-              })
-              .y(function (d) {
-                return y_axis_scale(d[1]);
-              })
-          );
+      if (new_pulse.indices.length > 0) {
+        for (const pulse of new_pulse.indices) {
+          const starting_x = this.data_points[pulse[0]][0];
+          const ending_x = this.data_points[pulse[1] - 1][0];
+          const starting_coord = [starting_x, this.y_max];
+          const ending_coord = [ending_x, this.y_max];
+          // in order to fill entire height of graph, need minimum y to max y
+          const data_to_fill = [
+            [starting_x, this.y_min],
+            starting_coord,
+            ending_coord,
+            [ending_x, this.y_min],
+          ];
+          this.highlight_line_node
+            .append("path")
+            .datum(data_to_fill)
+            .attr("fill", new_pulse.color)
+            .attr("stroke", new_pulse.color)
+            .attr("opacity", ".25")
+            .attr(
+              "d",
+              d3_line()
+                .x(function (d) {
+                  return x_axis_scale(d[0]);
+                })
+                .y(function (d) {
+                  return y_axis_scale(d[1]);
+                })
+            );
+        }
       }
     },
   },
