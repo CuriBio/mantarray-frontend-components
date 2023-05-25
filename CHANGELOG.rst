@@ -9,6 +9,9 @@ Added:
 - Recording snapshot error modal when unable to converge during data analysis
 - Stimulation subprotocol looping
 
+Changed:
+^^^^^^^^
+- Minimum phase duration is now 25μs instead of 20μs
 
 1.5.0 (2023-05-12)
 ------------------
