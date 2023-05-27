@@ -137,7 +137,7 @@ import StimulationStudioWaveformSettingModal from "@/components/stimulation/Stim
 import StimulationStudioInputModal from "@/components/stimulation/StimulationStudioInputModal.vue";
 import SmallDropDown from "@/components/basic_widgets/SmallDropDown.vue";
 import { generate_random_color } from "@/js_utils/waveform_data_formatter";
-
+import { DEFAULT_SUBPROTOCOL_TEMPLATES } from "@/js_utils/protocol_validation";
 /**
  * @vue-data {Array} icon_type - The source for the draggable pulse tiles
  * @vue-data {Array} is_dragging - Boolean to determine if user is currently dragging a tile in the scrollable window
@@ -467,36 +467,12 @@ export default {
           : generate_random_color(true);
 
       this.selected_color = random_color;
-
-      let type_specific_settings =
-        type === "Delay"
-          ? { duration: "", unit: "milliseconds" }
-          : // for both monophasic and biphasic
-            {
-              frequency: "",
-              total_active_duration: {
-                duration: "",
-                unit: "milliseconds",
-              },
-              num_cycles: 0,
-              postphase_interval: "",
-              phase_one_duration: "",
-              phase_one_charge: "",
-            };
-
-      if (type === "Biphasic")
-        type_specific_settings = {
-          ...type_specific_settings,
-          interphase_interval: "",
-          phase_two_charge: "",
-          phase_two_duration: "",
-        };
+      // have to make a deep copy to prevent changing original template state
+      const template_copy = JSON.parse(JSON.stringify(DEFAULT_SUBPROTOCOL_TEMPLATES[type.toUpperCase()]));
 
       return {
-        type,
+        ...template_copy,
         color: random_color,
-        pulse_settings: type_specific_settings,
-        subprotocols: [],
       };
     },
     open_repeat_modal_for_edit(number, idx) {
@@ -558,7 +534,6 @@ export default {
   display: flex;
   align-items: center;
   padding-left: 1px;
-  overflow: hidden;
 }
 .span__repeat-label {
   font-size: 12px;
@@ -582,7 +557,7 @@ export default {
 }
 
 img {
-  height: 93px;
+  height: 92px;
   width: 92px;
   cursor: pointer;
 }

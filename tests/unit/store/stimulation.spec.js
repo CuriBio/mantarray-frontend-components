@@ -234,18 +234,24 @@ describe("store/stimulation", () => {
     });
 
     test("When protocol file has been read, Then it will be given a new color/letter assignment and added to protocol list in state", async () => {
-      const parsed_stim_data = JSON.parse(VALID_STIM_JSON);
-      await store.dispatch("stimulation/add_imported_protocol", parsed_stim_data);
+      const { protocols } = JSON.parse(VALID_STIM_JSON);
+      await store.dispatch(
+        "stimulation/add_imported_protocol",
+        protocols.map(({ protocol }) => protocol)
+      );
 
       const expected_name = store.state.stimulation.protocol_list[2].label;
       const expected_letter = store.state.stimulation.protocol_list[2].letter;
-      expect(expected_name).toBe(parsed_stim_data.protocols[0].protocol.name);
+      expect(expected_name).toBe(protocols[0].protocol.name);
       expect(expected_letter).toBe("B"); // imported letter assignments won't be used, will always be next in line
     });
 
     test("When protocol file has been read and contains now invalid values, Then the protocol names will be added to state to show to user", async () => {
-      const parsed_stim_data = JSON.parse(INVALID_STIM_JSON);
-      await store.dispatch("stimulation/add_imported_protocol", parsed_stim_data);
+      const { protocols } = JSON.parse(INVALID_STIM_JSON);
+      await store.dispatch(
+        "stimulation/add_imported_protocol",
+        protocols.map(({ protocol }) => protocol)
+      );
 
       expect(store.state.stimulation.invalid_imported_protocols).toStrictEqual([
         "test_proto_1",

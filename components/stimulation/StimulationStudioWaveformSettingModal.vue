@@ -319,6 +319,7 @@ import {
   check_active_duration_validity,
   check_pulse_frequency_validity,
   get_max_pulse_duration_for_freq,
+  calculate_num_cycles,
 } from "@/js_utils/protocol_validation";
 import BootstrapVue from "bootstrap-vue";
 import { BModal } from "bootstrap-vue";
@@ -546,12 +547,11 @@ export default {
         updated_val = this.calculated_num_cycles = default_value;
       } else {
         const selected_unit = this.time_units[this.active_duration_idx];
-        const duration_in_secs =
-          this.pulse_settings.total_active_duration.duration *
-          (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
-
-        const num_cycles = duration_in_secs * this.input_pulse_frequency;
-        updated_val = isFinite(num_cycles) ? num_cycles : default_value;
+        updated_val = calculate_num_cycles(
+          selected_unit,
+          this.pulse_settings.total_active_duration,
+          this.input_pulse_frequency
+        );
       }
 
       this.calculated_num_cycles = updated_val;
