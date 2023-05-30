@@ -11,6 +11,8 @@ import {
   TEST_PROTOCOL_ORDER,
   TEST_PROTOCOL_B,
   TEST_PROTOCOL_D,
+  INCOMPATIBLE_PROTOCOL_EXPORT_SINGLE,
+  INCOMPATIBLE_PROTOCOL_EXPORT_MULTI,
 } from "@/tests/sample_stim_protocols/stim_protocols";
 
 describe("store/stimulation", () => {
@@ -245,6 +247,62 @@ describe("store/stimulation", () => {
       expect(expected_name).toBe(protocols[0].protocol.name);
       expect(expected_letter).toBe("B"); // imported letter assignments won't be used, will always be next in line
     });
+
+    test.each([INCOMPATIBLE_PROTOCOL_EXPORT_MULTI, INCOMPATIBLE_PROTOCOL_EXPORT_MULTI.protocols[0].protocol])(
+      "When a protocol file is imported, Then the protocol will be converted to latest protocol format if old format is found",
+      async (protocols) => {
+        await store.dispatch("stimulation/check_import_compatibility", protocols);
+        const expected_detailed_pulses = [
+          {
+            type: "Delay",
+            color: "hsla(281, 91%, 41%, 1)",
+            pulse_settings: {
+              duration: 1000,
+              unit: "milliseconds",
+            },
+            subprotocols: [],
+          },
+          {
+            type: "Monophasic",
+            color: "hsla(253, 99%, 58%, 1)",
+            pulse_settings: {
+              frequency: 10,
+              num_cycles: 10,
+              phase_one_charge: 100,
+              phase_one_duration: 10,
+              postphase_interval: 90,
+              total_active_duration: {
+                duration: 1000,
+                unit: "milliseconds",
+              },
+            },
+            subprotocols: [],
+          },
+          {
+            type: "Biphasic",
+            color: "hsla(11, 99%, 55%, 1)",
+            pulse_settings: {
+              frequency: 1,
+              interphase_interval: 0,
+              num_cycles: 2,
+              phase_one_charge: 100,
+              phase_one_duration: 10,
+              phase_two_charge: -100,
+              phase_two_duration: 10,
+              postphase_interval: 980,
+              total_active_duration: {
+                duration: 2000,
+                unit: "milliseconds",
+              },
+            },
+            subprotocols: [],
+          },
+        ];
+        expect(store.state.stimulation.protocol_list[2].protocol.detailed_subprotocols).toStrictEqual(
+          expected_detailed_pulses
+        );
+      }
+    );
 
     test("When protocol file has been read and contains now invalid values, Then the protocol names will be added to state to show to user", async () => {
       const { protocols } = JSON.parse(INVALID_STIM_JSON);

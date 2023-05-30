@@ -25,15 +25,6 @@ const invalid_err_msg = {
   non_integer: "Must be a whole number of ms",
 };
 
-const DEFAULT_PROTOCOL_TEMPLATE = {
-  name: "",
-  stimulation_type: "C",
-  rest_duration: 0,
-  time_unit: "milliseconds",
-  subprotocols: [],
-  detailed_subprotocols: [],
-};
-
 export const DEFAULT_SUBPROTOCOL_TEMPLATES = {
   DELAY: {
     type: "Delay",
@@ -260,17 +251,18 @@ export const check_pulse_compatibility = (protocol) => {
   // if up-to-date protocol, just return
   if ("subprotocols" in protocol) return protocol;
 
-  // else build new protocol from template
-  const compatible_protocol = JSON.parse(JSON.stringify(DEFAULT_PROTOCOL_TEMPLATE));
+  // grab protocol name, stim type, rest dur and unit
+  const { name, rest_duration, time_unit, stimulation_type } = protocol;
+  // build new protocol
   const run_until_stopped = protocol.stop_setting.includes("Stopped");
   const compatible_subprotocols = _convert_detailed_subprotocols(protocol.detailed_pulses);
 
-  // add protocol name, stim type, rest dur and unit
-  Object.assign(compatible_protocol, protocol);
-
   return {
-    ...compatible_protocol,
+    name,
+    rest_duration,
+    time_unit,
     run_until_stopped,
+    stimulation_type,
     subprotocols: compatible_subprotocols.map(({ subprotocol }) => subprotocol),
     detailed_subprotocols: compatible_subprotocols.map(({ detailed_subprotocol }) => detailed_subprotocol),
   };

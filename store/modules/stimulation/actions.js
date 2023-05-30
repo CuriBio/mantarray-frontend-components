@@ -242,7 +242,7 @@ export default {
     // helps clean up which protocol to view once import is complete
     // reset stim studio
     await commit("reset_protocol_editor");
-    console.log(protocols);
+
     for (const [idx, protocol] of Object.entries(protocols)) {
       const invalid_pulses = are_valid_pulses(protocol.subprotocols);
 
