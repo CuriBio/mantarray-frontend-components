@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.6.1 (unreleased)
+------------------
+
+Added:
+^^^^^^
+- Backwards stimulation protocol compatibility
+
+
 1.6.0 (2023-05-25)
 ------------------
 
