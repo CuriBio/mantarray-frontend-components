@@ -66,7 +66,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    await wrapper.vm.clone({ type: "Monophasic", src: "test" });
+    await wrapper.vm.clone("Monophasic");
     await wrapper.vm.check_type({
       added: {
         element: MONOPHASIC_DROP_ELEMENT,
@@ -81,7 +81,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.vm.on_modal_close("Cancel");
     expect(wrapper.vm.modal_type).toBeNull();
 
-    await wrapper.vm.clone({ type: "Delay", src: "test" });
+    await wrapper.vm.clone("Delay");
     await wrapper.vm.check_type({
       added: {
         element: {
@@ -145,7 +145,7 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
     await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_3)) });
     expect(wrapper.vm.protocol_order).toHaveLength(4);
 
-    await wrapper.vm.clone({ type: "Biphasic", src: "test" });
+    await wrapper.vm.clone("Biphasic");
     expect(wrapper.vm.cloned).toBe(true);
     await wrapper.vm.check_type({
       added: {

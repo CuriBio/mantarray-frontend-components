@@ -1,7 +1,7 @@
 import { WellTitle as LabwareDefinition } from "@/js_utils/labware_calculations.js";
 const twenty_four_well_plate_definition = new LabwareDefinition(4, 6);
 import { call_axios_post_from_vuex } from "@/js_utils/axios_helpers";
-import { are_valid_pulses } from "@/js_utils/protocol_validation";
+import { are_valid_pulses, check_pulse_compatibility } from "@/js_utils/protocol_validation";
 import { STIM_STATUS, TIME_CONVERSION_TO_MILLIS, COLOR_PALETTE } from "./enums";
 import { get_protocol_editor_letter } from "./getters";
 
@@ -177,7 +177,7 @@ export default {
 
     reader.onload = async function () {
       const response = JSON.parse(reader.result);
-      await dispatch("add_imported_protocol", response);
+      await dispatch("check_import_compatibility", response);
     };
 
     reader.onerror = function () {
@@ -231,13 +231,22 @@ export default {
     download_link.click();
     download_link.remove();
   },
-
-  async add_imported_protocol({ commit, state }, { protocols }) {
+  check_import_compatibility({ dispatch }, imported_response) {
+    // first interation only exported single protocols, not array of multiple
+    const protocols_to_use = imported_response.protocols || [{ protocol: imported_response }];
+    const compatible_protocols = protocols_to_use.map(({ protocol }) => check_pulse_compatibility(protocol));
+    dispatch("add_imported_protocol", compatible_protocols);
+  },
+  async add_imported_protocol({ commit, state }, protocols) {
     const invalid_imported_protocols = [];
-    for (const [idx, { protocol }] of Object.entries(protocols)) {
+    // helps clean up which protocol to view once import is complete
+    // reset stim studio
+    await commit("reset_protocol_editor");
+
+    for (const [idx, protocol] of Object.entries(protocols)) {
       const invalid_pulses = are_valid_pulses(protocol.subprotocols);
 
-      if (invalid_pulses) {
+      if (!invalid_pulses) {
         await commit("set_edit_mode_off");
         // needs to be set to off every iteration because an action elsewhere triggers it on
         const letter = get_protocol_editor_letter(state.protocol_list);

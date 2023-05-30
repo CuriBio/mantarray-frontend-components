@@ -25,6 +25,44 @@ const invalid_err_msg = {
   non_integer: "Must be a whole number of ms",
 };
 
+export const DEFAULT_SUBPROTOCOL_TEMPLATES = {
+  DELAY: {
+    type: "Delay",
+    color: "",
+    pulse_settings: { duration: "", unit: "milliseconds" },
+    subprotocols: [],
+  },
+  MONOPHASIC: {
+    type: "Monophasic",
+    color: "",
+    pulse_settings: {
+      frequency: "",
+      total_active_duration: { duration: "", unit: "milliseconds" },
+      num_cycles: "",
+      postphase_interval: "",
+      phase_one_duration: "",
+      phase_one_charge: "",
+    },
+    subprotocols: [],
+  },
+  BIPHASIC: {
+    type: "Biphasic",
+    color: "",
+    pulse_settings: {
+      frequency: "",
+      total_active_duration: { duration: "", unit: "milliseconds" },
+      num_cycles: "",
+      postphase_interval: "",
+      phase_one_duration: "",
+      phase_one_charge: "",
+      interphase_interval: "",
+      phase_two_charge: "",
+      phase_two_duration: "",
+    },
+    subprotocols: [],
+  },
+};
+
 export const check_num_cycles_validity = (num_cycles) => {
   // check if value is a whole number greater than 0
   const error_msg_label =
@@ -156,10 +194,16 @@ export const get_total_active_duration = (type, protocol) => {
     : +protocol.phase_one_duration + +protocol.phase_two_duration + +protocol.interphase_interval;
 };
 
-export const are_valid_pulses = (input) => {
-  return input.some((proto) => {
+export const calculate_num_cycles = (selected_unit, total_active_duration, pulse_frequency) => {
+  const duration_in_secs = total_active_duration.duration * (TIME_CONVERSION_TO_MILLIS[selected_unit] / 1000);
+  const num_cycles = duration_in_secs * pulse_frequency;
+  return isFinite(num_cycles) ? num_cycles : "";
+};
+
+export const are_valid_pulses = (subprotocols) => {
+  return subprotocols.some((proto) => {
     if (proto.type === "loop") return are_valid_pulses(proto.subprotocols);
-    else return proto.type === "Delay" ? _is_valid_delay_pulse(proto) : _is_valid_single_pulse(proto);
+    else return proto.type === "Delay" ? !_is_valid_delay_pulse(proto) : !_is_valid_single_pulse(proto);
   });
 };
 
@@ -201,6 +245,92 @@ export const _is_valid_single_pulse = (protocol) => {
 export const _is_valid_delay_pulse = (protocol) => {
   const { duration, unit } = protocol;
   return check_delay_pulse_validity(duration, unit) === "";
+};
+
+export const check_pulse_compatibility = (protocol) => {
+  // if up-to-date protocol, just return
+  if ("subprotocols" in protocol) return protocol;
+
+  // grab protocol name, stim type, rest dur and unit
+  const { name, rest_duration, time_unit, stimulation_type } = protocol;
+  // build new protocol
+  const run_until_stopped = protocol.stop_setting.includes("Stopped");
+  const compatible_subprotocols = _convert_detailed_subprotocols(protocol.detailed_pulses);
+
+  return {
+    name,
+    rest_duration,
+    time_unit,
+    run_until_stopped,
+    stimulation_type,
+    subprotocols: compatible_subprotocols.map(({ subprotocol }) => subprotocol),
+    detailed_subprotocols: compatible_subprotocols.map(({ detailed_subprotocol }) => detailed_subprotocol),
+  };
+};
+
+const _convert_detailed_subprotocols = (subprotocols) => {
+  return subprotocols.map((pulse) => {
+    switch (pulse.type) {
+      case "Monophasic":
+        return _create_compatible_pulse(pulse, "MONOPHASIC");
+      case "Biphasic":
+        return _create_compatible_pulse(pulse, "BIPHASIC");
+      case "Delay":
+        return _create_compatible_delay(pulse);
+    }
+  });
+};
+
+const _create_compatible_delay = (pulse) => {
+  const detailed_subprotocol = JSON.parse(JSON.stringify(DEFAULT_SUBPROTOCOL_TEMPLATES.DELAY));
+  // update color
+  detailed_subprotocol.color = pulse.repeat.color;
+  // update delay duration and unit
+  Object.assign(detailed_subprotocol.pulse_settings, pulse.stim_settings.total_active_duration);
+
+  return {
+    detailed_subprotocol,
+    subprotocol: {
+      type: detailed_subprotocol.type,
+      ...detailed_subprotocol.pulse_settings,
+    },
+  };
+};
+
+const _create_compatible_pulse = (pulse, type) => {
+  const detailed_subprotocol = JSON.parse(JSON.stringify(DEFAULT_SUBPROTOCOL_TEMPLATES[type]));
+  // update color
+  detailed_subprotocol.color = pulse.repeat.color;
+  // match any keys that are in both object structures
+  for (const key of Object.keys(detailed_subprotocol.pulse_settings)) {
+    if (key in pulse.pulse_settings) {
+      detailed_subprotocol.pulse_settings[key] = pulse.pulse_settings[key];
+    }
+  }
+  // update frequency
+  detailed_subprotocol.pulse_settings.frequency = pulse.repeat.number_of_repeats;
+  // update total active duration
+  Object.assign(
+    detailed_subprotocol.pulse_settings.total_active_duration,
+    pulse.stim_settings.total_active_duration
+  );
+  // update postphase interval
+  detailed_subprotocol.pulse_settings.postphase_interval = pulse.stim_settings.repeat_delay_interval;
+  // udpate num cycles
+  const { total_active_duration, frequency } = detailed_subprotocol.pulse_settings;
+  detailed_subprotocol.pulse_settings.num_cycles = calculate_num_cycles(
+    total_active_duration.unit,
+    total_active_duration,
+    frequency
+  );
+
+  return {
+    detailed_subprotocol,
+    subprotocol: {
+      type: detailed_subprotocol.type,
+      ...detailed_subprotocol.pulse_settings,
+    },
+  };
 };
 
 /*
