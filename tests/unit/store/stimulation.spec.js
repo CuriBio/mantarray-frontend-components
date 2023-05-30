@@ -11,7 +11,6 @@ import {
   TEST_PROTOCOL_ORDER,
   TEST_PROTOCOL_B,
   TEST_PROTOCOL_D,
-  INCOMPATIBLE_PROTOCOL_EXPORT_SINGLE,
   INCOMPATIBLE_PROTOCOL_EXPORT_MULTI,
 } from "@/tests/sample_stim_protocols/stim_protocols";
 
