@@ -630,7 +630,7 @@ describe("DesktopPlayerControls.vue", () => {
       });
     });
 
-    test("When live view becomes active from starting stimulation, Then recording will be automatically started", async () => {
+    test("When live view becomes active from the stimulation studio, Then stimulation will be automatically started", async () => {
       const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
       wrapper = mount(component_to_test, {
         store,
@@ -642,13 +642,12 @@ describe("DesktopPlayerControls.vue", () => {
         playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
 
-      expect(action_spy).toHaveBeenCalledWith("playback/start_recording", wrapper.vm.default_recording_name);
-      expect(store.state.playback.start_recording_from_stim).toBe(false);
+      expect(action_spy).toHaveBeenCalledWith("stimulation/create_protocol_message");
     });
 
     test.each([
       ["CALIBRATED", "playback/start_live_view"],
-      ["LIVE_VIEW_ACTIVE", "playback/start_recording"],
+      ["LIVE_VIEW_ACTIVE", "stimulation/create_protocol_message"],
     ])(
       "When vuex state is %s and start_recording_from_stim is set to true, Then the %s action should be called",
       async (playback_state, dispatched_actions) => {
@@ -663,13 +662,7 @@ describe("DesktopPlayerControls.vue", () => {
         );
 
         await store.commit("playback/set_start_recording_from_stim", true);
-
-        const expected_call =
-          playback_state === "LIVE_VIEW_ACTIVE"
-            ? [dispatched_actions, wrapper.vm.default_recording_name]
-            : [dispatched_actions];
-
-        expect(action_spy).toHaveBeenCalledWith(...expected_call);
+        expect(action_spy).toHaveBeenCalledWith(dispatched_actions);
       }
     );
   });
