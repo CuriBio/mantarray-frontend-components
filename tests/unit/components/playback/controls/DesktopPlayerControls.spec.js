@@ -630,7 +630,7 @@ describe("DesktopPlayerControls.vue", () => {
       });
     });
 
-    test("When live view becomes active from starting stimulation, Then recording will be automatically started", async () => {
+    test("When live view becomes active from the stimulation studio, Then stimulation will be automatically started", async () => {
       const action_spy = jest.spyOn(store, "dispatch").mockImplementation(() => null);
       wrapper = mount(component_to_test, {
         store,
@@ -642,13 +642,12 @@ describe("DesktopPlayerControls.vue", () => {
         playback_module.ENUMS.PLAYBACK_STATES.LIVE_VIEW_ACTIVE
       );
 
-      expect(action_spy).toHaveBeenCalledWith("playback/start_recording", wrapper.vm.default_recording_name);
-      expect(store.state.playback.start_recording_from_stim).toBe(false);
+      expect(action_spy).toHaveBeenCalledWith("stimulation/create_protocol_message");
     });
 
     test.each([
       ["CALIBRATED", "playback/start_live_view"],
-      ["LIVE_VIEW_ACTIVE", "playback/start_recording"],
+      ["LIVE_VIEW_ACTIVE", "stimulation/create_protocol_message"],
     ])(
       "When vuex state is %s and start_recording_from_stim is set to true, Then the %s action should be called",
       async (playback_state, dispatched_actions) => {
@@ -663,14 +662,36 @@ describe("DesktopPlayerControls.vue", () => {
         );
 
         await store.commit("playback/set_start_recording_from_stim", true);
-
-        const expected_call =
-          playback_state === "LIVE_VIEW_ACTIVE"
-            ? [dispatched_actions, wrapper.vm.default_recording_name]
-            : [dispatched_actions];
-
-        expect(action_spy).toHaveBeenCalledWith(...expected_call);
+        expect(action_spy).toHaveBeenCalledWith(dispatched_actions);
       }
     );
+
+    test("When vuex state is changed to RECORDING and start_recording_from_stim is set to true, Then the start_recording_from_stim will become false", async () => {
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+      await store.commit("playback/set_start_recording_from_stim", true);
+      await store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.RECORDING);
+
+      expect(store.state.playback.start_recording_from_stim).toBe(false);
+    });
+
+    test("When vuex state start_recording_from_stim is set to true, Then changing to false will set stim_start_time_idx to null", async () => {
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+
+      await store.commit("playback/set_start_recording_from_stim", true);
+      await store.commit("stimulation/set_stim_start_time_idx", 100000);
+
+      expect(store.state.playback.start_recording_from_stim).toBe(true);
+      expect(store.state.stimulation.stim_start_time_idx).toBe(100000);
+
+      await store.commit("playback/set_start_recording_from_stim", false);
+
+      expect(store.state.stimulation.stim_start_time_idx).toBeNull();
+    });
   });
 });

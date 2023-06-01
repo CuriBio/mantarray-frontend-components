@@ -52,6 +52,12 @@ export default {
 
         while (idx < new_well_values.length) {
           const x = new_well_values[idx];
+
+          // if recording needs to be started at same time point as stimulation starting, record first index once
+          if (!this.state.stimulation.stim_start_time_idx && this.state.playback.start_recording_from_stim) {
+            this.commit("stimulation/set_stim_start_time_idx", x);
+          }
+
           const next_x = new_well_values[idx + 1] ? new_well_values[idx + 1] : x;
           /*
               Protects against long subprotocols.

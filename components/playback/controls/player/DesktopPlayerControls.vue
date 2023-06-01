@@ -392,7 +392,7 @@ export default {
       "firmware_update_dur_mins",
       "run_recording_snapshot_default",
     ]),
-    ...mapState("stimulation", ["stim_status"]),
+    ...mapState("stimulation", ["stim_status", "stim_start_time_idx"]),
     ...mapGetters({
       status_uuid: "flask/status_id",
     }),
@@ -532,11 +532,18 @@ export default {
     },
     playback_state(new_state) {
       // if live view had to be started from stim studio, then catch it here and then start recording after buffering state. Start recording cannot happen right after starting live view becuase of buffering state
-      if (new_state === this.playback_state_enums.LIVE_VIEW_ACTIVE && this.start_recording_from_stim) {
-        // then start recording once ensured that live view has started
+      if (this.start_recording_from_stim) {
+        if (new_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
+          // // then start stimulation once ensured that live view has started
+          if (this.start_recording_from_stim) this.$store.dispatch(`stimulation/create_protocol_message`);
+        } else if (new_state === this.playback_state_enums.RECORDING) {
+          this.$store.commit("playback/set_start_recording_from_stim", false);
+        }
+      }
+    },
+    stim_start_time_idx() {
+      if (this.stim_start_time_idx >= 0 && this.start_recording_from_stim) {
         this.on_activate_record_click();
-        // set back to false
-        this.$store.commit("playback/set_start_recording_from_stim", false);
       }
     },
     async start_recording_from_stim(start_rec) {
@@ -547,11 +554,10 @@ export default {
           await this.$store.dispatch("playback/start_live_view");
           // else if live view is already active, just start new recording
         } else if (this.playback_state === this.playback_state_enums.LIVE_VIEW_ACTIVE) {
-          // then start recording once ensured that live view has started
-          this.on_activate_record_click();
-          // set back to false
-          this.$store.commit("playback/set_start_recording_from_stim", false);
+          this.$store.dispatch(`stimulation/create_protocol_message`);
         }
+      } else {
+        this.$store.commit("stimulation/set_stim_start_time_idx", null);
       }
     },
     is_recording_snapshot_running(new_state) {

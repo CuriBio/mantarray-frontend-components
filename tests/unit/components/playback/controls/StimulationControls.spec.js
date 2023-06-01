@@ -142,18 +142,15 @@ describe("StimulationControls", () => {
     });
 
     test("Given a stimulation is inactive and there are protocol assigned wells, When a user clicks the button to turn on both stimulation and recording, Then a signal should be dispatched to BE", async () => {
-      const dispatch_spy = jest.spyOn(store, "dispatch");
-      dispatch_spy.mockImplementation(
-        async () => await store.commit("stimulation/set_stim_play_state", true)
-      );
-
       store.state.stimulation.protocol_assignments = { test: "assignment" };
       await store.commit("playback/set_barcode", {
         type: "stim_barcode",
         new_value: "MS2022001000",
         is_valid: true,
       });
+
       await store.commit("stimulation/set_stim_status", STIM_STATUS.READY);
+
       const wrapper = mount(StimulationControls, {
         store,
         localVue,
@@ -165,8 +162,6 @@ describe("StimulationControls", () => {
       // direct call to bypass bootstrap component, jest can't find bootstrap elements
       await wrapper.vm.handle_dropdown_select(1);
 
-      expect(wrapper.vm.play_state).toBe(true);
-      expect(dispatch_spy).toHaveBeenCalledWith("stimulation/create_protocol_message");
       expect(store.state.playback.start_recording_from_stim).toBe(true);
       expect(wrapper.vm.open_start_dropdown).toBe(false);
     });

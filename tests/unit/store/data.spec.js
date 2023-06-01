@@ -266,6 +266,22 @@ describe("store/data", () => {
       y_data_points: [101000, 101000],
     });
   });
+
+  test("When stim_waveforms is first mutated and start_recording_from_stim is set to true, Then the first timepoint will be added to stimulation state", async () => {
+    await store.commit("playback/set_start_recording_from_stim", true);
+    expect(store.state.stimulation.stim_start_time_idx).toBeNull();
+
+    store.dispatch("data/append_stim_waveforms", {
+      0: [[1200000], [0]],
+      2: [
+        [1200000, 0],
+        [9999999, 0],
+      ],
+    });
+
+    expect(store.state.stimulation.stim_start_time_idx).toBe(1200000);
+  });
+
   test("Given stim_fill_assignments already has values for at least one subprotocol for a well, When a data for a single new subprotocol is appended, Then the end timepoint of the first subprotocol is updated to the start timepoint of the new subprotocol", async () => {
     store.dispatch("data/append_stim_waveforms", { 0: [[0], [0]] });
 
