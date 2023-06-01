@@ -665,5 +665,33 @@ describe("DesktopPlayerControls.vue", () => {
         expect(action_spy).toHaveBeenCalledWith(dispatched_actions);
       }
     );
+
+    test("When vuex state is changed to RECORDING and start_recording_from_stim is set to true, Then the start_recording_from_stim will become false", async () => {
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+      await store.commit("playback/set_start_recording_from_stim", true);
+      await store.commit("playback/set_playback_state", playback_module.ENUMS.PLAYBACK_STATES.RECORDING);
+
+      expect(store.state.playback.start_recording_from_stim).toBe(false);
+    });
+
+    test("When vuex state start_recording_from_stim is set to true, Then changing to false will set stim_start_time_idx to null", async () => {
+      wrapper = mount(component_to_test, {
+        store,
+        localVue,
+      });
+
+      await store.commit("playback/set_start_recording_from_stim", true);
+      await store.commit("stimulation/set_stim_start_time_idx", 100000);
+
+      expect(store.state.playback.start_recording_from_stim).toBe(true);
+      expect(store.state.stimulation.stim_start_time_idx).toBe(100000);
+
+      await store.commit("playback/set_start_recording_from_stim", false);
+
+      expect(store.state.stimulation.stim_start_time_idx).toBeNull();
+    });
   });
 });
