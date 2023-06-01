@@ -390,6 +390,8 @@ export default {
     stim_play_state: function () {
       this.current_gradient = this.stim_play_state ? this.active_gradient : this.inactive_gradient;
       this.play_state = this.stim_play_state;
+      // anytime stim changes to active state, start timer
+      if (this.stim_play_state) this.start_24hr_timer();
     },
     assigned_open_circuits: function (new_val, old_val) {
       if (this.stim_status !== STIM_STATUS.CONFIG_CHECK_COMPLETE && new_val.length > old_val.length)
@@ -408,6 +410,7 @@ export default {
     ...mapMutations("playback", ["set_start_recording_from_stim"]),
     async handle_play_stop(e) {
       e.preventDefault();
+
       if (this.is_start_stop_button_enabled) {
         if (this.play_state) {
           this.$store.dispatch(`stimulation/stop_stimulation`);
@@ -440,10 +443,8 @@ export default {
       // idx 0 = start stim, idx 1 = start rec and stim
       // start recording first if start rec and stim was selected
       if (idx === 1) this.set_start_recording_from_stim(true);
-
-      // always start stimulation
-      await this.$store.dispatch(`stimulation/create_protocol_message`);
-      this.start_24hr_timer();
+      // else start stim
+      else await this.$store.dispatch(`stimulation/create_protocol_message`);
     },
     close_invalid_protocol_modal: function () {
       this.$bvModal.hide("invalid-imported-protocols");

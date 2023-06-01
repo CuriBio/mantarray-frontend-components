@@ -143,4 +143,7 @@ export default {
   set_invalid_imported_protocols(state, protocols) {
     state.invalid_imported_protocols = [...protocols];
   },
+  set_stim_start_time_idx(state, val) {
+    state.stim_start_time_idx = val;
+  },
 };

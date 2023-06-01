@@ -24,7 +24,9 @@ const state = () => ({
     indices: [],
     color: null,
   },
+
   invalid_imported_protocols: [],
+  stim_start_time_idx: null,
 });
 
 export default {
