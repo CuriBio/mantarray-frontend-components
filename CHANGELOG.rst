@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.6.2 (2023-06-06)
+------------------
+
+Fixed:
+^^^^^^
+- Stim looping when second to last subprotocol is deleted or removed
+
+
 1.6.1 (2023-05-30)
 ------------------
 
