@@ -77,9 +77,9 @@
                 :group="{ name: 'order' }"
                 :ghost-class="'ghost'"
                 :style="pulse.type === 'loop' && 'margin-right: -31px'"
-                :emptyInsertThreshold="40"
+                :emptyInsertThreshold="60"
                 :disabled="is_nesting_disabled"
-                @change="handle_protocol_loop($event, idx)"
+                @change="handle_protocol_loop($event)"
                 @start="is_dragging = true"
                 @end="is_dragging = false"
               >
@@ -210,6 +210,12 @@ export default {
         this.cloned
       );
     },
+    idx_of_new_loop: function () {
+      // dynamically find the correct index to replace with a loop on modal closure
+      return this.protocol_order.findIndex(
+        (protocol) => protocol.subprotocols.length > 0 && protocol.type !== "loop"
+      );
+    },
   },
   watch: {
     is_dragging: function () {
@@ -263,7 +269,13 @@ export default {
         if (["Monophasic", "Biphasic"].includes(element.type)) this.modal_type = element.type;
         else if (element.type === "Delay") this.open_delay_modal = true;
       } else if (e.removed) {
-        this.selected_pulse_settings = e.removed.element;
+        // if a tile on the left side of another is dragged and dropped into the right subprotocol loop, for some reason the change only gets caught here
+        // need to basically mimic the handle_protocol_loop({e: {added: {}}}) event
+        if (!this.dbl_click_pulse_idx && this.idx_of_new_loop !== -1) {
+          this.dbl_click_pulse_idx = this.idx_of_new_loop;
+          this.selected_pulse_settings = e.removed.element;
+          this.open_repeat_modal = true;
+        }
       }
 
       if ((e.added && !this.cloned) || e.moved || e.removed) this.handle_protocol_order(this.protocol_order);
@@ -485,10 +497,11 @@ export default {
       this.modal_open_for_edit = true;
       this.open_repeat_modal = true;
     },
-    handle_protocol_loop(e, idx) {
+    handle_protocol_loop(e) {
       if (e.added) {
-        if (this.protocol_order[idx].type !== "loop") {
-          this.dbl_click_pulse_idx = idx;
+        if (this.idx_of_new_loop !== -1 && this.protocol_order[this.idx_of_new_loop].type !== "loop") {
+          this.dbl_click_pulse_idx = this.idx_of_new_loop;
+          this.selected_pulse_settings = e.added.element;
           this.open_repeat_modal = true;
         } else {
           this.handle_protocol_order(this.protocol_order);
