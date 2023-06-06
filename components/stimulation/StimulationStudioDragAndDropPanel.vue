@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="modal_type !== null || open_delay_modal || open_repeat_modal ? 'div__modal-overlay' : null">
+    <div :class="is_modal_open ? 'div__modal-overlay' : null">
       <div>
         <div class="div__drag-and-drop-panel">
           <span class="span__stimulationstudio-drag-drop-header-label">Drag/Drop Waveforms</span>
@@ -215,6 +215,9 @@ export default {
       return this.protocol_order.findIndex(
         (protocol) => protocol.subprotocols.length > 0 && protocol.type !== "loop"
       );
+    },
+    is_modal_open: function () {
+      return this.modal_type !== null || this.open_delay_modal || this.open_repeat_modal;
     },
   },
   watch: {
@@ -443,7 +446,8 @@ export default {
     on_pulse_enter(idx, nested_idx) {
       // if tile is being dragged, the pulse underneath the dragged tile will highlight even though the user is dragging a different tile
       // 0 index is considered falsy
-      if (!this.is_dragging && this.is_dragging !== 0) this.on_pulse_mouseenter({ idx, nested_idx });
+      if (!this.is_dragging && this.is_dragging !== 0 && !this.is_modal_open)
+        this.on_pulse_mouseenter({ idx, nested_idx });
     },
     on_pulse_leave() {
       this.on_pulse_mouseleave();
