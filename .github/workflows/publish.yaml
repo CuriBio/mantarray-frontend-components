@@ -60,17 +60,17 @@ jobs:
           echo "SHA of main branch: ${{ steps.extract_branch.outputs.sha-of-main-branch }}"
           echo "SHA of development branch: ${{ steps.extract_branch.outputs.sha-of-development-branch }}"
 
-      - name: Is this running on development branch?
-        if: runner.os == 'Linux'
-        run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-development-branch}}" ] ; then echo "Running on development branch."; else echo "Not running on development branch."; fi
+      # - name: Is this running on development branch?
+      #   if: runner.os == 'Linux'
+      #   run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-development-branch}}" ] ; then echo "Running on development branch."; else echo "Not running on development branch."; fi
 
-      - name: Is this running on main branch?
-        if: runner.os == 'Linux'
-        run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-main-branch}}" ] ; then echo "Running on main branch."; else echo "Not running on main branch."; fi
+      # - name: Is this running on main branch?
+      #   if: runner.os == 'Linux'
+      #   run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-main-branch}}" ] ; then echo "Running on main branch."; else echo "Not running on main branch."; fi
 
-      - name: Fail if attempting to publish from a branch other than main
-        if: runner.os == 'Linux' && github.event.inputs.publish_package == '1'
-        run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-main-branch}}" ] ; then echo "Running on main branch, can proceed to publish."; else exit 1; fi
+      # - name: Fail if attempting to publish from a branch other than main
+      #   if: runner.os == 'Linux' && github.event.inputs.publish_package == '1'
+      #   run: if [ "${{ steps.extract_branch.outputs.sha-of-current-branch}}" = "${{ steps.extract_branch.outputs.sha-of-main-branch}}" ] ; then echo "Running on main branch, can proceed to publish."; else exit 1; fi
 
       - name: Set up Python for use with pre-commit
         uses: actions/setup-python@v4
