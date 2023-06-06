@@ -1,12 +1,20 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.6.2 (unreleased)
+1.6.3 (unreleased)
 ------------------
 
 Changed:
 ^^^^^^^^
 - Start recording at same time index as stimulation when started from stimulation studio
+
+
+1.6.2 (2023-06-06)
+------------------
+
+Fixed:
+^^^^^^
+- Stim looping when second to last subprotocol is deleted or removed
 
 
 1.6.1 (2023-05-30)

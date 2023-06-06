@@ -514,7 +514,11 @@ describe("StimulationStudioDragAndDropPanel.vue", () => {
       localVue,
     });
 
-    await wrapper.setData({ protocol_order: JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2)) });
+    // subprotocols needs to have a length > 0
+    const protocol_order = JSON.parse(JSON.stringify(TEST_PROTOCOL_ORDER_2));
+    protocol_order[1].subprotocols.push({});
+
+    await wrapper.setData({ protocol_order });
     wrapper.vm.handle_protocol_loop(
       {
         added: {
