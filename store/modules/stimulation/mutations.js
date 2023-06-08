@@ -108,8 +108,9 @@ export default {
     // this contradictory state occurs when 'Stimulate until complete' was selected for a stimulation.
     // the system status pinging returns a is_stimulating key that constantly updates the stim_play_state
     // currently no other way set up for the FE to know on it's own that a stimulation has run to completion
-    if (!state.stim_play_state && state.stim_status === STIM_STATUS.STIM_ACTIVE)
+    if (!bool && [STIM_STATUS.STIM_ACTIVE, STIM_STATUS.WAITING].includes(state.stim_status))
       state.stim_status = STIM_STATUS.READY;
+    else if (bool && state.stim_status === STIM_STATUS.WAITING) state.stim_status = STIM_STATUS.STIM_ACTIVE;
   },
   set_stim_status(state, status) {
     if (

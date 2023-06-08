@@ -10,6 +10,7 @@ export const STIM_STATUS = {
   // ready means configuration check results have been confirmed by user and no short circuit errors occured
   // will default to ready when stimulation is inactive given no other requirements currently needed.
   READY: "Ready",
+  WAITING: "",
   // stim play states
   STIM_ACTIVE: "Stimulating...",
 
