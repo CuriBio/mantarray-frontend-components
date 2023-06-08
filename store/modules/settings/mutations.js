@@ -13,7 +13,7 @@ export default {
   set_shutdown_error_status(state, { error_type, latest_compatible_sw_version }) {
     let error = `${ERRORS[error_type]}.`;
     if (latest_compatible_sw_version) {
-      state.installer_link = `https://downloads.curibio.com/software/MantarrayController-Setup-prod-${latest_compatible_sw_version}.exe`;
+      state.installer_link = `https://downloads.curibio.com/software/mantarray/MantarrayController-Setup-prod-${latest_compatible_sw_version}.exe`;
       error += " Please download the installer for the correct version here:";
     } else {
       state.installer_link = null;

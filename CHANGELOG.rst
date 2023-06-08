@@ -1,12 +1,16 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.6.3 (unreleased)
+1.6.3 (2023-06-08)
 ------------------
 
 Changed:
 ^^^^^^^^
 - Start recording at same time index as stimulation when started from stimulation studio
+
+Fixed:
+^^^^^^
+- Installer link
 
 
 1.6.2 (2023-06-06)
