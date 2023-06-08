@@ -1,6 +1,7 @@
 // adapted from https://stackoverflow.com/questions/53446792/nuxt-vuex-how-do-i-break-down-a-vuex-module-into-separate-files
 import { MAX_NUM_DATAPOINTS_FOR_MEAN } from "@/store/modules/heatmap/enums";
 import { TWITCH } from "@/store/modules/data/enums";
+
 export default {
   set_plate_waveforms(state, new_value) {
     state.plate_waveforms = [...new_value];

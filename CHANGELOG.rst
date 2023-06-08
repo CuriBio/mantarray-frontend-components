@@ -1,6 +1,14 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
+1.6.4 (unreleased)
+------------------
+
+Changed:
+^^^^^^^^
+- Plate barcodes can now end with 000-399
+
+
 1.6.3 (2023-06-08)
 ------------------
 
