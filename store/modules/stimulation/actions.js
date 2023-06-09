@@ -357,13 +357,13 @@ export default {
 
     const status_url = `/set_stim_status?running=${status}`;
     await call_axios_post_from_vuex(status_url);
-    commit("set_stim_status", STIM_STATUS.STIM_ACTIVE);
+    commit("set_stim_status", STIM_STATUS.WAITING);
   },
 
   async stop_stimulation({ commit }) {
     const status_url = `/set_stim_status?running=${false}`;
     await call_axios_post_from_vuex(status_url);
-    commit("set_stim_status", STIM_STATUS.READY);
+    commit("set_stim_status", STIM_STATUS.WAITING);
   },
 
   async edit_selected_protocol({ commit, dispatch, state }, protocol) {

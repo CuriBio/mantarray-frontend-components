@@ -246,7 +246,7 @@ export class TextValidation {
       return " ";
     }
     // check that experiment code is between 0 and 299 inclusive
-    if (parseInt(barcode.slice(7, 10)) < 0 || parseInt(barcode.slice(7, 10)) > 299) {
+    if (parseInt(barcode.slice(7, 10)) < 0 || parseInt(barcode.slice(7, 10)) > 399) {
       return " ";
     }
     // check if in beta one or two mode. if last digit invalid then mark the barcode as invalid

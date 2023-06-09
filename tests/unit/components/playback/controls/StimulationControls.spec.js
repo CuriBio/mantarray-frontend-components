@@ -103,6 +103,16 @@ describe("StimulationControls", () => {
       expect(wrapper.vm.open_start_dropdown).toBe(false);
     });
 
+    test("When stim_status is set to WAITING, Then stim start stop button will always be disabled", async () => {
+      const wrapper = mount(StimulationControls, {
+        store,
+        localVue,
+      });
+
+      await store.commit("stimulation/set_stim_status", STIM_STATUS.WAITING);
+      expect(wrapper.vm.is_start_stop_button_enabled).toBe(false);
+    });
+
     test("Given a stimulation is inactive and there are protocol assigned wells, When a user clicks the button to turn on stimulation only, Then a signal should be dispatched to BE", async () => {
       const dispatch_spy = jest.spyOn(store, "dispatch");
       dispatch_spy.mockImplementation(
