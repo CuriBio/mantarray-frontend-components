@@ -1,28 +1,21 @@
 Changelog for Mantarray Frontend Components
 ===========================================
 
-1.6.4 (unreleased)
-------------------
-
-Changed:
-^^^^^^^^
-- Plate barcodes can now end with 000-399
-
-Added:
-^^^^^^
-- Stim waiting state to add spinner to stim start stop button
-
-
-1.6.3 (2023-06-08)
+1.6.3 (unreleased)
 ------------------
 
 Changed:
 ^^^^^^^^
 - Start recording at same time index as stimulation when started from stimulation studio
+- Plate barcodes can now end with 000-399
 
 Fixed:
 ^^^^^^
 - Installer link
+
+Added:
+^^^^^^
+- Stim waiting state to add spinner to stim start stop button
 
 
 1.6.2 (2023-06-06)
