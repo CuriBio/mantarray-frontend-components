@@ -71,6 +71,9 @@ describe("TextValidation.validate_barcode with new barcodes", () => {
     ["ML2021172002", "kit ID '002'"],
     ["ML2021172003", "kit ID '003'"],
     ["ML2021172004", "kit ID '004'"],
+    ["ML2021172300", "kit ID '300'"],
+    ["ML2021172200", "kit ID '200'"],
+    ["ML2021172100", "kit ID '100'"],
     ["ML9999172001", "year '9999'"],
     ["ML2021001144", "julian date '001'"],
     ["ML2021366144", "julian date '366'"],
@@ -111,21 +114,6 @@ describe("TextValidation.validate_uuidBase_fiftyseven_encode", () => {
     }
   );
 });
-// describe("TextValidation.validate_alphanumeric", () => {
-//   test.each([
-//     ["06ad547f fe02-477b-9473-f7977e4d5e17", "Wrong Format of pass Key"],
-//     ["06ad547f-fe02-477b-9473-f7977e4d5e1", "Wrong Format of pass Key"],
-//     ["06ad547f-fe02-477b-9473-f7977e4d5e14k", "Wrong Format of pass Key"],
-//     ["06ad547f-fe02-477b-9473-f7977e4d5e17", ""], // need to investigate
-//   ])(
-//     "Given the UUID %s is invalid and fails the matching criteria, When the text contains (%s), Then validation fails and appropriate invalid text is returned",
-//     (alphanumeric, message) => {
-//       const text = message;
-//       const TestAlphanumericCode = TextValidation_Alphanumeric;
-//       expect(TestAlphanumericCode.validate(alphanumeric)).toStrictEqual(text);
-//     }
-//   );
-// });
 describe("TextValidation.validate_user_account_input", () => {
   test.each([
     ["C", ""],
@@ -153,7 +141,7 @@ describe("Test new scheme for barcode", () => {
     ["ME22123099-1", "invalid header 'ME'"],
     ["ML20123099-1", "invalid year '2020'"],
     ["ML22444099-1", "day is not between 1 and 365"],
-    ["ML22123311-1", "invalid ###"],
+    ["ML22123411-1", "invalid ###"],
     ["MLh2123099-1", "none numeric values"],
     ["ML221230991-", "dash in wrong place"],
   ])(
@@ -163,6 +151,7 @@ describe("Test new scheme for barcode", () => {
       expect(TestBarcodeViewer.validate(plate_barcode)).toStrictEqual(" ");
     }
   );
+
   test("Test valid barcodes for beta 1 and beta 2 modes", async () => {
     //check valid beta 1 mode
     const TestBarcodeViewer = TextValidation_BarcodeViewer;

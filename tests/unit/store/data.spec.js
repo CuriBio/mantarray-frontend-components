@@ -831,9 +831,6 @@ describe("store/data", () => {
     test.each([
       ["plate_barcode", "ML2022002001", valid_plate_barcode_old, true],
       ["plate_barcode", "ML2022002001", valid_plate_barcode_beta_2, true],
-      ["plate_barcode", "ML2022002001", "ML22001300-2", true],
-      ["plate_barcode", "ML2022002001", "ML22001200-2", true],
-      ["plate_barcode", "ML2022002001", "ML22001100-2", true],
       ["plate_barcode", "ML2022002001", valid_plate_barcode_beta_1, false],
       ["stim_barcode", "MS2022002001", valid_stim_barcode_old, true],
     ])(
