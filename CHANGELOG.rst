@@ -8,6 +8,10 @@ Changed:
 ^^^^^^^^
 - Plate barcodes can now end with 000-399
 
+Added:
+^^^^^^
+- Stim waiting state to add spinner to stim start stop button
+
 
 1.6.3 (2023-06-08)
 ------------------
