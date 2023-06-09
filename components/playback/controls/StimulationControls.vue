@@ -36,22 +36,17 @@
         <template #button-content>
           <span :class="svg__stimulation_controls_play_stop_button__dynamic_class">
             <div
-              v-if="!play_state"
-              id="start-stim-button"
-              v-b-popover.hover.top="start_stim_label"
-              title="Start Stimulation"
+              v-b-popover.hover.bottom="play_state ? stop_stim_label : start_stim_label"
+              :title="play_state ? 'Stop Stimulation' : 'Start Stimulation'"
             >
               <!-- this is here for testing the popover message -->
-              <span id="start-popover-msg" style="display: none">{{ start_stim_label }}</span>
-              <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'play-circle']" />
-              <span v-show="is_stim_in_waiting" class="span__start-stop-spinner">
-                <FontAwesomeIcon :style="'fill: #ececed;'" :icon="['fa', 'spinner']" pulse />
-              </span>
-            </div>
-            <div v-if="play_state" v-b-popover.hover.bottom="stop_stim_label" title="Stop Stimulation">
-              <!-- this is here for testing the popover message -->
-              <span id="stop-popover-msg" style="display: none">{{ stop_stim_label }}</span>
-              <FontAwesomeIcon class="fontawesome_icon_class" :icon="['fa', 'stop-circle']" />
+              <span :id="play_state ? 'stop-popover-msg' : 'start-popover-msg'" style="display: none">{{
+                play_state ? stop_stim_label : start_stim_label
+              }}</span>
+              <FontAwesomeIcon
+                class="fontawesome_icon_class"
+                :icon="play_state ? ['fa', 'stop-circle'] : ['fa', 'play-circle']"
+              />
               <span v-show="is_stim_in_waiting" class="span__start-stop-spinner">
                 <FontAwesomeIcon :style="'fill: #ececed;'" :icon="['fa', 'spinner']" pulse />
               </span>
@@ -268,7 +263,7 @@ export default {
     ...mapState("playback", ["playback_state", "enable_stim_controls", "barcodes"]),
     ...mapState("data", ["stimulator_circuit_statuses"]),
     is_start_stop_button_enabled: function () {
-      if (this.stim_status === STIM_STATUS.WAITING) return false;
+      if (this.is_stim_in_waiting) return false;
 
       if (!this.play_state) {
         // if starting stim make sure initial magnetometer calibration has been completed and
