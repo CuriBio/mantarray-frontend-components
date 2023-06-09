@@ -108,7 +108,7 @@ describe("StimulationControls", () => {
         store,
         localVue,
       });
-      wrapper.setComp;
+
       await store.commit("stimulation/set_stim_status", STIM_STATUS.WAITING);
       expect(wrapper.vm.is_start_stop_button_enabled).toBe(false);
     });
