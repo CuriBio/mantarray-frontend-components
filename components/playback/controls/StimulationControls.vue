@@ -288,7 +288,7 @@ export default {
       return true;
     },
     is_stim_in_waiting: function () {
-      return this.stim_status === STIM_STATUS.WAITING;
+      return [STIM_STATUS.STARTING, STIM_STATUS.STOPPING].includes(this.stim_status);
     },
     assigned_open_circuits: function () {
       // filter for matching indices

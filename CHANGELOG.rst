@@ -12,6 +12,7 @@ Changed:
 Fixed:
 ^^^^^^
 - Installer link
+- Issue with stim state getting incorrectly set during transition
 
 Added:
 ^^^^^^
