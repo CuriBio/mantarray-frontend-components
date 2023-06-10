@@ -470,8 +470,8 @@ describe("StatusWidget.vue", () => {
       ["READY", "Stim status: Ready", { 1: {} }, false],
       ["STIM_ACTIVE", "Stim status: Stimulating...", { 1: {} }, true],
       ["SHORT_CIRCUIT_ERROR", "Stim status: Short Circuit Error", {}, false],
-      ["WAITING", "Stim status: Starting...", { 1: {} }, false],
-      ["WAITING", "Stim status: Stopping...", { 1: {} }, true],
+      ["STARTING", "Stim status: Starting...", { 1: {} }, false],
+      ["STOPPING", "Stim status: Stopping...", { 1: {} }, true],
       ["ERROR", "Stim status: Error Occurred", {}, false],
     ])(
       "When stim's stim_status gets mutated to %s, Then the status text should update to be: %s",

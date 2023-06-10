@@ -338,12 +338,9 @@ export default {
       if (!this.stim_specific && !this.shutdown_error_status) this.set_system_specific_status(new_status);
     },
     stim_status: function (new_status) {
-      let status_to_use = new_status;
+      const status_to_use = new_status;
 
       if (this.stim_specific) {
-        if (new_status === STIM_STATUS.WAITING)
-          status_to_use = this.stim_play_state ? "Stopping..." : "Starting...";
-
         this.set_stim_specific_status(status_to_use);
       }
     },
